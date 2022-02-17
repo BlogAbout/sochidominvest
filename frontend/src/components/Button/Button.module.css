@@ -1,0 +1,70 @@
+.button {
+    height: 40px;
+    padding: 0 10px;
+    min-width: 103px;
+    color: #6e7f8d;
+    text-align: center;
+    line-height: 40px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    -webkit-transition: all 0.3s ease;
+    -moz-transition: all 0.3s ease;
+    -o-transition: all 0.3s ease;
+    transition: all 0.3s ease;
+}
+
+.button.light {
+    color: rgb(239, 242, 249);
+}
+
+.button.dark {
+    color: rgb(40, 42, 55);
+}
+
+.button.violet {
+    background: rgb(162, 25, 207);
+    background: linear-gradient(90deg, rgb(95, 215, 247) 0%, rgb(167, 25, 212) 100%);
+    box-shadow: -3px -3px 8px rgba(95, 215, 247, 0.25), 3px 3px 8px rgba(162, 25, 207, 0.25);
+}
+
+.button.pink {
+    background: rgb(162, 25, 207);
+    background: linear-gradient(90deg, rgb(95, 215, 247) 0%, rgb(217, 25, 197) 100%);
+    box-shadow: -3px -3px 8px rgba(95, 215, 247, 0.25), 3px 3px 8px rgba(212, 25, 192, 0.25);
+}
+
+.button.orange {
+    background: rgb(162, 25, 207);
+    background: linear-gradient(90deg, rgb(95, 215, 247) 0%, rgb(236, 134, 28) 100%);
+    box-shadow: -3px -3px 8px rgba(95, 215, 247, 0.25), 3px 3px 8px rgba(231, 134, 23, 0.25);
+}
+
+.button.violet:not(.disabled):hover {
+    box-shadow: -3px -3px 8px rgba(162, 25, 207, 0.5),
+                3px 3px 8px rgba(95, 215, 247, 0.5),
+                inset -3px -3px 8px rgba(239, 242, 249, 0.5),
+                inset 3px 3px 8px rgba(22, 24, 29, 0.5);
+}
+
+.button.pink:not(.disabled):hover {
+    box-shadow: -3px -3px 8px rgba(212, 25, 192, 0.5),
+                3px 3px 8px rgba(95, 215, 247, 0.5),
+                inset -3px -3px 8px rgba(239, 242, 249, 0.5),
+                inset 3px 3px 8px rgba(22, 24, 29, 0.5);
+}
+
+.button.orange:not(.disabled):hover {
+    box-shadow: -3px -3px 8px rgba(231, 134, 23, 0.5),
+                3px 3px 8px rgba(95, 215, 247, 0.5),
+                inset -3px -3px 8px rgba(239, 242, 249, 0.5),
+                inset 3px 3px 8px rgba(22, 24, 29, 0.5);
+}
+
+.not-valid {
+    opacity: 0.5;
+}
+
+.disabled {
+    cursor: default;
+}
