@@ -1,6 +1,6 @@
 import React from 'react'
 import classNames from 'classnames/bind'
-import classes from './CheckBox.module.css'
+import classes from './CheckBox.module.scss'
 
 const cx = classNames.bind(classes)
 

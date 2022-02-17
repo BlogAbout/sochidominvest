@@ -44,7 +44,7 @@ const onResponse = (response: AxiosResponse): AxiosResponse => {
 const onResponseError = (error: AxiosError): Promise<AxiosError> => {
     if (error.response && error.response.status === 401) {
         localStorage.clear()
-        window.location.href = RouteNames.LOGIN
+        window.location.href = RouteNames.MAIN
     } else {
         // console.error(`[response error] [${JSON.stringify(error)}]`)
     }

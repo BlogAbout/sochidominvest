@@ -1,11 +1,12 @@
 import React from 'react'
 import AppRouter from './routes/components/AppRouter/AppRouter'
 import {library} from '@fortawesome/fontawesome-svg-core'
-import {faUser, faLock} from '@fortawesome/free-solid-svg-icons'
+import {faUser, faLock, faPhone} from '@fortawesome/free-solid-svg-icons'
 
 library.add(
     faUser,
-    faLock
+    faLock,
+    faPhone
 )
 
 function App() {

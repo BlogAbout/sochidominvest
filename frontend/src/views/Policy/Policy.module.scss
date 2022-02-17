@@ -1,4 +1,4 @@
-.Main {
+.Policy {
     position: relative;
     display: flex;
     flex-direction: column;
@@ -6,6 +6,7 @@
 }
 
 .Content {
+    padding: 40px 0;
     flex-grow: 1;
 
     .container {
@@ -15,18 +16,15 @@
         width: 100%;
         max-width: 1000px;
         margin: 0 auto;
+        background-color: rgba(7, 94, 165, 0.6);
+        padding: 60px 40px;
 
-        .login {
-            padding: 40px 0;
-            display: flex;
-            flex: 1 1 auto;
+        h1, h2, h3 {
+            color: #fff;
+        }
 
-            p {
-                font-size: 20px;
-                color: #fff;
-                width: 50%;
-                margin-right: auto;
-            }
+        p {
+            color: #fff;
         }
     }
 }

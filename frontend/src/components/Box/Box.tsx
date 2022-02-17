@@ -2,7 +2,7 @@ import React, {useState} from 'react'
 import classNames from 'classnames/bind'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {IconProp} from '@fortawesome/fontawesome-svg-core'
-import classes from './Box.module.css'
+import classes from './Box.module.scss'
 
 interface Props extends React.PropsWithChildren<any> {
     value?: string | number

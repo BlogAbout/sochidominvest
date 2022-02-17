@@ -1,6 +1,6 @@
 import * as React from 'react'
 import classNames from 'classnames/bind'
-import classes from './Button.module.css'
+import classes from './Button.module.scss'
 
 interface Props extends React.HTMLAttributes<any> {
     title?: string
