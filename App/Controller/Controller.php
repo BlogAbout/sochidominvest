@@ -24,16 +24,16 @@ class Controller
                 if ($payload->data == null || $payload->data = '' || !isset($payload->data)) {
                     array_push($response, [
                         'key' => $payload->key,
-                        'message' => "The {$payload->key} field is required"
+                        'message' => "{$payload->key} обязательно для заполнения"
                     ]);
                 }
             }
 
             if ($payload->validator == 'string') {
-                if (preg_match('/[^A-Za-z]/', $payload->data)) {
+                if (preg_match('/[^A-Za-zА-Яа-яЁё]/', $payload->data)) {
                     array_push($response, [
                         'key' => $payload->key,
-                        'message' => "Sorry {$payload->key} expects an Alphabet."
+                        'message' => "{$payload->key} должно содержать только текст."
                     ]);
                 }
             }
@@ -42,7 +42,7 @@ class Controller
                 if (preg_match('/[^0-9_]/', $payload->data)) {
                     array_push($response, [
                         'key' => $payload->key,
-                        'message' => "Sorry {$payload->key} expects a Number."
+                        'message' => "{$payload->key} должно содержать только цифры."
                     ]);
                 }
             }
@@ -51,7 +51,7 @@ class Controller
                 if (strtolower(gettype($payload->data)) !== 'boolean') {
                     array_push($response, [
                         'key' => $payload->key,
-                        'message' => "Sorry {$payload->key} expects a Boolean."
+                        'message' => "{$payload->key} должно содержать boolean значение."
                     ]);
                 }
             }
@@ -63,14 +63,14 @@ class Controller
                 if (strtolower($operationName) == 'min' && $operationChecks > strlen($payload->data)) {
                     array_push($response, [
                         'key' => $payload->key,
-                        'message' => "{$payload->key} должно быть меньше, чем " . strlen($payload->data)
+                        'message' => "{$payload->key} должно быть больше, чем " . strlen($payload->data)
                     ]);
                 }
 
                 if (strtolower($operationName) == 'max' && $operationChecks < strlen($payload->data)) {
                     array_push($response, [
                         'key' => $payload->key,
-                        'message' => "{$payload->key} должно быть больше, чем " . strlen($payload->data)
+                        'message' => "{$payload->key} должно быть меньше, чем " . strlen($payload->data)
                     ]);
                 }
 
@@ -78,7 +78,7 @@ class Controller
                     $operationChecksTwo = (int)explode(':', $payload->validator)[2];
                     array_push($response, [
                         'key' => $payload->key,
-                        'message' => "Sorry {$payload->key} is supposed to be between " . $operationChecks . ' and ' . $operationChecksTwo
+                        'message' => "{$payload->key} должно быть между " . $operationChecks . ' и ' . $operationChecksTwo
                     ]);
                 }
             }
@@ -91,7 +91,7 @@ class Controller
                     if ($checkEmail['status']) {
                         array_push($response, [
                             'key' => $payload->key,
-                            'message' => "Извините, но {$payload->key} уже существует. Пожалуйста, попробуйте другой Email."
+                            'message' => "Указанный {$payload->key} уже существует. Пожалуйста, попробуйте другой."
                         ]);
                     }
                 } catch (Exception $e) {
@@ -148,14 +148,14 @@ class Controller
                         if (!in_array($fileExtension, $payload->acceptedExtension)) {
                             array_push($response, [
                                 'key' => $payload->key,
-                                'message' => "Извините, {$payload->key} принимает только следующие расширения: " . implode(", ", $payload->acceptedExtension)
+                                'message' => "{$payload->key} принимает только следующие расширения: " . implode(", ", $payload->acceptedExtension)
                             ]);
                         }
 
                         if ($fileSize > $payload->maxSize) {
                             array_push($response, [
                                 'key' => $payload->key,
-                                'message' => "Извините, {$payload->key} размер файла должен быть меньше " . $payload->maxSize
+                                'message' => "{$payload->key} размер файла должен быть меньше " . $payload->maxSize
                             ]);
                         }
                     }

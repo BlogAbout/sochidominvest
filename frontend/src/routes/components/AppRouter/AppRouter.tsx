@@ -1,6 +1,7 @@
 import React from 'react'
 import {Route, Routes} from 'react-router-dom'
 import {RouteNames} from '../../routes'
+import {useTypedSelector} from '../../../hooks/useTypedSelector'
 import Main from '../../../views/Main/Main'
 import Policy from '../../../views/Policy/Policy'
 import MainService from '../../../views/MainService/MainService'
@@ -14,7 +15,7 @@ import FooterService from '../../../components/FooterService/FooterService'
 import classes from './AppRouter.module.scss'
 
 const AppRouter: React.FC = () => {
-    const isAuth = false
+    const {isAuth} = useTypedSelector(state => state.authReducer)
 
     return (
         <div className={classes.AppRouter}>

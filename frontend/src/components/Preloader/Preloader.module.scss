@@ -8,6 +8,8 @@
     height: 100%;
     z-index: 9999;
     position: absolute;
+    left: 0;
+    top: 0;
 }
 
 .spinner {
@@ -20,7 +22,7 @@
 .spinner > div {
     width: 10px;
     height: 10px;
-    background-color: #08a7b9;
+    background-color: #527abd;
     border-radius: 100%;
     display: inline-block;
     animation: bouncedelay 1.4s infinite ease-in-out;

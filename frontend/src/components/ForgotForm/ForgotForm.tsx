@@ -1,4 +1,6 @@
 import React from 'react'
+import {useTypedSelector} from '../../hooks/useTypedSelector'
+import {useActions} from '../../hooks/useActions'
 import classes from './ForgotForm.module.scss'
 
 interface Props {
@@ -16,7 +18,7 @@ const ForgotForm: React.FC<Props> = (props) => {
         <div className={classes.ForgotForm}>
             <h2>Восстановление пароля</h2>
 
-            <p>В разработке</p>
+            <p style={{color: '#000'}}>В разработке</p>
 
             <div className={classes['buttons-wrapper']}>
                 <div className={classes['links']}>

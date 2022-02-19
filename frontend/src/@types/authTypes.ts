@@ -10,28 +10,28 @@ export interface AuthState {
 export enum AuthActionTypes {
     SET_AUTH = 'SET_AUTH',
     SET_USER = 'SET_USER',
-    SET_FETCHING = 'SET_FETCHING',
-    SET_ERROR = 'SET_ERROR'
+    AUTH_IS_FETCHING = 'AUTH_IS_FETCHING',
+    AUTH_ERROR = 'AUTH_ERROR'
 }
 
-export interface SetAuthAction {
+interface SetAuthAction {
     type: AuthActionTypes.SET_AUTH
     payload: boolean
 }
 
-export interface SetUserAction {
+interface SetUserAction {
     type: AuthActionTypes.SET_USER
     payload: IUser
 }
 
-export interface SetFetchingAction {
-    type: AuthActionTypes.SET_FETCHING
+interface AuthIsFetchingAction {
+    type: AuthActionTypes.AUTH_IS_FETCHING
     payload: boolean
 }
 
-export interface SetErrorAction {
-    type: AuthActionTypes.SET_ERROR
+interface AuthErrorAction {
+    type: AuthActionTypes.AUTH_ERROR
     payload: string
 }
 
-export type AuthAction = SetAuthAction | SetUserAction | SetFetchingAction | SetErrorAction
+export type AuthAction = SetAuthAction | SetUserAction | AuthIsFetchingAction | AuthErrorAction

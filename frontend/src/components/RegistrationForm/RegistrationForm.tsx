@@ -1,7 +1,11 @@
 import React, {useState} from 'react'
+import {useTypedSelector} from '../../hooks/useTypedSelector'
+import {useActions} from '../../hooks/useActions'
+import TextBox from '../TextBox/TextBox'
+import Button from '../Button/Button'
+import Preloader from '../Preloader/Preloader'
+import {ISignUp} from '../../@types/ISignUp'
 import classes from './RegistrationForm.module.scss'
-import TextBox from "../TextBox/TextBox";
-import {ISignUp} from "../../@types/ISignUp";
 
 interface Props {
     onChangeType(value: string): void
@@ -16,20 +20,20 @@ const defaultProps: Props = {
 const RegistrationForm: React.FC<Props> = (props) => {
     const [signUp, setSignUp] = useState<ISignUp>({
         phone: '',
-        login: '',
+        email: '',
         password: '',
-        name: ''
+        firstName: ''
     })
 
     const [validationError, setValidationError] = useState({
         phone: false,
-        login: false,
+        email: false,
         password: false,
-        name: false
+        firstName: false
     })
 
-    // const {fetching} = useTypedSelector(state => state.authReducer)
-    // const {registration} = useActions()
+    const {fetching, error} = useTypedSelector(state => state.authReducer)
+    const {registration} = useActions()
 
     const validationHandler = (): boolean => {
         let phoneError = false
@@ -41,7 +45,7 @@ const RegistrationForm: React.FC<Props> = (props) => {
             phoneError = true
         }
 
-        if (signUp.login === '') {
+        if (signUp.email === '') {
             authError = true
         }
 
@@ -49,15 +53,15 @@ const RegistrationForm: React.FC<Props> = (props) => {
             passwordError = true
         }
 
-        if (signUp.name === '') {
+        if (signUp.firstName === '') {
             nameError = true
         }
 
         setValidationError({
             phone: phoneError,
-            login: authError,
+            email: authError,
             password: passwordError,
-            name: nameError
+            firstName: nameError
         })
 
         return !(phoneError || authError || passwordError || nameError)
@@ -67,28 +71,30 @@ const RegistrationForm: React.FC<Props> = (props) => {
         event.preventDefault()
 
         if (validationHandler()) {
-            // registration(signUp)
+            registration(signUp)
         }
     }
 
     return (
         <div className={classes.RegistrationForm}>
+            {fetching && <Preloader/>}
+
             <h2>Регистрация</h2>
 
             <div className={classes['field-wrapper']}>
                 <TextBox
                     type="text"
-                    value={signUp.name}
+                    value={signUp.firstName}
                     placeholder='Имя'
-                    error={validationError.login}
-                    errorText={validationError.login ? 'Введите имя' : undefined}
+                    error={validationError.firstName}
+                    errorText={validationError.firstName ? 'Введите имя' : undefined}
                     icon="user"
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                         setSignUp({
                             ...signUp,
-                            name: e.target.value
+                            firstName: e.target.value
                         })
-                        setValidationError({...validationError, name: false})
+                        setValidationError({...validationError, firstName: false})
                     }}
                 />
             </div>
@@ -96,17 +102,17 @@ const RegistrationForm: React.FC<Props> = (props) => {
             <div className={classes['field-wrapper']}>
                 <TextBox
                     type="text"
-                    value={signUp.login}
-                    placeholder='Логин'
-                    error={validationError.login}
-                    errorText={validationError.login ? 'Введите логин' : undefined}
-                    icon="user"
+                    value={signUp.email}
+                    placeholder='Email'
+                    error={validationError.email}
+                    errorText={validationError.email ? 'Введите Email' : undefined}
+                    icon="at"
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                         setSignUp({
                             ...signUp,
-                            login: e.target.value
+                            email: e.target.value
                         })
-                        setValidationError({...validationError, login: false})
+                        setValidationError({...validationError, email: false})
                     }}
                 />
             </div>
@@ -114,10 +120,10 @@ const RegistrationForm: React.FC<Props> = (props) => {
             <div className={classes['field-wrapper']}>
                 <TextBox
                     type="tel"
-                    value={signUp.password}
+                    value={signUp.phone}
                     placeholder='Телефон'
-                    error={validationError.password}
-                    errorText={validationError.password ? 'Введите телефон' : undefined}
+                    error={validationError.phone}
+                    errorText={validationError.phone ? 'Введите телефон' : undefined}
                     icon="phone"
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                         setSignUp({
@@ -147,7 +153,14 @@ const RegistrationForm: React.FC<Props> = (props) => {
                 />
             </div>
 
+            {error && <div className={classes.errorMessage}>{error}</div>}
+
             <div className={classes['buttons-wrapper']}>
+                <Button type="save"
+                        disabled={fetching}
+                        onClick={registrationHandler.bind(this)}
+                >Создать аккаунт</Button>
+
                 <div className={classes['links']}>
                     <strong onClick={() => props.onChangeType('login')}>Войти</strong>
                     <span>или</span>

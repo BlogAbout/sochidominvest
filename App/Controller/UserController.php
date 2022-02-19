@@ -11,13 +11,13 @@ use Firebase\JWT\JWT;
 class UserController extends Controller
 {
     /**
-     * Создает нового пользователя
+     * Регистрирует пользователя
      *
      * @param mixed $request Содержит объект запроса
      * @param mixed $response Содержит объект ответа от маршрутизатора
      * @return void
      */
-    public function createNewUser($request, $response)
+    public function signUp($request, $response)
     {
         $responseObject = [];
         $Middleware = new RequestMiddleware();
@@ -26,7 +26,7 @@ class UserController extends Controller
         if (!$Middleware) {
             array_push($responseObject, [
                 'status' => 400,
-                'message' => 'Извините, доступ к этой конечной точке разрешен только содержимому JSON.',
+                'message' => 'Доступ к конечной точке разрешен только содержимому JSON.',
                 'data' => []
             ]);
 
@@ -50,13 +50,8 @@ class UserController extends Controller
             ],
             (object)[
                 'validator' => 'required',
-                'data' => isset($data->lastName) ? $data->lastName : '',
-                'key' => 'Last Name',
-            ],
-            (object)[
-                'validator' => 'string',
-                'data' => isset($data->lastName) ? $data->lastName : '',
-                'key' => 'Last Name',
+                'data' => isset($data->phone) ? $data->phone : '',
+                'key' => 'Phone',
             ],
             (object)[
                 'validator' => 'emailExists',
@@ -64,7 +59,7 @@ class UserController extends Controller
                 'key' => 'Email'
             ],
             (object)[
-                'validator' => 'min:7',
+                'validator' => 'min:6',
                 'data' => isset($data->password) ? $data->password : '',
                 'key' => 'Password'
             ]
@@ -79,11 +74,16 @@ class UserController extends Controller
 
         $payload = array(
             'firstName' => htmlspecialchars(stripcslashes(strip_tags($data->firstName))),
-            'lastName' => htmlspecialchars(stripcslashes(strip_tags($data->lastName))),
+            'lastName' => '',
             'email' => stripcslashes(strip_tags($data->email)),
+            'phone' => htmlspecialchars(stripcslashes(strip_tags($data->phone))),
             'password' => password_hash($data->password, PASSWORD_BCRYPT),
-            'created_at' => date('Y-m-d H:i:s'),
-            'updated_at' => date('Y-m-d H:i:s')
+            'createdAt' => date('Y-m-d H:i:s'),
+            'updatedAt' => date('Y-m-d H:i:s'),
+            'lastActive' => date('Y-m-d H:i:s'),
+            'active' => 1,
+            'role' => 'subscriber',
+            'settings' => ''
         );
 
         try {
@@ -98,14 +98,14 @@ class UserController extends Controller
                     'iat' => time(),
                     'iss' => 'PHP_MINI_REST_API', // Fixme: !!Modify:: Modify this to come from a constant
                     "exp" => strtotime('+ 7 Days'),
-                    "user_id" => $UserData['data']['user_id']
+                    "user_id" => $UserData['data']['userId']
                 );
                 $Jwt = JWT::encode($tokenPayload, $tokenSecret);
 
                 // Сохраняем JWT токен
                 $TokenModel = new TokenModel();
                 $TokenModel->createToken([
-                    'user_id' => $UserData['data']['user_id'],
+                    'user_id' => $UserData['data']['userId'],
                     'jwt_token' => $Jwt
                 ]);
                 $UserData['data']['token'] = $Jwt;
@@ -121,7 +121,7 @@ class UserController extends Controller
             }
 
             $responseObject['status'] = 500;
-            $responseObject['message'] = 'Произошла непредвиденная ошибка, и ваша учетная запись не может быть создана. Пожалуйста, повторите попытку позже.';
+            $responseObject['message'] = 'Непредвиденная ошибка. Ваша учетная запись не может быть создана. Повторите попытку позже.';
             $responseObject['data'] = [];
 
             $response->code(500)->json($responseObject);
@@ -145,7 +145,7 @@ class UserController extends Controller
      * @param mixed $response Содержит объект ответа от маршрутизатора
      * @return void
      */
-    public function login($request, $response)
+    public function signIn($request, $response)
     {
         $responseObject = [];
         $Middleware = new RequestMiddleware();
@@ -154,7 +154,7 @@ class UserController extends Controller
         if (!$Middleware) {
             array_push($responseObject, [
                 'status' => 400,
-                'message' => 'Извините, доступ к этой конечной точке разрешен только содержимому JSON.',
+                'message' => 'Доступ к конечной точке разрешен только содержимому JSON.',
                 'data' => []
             ]);
 
@@ -177,7 +177,7 @@ class UserController extends Controller
                 'key' => 'Password'
             ],
             (object)[
-                'validator' => 'min:7',
+                'validator' => 'min:6',
                 'data' => isset($data->password) ? $data->password : '',
                 'key' => 'Password'
             ]
@@ -232,7 +232,7 @@ class UserController extends Controller
                 }
 
                 $responseObject['status'] = 401;
-                $responseObject['message'] = 'Пожалуйста, проверьте свой Email и пароль и повторите попытку.';
+                $responseObject['message'] = 'Проверьте свой Email и пароль и повторите попытку.';
                 $responseObject['data'] = [];
                 $response->code(401)->json($responseObject);
 
@@ -240,7 +240,7 @@ class UserController extends Controller
             }
 
             $responseObject['status'] = 500;
-            $responseObject['message'] = 'Произошла непредвиденная ошибка, и ваше действие не может быть выполнено. Пожалуйста, повторите попытку позже.';
+            $responseObject['message'] = 'Непредвиденная ошибка. Ваше действие не может быть выполнено. Повторите попытку позже.';
             $responseObject['data'] = [];
 
             $response->code(500)->json($responseObject);

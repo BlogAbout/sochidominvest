@@ -49,7 +49,7 @@ const onResponseError = (error: AxiosError): Promise<AxiosError> => {
         // console.error(`[response error] [${JSON.stringify(error)}]`)
     }
 
-    return Promise.reject(error)
+    return error.response ? Promise.reject(error.response) : Promise.reject(error)
 }
 
 /**
@@ -68,7 +68,7 @@ function setupInterceptorsTo(axiosInstance: AxiosInstance): AxiosInstance {
  */
 const API = setupInterceptorsTo(axios.create({
     // baseURL: 'http://192.168.15.24:3001/api/v1'
-    baseURL: 'http://127.0.0.1:3001/api/v1'
+    baseURL: 'http://sochidominvest/api/v1'
 }))
 
 export default API

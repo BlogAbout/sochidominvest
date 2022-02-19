@@ -1,7 +1,10 @@
 import React, {useState} from 'react'
+import {useTypedSelector} from '../../hooks/useTypedSelector'
+import {useActions} from '../../hooks/useActions'
 import {IAuth} from '../../@types/IAuth'
 import TextBox from '../TextBox/TextBox'
 import Button from '../Button/Button'
+import Preloader from '../Preloader/Preloader'
 import classes from './LoginForm.module.scss'
 
 interface Props {
@@ -16,62 +19,63 @@ const defaultProps: Props = {
 
 const LoginForm: React.FC<Props> = (props) => {
     const [auth, setAuth] = useState<IAuth>({
-        login: '',
+        email: '',
         password: ''
     })
 
     const [validationError, setValidationError] = useState({
-        login: false,
+        email: false,
         password: false
     })
 
-    // const {fetching} = useTypedSelector(state => state.authReducer)
-    // const {login} = useActions()
+    const {fetching, error} = useTypedSelector(state => state.authReducer)
+    const {login} = useActions()
 
     const validationHandler = (): boolean => {
-        let authError = false
+        let emailError = false
         let passwordError = false
 
-        if (auth.login === '') {
-            authError = true
+        if (auth.email === '') {
+            emailError = true
         }
 
         if (auth.password === '') {
             passwordError = true
         }
 
-        setValidationError({login: authError, password: passwordError})
+        setValidationError({email: emailError, password: passwordError})
 
-        return !(authError || passwordError)
+        return !(emailError || passwordError)
     }
 
     const loginHandler = async (event: React.MouseEvent<HTMLInputElement>) => {
         event.preventDefault()
 
         if (validationHandler()) {
-            // login(auth)
+            login(auth)
         }
     }
 
     return (
         <div className={classes.LoginForm}>
+            {fetching && <Preloader/>}
+
             <h2>Вход в приложение</h2>
-            {/*{fetching && <Preloader/>}*/}
 
             <div className={classes['field-wrapper']}>
                 <TextBox
                     type="text"
-                    value={auth.login}
-                    placeholder='Логин или E-mail'
-                    error={validationError.login}
-                    errorText={validationError.login ? 'Введите логин или E-mail' : undefined}
-                    icon="user"
+                    value={auth.email}
+                    placeholder='E-mail'
+                    error={validationError.email}
+                    errorText={validationError.email ? 'Введите E-mail' : undefined}
+                    icon="at"
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                         setAuth({
                             ...auth,
-                            login: e.target.value
+                            email: e.target.value
                         })
-                        setValidationError({...validationError, login: false})
+                        setValidationError({...validationError, email: false})
                     }}
                 />
             </div>
@@ -94,9 +98,11 @@ const LoginForm: React.FC<Props> = (props) => {
                 />
             </div>
 
+            {error && <div className={classes.errorMessage}>{error}</div>}
+
             <div className={classes['buttons-wrapper']}>
                 <Button type="save"
-                        disabled={false}
+                        disabled={fetching}
                         onClick={loginHandler.bind(this)}
                 >Войти</Button>
 

@@ -5,8 +5,8 @@ namespace App;
 $Klein = new \Klein\Klein();
 
 // User Routes, Authentication Routes
-$Klein->respond('POST', '/api/v1/user', [new UserController(), 'createNewUser']);
-$Klein->respond('POST', '/api/v1/user-auth', [new UserController(), 'login']);
+$Klein->respond('POST', '/api/v1/registration', [new UserController(), 'signUp']);
+$Klein->respond('POST', '/api/v1/auth', [new UserController(), 'signIn']);
 
 /******************** Catalog Routes **********************/
 $Klein->respond('POST', '/api/v1/catalog', [new CatalogController(), 'createNewCatalog']);

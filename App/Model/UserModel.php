@@ -16,8 +16,10 @@ class UserModel extends Model
     public static function createUser($payload)
     {
         $sql = "
-            INSERT INTO `db_users` (firstName, lastName, email, password, created_at, updated_at)
-            VALUES (:firstName, :lastName, :email, :password, :created_at, :updated_at)
+            INSERT INTO `db_users`
+                (first_name, last_name, email, phone, password, created_at, updated_at, last_active, active, role, settings)
+            VALUES
+                (:firstName, :lastName, :email, :phone, :password, :createdAt, :updatedAt, :lastActive, :active, :role, :settings)
         ";
 
         parent::query($sql);
@@ -25,15 +27,20 @@ class UserModel extends Model
         parent::bindParams('firstName', $payload['firstName']);
         parent::bindParams('lastName', $payload['lastName']);
         parent::bindParams('email', $payload['email']);
+        parent::bindParams('phone', $payload['phone']);
         parent::bindParams('password', $payload['password']);
-        parent::bindParams('created_at', $payload['created_at']);
-        parent::bindParams('updated_at', $payload['updated_at']);
+        parent::bindParams('createdAt', $payload['createdAt']);
+        parent::bindParams('updatedAt', $payload['updatedAt']);
+        parent::bindParams('lastActive', $payload['lastActive']);
+        parent::bindParams('active', $payload['active']);
+        parent::bindParams('role', $payload['role']);
+        parent::bindParams('settings', $payload['settings']);
 
         $newUser = parent::execute();
 
         if ($newUser) {
             $user_id = parent::lastInsertedId();
-            $payload['user_id'] = $user_id;
+            $payload['userId'] = $user_id;
 
             return array(
                 'status' => true,
@@ -55,7 +62,7 @@ class UserModel extends Model
      */
     public static function fetchUserById($id)
     {
-        $sql = "SELECT id, firstName, lastName, email, created_at, updated_at FROM `db_users` WHERE id = :id";
+        $sql = "SELECT id, first_name, last_name, email, created_at, updated_at FROM `db_users` WHERE id = :id";
 
         parent::query($sql);
 

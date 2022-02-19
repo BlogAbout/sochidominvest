@@ -81,7 +81,7 @@ class JwtMiddleware
                 $TokenModel = new TokenModel();
 
                 // Проверка базы данных на наличие запроса перед декодированием
-                $tokenDB = $TokenModel::fetchToken($token);
+                $tokenDB = $TokenModel->fetchToken($token);
 
                 if ($tokenDB['status']) {
                     // Декодирование токена и передача результата в контроллер
