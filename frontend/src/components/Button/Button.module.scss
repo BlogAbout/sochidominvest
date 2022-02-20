@@ -11,14 +11,27 @@
     -moz-transition: all 0.3s ease;
     -o-transition: all 0.3s ease;
     transition: all 0.3s ease;
-    background: #075ea5;
-    background: linear-gradient(135deg, #075ea5 0%, #ffcc01 100%);
-    color: #fff;
     border: 1px solid #075ea5;
-}
 
-.button:hover {
-    box-shadow: inset 3px 3px 8px rgba(0, 0, 0, 0.4);
+    &:hover {
+        box-shadow: inset 3px 3px 8px rgba(0, 0, 0, 0.4);
+    }
+
+    &.apply {
+        background: #075ea5;
+        background: linear-gradient(135deg, #075ea5 0%, #ffcc01 100%);
+        color: #fff;
+    }
+
+    &.save {
+        background: #075ea5;
+        color: #fff;
+
+        &:hover {
+            background: #fff;
+            color: #075ea5;
+        }
+    }
 }
 
 .not-valid {

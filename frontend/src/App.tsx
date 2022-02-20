@@ -2,13 +2,36 @@ import React, {useEffect} from 'react'
 import AppRouter from './routes/components/AppRouter/AppRouter'
 import {useActions} from './hooks/useActions'
 import {library} from '@fortawesome/fontawesome-svg-core'
-import {faUser, faLock, faPhone, faAt} from '@fortawesome/free-solid-svg-icons'
+import {
+    faAngleLeft,
+    faAt,
+    faBell,
+    faBook,
+    faBuilding,
+    faFileExcel,
+    faGear,
+    faLock,
+    faMessage,
+    faPhone,
+    faRightFromBracket,
+    faScrewdriverWrench,
+    faUser
+} from '@fortawesome/free-solid-svg-icons'
 
 library.add(
     faUser,
     faLock,
     faPhone,
-    faAt
+    faAt,
+    faBuilding,
+    faScrewdriverWrench,
+    faBook,
+    faFileExcel,
+    faGear,
+    faBell,
+    faMessage,
+    faRightFromBracket,
+    faAngleLeft
 )
 
 function App() {

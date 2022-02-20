@@ -156,7 +156,7 @@ const RegistrationForm: React.FC<Props> = (props) => {
             {error && <div className={classes.errorMessage}>{error}</div>}
 
             <div className={classes['buttons-wrapper']}>
-                <Button type="save"
+                <Button type='apply'
                         disabled={fetching}
                         onClick={registrationHandler.bind(this)}
                 >Создать аккаунт</Button>

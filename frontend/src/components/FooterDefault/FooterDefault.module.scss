@@ -3,6 +3,7 @@
     padding: 40px 0;
     background-color: #075ea5;
     flex-shrink: 0;
+    box-shadow: 0 -3px 8px rgba(0, 0, 0, 0.4);
 
     .container {
         display: flex;
@@ -15,6 +16,7 @@
             width: 25%;
             text-align: center;
             color: #fff;
+            margin: 0;
 
             a {
                 color: #ffcc01;
