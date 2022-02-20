@@ -21,3 +21,13 @@ declare module '*.module.scss' {
 
     export default classes
 }
+
+interface Window {
+    userId?: number
+    popupParents?: any
+    popupAutoCloseEvents?: any
+    popupAutoFocusEvents?: any
+    defaultDragDropContext?: any
+    HTMLElement?: any
+    StyleMedia?: any
+}

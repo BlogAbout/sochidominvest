@@ -67,8 +67,8 @@ function setupInterceptorsTo(axiosInstance: AxiosInstance): AxiosInstance {
  * <p>Подключаем interceptor из функции на экспортируемый Axios.</p>
  */
 const API = setupInterceptorsTo(axios.create({
-    // baseURL: 'http://192.168.15.24:3001/api/v1'
-    baseURL: 'http://sochidominvest/api/v1'
+    baseURL: 'https://api.sochidominvest.ru/api/v1'
+    // baseURL: 'http://sochidominvest/api/v1'
 }))
 
 export default API
