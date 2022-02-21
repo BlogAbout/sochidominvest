@@ -41,17 +41,12 @@ class UserController extends Controller
             (object)[
                 'validator' => 'required',
                 'data' => isset($data->firstName) ? $data->firstName : '',
-                'key' => 'First Name'
-            ],
-            (object)[
-                'validator' => 'string',
-                'data' => isset($data->firstName) ? $data->firstName : '',
-                'key' => 'First Name'
+                'key' => 'Имя'
             ],
             (object)[
                 'validator' => 'required',
                 'data' => isset($data->phone) ? $data->phone : '',
-                'key' => 'Phone',
+                'key' => 'Телефон',
             ],
             (object)[
                 'validator' => 'emailExists',
@@ -61,7 +56,7 @@ class UserController extends Controller
             (object)[
                 'validator' => 'min:6',
                 'data' => isset($data->password) ? $data->password : '',
-                'key' => 'Password'
+                'key' => 'Пароль'
             ]
         );
 
@@ -174,12 +169,12 @@ class UserController extends Controller
             (object)[
                 'validator' => 'required',
                 'data' => isset($data->password) ? $data->password : '',
-                'key' => 'Password'
+                'key' => 'Пароль'
             ],
             (object)[
                 'validator' => 'min:6',
                 'data' => isset($data->password) ? $data->password : '',
-                'key' => 'Password'
+                'key' => 'Пароль'
             ]
         );
 

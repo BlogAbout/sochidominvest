@@ -4,6 +4,11 @@
     background-color: #fff;
     padding: 40px;
     box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.4);
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translate(0, -50%);
+    z-index: 4;
 
     h2 {
         color: #000;

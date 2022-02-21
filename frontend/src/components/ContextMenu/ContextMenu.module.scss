@@ -1,39 +1,39 @@
 .normal {
-  box-shadow: 0 0 15px -5px #000000;
-  border-radius: 3px;
-  background-color: white;
+    box-shadow: 0 0 15px -5px #000000;
+    border-radius: 3px;
+    background-color: white;
 
-  a {
-    display: block;
-    text-decoration: none;
-  }
-
-  div,
-  a {
-    cursor: pointer;
-    padding-right: 6px;
-    background-repeat: no-repeat;
-    background-position: 7px;
-    border-bottom: 1px solid #eeeeee;
-    height: 25px;
-    line-height: 25px;
-    font-size: 12px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    color: #000;
-
-    &:hover {
-      background-color: #f3f3f3;
+    a {
+        display: block;
+        text-decoration: none;
     }
-  }
+
+    div,
+    a {
+        cursor: pointer;
+        padding-right: 6px;
+        background-repeat: no-repeat;
+        background-position: 7px;
+        border-bottom: 1px solid #eeeeee;
+        height: 25px;
+        line-height: 25px;
+        font-size: 12px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        color: #000;
+
+        &:hover {
+            background-color: #f3f3f3;
+        }
+    }
 }
 
 .separator {
-  border: 1px solid #eee;
-  height: 0;
-  padding: 0;
-  margin: 3px 0;
-  background-color: #eee;
-  cursor: default;
+    border: 1px solid #eee;
+    height: 0;
+    padding: 0;
+    margin: 3px 0;
+    background-color: #eee;
+    cursor: default;
 }

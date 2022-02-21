@@ -16,7 +16,7 @@ class UserModel extends Model
     public static function createUser($payload)
     {
         $sql = "
-            INSERT INTO `db_users`
+            INSERT INTO `sdi_user`
                 (first_name, last_name, email, phone, password, created_at, updated_at, last_active, active, role, settings)
             VALUES
                 (:firstName, :lastName, :email, :phone, :password, :createdAt, :updatedAt, :lastActive, :active, :role, :settings)
@@ -62,7 +62,7 @@ class UserModel extends Model
      */
     public static function fetchUserById($id)
     {
-        $sql = "SELECT id, first_name, last_name, email, created_at, updated_at FROM `db_users` WHERE id = :id";
+        $sql = "SELECT id, first_name, last_name, email, created_at, updated_at FROM `sdi_user` WHERE id = :id";
 
         parent::query($sql);
 
@@ -91,7 +91,7 @@ class UserModel extends Model
      */
     public static function checkEmail($email)
     {
-        $sql = "SELECT * FROM `db_users` WHERE email = :email";
+        $sql = "SELECT * FROM `sdi_user` WHERE email = :email";
 
         parent::query($sql);
 

@@ -1,0 +1,29 @@
+.SectionAdvanced {
+    padding: 40px 0;
+    background: #000;
+    position: relative;
+
+    .container {
+        width: 100%;
+        margin: 0 auto;
+        max-width: 1000px;
+        display: flex;
+        position: relative;
+
+        .list {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+
+            .item {
+                width: 29%;
+                border: 1px solid #075ea5;
+                color: #075ea5;
+                padding: 40px 20px;
+                text-align: center;
+                font-size: 18px;
+                line-height: 30px;
+            }
+        }
+    }
+}

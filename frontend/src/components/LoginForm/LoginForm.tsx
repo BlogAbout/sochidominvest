@@ -83,6 +83,7 @@ const LoginForm: React.FC<Props> = (props) => {
             <div className={classes['field-wrapper']}>
                 <TextBox
                     type="password"
+                    password={true}
                     value={auth.password}
                     placeholder='Пароль'
                     error={validationError.password}

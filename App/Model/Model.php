@@ -33,6 +33,7 @@ class Model
 
         try {
             self::$dbConn = new PDO($Dsn, self::$dbUser, self::$dbPass, $options);
+            self::$dbConn->exec('set names utf8');
         } catch (Exception $e) {
             $Response = array(
                 status => 500,

@@ -15,7 +15,7 @@ class TokenModel extends Model
      */
     public function createToken($payload)
     {
-        $sql = "INSERT INTO db_token (user_id, jwt_token) VALUES (:user_id, :jwt_token)";
+        $sql = "INSERT INTO sdi_user_token (user_id, jwt_token) VALUES (:user_id, :jwt_token)";
 
         parent::query($sql);
 
@@ -45,7 +45,7 @@ class TokenModel extends Model
      */
     public function fetchToken($token)
     {
-        $sql = "SELECT * FROM `db_token` WHERE jwt_token = :jwt_token";
+        $sql = "SELECT * FROM `sdi_user_token` WHERE jwt_token = :jwt_token";
 
         parent::query($sql);
 

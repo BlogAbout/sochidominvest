@@ -1,0 +1,26 @@
+.SectionInfo {
+    padding: 40px 0;
+    background: #ffcc01;
+    position: relative;
+
+    .container {
+        width: 100%;
+        margin: 0 auto;
+        max-width: 1000px;
+        display: flex;
+        position: relative;
+
+        .info {
+            width: calc(50% - 50px);
+            padding: 30px;
+            border: 1px solid #075ea5;
+            font-size: 20px;
+            color: #075ea5;
+            margin-right: auto;
+
+            p {
+                margin-bottom: 0;
+            }
+        }
+    }
+}

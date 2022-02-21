@@ -138,6 +138,7 @@ const RegistrationForm: React.FC<Props> = (props) => {
             <div className={classes['field-wrapper']}>
                 <TextBox
                     type="password"
+                    password={true}
                     value={signUp.password}
                     placeholder='Пароль'
                     error={validationError.password}

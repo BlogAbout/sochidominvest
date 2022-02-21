@@ -10,8 +10,6 @@ import Building from '../../../views/Building/Building'
 import Document from '../../../views/Document/Document'
 import Report from '../../../views/Report/Report'
 import Tool from '../../../views/Tool/Tool'
-import HeaderDefault from '../../../components/HeaderDefault/HeaderDefault'
-import FooterDefault from '../../../components/FooterDefault/FooterDefault'
 import Navigation from '../../../components/Navigation/Navigation'
 import SidebarLeft from '../../../components/SidebarLeft/SidebarLeft'
 import SidebarRight from '../../../components/SidebarRight/SidebarRight'
@@ -24,14 +22,10 @@ const AppRouter: React.FC = () => {
         <div className={classes.AppRouter}>
             {!isAuth ?
                 <div className={classes.container}>
-                    <HeaderDefault/>
-
                     <Routes>
                         <Route path={RouteNames.MAIN} element={<Main/>}/>
                         <Route path={RouteNames.POLICY} element={<Policy/>}/>
                     </Routes>
-
-                    <FooterDefault/>
                 </div>
                 :
                 <div className={classes.container}>
