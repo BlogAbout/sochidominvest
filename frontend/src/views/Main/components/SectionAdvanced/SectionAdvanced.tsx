@@ -7,15 +7,27 @@ const SectionAdvanced: React.FC = () => {
             <div className={classes.container}>
                 <div className={classes.list}>
                     <div className={classes.item}>
-                        The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested.
+                        <div className={classes.content}>
+                            <p>The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those
+                                interested.</p>
+                            <a>Подробнее</a>
+                        </div>
                     </div>
 
                     <div className={classes.item}>
-                        The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested.
+                        <div className={classes.content}>
+                            <p>The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those
+                                interested.</p>
+                            <a>Подробнее</a>
+                        </div>
                     </div>
 
                     <div className={classes.item}>
-                        The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested.
+                        <div className={classes.content}>
+                            <p>The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those
+                                interested.</p>
+                            <a>Подробнее</a>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -6,21 +6,17 @@
     .container {
         width: 100%;
         margin: 0 auto;
-        max-width: 1000px;
+        max-width: 1200px;
         display: flex;
         position: relative;
 
         .info {
-            width: calc(50% - 50px);
+            width: 100%;
             padding: 30px;
             border: 1px solid #075ea5;
             font-size: 20px;
             color: #075ea5;
             margin-right: auto;
-
-            p {
-                margin-bottom: 0;
-            }
         }
     }
 }

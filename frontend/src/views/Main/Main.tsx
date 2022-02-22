@@ -1,6 +1,5 @@
 import React from 'react'
 import HeadPanel from './components/HeadPanel/HeadPanel'
-import SectionLogin from './components/SectionLogin/SectionLogin'
 import SectionInfo from './components/SectionInfo/SectionInfo'
 import FooterDefault from '../../components/FooterDefault/FooterDefault'
 import SectionAdvanced from './components/SectionAdvanced/SectionAdvanced'
@@ -11,8 +10,6 @@ const Main: React.FC = () => {
         <div className={classes.Main}>
             <main className={classes.Content}>
                 <HeadPanel/>
-
-                <SectionLogin/>
 
                 <SectionInfo/>
 
