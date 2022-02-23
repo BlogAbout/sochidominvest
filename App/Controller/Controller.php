@@ -99,37 +99,33 @@ class Controller
                 }
             }
 
-            // Todo
-            if ($payload->validator == 'catalogExists') {
+            if ($payload->validator == 'buildingExists') {
                 try {
-                    $CatalogModel = new CatalogModel();
-                    $checkCatalog = $CatalogModel::fetchCatalogByID($payload->data);
+                    $BuildingModel = new BuildingModel();
+                    $checkBuilding = $BuildingModel::findBuildingById((int)$payload->data);
 
-                    if (!$checkCatalog['status']) {
+                    if (!$checkBuilding['status']) {
                         array_push($response, [
                             'key' => $payload->key,
-                            'message' => "Sorry, The catalog with this ID could not be found in our database."
+                            'message' => "Объект с таким идентификатором не найден в базе данных."
                         ]);
                     }
                 } catch (Exception $e) {
-                    /** */
                 }
             }
 
-            // Todo
-            if ($payload->validator == 'buildingExists') {
+            if ($payload->validator == 'tagExists') {
                 try {
-                    $ProductModel = new BuildingModel();
-                    $checkProduct = $ProductModel::findProductById((int)$payload->data);
+                    $TagModel = new TagModel();
+                    $checkTag = $TagModel::findTagById((int)$payload->data);
 
-                    if (!$checkProduct['status']) {
+                    if (!$checkTag['status']) {
                         array_push($response, [
                             'key' => $payload->key,
-                            'message' => "Sorry, The product with this ID could not be found in our database."
+                            'message' => "Метка с таким идентификатором не найдена в базе данных."
                         ]);
                     }
                 } catch (Exception $e) {
-                    /** */
                 }
             }
 

@@ -5,21 +5,20 @@ namespace App;
 use Exception;
 
 /**
- * BuildingController. Этот контроллер использует несколько моделей для создания, обновления, загрузки и удаления объектов недвижимости
+ * TagController. Этот контроллер использует несколько моделей для создания, обновления, загрузки и удаления меток
  */
-class BuildingController extends Controller
+class TagController extends Controller
 {
     /**
-     * Создание объекта недвижимости
+     * Создание метки
      *
      * @param mixed $request Содержит объект запроса
      * @param mixed $response Содержит объект ответа от маршрутизатора
      * @return void
      */
-    public function createBuilding($request, $response)
+    public function createTag($request, $response)
     {
         $responseObject = [];
-
         $FormDataMiddleware = new RequestMiddleware();
         $formData = $FormDataMiddleware::acceptsFormData();
 
@@ -54,11 +53,6 @@ class BuildingController extends Controller
                 'validator' => 'required',
                 'data' => isset($data->name) ? $data->name : '',
                 'key' => 'Название'
-            ],
-            (object)[
-                'validator' => 'required',
-                'data' => isset($data->address) ? $data->address : '',
-                'key' => 'Адрес'
             ]
         );
 
@@ -71,33 +65,17 @@ class BuildingController extends Controller
 
         $payload = array(
             'name' => htmlentities(stripcslashes(strip_tags($data->name))),
-            'description' => htmlentities(stripcslashes(strip_tags($data->description))),
-            'address' => htmlentities(stripcslashes(strip_tags($data->address))),
-            'active' => (int)htmlentities(stripcslashes(strip_tags($data->active))),
-            'houseClass' => htmlentities(stripcslashes(strip_tags($data->houseClass))),
-            'material' => htmlentities(stripcslashes(strip_tags($data->material))),
-            'entranceHouse' => htmlentities(stripcslashes(strip_tags($data->entranceHouse))),
-            'parking' => htmlentities(stripcslashes(strip_tags($data->parking))),
-            'territory' => htmlentities(stripcslashes(strip_tags($data->territory))),
-            'ceilingHeight' => htmlentities(stripcslashes(strip_tags($data->ceilingHeight))),
-            'maintenanceCost' => htmlentities(stripcslashes(strip_tags($data->maintenanceCost))),
-            'distanceSea' => htmlentities(stripcslashes(strip_tags($data->distanceSea))),
-            'gas' => htmlentities(stripcslashes(strip_tags($data->gas))),
-            'heating' => htmlentities(stripcslashes(strip_tags($data->heating))),
-            'electricity' => htmlentities(stripcslashes(strip_tags($data->electricity))),
-            'sewerage' => htmlentities(stripcslashes(strip_tags($data->sewerage))),
-            'waterSupply' => htmlentities(stripcslashes(strip_tags($data->waterSupply))),
             'created_at' => date('Y-m-d H:i:s'),
             'updated_at' => date('Y-m-d H:i:s')
         );
 
         try {
-            $BuildingModel = new BuildingModel();
-            $building = $BuildingModel::createBuilding($payload);
+            $TagModel = new TagModel();
+            $tag = $TagModel::createTag($payload);
 
-            if ($building['status']) {
+            if ($tag['status']) {
                 $responseObject['status'] = 201;
-                $responseObject['data'] = $building['data'];
+                $responseObject['data'] = $tag['data'];
                 $responseObject['message'] = '';
 
                 $response->code(201)->json($responseObject);
@@ -107,7 +85,7 @@ class BuildingController extends Controller
 
             $responseObject['status'] = 400;
             $responseObject['data'] = [];
-            $responseObject['message'] = 'Непредвиденная ошибка. Объект не может быть создан. Повторите попытку позже.';
+            $responseObject['message'] = 'Непредвиденная ошибка. Метка не может быть создана. Повторите попытку позже.';
 
             $response->code(400)->json($responseObject);
 
@@ -124,13 +102,13 @@ class BuildingController extends Controller
     }
 
     /**
-     * Обновление объекта недвижимости по id
+     * Обновление метки по id
      *
      * @param mixed $request Содержит объект запроса
      * @param mixed $response Содержит объект ответа от маршрутизатора
      * @return void
      */
-    public function updateBuilding($request, $response)
+    public function updateTag($request, $response)
     {
         $responseObject = [];
         $FormDataMiddleware = new RequestMiddleware();
@@ -169,7 +147,7 @@ class BuildingController extends Controller
                 'key' => 'Идентификатор'
             ],
             (object)[
-                'validator' => 'buildingExists',
+                'validator' => 'tagExists',
                 'data' => isset($request->id) ? $request->id : '',
                 'key' => 'Идентификатор'
             ],
@@ -177,11 +155,6 @@ class BuildingController extends Controller
                 'validator' => 'required',
                 'data' => isset($data->name) ? $data->name : '',
                 'key' => 'Название'
-            ],
-            (object)[
-                'validator' => 'required',
-                'data' => isset($data->address) ? $data->address : '',
-                'key' => 'Адрес'
             ]
         );
 
@@ -195,33 +168,17 @@ class BuildingController extends Controller
         $payload = array(
             'id' => $request->id,
             'name' => htmlentities(stripcslashes(strip_tags($data->name))),
-            'description' => htmlentities(stripcslashes(strip_tags($data->description))),
-            'address' => htmlentities(stripcslashes(strip_tags($data->address))),
-            'active' => (int)htmlentities(stripcslashes(strip_tags($data->active))),
-            'houseClass' => htmlentities(stripcslashes(strip_tags($data->houseClass))),
-            'material' => htmlentities(stripcslashes(strip_tags($data->material))),
-            'entranceHouse' => htmlentities(stripcslashes(strip_tags($data->entranceHouse))),
-            'parking' => htmlentities(stripcslashes(strip_tags($data->parking))),
-            'territory' => htmlentities(stripcslashes(strip_tags($data->territory))),
-            'ceilingHeight' => htmlentities(stripcslashes(strip_tags($data->ceilingHeight))),
-            'maintenanceCost' => htmlentities(stripcslashes(strip_tags($data->maintenanceCost))),
-            'distanceSea' => htmlentities(stripcslashes(strip_tags($data->distanceSea))),
-            'gas' => htmlentities(stripcslashes(strip_tags($data->gas))),
-            'heating' => htmlentities(stripcslashes(strip_tags($data->heating))),
-            'electricity' => htmlentities(stripcslashes(strip_tags($data->electricity))),
-            'sewerage' => htmlentities(stripcslashes(strip_tags($data->sewerage))),
-            'waterSupply' => htmlentities(stripcslashes(strip_tags($data->waterSupply))),
             'updated_at' => date('Y-m-d H:i:s')
         );
 
         try {
-            $BuildingModel = new BuildingModel();
-            $building = $BuildingModel::updateBuilding($payload);
+            $TagModel = new TagModel();
+            $tag = $TagModel::updateTag($payload);
 
-            if ($building['status']) {
-                $building['data'] = $BuildingModel::findBuildingById($request->id)['data'];
+            if ($tag['status']) {
+                $tag['data'] = $TagModel::findTagById($request->id)['data'];
                 $responseObject['status'] = 200;
-                $responseObject['data'] = $building['data'];
+                $responseObject['data'] = $tag['data'];
                 $responseObject['message'] = '';
 
                 $response->code(200)->json($responseObject);
@@ -231,7 +188,7 @@ class BuildingController extends Controller
 
             $responseObject['status'] = 400;
             $responseObject['data'] = [];
-            $responseObject['message'] = 'Непредвиденная ошибка. Объект не может быть обновлен. Повторите попытку позже.';
+            $responseObject['message'] = 'Непредвиденная ошибка. Метка не может быть обновлена. Повторите попытку позже.';
 
             $response->code(400)->json($responseObject);
 
@@ -248,144 +205,13 @@ class BuildingController extends Controller
     }
 
     /**
-     * Получение данных объекта недвижимости по id
+     * Получение данных метки по id
      *
      * @param mixed $request Содержит объект запроса
      * @param mixed $response Содержит объект ответа от маршрутизатора
      * @return void
      */
-    public function getBuildingById($request, $response)
-    {
-        $responseObject = [];
-
-        // Todo: Возможно будут доступны объекты даже не авторизованным
-        $JwtMiddleware = new JwtMiddleware();
-        $jwtMiddleware = $JwtMiddleware->getAndDecodeToken();
-        if (isset($jwtMiddleware) && $jwtMiddleware == false) {
-            $response->code(400)->json([
-                'status' => 401,
-                'message' => 'Вы не авторизованы.',
-                'data' => []
-            ]);
-
-            return;
-        }
-
-        $validationObject = array(
-            (object)[
-                'validator' => 'required',
-                'data' => isset($request->id) ? $request->id : '',
-                'key' => 'Идентификатор'
-            ],
-            (object)[
-                'validator' => 'buildingExists',
-                'data' => isset($request->id) ? $request->id : '',
-                'key' => 'Идентификатор'
-            ]
-        );
-
-        $validationBag = parent::validation($validationObject);
-        if ($validationBag->status) {
-            $response->code(400)->json($validationBag);
-
-            return;
-        }
-
-        try {
-            $BuildingModel = new BuildingModel();
-            $building = $BuildingModel::findBuildingById($request->id);
-
-            if ($building['status']) {
-                $responseObject['status'] = 200;
-                $responseObject['data'] = $building['data'];
-                $responseObject['message'] = '';
-
-                $response->code(200)->json($responseObject);
-
-                return;
-            }
-
-            $responseObject['status'] = 400;
-            $responseObject['data'] = [];
-            $responseObject['message'] = 'Непредвиденная ошибка. Не удалось получить данные объекта. Повторите попытку позже.';
-
-            $response->code(400)->json($responseObject);
-
-            return;
-        } catch (Exception $e) {
-            $responseObject['status'] = 500;
-            $responseObject['message'] = $e->getMessage();
-            $responseObject['data'] = [];
-
-            $response->code(500)->json($responseObject);
-
-            return;
-        }
-    }
-
-    /**
-     * Получение списка объектов недвижимости
-     *
-     * @param mixed $request Содержит объект запроса
-     * @param mixed $response Содержит объект ответа от маршрутизатора
-     * @return void
-     */
-    public function fetchBuildings($request, $response)
-    {
-        $responseObject = [];
-        // Todo: Возможно будут доступны объекты даже не авторизованным
-        $JwtMiddleware = new JwtMiddleware();
-        $jwtMiddleware = $JwtMiddleware->getAndDecodeToken();
-        if (isset($jwtMiddleware) && $jwtMiddleware == false) {
-            $response->code(400)->json([
-                'status' => 401,
-                'message' => 'Вы не авторизованы.',
-                'data' => []
-            ]);
-
-            return;
-        }
-
-        try {
-            $BuildingModel = new BuildingModel();
-            $building = $BuildingModel::fetchBuildings();
-
-            if ($building['status']) {
-                $responseObject['status'] = 200;
-                $responseObject['data'] = $building['data'];
-                $responseObject['message'] = '';
-
-                $response->code(200)->json($responseObject);
-
-                return;
-            }
-
-            $responseObject['status'] = 400;
-            $responseObject['data'] = [];
-            $responseObject['message'] = 'Непредвиденная ошибка. Не удалось получить данные объектов. Повторите попытку позже.';
-
-            $response->code(400)->json($responseObject);
-
-            return;
-        } catch (Exception $e) {
-            $responseObject['status'] = 500;
-            $responseObject['message'] = $e->getMessage();
-            $responseObject['data'] = [];
-
-            $response->code(500)->json($responseObject);
-
-            return;
-        }
-    }
-
-    /**
-     * Удаление объекта недвижимости по id
-     *
-     * @param mixed $request Содержит объект запроса
-     * @param mixed $response Содержит объект ответа от маршрутизатора
-     * @return void
-     */
-    public function deleteBuilding($request, $response)
+    public function getTagById($request, $response)
     {
         $responseObject = [];
 
@@ -408,7 +234,7 @@ class BuildingController extends Controller
                 'key' => 'Идентификатор'
             ],
             (object)[
-                'validator' => 'buildingExists',
+                'validator' => 'tagExists',
                 'data' => isset($request->id) ? $request->id : '',
                 'key' => 'Идентификатор'
             ]
@@ -422,10 +248,140 @@ class BuildingController extends Controller
         }
 
         try {
-            $BuildingModel = new BuildingModel();
-            $building = $BuildingModel::deleteBuilding($request->id);
+            $TagModel = new TagModel();
+            $tag = $TagModel::findTagById($request->id);
 
-            if ($building['status']) {
+            if ($tag['status']) {
+                $responseObject['status'] = 200;
+                $responseObject['data'] = $tag['data'];
+                $responseObject['message'] = '';
+
+                $response->code(200)->json($responseObject);
+
+                return;
+            }
+
+            $responseObject['status'] = 400;
+            $responseObject['data'] = [];
+            $responseObject['message'] = 'Непредвиденная ошибка. Не удалось получить данные метки. Повторите попытку позже.';
+
+            $response->code(400)->json($responseObject);
+
+            return;
+        } catch (Exception $e) {
+            $responseObject['status'] = 500;
+            $responseObject['message'] = $e->getMessage();
+            $responseObject['data'] = [];
+
+            $response->code(500)->json($responseObject);
+
+            return;
+        }
+    }
+
+    /**
+     * Получение списка меток
+     *
+     * @param mixed $request Содержит объект запроса
+     * @param mixed $response Содержит объект ответа от маршрутизатора
+     * @return void
+     */
+    public function fetchTags($request, $response)
+    {
+        $responseObject = [];
+
+        $JwtMiddleware = new JwtMiddleware();
+        $jwtMiddleware = $JwtMiddleware->getAndDecodeToken();
+        if (isset($jwtMiddleware) && $jwtMiddleware == false) {
+            $response->code(400)->json([
+                'status' => 401,
+                'message' => 'Вы не авторизованы.',
+                'data' => []
+            ]);
+
+            return;
+        }
+
+        try {
+            $TagModel = new TagModel();
+            $tag = $TagModel::fetchTags();
+
+            if ($tag['status']) {
+                $responseObject['status'] = 200;
+                $responseObject['data'] = $tag['data'];
+                $responseObject['message'] = '';
+
+                $response->code(200)->json($responseObject);
+
+                return;
+            }
+
+            $responseObject['status'] = 400;
+            $responseObject['data'] = [];
+            $responseObject['message'] = 'Непредвиденная ошибка. Не удалось получить данные меток. Повторите попытку позже.';
+
+            $response->code(400)->json($responseObject);
+
+            return;
+        } catch (Exception $e) {
+            $responseObject['status'] = 500;
+            $responseObject['message'] = $e->getMessage();
+            $responseObject['data'] = [];
+
+            $response->code(500)->json($responseObject);
+
+            return;
+        }
+    }
+
+    /**
+     * Удаление метки по id
+     *
+     * @param mixed $request Содержит объект запроса
+     * @param mixed $response Содержит объект ответа от маршрутизатора
+     * @return void
+     */
+    public function deleteTag($request, $response)
+    {
+        $responseObject = [];
+
+        $JwtMiddleware = new JwtMiddleware();
+        $jwtMiddleware = $JwtMiddleware->getAndDecodeToken();
+        if (isset($jwtMiddleware) && $jwtMiddleware == false) {
+            $response->code(400)->json([
+                'status' => 401,
+                'message' => 'Вы не авторизованы.',
+                'data' => []
+            ]);
+
+            return;
+        }
+
+        $validationObject = array(
+            (object)[
+                'validator' => 'required',
+                'data' => isset($request->id) ? $request->id : '',
+                'key' => 'Идентификатор'
+            ],
+            (object)[
+                'validator' => 'tagExists',
+                'data' => isset($request->id) ? $request->id : '',
+                'key' => 'Идентификатор'
+            ]
+        );
+
+        $validationBag = parent::validation($validationObject);
+        if ($validationBag->status) {
+            $response->code(400)->json($validationBag);
+
+            return;
+        }
+
+        try {
+            $TagModel = new TagModel();
+            $tag = $TagModel::deleteTag($request->id);
+
+            if ($tag['status']) {
                 $responseObject['status'] = 200;
                 $responseObject['data'] = [];
                 $responseObject['message'] = '';
@@ -437,7 +393,7 @@ class BuildingController extends Controller
 
             $responseObject['status'] = 400;
             $responseObject['data'] = [];
-            $responseObject['message'] = 'Непредвиденная ошибка. Не удалось удалить объект. Повторите попытку позже.';
+            $responseObject['message'] = 'Непредвиденная ошибка. Не удалось удалить метку. Повторите попытку позже.';
 
             $response->code(400)->json($responseObject);
 
