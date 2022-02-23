@@ -1,0 +1,70 @@
+.normal {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 27px;
+    border-radius: 2px;
+    color: white;
+    background-color: #a0c45b;
+}
+
+.wholeButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.newButton {
+    border-radius: 61px;
+    height: 23px;
+    font-size: 12px;
+    cursor: pointer;
+    min-width: 70px;
+    display: flex;
+    align-items: center;
+    padding: 0 8px;
+    border: 1px solid #bbc0c1;
+    color: #bbc0c1;
+    justify-content: center;
+    text-transform: uppercase;
+}
+
+.newButton:hover {
+    border: 1px solid #36B102;
+    color: #36B102;
+}
+
+.normal:hover {
+    background-color: #b1d968;
+    cursor: pointer;
+}
+
+.textSide {
+    font-size: 13px;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-user-select: none;
+    min-width: 90px;
+    display: flex;
+    justify-content: center;
+    border-right: 1px solid #7bad17;
+    height: 27px;
+    padding: 0 10px;
+    line-height: 27px;
+}
+
+.crossOnly {
+    background: url('./img/add.png') no-repeat center;
+    height: 27px;
+    width: 27px;
+    max-width: 27px;
+    border-radius: 2px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.crossOnly:hover {
+    cursor: pointer;
+}

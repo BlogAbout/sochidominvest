@@ -1,0 +1,90 @@
+.popup {
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+    box-shadow: 0 0 50px -15px #000;
+    max-width: 90vw;
+    min-width: 250px;
+    border-radius: 2px;
+}
+
+.title {
+    position: relative;
+    height: 38px;
+    padding-left: 15px;
+    padding-right: 35px;
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 2.4;
+    color: #585858;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.title:before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: 1px;
+    background-color: #e8e8e8;
+}
+
+.title-close {
+    position: absolute;
+    right: 15px;
+    top: 12px;
+    background: url('./img/cross.png') no-repeat center;
+    width: 14px;
+    height: 14px;
+}
+
+.title-close:hover {
+    cursor: pointer;
+    background-image: url('./img/cross_active.png');
+}
+
+.text {
+    text-align: left;
+    font-size: 14px;
+    padding: 5px 0;
+    overflow: auto;
+    max-height: 500px;
+    white-space: pre-line;
+    word-wrap: break-word;
+    flex: 1 1 auto;
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+}
+
+.footer {
+    flex: none;
+    padding: 15px 15px 15px 0;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.text-area {
+    border: 1px solid #e8e8e8;
+    border-radius: 1px;
+    padding: 5px;
+    resize: vertical;
+    min-height: 100px;
+    max-height: 250px;
+    flex-grow: 1;
+}
+
+.text-area::-webkit-input-placeholder {
+    font-style: normal;
+}
+
+.text-area::-moz-placeholder {
+    font-style: normal;
+}

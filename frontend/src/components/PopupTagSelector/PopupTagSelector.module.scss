@@ -1,0 +1,67 @@
+.PopupTagSelector {
+    width: 450px;
+    height: 500px;
+}
+
+.box_content {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    overflow-y: auto;
+    height: 100%;
+}
+
+.search_and_button {
+    display: flex;
+}
+
+.box_border {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-flex: 1;
+    -webkit-flex-grow: 1;
+    flex-grow: 1;
+    border: 1px solid #e8e8e8;
+    border-radius: 2px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    overflow-y: hidden;
+    height: 100%;
+}
+
+.row {
+    height: 40px;
+    border-bottom: 1px solid #e8e8e8;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.row:hover {
+    background-color: #f5f8fa;
+}
+
+.row:last-child {
+    margin-bottom: -1px;
+}
+
+.text {
+    font-size: 14px;
+    padding: 0 10px;
+    flex-grow: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.selected_icon {
+    background: url('./img/selected.png') no-repeat center;
+    width: 22px;
+    height: 22px;
+    margin-right: 8px;
+    flex: none;
+}
