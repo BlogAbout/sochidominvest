@@ -117,9 +117,9 @@ class Controller
             }
 
             // Todo
-            if ($payload->validator == 'productExists') {
+            if ($payload->validator == 'buildingExists') {
                 try {
-                    $ProductModel = new ProductModel();
+                    $ProductModel = new BuildingModel();
                     $checkProduct = $ProductModel::findProductById((int)$payload->data);
 
                     if (!$checkProduct['status']) {
