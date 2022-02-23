@@ -1,0 +1,29 @@
+.BuildingPage {
+    width: 600px;
+}
+
+.content {
+    .info {
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        padding: 15px 15px 0;
+    }
+}
+
+.tabContent {
+    padding: 15px;
+}
+
+.field {
+    width: 49%;
+    margin-bottom: 10px;
+    position: relative;
+}
+
+.field_label {
+    font-size: 14px;
+    color: black;
+    margin-bottom: 3px;
+    display: flex;
+}

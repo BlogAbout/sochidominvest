@@ -1,26 +1,33 @@
 import React from 'react'
 import Button from '../../components/Button/Button'
-import classes from './Building.module.scss'
+import openPopupBuildingCreate from '../../components/PopupBuildingCreate/PopupBuildingCreate'
+import classes from './BuildingPage.module.scss'
 
-const Building: React.FC = () => {
+const BuildingPage: React.FC = () => {
+    const onClickAddHandler = () => {
+        openPopupBuildingCreate(document.body, {
+            onSave: () => {
+                // Todo
+            }
+        })
+    }
+
     return (
-        <main className={classes.Building}>
+        <main className={classes.BuildingPage}>
             <div className={classes.filter}>
-                <Button type='save' onClick={() => console.log('add')}>Все</Button>
+                <Button type='save' icon={'bolt'} onClick={() => console.log('add')}>Новинки</Button>
 
-                <Button type='save' onClick={() => console.log('add')}>Новинки</Button>
+                <Button type='save' icon={'percent'} onClick={() => console.log('add')}>Акции</Button>
 
-                <Button type='save' onClick={() => console.log('add')}>Акции</Button>
+                <Button type='save' icon={'star'} onClick={() => console.log('add')}>Популярное</Button>
 
-                <Button type='save' onClick={() => console.log('add')}>Популярное</Button>
-
-                <Button type='save' onClick={() => console.log('add')}>Незаконные</Button>
+                <Button type='save' icon={'flag'} onClick={() => console.log('add')}>Незаконные</Button>
             </div>
 
             <div className={classes.Content}>
                 <h1>
                     <span>Недвижимость</span>
-                    <Button type='apply' onClick={() => console.log('add')}>+ Добавить</Button>
+                    <Button type='apply' icon='plus' onClick={onClickAddHandler.bind(this)}>Добавить</Button>
                 </h1>
 
                 <div className={classes.List}>
@@ -83,6 +90,6 @@ const Building: React.FC = () => {
     )
 }
 
-Building.displayName = 'Building'
+BuildingPage.displayName = 'BuildingPage'
 
-export default Building
+export default BuildingPage

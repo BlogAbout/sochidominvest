@@ -1,7 +1,7 @@
 .button {
     height: 40px;
     padding: 0 10px;
-    min-width: 103px;
+    min-width: 100px;
     text-align: center;
     line-height: 40px;
     border-radius: 8px;
@@ -12,9 +12,40 @@
     -o-transition: all 0.3s ease;
     transition: all 0.3s ease;
     border: 1px solid #075ea5;
+    display: flex;
+
+    .icon {
+        width: 30px;
+        display: inline-block;
+        margin-right: 10px;
+        padding-right: 5px;
+        position: relative;
+        text-align: center;
+
+        &::after {
+            content: '';
+            display: block;
+            position: absolute;
+            width: 1px;
+            height: 60%;
+            right: 0;
+            top: 50%;
+            transform: translate(0, -50%);
+            z-index: 2;
+            background: #fff;
+            -webkit-transition: all 0.3s ease;
+            -moz-transition: all 0.3s ease;
+            -o-transition: all 0.3s ease;
+            transition: all 0.3s ease;
+        }
+    }
 
     &:hover {
         box-shadow: inset 3px 3px 8px rgba(0, 0, 0, 0.4);
+    }
+
+    &.is-icon {
+        text-align: left;
     }
 
     &.apply {
@@ -30,6 +61,18 @@
         &:hover {
             background: #fff;
             color: #075ea5;
+
+            .icon::after {
+                background: #075ea5;
+            }
+        }
+    }
+
+    &.cancel {
+        background: #ffcc01;
+
+        .icon::after {
+            background: #075ea5;
         }
     }
 }

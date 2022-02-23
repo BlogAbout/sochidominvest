@@ -128,7 +128,7 @@ const ContextMenu: React.FC<Props> = (props) => {
 ContextMenu.defaultProps = defaultProps
 ContextMenu.displayName = 'ContextMenu'
 
-export default function openContextMenu(e: any, menuItems: any[] = [], popupProps = {} as Props, displayOptions: PopupDisplayOptions = {} as PopupDisplayOptions) {
+export default function openContextMenu(e: any, menuItems: any[] = [], popupProps = {}, displayOptions: PopupDisplayOptions = {} as PopupDisplayOptions) {
     popupProps = {...popupProps, menuItems}
 
     return openPopup(ContextMenu, popupProps, undefined, e, displayOptions)

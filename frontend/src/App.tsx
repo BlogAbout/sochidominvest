@@ -3,19 +3,21 @@ import AppRouter from './routes/components/AppRouter/AppRouter'
 import {useActions} from './hooks/useActions'
 import {library} from '@fortawesome/fontawesome-svg-core'
 import {
-    faAngleLeft,
+    faAngleLeft, faArrowRotateLeft, faArrowUpRightFromSquare,
     faAt,
     faBell,
+    faBolt,
     faBook,
-    faBuilding,
-    faFileExcel,
-    faGear,
+    faBuilding, faCheck,
+    faFileExcel, faFlag,
+    faGear, faHeading, faHeadset,
+    faHouse, faHouseUser, faLocationDot,
     faLock,
-    faMessage,
-    faPhone,
-    faRightFromBracket,
-    faScrewdriverWrench,
-    faUser
+    faMessage, faPercent,
+    faPhone, faPlus,
+    faRightFromBracket, faRubleSign,
+    faScrewdriverWrench, faStar,
+    faUser, faUserCheck, faUserTie
 } from '@fortawesome/free-solid-svg-icons'
 
 library.add(
@@ -31,7 +33,23 @@ library.add(
     faBell,
     faMessage,
     faRightFromBracket,
-    faAngleLeft
+    faAngleLeft,
+    faHouse,
+    faBolt,
+    faPercent,
+    faFlag,
+    faStar,
+    faPlus,
+    faUserTie,
+    faHouseUser,
+    faHeadset,
+    faCheck,
+    faArrowRotateLeft,
+    faUserCheck,
+    faHeading,
+    faLocationDot,
+    faArrowUpRightFromSquare,
+    faRubleSign
 )
 
 function App() {

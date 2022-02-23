@@ -3,7 +3,7 @@
     height: 50px;
     display: flex;
     flex-grow: 1;
-    background-color: #f7f7f7;
+    background-color: #fff;
     position: fixed;
     left: 0;
     top: 0;
@@ -11,26 +11,37 @@
     overflow: hidden;
     z-index: 5;
 
-    .logo {
-        width: 130px;
-        padding: 5px 10px;
-        margin-right: auto;
+    .menu {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        flex-grow: 1;
+        display: flex;
 
-        a {
+        li {
+            line-height: 50px;
+            height: 50px;
             display: block;
-            width: 100%;
-            font-size: 0;
-            line-height: 0;
-            height: 100%;
+            position: relative;
+            padding: 5px;
 
-            .logoImage {
-                display: block;
-                width: 100%;
-                height: 100%;
-                background-image: url('./img/logo-full.png');
-                background-size: contain;
-                background-position: center;
-                background-repeat: no-repeat;
+            a {
+                font-size: 16px;
+                line-height: 40px;
+                color: #075ea5;
+                padding: 0 10px;
+                display: flex;
+                height: 40px;
+                align-items: center;
+                justify-content: center;
+                border: 3px solid #075ea5;
+                border-radius: 50%;
+
+                &.active,
+                &:hover {
+                    color: #ffcc01;
+                    border: 3px solid #ffcc01;
+                }
             }
         }
     }
@@ -58,6 +69,19 @@
                 height: 50px;
                 align-items: center;
                 justify-content: center;
+                position: relative;
+
+                &::after {
+                    content: '';
+                    display: block;
+                    position: absolute;
+                    bottom: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 0;
+                    transition: all 0.3s ease-out;
+                    background: #075ea5;
+                }
 
                 span {
                     display: block;
@@ -67,11 +91,19 @@
                 &.active {
                     text-decoration: none;
                     background: #ffcc01;
+
+                    &::after {
+                        height: 3px;
+                    }
                 }
 
                 &:hover {
                     text-decoration: none;
                     background: #ffcc01;
+
+                    &::after {
+                        height: 3px;
+                    }
                 }
             }
         }

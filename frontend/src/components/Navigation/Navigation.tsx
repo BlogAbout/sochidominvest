@@ -1,5 +1,5 @@
 import React from 'react'
-import {Link, NavLink} from 'react-router-dom'
+import {NavLink} from 'react-router-dom'
 import {RouteNames} from '../../routes/routes'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import classes from './Navigation.module.scss'
@@ -7,11 +7,16 @@ import classes from './Navigation.module.scss'
 const Navigation: React.FC = () => {
     return (
         <nav className={classes.Navigation}>
-            <div className={classes.logo}>
-                <Link to={RouteNames.MAIN}>
-                    <span className={classes.logoImage} title='Вернуться на главную'/>
-                </Link>
-            </div>
+            <ul className={classes.menu}>
+                <li>
+                    <NavLink to={RouteNames.MAIN}
+                             className={({isActive}) => isActive ? classes.active : ''}
+                             title='Рабочий стол'
+                    >
+                        <FontAwesomeIcon icon='house'/>
+                    </NavLink>
+                </li>
+            </ul>
 
             <ul className={classes.links}>
                 <li>

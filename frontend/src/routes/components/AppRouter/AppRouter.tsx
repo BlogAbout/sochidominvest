@@ -5,8 +5,8 @@ import {useTypedSelector} from '../../../hooks/useTypedSelector'
 import Main from '../../../views/Main/Main'
 import Policy from '../../../views/Policy/Policy'
 import MainService from '../../../views/MainService/MainService'
-import User from '../../../views/User/User'
-import Building from '../../../views/Building/Building'
+import UserPage from '../../../views/UserPage/UserPage'
+import BuildingPage from '../../../views/BuildingPage/BuildingPage'
 import Document from '../../../views/Document/Document'
 import Report from '../../../views/Report/Report'
 import Tool from '../../../views/Tool/Tool'
@@ -36,8 +36,8 @@ const AppRouter: React.FC = () => {
                     <div className={classes.serviceContent}>
                         <Routes>
                             <Route path={RouteNames.MAIN} element={<MainService/>}/>
-                            <Route path={RouteNames.USER} element={<User/>}/>
-                            <Route path={RouteNames.BUILDING} element={<Building/>}/>
+                            <Route path={RouteNames.USER} element={<UserPage/>}/>
+                            <Route path={RouteNames.BUILDING} element={<BuildingPage/>}/>
                             <Route path={RouteNames.DOCUMENT} element={<Document/>}/>
                             <Route path={RouteNames.REPORT} element={<Report/>}/>
                             <Route path={RouteNames.TOOL} element={<Tool/>}/>

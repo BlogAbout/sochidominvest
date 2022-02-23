@@ -1,5 +1,7 @@
 import * as React from 'react'
 import classNames from 'classnames/bind'
+import {IconProp} from '@fortawesome/fontawesome-svg-core'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import classes from './Button.module.scss'
 
 interface Props extends React.HTMLAttributes<any> {
@@ -8,6 +10,7 @@ interface Props extends React.HTMLAttributes<any> {
     type: 'apply' | 'save' | 'cancel' | 'regular'
     disabled?: boolean
     notValid?: boolean
+    icon?: IconProp
 
     onClick(e: React.MouseEvent<HTMLElement>): void
 }
@@ -32,6 +35,7 @@ const Button: React.FC<Props> = (props) => {
         [`${props.type}`]: true,
         ['disabled']: props.disabled,
         ['not-valid']: props.notValid,
+        ['is-icon']: !!props.icon
     }, userStyle)
 
     return (
@@ -43,7 +47,13 @@ const Button: React.FC<Props> = (props) => {
                  }
              }}
         >
-            {props.children}
+            {props.icon ?
+                <span className={classes.icon}>
+                    <FontAwesomeIcon icon={props.icon}/>
+                </span>
+                : null
+            }
+            <span className={classes.text}>{props.children}</span>
         </div>
     )
 }

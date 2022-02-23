@@ -4,7 +4,7 @@ namespace App;
 
 $Klein = new \Klein\Klein();
 
-// User Routes, Authentication Routes
+// UserPage Routes, Authentication Routes
 $Klein->respond('POST', '/api/v1/registration', [new UserController(), 'signUp']);
 $Klein->respond('POST', '/api/v1/auth', [new UserController(), 'signIn']);
 

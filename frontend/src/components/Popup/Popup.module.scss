@@ -1,0 +1,95 @@
+.popup {
+    background-color: #fff;
+    box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.4);
+    display: flex;
+    flex-direction: column;
+    max-width: 100vw;
+    max-height: 100vh;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    height: 37px;
+    flex: none;
+    padding: 0 15px;
+    border-bottom: 1px solid #e8e8e8;
+}
+
+.header_big {
+    composes: header;
+    height: 48px;
+}
+
+.title {
+    font-size: 16px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    color: #585858;
+    font-weight: bold;
+}
+
+.header_big .title {
+    font-size: 18px;
+    color: #08a7b9;
+    margin: 0 15px;
+}
+
+.items {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-grow: 1;
+    min-width: 0;
+}
+
+.header_icon {
+    flex: none;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+.cross {
+    composes: header_icon;
+    background: url('./img/cross_small.png') no-repeat center;
+    width: 14px;
+    height: 14px;
+}
+
+.cross:hover {
+    background: url('./img/cross_small_active.png') no-repeat center;
+}
+
+.header_big .cross {
+    background: url('./img/cross.png') no-repeat center;
+    width: 20px;
+    height: 20px;
+}
+
+.header_big .cross:hover {
+    background: url('./img/cross_active.png') no-repeat center;
+}
+
+.content {
+    padding: 0;
+}
+
+.footer {
+    flex: none;
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.left {
+    display: flex;
+    align-items: center;
+    flex-grow: 1;
+}
+
+.right {
+    display: flex;
+    align-items: center;
+}
