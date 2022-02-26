@@ -63,14 +63,14 @@ class Controller
                 if (strtolower($operationName) == 'min' && $operationChecks > strlen($payload->data)) {
                     array_push($response, [
                         'key' => $payload->key,
-                        'message' => "{$payload->key} должно быть больше, чем " . strlen($payload->data)
+                        'message' => "{$payload->key} должен быть больше, чем " . strlen($payload->data) . " символа"
                     ]);
                 }
 
                 if (strtolower($operationName) == 'max' && $operationChecks < strlen($payload->data)) {
                     array_push($response, [
                         'key' => $payload->key,
-                        'message' => "{$payload->key} должно быть меньше, чем " . strlen($payload->data)
+                        'message' => "{$payload->key} должен быть меньше, чем " . strlen($payload->data) . " символа"
                     ]);
                 }
 
@@ -78,7 +78,7 @@ class Controller
                     $operationChecksTwo = (int)explode(':', $payload->validator)[2];
                     array_push($response, [
                         'key' => $payload->key,
-                        'message' => "{$payload->key} должно быть между " . $operationChecks . ' и ' . $operationChecksTwo
+                        'message' => "{$payload->key} должно быть между " . $operationChecks . ' и ' . $operationChecksTwo  . " символами"
                     ]);
                 }
             }
@@ -89,20 +89,37 @@ class Controller
                     $checkEmail = $UserModel::checkEmail($payload->data);
 
                     if ($checkEmail['status']) {
-                        array_push($response, [
-                            'key' => $payload->key,
-                            'message' => "Указанный {$payload->key} уже существует. Пожалуйста, попробуйте другой."
-                        ]);
+                        if (!$payload->id || $checkEmail['data']['id'] != $payload->id) {
+                            array_push($response, [
+                                'key' => $payload->key,
+                                'message' => "Указанный {$payload->key} уже существует. Пожалуйста, попробуйте другой."
+                            ]);
+                        }
                     }
                 } catch (Exception $e) {
                     /** */
                 }
             }
 
+            if ($payload->validator == 'userExists') {
+                try {
+                    $UserModel = new UserModel();
+                    $checkUser = $UserModel::fetchUserById((int)$payload->data);
+
+                    if (!$checkUser['status']) {
+                        array_push($response, [
+                            'key' => $payload->key,
+                            'message' => "Пользователь с таким идентификатором не найден в базе данных."
+                        ]);
+                    }
+                } catch (Exception $e) {
+                }
+            }
+
             if ($payload->validator == 'buildingExists') {
                 try {
                     $BuildingModel = new BuildingModel();
-                    $checkBuilding = $BuildingModel::findBuildingById((int)$payload->data);
+                    $checkBuilding = $BuildingModel::fetchBuildingById((int)$payload->data);
 
                     if (!$checkBuilding['status']) {
                         array_push($response, [
@@ -117,7 +134,7 @@ class Controller
             if ($payload->validator == 'tagExists') {
                 try {
                     $TagModel = new TagModel();
-                    $checkTag = $TagModel::findTagById((int)$payload->data);
+                    $checkTag = $TagModel::fetchTagById((int)$payload->data);
 
                     if (!$checkTag['status']) {
                         array_push($response, [

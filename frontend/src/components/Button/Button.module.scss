@@ -13,6 +13,7 @@
     transition: all 0.3s ease;
     border: 1px solid #075ea5;
     display: flex;
+    justify-content: center;
 
     .icon {
         width: 30px;
@@ -46,6 +47,7 @@
 
     &.is-icon {
         text-align: left;
+        justify-content: flex-start;
     }
 
     &.apply {

@@ -9,7 +9,7 @@ interface Props extends React.PropsWithChildren<any> {
     width?: string | number
     margin?: string | number
     flexGrow?: boolean
-    placeholder?: string
+    placeHolder?: string
     title?: string
     readOnly?: boolean
     error?: boolean

@@ -7,4 +7,5 @@ export interface IBuilding {
     type: string | null
     status: string | null
     active: number
+    tags: number[]
 }

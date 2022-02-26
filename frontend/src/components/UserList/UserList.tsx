@@ -1,19 +1,48 @@
-import React from 'React'
+import React from 'react'
+import Empty from '../Empty/Empty'
+import UserItem from './components/UserItem/UserItem'
+import {IUser} from '../../@types/IUser'
 import classes from './UserList.module.scss'
 
-const UserList: React.FC = () => {
-    // Обработчик изменений
-    const onSave = () => {
-        // Todo
-    }
+interface Props {
+    users: IUser[]
+    fetching: boolean
 
+    onSave(): void
+}
+
+const defaultProps: Props = {
+    users: [],
+    fetching: false,
+    onSave: () => {
+        console.info('UserList onSave')
+    }
+}
+
+const UserList: React.FC<Props> = (props) => {
     return (
         <div className={classes.UserList}>
+            <div className={classes.head}>
+                <div className={classes.id}>#</div>
+                <div className={classes.name}>Имя</div>
+                <div className={classes.email}>Email</div>
+                <div className={classes.phone}>Телефон</div>
+                <div className={classes.role}>Роль</div>
+            </div>
 
+            {props.users.length ?
+                props.users.map((user: IUser) => {
+                    return (
+                        <UserItem key={user.id} user={user} onSave={props.onSave.bind(this)}/>
+                    )
+                })
+                : <Empty message='Нет пользователей'/>
+            }
         </div>
     )
 }
 
+UserList.defaultProps = defaultProps
 UserList.displayName = 'UserList'
 
 export default UserList

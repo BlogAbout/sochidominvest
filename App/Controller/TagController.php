@@ -176,7 +176,7 @@ class TagController extends Controller
             $tag = $TagModel::updateTag($payload);
 
             if ($tag['status']) {
-                $tag['data'] = $TagModel::findTagById($request->id)['data'];
+                $tag['data'] = $TagModel::fetchTagById($request->id)['data'];
                 $responseObject['status'] = 200;
                 $responseObject['data'] = $tag['data'];
                 $responseObject['message'] = '';
@@ -249,7 +249,7 @@ class TagController extends Controller
 
         try {
             $TagModel = new TagModel();
-            $tag = $TagModel::findTagById($request->id);
+            $tag = $TagModel::fetchTagById($request->id);
 
             if ($tag['status']) {
                 $responseObject['status'] = 200;

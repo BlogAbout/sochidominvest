@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react'
+import withStore from '../../hoc/withStore'
 import {PopupProps} from '../../@types/IPopup'
 import {ITag} from '../../@types/ITag'
 import {getPopupContainer, openPopup, removePopup} from '../../helpers/popupHelper'
@@ -7,7 +8,7 @@ import {Content, Footer, Header, Popup} from '../Popup/Popup'
 import BlockingElement from '../BlockingElement/BlockingElement'
 import TextBox from '../TextBox/TextBox'
 import Button from '../Button/Button'
-import classes from './PopupBuildingCreate.module.scss'
+import classes from './PopupTagCreate.module.scss'
 
 interface Props extends PopupProps {
     tag?: ITag | null
@@ -100,5 +101,5 @@ export default function openPopupTagCreate(target: any, popupProps = {} as Props
 
     popupProps = {...popupProps, blockId: blockId}
 
-    return openPopup(PopupTagCreate, popupProps, undefined, block, displayOptions)
+    return openPopup(withStore(PopupTagCreate), popupProps, undefined, block, displayOptions)
 }

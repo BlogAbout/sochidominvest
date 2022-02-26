@@ -23,7 +23,7 @@ export const UserActionCreators = {
             const response = await UserService.fetchUsers()
 
             if (response.status === 200) {
-                dispatch(UserActionCreators.setUsers(response.data.data.data))
+                dispatch(UserActionCreators.setUsers(response.data.data))
             } else {
                 dispatch(UserActionCreators.setError('Ошибка загрузки данных'))
             }
@@ -44,14 +44,19 @@ export const UserActionCreators = {
                 response = await UserService.createUser(user)
             }
 
-            if (response.status === 200) {
+            if (response.status === 200 || response.status === 201) {
                 dispatch(UserActionCreators.setError(''))
             } else {
                 dispatch(UserActionCreators.setError('Ошибка сохранения данных'))
             }
-        } catch (e) {
-            dispatch(UserActionCreators.setError('Непредвиденная ошибка сохранения данных'))
-            console.log('Непредвиденная ошибка сохранения данных', e)
+        } catch (e: any) {
+            if (e.data && e.data.errors) {
+                const errorMessage: string[] = e.data.errors.map((error: any) => error.message)
+                dispatch(UserActionCreators.setError(errorMessage.join('\n')))
+            } else {
+                console.log('Непредвиденная ошибка сохранения данных', e)
+                dispatch(UserActionCreators.setError('Непредвиденная ошибка сохранения данных'))
+            }
         }
     },
     removeUser: (userId: number) => async (dispatch: AppDispatch) => {

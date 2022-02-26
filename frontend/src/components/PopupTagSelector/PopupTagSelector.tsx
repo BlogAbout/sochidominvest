@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react'
+import withStore from '../../hoc/withStore'
 import {ITag} from '../../@types/ITag'
-import {PopupProps} from '../../@types/IPopup'
+import {PopupDisplayOptions, PopupProps} from '../../@types/IPopup'
 import openPopupTagCreate from '../PopupTagCreate/PopupTagCreate'
 import {openPopup, removePopup} from '../../helpers/popupHelper'
 import {Content, Header, Popup} from '../Popup/Popup'
@@ -10,6 +11,8 @@ import openContextMenu from '../ContextMenu/ContextMenu'
 import ButtonAdd from '../ButtonAdd/ButtonAdd'
 import SearchBox from '../SearchBox/SearchBox'
 import openPopupAlert from '../PopupAlert/PopupAlert'
+import {useTypedSelector} from '../../hooks/useTypedSelector'
+import {useActions} from '../../hooks/useActions'
 import classes from './PopupTagSelector.module.scss'
 
 interface Props extends PopupProps {
@@ -39,24 +42,20 @@ const PopupTagSelector: React.FC<Props> = (props) => {
     const [searchText, setSearchText] = useState('')
     const [tagFilter, setTagFilter] = useState<ITag[]>([])
 
-    // const {fetching, tags} = useTypedSelector(state => state.tagReducer)
-    // const {fetchTagList, removeTag} = useActions()
-    const tags: ITag[] = []
-    const fetching: boolean = false
+    const {fetching, tags} = useTypedSelector(state => state.tagReducer)
+    const {fetchTagList, removeTag} = useActions()
 
     useEffect(() => {
         if (!tags.length || isUpdate) {
-            // fetchTagList(null)
+            fetchTagList()
 
             setIsUpdate(false)
-        } else {
-            search(searchText)
         }
     }, [isUpdate])
 
-    useEffect(() => {
-        search(searchText)
-    }, [tags])
+    // useEffect(() => {
+    //     search(searchText)
+    // }, [tags])
 
     // Закрытие Popup
     const close = () => {
@@ -210,6 +209,6 @@ const PopupTagSelector: React.FC<Props> = (props) => {
 PopupTagSelector.defaultProps = defaultProps
 PopupTagSelector.displayName = 'PopupTagSelector'
 
-export default function openPopupTagSelector(target: any, popupProps = {} as Props, displayOptions = {}) {
-    return openPopup(PopupTagSelector, popupProps, undefined, target, displayOptions)
+export default function openPopupTagSelector(target: any, popupProps = {} as Props, displayOptions: PopupDisplayOptions = {} as PopupDisplayOptions) {
+    return openPopup(withStore(PopupTagSelector), popupProps, undefined, target, displayOptions)
 }

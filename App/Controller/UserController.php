@@ -69,7 +69,6 @@ class UserController extends Controller
 
         $payload = array(
             'firstName' => htmlspecialchars(stripcslashes(strip_tags($data->firstName))),
-            'lastName' => '',
             'email' => stripcslashes(strip_tags($data->email)),
             'phone' => htmlspecialchars(stripcslashes(strip_tags($data->phone))),
             'password' => password_hash($data->password, PASSWORD_BCRYPT),
@@ -239,6 +238,449 @@ class UserController extends Controller
             $responseObject['data'] = [];
 
             $response->code(500)->json($responseObject);
+
+            return;
+        } catch (Exception $e) {
+            $responseObject['status'] = 500;
+            $responseObject['message'] = $e->getMessage();
+            $responseObject['data'] = [];
+
+            $response->code(500)->json($responseObject);
+
+            return;
+        }
+    }
+
+    /**
+     * Создание пользователя
+     *
+     * @param mixed $request Содержит объект запроса
+     * @param mixed $response Содержит объект ответа от маршрутизатора
+     * @return void
+     */
+    public function createUser($request, $response)
+    {
+        $responseObject = [];
+
+        $Middleware = new RequestMiddleware();
+        $Middleware = $Middleware::acceptsJson();
+
+        if (!$Middleware) {
+            array_push($responseObject, [
+                'status' => 400,
+                'message' => 'Доступ к конечной точке разрешен только содержимому JSON.',
+                'data' => []
+            ]);
+
+            $response->code(400)->json($responseObject);
+
+            return;
+        }
+
+        $JwtMiddleware = new JwtMiddleware();
+        $jwtMiddleware = $JwtMiddleware->getAndDecodeToken();
+        if (isset($jwtMiddleware) && $jwtMiddleware == false) {
+            $response->code(400)->json([
+                'status' => 401,
+                'message' => 'Вы не авторизованы.',
+                'data' => []
+            ]);
+
+            return;
+        }
+
+        $data = json_decode($request->body());
+
+        $validationObject = array(
+            (object)[
+                'validator' => 'required',
+                'data' => isset($data->firstName) ? $data->firstName : '',
+                'key' => 'Имя'
+            ],
+            (object)[
+                'validator' => 'required',
+                'data' => isset($data->phone) ? $data->phone : '',
+                'key' => 'Телефон',
+            ],
+            (object)[
+                'validator' => 'emailExists',
+                'data' => isset($data->email) ? $data->email : '',
+                'key' => 'Email'
+            ],
+            (object)[
+                'validator' => 'min:6',
+                'data' => isset($data->password) ? $data->password : '',
+                'key' => 'Пароль'
+            ]
+        );
+
+        $validationBag = parent::validation($validationObject);
+        if ($validationBag->status) {
+            $response->code(400)->json($validationBag);
+
+            return;
+        }
+
+        $payload = array(
+            'firstName' => htmlspecialchars(stripcslashes(strip_tags($data->firstName))),
+            'email' => stripcslashes(strip_tags($data->email)),
+            'phone' => htmlspecialchars(stripcslashes(strip_tags($data->phone))),
+            'password' => password_hash($data->password, PASSWORD_BCRYPT),
+            'createdAt' => date('Y-m-d H:i:s'),
+            'updatedAt' => date('Y-m-d H:i:s'),
+            'lastActive' => date('Y-m-d H:i:s'),
+            'active' => (int)htmlentities(stripcslashes(strip_tags($data->active))),
+            'role' => htmlspecialchars(stripcslashes(strip_tags($data->role))),
+            'settings' => ''
+        );
+
+        try {
+            $UserModel = new UserModel();
+            $user = $UserModel::createUser($payload);
+
+            if ($user['status']) {
+                $responseObject['status'] = 201;
+                $responseObject['data'] = $user['data'];
+                $responseObject['message'] = '';
+
+                $response->code(201)->json($responseObject);
+
+                return;
+            }
+
+            $responseObject['status'] = 400;
+            $responseObject['data'] = [];
+            $responseObject['message'] = 'Непредвиденная ошибка. Пользователь не может быть создан. Повторите попытку позже.';
+
+            $response->code(400)->json($responseObject);
+
+            return;
+        } catch (Exception $e) {
+            $responseObject['status'] = 500;
+            $responseObject['message'] = $e->getMessage();
+            $responseObject['data'] = [];
+
+            $response->code(500)->json($responseObject);
+
+            return;
+        }
+    }
+
+    /**
+     * Обновление пользователя по id
+     *
+     * @param mixed $request Содержит объект запроса
+     * @param mixed $response Содержит объект ответа от маршрутизатора
+     * @return void
+     */
+    public function updateUser($request, $response)
+    {
+        $responseObject = [];
+
+        $Middleware = new RequestMiddleware();
+        $Middleware = $Middleware::acceptsJson();
+
+        if (!$Middleware) {
+            array_push($responseObject, [
+                'status' => 400,
+                'message' => 'Доступ к конечной точке разрешен только содержимому JSON.',
+                'data' => []
+            ]);
+
+            $response->code(400)->json($responseObject);
+
+            return;
+        }
+
+        $JwtMiddleware = new JwtMiddleware();
+        $jwtMiddleware = $JwtMiddleware->getAndDecodeToken();
+        if (isset($jwtMiddleware) && $jwtMiddleware == false) {
+            $response->code(400)->json([
+                'status' => 401,
+                'message' => 'Вы не авторизованы.',
+                'data' => []
+            ]);
+
+            return;
+        }
+
+        $data = json_decode($request->body());
+
+        $validationObject = array(
+            (object)[
+                'validator' => 'required',
+                'data' => isset($request->id) ? $request->id : '',
+                'key' => 'Идентификатор'
+            ],
+            (object)[
+                'validator' => 'userExists',
+                'data' => isset($request->id) ? $request->id : '',
+                'key' => 'Идентификатор'
+            ],
+            (object)[
+                'validator' => 'required',
+                'data' => isset($data->firstName) ? $data->firstName : '',
+                'key' => 'Имя'
+            ],
+            (object)[
+                'validator' => 'required',
+                'data' => isset($data->phone) ? $data->phone : '',
+                'key' => 'Телефон',
+            ],
+            (object)[
+                'validator' => 'emailExists',
+                'data' => isset($data->email) ? $data->email : '',
+                'key' => 'Email',
+                'id' => $request->id
+            ]
+        );
+
+        $validationBag = parent::validation($validationObject);
+        if ($validationBag->status) {
+            $response->code(400)->json($validationBag);
+
+            return;
+        }
+
+        $payload = array(
+            'id' => $request->id,
+            'firstName' => htmlspecialchars(stripcslashes(strip_tags($data->firstName))),
+            'email' => stripcslashes(strip_tags($data->email)),
+            'phone' => htmlspecialchars(stripcslashes(strip_tags($data->phone))),
+            'password' => password_hash($data->password, PASSWORD_BCRYPT),
+            'createdAt' => date('Y-m-d H:i:s'),
+            'updatedAt' => date('Y-m-d H:i:s'),
+            'lastActive' => date('Y-m-d H:i:s'),
+            'active' => (int)htmlentities(stripcslashes(strip_tags($data->active))),
+            'role' => htmlspecialchars(stripcslashes(strip_tags($data->role))),
+            'settings' => ''
+        );
+
+        try {
+            $UserModel = new UserModel();
+            $user = $UserModel::updateUser($payload);
+
+            if ($user['status']) {
+                $building['data'] = $UserModel::fetchUserById($request->id)['data'];
+                $responseObject['status'] = 200;
+                $responseObject['data'] = $building['data'];
+                $responseObject['message'] = '';
+
+                $response->code(200)->json($responseObject);
+
+                return;
+            }
+
+            $responseObject['status'] = 400;
+            $responseObject['data'] = [];
+            $responseObject['message'] = 'Непредвиденная ошибка. Пользователь не может быть обновлен. Повторите попытку позже.';
+
+            $response->code(400)->json($responseObject);
+
+            return;
+        } catch (Exception $e) {
+            $responseObject['status'] = 500;
+            $responseObject['message'] = $e->getMessage();
+            $responseObject['data'] = [];
+
+            $response->code(500)->json($responseObject);
+
+            return;
+        }
+    }
+
+    /**
+     * Получение данных пользователя по id
+     *
+     * @param mixed $request Содержит объект запроса
+     * @param mixed $response Содержит объект ответа от маршрутизатора
+     * @return void
+     */
+    public function getUserById($request, $response)
+    {
+        $responseObject = [];
+
+        $JwtMiddleware = new JwtMiddleware();
+        $jwtMiddleware = $JwtMiddleware->getAndDecodeToken();
+        if (isset($jwtMiddleware) && $jwtMiddleware == false) {
+            $response->code(400)->json([
+                'status' => 401,
+                'message' => 'Вы не авторизованы.',
+                'data' => []
+            ]);
+
+            return;
+        }
+
+        $validationObject = array(
+            (object)[
+                'validator' => 'required',
+                'data' => isset($request->id) ? $request->id : '',
+                'key' => 'Идентификатор'
+            ],
+            (object)[
+                'validator' => 'userExists',
+                'data' => isset($request->id) ? $request->id : '',
+                'key' => 'Идентификатор'
+            ]
+        );
+
+        $validationBag = parent::validation($validationObject);
+        if ($validationBag->status) {
+            $response->code(400)->json($validationBag);
+
+            return;
+        }
+
+        try {
+            $UserModel = new UserModel();
+            $user = $UserModel::fetchUserById($request->id);
+
+            if ($user['status']) {
+                $responseObject['status'] = 200;
+                $responseObject['data'] = $user['data'];
+                $responseObject['message'] = '';
+
+                $response->code(200)->json($responseObject);
+
+                return;
+            }
+
+            $responseObject['status'] = 400;
+            $responseObject['data'] = [];
+            $responseObject['message'] = 'Непредвиденная ошибка. Не удалось получить данные пользователя. Повторите попытку позже.';
+
+            $response->code(400)->json($responseObject);
+
+            return;
+        } catch (Exception $e) {
+            $responseObject['status'] = 500;
+            $responseObject['message'] = $e->getMessage();
+            $responseObject['data'] = [];
+
+            $response->code(500)->json($responseObject);
+
+            return;
+        }
+    }
+
+    /**
+     * Получение списка пользователей
+     *
+     * @param mixed $request Содержит объект запроса
+     * @param mixed $response Содержит объект ответа от маршрутизатора
+     * @return void
+     */
+    public function fetchUsers($request, $response)
+    {
+        $responseObject = [];
+
+        $JwtMiddleware = new JwtMiddleware();
+        $jwtMiddleware = $JwtMiddleware->getAndDecodeToken();
+        if (isset($jwtMiddleware) && $jwtMiddleware == false) {
+            $response->code(400)->json([
+                'status' => 401,
+                'message' => 'Вы не авторизованы.',
+                'data' => []
+            ]);
+
+            return;
+        }
+
+        try {
+            $UserModel = new UserModel();
+            $user = $UserModel::fetchUsers();
+
+            if ($user['status']) {
+                $responseObject['status'] = 200;
+                $responseObject['data'] = $user['data'];
+                $responseObject['message'] = '';
+
+                $response->code(200)->json($responseObject);
+
+                return;
+            }
+
+            $responseObject['status'] = 400;
+            $responseObject['data'] = [];
+            $responseObject['message'] = 'Непредвиденная ошибка. Не удалось получить данные пользователей. Повторите попытку позже.';
+
+            $response->code(400)->json($responseObject);
+
+            return;
+        } catch (Exception $e) {
+            $responseObject['status'] = 500;
+            $responseObject['message'] = $e->getMessage();
+            $responseObject['data'] = [];
+
+            $response->code(500)->json($responseObject);
+
+            return;
+        }
+    }
+
+    /**
+     * Удаление пользователя по id
+     *
+     * @param mixed $request Содержит объект запроса
+     * @param mixed $response Содержит объект ответа от маршрутизатора
+     * @return void
+     */
+    public function deleteUser($request, $response)
+    {
+        $responseObject = [];
+
+        $JwtMiddleware = new JwtMiddleware();
+        $jwtMiddleware = $JwtMiddleware->getAndDecodeToken();
+        if (isset($jwtMiddleware) && $jwtMiddleware == false) {
+            $response->code(400)->json([
+                'status' => 401,
+                'message' => 'Вы не авторизованы.',
+                'data' => []
+            ]);
+
+            return;
+        }
+
+        $validationObject = array(
+            (object)[
+                'validator' => 'required',
+                'data' => isset($request->id) ? $request->id : '',
+                'key' => 'Идентификатор'
+            ],
+            (object)[
+                'validator' => 'userExists',
+                'data' => isset($request->id) ? $request->id : '',
+                'key' => 'Идентификатор'
+            ]
+        );
+
+        $validationBag = parent::validation($validationObject);
+        if ($validationBag->status) {
+            $response->code(400)->json($validationBag);
+
+            return;
+        }
+
+        try {
+            $UserModel = new UserModel();
+            $user = $UserModel::deleteUser($request->id);
+
+            if ($user['status']) {
+                $responseObject['status'] = 200;
+                $responseObject['data'] = [];
+                $responseObject['message'] = '';
+
+                $response->code(200)->json($responseObject);
+
+                return;
+            }
+
+            $responseObject['status'] = 400;
+            $responseObject['data'] = [];
+            $responseObject['message'] = 'Непредвиденная ошибка. Не удалось удалить пользователя. Повторите попытку позже.';
+
+            $response->code(400)->json($responseObject);
 
             return;
         } catch (Exception $e) {

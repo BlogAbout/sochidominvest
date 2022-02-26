@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react'
+import withStore from '../../hoc/withStore'
 import {PopupProps} from '../../@types/IPopup'
 import {IBuilding} from '../../@types/IBuilding'
 import {ITab} from '../../@types/ITab'
@@ -11,6 +12,10 @@ import Button from '../Button/Button'
 import CheckBox from '../CheckBox/CheckBox'
 import ComboBox from '../ComboBox/ComboBox'
 import Tabs from '../Tabs/Tabs'
+import TagBox from '../TagBox/TagBox'
+import openPopupAlert from '../PopupAlert/PopupAlert'
+import {useTypedSelector} from '../../hooks/useTypedSelector'
+import {useActions} from '../../hooks/useActions'
 import classes from './PopupBuildingCreate.module.scss'
 
 interface Props extends PopupProps {
@@ -35,8 +40,12 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
         cost: 0,
         type: 'apartment',
         status: 'sold',
-        active: 1
+        active: 1,
+        tags: []
     })
+
+    const {fetching, error} = useTypedSelector(state => state.buildingReducer)
+    const {saveBuilding} = useActions()
 
     useEffect(() => {
         return () => {
@@ -51,11 +60,34 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
 
     // Сохранение изменений
     const saveHandler = () => {
-        // Todo
+        if (building.name.trim() === '' || !building.address || building.address.trim() === '') {
+            return
+        }
+
+        saveBuildingStore()
+            .then(() => {
+                props.onSave()
+                close()
+            })
+            .catch(() => {
+                openPopupAlert(document.body, {
+                    title: 'Ошибка!',
+                    text: error
+                })
+            })
+    }
+
+    // Сохранение объекта в store
+    const saveBuildingStore = async () => {
+        await saveBuilding(building)
     }
 
     const typesList = [
-        {key: 'apartment', text: 'Апартаменты'}
+        {key: 'new_building', text: 'Новостройка'},
+        {key: 'secondary', text: 'Вторичная'},
+        {key: 'land_plot', text: 'Земля/участок'},
+        {key: 'commercial', text: 'Коммерческая'},
+        {key: 'rent', text: 'Аренда'}
     ]
 
     const statusesList = [
@@ -74,7 +106,16 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
                               onSelect={(value: string) => setBuilding({...building, status: value})}
                               placeHolder={'Выберите статус'}
                               styleType='standard'
-                              icon='flag'
+                    />
+                </div>
+
+                <div className={classes.field}>
+                    <div className={classes.field_label}>Теги</div>
+
+                    <TagBox tags={building.tags}
+                            onSelect={(value: number[]) => setBuilding({...building, tags: value})}
+                            placeHolder={'Выберите теги'}
+                            multi
                     />
                 </div>
 
@@ -144,7 +185,7 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
             />
 
             <Content className={classes['popup-content']}>
-                <BlockingElement fetching={false} className={classes.content}>
+                <BlockingElement fetching={fetching} className={classes.content}>
                     <div className={classes.info}>
                         <div className={classes.field}>
                             <div className={classes.field_label}>Название</div>
@@ -239,5 +280,5 @@ export default function openPopupBuildingCreate(target: any, popupProps = {} as 
 
     popupProps = {...popupProps, blockId: blockId}
 
-    return openPopup(PopupBuildingCreate, popupProps, undefined, block, displayOptions)
+    return openPopup(withStore(PopupBuildingCreate), popupProps, undefined, block, displayOptions)
 }

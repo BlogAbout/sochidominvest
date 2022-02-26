@@ -88,7 +88,8 @@ class BuildingController extends Controller
             'sewerage' => htmlentities(stripcslashes(strip_tags($data->sewerage))),
             'waterSupply' => htmlentities(stripcslashes(strip_tags($data->waterSupply))),
             'created_at' => date('Y-m-d H:i:s'),
-            'updated_at' => date('Y-m-d H:i:s')
+            'updated_at' => date('Y-m-d H:i:s'),
+            'tags' => $data->tags
         );
 
         try {
@@ -211,7 +212,8 @@ class BuildingController extends Controller
             'electricity' => htmlentities(stripcslashes(strip_tags($data->electricity))),
             'sewerage' => htmlentities(stripcslashes(strip_tags($data->sewerage))),
             'waterSupply' => htmlentities(stripcslashes(strip_tags($data->waterSupply))),
-            'updated_at' => date('Y-m-d H:i:s')
+            'updated_at' => date('Y-m-d H:i:s'),
+            'tags' => $data->tags
         );
 
         try {
@@ -219,7 +221,7 @@ class BuildingController extends Controller
             $building = $BuildingModel::updateBuilding($payload);
 
             if ($building['status']) {
-                $building['data'] = $BuildingModel::findBuildingById($request->id)['data'];
+                $building['data'] = $BuildingModel::fetchBuildingById($request->id)['data'];
                 $responseObject['status'] = 200;
                 $responseObject['data'] = $building['data'];
                 $responseObject['message'] = '';
@@ -293,7 +295,7 @@ class BuildingController extends Controller
 
         try {
             $BuildingModel = new BuildingModel();
-            $building = $BuildingModel::findBuildingById($request->id);
+            $building = $BuildingModel::fetchBuildingById($request->id);
 
             if ($building['status']) {
                 $responseObject['status'] = 200;

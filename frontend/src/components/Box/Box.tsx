@@ -23,7 +23,7 @@ interface Props extends React.PropsWithChildren<any> {
     margin?: string | number
     fontSize?: string
     flexGrow?: boolean
-    placeholder?: string
+    placeHolder?: string
     title?: string
     readOnly?: boolean
     error?: boolean
@@ -58,7 +58,7 @@ const defaultProps: Props = {
     width: 'auto',
     margin: '',
     flexGrow: false,
-    placeholder: '',
+    placeHolder: '',
     title: '',
     readOnly: false,
     error: false,
@@ -96,7 +96,7 @@ const Box = React.forwardRef<HTMLInputElement, Props>((props, ref) => {
                        onChange={props.onChange.bind(this)}
                        onBlur={props.onBlur}
                        value={props.value === null ? '' : props.value}
-                       placeholder={props.placeholder || ''}
+                       placeholder={props.placeHolder || ''}
                        readOnly={props.readOnly}
                        type={props.inputType}
                        autoFocus={props.autoFocus}
@@ -113,7 +113,7 @@ const Box = React.forwardRef<HTMLInputElement, Props>((props, ref) => {
                          }
                      )}
                 >
-                    {props.value || props.placeholder}
+                    {props.value || props.placeHolder}
                 </div>
         )
     }
@@ -368,7 +368,7 @@ const Box = React.forwardRef<HTMLInputElement, Props>((props, ref) => {
                  width: props.width,
                  flexGrow: props.flexGrow ? 1 : undefined
              }}
-             title={props.disableTitle ? undefined : (props.title || String(props.value) || props.placeholder)}
+             title={props.disableTitle ? undefined : (props.title || String(props.value) || props.placeHolder)}
              onClick={(props.readOnly || props.type === 'input') ? undefined : props.onChange.bind(this)}
         >
             {renderArrowLeft()}

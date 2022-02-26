@@ -10,30 +10,29 @@ class TagModel extends Model
     /**
      * Вернет метку по id
      *
-     * @param int $id Идентификатор недвижимости
+     * @param int $id Идентификатор метки
      * @return array
      */
-    public static function findTagById($id)
+    public static function fetchTagById($id)
     {
-//        $sql = "
-//            SELECT *
-//            FROM `sdi_building`
-//            LEFT JOIN sdi_building_data sbd on sdi_building.`id` = sbd.`id`
-//            WHERE sdi_building.`id` = :id
-//        ";
-//
-//        parent::query($sql);
-//
-//        parent::bindParams('id', $id);
-//
-//        $building = parent::fetch();
-//
-//        if (!empty($building)) {
-//            return array(
-//                'status' => true,
-//                'data' => $building
-//            );
-//        }
+        $sql = "
+            SELECT *
+            FROM `sdi_tag`
+            WHERE sdi_tag.`id` = :id
+        ";
+
+        parent::query($sql);
+
+        parent::bindParams('id', $id);
+
+        $tag = parent::fetch();
+
+        if (!empty($tag)) {
+            return array(
+                'status' => true,
+                'data' => TagModel::formatDataToJson($tag)
+            );
+        }
 
         return array(
             'status' => false,
@@ -48,22 +47,27 @@ class TagModel extends Model
      */
     public static function fetchTags()
     {
-//        $sql = "
-//            SELECT *
-//            FROM `sdi_building`
-//            LEFT JOIN sdi_building_data sbd on sdi_building.`id` = sbd.`id`
-//        ";
-//
-//        parent::query($sql);
-//
-//        $buildings = parent::fetchAll();
-//
-//        if (!empty($buildings)) {
-//            return array(
-//                'status' => true,
-//                'data' => $buildings
-//            );
-//        }
+        $sql = "
+            SELECT *
+            FROM `sdi_tag`
+        ";
+
+        parent::query($sql);
+
+        $tagList = parent::fetchAll();
+
+        if (!empty($tagList)) {
+            $resultList = [];
+
+            foreach($tagList as $tagData) {
+                array_push($resultList, TagModel::formatDataToJson($tagData));
+            }
+
+            return array(
+                'status' => true,
+                'data' => $resultList
+            );
+        }
 
         return array(
             'status' => false,
@@ -79,36 +83,29 @@ class TagModel extends Model
      */
     public static function createTag($payload)
     {
-//        $sql = "
-//            INSERT INTO `sdi_building`
-//                (name, description, address, created_at, updated_at, active, status)
-//            VALUES
-//                (:name, :description, :address, :createdAt, :updatedAt, :active, :status)
-//        ";
-//
-//        parent::query($sql);
-//
-//        parent::bindParams('name', $payload['name']);
-//        parent::bindParams('description', $payload['description']);
-//        parent::bindParams('address', $payload['address']);
-//        parent::bindParams('createdAt', $payload['createdAt']);
-//        parent::bindParams('updatedAt', $payload['updatedAt']);
-//        parent::bindParams('active', $payload['active']);
-//        parent::bindParams('status', $payload['status']);
-//
-//        $building = parent::execute();
-//
-//        if ($building) {
-//            $productId = parent::lastInsertedId();
-//            $payload['id'] = $productId;
-//
-//            TagModel::updateTagData($payload, false);
-//
-//            return array(
-//                'status' => true,
-//                'data' => $payload
-//            );
-//        }
+        $sql = "
+            INSERT INTO `sdi_tag`
+                (name, active)
+            VALUES
+                (:name, :status)
+        ";
+
+        parent::query($sql);
+
+        parent::bindParams('name', $payload['name']);
+        parent::bindParams('active', $payload['active']);
+
+        $tag = parent::execute();
+
+        if ($tag) {
+            $tagId = parent::lastInsertedId();
+            $payload['id'] = $tagId;
+
+            return array(
+                'status' => true,
+                'data' => $payload
+            );
+        }
 
         return array(
             'status' => false,
@@ -124,38 +121,28 @@ class TagModel extends Model
      */
     public static function updateTag($payload)
     {
-//        $sql = "
-//            UPDATE `sdi_building`
-//            SET
-//                name = :name,
-//                description = :description,
-//                address = :address,
-//                updated_at = :updatedAt,
-//                active = :active,
-//                status = :status
-//            WHERE id = :id
-//        ";
-//
-//        parent::query($sql);
-//
-//        parent::bindParams('id', $payload['id']);
-//        parent::bindParams('name', $payload['name']);
-//        parent::bindParams('description', $payload['description']);
-//        parent::bindParams('address', $payload['address']);
-//        parent::bindParams('updated_at', $payload['updatedAt']);
-//        parent::bindParams('active', $payload['active']);
-//        parent::bindParams('status', $payload['status']);
-//
-//        $product = parent::execute();
-//
-//        if ($product) {
-//            TagModel::updateTagData($payload, true);
-//
-//            return array(
-//                'status' => true,
-//                'data' => $payload,
-//            );
-//        }
+        $sql = "
+            UPDATE `sdi_tag`
+            SET
+                name = :name,
+                active = :active
+            WHERE id = :id
+        ";
+
+        parent::query($sql);
+
+        parent::bindParams('id', $payload['id']);
+        parent::bindParams('name', $payload['name']);
+        parent::bindParams('active', $payload['active']);
+
+        $tag = parent::execute();
+
+        if ($tag) {
+            return array(
+                'status' => true,
+                'data' => $payload,
+            );
+        }
 
         return array(
             'status' => false,
@@ -171,24 +158,37 @@ class TagModel extends Model
      */
     public static function deleteTag($id)
     {
-//        $sql = "UPDATE `sdi_building` SET active = 0 WHERE id = :id";
-//
-//        parent::query($sql);
-//
-//        parent::bindParams('id', $id);
-//
-//        $building = parent::execute();
-//
-//        if ($building) {
-//            return array(
-//                'status' => true,
-//                'data' => []
-//            );
-//        }
+        $sql = "UPDATE `sdi_tag` SET active = 0 WHERE id = :id";
+
+        parent::query($sql);
+
+        parent::bindParams('id', $id);
+
+        $building = parent::execute();
+
+        if ($building) {
+            return array(
+                'status' => true,
+                'data' => []
+            );
+        }
 
         return array(
             'status' => false,
             'data' => []
         );
+    }
+
+    /**
+     * Преобразование выходящих данных в формат для frontend
+     * @param array $data Массив из базы данных
+     * @return array
+     */
+    private static function formatDataToJson($data) {
+        return [
+            'id' => $data['id'],
+            'name' => $data['name'],
+            'active' => $data['active']
+        ];
     }
 }

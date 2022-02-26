@@ -1,61 +1,28 @@
 .search_wrapper {
-    composes: box from '../Box/Box.module.css';
-    background-color: #f5f8fa;
+    composes: box from '../Box/Box.module.scss';
     transition: all .3s;
     flex-shrink: 0;
 }
 
-.search_wrapper:hover {
-    box-shadow: 0 2px 6px 0 #b9b9b9;
-    background-color: #fff;
-    border-color: #eef9ff;
-}
-
-.search_wrapper_active {
-    composes: box from '../Box/Box.module.css';
-    border: 1px solid #00a9bb;
-    transition: all .3s;
-    box-shadow: 0 2px 6px 0 #b9b9b9;
-}
-
 .input_search {
-    composes: input from '../Box/Box.module.css';
-    background-color: #f5f8fa;
+    composes: input from '../Box/Box.module.scss';
     transition: background-color .3s;
-}
-
-.input_search_active {
-    composes: input_search;
-    background-color: white;
-}
-
-.search_wrapper:hover .input_search {
-    background-color: white;
 }
 
 .ico_search {
     width: 18px;
     height: 17px;
-    background: url('./img/search.png') center no-repeat;
-    margin: 0 10px;
     transition: all .3s;
 }
 
-.search_wrapper:hover .ico_search {
-    width: 18px;
-    height: 17px;
-    background: url('./img/search_active.png') center no-repeat;
-    margin: 0 10px;
-}
-
 .count_find {
-    color: #a0a0a0;
     margin-right: 6px;
     line-height: 25px;
+    font-size: 12px;
 }
 
 .cross {
-    composes: cross from '../Box/Box.module.css';
+    composes: cross from '../Box/Box.module.scss';
     display: block;
     border-color: transparent;
 }

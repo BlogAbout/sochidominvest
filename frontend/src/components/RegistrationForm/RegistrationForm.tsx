@@ -85,7 +85,7 @@ const RegistrationForm: React.FC<Props> = (props) => {
                 <TextBox
                     type="text"
                     value={signUp.firstName}
-                    placeholder='Имя'
+                    placeHolder='Имя'
                     error={validationError.firstName}
                     errorText={validationError.firstName ? 'Введите имя' : undefined}
                     icon="user"
@@ -103,7 +103,7 @@ const RegistrationForm: React.FC<Props> = (props) => {
                 <TextBox
                     type="text"
                     value={signUp.email}
-                    placeholder='Email'
+                    placeHolder='Email'
                     error={validationError.email}
                     errorText={validationError.email ? 'Введите Email' : undefined}
                     icon="at"
@@ -121,7 +121,7 @@ const RegistrationForm: React.FC<Props> = (props) => {
                 <TextBox
                     type="tel"
                     value={signUp.phone}
-                    placeholder='Телефон'
+                    placeHolder='Телефон'
                     error={validationError.phone}
                     errorText={validationError.phone ? 'Введите телефон' : undefined}
                     icon="phone"
@@ -140,7 +140,7 @@ const RegistrationForm: React.FC<Props> = (props) => {
                     type="password"
                     password={true}
                     value={signUp.password}
-                    placeholder='Пароль'
+                    placeHolder='Пароль'
                     error={validationError.password}
                     errorText={validationError.password ? 'Введите пароль' : undefined}
                     icon="lock"

@@ -13,13 +13,18 @@ class BuildingModel extends Model
      * @param int $id Идентификатор недвижимости
      * @return array
      */
-    public static function findBuildingById($id)
+    public static function fetchBuildingById($id)
     {
         $sql = "
-            SELECT *
-            FROM `sdi_building`
-            LEFT JOIN sdi_building_data sbd on sdi_building.`id` = sbd.`id`
-            WHERE sdi_building.`id` = :id
+            SELECT *,
+                   (
+                       SELECT GROUP_CONCAT(DISTINCT(bt.`id_tag`))
+                       FROM sdi_building_tag AS bt
+                       WHERE bt.`id_building` = bu.`id`
+                   ) AS tags
+            FROM `sdi_building` AS bu
+            LEFT JOIN sdi_building_data bd on bu.`id` = bd.`id`
+            WHERE bu.`id` = :id
         ";
 
         parent::query($sql);
@@ -49,19 +54,28 @@ class BuildingModel extends Model
     public static function fetchBuildings()
     {
         $sql = "
-            SELECT *
-            FROM `sdi_building`
-            LEFT JOIN sdi_building_data sbd on sdi_building.`id` = sbd.`id`
+            SELECT *,
+                   (
+                       SELECT GROUP_CONCAT(DISTINCT(bt.`id_tag`))
+                       FROM sdi_building_tag AS bt
+                       WHERE bt.`id_building` = bu.`id`
+                   ) AS tags
+            FROM `sdi_building` AS bu
+            LEFT JOIN sdi_building_data bd on bu.`id` = bd.`id`
         ";
 
         parent::query($sql);
 
-        $buildings = parent::fetchAll();
+        $buildingList = parent::fetchAll();
 
-        if (!empty($buildings)) {
+        if (!empty($buildingList)) {
+            foreach($buildingList as &$building) {
+                $building['tags'] = array_map('intval', $building['tags'] ? explode(',', $building['tags']) : []);
+            }
+
             return array(
                 'status' => true,
-                'data' => $buildings
+                'data' => $buildingList
             );
         }
 
@@ -99,10 +113,11 @@ class BuildingModel extends Model
         $building = parent::execute();
 
         if ($building) {
-            $productId = parent::lastInsertedId();
-            $payload['id'] = $productId;
+            $buildingId = parent::lastInsertedId();
+            $payload['id'] = $buildingId;
 
             BuildingModel::updateBuildingData($payload, false);
+            BuildingModel::updateRelationsTags($payload['id'], $payload['tags']);
 
             return array(
                 'status' => true,
@@ -146,10 +161,11 @@ class BuildingModel extends Model
         parent::bindParams('active', $payload['active']);
         parent::bindParams('status', $payload['status']);
 
-        $product = parent::execute();
+        $building = parent::execute();
 
-        if ($product) {
+        if ($building) {
             BuildingModel::updateBuildingData($payload, true);
+            BuildingModel::updateRelationsTags($payload['id'], $payload['tags']);
 
             return array(
                 'status' => true,
@@ -249,5 +265,35 @@ class BuildingModel extends Model
             'status' => false,
             'data' => []
         );
+    }
+
+    /**
+     * Обновление связей между объектами недвижимости и метками
+     * @param int $buildingId Идентификатор объекта недвижимости
+     * @param array $tags Массив идентификаторов меток
+     */
+    private static function updateRelationsTags($buildingId, $tags) {
+        $sql = "DELETE FROM `sdi_building_tag` WHERE id_building = :id";
+
+        parent::query($sql);
+        parent::bindParams('id', $buildingId);
+        parent::execute();
+
+        if (count($tags)) {
+            $tagsSql = [];
+
+            foreach ($tags as $tag) {
+                array_push($tagsSql, "($buildingId, $tag)");
+            }
+            $sql = "
+                INSERT INTO `sdi_building_tag`
+                    (`id_building`, `id_tag`)
+                VALUES
+            " . implode(",", $tagsSql);
+
+            parent::query($sql);
+            parent::bindParams('id', $buildingId);
+            parent::execute();
+        }
     }
 }

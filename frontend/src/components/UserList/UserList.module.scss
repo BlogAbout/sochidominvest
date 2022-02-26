@@ -1,3 +1,33 @@
 .UserList {
+    margin-top: 30px;
 
+    .head {
+        padding: 10px 15px;
+        background-color: #075ea5;
+        color: #fff;
+        margin-bottom: 15px;
+        display: flex;
+        width: 100%;
+        font-weight: 700;
+
+        .id {
+            width: 50px;
+            flex-shrink: 0;
+        }
+
+        .name {
+            flex-grow: 1;
+        }
+
+        .email {
+            width: 230px;
+            flex-shrink: 0;
+        }
+
+        .phone,
+        .role {
+            width: 150px;
+            flex-shrink: 0;
+        }
+    }
 }

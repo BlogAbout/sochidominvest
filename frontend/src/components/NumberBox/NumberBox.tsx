@@ -11,7 +11,7 @@ interface Props extends React.PropsWithChildren<any> {
     margin?: string | number
     fontSize?: string
     flexGrow?: boolean
-    placeholder?: string
+    placeHolder?: string
     title?: string
     readOnly?: boolean
     error?: boolean

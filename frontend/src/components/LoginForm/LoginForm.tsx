@@ -66,7 +66,7 @@ const LoginForm: React.FC<Props> = (props) => {
                 <TextBox
                     type="text"
                     value={auth.email}
-                    placeholder='E-mail'
+                    placeHolder='E-mail'
                     error={validationError.email}
                     errorText={validationError.email ? 'Введите E-mail' : undefined}
                     icon="at"
@@ -85,7 +85,7 @@ const LoginForm: React.FC<Props> = (props) => {
                     type="password"
                     password={true}
                     value={auth.password}
-                    placeholder='Пароль'
+                    placeHolder='Пароль'
                     error={validationError.password}
                     errorText={validationError.password ? 'Введите пароль' : undefined}
                     icon="lock"

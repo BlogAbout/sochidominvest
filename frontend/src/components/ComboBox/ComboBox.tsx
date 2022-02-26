@@ -94,6 +94,7 @@ const ComboBox: React.FC<Props> = (props) => {
              title={title}
              placeHolder={placeHolder}
              pickerClass={pickerClass}
+             type='picker'
              onChange={onChangeHandler.bind(this)}
              onClear={onClearHandler.bind(this)}
              showArrow

@@ -1,6 +1,7 @@
 import React, {MouseEventHandler, useState} from 'react'
 import classNames from 'classnames/bind'
-import styles from './SearchBox.module.scss'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import classes from './SearchBox.module.scss'
 
 interface Props extends React.PropsWithChildren<any> {
     value?: string
@@ -8,7 +9,7 @@ interface Props extends React.PropsWithChildren<any> {
     width?: string | number
     margin?: string | number
     flexGrow?: boolean
-    placeholder?: string
+    placeHolder?: string
     title?: string
     readOnly?: boolean
     showClear?: boolean
@@ -44,9 +45,9 @@ const defaultProps: Props = {
     }
 }
 
-const cx = classNames.bind(styles)
+const cx = classNames.bind(classes)
 
-const SearchBox = React.forwardRef<HTMLInputElement, Props>((props) => {
+const SearchBox = React.forwardRef<HTMLInputElement, Props>((props, ref) => {
     const [search, setSearch] = useState({
         active: false,
         value: ''
@@ -96,9 +97,6 @@ const SearchBox = React.forwardRef<HTMLInputElement, Props>((props) => {
         setSearch({...search, active: active})
     }
 
-    const searchWrapperClass = search.active ? styles['search_wrapper_active'] : styles['search_wrapper']
-    const inputSearchClass = search.active ? styles['input_search_active'] : styles['input_search']
-
     let text = props.value || props.placeHolder
     let title = props.disableTitle ? null : (props.title || text)
     let disabled = !props.value || props.readOnly
@@ -106,19 +104,20 @@ const SearchBox = React.forwardRef<HTMLInputElement, Props>((props) => {
 
     return (
         <div
-            className={props.className ? cx(props.className, searchWrapperClass) : searchWrapperClass}
+            className={props.className ? cx(props.className, classes['search_wrapper']) : classes['search_wrapper']}
             style={{
                 width: props.width,
                 margin: props.margin,
                 flexGrow: props.flexGrow ? 1 : '',
                 cursor: props.readOnly ? 'default' : 'pointer',
-                color: disabled ? '#a0a0a0' : ''
             }}
-            title={title}
+            title={title || ''}
         >
-            <div className={styles['ico_search']}/>
+            <div className={classes['ico_search']}>
+                <FontAwesomeIcon icon='magnifying-glass' />
+            </div>
 
-            <input className={inputSearchClass}
+            <input className={classes['input_search']}
                    value={value}
                    placeholder={props.placeHolder}
                    onChange={onChangeHandler.bind(this)}
@@ -129,10 +128,10 @@ const SearchBox = React.forwardRef<HTMLInputElement, Props>((props) => {
                    onKeyDown={onKeyDown}
             />
 
-            {props.countFind === null ? null : <div className={styles['count_find']}>Найдено: {props.countFind}</div>}
+            {props.countFind === null ? null : <div className={classes['count_find']}>Найдено: {props.countFind}</div>}
 
             {(disabled || !props.showClear) ? null :
-                <div className={styles['cross']}
+                <div className={classes['cross']}
                      title='Очистить'
                      onClick={onClearHandler.bind(this)}
                 />

@@ -1,6 +1,8 @@
 import React, {useEffect, useState} from 'react'
 import {ITag} from '../../@types/ITag'
 import openPopupTagSelector from '../PopupTagSelector/PopupTagSelector'
+import {useTypedSelector} from '../../hooks/useTypedSelector'
+import {useActions} from '../../hooks/useActions'
 import Box from '../Box/Box'
 
 interface Props {
@@ -32,10 +34,8 @@ const defaultProps: Props = {
 const TagBox: React.FC<Props> = (props) => {
     const [title, setTitle] = useState('')
     const [text, setText] = useState('')
-    // const {tags} = useTypedSelector(state => state.tagReducer)
-    // const {fetchTagList} = useActions()
-
-    const tags: ITag[] = []
+    const {tags} = useTypedSelector(state => state.tagReducer)
+    const {fetchTagList} = useActions()
 
     // Если в store нет тегов, пробуем их загрузить и обновить текст в поле
     useEffect(() => {
@@ -52,17 +52,19 @@ const TagBox: React.FC<Props> = (props) => {
 
     // Обновление списка отделов в store
     const updateTagListStore = async () => {
-        // await fetchTagList()
+        await fetchTagList()
     }
 
     // Обработчик клика на поле
     const clickHandler = (e: React.MouseEvent) => {
-        openPopupTagSelector(e.currentTarget, {
+        openPopupTagSelector(document.body, {
             multi: props.multi,
             selected: props.tags,
             onSelect: (value: number[]) => {
                 props.onSelect(value, e)
             }
+        }, {
+            center: true
         })
     }
 
@@ -107,6 +109,7 @@ const TagBox: React.FC<Props> = (props) => {
     return (
         <Box {...otherProps}
              value={text}
+             type='picker'
              title={otherProps.title || title}
              onChange={clickHandler.bind(this)}
              onClear={resetHandler.bind(this)}

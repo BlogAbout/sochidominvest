@@ -1,13 +1,35 @@
-import React from 'react'
-import Button from '../../components/Button/Button'
+import React, {useEffect, useState} from 'react'
 import openPopupUserCreate from '../../components/PopupUserCreate/PopupUserCreate'
+import Button from '../../components/Button/Button'
+import UserList from '../../components/UserList/UserList'
+import {useTypedSelector} from '../../hooks/useTypedSelector'
+import {useActions} from '../../hooks/useActions'
 import classes from './UserPage.module.scss'
 
 const UserPage: React.FC = () => {
+    const [isUpdate, setIsUpdate] = useState(false)
+
+    const {users, fetching} = useTypedSelector(state => state.userReducer)
+    const {fetchUserList} = useActions()
+
+    useEffect(() => {
+        if (isUpdate || !users.length) {
+            fetchUserList()
+
+            setIsUpdate(false)
+        }
+    }, [isUpdate])
+
+    // Обработчик изменений
+    const onSave = () => {
+        setIsUpdate(true)
+    }
+
+    // Добавление нового пользователя
     const onClickAddHandler = () => {
         openPopupUserCreate(document.body, {
             onSave: () => {
-                // Todo
+                onSave()
             }
         })
     }
@@ -29,6 +51,8 @@ const UserPage: React.FC = () => {
                     <span>Пользователи</span>
                     <Button type='apply' icon='plus' onClick={onClickAddHandler.bind(this)}>Добавить</Button>
                 </h1>
+
+                <UserList users={users} fetching={fetching} onSave={onSave.bind(this)}/>
             </div>
         </main>
     )
