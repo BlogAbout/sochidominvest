@@ -447,14 +447,15 @@ class UserController extends Controller
             'firstName' => htmlspecialchars(stripcslashes(strip_tags($data->firstName))),
             'email' => stripcslashes(strip_tags($data->email)),
             'phone' => htmlspecialchars(stripcslashes(strip_tags($data->phone))),
-            'password' => password_hash($data->password, PASSWORD_BCRYPT),
-            'createdAt' => date('Y-m-d H:i:s'),
             'updatedAt' => date('Y-m-d H:i:s'),
-            'lastActive' => date('Y-m-d H:i:s'),
             'active' => (int)htmlentities(stripcslashes(strip_tags($data->active))),
             'role' => htmlspecialchars(stripcslashes(strip_tags($data->role))),
             'settings' => ''
         );
+
+        if ($data->password) {
+            $payload['password'] = password_hash($data->password, PASSWORD_BCRYPT);
+        }
 
         try {
             $UserModel = new UserModel();

@@ -16,7 +16,7 @@ export default class AuthService {
     }
 
     static async updateUser(user: IUser): Promise<AxiosResponse> {
-        return API.post(`/user/${user.id}`, user)
+        return API.put(`/user/${user.id}`, user)
     }
 
     static async removeUser(userId: number): Promise<AxiosResponse> {

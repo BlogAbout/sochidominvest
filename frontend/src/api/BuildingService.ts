@@ -16,7 +16,7 @@ export default class BuildingService {
     }
 
     static async updateBuilding(building: IBuilding): Promise<AxiosResponse> {
-        return API.post(`/building/${building.id}`, building)
+        return API.put(`/building/${building.id}`, building)
     }
 
     static async removeBuilding(buildingId: number): Promise<AxiosResponse> {

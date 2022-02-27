@@ -33,6 +33,9 @@ class BuildingModel extends Model
 
         $building = parent::fetch();
 
+        $building['advantages'] = explode(',', $building['advantages']);
+        $building['tags'] = array_map('intval', $building['tags'] ? explode(',', $building['tags']) : []);
+
         if (!empty($building)) {
             return array(
                 'status' => true,
@@ -62,6 +65,7 @@ class BuildingModel extends Model
                    ) AS tags
             FROM `sdi_building` AS bu
             LEFT JOIN sdi_building_data bd on bu.`id` = bd.`id`
+            WHERE bu.`active` = 1
         ";
 
         parent::query($sql);
@@ -70,6 +74,7 @@ class BuildingModel extends Model
 
         if (!empty($buildingList)) {
             foreach($buildingList as &$building) {
+                $building['advantages'] = explode(',', $building['advantages']);
                 $building['tags'] = array_map('intval', $building['tags'] ? explode(',', $building['tags']) : []);
             }
 
@@ -157,7 +162,7 @@ class BuildingModel extends Model
         parent::bindParams('name', $payload['name']);
         parent::bindParams('description', $payload['description']);
         parent::bindParams('address', $payload['address']);
-        parent::bindParams('updated_at', $payload['updatedAt']);
+        parent::bindParams('updatedAt', $payload['updatedAt']);
         parent::bindParams('active', $payload['active']);
         parent::bindParams('status', $payload['status']);
 
@@ -187,16 +192,7 @@ class BuildingModel extends Model
      */
     private static function updateBuildingData($payload, $update)
     {
-        if (!$update) {
-            $sql = "
-                INSERT INTO `sdi_building_data`
-                    (id, house_class, material, house_type, entrance_house, parking, territory, ceiling_height,
-                     maintenance_cost, distance_sea, gas, heating, electricity, sewerage, water_supply)
-                VALUES
-                    (:id, :houseClass, :material, :houseType, :entranceHouse, :parking, :territory, :ceilingHeight,
-                     :maintenanceCost, :distanceSea, :gas, :heating, :electricity, :sewerage, :waterSupply)
-            ";
-        } else {
+        if ($update) {
             $sql = "
                 UPDATE `sdi_building_data`
                 SET
@@ -213,8 +209,18 @@ class BuildingModel extends Model
                     heating = :heating,
                     electricity = :electricity,
                     sewerage = :sewerage,
-                    water_supply = :waterSupply
+                    water_supply = :waterSupply,
+                    advantages = :advantages
                 WHERE id = :id
+            ";
+        } else {
+            $sql = "
+                INSERT INTO `sdi_building_data`
+                    (id, house_class, material, house_type, entrance_house, parking, territory, ceiling_height,
+                     maintenance_cost, distance_sea, gas, heating, electricity, sewerage, water_supply, advantages)
+                VALUES
+                    (:id, :houseClass, :material, :houseType, :entranceHouse, :parking, :territory, :ceilingHeight,
+                     :maintenanceCost, :distanceSea, :gas, :heating, :electricity, :sewerage, :waterSupply, :advantages)
             ";
         }
 
@@ -225,6 +231,7 @@ class BuildingModel extends Model
         parent::bindParams('material', $payload['material']);
         parent::bindParams('houseType', $payload['houseType']);
         parent::bindParams('entranceHouse', $payload['entranceHouse']);
+        parent::bindParams('parking', $payload['parking']);
         parent::bindParams('territory', $payload['territory']);
         parent::bindParams('ceilingHeight', $payload['ceilingHeight']);
         parent::bindParams('maintenanceCost', $payload['maintenanceCost']);
@@ -234,6 +241,7 @@ class BuildingModel extends Model
         parent::bindParams('electricity', $payload['electricity']);
         parent::bindParams('sewerage', $payload['sewerage']);
         parent::bindParams('waterSupply', $payload['waterSupply']);
+        parent::bindParams('advantages', $payload['advantages'] ? implode(',', $payload['advantages']) : '');
 
         parent::execute();
     }

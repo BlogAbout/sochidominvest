@@ -20,10 +20,10 @@ class BuildingController extends Controller
     {
         $responseObject = [];
 
-        $FormDataMiddleware = new RequestMiddleware();
-        $formData = $FormDataMiddleware::acceptsFormData();
+        $Middleware = new RequestMiddleware();
+        $Middleware = $Middleware::acceptsJson();
 
-        if (!$formData) {
+        if (!$Middleware) {
             array_push($responseObject, [
                 'status' => 400,
                 'message' => 'Доступ к конечной точке разрешен только содержимому JSON.',
@@ -47,7 +47,7 @@ class BuildingController extends Controller
             return;
         }
 
-        $data = $request->paramsPost();
+        $data = json_decode($request->body());
 
         $validationObject = array(
             (object)[
@@ -74,21 +74,24 @@ class BuildingController extends Controller
             'description' => htmlentities(stripcslashes(strip_tags($data->description))),
             'address' => htmlentities(stripcslashes(strip_tags($data->address))),
             'active' => (int)htmlentities(stripcslashes(strip_tags($data->active))),
+            'status' => htmlentities(stripcslashes(strip_tags($data->status))),
             'houseClass' => htmlentities(stripcslashes(strip_tags($data->houseClass))),
             'material' => htmlentities(stripcslashes(strip_tags($data->material))),
+            'houseType' => htmlentities(stripcslashes(strip_tags($data->houseType))),
             'entranceHouse' => htmlentities(stripcslashes(strip_tags($data->entranceHouse))),
             'parking' => htmlentities(stripcslashes(strip_tags($data->parking))),
             'territory' => htmlentities(stripcslashes(strip_tags($data->territory))),
-            'ceilingHeight' => htmlentities(stripcslashes(strip_tags($data->ceilingHeight))),
-            'maintenanceCost' => htmlentities(stripcslashes(strip_tags($data->maintenanceCost))),
-            'distanceSea' => htmlentities(stripcslashes(strip_tags($data->distanceSea))),
+            'ceilingHeight' => (float)htmlentities(stripcslashes(strip_tags($data->ceilingHeight))),
+            'maintenanceCost' => (float)htmlentities(stripcslashes(strip_tags($data->maintenanceCost))),
+            'distanceSea' => (float)htmlentities(stripcslashes(strip_tags($data->distanceSea))),
             'gas' => htmlentities(stripcslashes(strip_tags($data->gas))),
             'heating' => htmlentities(stripcslashes(strip_tags($data->heating))),
             'electricity' => htmlentities(stripcslashes(strip_tags($data->electricity))),
             'sewerage' => htmlentities(stripcslashes(strip_tags($data->sewerage))),
             'waterSupply' => htmlentities(stripcslashes(strip_tags($data->waterSupply))),
-            'created_at' => date('Y-m-d H:i:s'),
-            'updated_at' => date('Y-m-d H:i:s'),
+            'createdAt' => date('Y-m-d H:i:s'),
+            'updatedAt' => date('Y-m-d H:i:s'),
+            'advantages' => htmlentities(stripcslashes(strip_tags($data->heating))),
             'tags' => $data->tags
         );
 
@@ -134,13 +137,14 @@ class BuildingController extends Controller
     public function updateBuilding($request, $response)
     {
         $responseObject = [];
-        $FormDataMiddleware = new RequestMiddleware();
-        $formData = $FormDataMiddleware::acceptsFormData();
 
-        if (!$formData) {
+        $Middleware = new RequestMiddleware();
+        $Middleware = $Middleware::acceptsJson();
+
+        if (!$Middleware) {
             array_push($responseObject, [
                 'status' => 400,
-                'message' => 'Доступ к конечной точке разрешен только содержимому Multipart Form Data.',
+                'message' => 'Доступ к конечной точке разрешен только содержимому JSON.',
                 'data' => []
             ]);
 
@@ -161,7 +165,7 @@ class BuildingController extends Controller
             return;
         }
 
-        $data = $request->paramsPost();
+        $data = json_decode($request->body());
 
         $validationObject = array(
             (object)[
@@ -199,20 +203,23 @@ class BuildingController extends Controller
             'description' => htmlentities(stripcslashes(strip_tags($data->description))),
             'address' => htmlentities(stripcslashes(strip_tags($data->address))),
             'active' => (int)htmlentities(stripcslashes(strip_tags($data->active))),
+            'status' => htmlentities(stripcslashes(strip_tags($data->status))),
             'houseClass' => htmlentities(stripcslashes(strip_tags($data->houseClass))),
             'material' => htmlentities(stripcslashes(strip_tags($data->material))),
+            'houseType' => htmlentities(stripcslashes(strip_tags($data->houseType))),
             'entranceHouse' => htmlentities(stripcslashes(strip_tags($data->entranceHouse))),
             'parking' => htmlentities(stripcslashes(strip_tags($data->parking))),
             'territory' => htmlentities(stripcslashes(strip_tags($data->territory))),
-            'ceilingHeight' => htmlentities(stripcslashes(strip_tags($data->ceilingHeight))),
-            'maintenanceCost' => htmlentities(stripcslashes(strip_tags($data->maintenanceCost))),
-            'distanceSea' => htmlentities(stripcslashes(strip_tags($data->distanceSea))),
+            'ceilingHeight' => (float)htmlentities(stripcslashes(strip_tags($data->ceilingHeight))),
+            'maintenanceCost' => (float)htmlentities(stripcslashes(strip_tags($data->maintenanceCost))),
+            'distanceSea' => (float)htmlentities(stripcslashes(strip_tags($data->distanceSea))),
             'gas' => htmlentities(stripcslashes(strip_tags($data->gas))),
             'heating' => htmlentities(stripcslashes(strip_tags($data->heating))),
             'electricity' => htmlentities(stripcslashes(strip_tags($data->electricity))),
             'sewerage' => htmlentities(stripcslashes(strip_tags($data->sewerage))),
             'waterSupply' => htmlentities(stripcslashes(strip_tags($data->waterSupply))),
-            'updated_at' => date('Y-m-d H:i:s'),
+            'updatedAt' => date('Y-m-d H:i:s'),
+            'advantages' => htmlentities(stripcslashes(strip_tags($data->heating))),
             'tags' => $data->tags
         );
 

@@ -16,7 +16,7 @@ export default class TagService {
     }
 
     static async updateTag(tag: ITag): Promise<AxiosResponse> {
-        return API.post(`/tag/${tag.id}`, tag)
+        return API.put(`/tag/${tag.id}`, tag)
     }
 
     static async removeTag(tagId: number): Promise<AxiosResponse> {

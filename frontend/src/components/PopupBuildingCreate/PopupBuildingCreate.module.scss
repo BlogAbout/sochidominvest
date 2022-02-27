@@ -1,5 +1,5 @@
-.BuildingPage {
-    width: 600px;
+.PopupBuildingCreate {
+    width: 800px;
 }
 
 .content {
@@ -13,6 +13,9 @@
 
 .tabContent {
     padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
 }
 
 .field {
@@ -26,4 +29,15 @@
     color: black;
     margin-bottom: 3px;
     display: flex;
+}
+
+.advantagesList {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+
+    .field {
+        width: 32%;
+    }
 }

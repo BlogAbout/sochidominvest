@@ -26,12 +26,12 @@
 
 .top .tabs {
     align-items: flex-end;
-    border-bottom: 1px solid #e8e8e8;
+    border-bottom: 1px solid #075ea5;
 }
 
 .bottom .tabs {
     align-items: flex-start;
-    border-top: 1px solid #e8e8e8;
+    border-top: 1px solid #075ea5;
 }
 
 .top.error_tabs .tabs {
@@ -56,7 +56,7 @@
 .tab {
     display: flex;
     height: 23px;
-    border: 1px solid #e8e8e8;
+    border: 1px solid #075ea5;
     padding: 0 10px;
     margin-left: 6px;
     font-size: 14px;

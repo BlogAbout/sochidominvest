@@ -154,7 +154,7 @@ class UserModel extends Model
      */
     public static function updateUser($payload)
     {
-        if ($payload['password'] !== '') {
+        if ($payload['password'] && $payload['password'] !== '') {
             $sql = "
                 UPDATE `sdi_user`
                 SET
@@ -183,6 +183,7 @@ class UserModel extends Model
 
         parent::query($sql);
 
+        parent::bindParams('id', $payload['id']);
         parent::bindParams('firstName', $payload['firstName']);
         parent::bindParams('email', $payload['email']);
         parent::bindParams('phone', $payload['phone']);
@@ -190,7 +191,7 @@ class UserModel extends Model
         parent::bindParams('active', $payload['active']);
         parent::bindParams('role', $payload['role']);
 
-        if ($payload['password'] !== '') {
+        if ($payload['password'] && $payload['password'] !== '') {
             parent::bindParams('password', $payload['password']);
         }
 

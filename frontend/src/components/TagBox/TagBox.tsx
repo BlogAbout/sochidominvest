@@ -34,6 +34,7 @@ const defaultProps: Props = {
 const TagBox: React.FC<Props> = (props) => {
     const [title, setTitle] = useState('')
     const [text, setText] = useState('')
+
     const {tags} = useTypedSelector(state => state.tagReducer)
     const {fetchTagList} = useActions()
 
@@ -49,6 +50,10 @@ const TagBox: React.FC<Props> = (props) => {
             updateSelectedInfo()
         }
     }, [props.tags])
+
+    useEffect(() => {
+        updateSelectedInfo()
+    }, [tags])
 
     // Обновление списка отделов в store
     const updateTagListStore = async () => {

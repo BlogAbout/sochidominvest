@@ -47,31 +47,26 @@ class TagModel extends Model
      */
     public static function fetchTags()
     {
+        $resultList = [];
+
         $sql = "
             SELECT *
             FROM `sdi_tag`
+            WHERE `active` = 1
         ";
 
         parent::query($sql);
-
         $tagList = parent::fetchAll();
 
         if (!empty($tagList)) {
-            $resultList = [];
-
             foreach($tagList as $tagData) {
                 array_push($resultList, TagModel::formatDataToJson($tagData));
             }
-
-            return array(
-                'status' => true,
-                'data' => $resultList
-            );
         }
 
         return array(
-            'status' => false,
-            'data' => []
+            'status' => true,
+            'data' => $resultList
         );
     }
 
@@ -87,7 +82,7 @@ class TagModel extends Model
             INSERT INTO `sdi_tag`
                 (name, active)
             VALUES
-                (:name, :status)
+                (:name, :active)
         ";
 
         parent::query($sql);

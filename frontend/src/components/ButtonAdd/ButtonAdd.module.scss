@@ -2,10 +2,15 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    height: 27px;
-    border-radius: 2px;
-    color: white;
-    background-color: #a0c45b;
+    width: 40px;
+    height: 40px;
+    background: #075ea5;
+    background: linear-gradient(135deg, #075ea5 0%, #ffcc01 100%);
+    color: #fff;
+
+    &:hover {
+        box-shadow: inset 3px 3px 8px rgba(0, 0, 0, 0.4);
+    }
 }
 
 .wholeButton {
@@ -55,7 +60,6 @@
 }
 
 .crossOnly {
-    background: url('./img/add.png') no-repeat center;
     height: 27px;
     width: 27px;
     max-width: 27px;

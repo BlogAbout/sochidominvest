@@ -1,9 +1,30 @@
-import React from 'react'
+import React, {useEffect, useState} from 'react'
 import Button from '../../components/Button/Button'
 import openPopupBuildingCreate from '../../components/PopupBuildingCreate/PopupBuildingCreate'
+import BuildingList from '../../components/BuildingList/BuildingList'
+import {useTypedSelector} from '../../hooks/useTypedSelector'
+import {useActions} from '../../hooks/useActions'
 import classes from './BuildingPage.module.scss'
 
 const BuildingPage: React.FC = () => {
+    const [isUpdate, setIsUpdate] = useState(false)
+
+    const {buildings, fetching} = useTypedSelector(state => state.buildingReducer)
+    const {fetchBuildingList} = useActions()
+
+    useEffect(() => {
+        if (isUpdate || !buildings.length) {
+            fetchBuildingList()
+
+            setIsUpdate(false)
+        }
+    }, [isUpdate])
+
+    // Обработчик изменений
+    const onSave = () => {
+        setIsUpdate(true)
+    }
+
     const onClickAddHandler = () => {
         openPopupBuildingCreate(document.body, {
             onSave: () => {
@@ -30,61 +51,7 @@ const BuildingPage: React.FC = () => {
                     <Button type='apply' icon='plus' onClick={onClickAddHandler.bind(this)}>Добавить</Button>
                 </h1>
 
-                <div className={classes.List}>
-                    <div className={classes.item}>
-                        <div className={classes.itemImage}>
-                            image
-                        </div>
-
-                        <div className={classes.itemContent}>
-                            <h2>ЖК Прибрежный</h2>
-                            <div className={classes.address}>Курортный городок, ул. Ленина, 217а, Адлер</div>
-                        </div>
-
-                        <div className={classes.itemInfo}>
-                            <div className={classes.counter}>1 квартира</div>
-                            <div className={classes.cost}>От 4 890 000 руб.</div>
-                            <div className={classes.costPer}>161 923 руб. за м<sup>2</sup></div>
-                            <div className={classes.area}>26 м<sup>2</sup></div>
-                        </div>
-                    </div>
-
-                    <div className={classes.item}>
-                        <div className={classes.itemImage}>
-                            image
-                        </div>
-
-                        <div className={classes.itemContent}>
-                            <h2>ЖК Прибрежный</h2>
-                            <div className={classes.address}>Курортный городок, ул. Ленина, 217а, Адлер</div>
-                        </div>
-
-                        <div className={classes.itemInfo}>
-                            <div className={classes.counter}>1 квартира</div>
-                            <div className={classes.cost}>От 4 890 000 руб.</div>
-                            <div className={classes.costPer}>161 923 руб. за м<sup>2</sup></div>
-                            <div className={classes.area}>26 м<sup>2</sup></div>
-                        </div>
-                    </div>
-
-                    <div className={classes.item}>
-                        <div className={classes.itemImage}>
-                            image
-                        </div>
-
-                        <div className={classes.itemContent}>
-                            <h2>ЖК Прибрежный</h2>
-                            <div className={classes.address}>Курортный городок, ул. Ленина, 217а, Адлер</div>
-                        </div>
-
-                        <div className={classes.itemInfo}>
-                            <div className={classes.counter}>1 квартира</div>
-                            <div className={classes.cost}>От 4 890 000 руб.</div>
-                            <div className={classes.costPer}>161 923 руб. за м<sup>2</sup></div>
-                            <div className={classes.area}>26 м<sup>2</sup></div>
-                        </div>
-                    </div>
-                </div>
+                <BuildingList buildings={buildings} fetching={fetching} onSave={onSave.bind(this)}/>
             </div>
         </main>
     )

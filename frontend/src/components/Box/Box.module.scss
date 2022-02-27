@@ -28,10 +28,6 @@
     opacity: 0.5;
 }
 
-.box:not(.read_only) .select:hover {
-    background-image: url('./img/select_active.png');
-}
-
 .box:not(.read_only) .date:hover {
     background-image: url('./img/calendar_active.png');
 }
@@ -134,9 +130,11 @@
 .box_item {
     width: 25px;
     height: 25px;
-    border-left: 1px solid #e8e8e8;
+    border-left: 1px solid #075ea5;
     flex-shrink: 0;
     transition: width 0.3s;
+    text-align: center;
+    line-height: 25px;
 }
 
 .cross {
@@ -151,14 +149,13 @@
 
 .arrow {
     composes: box_item;
-    background: url('./img/arrow_grey.png') center no-repeat;
 }
 
 .arrow_left {
     composes: box_item;
     background: url('./img/arrow_left_grey.png') center no-repeat;
     border-left-width: 0;
-    border-right: 1px solid #e8e8e8;
+    border-right: 1px solid #075ea5;
 }
 
 .arrow_right {
@@ -173,7 +170,7 @@
 
 .box_arrow_down {
     composes: box_arrow_up;
-    border-bottom: 1px solid #e8e8e8;
+    border-bottom: 1px solid #075ea5;
     transform: scale(1, -1);
 }
 
@@ -200,7 +197,6 @@
 
 .select {
     composes: box_item;
-    background: url('./img/select.png') no-repeat center 16px;
 }
 
 .validate {

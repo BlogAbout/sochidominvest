@@ -18,17 +18,16 @@
 }
 
 .check_on {
-    background-image: url('img/checked.png');
     width: 15px;
     height: 15px;
     border-radius: 1px;
-
-    transition: all .2s ease-in-out;
+    border: 1px solid #075ea5;
+    font-size: 13px;
+    text-align: center;
 }
 
 .check_off {
     composes: check_on;
-    background-image: url('img/unchecked.png');
 }
 
 .ellipse {
@@ -74,7 +73,7 @@
 .circle_off {
     composes: circle;
     background-color: #ffffff;
-    border: 1px solid #e8e8e8;
+    border: 1px solid #075ea5;
     left: 0;
 }
 

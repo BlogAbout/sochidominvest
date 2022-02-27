@@ -1,5 +1,6 @@
 import React from 'react'
 import classNames from 'classnames/bind'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import classes from './CheckBox.module.scss'
 
 const cx = classNames.bind(classes)
@@ -48,7 +49,9 @@ const CheckBox: React.FC<Props> = (props) => {
                 <div className={props.checked ? classes['check_on'] : classes['check_off']}
                      onClick={onClickHandler.bind(this)}
                      style={{cursor: props.readOnly ? 'default' : 'pointer'}}
-                />
+                >
+                    {props.checked && <FontAwesomeIcon icon='check'/>}
+                </div>
             </div>
         )
     }

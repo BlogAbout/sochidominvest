@@ -12,10 +12,10 @@ class Model
 {
     protected static $dbHost = '127.0.0.1';
     protected static $dbName = 'sochidominvest';
-//    protected static $dbUser = 'sochidominvest';
-    protected static $dbUser = 'mysql';
-//    protected static $dbPass = 'N9o5A4o4';
-    protected static $dbPass = '';
+    protected static $dbUser = 'sochidominvest';
+//    protected static $dbUser = 'mysql';
+    protected static $dbPass = 'N9o5A4o4';
+//    protected static $dbPass = '';
     protected static $dbConn;
     protected static $stmt;
 

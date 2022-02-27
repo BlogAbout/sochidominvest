@@ -13,7 +13,20 @@ import CheckBox from '../CheckBox/CheckBox'
 import ComboBox from '../ComboBox/ComboBox'
 import Tabs from '../Tabs/Tabs'
 import TagBox from '../TagBox/TagBox'
+import Empty from '../Empty/Empty'
+import CheckerList from './components/CheckerList/CheckerList'
 import openPopupAlert from '../PopupAlert/PopupAlert'
+import {
+    buildingAdvantages,
+    buildingClasses,
+    buildingEntrance,
+    buildingFormat,
+    buildingMaterials,
+    buildingParking,
+    buildingStatuses,
+    buildingTerritory,
+    buildingTypes
+} from '../../helpers/buildingHelper'
 import {useTypedSelector} from '../../hooks/useTypedSelector'
 import {useActions} from '../../hooks/useActions'
 import classes from './PopupBuildingCreate.module.scss'
@@ -38,7 +51,7 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
         address: '',
         area: 0,
         cost: 0,
-        type: 'apartment',
+        type: 'new_building',
         status: 'sold',
         active: 1,
         tags: []
@@ -82,17 +95,19 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
         await saveBuilding(building)
     }
 
-    const typesList = [
-        {key: 'new_building', text: 'Новостройка'},
-        {key: 'secondary', text: 'Вторичная'},
-        {key: 'land_plot', text: 'Земля/участок'},
-        {key: 'commercial', text: 'Коммерческая'},
-        {key: 'rent', text: 'Аренда'}
-    ]
+    const changeAdvantagesHandler = (key: string, value: boolean) => {
+        let advantagesList: string[] = building.advantages || []
 
-    const statusesList = [
-        {key: 'sold', text: 'Продано'}
-    ]
+        if (value) {
+            advantagesList.push(key)
+        } else {
+            if (building.advantages) {
+                advantagesList = building.advantages.filter(item => item !== key)
+            }
+        }
+
+        setBuilding({...building, advantages: advantagesList})
+    }
 
     // Вкладка состояния объекта
     const renderStateTab = () => {
@@ -102,7 +117,7 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
                     <div className={classes.field_label}>Статус</div>
 
                     <ComboBox selected={building.status}
-                              items={Object.values(statusesList)}
+                              items={Object.values(buildingStatuses)}
                               onSelect={(value: string) => setBuilding({...building, status: value})}
                               placeHolder={'Выберите статус'}
                               styleType='standard'
@@ -133,21 +148,101 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
         )
     }
 
-    // Вкладка цен объекта
-    const renderPriceTab = () => {
+    // Вкладка информации объекта
+    const renderInformationTab = () => {
         return (
-            <div key='price' className={classes.tabContent}>
+            <div key='info' className={classes.tabContent}>
                 <div className={classes.field}>
-                    <div className={classes.field_label}>Цена</div>
+                    <div className={classes.field_label}>Класс дома</div>
 
-                    <TextBox value={building.cost}
-                             onChange={(e: React.MouseEvent, value: number) => setBuilding({
-                                 ...building,
-                                 cost: value
-                             })}
-                             placeHolder={'Введите цену'}
-                             icon='ruble-sign'
+                    <ComboBox selected={building.houseClass || ''}
+                              items={Object.values(buildingClasses)}
+                              onSelect={(value: string) => setBuilding({...building, houseClass: value})}
+                              placeHolder={'Выберите класс дома'}
+                              styleType='standard'
                     />
+                </div>
+
+                <div className={classes.field}>
+                    <div className={classes.field_label}>Материал здания</div>
+
+                    <ComboBox selected={building.material || ''}
+                              items={Object.values(buildingMaterials)}
+                              onSelect={(value: string) => setBuilding({...building, material: value})}
+                              placeHolder={'Выберите тип материала здания'}
+                              styleType='standard'
+                    />
+                </div>
+
+                <div className={classes.field}>
+                    <div className={classes.field_label}>Тип дома</div>
+
+                    <ComboBox selected={building.houseType || ''}
+                              items={Object.values(buildingFormat)}
+                              onSelect={(value: string) => setBuilding({...building, houseType: value})}
+                              placeHolder={'Выберите тип дома'}
+                              styleType='standard'
+                    />
+                </div>
+
+                <div className={classes.field}>
+                    <div className={classes.field_label}>Паркинг</div>
+
+                    <ComboBox selected={building.parking || ''}
+                              items={Object.values(buildingParking)}
+                              onSelect={(value: string) => setBuilding({...building, parking: value})}
+                              placeHolder={'Выберите тип паркинга'}
+                              styleType='standard'
+                    />
+                </div>
+
+                <div className={classes.field}>
+                    <div className={classes.field_label}>Территория</div>
+
+                    <ComboBox selected={building.territory || ''}
+                              items={Object.values(buildingTerritory)}
+                              onSelect={(value: string) => setBuilding({...building, territory: value})}
+                              placeHolder={'Выберите тип территории'}
+                              styleType='standard'
+                    />
+                </div>
+
+                <div className={classes.field}>
+                    <div className={classes.field_label}>Подъезд к дому</div>
+
+                    <ComboBox selected={building.entranceHouse || ''}
+                              items={Object.values(buildingEntrance)}
+                              onSelect={(value: string) => setBuilding({...building, entranceHouse: value})}
+                              placeHolder={'Выберите тип подъезда к дому'}
+                              styleType='standard'
+                    />
+                </div>
+            </div>
+        )
+    }
+
+    // Вкладка особенностей объекта
+    const renderAdvantagesTab = () => {
+        return (
+            <div key='info' className={classes.tabContent}>
+                <div className={classes.advantagesList}>
+                    {buildingAdvantages.map(item => {
+                        let checked = false
+
+                        if (building.advantages) {
+                            checked = building.advantages.includes(item.key)
+                        }
+
+                        return (
+                            <div key={item.key} className={classes.field}>
+                                <CheckBox label={item.text}
+                                          type='classic'
+                                          checked={checked}
+                                          onChange={(e: React.MouseEvent, value: boolean) => changeAdvantagesHandler(item.key, value)}
+                                />
+                            </div>
+                        )
+                    })}
                 </div>
             </div>
         )
@@ -157,7 +252,10 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
     const renderCheckerBoardTab = () => {
         return (
             <div key='checker' className={classes.tabContent}>
-
+                {building.id ?
+                    <CheckerList checkers={building.checker || []}/>
+                    : <Empty message='Для получения доступа к шахматке сохраните изменения'/>
+                }
             </div>
         )
     }
@@ -173,7 +271,8 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
 
     const tabs: ITab = {
         state: {title: 'Состояние', render: renderStateTab()},
-        price: {title: 'Цены', render: renderPriceTab()},
+        info: {title: 'Информация', render: renderInformationTab()},
+        advantages: {title: 'Особенности', render: renderAdvantagesTab()},
         checker: {title: 'Шахматка', render: renderCheckerBoardTab()},
         gallery: {title: 'Галерея', render: renderGalleryTab()}
     }
@@ -236,7 +335,7 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
                             <div className={classes.field_label}>Тип</div>
 
                             <ComboBox selected={building.type}
-                                      items={Object.values(typesList)}
+                                      items={Object.values(buildingTypes)}
                                       onSelect={(value: string) => setBuilding({...building, type: value})}
                                       placeHolder={'Выберите тип'}
                                       styleType='standard'

@@ -3,6 +3,7 @@ import AppRouter from './routes/components/AppRouter/AppRouter'
 import {useActions} from './hooks/useActions'
 import {library} from '@fortawesome/fontawesome-svg-core'
 import {
+    faAngleDown,
     faAngleLeft,
     faArrowRotateLeft,
     faArrowUpRightFromSquare,
@@ -11,7 +12,7 @@ import {
     faBolt,
     faBook,
     faBuilding,
-    faCheck,
+    faCheck, faEllipsis,
     faFileExcel,
     faFlag,
     faGear,
@@ -64,7 +65,9 @@ library.add(
     faLocationDot,
     faArrowUpRightFromSquare,
     faRubleSign,
-    faMagnifyingGlass
+    faMagnifyingGlass,
+    faAngleDown,
+    faEllipsis
 )
 
 function App() {

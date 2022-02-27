@@ -143,7 +143,7 @@ const Box = React.forwardRef<HTMLInputElement, Props>((props, ref) => {
             <div className={cx({'minimal': isMinimal, 'cross': showClear, 'hidden': !showClear})}
                  onClick={onClear}
                  title='Очистить'
-                 style={{borderRight: props.showRequired && !isMinimal ? '1px solid #e8e8e8' : undefined}}
+                 style={{borderRight: props.showRequired && !isMinimal ? '1px solid #075ea5' : undefined}}
             />
         )
     }
@@ -220,9 +220,9 @@ const Box = React.forwardRef<HTMLInputElement, Props>((props, ref) => {
         const isMinimal = props.styleType === 'minimal'
 
         return (
-            <div className={cx({'arrow': true, 'minimal': isMinimal})}
-                 onClick={onClick}
-            />
+            <div className={cx({'arrow': true, 'minimal': isMinimal})} onClick={onClick}>
+                <FontAwesomeIcon icon='angle-down'/>
+            </div>
         )
     }
 
@@ -283,10 +283,9 @@ const Box = React.forwardRef<HTMLInputElement, Props>((props, ref) => {
         }
 
         return (
-            <div className={classes['select']}
-                 title='Выбрать'
-                 onClick={onSelect}
-            />
+            <div className={classes.select} title='Выбрать' onClick={onSelect}>
+                <FontAwesomeIcon icon='ellipsis'/>
+            </div>
         )
     }
 

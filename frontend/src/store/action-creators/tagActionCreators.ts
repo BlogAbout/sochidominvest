@@ -23,7 +23,7 @@ export const TagActionCreators = {
             const response = await TagService.fetchTags()
 
             if (response.status === 200) {
-                dispatch(TagActionCreators.setTags(response.data.data.data))
+                dispatch(TagActionCreators.setTags(response.data.data))
             } else {
                 dispatch(TagActionCreators.setError('Ошибка загрузки данных'))
             }
@@ -44,7 +44,7 @@ export const TagActionCreators = {
                 response = await TagService.createTag(tag)
             }
 
-            if (response.status === 200) {
+            if (response.status === 200 || response.status === 201) {
                 dispatch(TagActionCreators.setError(''))
             } else {
                 dispatch(TagActionCreators.setError('Ошибка сохранения данных'))

@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react'
 import withStore from '../../hoc/withStore'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {ITag} from '../../@types/ITag'
 import {PopupDisplayOptions, PopupProps} from '../../@types/IPopup'
 import openPopupTagCreate from '../PopupTagCreate/PopupTagCreate'
@@ -53,9 +54,9 @@ const PopupTagSelector: React.FC<Props> = (props) => {
         }
     }, [isUpdate])
 
-    // useEffect(() => {
-    //     search(searchText)
-    // }, [tags])
+    useEffect(() => {
+        search(searchText)
+    }, [tags])
 
     // Закрытие Popup
     const close = () => {
@@ -116,6 +117,7 @@ const PopupTagSelector: React.FC<Props> = (props) => {
                                 console.error('Ошибка удаления метки', error)
 
                                 openPopupAlert(document.body, {
+                                    title: 'Ошибка!',
                                     text: 'Ошибка удаления метки',
                                     onOk: close.bind(this)
                                 })
@@ -128,7 +130,9 @@ const PopupTagSelector: React.FC<Props> = (props) => {
     }
 
     const removeTagHandler = async (tag: ITag) => {
-        // Todo: await removeTag(tag)
+        if (tag.id) {
+            await removeTag(tag.id)
+        }
     }
 
     // Открытие контекстного меню на элементе справочника
@@ -150,12 +154,11 @@ const PopupTagSelector: React.FC<Props> = (props) => {
                            onChange={(value: string) => search(value)}
                            countFind={tagFilter ? tagFilter.length : 0}
                            showClear
-                           margin={'0 0 11px 0'}
                            flexGrow
-                           autoFocus={true}
+                           autoFocus
                 />
 
-                {props.buttonAdd && <ButtonAdd onClick={onClickAdd.bind(this)} margin={'0 0 0 11px'}/>}
+                {props.buttonAdd && <ButtonAdd onClick={onClickAdd.bind(this)}/>}
             </div>
         )
     }
@@ -166,7 +169,7 @@ const PopupTagSelector: React.FC<Props> = (props) => {
                 {tagFilter.length ?
                     tagFilter.map(tag => renderRow(tag))
                     :
-                    <Empty message={tags ? 'Метки не найдены' : 'Нет доступных меток'}/>
+                    <Empty message={!tags.length ? 'Нет меток' : 'Метки не найдены'}/>
                 }
             </div>
         )
@@ -182,21 +185,21 @@ const PopupTagSelector: React.FC<Props> = (props) => {
                 <div className={classes['text']} title={tag.name}>{tag.name}</div>
 
                 {tag.id && props.selected && props.selected.includes(tag.id) &&
-                <div className={classes['selected_icon']}/>}
+                <div className={classes['selected_icon']}><FontAwesomeIcon icon='check'/></div>}
             </div>
         )
     }
 
     return (
-        <Popup className={classes['popup']}>
+        <Popup className={classes.PopupTagSelector}>
             <Header title='Выбрать метку' popupId={props.id ? props.id : ''} onClose={() => close()}/>
 
             <BlockingElement fetching={fetching}>
-                <Content className={classes['content']}>
+                <Content className={classes.content}>
                     <div className={classes['box_no_menu']}>
-                        <div style={{height: 38}}>{renderSearch()}</div>
+                        <div style={{height: 40}}>{renderSearch()}</div>
 
-                        <div className={classes['box_border']} style={{height: 393}}>
+                        <div className={classes['box_border']} style={{height: 423}}>
                             {renderLeftTab()}
                         </div>
                     </div>

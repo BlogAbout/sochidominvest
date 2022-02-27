@@ -4,7 +4,7 @@ import {getPopupContainer, openPopup, removePopup} from '../../helpers/popupHelp
 import Button from '../Button/Button'
 import showBackgroundBlock from '../BackgroundBlock/BackgroundBlock'
 import {Content} from '../Popup/Popup'
-import styles from './PopupAlert.module.scss'
+import classes from './PopupAlert.module.scss'
 
 interface ButtonProps {
     text: string // Текст кнопки, обязательный параметр
@@ -23,6 +23,7 @@ interface Props extends PopupProps {
     maxHeight?: number
     width?: number
     buttons?: ButtonProps[] // Массив кнопок для вывода. При подаче массива, отключатся встроенные кнопки ок, отмена
+
     onOk?(result?: string, e?: any): void // Функция при нажатии ок
     onCancel?(): void // Функция при нажатии отмена
 }
@@ -122,27 +123,27 @@ const PopupAlert: React.FC<Props> = (props) => {
     }
 
     return (
-        <div className={styles['popup']}>
-            <div className={styles['title']}>
+        <div className={classes.popup}>
+            <div className={classes.title}>
                 {props.title}
-                <div className={styles['title-close']} onClick={close.bind(this)}/>
+                <div className={classes['title-close']} onClick={close.bind(this)}/>
             </div>
 
-            <Content className={styles['content']}>
-                {props.text ? <div className={styles['text']}>{props.text}</div> : null}
+            <Content className={classes.content}>
+                {props.text ? <div className={classes.text}>{props.text}</div> : null}
 
                 {props.prompt ?
                     <textarea
-                        className={styles['text-area']}
+                        className={classes['text-area']}
                         placeholder={props.promptPlaceholder}
-                        style={{borderColor: props.promptRequired && !promptResult.trim() ? '#ac4747' : '#e8e8e8'}}
+                        style={{borderColor: props.promptRequired && !promptResult.trim() ? '#ac4747' : '#075ea5'}}
                         onChange={handlePromptChange}
                         value={promptResult}
                     />
                     : null}
             </Content>
 
-            <div className={styles['footer']}>{buttons}</div>
+            <div className={classes.footer}>{buttons}</div>
         </div>
     )
 }

@@ -1,6 +1,7 @@
 import React, {CSSProperties} from 'react'
 import classNames from 'classnames/bind'
-import styles from './ButtonAdd.module.scss'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import classes from './ButtonAdd.module.scss'
 
 interface Props extends React.HTMLAttributes<any> {
     title?: string
@@ -23,7 +24,7 @@ const defaultProps: Props = {
     }
 }
 
-const cx = classNames.bind(styles)
+const cx = classNames.bind(classes)
 
 const ButtonAdd: React.FC<Props> = (props) => {
     const userStyle = props.className ? props.className : ''
@@ -40,8 +41,8 @@ const ButtonAdd: React.FC<Props> = (props) => {
 
     const wholeButton = () => {
         return (
-            <div className={styles['wholeButton']} title={props.title}>
-                <div className={styles['textSide']} onClick={props.onClick}>
+            <div className={classes.wholeButton} title={props.title}>
+                <div className={classes.textSide} onClick={props.onClick}>
                     {props.children}
                 </div>
 
@@ -52,13 +53,15 @@ const ButtonAdd: React.FC<Props> = (props) => {
 
     const crossOnly = () => {
         return (
-            <div className={styles['crossOnly']} onClick={props.onClick} title={props.title}/>
+            <div className={classes.crossOnly} onClick={props.onClick} title={props.title}>
+                <FontAwesomeIcon icon='plus'/>
+            </div>
         )
     }
 
     if (props.type === 'new') {
         return (
-            <div className={styles['newButton']}
+            <div className={classes.newButton}
                  title={props.title}
                  style={styleObj}
                  onClick={props.onClick}
@@ -69,9 +72,7 @@ const ButtonAdd: React.FC<Props> = (props) => {
     }
 
     return (
-        <div className={buttonStyle}
-             style={!props.children ? {width: "27px", margin: props.margin} : {margin: props.margin}}
-        >
+        <div className={buttonStyle}>
             {props.children ? wholeButton() : crossOnly()}
         </div>
     )

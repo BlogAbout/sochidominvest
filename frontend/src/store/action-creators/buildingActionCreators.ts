@@ -23,7 +23,7 @@ export const BuildingActionCreators = {
             const response = await BuildingService.fetchBuildings()
 
             if (response.status === 200) {
-                dispatch(BuildingActionCreators.setBuildings(response.data.data.data))
+                dispatch(BuildingActionCreators.setBuildings(response.data.data))
             } else {
                 dispatch(BuildingActionCreators.setError('Ошибка загрузки данных'))
             }
@@ -44,7 +44,7 @@ export const BuildingActionCreators = {
                 response = await BuildingService.createBuilding(building)
             }
 
-            if (response.status === 200) {
+            if (response.status === 200 || response.status === 201) {
                 dispatch(BuildingActionCreators.setError(''))
             } else {
                 dispatch(BuildingActionCreators.setError('Ошибка сохранения данных'))

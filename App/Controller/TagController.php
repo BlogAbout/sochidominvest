@@ -19,10 +19,11 @@ class TagController extends Controller
     public function createTag($request, $response)
     {
         $responseObject = [];
-        $FormDataMiddleware = new RequestMiddleware();
-        $formData = $FormDataMiddleware::acceptsFormData();
 
-        if (!$formData) {
+        $Middleware = new RequestMiddleware();
+        $Middleware = $Middleware::acceptsJson();
+
+        if (!$Middleware) {
             array_push($responseObject, [
                 'status' => 400,
                 'message' => 'Доступ к конечной точке разрешен только содержимому JSON.',
@@ -46,7 +47,7 @@ class TagController extends Controller
             return;
         }
 
-        $data = $request->paramsPost();
+        $data = json_decode($request->body());
 
         $validationObject = array(
             (object)[
@@ -65,8 +66,7 @@ class TagController extends Controller
 
         $payload = array(
             'name' => htmlentities(stripcslashes(strip_tags($data->name))),
-            'created_at' => date('Y-m-d H:i:s'),
-            'updated_at' => date('Y-m-d H:i:s')
+            'active' => (int)htmlentities(stripcslashes(strip_tags($data->active))),
         );
 
         try {
@@ -111,13 +111,14 @@ class TagController extends Controller
     public function updateTag($request, $response)
     {
         $responseObject = [];
-        $FormDataMiddleware = new RequestMiddleware();
-        $formData = $FormDataMiddleware::acceptsFormData();
 
-        if (!$formData) {
+        $Middleware = new RequestMiddleware();
+        $Middleware = $Middleware::acceptsJson();
+
+        if (!$Middleware) {
             array_push($responseObject, [
                 'status' => 400,
-                'message' => 'Доступ к конечной точке разрешен только содержимому Multipart Form Data.',
+                'message' => 'Доступ к конечной точке разрешен только содержимому JSON.',
                 'data' => []
             ]);
 
@@ -138,7 +139,7 @@ class TagController extends Controller
             return;
         }
 
-        $data = $request->paramsPost();
+        $data = json_decode($request->body());
 
         $validationObject = array(
             (object)[
@@ -168,7 +169,7 @@ class TagController extends Controller
         $payload = array(
             'id' => $request->id,
             'name' => htmlentities(stripcslashes(strip_tags($data->name))),
-            'updated_at' => date('Y-m-d H:i:s')
+            'active' => (int)htmlentities(stripcslashes(strip_tags($data->active))),
         );
 
         try {
