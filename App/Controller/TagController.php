@@ -9,6 +9,18 @@ use Exception;
  */
 class TagController extends Controller
 {
+    protected $tagModel;
+
+    /**
+     * Инициализация TagController
+     */
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->tagModel = new TagModel();
+    }
+
     /**
      * Создание метки
      *
@@ -18,31 +30,14 @@ class TagController extends Controller
      */
     public function createTag($request, $response)
     {
-        $responseObject = [];
-
-        $Middleware = new RequestMiddleware();
-        $Middleware = $Middleware::acceptsJson();
-
-        if (!$Middleware) {
-            array_push($responseObject, [
-                'status' => 400,
-                'message' => 'Доступ к конечной точке разрешен только содержимому JSON.',
-                'data' => []
-            ]);
-
-            $response->code(400)->json($responseObject);
+        if (!$this->requestMiddleware->acceptsJson()) {
+            $response->code(400)->json('Доступ к конечной точке разрешен только содержимому JSON.');
 
             return;
         }
 
-        $JwtMiddleware = new JwtMiddleware();
-        $jwtMiddleware = $JwtMiddleware->getAndDecodeToken();
-        if (isset($jwtMiddleware) && $jwtMiddleware == false) {
-            $response->code(400)->json([
-                'status' => 401,
-                'message' => 'Вы не авторизованы.',
-                'data' => []
-            ]);
+        if (!JwtMiddleware::getAndDecodeToken()) {
+            $response->code(401)->json('Вы не авторизованы.');
 
             return;
         }
@@ -52,50 +47,37 @@ class TagController extends Controller
         $validationObject = array(
             (object)[
                 'validator' => 'required',
-                'data' => isset($data->name) ? $data->name : '',
+                'data' => $data->name ?? '',
                 'key' => 'Название'
             ]
         );
 
         $validationBag = parent::validation($validationObject);
         if ($validationBag->status) {
-            $response->code(400)->json($validationBag);
+            $response->code(400)->json($validationBag->errors);
 
             return;
         }
 
         $payload = array(
             'name' => htmlentities(stripcslashes(strip_tags($data->name))),
-            'active' => (int)htmlentities(stripcslashes(strip_tags($data->active))),
+            'active' => (int)htmlentities(stripcslashes(strip_tags($data->active)))
         );
 
         try {
-            $TagModel = new TagModel();
-            $tag = $TagModel::createTag($payload);
+            $tagData = $this->tagModel->createTag($payload);
 
-            if ($tag['status']) {
-                $responseObject['status'] = 201;
-                $responseObject['data'] = $tag['data'];
-                $responseObject['message'] = '';
-
-                $response->code(201)->json($responseObject);
+            if ($tagData['status']) {
+                $response->code(201)->json($tagData['data']);
 
                 return;
             }
 
-            $responseObject['status'] = 400;
-            $responseObject['data'] = [];
-            $responseObject['message'] = 'Непредвиденная ошибка. Метка не может быть создана. Повторите попытку позже.';
-
-            $response->code(400)->json($responseObject);
+            $response->code(400)->json('Ошибка создания метки. Повторите попытку позже.');
 
             return;
         } catch (Exception $e) {
-            $responseObject['status'] = 500;
-            $responseObject['message'] = $e->getMessage();
-            $responseObject['data'] = [];
-
-            $response->code(500)->json($responseObject);
+            $response->code(500)->json($e->getMessage());
 
             return;
         }
@@ -110,31 +92,14 @@ class TagController extends Controller
      */
     public function updateTag($request, $response)
     {
-        $responseObject = [];
-
-        $Middleware = new RequestMiddleware();
-        $Middleware = $Middleware::acceptsJson();
-
-        if (!$Middleware) {
-            array_push($responseObject, [
-                'status' => 400,
-                'message' => 'Доступ к конечной точке разрешен только содержимому JSON.',
-                'data' => []
-            ]);
-
-            $response->code(400)->json($responseObject);
+        if (!$this->requestMiddleware->acceptsJson()) {
+            $response->code(400)->json('Доступ к конечной точке разрешен только содержимому JSON.');
 
             return;
         }
 
-        $JwtMiddleware = new JwtMiddleware();
-        $jwtMiddleware = $JwtMiddleware->getAndDecodeToken();
-        if (isset($jwtMiddleware) && $jwtMiddleware == false) {
-            $response->code(400)->json([
-                'status' => 401,
-                'message' => 'Вы не авторизованы.',
-                'data' => []
-            ]);
+        if (!JwtMiddleware::getAndDecodeToken()) {
+            $response->code(401)->json('Вы не авторизованы.');
 
             return;
         }
@@ -144,24 +109,24 @@ class TagController extends Controller
         $validationObject = array(
             (object)[
                 'validator' => 'required',
-                'data' => isset($request->id) ? $request->id : '',
+                'data' => $request->id ?? '',
                 'key' => 'Идентификатор'
             ],
             (object)[
                 'validator' => 'tagExists',
-                'data' => isset($request->id) ? $request->id : '',
+                'data' => $request->id ?? '',
                 'key' => 'Идентификатор'
             ],
             (object)[
                 'validator' => 'required',
-                'data' => isset($data->name) ? $data->name : '',
+                'data' => $data->name ?? '',
                 'key' => 'Название'
             ]
         );
 
         $validationBag = parent::validation($validationObject);
         if ($validationBag->status) {
-            $response->code(400)->json($validationBag);
+            $response->code(400)->json($validationBag->errors);
 
             return;
         }
@@ -169,37 +134,24 @@ class TagController extends Controller
         $payload = array(
             'id' => $request->id,
             'name' => htmlentities(stripcslashes(strip_tags($data->name))),
-            'active' => (int)htmlentities(stripcslashes(strip_tags($data->active))),
+            'active' => (int)htmlentities(stripcslashes(strip_tags($data->active)))
         );
 
         try {
-            $TagModel = new TagModel();
-            $tag = $TagModel::updateTag($payload);
+            $tagData = $this->tagModel->updateTag($payload);
 
-            if ($tag['status']) {
-                $tag['data'] = $TagModel::fetchTagById($request->id)['data'];
-                $responseObject['status'] = 200;
-                $responseObject['data'] = $tag['data'];
-                $responseObject['message'] = '';
-
-                $response->code(200)->json($responseObject);
+            if ($tagData['status']) {
+                $tag = $this->tagModel->fetchTagById($request->id);
+                $response->code(200)->json($tag);
 
                 return;
             }
 
-            $responseObject['status'] = 400;
-            $responseObject['data'] = [];
-            $responseObject['message'] = 'Непредвиденная ошибка. Метка не может быть обновлена. Повторите попытку позже.';
-
-            $response->code(400)->json($responseObject);
+            $response->code(400)->json('Ошибка обновления метки. Повторите попытку позже.');
 
             return;
         } catch (Exception $e) {
-            $responseObject['status'] = 500;
-            $responseObject['message'] = $e->getMessage();
-            $responseObject['data'] = [];
-
-            $response->code(500)->json($responseObject);
+            $response->code(500)->json($e->getMessage());
 
             return;
         }
@@ -214,16 +166,8 @@ class TagController extends Controller
      */
     public function getTagById($request, $response)
     {
-        $responseObject = [];
-
-        $JwtMiddleware = new JwtMiddleware();
-        $jwtMiddleware = $JwtMiddleware->getAndDecodeToken();
-        if (isset($jwtMiddleware) && $jwtMiddleware == false) {
-            $response->code(400)->json([
-                'status' => 401,
-                'message' => 'Вы не авторизованы.',
-                'data' => []
-            ]);
+        if (!JwtMiddleware::getAndDecodeToken()) {
+            $response->code(401)->json('Вы не авторизованы.');
 
             return;
         }
@@ -231,50 +175,30 @@ class TagController extends Controller
         $validationObject = array(
             (object)[
                 'validator' => 'required',
-                'data' => isset($request->id) ? $request->id : '',
+                'data' => $request->id ?? '',
                 'key' => 'Идентификатор'
             ],
             (object)[
                 'validator' => 'tagExists',
-                'data' => isset($request->id) ? $request->id : '',
+                'data' => $request->id ?? '',
                 'key' => 'Идентификатор'
             ]
         );
 
         $validationBag = parent::validation($validationObject);
         if ($validationBag->status) {
-            $response->code(400)->json($validationBag);
+            $response->code(400)->json($validationBag->errors);
 
             return;
         }
 
         try {
-            $TagModel = new TagModel();
-            $tag = $TagModel::fetchTagById($request->id);
-
-            if ($tag['status']) {
-                $responseObject['status'] = 200;
-                $responseObject['data'] = $tag['data'];
-                $responseObject['message'] = '';
-
-                $response->code(200)->json($responseObject);
-
-                return;
-            }
-
-            $responseObject['status'] = 400;
-            $responseObject['data'] = [];
-            $responseObject['message'] = 'Непредвиденная ошибка. Не удалось получить данные метки. Повторите попытку позже.';
-
-            $response->code(400)->json($responseObject);
+            $tag = $this->tagModel->fetchTagById($request->id);
+            $response->code(200)->json($tag);
 
             return;
         } catch (Exception $e) {
-            $responseObject['status'] = 500;
-            $responseObject['message'] = $e->getMessage();
-            $responseObject['data'] = [];
-
-            $response->code(500)->json($responseObject);
+            $response->code(500)->json($e->getMessage());
 
             return;
         }
@@ -289,47 +213,19 @@ class TagController extends Controller
      */
     public function fetchTags($request, $response)
     {
-        $responseObject = [];
-
-        $JwtMiddleware = new JwtMiddleware();
-        $jwtMiddleware = $JwtMiddleware->getAndDecodeToken();
-        if (isset($jwtMiddleware) && $jwtMiddleware == false) {
-            $response->code(400)->json([
-                'status' => 401,
-                'message' => 'Вы не авторизованы.',
-                'data' => []
-            ]);
+        if (!JwtMiddleware::getAndDecodeToken()) {
+            $response->code(401)->json('Вы не авторизованы.');
 
             return;
         }
 
         try {
-            $TagModel = new TagModel();
-            $tag = $TagModel::fetchTags();
-
-            if ($tag['status']) {
-                $responseObject['status'] = 200;
-                $responseObject['data'] = $tag['data'];
-                $responseObject['message'] = '';
-
-                $response->code(200)->json($responseObject);
-
-                return;
-            }
-
-            $responseObject['status'] = 400;
-            $responseObject['data'] = [];
-            $responseObject['message'] = 'Непредвиденная ошибка. Не удалось получить данные меток. Повторите попытку позже.';
-
-            $response->code(400)->json($responseObject);
+            $tagList = $this->tagModel->fetchTags();
+            $response->code(200)->json($tagList);
 
             return;
         } catch (Exception $e) {
-            $responseObject['status'] = 500;
-            $responseObject['message'] = $e->getMessage();
-            $responseObject['data'] = [];
-
-            $response->code(500)->json($responseObject);
+            $response->code(500)->json($e->getMessage());
 
             return;
         }
@@ -344,16 +240,8 @@ class TagController extends Controller
      */
     public function deleteTag($request, $response)
     {
-        $responseObject = [];
-
-        $JwtMiddleware = new JwtMiddleware();
-        $jwtMiddleware = $JwtMiddleware->getAndDecodeToken();
-        if (isset($jwtMiddleware) && $jwtMiddleware == false) {
-            $response->code(400)->json([
-                'status' => 401,
-                'message' => 'Вы не авторизованы.',
-                'data' => []
-            ]);
+        if (!JwtMiddleware::getAndDecodeToken()) {
+            $response->code(401)->json('Вы не авторизованы.');
 
             return;
         }
@@ -361,50 +249,35 @@ class TagController extends Controller
         $validationObject = array(
             (object)[
                 'validator' => 'required',
-                'data' => isset($request->id) ? $request->id : '',
+                'data' => $request->id ?? '',
                 'key' => 'Идентификатор'
             ],
             (object)[
                 'validator' => 'tagExists',
-                'data' => isset($request->id) ? $request->id : '',
+                'data' => $request->id ?? '',
                 'key' => 'Идентификатор'
             ]
         );
 
         $validationBag = parent::validation($validationObject);
         if ($validationBag->status) {
-            $response->code(400)->json($validationBag);
+            $response->code(400)->json($validationBag->errors);
 
             return;
         }
 
         try {
-            $TagModel = new TagModel();
-            $tag = $TagModel::deleteTag($request->id);
-
-            if ($tag['status']) {
-                $responseObject['status'] = 200;
-                $responseObject['data'] = [];
-                $responseObject['message'] = '';
-
-                $response->code(200)->json($responseObject);
+            if ($this->tagModel->deleteTag($request->id)) {
+                $response->code(200)->json('');
 
                 return;
             }
 
-            $responseObject['status'] = 400;
-            $responseObject['data'] = [];
-            $responseObject['message'] = 'Непредвиденная ошибка. Не удалось удалить метку. Повторите попытку позже.';
-
-            $response->code(400)->json($responseObject);
+            $response->code(400)->json('Ошибка удаления метки. Повторите попытку позже.');
 
             return;
         } catch (Exception $e) {
-            $responseObject['status'] = 500;
-            $responseObject['message'] = $e->getMessage();
-            $responseObject['data'] = [];
-
-            $response->code(500)->json($responseObject);
+            $response->code(500)->json($e->getMessage());
 
             return;
         }

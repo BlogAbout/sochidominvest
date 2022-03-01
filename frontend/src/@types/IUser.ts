@@ -6,6 +6,8 @@ export interface IUser {
     firstName: string
     role: string
     active?: number
+    block?: number
     lastActive?: string | null
     settings?: string | null
+    token?: string
 }

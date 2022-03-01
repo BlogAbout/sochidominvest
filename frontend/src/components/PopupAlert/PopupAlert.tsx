@@ -112,7 +112,8 @@ const PopupAlert: React.FC<Props> = (props) => {
 
     let buttons = getButtons().map((button, index) => {
         return (
-            <Button key={props.id + '-' + index} type={'regular'}
+            <Button key={props.id + '-' + index}
+                    type='regular'
                     onClick={button.onClick ? button.onClick : close.bind(this)}
             >{button.text}</Button>
         )

@@ -11,12 +11,12 @@ export default class BuildingService {
         return API.get('/building')
     }
 
-    static async createBuilding(building: IBuilding): Promise<AxiosResponse> {
-        return API.post('/building', building)
-    }
-
-    static async updateBuilding(building: IBuilding): Promise<AxiosResponse> {
-        return API.put(`/building/${building.id}`, building)
+    static async saveBuilding(building: IBuilding): Promise<AxiosResponse> {
+        if (building.id) {
+            return API.put(`/building/${building.id}`, building)
+        } else {
+            return API.post('/building', building)
+        }
     }
 
     static async removeBuilding(buildingId: number): Promise<AxiosResponse> {

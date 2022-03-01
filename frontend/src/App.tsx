@@ -32,7 +32,8 @@ import {
     faStar,
     faUser,
     faUserCheck,
-    faUserTie
+    faUserTie,
+    faCheckDouble
 } from '@fortawesome/free-solid-svg-icons'
 
 library.add(
@@ -67,7 +68,8 @@ library.add(
     faRubleSign,
     faMagnifyingGlass,
     faAngleDown,
-    faEllipsis
+    faEllipsis,
+    faCheckDouble
 )
 
 function App() {

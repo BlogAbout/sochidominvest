@@ -6,7 +6,7 @@ import classes from './Button.module.scss'
 
 interface Props extends React.HTMLAttributes<any> {
     title?: string
-    className?: 'default'
+    className?: 'default' | 'marginLeft' | 'marginRight'
     type: 'apply' | 'save' | 'cancel' | 'regular'
     disabled?: boolean
     notValid?: boolean

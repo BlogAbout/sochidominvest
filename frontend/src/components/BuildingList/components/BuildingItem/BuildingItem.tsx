@@ -1,10 +1,11 @@
-import React from 'react'
+import React, {useState} from 'react'
 import classNames from 'classnames/bind'
+import BuildingService from '../../../../api/BuildingService'
 import {IBuilding} from '../../../../@types/IBuilding'
 import openPopupBuildingCreate from '../../../PopupBuildingCreate/PopupBuildingCreate'
 import openContextMenu from '../../../ContextMenu/ContextMenu'
 import openPopupAlert from '../../../PopupAlert/PopupAlert'
-import {useActions} from '../../../../hooks/useActions'
+import Preloader from '../../../Preloader/Preloader'
 import classes from './BuildingItem.module.scss'
 
 interface Props {
@@ -23,7 +24,7 @@ const defaultProps: Props = {
 const cx = classNames.bind(classes)
 
 const BuildingItem: React.FC<Props> = (props) => {
-    const {removeBuilding} = useActions()
+    const [fetching, setFetching] = useState(false)
 
     // Редактирование объекта
     const updateHandler = (building: IBuilding) => {
@@ -43,28 +44,28 @@ const BuildingItem: React.FC<Props> = (props) => {
                 {
                     text: 'Удалить',
                     onClick: () => {
-                        removeFromStore(building)
-                            .then(() => props.onSave())
-                            .catch((error) => {
-                                console.error('Ошибка удаления объекта недвижимости', error)
+                        if (building.id) {
+                            setFetching(true)
 
-                                openPopupAlert(document.body, {
-                                    title: 'Ошибка!',
-                                    text: 'Ошибка удаления объекта недвижимости'
+                            BuildingService.removeBuilding(building.id)
+                                .then(() => {
+                                    setFetching(false)
+                                    props.onSave()
                                 })
-                            })
+                                .catch((error: any) => {
+                                    openPopupAlert(document.body, {
+                                        title: 'Ошибка!',
+                                        text: error.data
+                                    })
+
+                                    setFetching(false)
+                                })
+                        }
                     }
                 },
                 {text: 'Отмена'}
             ]
         })
-    }
-
-    // Удаление из store
-    const removeFromStore = async (building: IBuilding) => {
-        if (building.id) {
-            await removeBuilding(building.id)
-        }
     }
 
     // Открытие контекстного меню на элементе
@@ -81,6 +82,8 @@ const BuildingItem: React.FC<Props> = (props) => {
 
     return (
         <div className={classes.BuildingItem} onContextMenu={(e: React.MouseEvent) => onContextMenu(e)}>
+            {fetching && <Preloader/>}
+
             <div className={cx({'itemImage': true, 'noImage': true})}/>
 
             <div className={classes.itemContent}>

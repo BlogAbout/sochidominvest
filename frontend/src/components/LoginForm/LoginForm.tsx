@@ -1,6 +1,6 @@
 import React, {useState} from 'react'
-import {useTypedSelector} from '../../hooks/useTypedSelector'
 import {useActions} from '../../hooks/useActions'
+import UserService from '../../api/UserService'
 import {IAuth} from '../../@types/IAuth'
 import TextBox from '../TextBox/TextBox'
 import Button from '../Button/Button'
@@ -28,8 +28,12 @@ const LoginForm: React.FC<Props> = (props) => {
         password: false
     })
 
-    const {fetching, error} = useTypedSelector(state => state.authReducer)
-    const {login} = useActions()
+    const [info, setInfo] = useState({
+        fetching: false,
+        error: ''
+    })
+
+    const {setUserAuth} = useActions()
 
     const validationHandler = (): boolean => {
         let emailError = false
@@ -52,13 +56,32 @@ const LoginForm: React.FC<Props> = (props) => {
         event.preventDefault()
 
         if (validationHandler()) {
-            login(auth)
+            setInfo({
+                fetching: true,
+                error: ''
+            })
+
+            UserService.authUser(auth)
+                .then((response: any) => {
+                    setUserAuth(response.data)
+
+                    setInfo({
+                        fetching: false,
+                        error: ''
+                    })
+                })
+                .catch((error: any) => {
+                    setInfo({
+                        fetching: false,
+                        error: error.data
+                    })
+                })
         }
     }
 
     return (
         <div className={classes.LoginForm}>
-            {fetching && <Preloader/>}
+            {info.fetching && <Preloader/>}
 
             <h2>Вход в приложение</h2>
 
@@ -99,11 +122,11 @@ const LoginForm: React.FC<Props> = (props) => {
                 />
             </div>
 
-            {error && <div className={classes.errorMessage}>{error}</div>}
+            {info.error !== '' && <div className={classes.errorMessage}>{info.error}</div>}
 
             <div className={classes['buttons-wrapper']}>
                 <Button type='apply'
-                        disabled={fetching}
+                        disabled={info.fetching || validationError.email || validationError.password}
                         onClick={loginHandler.bind(this)}
                 >Войти</Button>
 

@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react'
 import withStore from '../../hoc/withStore'
+import TagService from '../../api/TagService'
 import {PopupProps} from '../../@types/IPopup'
 import {ITag} from '../../@types/ITag'
 import {getPopupContainer, openPopup, removePopup} from '../../helpers/popupHelper'
@@ -9,10 +10,8 @@ import {Content, Footer, Header, Popup} from '../Popup/Popup'
 import BlockingElement from '../BlockingElement/BlockingElement'
 import TextBox from '../TextBox/TextBox'
 import Button from '../Button/Button'
-import {useTypedSelector} from '../../hooks/useTypedSelector'
-import {useActions} from '../../hooks/useActions'
+import CheckBox from '../CheckBox/CheckBox'
 import classes from './PopupTagCreate.module.scss'
-import CheckBox from "../CheckBox/CheckBox";
 
 interface Props extends PopupProps {
     tag?: ITag | null
@@ -34,8 +33,7 @@ const PopupTagCreate: React.FC<Props> = (props) => {
         active: 1
     })
 
-    const {fetching} = useTypedSelector(state => state.tagReducer)
-    const {saveTag} = useActions()
+    const [fetching, setFetching] = useState(false)
 
     useEffect(() => {
         return () => {
@@ -49,32 +47,37 @@ const PopupTagCreate: React.FC<Props> = (props) => {
     }
 
     // Сохранение изменений
-    const saveHandler = () => {
+    const saveHandler = (isClose?: boolean) => {
         if (!tag.name || tag.name.trim() === '') {
             return
         }
 
-        saveToStore()
-            .then(() => {
+        setFetching(true)
+
+        TagService.saveTag(tag)
+            .then((response: any) => {
+                setFetching(false)
+                setTag(response.data)
+
                 props.onSave()
-                close()
+
+                if (isClose) {
+                    close()
+                }
             })
-            .catch((error) => {
+            .catch((error: any) => {
                 openPopupAlert(document.body, {
                     title: 'Ошибка!',
-                    text: error
+                    text: error.data
                 })
-            })
-    }
 
-    // Сохранение в store
-    const saveToStore = async () => {
-        await saveTag(tag)
+                setFetching(false)
+            })
     }
 
     return (
         <Popup className={classes.PopupTagCreate}>
-            <Header title={props.tag ? 'Редактировать метку' : 'Добавить метку'}
+            <Header title={tag.id ? 'Редактировать метку' : 'Добавить метку'}
                     popupId={props.id ? props.id : ''}
             />
 
@@ -110,13 +113,19 @@ const PopupTagCreate: React.FC<Props> = (props) => {
             </Content>
 
             <Footer>
-                <Button type="apply"
-                        icon='check'
-                        onClick={saveHandler.bind(this)}
-                        disabled={false}
+                <Button type="save"
+                        icon='check-double'
+                        onClick={() => saveHandler(true)}
+                        disabled={fetching || tag.name.trim() === ''}
                 >Сохранить</Button>
 
-                <Button type="save"
+                <Button type="apply"
+                        icon='check'
+                        onClick={() => saveHandler()}
+                        disabled={fetching || tag.name.trim() === ''}
+                >Сохранить</Button>
+
+                <Button type="regular"
                         icon='arrow-rotate-left'
                         onClick={close.bind(this)}
                 >Отменить</Button>

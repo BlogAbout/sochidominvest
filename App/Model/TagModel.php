@@ -13,7 +13,7 @@ class TagModel extends Model
      * @param int $id Идентификатор метки
      * @return array
      */
-    public static function fetchTagById($id)
+    public static function fetchTagById(int $id): array
     {
         $sql = "
             SELECT *
@@ -22,22 +22,15 @@ class TagModel extends Model
         ";
 
         parent::query($sql);
-
         parent::bindParams('id', $id);
 
         $tag = parent::fetch();
 
         if (!empty($tag)) {
-            return array(
-                'status' => true,
-                'data' => TagModel::formatDataToJson($tag)
-            );
+            return TagModel::formatDataToJson($tag);
         }
 
-        return array(
-            'status' => false,
-            'data' => []
-        );
+        return [];
     }
 
     /**
@@ -45,7 +38,7 @@ class TagModel extends Model
      *
      * @return array
      */
-    public static function fetchTags()
+    public static function fetchTags(): array
     {
         $resultList = [];
 
@@ -59,15 +52,12 @@ class TagModel extends Model
         $tagList = parent::fetchAll();
 
         if (!empty($tagList)) {
-            foreach($tagList as $tagData) {
+            foreach ($tagList as $tagData) {
                 array_push($resultList, TagModel::formatDataToJson($tagData));
             }
         }
 
-        return array(
-            'status' => true,
-            'data' => $resultList
-        );
+        return $resultList;
     }
 
     /**
@@ -76,7 +66,7 @@ class TagModel extends Model
      * @param array $payload Содержит все поля, которые будут созданы
      * @return array
      */
-    public static function createTag($payload)
+    public static function createTag(array $payload): array
     {
         $sql = "
             INSERT INTO `sdi_tag`
@@ -86,15 +76,13 @@ class TagModel extends Model
         ";
 
         parent::query($sql);
-
         parent::bindParams('name', $payload['name']);
         parent::bindParams('active', $payload['active']);
 
         $tag = parent::execute();
 
         if ($tag) {
-            $tagId = parent::lastInsertedId();
-            $payload['id'] = $tagId;
+            $payload['id'] = parent::lastInsertedId();
 
             return array(
                 'status' => true,
@@ -114,7 +102,7 @@ class TagModel extends Model
      * @param array $payload Содержит все поля, которые будут обновлены
      * @return array
      */
-    public static function updateTag($payload)
+    public static function updateTag(array $payload): array
     {
         $sql = "
             UPDATE `sdi_tag`
@@ -125,17 +113,14 @@ class TagModel extends Model
         ";
 
         parent::query($sql);
-
         parent::bindParams('id', $payload['id']);
         parent::bindParams('name', $payload['name']);
         parent::bindParams('active', $payload['active']);
 
-        $tag = parent::execute();
-
-        if ($tag) {
+        if (parent::execute()) {
             return array(
                 'status' => true,
-                'data' => $payload,
+                'data' => $payload
             );
         }
 
@@ -144,34 +129,21 @@ class TagModel extends Model
             'data' => []
         );
     }
-    
+
     /**
      * Удаляет метку по id (меняет статус активности)
      *
      * @param int $id Идентификатор метки
-     * @return array
+     * @return bool
      */
-    public static function deleteTag($id)
+    public static function deleteTag(int $id): bool
     {
         $sql = "UPDATE `sdi_tag` SET active = 0 WHERE id = :id";
 
         parent::query($sql);
-
         parent::bindParams('id', $id);
 
-        $building = parent::execute();
-
-        if ($building) {
-            return array(
-                'status' => true,
-                'data' => []
-            );
-        }
-
-        return array(
-            'status' => false,
-            'data' => []
-        );
+        return parent::execute();
     }
 
     /**
@@ -179,7 +151,8 @@ class TagModel extends Model
      * @param array $data Массив из базы данных
      * @return array
      */
-    private static function formatDataToJson($data) {
+    private static function formatDataToJson(array $data): array
+    {
         return [
             'id' => $data['id'],
             'name' => $data['name'],

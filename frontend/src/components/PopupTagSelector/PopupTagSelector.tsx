@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react'
 import withStore from '../../hoc/withStore'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import TagService from '../../api/TagService'
 import {ITag} from '../../@types/ITag'
 import {PopupDisplayOptions, PopupProps} from '../../@types/IPopup'
 import openPopupTagCreate from '../PopupTagCreate/PopupTagCreate'
@@ -42,9 +43,10 @@ const PopupTagSelector: React.FC<Props> = (props) => {
     const [isUpdate, setIsUpdate] = useState(false)
     const [searchText, setSearchText] = useState('')
     const [tagFilter, setTagFilter] = useState<ITag[]>([])
+    const [fetching, setFetching] = useState(false)
 
-    const {fetching, tags} = useTypedSelector(state => state.tagReducer)
-    const {fetchTagList, removeTag} = useActions()
+    const {fetching: fetchingTagList, tags} = useTypedSelector(state => state.tagReducer)
+    const {fetchTagList} = useActions()
 
     useEffect(() => {
         if (!tags.length || isUpdate) {
@@ -57,6 +59,10 @@ const PopupTagSelector: React.FC<Props> = (props) => {
     useEffect(() => {
         search(searchText)
     }, [tags])
+
+    useEffect(() => {
+        setFetching(fetchingTagList)
+    }, [fetchingTagList])
 
     // Закрытие Popup
     const close = () => {
@@ -111,28 +117,29 @@ const PopupTagSelector: React.FC<Props> = (props) => {
                 {
                     text: 'Удалить',
                     onClick: () => {
-                        removeTagHandler(tag)
-                            .then(() => setIsUpdate(true))
-                            .catch((error) => {
-                                console.error('Ошибка удаления метки', error)
+                        setFetching(true)
 
-                                openPopupAlert(document.body, {
-                                    title: 'Ошибка!',
-                                    text: 'Ошибка удаления метки',
-                                    onOk: close.bind(this)
+                        if (tag.id) {
+                            TagService.removeTag(tag.id)
+                                .then(() => {
+                                    setFetching(false)
+                                    setIsUpdate(true)
                                 })
-                            })
+                                .catch((error: any) => {
+                                    openPopupAlert(document.body, {
+                                        title: 'Ошибка!',
+                                        text: error.data,
+                                        onOk: close.bind(this)
+                                    })
+
+                                    setFetching(false)
+                                })
+                        }
                     }
                 },
                 {text: 'Отмена'}
             ]
         })
-    }
-
-    const removeTagHandler = async (tag: ITag) => {
-        if (tag.id) {
-            await removeTag(tag.id)
-        }
     }
 
     // Открытие контекстного меню на элементе справочника

@@ -12,15 +12,14 @@ class JwtMiddleware
 {
     protected static $user;
     protected static $token;
-    protected static $user_id;
+    protected static $userId;
 
     /**
      * Возвращает JWT Secret
      *
-     * @param void
      * @return string
      */
-    private static function JWTSecret()
+    private static function JWTSecret(): string
     {
         return 'K-lyniEXe8Gm-WOA7IhUd5xMrqCBSPzZFpv02Q6sJcVtaYD41wfHRL3';
     }
@@ -28,10 +27,9 @@ class JwtMiddleware
     /**
      * Извлекает и возвращает JWT-токен из заголовка запроса
      *
-     * @param void
      * @return string
      */
-    protected static function getToken()
+    protected static function getToken(): string
     {
         self::$token = $_SERVER['HTTP_AUTHORIZATION'];
 
@@ -41,8 +39,7 @@ class JwtMiddleware
     /**
      * Проверяет JWT-токен и возвращает логическое значение true
      *
-     * @param void
-     * @return boolean
+     * @return mixed
      */
     protected static function validateToken()
     {
@@ -53,13 +50,13 @@ class JwtMiddleware
         }
 
         try {
-            $Token = explode('Bearer ', self::$token);
+            $tokenExplode = explode('Bearer ', self::$token);
 
-            if (isset($Token[1]) && $Token == '') {
+            if (isset($tokenExplode[1]) && $tokenExplode == '') {
                 return false;
             }
 
-            return $Token[1];
+            return $tokenExplode[1];
         } catch (Exception $e) {
             return false;
         }
@@ -69,33 +66,32 @@ class JwtMiddleware
      * Декодирует и возвращает логическое значение true или user_id
      *
      * @param void
-     * @return mixed
+     * @return bool
      */
-    public function getAndDecodeToken()
+    public static function getAndDecodeToken(): bool
     {
         $token = self::validateToken();
 
         try {
-            if ($token !== false) {
-                // Запрос токена из базы данных и декодирование
-                $TokenModel = new TokenModel();
-
-                // Проверка базы данных на наличие запроса перед декодированием
-                $tokenDB = $TokenModel->fetchToken($token);
-
-                if ($tokenDB['status']) {
-                    // Декодирование токена и передача результата в контроллер
-                    $decodedToken = (array)JWT::decode($token, self::JWTSecret(), array('HS256'));
-                    if (isset($decodedToken['user_id'])) {
-                        self::$user_id = $decodedToken['user_id'];
-
-                        return $decodedToken['user_id'];
-                    }
-
-                    return false;
-                }
-
+            if (!$token) {
                 return false;
+            }
+
+            $tokenModel = new TokenModel();
+            $tokenStatus = $tokenModel->fetchToken($token); // Проверка базы данных на наличие запроса перед декодированием
+
+            if (!$tokenStatus) {
+                return false;
+            }
+
+            // Декодирование токена и передача результата в контроллер
+            $decodedToken = (array)JWT::decode($token, self::JWTSecret(), array('HS256'));
+
+            if (isset($decodedToken['user_id'])) {
+//                self::$userId = $decodedToken['user_id'];
+//
+//                return $decodedToken['user_id'];
+                return true;
             }
 
             return false;
@@ -107,20 +103,13 @@ class JwtMiddleware
     /**
      * Извлекает идентификатор пользователя из JWT-токена и возвращает массив пользователей
      *
-     * @param void
      * @return array
      */
-    public function getUser()
+    public function getUser(): array
     {
         try {
-            $UserModel = new UserModel();
-            $user = $UserModel::fetchUserById(self::$user_id);
-
-            if ($user['status']) {
-                return $user['data'];
-            }
-
-            return [];
+            $userModel = new UserModel();
+            return $userModel::fetchUserById(self::$userId);
         } catch (Exception $e) {
             return [];
         }

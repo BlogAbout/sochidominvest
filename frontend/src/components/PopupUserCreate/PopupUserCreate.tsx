@@ -3,6 +3,7 @@ import withStore from '../../hoc/withStore'
 import {rolesList} from '../../helpers/userHelper'
 import {PopupProps} from '../../@types/IPopup'
 import {IUser} from '../../@types/IUser'
+import UserService from '../../api/UserService'
 import {getPopupContainer, openPopup, removePopup} from '../../helpers/popupHelper'
 import showBackgroundBlock from '../BackgroundBlock/BackgroundBlock'
 import openPopupAlert from '../PopupAlert/PopupAlert'
@@ -12,10 +13,7 @@ import TextBox from '../TextBox/TextBox'
 import Button from '../Button/Button'
 import CheckBox from '../CheckBox/CheckBox'
 import ComboBox from '../ComboBox/ComboBox'
-import ErrorMessage from '../ErrorMessage/ErrorMessage'
 import {generatePassword} from '../../helpers/generatePasswordHelper'
-import {useTypedSelector} from '../../hooks/useTypedSelector'
-import {useActions} from '../../hooks/useActions'
 import classes from './PopupUserCreate.module.scss'
 
 interface Props extends PopupProps {
@@ -44,8 +42,7 @@ const PopupUserCreate: React.FC<Props> = (props) => {
         settings: null,
     })
 
-    const {error, fetching} = useTypedSelector(state => state.userReducer)
-    const {saveUser} = useActions()
+    const [fetching, setFetching] = useState(false)
 
     useEffect(() => {
         return () => {
@@ -58,29 +55,37 @@ const PopupUserCreate: React.FC<Props> = (props) => {
         removePopup(props.id ? props.id : '')
     }
 
+    const checkFormValidation = () => {
+        return user.firstName.trim() === '' || user.email.trim() === '' || user.phone.trim() === '' || (!user.id && user.password === '')
+    }
+
     // Сохранение изменений
-    const saveHandler = () => {
-        if (user.firstName.trim() === '' || user.email.trim() === '' || user.phone.trim() === '' || (!user.id && user.password === '')) {
+    const saveHandler = (isClose?: boolean) => {
+        if (checkFormValidation()) {
             return
         }
 
-        saveToStore()
-            .then(() => {
+        setFetching(true)
+
+        UserService.saveUser(user)
+            .then((response: any) => {
+                setFetching(false)
+                setUser(response.data)
+
                 props.onSave()
-                close()
+
+                if (isClose) {
+                    close()
+                }
             })
-            .catch((error) => {
+            .catch((error: any) => {
                 openPopupAlert(document.body, {
                     title: 'Ошибка!',
-                    text: error
+                    text: error.data
                 })
+
+                setFetching(false)
             })
-    }
-
-
-    // Сохранение в store
-    const saveToStore = async () => {
-        await saveUser(user)
     }
 
     // Автогенерация пароля
@@ -90,7 +95,7 @@ const PopupUserCreate: React.FC<Props> = (props) => {
 
     return (
         <Popup className={classes.PopupUserCreate}>
-            <Header title={props.user ? 'Редактировать пользователя' : 'Добавить пользователя'}
+            <Header title={user.id ? 'Редактировать пользователя' : 'Добавить пользователя'}
                     popupId={props.id ? props.id : ''}
             />
 
@@ -176,20 +181,26 @@ const PopupUserCreate: React.FC<Props> = (props) => {
                         />
                     </div>
                 </div>
-
-                {error !== '' && <ErrorMessage text={error}/>}
             </BlockingElement>
 
             <Footer>
-                <Button type="apply"
-                        icon='check'
-                        onClick={saveHandler.bind(this)}
-                        disabled={false}
+                <Button type="save"
+                        icon='check-double'
+                        onClick={() => saveHandler(true)}
+                        disabled={fetching || checkFormValidation()}
                 >Сохранить</Button>
 
-                <Button type="save"
+                <Button type="apply"
+                        icon='check'
+                        onClick={() => saveHandler()}
+                        disabled={fetching || checkFormValidation()}
+                        className='marginLeft'
+                >Сохранить</Button>
+
+                <Button type="regular"
                         icon='arrow-rotate-left'
                         onClick={close.bind(this)}
+                        className='marginLeft'
                 >Отменить</Button>
             </Footer>
         </Popup>

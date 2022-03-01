@@ -11,12 +11,12 @@ export default class TagService {
         return API.get('/tag')
     }
 
-    static async createTag(tag: ITag): Promise<AxiosResponse> {
-        return API.post('/tag', tag)
-    }
-
-    static async updateTag(tag: ITag): Promise<AxiosResponse> {
-        return API.put(`/tag/${tag.id}`, tag)
+    static async saveTag(tag: ITag): Promise<AxiosResponse> {
+        if (tag.id) {
+            return API.put(`/tag/${tag.id}`, tag)
+        } else {
+            return API.post('/tag', tag)
+        }
     }
 
     static async removeTag(tagId: number): Promise<AxiosResponse> {

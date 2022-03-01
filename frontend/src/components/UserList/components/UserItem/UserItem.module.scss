@@ -4,6 +4,11 @@
     margin-bottom: 15px;
     display: flex;
     width: 100%;
+    position: relative;
+
+    &.block {
+        color: #999;
+    }
 
     .id {
         width: 50px;

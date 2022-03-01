@@ -13,7 +13,7 @@ class BuildingModel extends Model
      * @param int $id Идентификатор недвижимости
      * @return array
      */
-    public static function fetchBuildingById($id)
+    public static function fetchBuildingById(int $id): array
     {
         $sql = "
             SELECT *,
@@ -28,25 +28,18 @@ class BuildingModel extends Model
         ";
 
         parent::query($sql);
-
         parent::bindParams('id', $id);
 
         $building = parent::fetch();
 
-        $building['advantages'] = explode(',', $building['advantages']);
-        $building['tags'] = array_map('intval', $building['tags'] ? explode(',', $building['tags']) : []);
-
         if (!empty($building)) {
-            return array(
-                'status' => true,
-                'data' => $building
-            );
+            $building['advantages'] = explode(',', $building['advantages']);
+            $building['tags'] = array_map('intval', $building['tags'] ? explode(',', $building['tags']) : []);
+
+            return $building;
         }
 
-        return array(
-            'status' => false,
-            'data' => []
-        );
+        return [];
     }
 
     /**
@@ -54,8 +47,10 @@ class BuildingModel extends Model
      *
      * @return array
      */
-    public static function fetchBuildings()
+    public static function fetchBuildings(): array
     {
+        $resultList = [];
+
         $sql = "
             SELECT *,
                    (
@@ -69,25 +64,15 @@ class BuildingModel extends Model
         ";
 
         parent::query($sql);
-
         $buildingList = parent::fetchAll();
 
         if (!empty($buildingList)) {
-            foreach($buildingList as &$building) {
-                $building['advantages'] = explode(',', $building['advantages']);
-                $building['tags'] = array_map('intval', $building['tags'] ? explode(',', $building['tags']) : []);
+            foreach ($buildingList as $buildingData) {
+                array_push($resultList, BuildingModel::formatDataToJson($buildingData));
             }
-
-            return array(
-                'status' => true,
-                'data' => $buildingList
-            );
         }
 
-        return array(
-            'status' => false,
-            'data' => []
-        );
+        return $buildingList;
     }
 
     /**
@@ -96,30 +81,28 @@ class BuildingModel extends Model
      * @param array $payload Содержит все поля, которые будут созданы
      * @return array
      */
-    public static function createBuilding($payload)
+    public static function createBuilding(array $payload): array
     {
         $sql = "
             INSERT INTO `sdi_building`
-                (name, description, address, created_at, updated_at, active, status)
+                (name, description, address, date_created, date_update, active, status)
             VALUES
-                (:name, :description, :address, :createdAt, :updatedAt, :active, :status)
+                (:name, :description, :address, :dateCreated, :dateUpdate, :active, :status)
         ";
 
         parent::query($sql);
-
         parent::bindParams('name', $payload['name']);
         parent::bindParams('description', $payload['description']);
         parent::bindParams('address', $payload['address']);
-        parent::bindParams('createdAt', $payload['createdAt']);
-        parent::bindParams('updatedAt', $payload['updatedAt']);
+        parent::bindParams('dateCreated', $payload['dateCreated']);
+        parent::bindParams('dateUpdate', $payload['dateUpdate']);
         parent::bindParams('active', $payload['active']);
         parent::bindParams('status', $payload['status']);
 
         $building = parent::execute();
 
         if ($building) {
-            $buildingId = parent::lastInsertedId();
-            $payload['id'] = $buildingId;
+            $payload['id'] = parent::lastInsertedId();
 
             BuildingModel::updateBuildingData($payload, false);
             BuildingModel::updateRelationsTags($payload['id'], $payload['tags']);
@@ -142,7 +125,7 @@ class BuildingModel extends Model
      * @param array $payload Содержит все поля, которые будут обновлены
      * @return array
      */
-    public static function updateBuilding($payload)
+    public static function updateBuilding(array $payload): array
     {
         $sql = "
             UPDATE `sdi_building`
@@ -150,31 +133,28 @@ class BuildingModel extends Model
                 name = :name,
                 description = :description,
                 address = :address,
-                updated_at = :updatedAt,
+                date_update = :dateUpdate,
                 active = :active,
                 status = :status
             WHERE id = :id
         ";
 
         parent::query($sql);
-
         parent::bindParams('id', $payload['id']);
         parent::bindParams('name', $payload['name']);
         parent::bindParams('description', $payload['description']);
         parent::bindParams('address', $payload['address']);
-        parent::bindParams('updatedAt', $payload['updatedAt']);
+        parent::bindParams('dateUpdate', $payload['dateUpdate']);
         parent::bindParams('active', $payload['active']);
         parent::bindParams('status', $payload['status']);
 
-        $building = parent::execute();
-
-        if ($building) {
+        if (parent::execute()) {
             BuildingModel::updateBuildingData($payload, true);
             BuildingModel::updateRelationsTags($payload['id'], $payload['tags']);
 
             return array(
                 'status' => true,
-                'data' => $payload,
+                'data' => $payload
             );
         }
 
@@ -185,12 +165,28 @@ class BuildingModel extends Model
     }
 
     /**
+     * Удаляет объект недвижимости по id (меняет статус активности)
+     *
+     * @param int $id Идентификатор объекта недвижимости
+     * @return bool
+     */
+    public static function deleteBuilding(int $id): bool
+    {
+        $sql = "UPDATE `sdi_building` SET active = 0 WHERE id = :id";
+
+        parent::query($sql);
+        parent::bindParams('id', $id);
+
+        return parent::execute();
+    }
+
+    /**
      * Добавление/обновление информации об объекте недвижимости
      *
      * @param array $payload Содержит все поля, которые будут созданы
      * @param boolean $update Добавление данных или обновление
      */
-    private static function updateBuildingData($payload, $update)
+    private static function updateBuildingData(array $payload, bool $update)
     {
         if ($update) {
             $sql = "
@@ -225,7 +221,6 @@ class BuildingModel extends Model
         }
 
         parent::query($sql);
-
         parent::bindParams('id', $payload['id']);
         parent::bindParams('houseClass', $payload['houseClass']);
         parent::bindParams('material', $payload['material']);
@@ -242,37 +237,7 @@ class BuildingModel extends Model
         parent::bindParams('sewerage', $payload['sewerage']);
         parent::bindParams('waterSupply', $payload['waterSupply']);
         parent::bindParams('advantages', $payload['advantages'] ? implode(',', $payload['advantages']) : '');
-
         parent::execute();
-    }
-
-    /**
-     * Удаляет объект недвижимости по id (меняет статус активности)
-     *
-     * @param int $id Идентификатор объекта недвижимости
-     * @return array
-     */
-    public static function deleteBuilding($id)
-    {
-        $sql = "UPDATE `sdi_building` SET active = 0 WHERE id = :id";
-
-        parent::query($sql);
-
-        parent::bindParams('id', $id);
-
-        $building = parent::execute();
-
-        if ($building) {
-            return array(
-                'status' => true,
-                'data' => []
-            );
-        }
-
-        return array(
-            'status' => false,
-            'data' => []
-        );
     }
 
     /**
@@ -280,7 +245,8 @@ class BuildingModel extends Model
      * @param int $buildingId Идентификатор объекта недвижимости
      * @param array $tags Массив идентификаторов меток
      */
-    private static function updateRelationsTags($buildingId, $tags) {
+    private static function updateRelationsTags(int $buildingId, array $tags)
+    {
         $sql = "DELETE FROM `sdi_building_tag` WHERE id_building = :id";
 
         parent::query($sql);
@@ -293,6 +259,7 @@ class BuildingModel extends Model
             foreach ($tags as $tag) {
                 array_push($tagsSql, "($buildingId, $tag)");
             }
+
             $sql = "
                 INSERT INTO `sdi_building_tag`
                     (`id_building`, `id_tag`)
@@ -303,5 +270,40 @@ class BuildingModel extends Model
             parent::bindParams('id', $buildingId);
             parent::execute();
         }
+    }
+
+    /**
+     * Преобразование выходящих данных в формат для frontend
+     * @param array $data Массив из базы данных
+     * @return array
+     */
+    private static function formatDataToJson(array $data): array
+    {
+        return [
+            'id' => (int)$data['id'],
+            'name' => $data['name'],
+            'description' => $data['description'],
+            'address' => $data['address'],
+            'active' => (int)$data['active'],
+            'status' => $data['status'],
+            'dateCreated' => $data['date_created'],
+            'dateUpdate' => $data['date_update'],
+            'houseClass' => $data['house_class'],
+            'material' => $data['material'],
+            'houseType' => $data['house_type'],
+            'entranceHouse' => $data['entrance_house'],
+            'parking' => $data['parking'],
+            'territory' => $data['territory'],
+            'ceilingHeight' => (float)$data['ceiling_height'],
+            'maintenanceCost' => (float)$data['maintenance_cost'],
+            'distanceSea' => (float)$data['distance_sea'],
+            'gas' => $data['gas'],
+            'heating' => $data['heating'],
+            'electricity' => $data['electricity'],
+            'sewerage' => $data['sewerage'],
+            'waterSupply' => $data['water_supply'],
+            'advantages' => explode(',', $data['advantages']),
+            'tags' => array_map('intval', $data['tags'] ? explode(',', $data['tags']) : [])
+        ];
     }
 }

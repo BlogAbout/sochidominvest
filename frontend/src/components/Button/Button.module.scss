@@ -1,4 +1,8 @@
 .button {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
     height: 40px;
     padding: 0 10px;
     min-width: 100px;
@@ -14,6 +18,14 @@
     border: 1px solid #075ea5;
     display: flex;
     justify-content: center;
+
+    &.marginLeft {
+        margin-left: 10px;
+    }
+
+    &.marginRight {
+        margin-right: 10px;
+    }
 
     .icon {
         width: 30px;
@@ -41,7 +53,7 @@
         }
     }
 
-    &:hover {
+    &:not(.disabled):hover {
         box-shadow: inset 3px 3px 8px rgba(0, 0, 0, 0.4);
     }
 
@@ -60,7 +72,7 @@
         background: #075ea5;
         color: #fff;
 
-        &:hover {
+        &:not(.disabled):hover {
             background: #fff;
             color: #075ea5;
 
@@ -77,12 +89,21 @@
             background: #075ea5;
         }
     }
+
+    &.regular {
+        background: #fff;
+
+        .icon::after {
+            background: #075ea5;
+        }
+    }
+
+    &.disabled {
+        cursor: default;
+        opacity: 0.5;
+    }
 }
 
 .not-valid {
     opacity: 0.5;
-}
-
-.disabled {
-    cursor: default;
 }

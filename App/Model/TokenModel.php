@@ -11,58 +11,36 @@ class TokenModel extends Model
      * Создает новый токен
      *
      * @param array $payload Содержит все поля, которые будут созданы
-     * @return array
      */
-    public function createToken($payload)
+    public static function createTokenDb(array $payload)
     {
         $sql = "INSERT INTO sdi_user_token (user_id, jwt_token) VALUES (:user_id, :jwt_token)";
 
         parent::query($sql);
-
         parent::bindParams('user_id', $payload['user_id']);
         parent::bindParams('jwt_token', $payload['jwt_token']);
-
-        $token = parent::execute();
-
-        if ($token) {
-            return array(
-                'status' => true,
-                'data' => $payload
-            );
-        }
-
-        return array(
-            'status' => false,
-            'data' => []
-        );
+        parent::execute();
     }
 
     /**
      * Извлекает существующий токен, используя $token
      *
      * @param string $token Токен, который будет использоваться для сопоставления с ближайшим токеном из базы данных
-     * @return array
+     * @return bool
      */
-    public function fetchToken($token)
+    public function fetchToken(string $token): bool
     {
         $sql = "SELECT * FROM `sdi_user_token` WHERE jwt_token = :jwt_token";
 
         parent::query($sql);
-
         parent::bindParams('jwt_token', $token);
 
         $data = parent::fetch();
 
         if (!empty($data)) {
-            return array(
-                'status' => true,
-                'data' => $data
-            );
+            return true;
         }
 
-        return array(
-            'status' => false,
-            'data' => []
-        );
+        return false;
     }
 }

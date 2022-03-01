@@ -7,48 +7,35 @@ namespace App;
  */
 class RequestMiddleware
 {
-    protected static $Request;
+    protected static $request;
 
     /**
      * Инициализация middleware
-     *
-     * @param void
-     * @return void
      */
     public function __construct()
     {
-        self::$Request = isset($_SERVER['CONTENT_TYPE']) ? $_SERVER['CONTENT_TYPE'] : '';
+        self::$request = $_SERVER['CONTENT_TYPE'] ?? '';
     }
 
     /**
      * Определяет, относится ли запрос к типу содержимого JSON
      *
-     * @param void
      * @return boolean
      */
-    public static function acceptsJson()
+    public static function acceptsJson(): bool
     {
-        if (strtolower(self::$Request) == 'application/json') {
-            return true;
-        }
-
-        return false;
+        return strtolower(self::$request) == 'application/json';
     }
 
     /**
      * Определяет, относится ли запрос к типу содержимого FormData
      *
-     * @param void
      * @return boolean
      */
-    public static function acceptsFormData()
+    public static function acceptsFormData(): bool
     {
-        self::$Request = explode(';', self::$Request)[0];
+        self::$request = explode(';', self::$request)[0];
 
-        if (strtolower(self::$Request) == 'multipart/form-data') {
-            return true;
-        }
-
-        return false;
+        return strtolower(self::$request) == 'multipart/form-data';
     }
 }

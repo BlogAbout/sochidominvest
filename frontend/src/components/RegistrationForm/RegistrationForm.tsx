@@ -1,9 +1,11 @@
 import React, {useState} from 'react'
-import {useTypedSelector} from '../../hooks/useTypedSelector'
 import {useActions} from '../../hooks/useActions'
+import UserService from '../../api/UserService'
 import TextBox from '../TextBox/TextBox'
 import Button from '../Button/Button'
 import Preloader from '../Preloader/Preloader'
+import ComboBox from '../ComboBox/ComboBox'
+import {rolesList} from '../../helpers/userHelper'
 import {ISignUp} from '../../@types/ISignUp'
 import classes from './RegistrationForm.module.scss'
 
@@ -22,7 +24,8 @@ const RegistrationForm: React.FC<Props> = (props) => {
         phone: '',
         email: '',
         password: '',
-        firstName: ''
+        firstName: '',
+        role: 'subscriber'
     })
 
     const [validationError, setValidationError] = useState({
@@ -32,8 +35,12 @@ const RegistrationForm: React.FC<Props> = (props) => {
         firstName: false
     })
 
-    const {fetching, error} = useTypedSelector(state => state.authReducer)
-    const {registration} = useActions()
+    const [info, setInfo] = useState({
+        fetching: false,
+        error: ''
+    })
+
+    const {setUserAuth} = useActions()
 
     const validationHandler = (): boolean => {
         let phoneError = false
@@ -71,13 +78,32 @@ const RegistrationForm: React.FC<Props> = (props) => {
         event.preventDefault()
 
         if (validationHandler()) {
-            registration(signUp)
+            setInfo({
+                fetching: true,
+                error: ''
+            })
+
+            UserService.registrationUser(signUp)
+                .then((response: any) => {
+                    setUserAuth(response.data)
+
+                    setInfo({
+                        fetching: false,
+                        error: ''
+                    })
+                })
+                .catch((error: any) => {
+                    setInfo({
+                        fetching: false,
+                        error: error.data
+                    })
+                })
         }
     }
 
     return (
         <div className={classes.RegistrationForm}>
-            {fetching && <Preloader/>}
+            {info.fetching && <Preloader/>}
 
             <h2>Регистрация</h2>
 
@@ -154,11 +180,20 @@ const RegistrationForm: React.FC<Props> = (props) => {
                 />
             </div>
 
-            {error && <div className={classes.errorMessage}>{error}</div>}
+            <div className={classes['field-wrapper']}>
+                <ComboBox selected={signUp.role || 'subscriber'}
+                          items={Object.values(rolesList.filter(role => role.isRegistration))}
+                          onSelect={(value: string) => setSignUp({...signUp, role: value})}
+                          placeHolder={'Выберите тип аккаунта'}
+                          styleType='standard'
+                />
+            </div>
+
+            {info.error !== '' && <div className={classes.errorMessage}>{info.error}</div>}
 
             <div className={classes['buttons-wrapper']}>
                 <Button type='apply'
-                        disabled={fetching}
+                        disabled={info.fetching || validationError.firstName || validationError.email || validationError.phone || validationError.password}
                         onClick={registrationHandler.bind(this)}
                 >Создать аккаунт</Button>
 

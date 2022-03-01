@@ -16,7 +16,7 @@ import SidebarRight from '../../../components/SidebarRight/SidebarRight'
 import classes from './AppRouter.module.scss'
 
 const AppRouter: React.FC = () => {
-    const {isAuth} = useTypedSelector(state => state.authReducer)
+    const {isAuth} = useTypedSelector(state => state.userReducer)
 
     return (
         <div className={classes.AppRouter}>

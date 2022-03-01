@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react'
 import withStore from '../../hoc/withStore'
+import BuildingService from '../../api/BuildingService'
 import {PopupProps} from '../../@types/IPopup'
 import {IBuilding} from '../../@types/IBuilding'
 import {ITab} from '../../@types/ITab'
@@ -27,8 +28,6 @@ import {
     buildingTerritory,
     buildingTypes
 } from '../../helpers/buildingHelper'
-import {useTypedSelector} from '../../hooks/useTypedSelector'
-import {useActions} from '../../hooks/useActions'
 import classes from './PopupBuildingCreate.module.scss'
 
 interface Props extends PopupProps {
@@ -57,8 +56,7 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
         tags: []
     })
 
-    const {fetching, error} = useTypedSelector(state => state.buildingReducer)
-    const {saveBuilding} = useActions()
+    const [fetching, setFetching] = useState(false)
 
     useEffect(() => {
         return () => {
@@ -72,29 +70,35 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
     }
 
     // Сохранение изменений
-    const saveHandler = () => {
+    const saveHandler = (isClose?: boolean) => {
         if (building.name.trim() === '' || !building.address || building.address.trim() === '') {
             return
         }
 
-        saveBuildingStore()
-            .then(() => {
+        setFetching(true)
+
+        BuildingService.saveBuilding(building)
+            .then((response: any) => {
+                setFetching(false)
+                setBuilding(response.data)
+
                 props.onSave()
-                close()
+
+                if (isClose) {
+                    close()
+                }
             })
-            .catch(() => {
+            .catch((error: any) => {
                 openPopupAlert(document.body, {
                     title: 'Ошибка!',
-                    text: error
+                    text: error.data
                 })
+
+                setFetching(false)
             })
     }
 
-    // Сохранение объекта в store
-    const saveBuildingStore = async () => {
-        await saveBuilding(building)
-    }
-
+    // Смена выбранных особенностей объекта
     const changeAdvantagesHandler = (key: string, value: boolean) => {
         let advantagesList: string[] = building.advantages || []
 
@@ -279,7 +283,7 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
 
     return (
         <Popup className={classes.PopupBuildingCreate}>
-            <Header title={props.building ? 'Редактировать недвижимость' : 'Добавить недвижимость'}
+            <Header title={building.id ? 'Редактировать недвижимость' : 'Добавить недвижимость'}
                     popupId={props.id ? props.id : ''}
             />
 
@@ -351,15 +355,23 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
             </Content>
 
             <Footer>
-                <Button type="apply"
-                        icon='check'
-                        onClick={saveHandler.bind(this)}
-                        disabled={false}
+                <Button type="save"
+                        icon='check-double'
+                        onClick={() => saveHandler(true)}
+                        disabled={fetching || building.name.trim() === '' || !building.address || building.address.trim() === ''}
                 >Сохранить</Button>
 
-                <Button type="save"
+                <Button type="apply"
+                        icon='check'
+                        onClick={() => saveHandler()}
+                        disabled={false}
+                        className='marginLeft'
+                >Сохранить</Button>
+
+                <Button type="regular"
                         icon='arrow-rotate-left'
                         onClick={close.bind(this)}
+                        className='marginLeft'
                 >Отменить</Button>
             </Footer>
         </Popup>

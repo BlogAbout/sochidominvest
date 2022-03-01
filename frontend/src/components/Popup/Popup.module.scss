@@ -14,6 +14,9 @@
     flex: none;
     padding: 0 15px;
     border-bottom: 1px solid #075ea5;
+
+    background: #075ea5;
+    background: linear-gradient(135deg, #075ea5 0%, #ffcc01 100%);
 }
 
 .header_big {
@@ -26,7 +29,7 @@
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
-    color: #585858;
+    color: #fff;
     font-weight: bold;
 }
 
