@@ -117,7 +117,7 @@ const PopupTagCreate: React.FC<Props> = (props) => {
                         icon='check-double'
                         onClick={() => saveHandler(true)}
                         disabled={fetching || tag.name.trim() === ''}
-                >Сохранить</Button>
+                >Сохранить и закрыть</Button>
 
                 <Button type="apply"
                         icon='check'

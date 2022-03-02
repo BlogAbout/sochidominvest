@@ -1,28 +1,57 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {IBuildingChecker} from '../../../../@types/IBuilding'
 import Empty from '../../../Empty/Empty'
 import openPopupCheckerCreate from '../../../PopupCheckerCreate/PopupCheckerCreate'
+import CheckerService from '../../../../api/CheckerService'
+import openPopupAlert from '../../../PopupAlert/PopupAlert'
+import openContextMenu from '../../../ContextMenu/ContextMenu'
+import Preloader from '../../../Preloader/Preloader'
 import classes from './CheckerList.module.scss'
 
 interface Props {
-    checkers: IBuildingChecker[]
+    buildingId: number | null
 }
 
 const defaultProps: Props = {
-    checkers: [],
+    buildingId: null
 }
 
 const CheckerList: React.FC<Props> = (props) => {
-    const [checkers, setCheckers] = useState<IBuildingChecker[]>(props.checkers)
+    const [isUpdate, setIsUpdate] = useState(true)
+    const [fetching, setFetching] = useState(false)
+    const [checkers, setCheckers] = useState<IBuildingChecker[]>([])
+
+    useEffect(() => {
+        if (isUpdate && props.buildingId) {
+            CheckerService.fetchCheckers(props.buildingId)
+                .then((response: any) => {
+                    setFetching(false)
+                    setCheckers(response.data)
+                })
+                .catch((error: any) => {
+                    openPopupAlert(document.body, {
+                        title: 'Ошибка!',
+                        text: error.data
+                    })
+
+                    setFetching(false)
+                })
+
+            setIsUpdate(false)
+        }
+    }, [isUpdate, props.buildingId])
+
+    // Обработчик изменений
+    const onSave = () => {
+        setIsUpdate(true)
+    }
 
     // Добавление элемента
     const createHandler = () => {
         openPopupCheckerCreate(document.body, {
-            fetching: false,
-            onSave: (checker: IBuildingChecker) => {
-                // Todo
-            }
+            buildingId: props.buildingId,
+            onSave: () => onSave()
         })
     }
 
@@ -30,20 +59,59 @@ const CheckerList: React.FC<Props> = (props) => {
     const updateHandler = (checker: IBuildingChecker) => {
         openPopupCheckerCreate(document.body, {
             checker: checker,
-            fetching: false,
-            onSave: (checker: IBuildingChecker) => {
-                // Todo
-            }
+            buildingId: props.buildingId,
+            onSave: () => onSave()
         })
     }
 
+    // Открытие контекстного меню на элементе
+    const onContextMenu = (e: React.MouseEvent, checker: IBuildingChecker) => {
+        e.preventDefault()
+
+        const menuItems = [
+            {text: 'Редактировать', onClick: () => updateHandler(checker)},
+            {text: 'Удалить', onClick: () => removeHandler(checker)}
+        ]
+
+        openContextMenu(e, menuItems)
+    }
+
     // Удаление элемента
-    const removeHandler = () => {
-        // Todo
+    const removeHandler = (checker: IBuildingChecker) => {
+        openPopupAlert(document.body, {
+            text: `Вы действительно хотите удалить ${checker.name}?`,
+            buttons: [
+                {
+                    text: 'Удалить',
+                    onClick: () => {
+                        if (checker.id) {
+                            setFetching(true)
+
+                            CheckerService.removeChecker(checker.id)
+                                .then(() => {
+                                    setFetching(false)
+                                    onSave()
+                                })
+                                .catch((error: any) => {
+                                    openPopupAlert(document.body, {
+                                        title: 'Ошибка!',
+                                        text: error.data
+                                    })
+
+                                    setFetching(false)
+                                })
+                        }
+                    }
+                },
+                {text: 'Отмена'}
+            ]
+        })
     }
 
     return (
         <div className={classes.CheckerList}>
+            {fetching && <Preloader/>}
+
             <div className={classes.header}>
                 <div className={classes.id}>#</div>
                 <div className={classes.name}>Название</div>
@@ -60,7 +128,10 @@ const CheckerList: React.FC<Props> = (props) => {
                 {checkers.length ?
                     checkers.map((checker: IBuildingChecker) => {
                         return (
-                            <div key={checker.id} className={classes.header}>
+                            <div key={checker.id}
+                                 className={classes.header}
+                                 onContextMenu={(e: React.MouseEvent) => onContextMenu(e, checker)}
+                            >
                                 <div className={classes.id}>#{checker.id}</div>
                                 <div className={classes.name}>{checker.name}</div>
                                 <div className={classes.stage}>{checker.stage}</div>

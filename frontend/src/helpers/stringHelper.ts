@@ -7,7 +7,7 @@
  * @param isInteger
  * @return string
  */
-export function declension(number: number, titles: string, onlyWord = false, isInteger = true) {
+export function declension(number: number, titles: string[], onlyWord = false, isInteger = true) {
     if (number < 0) {
         number = Math.abs(number)
     }

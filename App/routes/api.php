@@ -17,6 +17,13 @@ $Klein->respond('GET', '/api/v1/user/[:id]', [new UserController(), 'getUserById
 $Klein->respond('GET', '/api/v1/user', [new UserController(), 'fetchUsers']);
 $Klein->respond('DELETE', '/api/v1/user/[:id]', [new UserController(), 'deleteUser']);
 
+// Checker Routes
+$Klein->respond('POST', '/api/v1/building/checker', [new CheckerController(), 'createChecker']);
+$Klein->respond('PUT', '/api/v1/building/checker/[:id]', [new CheckerController(), 'updateChecker']);
+$Klein->respond('GET', '/api/v1/building/checker/[:id]', [new CheckerController(), 'getCheckerById']);
+$Klein->respond('GET', '/api/v1/building/[:id]/checker', [new CheckerController(), 'fetchCheckers']);
+$Klein->respond('DELETE', '/api/v1/building/checker/[:id]', [new CheckerController(), 'deleteChecker']);
+
 // Building Routes
 $Klein->respond('POST', '/api/v1/building', [new BuildingController(), 'createBuilding']);
 $Klein->respond('PUT', '/api/v1/building/[:id]', [new BuildingController(), 'updateBuilding']);

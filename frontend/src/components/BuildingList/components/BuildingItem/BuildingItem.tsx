@@ -1,5 +1,6 @@
 import React, {useState} from 'react'
 import classNames from 'classnames/bind'
+import {declension} from '../../../../helpers/stringHelper'
 import BuildingService from '../../../../api/BuildingService'
 import {IBuilding} from '../../../../@types/IBuilding'
 import openPopupBuildingCreate from '../../../PopupBuildingCreate/PopupBuildingCreate'
@@ -92,10 +93,17 @@ const BuildingItem: React.FC<Props> = (props) => {
             </div>
 
             <div className={classes.itemInfo}>
-                <div className={classes.counter}>1 квартира</div>
-                <div className={classes.cost}>От 4 890 000 руб.</div>
-                <div className={classes.costPer}>161 923 руб. за м<sup>2</sup></div>
-                <div className={classes.area}>26 м<sup>2</sup></div>
+                <div className={classes.counter}>
+                    {declension(props.building.countCheckers || 0, ['квартира', 'квартиры', 'квартир'], true)}
+                </div>
+
+                <div className={classes.cost}>От {props.building.costMin} руб.</div>
+
+                <div className={classes.costPer}>{props.building.costMinUnit} руб. за м<sup>2</sup></div>
+
+                <div className={classes.area}>
+                    {props.building.areaMin} м<sup>2</sup> - {props.building.areaMax} м<sup>2</sup>
+                </div>
             </div>
         </div>
     )

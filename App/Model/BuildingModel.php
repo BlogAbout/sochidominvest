@@ -21,7 +21,12 @@ class BuildingModel extends Model
                        SELECT GROUP_CONCAT(DISTINCT(bt.`id_tag`))
                        FROM sdi_building_tag AS bt
                        WHERE bt.`id_building` = bu.`id`
-                   ) AS tags
+                   ) AS tags,
+                   (
+                       SELECT COUNT(bc.`id`)
+                       FROM sdi_building_checker AS bc
+                       WHERE bc.`id_building` = bu.`id` AND bc.`active` = 1
+                   ) AS countCheckers
             FROM `sdi_building` AS bu
             LEFT JOIN sdi_building_data bd on bu.`id` = bd.`id`
             WHERE bu.`id` = :id
@@ -33,10 +38,7 @@ class BuildingModel extends Model
         $building = parent::fetch();
 
         if (!empty($building)) {
-            $building['advantages'] = explode(',', $building['advantages']);
-            $building['tags'] = array_map('intval', $building['tags'] ? explode(',', $building['tags']) : []);
-
-            return $building;
+            return BuildingModel::formatDataToJson($building);
         }
 
         return [];
@@ -57,7 +59,12 @@ class BuildingModel extends Model
                        SELECT GROUP_CONCAT(DISTINCT(bt.`id_tag`))
                        FROM sdi_building_tag AS bt
                        WHERE bt.`id_building` = bu.`id`
-                   ) AS tags
+                   ) AS tags,
+                   (
+                       SELECT COUNT(bc.`id`)
+                       FROM sdi_building_checker AS bc
+                       WHERE bc.`id_building` = bu.`id` AND bc.`active` = 1
+                   ) AS countCheckers
             FROM `sdi_building` AS bu
             LEFT JOIN sdi_building_data bd on bu.`id` = bd.`id`
             WHERE bu.`active` = 1
@@ -72,7 +79,7 @@ class BuildingModel extends Model
             }
         }
 
-        return $buildingList;
+        return $resultList;
     }
 
     /**
@@ -178,6 +185,36 @@ class BuildingModel extends Model
         parent::bindParams('id', $id);
 
         return parent::execute();
+    }
+
+    public static function updateValuesBuilding(int $buildingId) {
+        $sql = "
+            SELECT MIN(`area`) as areaMin, MAX(`area`) as areaMax, MIN(`cost`) as costMin, MIN(`cost` / `area`) as costMinUnit
+            FROM `sdi_building_checker`
+            WHERE `id_building` = :buildingId
+        ";
+
+        parent::query($sql);
+        parent::bindParams('buildingId', $buildingId);
+        $values = parent::execute();
+
+        $sql = "
+            UPDATE `sdi_building`
+            SET
+                area_min = :areaMin,
+                area_max = :areaMax,
+                cost_min = :costMin,
+                cost_min_unit = :costMinUnit
+            WHERE id = :id
+        ";
+
+        parent::query($sql);
+        parent::bindParams('id', $buildingId);
+        parent::bindParams('areaMin', $values['areaMin']);
+        parent::bindParams('areaMax', $values['areaMax']);
+        parent::bindParams('costMin', $values['costMin']);
+        parent::bindParams('costMinUnit', $values['costMinUnit']);
+        parent::execute();
     }
 
     /**
@@ -286,8 +323,14 @@ class BuildingModel extends Model
             'address' => $data['address'],
             'active' => (int)$data['active'],
             'status' => $data['status'],
+            'author' => (int)$data['author'],
             'dateCreated' => $data['date_created'],
             'dateUpdate' => $data['date_update'],
+            'areaMin' => $data['area_min'],
+            'areaMax' => $data['area_max'],
+            'costMin' => $data['cost_min'],
+            'costMinUnit' => $data['cost_min_unit'],
+            'countCheckers' => $data['countCheckers'],
             'houseClass' => $data['house_class'],
             'material' => $data['material'],
             'houseType' => $data['house_type'],

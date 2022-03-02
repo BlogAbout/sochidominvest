@@ -257,7 +257,7 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
         return (
             <div key='checker' className={classes.tabContent}>
                 {building.id ?
-                    <CheckerList checkers={building.checker || []}/>
+                    <CheckerList buildingId={building.id}/>
                     : <Empty message='Для получения доступа к шахматке сохраните изменения'/>
                 }
             </div>
@@ -359,12 +359,12 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
                         icon='check-double'
                         onClick={() => saveHandler(true)}
                         disabled={fetching || building.name.trim() === '' || !building.address || building.address.trim() === ''}
-                >Сохранить</Button>
+                >Сохранить и закрыть</Button>
 
                 <Button type="apply"
                         icon='check'
                         onClick={() => saveHandler()}
-                        disabled={false}
+                        disabled={fetching || building.name.trim() === '' || !building.address || building.address.trim() === ''}
                         className='marginLeft'
                 >Сохранить</Button>
 

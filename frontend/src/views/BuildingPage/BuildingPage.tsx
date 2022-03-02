@@ -27,9 +27,7 @@ const BuildingPage: React.FC = () => {
 
     const onClickAddHandler = () => {
         openPopupBuildingCreate(document.body, {
-            onSave: () => {
-                // Todo
-            }
+            onSave: () => onSave()
         })
     }
 

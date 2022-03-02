@@ -5,6 +5,9 @@ import showBackgroundBlock from '../BackgroundBlock/BackgroundBlock'
 import {getPopupContainer, openPopup, removePopup} from '../../helpers/popupHelper'
 import {Content, Footer, Header, Popup} from '../Popup/Popup'
 import BlockingElement from '../BlockingElement/BlockingElement'
+import openPopupAlert from '../PopupAlert/PopupAlert'
+import CheckerService from '../../api/CheckerService'
+import Button from '../Button/Button'
 import TextBox from '../TextBox/TextBox'
 import CheckBox from '../CheckBox/CheckBox'
 import ComboBox from '../ComboBox/ComboBox'
@@ -13,31 +16,34 @@ import classes from './PopupCheckerCreate.module.scss'
 
 interface Props extends PopupProps {
     checker?: IBuildingChecker
-    fetching: boolean
+    buildingId: number | null
 
-    onSave(checker: IBuildingChecker): void
+    onSave(): void
 }
 
 const defaultProps: Props = {
     checker: {} as IBuildingChecker,
-    fetching: false,
-    onSave: (checker: IBuildingChecker) => {
-        console.info('PopupCheckerCreate onSave', checker)
+    buildingId: null,
+    onSave: () => {
+        console.info('PopupCheckerCreate onSave')
     }
 }
 
 const PopupCheckerCreate: React.FC<Props> = (props) => {
     const [checker, setChecker] = useState<IBuildingChecker>(props.checker || {
         id: null,
-        buildingId: 0,
+        buildingId: props.buildingId,
         name: '',
         area: 0,
         cost: 0,
         furnish: 'draft',
         stage: 1,
         rooms: 1,
-        active: 1
+        active: 1,
+        status: 'sold'
     })
+
+    const [fetching, setFetching] = useState(false)
 
     useEffect(() => {
         return () => {
@@ -50,14 +56,43 @@ const PopupCheckerCreate: React.FC<Props> = (props) => {
         removePopup(props.id ? props.id : '')
     }
 
+    // Сохранение изменений
+    const saveHandler = (isClose?: boolean) => {
+        if (checker.buildingId || checker.name.trim() === '' || !checker.area || !checker.cost) {
+            return
+        }
+
+        setFetching(true)
+
+        CheckerService.saveChecker(checker)
+            .then((response: any) => {
+                setFetching(false)
+                setChecker(response.data)
+
+                props.onSave()
+
+                if (isClose) {
+                    close()
+                }
+            })
+            .catch((error: any) => {
+                openPopupAlert(document.body, {
+                    title: 'Ошибка!',
+                    text: error.data
+                })
+
+                setFetching(false)
+            })
+    }
+
     return (
         <Popup className={classes.PopupCheckerCreate}>
-            <Header title={checker ? 'Редактировать картиру' : 'Добавить квартиру'}
+            <Header title={checker.id ? 'Редактировать картиру' : 'Добавить квартиру'}
                     popupId={props.id ? props.id : ''}
             />
 
             <Content className={classes['popup-content']}>
-                <BlockingElement fetching={props.fetching} className={classes.content}>
+                <BlockingElement fetching={fetching} className={classes.content}>
                     <div className={classes.field}>
                         <div className={classes.field_label}>Название</div>
 
@@ -152,16 +187,24 @@ const PopupCheckerCreate: React.FC<Props> = (props) => {
             </Content>
 
             <Footer>
-                {/*<Button type="apply"*/}
-                {/*        icon='check'*/}
-                {/*        onClick={saveHandler.bind(this)}*/}
-                {/*        disabled={false}*/}
-                {/*>Сохранить</Button>*/}
+                <Button type="save"
+                        icon='check-double'
+                        onClick={() => saveHandler(true)}
+                        disabled={fetching || !checker.buildingId || checker.name.trim() === '' || !checker.area || !checker.cost}
+                >Сохранить и закрыть</Button>
 
-                {/*<Button type="save"*/}
-                {/*        icon='arrow-rotate-left'*/}
-                {/*        onClick={close.bind(this)}*/}
-                {/*>Отменить</Button>*/}
+                <Button type="apply"
+                        icon='check'
+                        onClick={() => saveHandler()}
+                        disabled={fetching || !checker.buildingId || checker.name.trim() === '' || !checker.area || !checker.cost}
+                        className='marginLeft'
+                >Сохранить</Button>
+
+                <Button type="regular"
+                        icon='arrow-rotate-left'
+                        onClick={close.bind(this)}
+                        className='marginLeft'
+                >Отменить</Button>
             </Footer>
         </Popup>
     )

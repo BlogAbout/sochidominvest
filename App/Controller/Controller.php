@@ -100,8 +100,19 @@ class Controller
                 try {
                     $checkBuilding = BuildingModel::fetchBuildingById((int)$payload->data);
 
-                    if (!$checkBuilding['status']) {
+                    if (!$checkBuilding['id']) {
                         array_push($response, "Объект с таким идентификатором не найден в базе данных.");
+                    }
+                } catch (Exception $e) {
+                }
+            }
+
+            if ($payload->validator == 'checkerExists') {
+                try {
+                    $checkChecker = CheckerModel::fetchCheckerById((int)$payload->data);
+
+                    if (!$checkChecker['id']) {
+                        array_push($response, "Квартира с таким идентификатором не найдена в базе данных.");
                     }
                 } catch (Exception $e) {
                 }
@@ -111,7 +122,7 @@ class Controller
                 try {
                     $checkTag = TagModel::fetchTagById((int)$payload->data);
 
-                    if (!$checkTag['status']) {
+                    if (!$checkTag['id']) {
                         array_push($response, "Метка с таким идентификатором не найдена в базе данных.");
                     }
                 } catch (Exception $e) {

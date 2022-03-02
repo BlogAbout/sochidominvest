@@ -7,6 +7,14 @@ export interface IBuilding {
     type: string | null
     status: string | null
     active: number
+    author: number | null
+    dateCreated?: string | null
+    dateUpdate?: string | null
+    areaMin?: number | null
+    areaMax?: number | null
+    costMin?: number | null
+    costMinUnit?: number | null
+    countCheckers?: number | null
     tags: number[]
     houseClass?: string | null
     material?: string | null
@@ -23,12 +31,11 @@ export interface IBuilding {
     sewerage?: string | null
     waterSupply?: string | null
     advantages?: string[]
-    checker?: IBuildingChecker[] | null
 }
 
 export interface IBuildingChecker {
     id: number | null
-    buildingId: number
+    buildingId: number | null
     name: string
     area: number | null
     cost: number | null
@@ -36,4 +43,7 @@ export interface IBuildingChecker {
     stage: number | null
     rooms: number | null
     active: number
+    status: string | null
+    dateCreated?: string | null
+    dateUpdate?: string | null
 }

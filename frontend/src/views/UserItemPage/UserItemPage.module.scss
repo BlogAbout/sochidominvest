@@ -1,0 +1,49 @@
+.UserItemPage {
+    position: relative;
+
+    .Content {
+        padding: 40px 0;
+        color: #000;
+
+        h1 {
+            display: flex;
+
+            span {
+                display: block;
+                margin-right: auto;
+                color: #fff;
+            }
+        }
+
+        .information {
+            display: flex;
+            flex-wrap: wrap;
+            width: 100%;
+            justify-content: space-between;
+
+            .data {
+                width: 49%;
+                background-color: #fff;
+                border: 1px solid #075ea5;
+
+                .container {
+                    padding: 15px 15px 0;
+
+                    .row {
+                        display: flex;
+
+                        .label {
+                            width: 30%;
+                            font-weight: 700;
+                        }
+
+                        .param {
+                            width: 70%;
+                            text-align: right;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
