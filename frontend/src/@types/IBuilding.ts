@@ -1,6 +1,7 @@
 export interface IBuilding {
     id: number | null
     name: string
+    description?: string
     address: string | null
     area: number | null
     cost: number | null

@@ -1,5 +1,6 @@
 import React, {useState} from 'react'
 import classNames from 'classnames/bind'
+import {useNavigate} from 'react-router-dom'
 import {IUser} from '../../../../@types/IUser'
 import {rolesList} from '../../../../helpers/userHelper'
 import UserService from '../../../../api/UserService'
@@ -25,6 +26,8 @@ const defaultProps: Props = {
 const cx = classNames.bind(classes)
 
 const UserItem: React.FC<Props> = (props) => {
+    const navigate = useNavigate()
+
     const [fetching, setFetching] = useState(false)
 
     // Редактирование пользователя
@@ -106,6 +109,7 @@ const UserItem: React.FC<Props> = (props) => {
 
     return (
         <div className={cx({'UserItem': true, 'block': props.user.block})}
+             onClick={() => navigate('/user/' + props.user.id)}
              onContextMenu={(e: React.MouseEvent) => onContextMenu(e)}
         >
             {fetching && <Preloader/>}

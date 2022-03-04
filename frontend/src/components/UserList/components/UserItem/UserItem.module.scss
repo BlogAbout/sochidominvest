@@ -5,6 +5,17 @@
     display: flex;
     width: 100%;
     position: relative;
+    box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.4);
+    transition: all 0.3s ease-out;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    cursor: pointer;
+
+    &:hover {
+        box-shadow: 6px 6px 8px rgba(0, 0, 0, 0.7);
+    }
 
     &.block {
         color: #999;

@@ -92,6 +92,7 @@
 
     &.regular {
         background: #fff;
+        color: #075ea5;
 
         .icon::after {
             background: #075ea5;
@@ -101,6 +102,19 @@
     &.disabled {
         cursor: default;
         opacity: 0.5;
+    }
+
+    &.only-icon {
+        min-width: auto;
+
+        .icon {
+            margin-right: 0;
+            padding-right: 0;
+
+            &::after {
+                display: none;
+            }
+        }
     }
 }
 

@@ -53,6 +53,7 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
         type: 'new_building',
         status: 'sold',
         active: 1,
+        author: 0,
         tags: []
     })
 

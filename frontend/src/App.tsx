@@ -33,7 +33,7 @@ import {
     faUser,
     faUserCheck,
     faUserTie,
-    faCheckDouble
+    faCheckDouble, faHeart, faPenToSquare, faPrint, faArrowUpFromBracket
 } from '@fortawesome/free-solid-svg-icons'
 
 library.add(
@@ -69,7 +69,11 @@ library.add(
     faMagnifyingGlass,
     faAngleDown,
     faEllipsis,
-    faCheckDouble
+    faCheckDouble,
+    faHeart,
+    faPenToSquare,
+    faPrint,
+    faArrowUpFromBracket
 )
 
 function App() {

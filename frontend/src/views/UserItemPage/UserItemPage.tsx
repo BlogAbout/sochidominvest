@@ -57,9 +57,8 @@ const UserItemPage: React.FC = () => {
     const renderStatisticBuilding = () => {
         return (
             <div className={classes.data}>
-                <h3>Статистика по недвижимости</h3>
-
                 <BlockingElement fetching={fetching} className={classes.container}>
+                    <h3>Статистика по недвижимости</h3>
                     В разработке
                 </BlockingElement>
             </div>
@@ -70,9 +69,8 @@ const UserItemPage: React.FC = () => {
     const renderStatisticAction = () => {
         return (
             <div className={classes.data}>
-                <h3>Статистика действий</h3>
-
                 <BlockingElement fetching={fetching} className={classes.container}>
+                    <h3>Статистика действий</h3>
                     В разработке
                 </BlockingElement>
             </div>
@@ -85,9 +83,8 @@ const UserItemPage: React.FC = () => {
 
         return (
             <div className={classes.data}>
-                <h3>Информация</h3>
-
                 <BlockingElement fetching={fetching} className={classes.container}>
+                    <h3>Информация</h3>
                     <div className={classes.row}>
                         <div className={classes.label}>Имя:</div>
                         <div className={classes.param}>{user.firstName}</div>

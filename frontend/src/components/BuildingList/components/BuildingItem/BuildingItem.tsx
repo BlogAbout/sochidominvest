@@ -1,5 +1,6 @@
 import React, {useState} from 'react'
 import classNames from 'classnames/bind'
+import {useNavigate} from 'react-router-dom'
 import {declension} from '../../../../helpers/stringHelper'
 import BuildingService from '../../../../api/BuildingService'
 import {IBuilding} from '../../../../@types/IBuilding'
@@ -25,6 +26,8 @@ const defaultProps: Props = {
 const cx = classNames.bind(classes)
 
 const BuildingItem: React.FC<Props> = (props) => {
+    const navigate = useNavigate()
+
     const [fetching, setFetching] = useState(false)
 
     // Редактирование объекта
@@ -82,7 +85,10 @@ const BuildingItem: React.FC<Props> = (props) => {
     }
 
     return (
-        <div className={classes.BuildingItem} onContextMenu={(e: React.MouseEvent) => onContextMenu(e)}>
+        <div className={classes.BuildingItem}
+             onClick={() => navigate('/building/' + props.building.id)}
+             onContextMenu={(e: React.MouseEvent) => onContextMenu(e)}
+        >
             {fetching && <Preloader/>}
 
             <div className={cx({'itemImage': true, 'noImage': true})}/>
@@ -94,15 +100,15 @@ const BuildingItem: React.FC<Props> = (props) => {
 
             <div className={classes.itemInfo}>
                 <div className={classes.counter}>
-                    {declension(props.building.countCheckers || 0, ['квартира', 'квартиры', 'квартир'], true)}
+                    {declension(props.building.countCheckers || 0, ['квартира', 'квартиры', 'квартир'], false)}
                 </div>
 
-                <div className={classes.cost}>От {props.building.costMin} руб.</div>
+                <div className={classes.cost}>От {props.building.costMin || 0} руб.</div>
 
-                <div className={classes.costPer}>{props.building.costMinUnit} руб. за м<sup>2</sup></div>
+                <div className={classes.costPer}>{props.building.costMinUnit || 0} руб. за м<sup>2</sup></div>
 
                 <div className={classes.area}>
-                    {props.building.areaMin} м<sup>2</sup> - {props.building.areaMax} м<sup>2</sup>
+                    {props.building.areaMin || 0} м<sup>2</sup> - {props.building.areaMax || 0} м<sup>2</sup>
                 </div>
             </div>
         </div>

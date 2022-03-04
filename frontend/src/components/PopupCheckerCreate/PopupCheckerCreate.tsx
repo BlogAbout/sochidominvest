@@ -22,7 +22,6 @@ interface Props extends PopupProps {
 }
 
 const defaultProps: Props = {
-    checker: {} as IBuildingChecker,
     buildingId: null,
     onSave: () => {
         console.info('PopupCheckerCreate onSave')

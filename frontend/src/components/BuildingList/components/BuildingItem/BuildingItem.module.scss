@@ -4,6 +4,16 @@
     display: flex;
     width: 49%;
     background-color: #fff;
+    transition: all 0.3s ease-out;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    cursor: pointer;
+
+    &:hover {
+        box-shadow: 6px 6px 8px rgba(0, 0, 0, 0.7);
+    }
 
     .itemImage {
         width: 200px;

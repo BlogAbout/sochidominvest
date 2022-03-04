@@ -35,7 +35,8 @@ const Button: React.FC<Props> = (props) => {
         [`${props.type}`]: true,
         ['disabled']: props.disabled,
         ['not-valid']: props.notValid,
-        ['is-icon']: !!props.icon
+        ['is-icon']: !!props.icon,
+        ['only-icon']: !props.children
     }, userStyle)
 
     return (
