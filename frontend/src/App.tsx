@@ -12,7 +12,8 @@ import {
     faBolt,
     faBook,
     faBuilding,
-    faCheck, faEllipsis,
+    faCheck,
+    faEllipsis,
     faFileExcel,
     faFlag,
     faGear,
@@ -21,7 +22,8 @@ import {
     faHouse,
     faHouseUser,
     faLocationDot,
-    faLock, faMagnifyingGlass,
+    faLock,
+    faMagnifyingGlass,
     faMessage,
     faPercent,
     faPhone,
@@ -33,7 +35,14 @@ import {
     faUser,
     faUserCheck,
     faUserTie,
-    faCheckDouble, faHeart, faPenToSquare, faPrint, faArrowUpFromBracket
+    faCheckDouble,
+    faHeart,
+    faPenToSquare,
+    faPrint,
+    faArrowUpFromBracket,
+    fa1,
+    faUpRightAndDownLeftFromCenter,
+    faPaintRoller, faElevator, faBed, faTrash, faUpload
 } from '@fortawesome/free-solid-svg-icons'
 
 library.add(
@@ -73,7 +82,14 @@ library.add(
     faHeart,
     faPenToSquare,
     faPrint,
-    faArrowUpFromBracket
+    faArrowUpFromBracket,
+    fa1,
+    faUpRightAndDownLeftFromCenter,
+    faPaintRoller,
+    faElevator,
+    faBed,
+    faTrash,
+    faUpload
 )
 
 function App() {
@@ -83,7 +99,7 @@ function App() {
         if (localStorage.getItem('auth')) {
             setIsAuth(true)
         }
-    }, [])
+    })
 
     return (
         <AppRouter/>

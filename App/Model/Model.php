@@ -53,7 +53,7 @@ class Model
      * @param string $query Sql запрос из наследуемых моделей
      * @return bool
      */
-    protected static function query($query)
+    protected static function query(string $query): bool
     {
         self::$stmt = self::$dbConn->prepare($query);
 
@@ -93,10 +93,9 @@ class Model
     /**
      * Выполняет инструкцию Sql и возвращает логический статус
      *
-     * @param void
      * @return boolean
      */
-    protected static function execute()
+    protected static function execute(): bool
     {
         self::$stmt->execute();
 
@@ -106,10 +105,9 @@ class Model
     /**
      * Выполняет инструкцию Sql и возвращает один массив из результирующего запроса Sql
      *
-     * @param void
      * @return array
      */
-    protected static function fetch()
+    protected static function fetch(): array
     {
         self::execute();
 
@@ -119,10 +117,9 @@ class Model
     /**
      * Выполняет инструкцию Sql и возвращает массив из результирующего запроса Sql
      *
-     * @param void
      * @return array
      */
-    protected static function fetchAll()
+    protected static function fetchAll(): array
     {
         self::execute();
 
@@ -135,8 +132,52 @@ class Model
      * @param void
      * @return string
      */
-    protected static function lastInsertedId()
+    protected static function lastInsertedId(): string
     {
         return self::$dbConn->lastInsertId();
+    }
+
+    /**
+     * @param string $file
+     * @param string $objectType
+     * @param int $objectId
+     * @param string $fileType
+     * @return string|null
+     */
+    protected static function uploadFile(string $file, string $objectType, int $objectId, $fileType = 'image')
+    {
+        $dir = $_SERVER['DOCUMENT_ROOT'] . "/uploads/$objectType/$objectId/";
+
+        if ($file) {
+            if (!file_exists($dir)) {
+                mkdir($dir, 0777, true);
+            }
+
+            if (preg_match('/^data:image\/(\w+);base64,/', $file, $type)) {
+                $content = substr($file, strpos($file, ',') + 1);
+                $type = strtolower($type[1]);
+
+                if ($fileType == 'image' && !in_array($type, ['jpg', 'jpeg', 'gif', 'png'])) {
+                    return null;
+                }
+
+                $content = str_replace(' ', '+', $content);
+                $content = base64_decode($content);
+
+                if ($content === false) {
+                    return null;
+                }
+
+                $fileName = base64_encode(microtime()) . '.' . $type;
+
+                if (!file_put_contents($dir . $fileName, $content)) {
+                    return null;
+                }
+
+                return $fileName;
+            }
+        }
+
+        return null;
     }
 }

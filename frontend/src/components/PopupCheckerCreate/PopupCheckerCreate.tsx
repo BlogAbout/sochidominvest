@@ -36,6 +36,7 @@ const PopupCheckerCreate: React.FC<Props> = (props) => {
         area: 0,
         cost: 0,
         furnish: 'draft',
+        housing: 1,
         stage: 1,
         rooms: 1,
         active: 1,
@@ -109,6 +110,22 @@ const PopupCheckerCreate: React.FC<Props> = (props) => {
                     </div>
 
                     <div className={classes.field}>
+                        <div className={classes.field_label}>Корпус</div>
+
+                        <TextBox value={checker.housing || 1}
+                                 onChange={(e: React.MouseEvent, value: number) => setChecker({
+                                     ...checker,
+                                     housing: value
+                                 })}
+                                 placeHolder='Укажите номер корпуса'
+                                 error={!checker.housing}
+                                 showRequired
+                                 errorText='Поле обязательно для заполнения'
+                                 icon='1'
+                        />
+                    </div>
+
+                    <div className={classes.field}>
                         <div className={classes.field_label}>Площадь, кв.м.</div>
 
                         <TextBox value={checker.area || 0}
@@ -117,7 +134,7 @@ const PopupCheckerCreate: React.FC<Props> = (props) => {
                                      area: value
                                  })}
                                  placeHolder='Укажите площадь в квадратных метрах'
-                                 icon='heading'
+                                 icon='up-right-and-down-left-from-center'
                         />
                     </div>
 
@@ -130,7 +147,7 @@ const PopupCheckerCreate: React.FC<Props> = (props) => {
                                      cost: value
                                  })}
                                  placeHolder='Укажите полную стоимость'
-                                 icon='heading'
+                                 icon='ruble-sign'
                         />
                     </div>
 
@@ -142,7 +159,7 @@ const PopupCheckerCreate: React.FC<Props> = (props) => {
                                   onSelect={(value: string) => setChecker({...checker, furnish: value})}
                                   placeHolder='Выберите вид отделки'
                                   styleType='standard'
-                                  icon='heading'
+                                  icon='paint-roller'
                         />
                     </div>
 
@@ -155,7 +172,7 @@ const PopupCheckerCreate: React.FC<Props> = (props) => {
                                      stage: value
                                  })}
                                  placeHolder='Укажите этаж'
-                                 icon='heading'
+                                 icon='elevator'
                         />
                     </div>
 
@@ -168,7 +185,7 @@ const PopupCheckerCreate: React.FC<Props> = (props) => {
                                      rooms: value
                                  })}
                                  placeHolder='Укажите количество комнат'
-                                 icon='heading'
+                                 icon='bed'
                         />
                     </div>
 

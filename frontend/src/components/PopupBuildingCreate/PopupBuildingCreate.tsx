@@ -4,6 +4,7 @@ import BuildingService from '../../api/BuildingService'
 import {PopupProps} from '../../@types/IPopup'
 import {IBuilding} from '../../@types/IBuilding'
 import {ITab} from '../../@types/ITab'
+import {IImage, IImageDb} from '../../@types/IImage'
 import {getPopupContainer, openPopup, removePopup} from '../../helpers/popupHelper'
 import showBackgroundBlock from '../BackgroundBlock/BackgroundBlock'
 import {Content, Footer, Header, Popup} from '../Popup/Popup'
@@ -16,6 +17,7 @@ import Tabs from '../Tabs/Tabs'
 import TagBox from '../TagBox/TagBox'
 import Empty from '../Empty/Empty'
 import CheckerList from './components/CheckerList/CheckerList'
+import ImageUploader from '../ImageUploader/ImageUploader'
 import openPopupAlert from '../PopupAlert/PopupAlert'
 import {
     buildingAdvantages,
@@ -44,7 +46,7 @@ const defaultProps: Props = {
 }
 
 const PopupBuildingCreate: React.FC<Props> = (props) => {
-    const [building, setBuilding] = useState<IBuilding>(props.building || {
+    const [building, setBuilding] = useState<IBuilding>(props.building ? JSON.parse(JSON.stringify(props.building)) : {
         id: null,
         name: '',
         address: '',
@@ -54,7 +56,10 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
         status: 'sold',
         active: 1,
         author: 0,
-        tags: []
+        tags: [],
+        advantages: [],
+        images: [],
+        newImages: []
     })
 
     const [fetching, setFetching] = useState(false)
@@ -80,6 +85,7 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
 
         BuildingService.saveBuilding(building)
             .then((response: any) => {
+                console.log('response', response)
                 setFetching(false)
                 setBuilding(response.data)
 
@@ -90,6 +96,7 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
                 }
             })
             .catch((error: any) => {
+                console.log('error', error)
                 openPopupAlert(document.body, {
                     title: 'Ошибка!',
                     text: error.data
@@ -101,7 +108,7 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
 
     // Смена выбранных особенностей объекта
     const changeAdvantagesHandler = (key: string, value: boolean) => {
-        let advantagesList: string[] = building.advantages || []
+        let advantagesList: string[] = building.advantages ? [...building.advantages] : []
 
         if (value) {
             advantagesList.push(key)
@@ -112,6 +119,11 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
         }
 
         setBuilding({...building, advantages: advantagesList})
+    }
+
+    // Загрузка изображений
+    const uploadImagesHandler = (images: IImageDb[], newImages: IImage[]) => {
+        setBuilding({...building, images: images, newImages: newImages})
     }
 
     // Вкладка состояния объекта
@@ -267,9 +279,16 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
 
     // Вкладка галереии объекта
     const renderGalleryTab = () => {
+        const listActiveImages: IImageDb[] = building.images.filter((image: IImageDb) => image.active)
+
         return (
             <div key='gallery' className={classes.tabContent}>
-
+                <ImageUploader images={listActiveImages}
+                               newImages={building.newImages}
+                               multi
+                               showUploadList
+                               onChange={uploadImagesHandler.bind(this)}
+                />
             </div>
         )
     }

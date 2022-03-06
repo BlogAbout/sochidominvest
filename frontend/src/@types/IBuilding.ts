@@ -1,3 +1,5 @@
+import {IImage, IImageDb} from './IImage'
+
 export interface IBuilding {
     id: number | null
     name: string
@@ -32,6 +34,8 @@ export interface IBuilding {
     sewerage?: string | null
     waterSupply?: string | null
     advantages?: string[]
+    images: IImageDb[]
+    newImages: IImage[]
 }
 
 export interface IBuildingChecker {
@@ -41,6 +45,7 @@ export interface IBuildingChecker {
     area: number | null
     cost: number | null
     furnish: string | null
+    housing: number
     stage: number | null
     rooms: number | null
     active: number

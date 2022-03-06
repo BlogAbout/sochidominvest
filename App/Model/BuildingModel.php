@@ -38,7 +38,14 @@ class BuildingModel extends Model
         $building = parent::fetch();
 
         if (!empty($building)) {
-            return BuildingModel::formatDataToJson($building);
+            $building = BuildingModel::formatDataToJson($building);
+            $images = BuildingModel::fetchBuildingImages([$building['id']]);
+
+            if (count($images)) {
+                $building['images'] = $images;
+            }
+
+            return $building;
         }
 
         return [];
@@ -74,8 +81,20 @@ class BuildingModel extends Model
         $buildingList = parent::fetchAll();
 
         if (!empty($buildingList)) {
+            $ids = [];
             foreach ($buildingList as $buildingData) {
                 array_push($resultList, BuildingModel::formatDataToJson($buildingData));
+                array_push($ids, (int)$buildingData['id']);
+            }
+
+            $images = BuildingModel::fetchBuildingImages($ids);
+
+            if (count($images)) {
+                foreach ($resultList as &$building) {
+                    $building['images'] = array_filter($images, function ($image) use ($building) {
+                        return $image['idObject'] == $building['id'];
+                    });
+                }
             }
         }
 
@@ -113,6 +132,7 @@ class BuildingModel extends Model
 
             BuildingModel::updateBuildingData($payload, false);
             BuildingModel::updateRelationsTags($payload['id'], $payload['tags']);
+            BuildingModel::uploadImages($payload['id'], $payload['newImages']);
 
             return array(
                 'status' => true,
@@ -158,6 +178,8 @@ class BuildingModel extends Model
         if (parent::execute()) {
             BuildingModel::updateBuildingData($payload, true);
             BuildingModel::updateRelationsTags($payload['id'], $payload['tags']);
+            BuildingModel::updateImages($payload['images']);
+            BuildingModel::uploadImages($payload['id'], $payload['newImages']);
 
             return array(
                 'status' => true,
@@ -187,7 +209,8 @@ class BuildingModel extends Model
         return parent::execute();
     }
 
-    public static function updateValuesBuilding(int $buildingId) {
+    public static function updateValuesBuilding(int $buildingId)
+    {
         $sql = "
             SELECT MIN(`area`) as areaMin, MAX(`area`) as areaMax, MIN(`cost`) as costMin, MIN(`cost` / `area`) as costMinUnit
             FROM `sdi_building_checker`
@@ -273,12 +296,13 @@ class BuildingModel extends Model
         parent::bindParams('electricity', $payload['electricity']);
         parent::bindParams('sewerage', $payload['sewerage']);
         parent::bindParams('waterSupply', $payload['waterSupply']);
-        parent::bindParams('advantages', $payload['advantages'] ? implode(',', $payload['advantages']) : '');
+        parent::bindParams('advantages', $payload['advantages'] ?? null);
         parent::execute();
     }
 
     /**
      * Обновление связей между объектами недвижимости и метками
+     *
      * @param int $buildingId Идентификатор объекта недвижимости
      * @param array $tags Массив идентификаторов меток
      */
@@ -310,7 +334,86 @@ class BuildingModel extends Model
     }
 
     /**
+     * Загрузка изображений на сервер и сохранение в базу данных
+     *
+     * @param int $buildingId Идентификатор объекта недвижимости
+     * @param array $images Массив изображений
+     */
+    private static function uploadImages(int $buildingId, array $images)
+    {
+        if (count($images)) {
+            foreach ($images as $image) {
+                $fileName = parent::uploadFile($image->value, 'building', $buildingId);
+
+                if ($fileName) {
+                    $sql = "INSERT INTO `sdi_building_images` (`id_building`, `name`, `active`) VALUES (:buildingId, :name, 1)";
+
+                    parent::query($sql);
+                    parent::bindParams('buildingId', $buildingId);
+                    parent::bindParams('name', $fileName);
+                    parent::execute();
+                }
+            }
+        }
+    }
+
+    /**
+     * Обновление данных изображений в базе данных
+     *
+     * @param array $images Массив изображений
+     */
+    private static function updateImages(array $images)
+    {
+        if (count($images)) {
+            foreach ($images as $image) {
+                $sql = "
+                    UPDATE `sdi_building_images`
+                    SET
+                        active = :active
+                    WHERE id = :id
+                ";
+
+                parent::query($sql);
+                parent::bindParams('id', $image->id);
+                parent::bindParams('active', $image->active);
+                parent::execute();
+            }
+        }
+    }
+
+    /**
+     * Получение данных изображений к соответствующим объектам недвижимости
+     *
+     * @param array $buildingIds Массив дентификаторов объектов недвижимости
+     * @return array
+     */
+    private static function fetchBuildingImages(array $buildingIds): array
+    {
+        $resultList = [];
+
+        $sql = "
+            SELECT *
+            FROM `sdi_building_images`
+            WHERE `id_building` IN (:buildingIds)
+        ";
+
+        parent::query($sql);
+        parent::bindParams('buildingIds', implode(',', $buildingIds));
+
+        $images = parent::fetchAll();
+
+        if (!empty($images)) {
+            foreach ($images as $image) {
+                array_push($resultList, BuildingModel::formatImagesToJson($image));
+            }
+        }
+
+        return $resultList;
+    }
+
+    /**
      * Преобразование выходящих данных в формат для frontend
+     *
      * @param array $data Массив из базы данных
      * @return array
      */
@@ -345,8 +448,27 @@ class BuildingModel extends Model
             'electricity' => $data['electricity'],
             'sewerage' => $data['sewerage'],
             'waterSupply' => $data['water_supply'],
-            'advantages' => explode(',', $data['advantages']),
-            'tags' => array_map('intval', $data['tags'] ? explode(',', $data['tags']) : [])
+            'advantages' => $data['advantages'] ? explode(',', $data['advantages']) : [],
+            'tags' => array_map('intval', $data['tags'] ? explode(',', $data['tags']) : []),
+            'images' => [],
+            'newImages' => []
+        ];
+    }
+
+    /**
+     * Преобразование выходящих данных изображений в формат для frontend
+     *
+     * @param array $data Массив из базы данных
+     * @return array
+     */
+    private static function formatImagesToJson(array $data): array
+    {
+        return [
+            'id' => (int)$data['id'],
+            'idObject' => (int)$data['id_building'],
+            'name' => $data['name'],
+            'active' => (int)$data['active'],
+            'value' => '/uploads/building/' . $data['id_building'] . '/' . $data['name']
         ];
     }
 }

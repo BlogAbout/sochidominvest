@@ -87,7 +87,9 @@ class BuildingController extends Controller
             'dateCreated' => date('Y-m-d H:i:s'),
             'dateUpdate' => date('Y-m-d H:i:s'),
             'advantages' => htmlentities(stripcslashes(strip_tags(implode(',', $data->advantages)))),
-            'tags' => $data->tags
+            'tags' => $data->tags,
+            'images' => $data->images,
+            'newImages' => $data->newImages
         );
 
         try {
@@ -185,7 +187,9 @@ class BuildingController extends Controller
             'waterSupply' => htmlentities(stripcslashes(strip_tags($data->waterSupply))),
             'dateUpdate' => date('Y-m-d H:i:s'),
             'advantages' => htmlentities(stripcslashes(strip_tags(implode(',', $data->advantages)))),
-            'tags' => $data->tags
+            'tags' => $data->tags,
+            'images' => $data->images,
+            'newImages' => $data->newImages
         );
 
         try {

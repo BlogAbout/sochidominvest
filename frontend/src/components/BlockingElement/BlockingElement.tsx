@@ -17,7 +17,7 @@ const cx = classNames.bind(classes)
 const BlockingElement: React.FC<Props> = (props) => {
     const blockingElementStyle = cx({
         [`${props.className}`]: props.className !== undefined,
-        'fetching': props.fetching
+        [classes.fetching]: props.fetching
     })
 
     return (

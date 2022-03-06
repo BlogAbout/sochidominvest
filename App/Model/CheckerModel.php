@@ -83,9 +83,11 @@ class CheckerModel extends Model
     {
         $sql = "
             INSERT INTO `sdi_building_checker`
-                (id_building, name, area, cost, furnish, stage, rooms, date_created, date_update, active, status)
+                (id_building, name, area, cost, furnish, housing, stage,
+                 rooms, date_created, date_update, active, status)
             VALUES
-                (:buildingId, :name, :area, :cost, :furnish, :stage, :rooms, :dateCreated, :dateUpdate, :active, :status)
+                (:buildingId, :name, :area, :cost, :furnish, :housing, :stage,
+                 :rooms, :dateCreated, :dateUpdate, :active, :status)
         ";
 
         parent::query($sql);
@@ -94,6 +96,7 @@ class CheckerModel extends Model
         parent::bindParams('area', $payload['area']);
         parent::bindParams('cost', $payload['cost']);
         parent::bindParams('furnish', $payload['furnish']);
+        parent::bindParams('housing', $payload['housing']);
         parent::bindParams('stage', $payload['stage']);
         parent::bindParams('rooms', $payload['rooms']);
         parent::bindParams('dateCreated', $payload['dateCreated']);
@@ -136,6 +139,7 @@ class CheckerModel extends Model
                 area = :area,
                 cost = :cost,
                 furnish = :furnish,
+                housing = :housing,
                 stage = :stage,
                 rooms = :rooms,
                 date_created = :dateCreated,
@@ -152,6 +156,7 @@ class CheckerModel extends Model
         parent::bindParams('area', $payload['area']);
         parent::bindParams('cost', $payload['cost']);
         parent::bindParams('furnish', $payload['furnish']);
+        parent::bindParams('housing', $payload['housing']);
         parent::bindParams('stage', $payload['stage']);
         parent::bindParams('rooms', $payload['rooms']);
         parent::bindParams('dateCreated', $payload['dateCreated']);
@@ -209,6 +214,7 @@ class CheckerModel extends Model
             'area' => (float)$data['area'],
             'cost' => (float)$data['cost'],
             'furnish' => $data['furnish'],
+            'housing' => $data['housing'],
             'stage' => (int)$data['stage'],
             'rooms' => (int)$data['rooms'],
             'dateCreated' => $data['date_created'],
