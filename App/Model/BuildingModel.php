@@ -219,7 +219,7 @@ class BuildingModel extends Model
 
         parent::query($sql);
         parent::bindParams('buildingId', $buildingId);
-        $values = parent::execute();
+        $values = parent::fetch();
 
         $sql = "
             UPDATE `sdi_building`

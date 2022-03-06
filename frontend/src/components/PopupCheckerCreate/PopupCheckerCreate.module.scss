@@ -1,13 +1,16 @@
 .PopupCheckerCreate {
-    width: 450px;
+    width: 600px;
 }
 
 .content {
     padding: 15px 15px 0;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
 }
 
 .field {
-    width: 100%;
+    width: 49%;
     margin-bottom: 10px;
     position: relative;
 }

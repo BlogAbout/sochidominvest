@@ -23,32 +23,6 @@
             padding: 0 10px;
             border-right: 1px solid #fff;
         }
-
-        .id {
-            flex-shrink: 0;
-            width: 50px;
-        }
-
-        .name {
-            flex-grow: 1;
-            width: 100%;
-        }
-
-        .stage {
-            flex-shrink: 0;
-            width: 150px;
-        }
-
-        .area {
-            flex-shrink: 0;
-            width: 150px;
-        }
-
-        .cost {
-            flex-shrink: 0;
-            width: 150px;
-            border-right: none;
-        }
     }
 
     .addChecker {
@@ -78,38 +52,43 @@
     }
 
     .list {
-        overflow: auto;
-        flex: 1 1 auto;
-
-        > div {
-            padding: 0 10px;
-            border-right: 1px solid #fff;
-        }
-
-        .id {
-            flex-shrink: 0;
-            width: 50px;
-        }
-
-        .name {
-            flex-grow: 1;
+        .row {
+            display: flex;
+            height: 30px;
+            flex: none;
+            border-bottom: 1px solid #e8e8e8;
+            align-items: center;
             width: 100%;
-        }
 
-        .stage {
-            flex-shrink: 0;
-            width: 150px;
-        }
+            > div {
+                padding: 0 10px;
+                border-right: 1px solid #fff;
+            }
 
-        .area {
-            flex-shrink: 0;
-            width: 150px;
-        }
 
-        .cost {
-            flex-shrink: 0;
-            width: 150px;
-            border-right: none;
         }
+    }
+
+    .id {
+        flex-shrink: 0;
+        width: 50px;
+    }
+
+    .name {
+        flex-grow: 1;
+        width: 100%;
+    }
+
+    .housing,
+    .stage,
+    .area {
+        flex-shrink: 0;
+        width: 90px;
+    }
+
+    .cost {
+        flex-shrink: 0;
+        width: 150px;
+        border-right: none !important;
     }
 }

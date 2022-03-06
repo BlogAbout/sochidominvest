@@ -91,7 +91,7 @@ class CheckerModel extends Model
         ";
 
         parent::query($sql);
-        parent::bindParams('id_building', $payload['buildingId']);
+        parent::bindParams('buildingId', $payload['buildingId']);
         parent::bindParams('name', $payload['name']);
         parent::bindParams('area', $payload['area']);
         parent::bindParams('cost', $payload['cost']);

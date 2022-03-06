@@ -58,7 +58,7 @@ const PopupCheckerCreate: React.FC<Props> = (props) => {
 
     // Сохранение изменений
     const saveHandler = (isClose?: boolean) => {
-        if (checker.buildingId || checker.name.trim() === '' || !checker.area || !checker.cost) {
+        if (!checker.buildingId || checker.name.trim() === '' || !checker.area || !checker.cost) {
             return
         }
 

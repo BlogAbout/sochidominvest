@@ -86,12 +86,12 @@ const BuildingItemPage: React.FC = (props) => {
                     </div>
 
                     <div className={classes.row}>
-                        <span>{building.costMinUnit || 0} руб.</span>
+                        <span>{building.costMinUnit || 0} тыс. руб.</span>
                         <span>Мин. цена за м<sup>2</sup></span>
                     </div>
 
                     <div className={classes.row}>
-                        <span>{building.costMin || 0} руб.</span>
+                        <span>{building.costMin || 0} тыс. руб.</span>
                         <span>Мин. цена</span>
                     </div>
 

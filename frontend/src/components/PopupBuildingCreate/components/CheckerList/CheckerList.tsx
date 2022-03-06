@@ -115,6 +115,7 @@ const CheckerList: React.FC<Props> = (props) => {
             <div className={classes.header}>
                 <div className={classes.id}>#</div>
                 <div className={classes.name}>Название</div>
+                <div className={classes.housing}>Корпус</div>
                 <div className={classes.stage}>Этаж</div>
                 <div className={classes.area}>Площадь</div>
                 <div className={classes.cost}>Цена</div>
@@ -129,11 +130,12 @@ const CheckerList: React.FC<Props> = (props) => {
                     checkers.map((checker: IBuildingChecker) => {
                         return (
                             <div key={checker.id}
-                                 className={classes.header}
+                                 className={classes.row}
                                  onContextMenu={(e: React.MouseEvent) => onContextMenu(e, checker)}
                             >
                                 <div className={classes.id}>#{checker.id}</div>
                                 <div className={classes.name}>{checker.name}</div>
+                                <div className={classes.housing}>{checker.housing}</div>
                                 <div className={classes.stage}>{checker.stage}</div>
                                 <div className={classes.area}>{checker.area ? `${checker.area} кв.м` : ''}</div>
                                 <div className={classes.cost}>{checker.cost ? `${checker.cost} тыс. руб.` : ''}</div>
