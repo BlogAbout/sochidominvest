@@ -357,7 +357,7 @@ export function closePopupsByType(popupType: any, excludeID: string) {
             continue
         }
 
-        if (popupID == excludeID) {
+        if (popupID === excludeID) {
             continue
         }
 

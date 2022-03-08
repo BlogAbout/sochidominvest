@@ -139,7 +139,7 @@ const PopupCheckerCreate: React.FC<Props> = (props) => {
                     </div>
 
                     <div className={classes.field}>
-                        <div className={classes.field_label}>Цена, тыс. руб.</div>
+                        <div className={classes.field_label}>Цена, руб.</div>
 
                         <TextBox value={checker.cost}
                                  onChange={(e: React.MouseEvent, value: number) => setChecker({

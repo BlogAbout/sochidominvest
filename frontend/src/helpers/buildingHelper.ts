@@ -64,6 +64,45 @@ export const buildingEntrance = [
 ]
 
 /**
+ *  Список типов подключения газа
+ */
+export const buildingGas = [
+    {key: 'no', text: 'Нет'},
+    {key: 'yes', text: 'Да'}
+]
+
+/**
+ *  Список типов отопления
+ */
+export const buildingHeating = [
+    {key: 'electrical', text: 'Электрическое'},
+    {key: 'boiler', text: 'Котельная'}
+]
+
+/**
+ *  Список типов подключения электричества
+ */
+export const buildingElectricity = [
+    {key: 'no-connect', text: 'Не подключено'},
+    {key: 'connect', text: 'Подключено'}
+]
+
+/**
+ *  Список типов канализации
+ */
+export const buildingSewerage = [
+    {key: 'central', text: 'Центральная'},
+    {key: 'los', text: 'ЛОС'}
+]
+
+/**
+ *  Список типов водоснабжения
+ */
+export const buildingWaterSupply = [
+    {key: 'central', text: 'Центральное'}
+]
+
+/**
  * Список особенностей
  */
 export const buildingAdvantages = [

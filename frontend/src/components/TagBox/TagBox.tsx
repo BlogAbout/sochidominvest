@@ -86,7 +86,7 @@ const TagBox: React.FC<Props> = (props) => {
         if (props.tags && props.tags.length) {
             const firstTagId: number = props.tags[0]
             const tagsNames: string[] = []
-            const tagFirstInfo = tags.find((tag: ITag) => tag.id == firstTagId)
+            const tagFirstInfo = tags.find((tag: ITag) => tag.id === firstTagId)
 
             if (tagFirstInfo) {
                 tmpText += tagFirstInfo.name

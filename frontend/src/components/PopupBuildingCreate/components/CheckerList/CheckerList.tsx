@@ -126,7 +126,7 @@ const CheckerList: React.FC<Props> = (props) => {
             </div>
 
             <div className={classes.list}>
-                {checkers.length ?
+                {checkers && checkers.length ?
                     checkers.map((checker: IBuildingChecker) => {
                         return (
                             <div key={checker.id}
@@ -138,7 +138,7 @@ const CheckerList: React.FC<Props> = (props) => {
                                 <div className={classes.housing}>{checker.housing}</div>
                                 <div className={classes.stage}>{checker.stage}</div>
                                 <div className={classes.area}>{checker.area ? `${checker.area} кв.м` : ''}</div>
-                                <div className={classes.cost}>{checker.cost ? `${checker.cost} тыс. руб.` : ''}</div>
+                                <div className={classes.cost}>{checker.cost ? `${checker.cost} руб.` : ''}</div>
                             </div>
                         )
                     })

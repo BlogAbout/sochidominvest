@@ -2,20 +2,32 @@ import React, {useEffect, useState} from 'react'
 import {useParams} from 'react-router-dom'
 import {useTypedSelector} from '../../hooks/useTypedSelector'
 import {useActions} from '../../hooks/useActions'
-import {IBuilding} from '../../@types/IBuilding'
+import {declension} from '../../helpers/stringHelper'
+import {numberWithSpaces, round} from '../../helpers/numberHelper'
+import CheckerService from '../../api/CheckerService'
+import {IBuilding, IBuildingChecker, IBuildingHousing} from '../../@types/IBuilding'
+import {IImageCarousel} from '../../@types/IImageCarousel'
+import {IImageDb} from '../../@types/IImage'
 import Button from '../../components/Button/Button'
 import Empty from '../../components/Empty/Empty'
 import BlockingElement from '../../components/BlockingElement/BlockingElement'
+import ImageCarousel from '../../components/ImageCarousel/ImageCarousel'
 import openPopupBuildingCreate from '../../components/PopupBuildingCreate/PopupBuildingCreate'
-import classes from './BuildingItemPage.module.scss'
-import {declension} from "../../helpers/stringHelper";
 import {
+    buildingAdvantages,
     buildingClasses,
+    buildingElectricity,
     buildingEntrance,
     buildingFormat,
+    buildingGas,
+    buildingHeating,
     buildingMaterials,
-    buildingParking, buildingTerritory
-} from "../../helpers/buildingHelper";
+    buildingParking,
+    buildingSewerage,
+    buildingTerritory,
+    buildingWaterSupply
+} from '../../helpers/buildingHelper'
+import classes from './BuildingItemPage.module.scss'
 
 type BuildingItemPageParams = {
     id: string
@@ -26,6 +38,8 @@ const BuildingItemPage: React.FC = (props) => {
 
     const [isUpdate, setIsUpdate] = useState(false)
     const [building, setBuilding] = useState<IBuilding>({} as IBuilding)
+    const [checkers, setCheckers] = useState<IBuildingChecker[]>([])
+    const [fetchingCheckers, setFetchingCheckers] = useState(false)
 
     const {buildings, fetching} = useTypedSelector(state => state.buildingReducer)
     const {fetchBuildingList} = useActions()
@@ -49,6 +63,23 @@ const BuildingItemPage: React.FC = (props) => {
         }
     }, [buildings])
 
+    useEffect(() => {
+        if (building.id) {
+            setFetchingCheckers(true)
+
+            CheckerService.fetchCheckers(building.id)
+                .then((response) => {
+                    setCheckers(response.data)
+                })
+                .catch((error: any) => {
+                    console.error('Ошибка загрузки шахматки', error)
+                })
+                .finally(() => {
+                    setFetchingCheckers(false)
+                })
+        }
+    }, [building])
+
     // Редактирование объекта
     const onClickEditHandler = () => {
         openPopupBuildingCreate(document.body, {
@@ -61,12 +92,23 @@ const BuildingItemPage: React.FC = (props) => {
 
     // Вывод галереи
     const renderGallery = () => {
+        let listImages: IImageCarousel[] = []
+        if (building.images && building.images.length) {
+            listImages = building.images.filter((image: IImageDb) => image.active).map((image: IImageDb) => {
+                return {
+                    image: 'http://sochidominvest' + image.value,
+                    alt: building.name
+                }
+            })
+        }
+
         return (
             <BlockingElement fetching={fetching} className={classes.gallery}>
                 <div className={classes.carousel}>
-                    <a href='https://api.sochidominvest.ru/uploads/no-image.jpg'>
-                        <img src='https://api.sochidominvest.ru/uploads/no-image.jpg' alt={building.name}/>
-                    </a>
+                    {listImages.length ?
+                        <ImageCarousel images={listImages} alt={building.name} fancy/>
+                        : <img src='https://api.sochidominvest.ru/uploads/no-image.jpg' alt={building.name}/>
+                    }
                 </div>
             </BlockingElement>
         )
@@ -86,12 +128,12 @@ const BuildingItemPage: React.FC = (props) => {
                     </div>
 
                     <div className={classes.row}>
-                        <span>{building.costMinUnit || 0} тыс. руб.</span>
+                        <span>{numberWithSpaces(round(building.costMinUnit || 0, 0))} руб.</span>
                         <span>Мин. цена за м<sup>2</sup></span>
                     </div>
 
                     <div className={classes.row}>
-                        <span>{building.costMin || 0} тыс. руб.</span>
+                        <span>{numberWithSpaces(round(building.costMin || 0, 0))} руб.</span>
                         <span>Мин. цена</span>
                     </div>
 
@@ -144,6 +186,11 @@ const BuildingItemPage: React.FC = (props) => {
         const entranceHouse = buildingEntrance.find(item => item.key === building.entranceHouse)
         const parking = buildingParking.find(item => item.key === building.parking)
         const territory = buildingTerritory.find(item => item.key === building.territory)
+        const gas = buildingGas.find(item => item.key === building.gas)
+        const heating = buildingHeating.find(item => item.key === building.heating)
+        const electricity = buildingElectricity.find(item => item.key === building.electricity)
+        const sewerage = buildingSewerage.find(item => item.key === building.sewerage)
+        const waterSupply = buildingWaterSupply.find(item => item.key === building.waterSupply)
 
         return (
             <BlockingElement fetching={fetching} className={classes.block}>
@@ -173,7 +220,7 @@ const BuildingItemPage: React.FC = (props) => {
 
                         {territory && <div className={classes.row}>
                             <div className={classes.label}>Территория:</div>
-                            <div className={classes.param}>{building.houseClass}</div>
+                            <div className={classes.param}>{territory.text}</div>
                         </div>}
 
                         {entranceHouse && <div className={classes.row}>
@@ -206,30 +253,30 @@ const BuildingItemPage: React.FC = (props) => {
                     <div className={classes.col}>
                         <h2>Коммуникации</h2>
 
-                        <div className={classes.row}>
+                        {gas && <div className={classes.row}>
                             <div className={classes.label}>Газ:</div>
-                            <div className={classes.param}>В разработке</div>
-                        </div>
+                            <div className={classes.param}>{gas.text}</div>
+                        </div>}
 
-                        <div className={classes.row}>
+                        {heating && <div className={classes.row}>
                             <div className={classes.label}>Отопление:</div>
-                            <div className={classes.param}>В разработке</div>
-                        </div>
+                            <div className={classes.param}>{heating.text}</div>
+                        </div>}
 
-                        <div className={classes.row}>
+                        {electricity && <div className={classes.row}>
                             <div className={classes.label}>Электричество:</div>
-                            <div className={classes.param}>В разработке</div>
-                        </div>
+                            <div className={classes.param}>{electricity.text}</div>
+                        </div>}
 
-                        <div className={classes.row}>
+                        {sewerage && <div className={classes.row}>
                             <div className={classes.label}>Канализация:</div>
-                            <div className={classes.param}>В разработке</div>
-                        </div>
+                            <div className={classes.param}>{sewerage.text}</div>
+                        </div>}
 
-                        <div className={classes.row}>
+                        {waterSupply && <div className={classes.row}>
                             <div className={classes.label}>Водоснабжение:</div>
-                            <div className={classes.param}>В разработке</div>
-                        </div>
+                            <div className={classes.param}>{waterSupply.text}</div>
+                        </div>}
                     </div>
 
                     <div className={classes.col}>
@@ -288,10 +335,16 @@ const BuildingItemPage: React.FC = (props) => {
                 <h2>Преимущества</h2>
 
                 <div className={classes.container}>
-                    {building.advantages.map((item: string) => {
+                    {building.advantages.map((item: string, index: number) => {
+                        const advantage = buildingAdvantages.find(element => element.key === item)
+
+                        if (!advantage) {
+                            return null
+                        }
+
                         return (
-                            <div className={classes.advantage}>
-                                <span>{item}</span>
+                            <div key={index} className={classes.advantage}>
+                                <span>{advantage.text}</span>
                             </div>
                         )
                     })}
@@ -302,11 +355,49 @@ const BuildingItemPage: React.FC = (props) => {
 
     // Вывод корпусов
     const renderHousing = () => {
-        return (
-            <BlockingElement fetching={fetching} className={classes.block}>
-                <h2>Корпуса (#)</h2>
+        if (!checkers || !checkers.length) {
+            return null
+        }
 
-                <p>В разработке</p>
+        const housingIds: number[] = Array.from(new Set(checkers.map((checker: IBuildingChecker) => checker.housing)))
+        const housingList: IBuildingHousing = {} as IBuildingHousing
+
+        housingIds.map((housingId: number) => {
+            housingList[housingId] = checkers.filter((checker: IBuildingChecker) => checker.housing === housingId)
+        })
+
+        return (
+            <BlockingElement fetching={fetchingCheckers} className={classes.block}>
+                <h2>Корпуса ({housingIds.length})</h2>
+
+                {Object.keys(housingList).map((key: string) => {
+                    let minCost = 0
+                    let minCostUnit = 0
+
+                    housingList[parseInt(key)].map((checker: IBuildingChecker) => {
+                        const cost = checker.cost && checker.cost ? checker.cost : 0
+                        const costUnit = checker.cost && checker.area ? checker.cost / checker.area : 0
+
+                        if (minCost == 0 || checker.cost && cost < minCost) {
+                            minCost = cost
+                        }
+
+                        if (minCostUnit == 0 || costUnit < minCostUnit) {
+                            minCostUnit = costUnit
+                        }
+                    })
+
+                    return (
+                        <div key={key} className={classes.housing}>
+                            <div className={classes.title}>Корпус #{key}</div>
+                            <div className={classes.counter}>
+                                {declension(housingList[parseInt(key)].length, ['квартира', 'квартиры', 'квартир'], false)},
+                                от {numberWithSpaces(round(minCost, 0))} рублей,
+                                от {numberWithSpaces(round(minCostUnit, 0))} рублей за м<sup>2</sup>
+                            </div>
+                        </div>
+                    )
+                })}
             </BlockingElement>
         )
     }

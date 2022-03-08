@@ -22,13 +22,18 @@ import openPopupAlert from '../PopupAlert/PopupAlert'
 import {
     buildingAdvantages,
     buildingClasses,
+    buildingElectricity,
     buildingEntrance,
     buildingFormat,
+    buildingGas,
+    buildingHeating,
     buildingMaterials,
     buildingParking,
+    buildingSewerage,
     buildingStatuses,
     buildingTerritory,
-    buildingTypes
+    buildingTypes,
+    buildingWaterSupply
 } from '../../helpers/buildingHelper'
 import classes from './PopupBuildingCreate.module.scss'
 
@@ -50,8 +55,6 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
         id: null,
         name: '',
         address: '',
-        area: 0,
-        cost: 0,
         type: 'new_building',
         status: 'sold',
         active: 1,
@@ -85,7 +88,6 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
 
         BuildingService.saveBuilding(building)
             .then((response: any) => {
-                console.log('response', response)
                 setFetching(false)
                 setBuilding(response.data)
 
@@ -170,6 +172,18 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
         return (
             <div key='info' className={classes.tabContent}>
                 <div className={classes.field}>
+                    <div className={classes.field_label}>Тип</div>
+
+                    <ComboBox selected={building.type}
+                              items={Object.values(buildingTypes)}
+                              onSelect={(value: string) => setBuilding({...building, type: value})}
+                              placeHolder={'Выберите тип'}
+                              styleType='standard'
+                              icon='user-check'
+                    />
+                </div>
+
+                <div className={classes.field}>
                     <div className={classes.field_label}>Класс дома</div>
 
                     <ComboBox selected={building.houseClass || ''}
@@ -231,6 +245,61 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
                               items={Object.values(buildingEntrance)}
                               onSelect={(value: string) => setBuilding({...building, entranceHouse: value})}
                               placeHolder={'Выберите тип подъезда к дому'}
+                              styleType='standard'
+                    />
+                </div>
+
+                <div className={classes.field}>
+                    <div className={classes.field_label}>Газ</div>
+
+                    <ComboBox selected={building.gas || ''}
+                              items={Object.values(buildingGas)}
+                              onSelect={(value: string) => setBuilding({...building, gas: value})}
+                              placeHolder={'Выберите подключение газа'}
+                              styleType='standard'
+                    />
+                </div>
+
+                <div className={classes.field}>
+                    <div className={classes.field_label}>Отопление</div>
+
+                    <ComboBox selected={building.heating || ''}
+                              items={Object.values(buildingHeating)}
+                              onSelect={(value: string) => setBuilding({...building, heating: value})}
+                              placeHolder={'Выберите тип отопления'}
+                              styleType='standard'
+                    />
+                </div>
+
+                <div className={classes.field}>
+                    <div className={classes.field_label}>Электричество</div>
+
+                    <ComboBox selected={building.electricity || ''}
+                              items={Object.values(buildingElectricity)}
+                              onSelect={(value: string) => setBuilding({...building, electricity: value})}
+                              placeHolder={'Выберите тип электричества'}
+                              styleType='standard'
+                    />
+                </div>
+
+                <div className={classes.field}>
+                    <div className={classes.field_label}>Канализация</div>
+
+                    <ComboBox selected={building.sewerage || ''}
+                              items={Object.values(buildingSewerage)}
+                              onSelect={(value: string) => setBuilding({...building, sewerage: value})}
+                              placeHolder={'Выберите тип канализации'}
+                              styleType='standard'
+                    />
+                </div>
+
+                <div className={classes.field}>
+                    <div className={classes.field_label}>Водоснабжение</div>
+
+                    <ComboBox selected={building.waterSupply || ''}
+                              items={Object.values(buildingWaterSupply)}
+                              onSelect={(value: string) => setBuilding({...building, waterSupply: value})}
+                              placeHolder={'Выберите тип водоснабжения'}
                               styleType='standard'
                     />
                 </div>
@@ -339,31 +408,6 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
                                      showRequired
                                      errorText='Поле обязательно для заполнения'
                                      icon='location-dot'
-                            />
-                        </div>
-
-                        <div className={classes.field}>
-                            <div className={classes.field_label}>Площадь, м<sup>2</sup></div>
-
-                            <TextBox value={building.area}
-                                     onChange={(e: React.MouseEvent, value: number) => setBuilding({
-                                         ...building,
-                                         area: value
-                                     })}
-                                     placeHolder={'Введите площадь'}
-                                     icon='arrow-up-right-from-square'
-                            />
-                        </div>
-
-                        <div className={classes.field}>
-                            <div className={classes.field_label}>Тип</div>
-
-                            <ComboBox selected={building.type}
-                                      items={Object.values(buildingTypes)}
-                                      onSelect={(value: string) => setBuilding({...building, type: value})}
-                                      placeHolder={'Выберите тип'}
-                                      styleType='standard'
-                                      icon='user-check'
                             />
                         </div>
                     </div>

@@ -58,7 +58,7 @@ const PopupAlert: React.FC<Props> = (props) => {
 
             removePopup(props.blockId ? props.blockId : '') // Удаление окна блокировки при закрытии основного окна
         }
-    }, [])
+    })
 
     const close = () => {
         clicked = true

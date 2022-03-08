@@ -1,8 +1,12 @@
 .PopupBuildingCreate {
     width: 800px;
+    height: 500px;
 }
 
 .content {
+    height: 393px;
+    overflow: auto;
+
     .info {
         display: flex;
         justify-content: space-between;

@@ -31,12 +31,12 @@ const cx = classNames.bind(classes)
 const Button: React.FC<Props> = (props) => {
     const userStyle = props.className ? props.className : ''
     const buttonStyle = cx({
-        'button': true,
+        [classes['button']]: true,
         [`${props.type}`]: true,
-        ['disabled']: props.disabled,
-        ['not-valid']: props.notValid,
-        ['is-icon']: !!props.icon,
-        ['only-icon']: !props.children
+        [classes['disabled']]: props.disabled,
+        [classes['not-valid']]: props.notValid,
+        [classes['is-icon']]: !!props.icon,
+        [classes['only-icon']]: !props.children
     }, userStyle)
 
     return (

@@ -54,7 +54,7 @@ const ComboBox: React.FC<Props> = (props) => {
     let title = props.title
     let imageClass = null
 
-    let selectedItem = props.items.find(item => props.selected == item.key)
+    let selectedItem = props.items.find(item => props.selected === item.key)
     if (selectedItem) {
         text = selectedItem.text
         placeHolder = ''

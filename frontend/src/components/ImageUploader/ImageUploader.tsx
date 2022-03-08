@@ -43,10 +43,10 @@ const ImageUploader: React.FC<Props> = (props) => {
         new Promise((resolve) => {
             Resizer.imageFileResizer(
                 file,
-                300,
-                400,
+                1200,
+                1200,
                 "JPEG",
-                80,
+                90,
                 0,
                 (uri) => {
                     resolve(uri)

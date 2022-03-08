@@ -111,9 +111,9 @@ class BuildingModel extends Model
     {
         $sql = "
             INSERT INTO `sdi_building`
-                (name, description, address, date_created, date_update, active, status)
+                (name, description, address, date_created, date_update, active, status, type)
             VALUES
-                (:name, :description, :address, :dateCreated, :dateUpdate, :active, :status)
+                (:name, :description, :address, :dateCreated, :dateUpdate, :active, :status, :type)
         ";
 
         parent::query($sql);
@@ -124,6 +124,7 @@ class BuildingModel extends Model
         parent::bindParams('dateUpdate', $payload['dateUpdate']);
         parent::bindParams('active', $payload['active']);
         parent::bindParams('status', $payload['status']);
+        parent::bindParams('type', $payload['type']);
 
         $building = parent::execute();
 
@@ -162,7 +163,8 @@ class BuildingModel extends Model
                 address = :address,
                 date_update = :dateUpdate,
                 active = :active,
-                status = :status
+                status = :status,
+                type = :type
             WHERE id = :id
         ";
 
@@ -174,6 +176,7 @@ class BuildingModel extends Model
         parent::bindParams('dateUpdate', $payload['dateUpdate']);
         parent::bindParams('active', $payload['active']);
         parent::bindParams('status', $payload['status']);
+        parent::bindParams('type', $payload['type']);
 
         if (parent::execute()) {
             BuildingModel::updateBuildingData($payload, true);
@@ -427,6 +430,7 @@ class BuildingModel extends Model
             'active' => (int)$data['active'],
             'status' => $data['status'],
             'author' => (int)$data['author'],
+            'type' => $data['type'],
             'dateCreated' => $data['date_created'],
             'dateUpdate' => $data['date_update'],
             'areaMin' => $data['area_min'],

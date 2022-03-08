@@ -31,3 +31,5 @@ interface Window {
     HTMLElement?: any
     StyleMedia?: any
 }
+
+declare module 'react-lightgallery'

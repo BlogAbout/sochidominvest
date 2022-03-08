@@ -2,6 +2,7 @@ import React, {useState} from 'react'
 import classNames from 'classnames/bind'
 import {useNavigate} from 'react-router-dom'
 import {declension} from '../../../../helpers/stringHelper'
+import {numberWithSpaces, round} from '../../../../helpers/numberHelper'
 import BuildingService from '../../../../api/BuildingService'
 import {IBuilding} from '../../../../@types/IBuilding'
 import openPopupBuildingCreate from '../../../PopupBuildingCreate/PopupBuildingCreate'
@@ -103,9 +104,9 @@ const BuildingItem: React.FC<Props> = (props) => {
                     {declension(props.building.countCheckers || 0, ['квартира', 'квартиры', 'квартир'], false)}
                 </div>
 
-                <div className={classes.cost}>От {props.building.costMin || 0} тыс. руб.</div>
+                <div className={classes.cost}>От {numberWithSpaces(round(props.building.costMin || 0, 0))} руб.</div>
 
-                <div className={classes.costPer}>{props.building.costMinUnit || 0} тыс. руб. за м<sup>2</sup></div>
+                <div className={classes.costPer}>{numberWithSpaces(round(props.building.costMinUnit || 0, 0))} руб. за м<sup>2</sup></div>
 
                 <div className={classes.area}>
                     {props.building.areaMin || 0} м<sup>2</sup> - {props.building.areaMax || 0} м<sup>2</sup>

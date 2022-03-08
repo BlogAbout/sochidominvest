@@ -5,8 +5,6 @@ export interface IBuilding {
     name: string
     description?: string
     address: string | null
-    area: number | null
-    cost: number | null
     type: string | null
     status: string | null
     active: number
@@ -52,4 +50,8 @@ export interface IBuildingChecker {
     status: string | null
     dateCreated?: string | null
     dateUpdate?: string | null
+}
+
+export interface IBuildingHousing {
+    [key: number]: IBuildingChecker[]
 }
