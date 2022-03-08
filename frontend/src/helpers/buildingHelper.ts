@@ -28,6 +28,7 @@ export const buildingClasses = [
  * Список типов материалов
  */
 export const buildingMaterials = [
+    {key: 'monolith', text: 'Монолитный'},
     {key: 'monolith-frame', text: 'Монолит-каркас'}
 ]
 
@@ -44,7 +45,8 @@ export const buildingFormat = [
  */
 export const buildingParking = [
     {key: 'pre-house', text: 'Придомовой'},
-    {key: 'pre-house-underground', text: 'Придомовой, подземный'}
+    {key: 'pre-house-underground', text: 'Придомовой, подземный'},
+    {key: 'pre-house-closed', text: 'Придомовой, закрытый'}
 ]
 
 /**

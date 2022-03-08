@@ -103,7 +103,7 @@ const ImageUploader: React.FC<Props> = (props) => {
                     props.images.map((image: IImageDb, index: number) => {
                         return (
                             <div key={'selected-' + image.id} className={classes.item}>
-                                <img src={'http://sochidominvest' + image.value} alt={image.name}/>
+                                <img src={'https://api.sochidominvest.ru' + image.value} alt={image.name}/>
 
                                 <div className={classes.remove}
                                      title='Удалить'

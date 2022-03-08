@@ -31,7 +31,10 @@ class JwtMiddleware
      */
     protected static function getToken(): string
     {
-        self::$token = $_SERVER['HTTP_AUTHORIZATION'];
+        $headers = getallheaders();
+
+        // self::$token = $_SERVER['HTTP_AUTHORIZATION'];
+        self::$token = $headers['Authorization'];
 
         return $_SERVER['HTTP_AUTHORIZATION'];
     }

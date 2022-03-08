@@ -128,30 +128,6 @@ class Controller
                 } catch (Exception $e) {
                 }
             }
-
-//            if ($payload->validator == 'img') {
-//                try {
-//                    $files = $payload->data;
-//                    if ($files) {
-//                        $fileName = $files['name'];
-//
-//                        $targetDir = '../../public/img/';
-//                        $targetFile = $targetDir . basename($files['name']);
-//
-//                        $fileSize = $files['size'];
-//                        $fileExtension = strtolower(pathinfo($targetFile, PATHINFO_EXTENSION));
-//
-//                        if (!in_array($fileExtension, $payload->acceptedExtension)) {
-//                            array_push($response, "{$payload->key} принимает только следующие расширения: " . implode(", ", $payload->acceptedExtension));
-//                        }
-//
-//                        if ($fileSize > $payload->maxSize) {
-//                            array_push($response, "{$payload->key} размер файла должен быть меньше " . $payload->maxSize);
-//                        }
-//                    }
-//                } catch (Exception $e) {
-//                }
-//            }
         }
 
         $validationErrors = new \stdClass();

@@ -96,7 +96,7 @@ const BuildingItemPage: React.FC = (props) => {
         if (building.images && building.images.length) {
             listImages = building.images.filter((image: IImageDb) => image.active).map((image: IImageDb) => {
                 return {
-                    image: 'http://sochidominvest' + image.value,
+                    image: 'https://api.sochidominvest.ru' + image.value,
                     alt: building.name
                 }
             })

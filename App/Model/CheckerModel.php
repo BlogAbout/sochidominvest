@@ -54,11 +54,11 @@ class CheckerModel extends Model
         }
 
         if ($buildingId) {
-            array_push($where, "`id_building` = " . $filter['buildingId']);
+            array_push($where, "`id_building` = " . $buildingId);
         }
 
         if (count($where)) {
-            $where .= " " . implode(' AND ', $where);
+            $sql .= " WHERE " . implode(' AND ', $where);
         }
 
         parent::query($sql);
