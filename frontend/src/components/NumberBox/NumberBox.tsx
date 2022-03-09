@@ -27,7 +27,7 @@ interface Props extends React.PropsWithChildren<any> {
     showMaxAfterOverflow?: boolean // Показывать максимум, если число превышает максимум. По умолчанию true
     transform?: boolean
 
-    onChange(e: React.ChangeEvent<HTMLInputElement>, value?: string | number, up?: any): string
+    onChange(e: React.ChangeEvent<HTMLInputElement>, value?: string | number, up?: any): void
 
     onBlur?(e: React.ChangeEvent<HTMLInputElement>): void
 }
@@ -42,10 +42,8 @@ const defaultProps: Props = {
     showArrows: true,
     styleType: 'standard',
     showMaxAfterOverflow: true,
-    onChange(e: React.ChangeEvent<HTMLInputElement>, value?: string | number, up?: any): string {
-        console.log(e, value, up)
-
-        return e.target.value
+    onChange(e: React.ChangeEvent<HTMLInputElement>, value?: string | number, up?: any): void {
+        console.log('NumberBox onChange', e, value, up)
     }
 }
 

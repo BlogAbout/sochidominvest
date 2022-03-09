@@ -9,6 +9,7 @@ import openPopupAlert from '../PopupAlert/PopupAlert'
 import CheckerService from '../../api/CheckerService'
 import Button from '../Button/Button'
 import TextBox from '../TextBox/TextBox'
+import NumberBox from '../NumberBox/NumberBox'
 import CheckBox from '../CheckBox/CheckBox'
 import ComboBox from '../ComboBox/ComboBox'
 import {checkerFurnish} from '../../helpers/buildingHelper'
@@ -37,7 +38,7 @@ const PopupCheckerCreate: React.FC<Props> = (props) => {
         cost: 0,
         furnish: 'draft',
         housing: 1,
-        stage: 1,
+        stage: 'Ц',
         rooms: 1,
         active: 1,
         status: 'sold'
@@ -112,42 +113,51 @@ const PopupCheckerCreate: React.FC<Props> = (props) => {
                     <div className={classes.field}>
                         <div className={classes.field_label}>Корпус</div>
 
-                        <TextBox value={checker.housing || 1}
-                                 onChange={(e: React.MouseEvent, value: number) => setChecker({
-                                     ...checker,
-                                     housing: value
-                                 })}
-                                 placeHolder='Укажите номер корпуса'
-                                 error={!checker.housing}
-                                 showRequired
-                                 errorText='Поле обязательно для заполнения'
-                                 icon='1'
+                        <NumberBox value={checker.housing || 1}
+                                   min={0}
+                                   step={1}
+                                   max={999999999}
+                                   onChange={(e: React.ChangeEvent<HTMLInputElement>, value: number) => setChecker({
+                                       ...checker,
+                                       housing: value
+                                   })}
+                                   placeHolder='Укажите номер корпуса'
+                                   error={!checker.housing}
+                                   showRequired
+                                   errorText='Поле обязательно для заполнения'
+                                   icon='1'
                         />
                     </div>
 
                     <div className={classes.field}>
                         <div className={classes.field_label}>Площадь, кв.м.</div>
 
-                        <TextBox value={checker.area || 0}
-                                 onChange={(e: React.MouseEvent, value: number) => setChecker({
-                                     ...checker,
-                                     area: value
-                                 })}
-                                 placeHolder='Укажите площадь в квадратных метрах'
-                                 icon='up-right-and-down-left-from-center'
+                        <NumberBox value={checker.area || 0}
+                                   min={0}
+                                   step={0.01}
+                                   max={999999999}
+                                   onChange={(e: React.ChangeEvent<HTMLInputElement>, value: number) => setChecker({
+                                       ...checker,
+                                       area: value
+                                   })}
+                                   placeHolder='Укажите площадь в квадратных метрах'
+                                   icon='up-right-and-down-left-from-center'
                         />
                     </div>
 
                     <div className={classes.field}>
                         <div className={classes.field_label}>Цена, руб.</div>
 
-                        <TextBox value={checker.cost}
-                                 onChange={(e: React.MouseEvent, value: number) => setChecker({
-                                     ...checker,
-                                     cost: value
-                                 })}
-                                 placeHolder='Укажите полную стоимость'
-                                 icon='ruble-sign'
+                        <NumberBox value={checker.cost || 0}
+                                   min={0}
+                                   step={1}
+                                   max={999999999}
+                                   onChange={(e: React.ChangeEvent<HTMLInputElement>, value: number) => setChecker({
+                                       ...checker,
+                                       cost: value
+                                   })}
+                                   placeHolder='Укажите полную стоимость'
+                                   icon='ruble-sign'
                         />
                     </div>
 
@@ -167,7 +177,7 @@ const PopupCheckerCreate: React.FC<Props> = (props) => {
                         <div className={classes.field_label}>Этаж</div>
 
                         <TextBox value={checker.stage}
-                                 onChange={(e: React.MouseEvent, value: number) => setChecker({
+                                 onChange={(e: React.MouseEvent, value: string) => setChecker({
                                      ...checker,
                                      stage: value
                                  })}
@@ -179,13 +189,16 @@ const PopupCheckerCreate: React.FC<Props> = (props) => {
                     <div className={classes.field}>
                         <div className={classes.field_label}>Количество комнат</div>
 
-                        <TextBox value={checker.rooms}
-                                 onChange={(e: React.MouseEvent, value: number) => setChecker({
-                                     ...checker,
-                                     rooms: value
-                                 })}
-                                 placeHolder='Укажите количество комнат'
-                                 icon='bed'
+                        <NumberBox value={checker.rooms || 1}
+                                   min={0}
+                                   step={1}
+                                   max={99}
+                                   onChange={(e: React.ChangeEvent<HTMLInputElement>, value: number) => setChecker({
+                                       ...checker,
+                                       rooms: value
+                                   })}
+                                   placeHolder='Укажите количество комнат'
+                                   icon='bed'
                         />
                     </div>
 

@@ -32,6 +32,11 @@ export interface IBuilding {
     sewerage?: string | null
     waterSupply?: string | null
     advantages?: string[]
+    payments?: string[]
+    formalization?: string[]
+    amountContract?: string | null
+    surchargeDoc?: number | null
+    surchargeGas?: number | null
     images: IImageDb[]
     newImages: IImage[]
 }
@@ -44,7 +49,7 @@ export interface IBuildingChecker {
     cost: number | null
     furnish: string | null
     housing: number
-    stage: number | null
+    stage: string | null
     rooms: number | null
     active: number
     status: string | null

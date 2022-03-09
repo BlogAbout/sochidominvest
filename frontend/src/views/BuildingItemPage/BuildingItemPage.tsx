@@ -378,11 +378,11 @@ const BuildingItemPage: React.FC = (props) => {
                         const cost = checker.cost && checker.cost ? checker.cost : 0
                         const costUnit = checker.cost && checker.area ? checker.cost / checker.area : 0
 
-                        if (minCost == 0 || checker.cost && cost < minCost) {
+                        if (minCost === 0 || (checker.cost && cost < minCost)) {
                             minCost = cost
                         }
 
-                        if (minCostUnit == 0 || costUnit < minCostUnit) {
+                        if (minCostUnit === 0 || costUnit < minCostUnit) {
                             minCostUnit = costUnit
                         }
                     })

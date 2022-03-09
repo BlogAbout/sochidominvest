@@ -92,7 +92,12 @@ const BuildingItem: React.FC<Props> = (props) => {
         >
             {fetching && <Preloader/>}
 
-            <div className={cx({'itemImage': true, 'noImage': true})}/>
+            <div className={cx({'itemImage': true, 'noImage': !props.building.images || !props.building.images.length})}>
+                {props.building.images && props.building.images.length ?
+                    <img src={'https://api.sochidominvest.ru' + props.building.images[0].value} alt={props.building.name}/>
+                    : null
+                }
+            </div>
 
             <div className={classes.itemContent}>
                 <h2>{props.building.name}</h2>

@@ -91,9 +91,11 @@ class BuildingModel extends Model
 
             if (count($images)) {
                 foreach ($resultList as &$building) {
-                    $building['images'] = array_filter($images, function ($image) use ($building) {
-                        return $image['idObject'] == $building['id'];
-                    });
+                    foreach($images as $image) {
+                        if ($image['idObject'] == $building['id']) {
+                            array_push($building['images'], $image);
+                        }
+                    }
                 }
             }
         }
@@ -269,17 +271,24 @@ class BuildingModel extends Model
                     electricity = :electricity,
                     sewerage = :sewerage,
                     water_supply = :waterSupply,
-                    advantages = :advantages
+                    advantages = :advantages,
+                    payments = :payments,
+                    formalization = :formalization,
+                    amount_contract = :amountContract,
+                    surcharge_doc = :surchargeDoc,
+                    surcharge_gas = :surchargeGas
                 WHERE id = :id
             ";
         } else {
             $sql = "
                 INSERT INTO `sdi_building_data`
                     (id, house_class, material, house_type, entrance_house, parking, territory, ceiling_height,
-                     maintenance_cost, distance_sea, gas, heating, electricity, sewerage, water_supply, advantages)
+                     maintenance_cost, distance_sea, gas, heating, electricity, sewerage, water_supply, advantages,
+                     payments, formalization, amount_contract, surcharge_doc, surcharge_gas)
                 VALUES
                     (:id, :houseClass, :material, :houseType, :entranceHouse, :parking, :territory, :ceilingHeight,
-                     :maintenanceCost, :distanceSea, :gas, :heating, :electricity, :sewerage, :waterSupply, :advantages)
+                     :maintenanceCost, :distanceSea, :gas, :heating, :electricity, :sewerage, :waterSupply, :advantages,
+                     :payments, :formalization, :amountContract, :surchargeDoc, :surchargeGas)
             ";
         }
 
@@ -300,6 +309,11 @@ class BuildingModel extends Model
         parent::bindParams('sewerage', $payload['sewerage']);
         parent::bindParams('waterSupply', $payload['waterSupply']);
         parent::bindParams('advantages', $payload['advantages'] ?? null);
+        parent::bindParams('payments', $payload['payments'] ?? null);
+        parent::bindParams('formalization', $payload['formalization'] ?? null);
+        parent::bindParams('amountContract', $payload['amountContract']);
+        parent::bindParams('surchargeDoc', $payload['surchargeDoc']);
+        parent::bindParams('surchargeGas', $payload['surchargeGas']);
         parent::execute();
     }
 
@@ -397,11 +411,10 @@ class BuildingModel extends Model
         $sql = "
             SELECT *
             FROM `sdi_building_images`
-            WHERE `id_building` IN (:buildingIds)
+            WHERE `id_building` IN (" . implode(',', $buildingIds) . ")
         ";
 
         parent::query($sql);
-        parent::bindParams('buildingIds', implode(',', $buildingIds));
 
         $images = parent::fetchAll();
 
@@ -453,6 +466,11 @@ class BuildingModel extends Model
             'sewerage' => $data['sewerage'],
             'waterSupply' => $data['water_supply'],
             'advantages' => $data['advantages'] ? explode(',', $data['advantages']) : [],
+            'payments' => $data['payments'] ? explode(',', $data['payments']) : [],
+            'formalization' => $data['formalization'] ? explode(',', $data['formalization']) : [],
+            'amountContract' => $data['amount_contract'],
+            'surchargeDoc' => (float)$data['surcharge_doc'],
+            'surchargeGas' => (float)$data['surcharge_gas'],
             'tags' => array_map('intval', $data['tags'] ? explode(',', $data['tags']) : []),
             'images' => [],
             'newImages' => []

@@ -88,6 +88,11 @@ class BuildingController extends Controller
             'dateCreated' => date('Y-m-d H:i:s'),
             'dateUpdate' => date('Y-m-d H:i:s'),
             'advantages' => htmlentities(stripcslashes(strip_tags(implode(',', $data->advantages)))),
+            'payments' => htmlentities(stripcslashes(strip_tags(implode(',', $data->payments)))),
+            'formalization' => htmlentities(stripcslashes(strip_tags(implode(',', $data->formalization)))),
+            'amountContract' => htmlentities(stripcslashes(strip_tags($data->amountContract))),
+            'surchargeDoc' => (float)htmlentities(stripcslashes(strip_tags($data->surchargeDoc))),
+            'surchargeGas' => (float)htmlentities(stripcslashes(strip_tags($data->surchargeGas))),
             'tags' => $data->tags,
             'images' => $data->images,
             'newImages' => $data->newImages
@@ -189,6 +194,11 @@ class BuildingController extends Controller
             'waterSupply' => htmlentities(stripcslashes(strip_tags($data->waterSupply))),
             'dateUpdate' => date('Y-m-d H:i:s'),
             'advantages' => htmlentities(stripcslashes(strip_tags(implode(',', $data->advantages)))),
+            'payments' => htmlentities(stripcslashes(strip_tags(implode(',', $data->payments)))),
+            'formalization' => htmlentities(stripcslashes(strip_tags(implode(',', $data->formalization)))),
+            'amountContract' => htmlentities(stripcslashes(strip_tags($data->amountContract))),
+            'surchargeDoc' => (float)htmlentities(stripcslashes(strip_tags($data->surchargeDoc))),
+            'surchargeGas' => (float)htmlentities(stripcslashes(strip_tags($data->surchargeGas))),
             'tags' => $data->tags,
             'images' => $data->images,
             'newImages' => $data->newImages

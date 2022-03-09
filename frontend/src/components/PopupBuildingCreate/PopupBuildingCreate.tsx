@@ -10,6 +10,7 @@ import showBackgroundBlock from '../BackgroundBlock/BackgroundBlock'
 import {Content, Footer, Header, Popup} from '../Popup/Popup'
 import BlockingElement from '../BlockingElement/BlockingElement'
 import TextBox from '../TextBox/TextBox'
+import NumberBox from '../NumberBox/NumberBox'
 import Button from '../Button/Button'
 import CheckBox from '../CheckBox/CheckBox'
 import ComboBox from '../ComboBox/ComboBox'
@@ -62,7 +63,9 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
         tags: [],
         advantages: [],
         images: [],
-        newImages: []
+        newImages: [],
+        surchargeDoc: 0,
+        surchargeGas: 0
     })
 
     const [fetching, setFetching] = useState(false)
@@ -150,6 +153,36 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
                             onSelect={(value: number[]) => setBuilding({...building, tags: value})}
                             placeHolder={'Выберите теги'}
                             multi
+                    />
+                </div>
+
+                <div className={classes.field}>
+                    <div className={classes.field_label}>Доплата за документы, руб.</div>
+
+                    <NumberBox value={building.surchargeDoc || 0}
+                               min={0}
+                               step={1}
+                               max={999999999}
+                               onChange={(e: React.ChangeEvent<HTMLInputElement>, value: number) => setBuilding({
+                                   ...building,
+                                   surchargeDoc: value
+                               })}
+                               placeHolder={'Введите размер доплаты за документы'}
+                    />
+                </div>
+
+                <div className={classes.field}>
+                    <div className={classes.field_label}>Доплата за газ, руб.</div>
+
+                    <NumberBox value={building.surchargeGas || 0}
+                               min={0}
+                               step={1}
+                               max={999999999}
+                               onChange={(e: React.ChangeEvent<HTMLInputElement>, value: number) => setBuilding({
+                                   ...building,
+                                   surchargeGas: value
+                               })}
+                               placeHolder={'Введите размер доплаты за газ'}
                     />
                 </div>
 

@@ -1,4 +1,11 @@
 /**
+ * Список статусов объектов недвижимости
+ */
+export const buildingStatuses = [
+    {key: 'sold', text: 'Продано'}
+]
+
+/**
  * Список типов объектов недвижимости
  */
 export const buildingTypes = [
@@ -10,18 +17,12 @@ export const buildingTypes = [
 ]
 
 /**
- * Список статусов объектов недвижимости
- */
-export const buildingStatuses = [
-    {key: 'sold', text: 'Продано'}
-]
-
-/**
  * Список классов недвижимости
  */
 export const buildingClasses = [
     {key: 'business', text: 'Бизнес'},
-    {key: 'comfort', text: 'Комфорт'}
+    {key: 'comfort', text: 'Комфорт'},
+    {key: 'elite', text: 'Элит'}
 ]
 
 /**
@@ -29,7 +30,8 @@ export const buildingClasses = [
  */
 export const buildingMaterials = [
     {key: 'monolith', text: 'Монолитный'},
-    {key: 'monolith-frame', text: 'Монолит-каркас'}
+    {key: 'monolith-frame', text: 'Монолит-каркас'},
+    {key: 'monolith-brick', text: 'Монолитно-кирпичный'}
 ]
 
 /**
@@ -44,6 +46,7 @@ export const buildingFormat = [
  * Список типов паркинга
  */
 export const buildingParking = [
+    {key: 'out', text: 'Отсуствует'},
     {key: 'pre-house', text: 'Придомовой'},
     {key: 'pre-house-underground', text: 'Придомовой, подземный'},
     {key: 'pre-house-closed', text: 'Придомовой, закрытый'}
@@ -78,7 +81,8 @@ export const buildingGas = [
  */
 export const buildingHeating = [
     {key: 'electrical', text: 'Электрическое'},
-    {key: 'boiler', text: 'Котельная'}
+    {key: 'boiler', text: 'Котельная'},
+    {key: 'individual-gas-boiler', text: 'Индивидуальный газовый котел'}
 ]
 
 /**
@@ -131,4 +135,35 @@ export const buildingAdvantages = [
 export const checkerFurnish = [
     {key: 'draft', text: 'черновая'},
     {key: 'repair', text: 'ремонт'}
+]
+
+/**
+ *  Список типов оплаты
+ */
+export const paymentsList = [
+    {key: 'maternal-capital', text: 'Материнский капитал'},
+    {key: 'installment-plan', text: 'Рассрочка'},
+    {key: 'mortgage', text: 'Ипотека'},
+    {key: 'mortgage-individual', text: 'Ипотека (индивидуально)'},
+    {key: 'military-mortgage', text: 'Военная ипотека'}
+]
+
+/**
+ *  Список вариантов оформления покупки
+ */
+export const formalizationList = [
+    {key: 'justice', text: 'Юстиция'},
+    {key: 'contract-sale', text: 'Договор купли-продажи'},
+    {key: 'loan-agreement', text: 'Договор займа'},
+    {key: 'fz-214', text: 'ФЗ-214'},
+    {key: 'preliminary-agreement', text: 'Предварительный договор'},
+    {key: 'investment-agreement', text: 'Договор инвестирования'}
+]
+
+/**
+ *  Список вариантов сумм в договоре
+ */
+export const amountContract = [
+    {key: 'full', text: 'Полная'},
+    {key: 'partial', text: 'Неполная'}
 ]

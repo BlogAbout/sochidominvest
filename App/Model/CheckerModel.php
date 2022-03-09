@@ -215,7 +215,7 @@ class CheckerModel extends Model
             'cost' => (float)$data['cost'],
             'furnish' => $data['furnish'],
             'housing' => (int)$data['housing'],
-            'stage' => (int)$data['stage'],
+            'stage' => $data['stage'],
             'rooms' => (int)$data['rooms'],
             'dateCreated' => $data['date_created'],
             'dateUpdate' => $data['date_update'],
