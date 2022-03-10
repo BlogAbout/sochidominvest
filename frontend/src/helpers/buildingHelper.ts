@@ -1,14 +1,16 @@
+import {ISelector} from '../@types/ISelector'
+
 /**
  * Список статусов объектов недвижимости
  */
-export const buildingStatuses = [
+export const buildingStatuses: ISelector[] = [
     {key: 'sold', text: 'Продано'}
 ]
 
 /**
  * Список типов объектов недвижимости
  */
-export const buildingTypes = [
+export const buildingTypes: ISelector[] = [
     {key: 'new_building', text: 'Новостройка'},
     {key: 'secondary', text: 'Вторичная'},
     {key: 'land_plot', text: 'Земля/участок'},
@@ -19,7 +21,7 @@ export const buildingTypes = [
 /**
  * Список классов недвижимости
  */
-export const buildingClasses = [
+export const buildingClasses: ISelector[] = [
     {key: 'business', text: 'Бизнес'},
     {key: 'comfort', text: 'Комфорт'},
     {key: 'elite', text: 'Элит'}
@@ -28,7 +30,7 @@ export const buildingClasses = [
 /**
  * Список типов материалов
  */
-export const buildingMaterials = [
+export const buildingMaterials: ISelector[] = [
     {key: 'monolith', text: 'Монолитный'},
     {key: 'monolith-frame', text: 'Монолит-каркас'},
     {key: 'monolith-brick', text: 'Монолитно-кирпичный'}
@@ -37,7 +39,7 @@ export const buildingMaterials = [
 /**
  * Список типов домов
  */
-export const buildingFormat = [
+export const buildingFormat: ISelector[] = [
     {key: 'multi-family', text: 'Многоквартирный'},
     {key: 'club', text: 'Клубный'}
 ]
@@ -45,7 +47,7 @@ export const buildingFormat = [
 /**
  * Список типов паркинга
  */
-export const buildingParking = [
+export const buildingParking: ISelector[] = [
     {key: 'out', text: 'Отсуствует'},
     {key: 'pre-house', text: 'Придомовой'},
     {key: 'pre-house-underground', text: 'Придомовой, подземный'},
@@ -55,7 +57,7 @@ export const buildingParking = [
 /**
  * Список типов территории
  */
-export const buildingTerritory = [
+export const buildingTerritory: ISelector[] = [
     {key: 'open', text: 'Открытая'},
     {key: 'close', text: 'Закрытая'},
     {key: 'close-protected', text: 'Закрытая охраняемая'}
@@ -64,14 +66,14 @@ export const buildingTerritory = [
 /**
  *  Список типов подездов к дому
  */
-export const buildingEntrance = [
+export const buildingEntrance: ISelector[] = [
     {key: 'asphalt', text: 'Асфальтная дорога'}
 ]
 
 /**
  *  Список типов подключения газа
  */
-export const buildingGas = [
+export const buildingGas: ISelector[] = [
     {key: 'no', text: 'Нет'},
     {key: 'yes', text: 'Да'}
 ]
@@ -79,7 +81,7 @@ export const buildingGas = [
 /**
  *  Список типов отопления
  */
-export const buildingHeating = [
+export const buildingHeating: ISelector[] = [
     {key: 'electrical', text: 'Электрическое'},
     {key: 'boiler', text: 'Котельная'},
     {key: 'individual-gas-boiler', text: 'Индивидуальный газовый котел'}
@@ -88,7 +90,7 @@ export const buildingHeating = [
 /**
  *  Список типов подключения электричества
  */
-export const buildingElectricity = [
+export const buildingElectricity: ISelector[] = [
     {key: 'no-connect', text: 'Не подключено'},
     {key: 'connect', text: 'Подключено'}
 ]
@@ -96,7 +98,7 @@ export const buildingElectricity = [
 /**
  *  Список типов канализации
  */
-export const buildingSewerage = [
+export const buildingSewerage: ISelector[] = [
     {key: 'central', text: 'Центральная'},
     {key: 'los', text: 'ЛОС'}
 ]
@@ -104,14 +106,14 @@ export const buildingSewerage = [
 /**
  *  Список типов водоснабжения
  */
-export const buildingWaterSupply = [
+export const buildingWaterSupply: ISelector[] = [
     {key: 'central', text: 'Центральное'}
 ]
 
 /**
  * Список особенностей
  */
-export const buildingAdvantages = [
+export const buildingAdvantages: ISelector[] = [
     {key: 'landscape-design', text: 'Ландшафтный дизайн'},
     {key: 'swimming-pool', text: 'Бассейн'},
     {key: 'rest-zone', text: 'Зона отдыха'},
@@ -132,7 +134,7 @@ export const buildingAdvantages = [
 /**
  *  Список типов отделки
  */
-export const checkerFurnish = [
+export const checkerFurnish: ISelector[] = [
     {key: 'draft', text: 'черновая'},
     {key: 'repair', text: 'ремонт'}
 ]
@@ -140,7 +142,7 @@ export const checkerFurnish = [
 /**
  *  Список типов оплаты
  */
-export const paymentsList = [
+export const paymentsList: ISelector[] = [
     {key: 'maternal-capital', text: 'Материнский капитал'},
     {key: 'installment-plan', text: 'Рассрочка'},
     {key: 'mortgage', text: 'Ипотека'},
@@ -151,7 +153,7 @@ export const paymentsList = [
 /**
  *  Список вариантов оформления покупки
  */
-export const formalizationList = [
+export const formalizationList: ISelector[] = [
     {key: 'justice', text: 'Юстиция'},
     {key: 'contract-sale', text: 'Договор купли-продажи'},
     {key: 'loan-agreement', text: 'Договор займа'},
@@ -163,7 +165,7 @@ export const formalizationList = [
 /**
  *  Список вариантов сумм в договоре
  */
-export const amountContract = [
+export const amountContract: ISelector[] = [
     {key: 'full', text: 'Полная'},
     {key: 'partial', text: 'Неполная'}
 ]

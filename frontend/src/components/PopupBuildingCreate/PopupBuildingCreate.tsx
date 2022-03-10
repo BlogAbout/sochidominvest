@@ -19,8 +19,10 @@ import TagBox from '../TagBox/TagBox'
 import Empty from '../Empty/Empty'
 import CheckerList from './components/CheckerList/CheckerList'
 import ImageUploader from '../ImageUploader/ImageUploader'
+import SelectorBox from '../SelectorBox/SelectorBox'
 import openPopupAlert from '../PopupAlert/PopupAlert'
 import {
+    amountContract,
     buildingAdvantages,
     buildingClasses,
     buildingElectricity,
@@ -34,7 +36,9 @@ import {
     buildingStatuses,
     buildingTerritory,
     buildingTypes,
-    buildingWaterSupply
+    buildingWaterSupply,
+    formalizationList,
+    paymentsList
 } from '../../helpers/buildingHelper'
 import classes from './PopupBuildingCreate.module.scss'
 
@@ -141,7 +145,7 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
                     <ComboBox selected={building.status}
                               items={Object.values(buildingStatuses)}
                               onSelect={(value: string) => setBuilding({...building, status: value})}
-                              placeHolder={'Выберите статус'}
+                              placeHolder='Выберите статус'
                               styleType='standard'
                     />
                 </div>
@@ -151,7 +155,7 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
 
                     <TagBox tags={building.tags}
                             onSelect={(value: number[]) => setBuilding({...building, tags: value})}
-                            placeHolder={'Выберите теги'}
+                            placeHolder='Выберите теги'
                             multi
                     />
                 </div>
@@ -167,7 +171,7 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
                                    ...building,
                                    surchargeDoc: value
                                })}
-                               placeHolder={'Введите размер доплаты за документы'}
+                               placeHolder='Введите размер доплаты за документы'
                     />
                 </div>
 
@@ -182,7 +186,7 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
                                    ...building,
                                    surchargeGas: value
                                })}
-                               placeHolder={'Введите размер доплаты за газ'}
+                               placeHolder='Введите размер доплаты за газ'
                     />
                 </div>
 
@@ -205,12 +209,53 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
         return (
             <div key='info' className={classes.tabContent}>
                 <div className={classes.field}>
+                    <div className={classes.field_label}>Сумма в договоре</div>
+
+                    <ComboBox selected={building.amountContract || null}
+                              items={Object.values(amountContract)}
+                              onSelect={(value: string) => setBuilding({...building, amountContract: value})}
+                              placeHolder='Выберите сумму в договоре'
+                              styleType='standard'
+                    />
+                </div>
+
+                <div className={classes.field}>
+                    <div className={classes.field_label}>Варианты оплаты</div>
+
+                    <SelectorBox selected={building.payments || []}
+                                 items={Object.values(paymentsList)}
+                                 onSelect={(value: string[]) => setBuilding({
+                                     ...building,
+                                     payments: value
+                                 })}
+                                 title='Выберите варианты оплаты'
+                                 placeHolder='Выберите варианты оплаты'
+                                 multi
+                    />
+                </div>
+
+                <div className={classes.field}>
+                    <div className={classes.field_label}>Варианты оформления покупки</div>
+
+                    <SelectorBox selected={building.formalization || []}
+                                 items={Object.values(formalizationList)}
+                                 onSelect={(value: string[]) => setBuilding({
+                                     ...building,
+                                     formalization: value
+                                 })}
+                                 title='Выберите варианты оформления покупки'
+                                 placeHolder='Выберите варианты оформления покупки'
+                                 multi
+                    />
+                </div>
+
+                <div className={classes.field}>
                     <div className={classes.field_label}>Тип</div>
 
                     <ComboBox selected={building.type}
                               items={Object.values(buildingTypes)}
                               onSelect={(value: string) => setBuilding({...building, type: value})}
-                              placeHolder={'Выберите тип'}
+                              placeHolder='Выберите тип'
                               styleType='standard'
                               icon='user-check'
                     />
@@ -222,7 +267,7 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
                     <ComboBox selected={building.houseClass || ''}
                               items={Object.values(buildingClasses)}
                               onSelect={(value: string) => setBuilding({...building, houseClass: value})}
-                              placeHolder={'Выберите класс дома'}
+                              placeHolder='Выберите класс дома'
                               styleType='standard'
                     />
                 </div>
@@ -233,7 +278,7 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
                     <ComboBox selected={building.material || ''}
                               items={Object.values(buildingMaterials)}
                               onSelect={(value: string) => setBuilding({...building, material: value})}
-                              placeHolder={'Выберите тип материала здания'}
+                              placeHolder='Выберите тип материала здания'
                               styleType='standard'
                     />
                 </div>
@@ -244,7 +289,7 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
                     <ComboBox selected={building.houseType || ''}
                               items={Object.values(buildingFormat)}
                               onSelect={(value: string) => setBuilding({...building, houseType: value})}
-                              placeHolder={'Выберите тип дома'}
+                              placeHolder='Выберите тип дома'
                               styleType='standard'
                     />
                 </div>
@@ -255,7 +300,7 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
                     <ComboBox selected={building.parking || ''}
                               items={Object.values(buildingParking)}
                               onSelect={(value: string) => setBuilding({...building, parking: value})}
-                              placeHolder={'Выберите тип паркинга'}
+                              placeHolder='Выберите тип паркинга'
                               styleType='standard'
                     />
                 </div>
@@ -266,7 +311,7 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
                     <ComboBox selected={building.territory || ''}
                               items={Object.values(buildingTerritory)}
                               onSelect={(value: string) => setBuilding({...building, territory: value})}
-                              placeHolder={'Выберите тип территории'}
+                              placeHolder='Выберите тип территории'
                               styleType='standard'
                     />
                 </div>
@@ -277,7 +322,7 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
                     <ComboBox selected={building.entranceHouse || ''}
                               items={Object.values(buildingEntrance)}
                               onSelect={(value: string) => setBuilding({...building, entranceHouse: value})}
-                              placeHolder={'Выберите тип подъезда к дому'}
+                              placeHolder='Выберите тип подъезда к дому'
                               styleType='standard'
                     />
                 </div>
@@ -288,7 +333,7 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
                     <ComboBox selected={building.gas || ''}
                               items={Object.values(buildingGas)}
                               onSelect={(value: string) => setBuilding({...building, gas: value})}
-                              placeHolder={'Выберите подключение газа'}
+                              placeHolder='Выберите подключение газа'
                               styleType='standard'
                     />
                 </div>
@@ -299,7 +344,7 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
                     <ComboBox selected={building.heating || ''}
                               items={Object.values(buildingHeating)}
                               onSelect={(value: string) => setBuilding({...building, heating: value})}
-                              placeHolder={'Выберите тип отопления'}
+                              placeHolder='Выберите тип отопления'
                               styleType='standard'
                     />
                 </div>
@@ -310,7 +355,7 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
                     <ComboBox selected={building.electricity || ''}
                               items={Object.values(buildingElectricity)}
                               onSelect={(value: string) => setBuilding({...building, electricity: value})}
-                              placeHolder={'Выберите тип электричества'}
+                              placeHolder='Выберите тип электричества'
                               styleType='standard'
                     />
                 </div>
@@ -321,7 +366,7 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
                     <ComboBox selected={building.sewerage || ''}
                               items={Object.values(buildingSewerage)}
                               onSelect={(value: string) => setBuilding({...building, sewerage: value})}
-                              placeHolder={'Выберите тип канализации'}
+                              placeHolder='Выберите тип канализации'
                               styleType='standard'
                     />
                 </div>
@@ -332,7 +377,7 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
                     <ComboBox selected={building.waterSupply || ''}
                               items={Object.values(buildingWaterSupply)}
                               onSelect={(value: string) => setBuilding({...building, waterSupply: value})}
-                              placeHolder={'Выберите тип водоснабжения'}
+                              placeHolder='Выберите тип водоснабжения'
                               styleType='standard'
                     />
                 </div>
@@ -420,7 +465,7 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
                                          ...building,
                                          name: value
                                      })}
-                                     placeHolder={'Введите название'}
+                                     placeHolder='Введите название'
                                      error={building.name.trim() === ''}
                                      showRequired
                                      errorText='Поле обязательно для заполнения'
@@ -436,7 +481,7 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
                                          ...building,
                                          address: value
                                      })}
-                                     placeHolder={'Введите адрес'}
+                                     placeHolder='Введите адрес'
                                      error={!building.address || building.address.trim() === ''}
                                      showRequired
                                      errorText='Поле обязательно для заполнения'
