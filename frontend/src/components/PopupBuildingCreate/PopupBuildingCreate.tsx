@@ -440,12 +440,26 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
         )
     }
 
+    // Вкладка застройщика объекта
+    const renderDeveloperTab = () => {
+        // Todo
+        return 'В разработке'
+    }
+
+    // Вкладка документов объекта
+    const renderDocumentTab = () => {
+        // Todo
+        return 'В разработке'
+    }
+
     const tabs: ITab = {
         state: {title: 'Состояние', render: renderStateTab()},
         info: {title: 'Информация', render: renderInformationTab()},
         advantages: {title: 'Особенности', render: renderAdvantagesTab()},
         checker: {title: 'Шахматка', render: renderCheckerBoardTab()},
-        gallery: {title: 'Галерея', render: renderGalleryTab()}
+        gallery: {title: 'Галерея', render: renderGalleryTab()},
+        developer: {title: 'Застройщик', render: renderDeveloperTab()},
+        documents: {title: 'Документы', render: renderDocumentTab()}
     }
 
     return (

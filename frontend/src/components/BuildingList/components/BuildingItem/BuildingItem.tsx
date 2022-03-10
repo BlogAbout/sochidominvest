@@ -3,8 +3,10 @@ import classNames from 'classnames/bind'
 import {useNavigate} from 'react-router-dom'
 import {declension} from '../../../../helpers/stringHelper'
 import {numberWithSpaces, round} from '../../../../helpers/numberHelper'
+import {formalizationList, paymentsList} from '../../../../helpers/buildingHelper'
 import BuildingService from '../../../../api/BuildingService'
 import {IBuilding} from '../../../../@types/IBuilding'
+import {ISelector} from '../../../../@types/ISelector'
 import openPopupBuildingCreate from '../../../PopupBuildingCreate/PopupBuildingCreate'
 import openContextMenu from '../../../ContextMenu/ContextMenu'
 import openPopupAlert from '../../../PopupAlert/PopupAlert'
@@ -92,9 +94,11 @@ const BuildingItem: React.FC<Props> = (props) => {
         >
             {fetching && <Preloader/>}
 
-            <div className={cx({'itemImage': true, 'noImage': !props.building.images || !props.building.images.length})}>
+            <div
+                className={cx({'itemImage': true, 'noImage': !props.building.images || !props.building.images.length})}>
                 {props.building.images && props.building.images.length ?
-                    <img src={'https://api.sochidominvest.ru' + props.building.images[0].value} alt={props.building.name}/>
+                    <img src={'https://api.sochidominvest.ru' + props.building.images[0].value}
+                         alt={props.building.name}/>
                     : null
                 }
             </div>
@@ -102,6 +106,34 @@ const BuildingItem: React.FC<Props> = (props) => {
             <div className={classes.itemContent}>
                 <h2>{props.building.name}</h2>
                 <div className={classes.address}>{props.building.address}</div>
+
+                {props.building.payments && props.building.payments.length ?
+                    <div className={classes.payments}>
+                        {props.building.payments.map((payment: string) => {
+                            const paymentInfo = paymentsList.find((item: ISelector) => item.key === payment)
+                            if (paymentInfo) {
+                                return (
+                                    <div>{paymentInfo.text}</div>
+                                )
+                            }
+                        })}
+                    </div>
+                    : null
+                }
+
+                {props.building.formalization && props.building.formalization.length ?
+                    <div className={classes.payments}>
+                        {props.building.formalization.map((formalization: string) => {
+                            const formalizationInfo = formalizationList.find((item: ISelector) => item.key === formalization)
+                            if (formalizationInfo) {
+                                return (
+                                    <div>{formalizationInfo.text}</div>
+                                )
+                            }
+                        })}
+                    </div>
+                    : null
+                }
             </div>
 
             <div className={classes.itemInfo}>
@@ -111,7 +143,8 @@ const BuildingItem: React.FC<Props> = (props) => {
 
                 <div className={classes.cost}>От {numberWithSpaces(round(props.building.costMin || 0, 0))} руб.</div>
 
-                <div className={classes.costPer}>{numberWithSpaces(round(props.building.costMinUnit || 0, 0))} руб. за м<sup>2</sup></div>
+                <div className={classes.costPer}>{numberWithSpaces(round(props.building.costMinUnit || 0, 0))} руб. за м<sup>2</sup>
+                </div>
 
                 <div className={classes.area}>
                     {props.building.areaMin || 0} м<sup>2</sup> - {props.building.areaMax || 0} м<sup>2</sup>

@@ -8,12 +8,14 @@ import CheckerService from '../../api/CheckerService'
 import {IBuilding, IBuildingChecker, IBuildingHousing} from '../../@types/IBuilding'
 import {IImageCarousel} from '../../@types/IImageCarousel'
 import {IImageDb} from '../../@types/IImage'
+import {ISelector} from '../../@types/ISelector'
 import Button from '../../components/Button/Button'
 import Empty from '../../components/Empty/Empty'
 import BlockingElement from '../../components/BlockingElement/BlockingElement'
 import ImageCarousel from '../../components/ImageCarousel/ImageCarousel'
 import openPopupBuildingCreate from '../../components/PopupBuildingCreate/PopupBuildingCreate'
 import {
+    amountContract,
     buildingAdvantages,
     buildingClasses,
     buildingElectricity,
@@ -25,7 +27,10 @@ import {
     buildingParking,
     buildingSewerage,
     buildingTerritory,
-    buildingWaterSupply
+    buildingTypes,
+    buildingWaterSupply,
+    formalizationList,
+    paymentsList
 } from '../../helpers/buildingHelper'
 import classes from './BuildingItemPage.module.scss'
 
@@ -191,6 +196,31 @@ const BuildingItemPage: React.FC = (props) => {
         const electricity = buildingElectricity.find(item => item.key === building.electricity)
         const sewerage = buildingSewerage.find(item => item.key === building.sewerage)
         const waterSupply = buildingWaterSupply.find(item => item.key === building.waterSupply)
+        const contract = amountContract.find(item => item.key === building.amountContract)
+        const type = buildingTypes.find(item => item.key === building.type)
+
+        const payments: string[] = []
+        const formalizations: string[] = []
+
+        if (building.payments && building.payments.length) {
+            building.payments.map((payment: string) => {
+                const paymentInfo = paymentsList.find((item: ISelector) => item.key === payment)
+
+                if (paymentInfo) {
+                    payments.push(paymentInfo.text)
+                }
+            })
+        }
+
+        if (building.formalization && building.formalization.length) {
+            building.formalization.map((formalization: string) => {
+                const formalizationInfo = formalizationList.find((item: ISelector) => item.key === formalization)
+
+                if (formalizationInfo) {
+                    formalizations.push(formalizationInfo.text)
+                }
+            })
+        }
 
         return (
             <BlockingElement fetching={fetching} className={classes.block}>
@@ -282,25 +312,29 @@ const BuildingItemPage: React.FC = (props) => {
                     <div className={classes.col}>
                         <h2>Оформление</h2>
 
+                        {payments.length &&
                         <div className={classes.row}>
                             <div className={classes.label}>Варианты оформления:</div>
-                            <div className={classes.param}>В разработке</div>
+                            <div className={classes.param}>{payments.join(', ')}</div>
                         </div>
+                        }
 
-                        <div className={classes.row}>
+                        {type && <div className={classes.row}>
                             <div className={classes.label}>Тип недвижимости:</div>
-                            <div className={classes.param}>В разработке</div>
-                        </div>
+                            <div className={classes.param}>{type.text}</div>
+                        </div>}
 
-                        <div className={classes.row}>
+                        {contract && <div className={classes.row}>
                             <div className={classes.label}>Сумма в договоре:</div>
-                            <div className={classes.param}>В разработке</div>
-                        </div>
+                            <div className={classes.param}>{contract.text}</div>
+                        </div>}
                     </div>
 
                     <div className={classes.col}>
                         <h2>Оплата</h2>
-                        <p>В разработке</p>
+                        {formalizations.length ? formalizations.map((item: string) => {
+                            return <div className={classes.row}>{item}</div>
+                        }) : null}
                     </div>
                 </div>
             </BlockingElement>
