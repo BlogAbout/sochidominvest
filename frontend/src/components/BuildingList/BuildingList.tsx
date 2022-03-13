@@ -1,7 +1,8 @@
-import React from 'react'
+import React, {useEffect} from 'react'
+import {IBuilding} from '../../@types/IBuilding'
+import {useActions} from '../../hooks/useActions'
 import Empty from '../Empty/Empty'
 import BuildingItem from './components/BuildingItem/BuildingItem'
-import {IBuilding} from '../../@types/IBuilding'
 import classes from './BuildingList.module.scss'
 
 interface Props {
@@ -20,6 +21,12 @@ const defaultProps: Props = {
 }
 
 const BuildingList: React.FC<Props> = (props) => {
+    const {fetchTagList} = useActions()
+
+    useEffect(() => {
+        fetchTagList()
+    }, [])
+
     return (
         <div className={classes.BuildingList}>
             {props.buildings.length ?

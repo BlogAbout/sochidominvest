@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
-import LoginForm from '../../../../components/LoginForm/LoginForm'
-import RegistrationForm from '../../../../components/RegistrationForm/RegistrationForm'
-import ForgotForm from '../../../../components/ForgotForm/ForgotForm'
+import LoginForm from '../../../../../components/LoginForm/LoginForm'
+import RegistrationForm from '../../../../../components/RegistrationForm/RegistrationForm'
+import ForgotForm from '../../../../../components/ForgotForm/ForgotForm'
 import classes from './HeadPanel.module.scss'
 
 const HeadPanel: React.FC = () => {

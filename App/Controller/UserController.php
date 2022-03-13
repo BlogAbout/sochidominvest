@@ -156,6 +156,12 @@ class UserController extends Controller
             $userData = $this->userModel->checkEmail($payload['email']);
 
             if ($userData['status']) {
+                if ($userData['data']['block'] === 1) {
+                    $response->code(400)->json('Аккаунт заблокирован. За подробностями обратитесь к администрации системы.');
+
+                    return;
+                }
+
                 if (password_verify($payload['password'], $userData['data']['password'])) {
                     $userData['data']['token'] = $this->createUserToken($userData['data']['id']);
                     unset($userData['data']['password']);

@@ -69,6 +69,7 @@ class BuildingController extends Controller
             'description' => htmlentities(stripcslashes(strip_tags($data->description))),
             'address' => htmlentities(stripcslashes(strip_tags($data->address))),
             'active' => (int)htmlentities(stripcslashes(strip_tags($data->active))),
+            'publish' => (int)htmlentities(stripcslashes(strip_tags($data->publish))),
             'status' => htmlentities(stripcslashes(strip_tags($data->status))),
             'type' => htmlentities(stripcslashes(strip_tags($data->type))),
             'houseClass' => htmlentities(stripcslashes(strip_tags($data->houseClass))),
@@ -93,6 +94,7 @@ class BuildingController extends Controller
             'amountContract' => htmlentities(stripcslashes(strip_tags($data->amountContract))),
             'surchargeDoc' => (float)htmlentities(stripcslashes(strip_tags($data->surchargeDoc))),
             'surchargeGas' => (float)htmlentities(stripcslashes(strip_tags($data->surchargeGas))),
+            'saleNoResident' => (int)htmlentities(stripcslashes(strip_tags($data->saleNoResident))),
             'tags' => $data->tags,
             'images' => $data->images,
             'newImages' => $data->newImages
@@ -176,6 +178,7 @@ class BuildingController extends Controller
             'description' => htmlentities(stripcslashes(strip_tags($data->description))),
             'address' => htmlentities(stripcslashes(strip_tags($data->address))),
             'active' => (int)htmlentities(stripcslashes(strip_tags($data->active))),
+            'publish' => (int)htmlentities(stripcslashes(strip_tags($data->publish))),
             'status' => htmlentities(stripcslashes(strip_tags($data->status))),
             'type' => htmlentities(stripcslashes(strip_tags($data->type))),
             'houseClass' => htmlentities(stripcslashes(strip_tags($data->houseClass))),
@@ -199,6 +202,7 @@ class BuildingController extends Controller
             'amountContract' => htmlentities(stripcslashes(strip_tags($data->amountContract))),
             'surchargeDoc' => (float)htmlentities(stripcslashes(strip_tags($data->surchargeDoc))),
             'surchargeGas' => (float)htmlentities(stripcslashes(strip_tags($data->surchargeGas))),
+            'saleNoResident' => (int)htmlentities(stripcslashes(strip_tags($data->saleNoResident))),
             'tags' => $data->tags,
             'images' => $data->images,
             'newImages' => $data->newImages
@@ -280,14 +284,21 @@ class BuildingController extends Controller
      */
     public function fetchBuildings($request, $response)
     {
-        if (!JwtMiddleware::getAndDecodeToken()) {
-            $response->code(401)->json('Вы не авторизованы.');
+        $params = [];
+        $paramsGet = $request->paramsGet();
 
-            return;
+        if ($paramsGet) {
+            if (!empty($paramsGet->active) && count($paramsGet->active)) {
+                $params['active'] = $paramsGet->active;
+            }
+
+            if (!empty($paramsGet->publish)) {
+                $params['publish'] = $paramsGet->publish;
+            }
         }
 
         try {
-            $buildingList = $this->buildingModel->fetchBuildings();
+            $buildingList = $this->buildingModel->fetchBuildings($params);
             $response->code(200)->json($buildingList);
 
             return;

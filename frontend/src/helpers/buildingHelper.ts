@@ -4,6 +4,7 @@ import {ISelector} from '../@types/ISelector'
  * Список статусов объектов недвижимости
  */
 export const buildingStatuses: ISelector[] = [
+    {key: 'onSale', text: 'В продаже'},
     {key: 'sold', text: 'Продано'}
 ]
 
@@ -82,6 +83,7 @@ export const buildingGas: ISelector[] = [
  *  Список типов отопления
  */
 export const buildingHeating: ISelector[] = [
+    {key: 'central', text: 'Центральное'},
     {key: 'electrical', text: 'Электрическое'},
     {key: 'boiler', text: 'Котельная'},
     {key: 'individual-gas-boiler', text: 'Индивидуальный газовый котел'}

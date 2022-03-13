@@ -1,13 +1,17 @@
 export enum RouteNames {
     MAIN = '/',
-    POLICY = '/policy',
-    USER = '/user',
-    USER_CREATE = '/user-create',
-    USER_ITEM = '/user/:id',
-    BUILDING = '/building',
-    BUILDING_ITEM = '/building/:id',
-    DOCUMENT = '/document',
-    REPORT = '/report',
-    TOOL = '/tool',
-    PROFILE = '/profile'
+    USER = '/panel/user',
+    USER_ITEM = '/panel/user/:id',
+    BUILDING = '/panel/building',
+    BUILDING_ITEM = '/panel/building/:id',
+    DOCUMENT = '/panel/document',
+    REPORT = '/panel/report',
+    TOOL = '/panel/tool',
+    FAVORITE = '/panel/favorite',
+    COMPILATION = '/panel/compilation',
+    PROFILE = '/panel/profile',
+    PUBLIC_BUILDING = '/building',
+    PUBLIC_BUILDING_ITEM = '/building/:id',
+    PUBLIC_POLICY = '/policy',
+    PUBLIC_ABOUT = '/about'
 }

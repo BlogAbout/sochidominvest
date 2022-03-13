@@ -14,7 +14,7 @@ const BuildingPage: React.FC = () => {
 
     useEffect(() => {
         if (isUpdate || !buildings.length) {
-            fetchBuildingList()
+            fetchBuildingList({active: [0, 1]})
 
             setIsUpdate(false)
         }

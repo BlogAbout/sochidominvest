@@ -62,7 +62,7 @@ const PopupSelector: React.FC<Props> = (props) => {
         }
     }
 
-    // Проверка наличия роли среди выбранных
+    // Проверка наличия элемента среди выбранных
     const checkSelected = (key: string) => {
         return selectedItems.includes(key)
     }

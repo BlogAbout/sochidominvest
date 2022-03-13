@@ -45,7 +45,7 @@ class TagModel extends Model
         $sql = "
             SELECT *
             FROM `sdi_tag`
-            WHERE `active` = 1
+            WHERE `active` != -1
         ";
 
         parent::query($sql);
@@ -138,7 +138,7 @@ class TagModel extends Model
      */
     public static function deleteTag(int $id): bool
     {
-        $sql = "UPDATE `sdi_tag` SET active = 0 WHERE id = :id";
+        $sql = "UPDATE `sdi_tag` SET active = -1 WHERE id = :id";
 
         parent::query($sql);
         parent::bindParams('id', $id);
@@ -154,9 +154,9 @@ class TagModel extends Model
     private static function formatDataToJson(array $data): array
     {
         return [
-            'id' => $data['id'],
+            'id' => (int)$data['id'],
             'name' => $data['name'],
-            'active' => $data['active']
+            'active' => (int)$data['active']
         ];
     }
 }

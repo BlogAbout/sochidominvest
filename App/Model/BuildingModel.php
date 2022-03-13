@@ -54,11 +54,13 @@ class BuildingModel extends Model
     /**
      * Вернет список объектов недвижимости
      *
+     * @param array $params Массив параметров фильтрации
      * @return array
      */
-    public static function fetchBuildings(): array
+    public static function fetchBuildings(array $params): array
     {
         $resultList = [];
+        $where = [];
 
         $sql = "
             SELECT *,
@@ -74,8 +76,19 @@ class BuildingModel extends Model
                    ) AS countCheckers
             FROM `sdi_building` AS bu
             LEFT JOIN sdi_building_data bd on bu.`id` = bd.`id`
-            WHERE bu.`active` = 1
         ";
+
+        if (!empty($params['active'])) {
+            array_push($where, 'bu.`active` IN (' . implode(',', $params['active']) . ')');
+        }
+
+        if (!empty($params['publish'])) {
+            array_push($where, 'bu.`publish` = ' . $params['publish']);
+        }
+
+        if (count($where)) {
+            $sql .= " WHERE " . implode(' AND ', $where);
+        }
 
         parent::query($sql);
         $buildingList = parent::fetchAll();
@@ -91,7 +104,7 @@ class BuildingModel extends Model
 
             if (count($images)) {
                 foreach ($resultList as &$building) {
-                    foreach($images as $image) {
+                    foreach ($images as $image) {
                         if ($image['idObject'] == $building['id']) {
                             array_push($building['images'], $image);
                         }
@@ -113,9 +126,9 @@ class BuildingModel extends Model
     {
         $sql = "
             INSERT INTO `sdi_building`
-                (name, description, address, date_created, date_update, active, status, type)
+                (name, description, address, date_created, date_update, active, publish, status, type)
             VALUES
-                (:name, :description, :address, :dateCreated, :dateUpdate, :active, :status, :type)
+                (:name, :description, :address, :dateCreated, :dateUpdate, :active, :publish, :status, :type)
         ";
 
         parent::query($sql);
@@ -125,6 +138,7 @@ class BuildingModel extends Model
         parent::bindParams('dateCreated', $payload['dateCreated']);
         parent::bindParams('dateUpdate', $payload['dateUpdate']);
         parent::bindParams('active', $payload['active']);
+        parent::bindParams('publish', $payload['publish']);
         parent::bindParams('status', $payload['status']);
         parent::bindParams('type', $payload['type']);
 
@@ -165,6 +179,7 @@ class BuildingModel extends Model
                 address = :address,
                 date_update = :dateUpdate,
                 active = :active,
+                publish = :publish,
                 status = :status,
                 type = :type
             WHERE id = :id
@@ -177,6 +192,7 @@ class BuildingModel extends Model
         parent::bindParams('address', $payload['address']);
         parent::bindParams('dateUpdate', $payload['dateUpdate']);
         parent::bindParams('active', $payload['active']);
+        parent::bindParams('publish', $payload['publish']);
         parent::bindParams('status', $payload['status']);
         parent::bindParams('type', $payload['type']);
 
@@ -206,7 +222,7 @@ class BuildingModel extends Model
      */
     public static function deleteBuilding(int $id): bool
     {
-        $sql = "UPDATE `sdi_building` SET active = 0 WHERE id = :id";
+        $sql = "UPDATE `sdi_building` SET active = -1 WHERE id = :id";
 
         parent::query($sql);
         parent::bindParams('id', $id);
@@ -276,7 +292,8 @@ class BuildingModel extends Model
                     formalization = :formalization,
                     amount_contract = :amountContract,
                     surcharge_doc = :surchargeDoc,
-                    surcharge_gas = :surchargeGas
+                    surcharge_gas = :surchargeGas,
+                    sale_no_resident = :saleNoResident
                 WHERE id = :id
             ";
         } else {
@@ -284,11 +301,11 @@ class BuildingModel extends Model
                 INSERT INTO `sdi_building_data`
                     (id, house_class, material, house_type, entrance_house, parking, territory, ceiling_height,
                      maintenance_cost, distance_sea, gas, heating, electricity, sewerage, water_supply, advantages,
-                     payments, formalization, amount_contract, surcharge_doc, surcharge_gas)
+                     payments, formalization, amount_contract, surcharge_doc, surcharge_gas, sale_no_resident)
                 VALUES
                     (:id, :houseClass, :material, :houseType, :entranceHouse, :parking, :territory, :ceilingHeight,
                      :maintenanceCost, :distanceSea, :gas, :heating, :electricity, :sewerage, :waterSupply, :advantages,
-                     :payments, :formalization, :amountContract, :surchargeDoc, :surchargeGas)
+                     :payments, :formalization, :amountContract, :surchargeDoc, :surchargeGas, :saleNoResident)
             ";
         }
 
@@ -314,6 +331,7 @@ class BuildingModel extends Model
         parent::bindParams('amountContract', $payload['amountContract']);
         parent::bindParams('surchargeDoc', $payload['surchargeDoc']);
         parent::bindParams('surchargeGas', $payload['surchargeGas']);
+        parent::bindParams('saleNoResident', $payload['saleNoResident']);
         parent::execute();
     }
 
@@ -441,6 +459,7 @@ class BuildingModel extends Model
             'description' => $data['description'],
             'address' => $data['address'],
             'active' => (int)$data['active'],
+            'publish' => (int)$data['publish'],
             'status' => $data['status'],
             'author' => (int)$data['author'],
             'type' => $data['type'],
@@ -471,6 +490,7 @@ class BuildingModel extends Model
             'amountContract' => $data['amount_contract'],
             'surchargeDoc' => (float)$data['surcharge_doc'],
             'surchargeGas' => (float)$data['surcharge_gas'],
+            'saleNoResident' => (int)$data['sale_no_resident'],
             'tags' => array_map('intval', $data['tags'] ? explode(',', $data['tags']) : []),
             'images' => [],
             'newImages' => []

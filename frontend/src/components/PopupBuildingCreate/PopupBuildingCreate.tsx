@@ -191,6 +191,28 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
                 </div>
 
                 <div className={classes.field}>
+                    <CheckBox label='Продажа для нерезидентов'
+                              type='modern'
+                              checked={!!building.saleNoResident}
+                              onChange={(e: React.MouseEvent, value: boolean) => setBuilding({
+                                  ...building,
+                                  saleNoResident: value ? 1 : 0
+                              })}
+                    />
+                </div>
+
+                <div className={classes.field}>
+                    <CheckBox label='Публичный'
+                              type='modern'
+                              checked={!!building.publish}
+                              onChange={(e: React.MouseEvent, value: boolean) => setBuilding({
+                                  ...building,
+                                  publish: value ? 1 : 0
+                              })}
+                    />
+                </div>
+
+                <div className={classes.field}>
                     <CheckBox label='Активен'
                               type='modern'
                               checked={!!building.active}
@@ -208,6 +230,21 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
     const renderInformationTab = () => {
         return (
             <div key='info' className={classes.tabContent}>
+                <div className={classes.field}>
+                    <div className={classes.field_label}>Особенности</div>
+
+                    <SelectorBox selected={building.advantages || []}
+                                 items={Object.values(buildingAdvantages)}
+                                 onSelect={(value: string[]) => setBuilding({
+                                     ...building,
+                                     advantages: value
+                                 })}
+                                 title='Выберите особенности'
+                                 placeHolder='Выберите особенности'
+                                 multi
+                    />
+                </div>
+
                 <div className={classes.field}>
                     <div className={classes.field_label}>Сумма в договоре</div>
 
@@ -385,33 +422,6 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
         )
     }
 
-    // Вкладка особенностей объекта
-    const renderAdvantagesTab = () => {
-        return (
-            <div key='info' className={classes.tabContent}>
-                <div className={classes.advantagesList}>
-                    {buildingAdvantages.map(item => {
-                        let checked = false
-
-                        if (building.advantages) {
-                            checked = building.advantages.includes(item.key)
-                        }
-
-                        return (
-                            <div key={item.key} className={classes.field}>
-                                <CheckBox label={item.text}
-                                          type='classic'
-                                          checked={checked}
-                                          onChange={(e: React.MouseEvent, value: boolean) => changeAdvantagesHandler(item.key, value)}
-                                />
-                            </div>
-                        )
-                    })}
-                </div>
-            </div>
-        )
-    }
-
     // Вкладка шахматки объекта
     const renderCheckerBoardTab = () => {
         return (
@@ -455,7 +465,6 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
     const tabs: ITab = {
         state: {title: 'Состояние', render: renderStateTab()},
         info: {title: 'Информация', render: renderInformationTab()},
-        advantages: {title: 'Особенности', render: renderAdvantagesTab()},
         checker: {title: 'Шахматка', render: renderCheckerBoardTab()},
         gallery: {title: 'Галерея', render: renderGalleryTab()},
         developer: {title: 'Застройщик', render: renderDeveloperTab()},

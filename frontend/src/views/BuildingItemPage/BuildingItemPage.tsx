@@ -9,6 +9,7 @@ import {IBuilding, IBuildingChecker, IBuildingHousing} from '../../@types/IBuild
 import {IImageCarousel} from '../../@types/IImageCarousel'
 import {IImageDb} from '../../@types/IImage'
 import {ISelector} from '../../@types/ISelector'
+import {ITag} from '../../@types/ITag'
 import Button from '../../components/Button/Button'
 import Empty from '../../components/Empty/Empty'
 import BlockingElement from '../../components/BlockingElement/BlockingElement'
@@ -47,11 +48,12 @@ const BuildingItemPage: React.FC = (props) => {
     const [fetchingCheckers, setFetchingCheckers] = useState(false)
 
     const {buildings, fetching} = useTypedSelector(state => state.buildingReducer)
-    const {fetchBuildingList} = useActions()
+    const {tags} = useTypedSelector(state => state.tagReducer)
+    const {fetchBuildingList, fetchTagList} = useActions()
 
     useEffect(() => {
         if (isUpdate || !buildings.length) {
-            fetchBuildingList()
+            fetchBuildingList({active: [0, 1]})
 
             setIsUpdate(false)
         }
@@ -75,6 +77,8 @@ const BuildingItemPage: React.FC = (props) => {
             CheckerService.fetchCheckers(building.id)
                 .then((response) => {
                     setCheckers(response.data)
+
+                    fetchTagList()
                 })
                 .catch((error: any) => {
                     console.error('Ошибка загрузки шахматки', error)
@@ -123,6 +127,17 @@ const BuildingItemPage: React.FC = (props) => {
     const renderInfo = () => {
         return (
             <BlockingElement fetching={fetching} className={classes.block}>
+                {tags && tags.length && building.tags && building.tags.length ?
+                    <div className={classes.tags}>
+                        {building.tags.map((id: number) => {
+                            const findTag = tags.find((tag: ITag) => tag.id === id)
+
+                            return findTag ? <div key={findTag.id}>{findTag.name}</div> : null
+                        })}
+                    </div>
+                    : null
+                }
+
                 <h1>{building.name}</h1>
                 <div className={classes.address}>{building.address}</div>
 
@@ -328,12 +343,17 @@ const BuildingItemPage: React.FC = (props) => {
                             <div className={classes.label}>Сумма в договоре:</div>
                             <div className={classes.param}>{contract.text}</div>
                         </div>}
+
+                        <div className={classes.row}>
+                            <div className={classes.label}>Продажа для нерезидентов России:</div>
+                            <div className={classes.param}>{!!building.saleNoResident ? 'Доступно' : 'Не доступно'}</div>
+                        </div>
                     </div>
 
                     <div className={classes.col}>
                         <h2>Оплата</h2>
-                        {formalizations.length ? formalizations.map((item: string) => {
-                            return <div className={classes.row}>{item}</div>
+                        {formalizations.length ? formalizations.map((item: string, index: number) => {
+                            return <div key={index} className={classes.row}>{item}</div>
                         }) : null}
                     </div>
                 </div>

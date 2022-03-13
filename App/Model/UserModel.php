@@ -70,6 +70,7 @@ class UserModel extends Model
         $sql = "
             SELECT *
             FROM `sdi_user`
+            WHERE `active` != -1
         ";
 
         parent::query($sql);
@@ -205,7 +206,7 @@ class UserModel extends Model
      */
     public static function deleteUser(int $id): bool
     {
-        $sql = "UPDATE `sdi_user` SET active = 0 WHERE id = :id";
+        $sql = "UPDATE `sdi_user` SET active = -1 WHERE id = :id";
 
         parent::query($sql);
         parent::bindParams('id', $id);

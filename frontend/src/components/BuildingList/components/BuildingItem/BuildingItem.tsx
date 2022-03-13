@@ -7,10 +7,12 @@ import {formalizationList, paymentsList} from '../../../../helpers/buildingHelpe
 import BuildingService from '../../../../api/BuildingService'
 import {IBuilding} from '../../../../@types/IBuilding'
 import {ISelector} from '../../../../@types/ISelector'
+import {ITag} from '../../../../@types/ITag'
 import openPopupBuildingCreate from '../../../PopupBuildingCreate/PopupBuildingCreate'
 import openContextMenu from '../../../ContextMenu/ContextMenu'
 import openPopupAlert from '../../../PopupAlert/PopupAlert'
 import Preloader from '../../../Preloader/Preloader'
+import {useTypedSelector} from '../../../../hooks/useTypedSelector'
 import classes from './BuildingItem.module.scss'
 
 interface Props {
@@ -32,6 +34,8 @@ const BuildingItem: React.FC<Props> = (props) => {
     const navigate = useNavigate()
 
     const [fetching, setFetching] = useState(false)
+
+    const {tags} = useTypedSelector(state => state.tagReducer)
 
     // Редактирование объекта
     const updateHandler = (building: IBuilding) => {
@@ -89,7 +93,7 @@ const BuildingItem: React.FC<Props> = (props) => {
 
     return (
         <div className={classes.BuildingItem}
-             onClick={() => navigate('/building/' + props.building.id)}
+             onClick={() => navigate('/panel/building/' + props.building.id)}
              onContextMenu={(e: React.MouseEvent) => onContextMenu(e)}
         >
             {fetching && <Preloader/>}
@@ -97,8 +101,22 @@ const BuildingItem: React.FC<Props> = (props) => {
             <div
                 className={cx({'itemImage': true, 'noImage': !props.building.images || !props.building.images.length})}>
                 {props.building.images && props.building.images.length ?
-                    <img src={'https://api.sochidominvest.ru' + props.building.images[0].value}
-                         alt={props.building.name}/>
+                    (
+                        <>
+                            {tags && tags.length && props.building.tags && props.building.tags.length ?
+                                <div className={classes.tags}>
+                                    {props.building.tags.map((id: number) => {
+                                        const findTag = tags.find((tag: ITag) => tag.id === id)
+
+                                        return findTag ? <div key={findTag.id}>{findTag.name}</div> : null
+                                    })}
+                                </div>
+                                : null
+                            }
+                            <img src={'https://api.sochidominvest.ru' + props.building.images[0].value}
+                                 alt={props.building.name}/>
+                        </>
+                    )
                     : null
                 }
             </div>

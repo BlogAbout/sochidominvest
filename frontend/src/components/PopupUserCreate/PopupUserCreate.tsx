@@ -1,4 +1,6 @@
 import React, {useEffect, useState} from 'react'
+// @ts-ignore
+import is from 'is_js'
 import withStore from '../../hoc/withStore'
 import {rolesList} from '../../helpers/userHelper'
 import {PopupProps} from '../../@types/IPopup'
@@ -56,7 +58,7 @@ const PopupUserCreate: React.FC<Props> = (props) => {
     }
 
     const checkFormValidation = () => {
-        return user.firstName.trim() === '' || user.email.trim() === '' || user.phone.trim() === '' || (!user.id && user.password === '')
+        return user.firstName.trim() === '' || user.email.trim() === '' || !is.email(user.email) || user.phone.trim() === '' || (user.password && user.password.length < 6) || (!user.id && user.password === '')
     }
 
     // Сохранение изменений
@@ -120,9 +122,9 @@ const PopupUserCreate: React.FC<Props> = (props) => {
                         <TextBox value={user.email}
                                  onChange={(e: React.MouseEvent, value: string) => setUser({...user, email: value})}
                                  placeHolder='Введите Email'
-                                 error={user.email.trim() === ''}
+                                 error={user.email.trim().length === 0 || !is.email(user.email)}
                                  showRequired
-                                 errorText='Поле обязательно для заполнения'
+                                 errorText={user.email.trim().length === 0 ? 'Поле обязательно для заполнения' : !is.email(user.email) ? 'E-mail имеет неверный формат' : ''}
                                  icon='at'
                         />
                     </div>
@@ -138,8 +140,8 @@ const PopupUserCreate: React.FC<Props> = (props) => {
                             password={true}
                             value={user.password}
                             placeHolder='Пароль'
-                            error={!user.id && user.password === ''}
-                            errorText='Введите пароль'
+                            error={(!user.id && user.password === '') || (user.password && user.password.length < 6)}
+                            errorText={!user.id && user.password === '' ? 'Введите пароль' : user.password && user.password.length < 6 ? 'Минимальная длина пароля 6 символов' : ''}
                             icon='lock'
                             onChange={(e: React.MouseEvent, value: string) => setUser({...user, password: value})}
                         />

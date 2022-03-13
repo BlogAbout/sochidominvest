@@ -1,7 +1,7 @@
 import React from 'react'
 import HeadPanel from './components/HeadPanel/HeadPanel'
 import SectionInfo from './components/SectionInfo/SectionInfo'
-import FooterDefault from '../../components/FooterDefault/FooterDefault'
+import FooterDefault from '../../../components/FooterDefault/FooterDefault'
 import SectionAdvanced from './components/SectionAdvanced/SectionAdvanced'
 import classes from './Main.module.scss'
 

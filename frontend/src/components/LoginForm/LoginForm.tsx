@@ -1,4 +1,6 @@
 import React, {useState} from 'react'
+// @ts-ignore
+import is from 'is_js'
 import {useActions} from '../../hooks/useActions'
 import UserService from '../../api/UserService'
 import {IAuth} from '../../@types/IAuth'
@@ -24,8 +26,8 @@ const LoginForm: React.FC<Props> = (props) => {
     })
 
     const [validationError, setValidationError] = useState({
-        email: false,
-        password: false
+        email: '',
+        password: ''
     })
 
     const [info, setInfo] = useState({
@@ -36,15 +38,17 @@ const LoginForm: React.FC<Props> = (props) => {
     const {setUserAuth} = useActions()
 
     const validationHandler = (): boolean => {
-        let emailError = false
-        let passwordError = false
+        let emailError = ''
+        let passwordError = ''
 
-        if (auth.email === '') {
-            emailError = true
+        if (auth.email.trim().length === 0) {
+            emailError = 'Введите E-mail'
+        } else if (!is.email(auth.email)) {
+            emailError = 'E-mail имеет неверный формат'
         }
 
         if (auth.password === '') {
-            passwordError = true
+            passwordError = 'Введите пароль'
         }
 
         setValidationError({email: emailError, password: passwordError})
@@ -90,15 +94,22 @@ const LoginForm: React.FC<Props> = (props) => {
                     type="text"
                     value={auth.email}
                     placeHolder='E-mail'
-                    error={validationError.email}
-                    errorText={validationError.email ? 'Введите E-mail' : undefined}
+                    error={validationError.email !== ''}
+                    errorText={validationError.email}
                     icon="at"
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                         setAuth({
                             ...auth,
                             email: e.target.value
                         })
-                        setValidationError({...validationError, email: false})
+
+                        if (e.target.value.length === 0) {
+                            setValidationError({...validationError, email: 'Введите E-mail'})
+                        } else if (!is.email(e.target.value)) {
+                            setValidationError({...validationError, email: 'E-mail имеет неверный формат'})
+                        } else {
+                            setValidationError({...validationError, email: ''})
+                        }
                     }}
                 />
             </div>
@@ -109,15 +120,20 @@ const LoginForm: React.FC<Props> = (props) => {
                     password={true}
                     value={auth.password}
                     placeHolder='Пароль'
-                    error={validationError.password}
-                    errorText={validationError.password ? 'Введите пароль' : undefined}
+                    error={validationError.password !== ''}
+                    errorText={validationError.password}
                     icon="lock"
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                         setAuth({
                             ...auth,
                             password: e.target.value
                         })
-                        setValidationError({...validationError, password: false})
+
+                        if (e.target.value.length === 0) {
+                            setValidationError({...validationError, password: 'Введите пароль'})
+                        } else {
+                            setValidationError({...validationError, password: ''})
+                        }
                     }}
                 />
             </div>
@@ -126,7 +142,7 @@ const LoginForm: React.FC<Props> = (props) => {
 
             <div className={classes['buttons-wrapper']}>
                 <Button type='apply'
-                        disabled={info.fetching || validationError.email || validationError.password}
+                        disabled={info.fetching || validationError.email !== '' || validationError.password !== ''}
                         onClick={loginHandler.bind(this)}
                 >Войти</Button>
 

@@ -60,6 +60,7 @@
             display: block;
             border-left: 1px solid #075ea5;
             position: relative;
+            min-width: 50px;
 
             a {
                 font-size: 16px;
@@ -80,7 +81,7 @@
                     width: 100%;
                     height: 0;
                     transition: all 0.3s ease-out;
-                    background: #075ea5;
+                    background: #ffcc01;
                 }
 
                 span {
@@ -88,18 +89,11 @@
                     margin-left: 10px;
                 }
 
-                &.active {
-                    text-decoration: none;
-                    background: #ffcc01;
-
-                    &::after {
-                        height: 3px;
-                    }
-                }
-
+                &.active,
                 &:hover {
                     text-decoration: none;
-                    background: #ffcc01;
+                    background: #075ea5;
+                    color: #fff;
 
                     &::after {
                         height: 3px;

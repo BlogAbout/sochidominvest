@@ -109,7 +109,7 @@ const UserItem: React.FC<Props> = (props) => {
 
     return (
         <div className={cx({'UserItem': true, 'block': props.user.block})}
-             onClick={() => navigate('/user/' + props.user.id)}
+             onClick={() => navigate('/panel/user/' + props.user.id)}
              onContextMenu={(e: React.MouseEvent) => onContextMenu(e)}
         >
             {fetching && <Preloader/>}

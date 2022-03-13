@@ -8,6 +8,7 @@ export interface IBuilding {
     type: string | null
     status: string | null
     active: number
+    publish: number
     author: number | null
     dateCreated?: string | null
     dateUpdate?: string | null
@@ -37,6 +38,7 @@ export interface IBuilding {
     amountContract?: string | null
     surchargeDoc?: number | null
     surchargeGas?: number | null
+    saleNoResident?: number | null
     images: IImageDb[]
     newImages: IImage[]
 }

@@ -17,6 +17,7 @@ body {
     position: relative;
     font-size: 16px;
     color: #075ea5;
+    scroll-behavior: smooth;
 }
 
 a {

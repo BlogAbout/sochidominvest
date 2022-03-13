@@ -16,6 +16,23 @@ const Navigation: React.FC = () => {
                         <FontAwesomeIcon icon='house'/>
                     </NavLink>
                 </li>
+
+                <li>
+                    <NavLink to={RouteNames.FAVORITE}
+                             className={({isActive}) => isActive ? classes.active : ''}
+                             title='Избранное'
+                    >
+                        <FontAwesomeIcon icon='heart'/>
+                    </NavLink>
+                </li>
+                <li>
+                    <NavLink to={RouteNames.COMPILATION}
+                             className={({isActive}) => isActive ? classes.active : ''}
+                             title='Подборка'
+                    >
+                        <FontAwesomeIcon icon='table-list'/>
+                    </NavLink>
+                </li>
             </ul>
 
             <ul className={classes.links}>
@@ -52,7 +69,6 @@ const Navigation: React.FC = () => {
                              title='Отчеты'
                     >
                         <FontAwesomeIcon icon='file-excel'/>
-                        <span>Отчеты</span>
                     </NavLink>
                 </li>
                 <li>
@@ -61,9 +77,9 @@ const Navigation: React.FC = () => {
                              title='Инструкменты'
                     >
                         <FontAwesomeIcon icon='screwdriver-wrench'/>
-                        <span>Инструкменты</span>
                     </NavLink>
                 </li>
+
             </ul>
         </nav>
     )

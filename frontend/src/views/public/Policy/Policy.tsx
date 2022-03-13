@@ -6,7 +6,7 @@ const Policy: React.FC = () => {
         <div className={classes.Policy}>
             <main className={classes.Content}>
                 <div className={classes.container}>
-                    <h1>Недвижимость</h1>
+                    <h1>Политика конфиденциальности</h1>
 
                     <h3>What is Lorem Ipsum?</h3>
                     <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has

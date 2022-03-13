@@ -213,12 +213,6 @@ class TagController extends Controller
      */
     public function fetchTags($request, $response)
     {
-        if (!JwtMiddleware::getAndDecodeToken()) {
-            $response->code(401)->json('Вы не авторизованы.');
-
-            return;
-        }
-
         try {
             $tagList = $this->tagModel->fetchTags();
             $response->code(200)->json($tagList);

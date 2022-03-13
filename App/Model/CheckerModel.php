@@ -49,8 +49,8 @@ class CheckerModel extends Model
         ";
 
         $where = [];
-        if ($filter['active']) {
-            array_push($where, "`active` = " . $filter['active']);
+        if ($filter['active'] && count($filter['active'])) {
+            array_push($where, "`active` IN (" . implode(',', $filter['active']) . ")");
         }
 
         if ($buildingId) {
@@ -187,7 +187,7 @@ class CheckerModel extends Model
      */
     public static function deleteChecker(int $id): bool
     {
-        $sql = "UPDATE `sdi_building_checker` SET active = 0 WHERE id = :id";
+        $sql = "UPDATE `sdi_building_checker` SET active = -1 WHERE id = :id";
 
         parent::query($sql);
         parent::bindParams('id', $id);

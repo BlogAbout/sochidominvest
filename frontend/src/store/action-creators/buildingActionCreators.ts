@@ -1,5 +1,6 @@
 import {BuildingAction, BuildingActionTypes} from '../../@types/buildingTypes'
 import {IBuilding} from '../../@types/IBuilding'
+import {IFilter} from '../../@types/IFilter'
 import {AppDispatch} from '../reducers'
 import BuildingService from '../../api/BuildingService'
 
@@ -16,11 +17,11 @@ export const BuildingActionCreators = {
         type: BuildingActionTypes.BUILDING_ERROR,
         payload
     }),
-    fetchBuildingList: () => async (dispatch: AppDispatch) => {
+    fetchBuildingList: (filter: IFilter) => async (dispatch: AppDispatch) => {
         dispatch(BuildingActionCreators.setFetching(true))
 
         try {
-            const response = await BuildingService.fetchBuildings()
+            const response = await BuildingService.fetchBuildings(filter)
 
             if (response.status === 200) {
                 dispatch(BuildingActionCreators.setBuildings(response.data))

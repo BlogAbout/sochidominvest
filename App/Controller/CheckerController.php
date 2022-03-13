@@ -273,12 +273,6 @@ class CheckerController extends Controller
      */
     public function fetchCheckers($request, $response)
     {
-        if (!JwtMiddleware::getAndDecodeToken()) {
-            $response->code(401)->json('Вы не авторизованы.');
-
-            return;
-        }
-
         $validationObject = array(
             (object)[
                 'validator' => 'required',
@@ -300,7 +294,7 @@ class CheckerController extends Controller
         }
 
         $filter = [
-            'active' => 1
+            'active' => [0, 1]
         ];
 
         try {

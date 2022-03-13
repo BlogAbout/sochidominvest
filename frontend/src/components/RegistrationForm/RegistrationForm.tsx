@@ -1,4 +1,6 @@
 import React, {useState} from 'react'
+// @ts-ignore
+import is from 'is_js'
 import {useActions} from '../../hooks/useActions'
 import UserService from '../../api/UserService'
 import TextBox from '../TextBox/TextBox'
@@ -29,10 +31,10 @@ const RegistrationForm: React.FC<Props> = (props) => {
     })
 
     const [validationError, setValidationError] = useState({
-        phone: false,
-        email: false,
-        password: false,
-        firstName: false
+        phone: '',
+        email: '',
+        password: '',
+        firstName: ''
     })
 
     const [info, setInfo] = useState({
@@ -43,35 +45,37 @@ const RegistrationForm: React.FC<Props> = (props) => {
     const {setUserAuth} = useActions()
 
     const validationHandler = (): boolean => {
-        let phoneError = false
-        let authError = false
-        let passwordError = false
-        let nameError = false
+        let phoneError = ''
+        let emailError = ''
+        let passwordError = ''
+        let nameError = ''
 
         if (signUp.phone === '') {
-            phoneError = true
+            phoneError = 'Введите номер телефона'
         }
 
         if (signUp.email === '') {
-            authError = true
+            emailError = 'Введите E-mail'
+        } else if (!is.email(signUp.email)) {
+            emailError = 'E-mail имеет неверный формат'
         }
 
         if (signUp.password === '') {
-            passwordError = true
+            passwordError = 'Введите пароль'
         }
 
         if (signUp.firstName === '') {
-            nameError = true
+            nameError = 'Введите имя'
         }
 
         setValidationError({
             phone: phoneError,
-            email: authError,
+            email: emailError,
             password: passwordError,
             firstName: nameError
         })
 
-        return !(phoneError || authError || passwordError || nameError)
+        return !(phoneError || emailError || passwordError || nameError)
     }
 
     const registrationHandler = async (event: React.MouseEvent<HTMLInputElement>) => {
@@ -112,15 +116,20 @@ const RegistrationForm: React.FC<Props> = (props) => {
                     type="text"
                     value={signUp.firstName}
                     placeHolder='Имя'
-                    error={validationError.firstName}
-                    errorText={validationError.firstName ? 'Введите имя' : undefined}
+                    error={validationError.firstName !== ''}
+                    errorText={validationError.firstName}
                     icon="user"
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                         setSignUp({
                             ...signUp,
                             firstName: e.target.value
                         })
-                        setValidationError({...validationError, firstName: false})
+
+                        if (e.target.value.trim().length === 0) {
+                            setValidationError({...validationError, firstName: 'Введите имя'})
+                        } else {
+                            setValidationError({...validationError, firstName: ''})
+                        }
                     }}
                 />
             </div>
@@ -130,15 +139,22 @@ const RegistrationForm: React.FC<Props> = (props) => {
                     type="text"
                     value={signUp.email}
                     placeHolder='Email'
-                    error={validationError.email}
-                    errorText={validationError.email ? 'Введите Email' : undefined}
+                    error={validationError.email !== ''}
+                    errorText={validationError.email}
                     icon="at"
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                         setSignUp({
                             ...signUp,
                             email: e.target.value
                         })
-                        setValidationError({...validationError, email: false})
+
+                        if (e.target.value.trim().length === 0) {
+                            setValidationError({...validationError, email: 'Введите имя'})
+                        } else if (!is.email(e.target.value)) {
+                            setValidationError({...validationError, email: 'E-mail имеет неверный формат'})
+                        } else {
+                            setValidationError({...validationError, email: ''})
+                        }
                     }}
                 />
             </div>
@@ -148,15 +164,20 @@ const RegistrationForm: React.FC<Props> = (props) => {
                     type="tel"
                     value={signUp.phone}
                     placeHolder='Телефон'
-                    error={validationError.phone}
-                    errorText={validationError.phone ? 'Введите телефон' : undefined}
+                    error={validationError.phone !== ''}
+                    errorText={validationError.phone}
                     icon="phone"
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                         setSignUp({
                             ...signUp,
                             phone: e.target.value
                         })
-                        setValidationError({...validationError, phone: false})
+
+                        if (e.target.value.trim().length === 0) {
+                            setValidationError({...validationError, password: 'Введите номер телефона'})
+                        } else {
+                            setValidationError({...validationError, password: ''})
+                        }
                     }}
                 />
             </div>
@@ -167,15 +188,22 @@ const RegistrationForm: React.FC<Props> = (props) => {
                     password={true}
                     value={signUp.password}
                     placeHolder='Пароль'
-                    error={validationError.password}
-                    errorText={validationError.password ? 'Введите пароль' : undefined}
+                    error={validationError.password !== ''}
+                    errorText={validationError.password}
                     icon="lock"
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                         setSignUp({
                             ...signUp,
                             password: e.target.value
                         })
-                        setValidationError({...validationError, password: false})
+
+                        if (e.target.value.length > 0 && e.target.value.length < 6) {
+                            setValidationError({...validationError, password: 'Минимальная длина пароля 6 символов'})
+                        } else if (e.target.value.length === 0) {
+                            setValidationError({...validationError, password: 'Введите пароль'})
+                        } else {
+                            setValidationError({...validationError, password: ''})
+                        }
                     }}
                 />
             </div>
@@ -193,7 +221,7 @@ const RegistrationForm: React.FC<Props> = (props) => {
 
             <div className={classes['buttons-wrapper']}>
                 <Button type='apply'
-                        disabled={info.fetching || validationError.firstName || validationError.email || validationError.phone || validationError.password}
+                        disabled={info.fetching || validationError.firstName !== '' || validationError.email !== '' || validationError.phone !== '' || validationError.password !== ''}
                         onClick={registrationHandler.bind(this)}
                 >Создать аккаунт</Button>
 
