@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react'
 import withStore from '../../hoc/withStore'
+import classNames from 'classnames/bind'
 import BuildingService from '../../api/BuildingService'
 import {PopupProps} from '../../@types/IPopup'
 import {IBuilding} from '../../@types/IBuilding'
@@ -41,6 +42,7 @@ import {
     paymentsList
 } from '../../helpers/buildingHelper'
 import classes from './PopupBuildingCreate.module.scss'
+import TextAreaBox from "../TextAreaBox/TextAreaBox";
 
 interface Props extends PopupProps {
     building?: IBuilding | null
@@ -54,6 +56,8 @@ const defaultProps: Props = {
         console.info('PopupBuildingCreate onSave')
     }
 }
+
+const cx = classNames.bind(classes)
 
 const PopupBuildingCreate: React.FC<Props> = (props) => {
     const [building, setBuilding] = useState<IBuilding>(props.building ? JSON.parse(JSON.stringify(props.building)) : {
@@ -133,6 +137,35 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
     // Загрузка изображений
     const uploadImagesHandler = (images: IImageDb[], newImages: IImage[]) => {
         setBuilding({...building, images: images, newImages: newImages})
+    }
+
+    // Смена главного изображения
+    const selectImageAvatarHandler = (index: number, type: string) => {
+        console.log(index, type)
+        const images: IImageDb[] = [...building.images]
+        const newImages: IImage[] = [...building.newImages]
+
+        if (type === 'selected') {
+            newImages.map((image: IImage) => image.avatar = 0)
+            images.map((image: IImageDb, imageIndex: number) => {
+                if (index === imageIndex) {
+                    image.avatar = 1
+                } else {
+                    image.avatar = 0
+                }
+            })
+        } else if (type === 'upload') {
+            images.map((image: IImageDb) => image.avatar = 0)
+            newImages.map((image: IImage, imageIndex: number) => {
+                if (index === imageIndex) {
+                    image.avatar = 1
+                } else {
+                    image.avatar = 0
+                }
+            })
+        }
+
+        uploadImagesHandler(images, newImages)
     }
 
     // Вкладка состояния объекта
@@ -445,6 +478,7 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
                                multi
                                showUploadList
                                onChange={uploadImagesHandler.bind(this)}
+                               onClickImage={selectImageAvatarHandler.bind(this)}
                 />
             </div>
         )
@@ -509,6 +543,20 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
                                      showRequired
                                      errorText='Поле обязательно для заполнения'
                                      icon='location-dot'
+                            />
+                        </div>
+
+                        <div className={cx({'field': true, 'full': true})}>
+                            <div className={classes.field_label}>Описание</div>
+
+                            <TextAreaBox value={building.description}
+                                         onChange={(value: string) => setBuilding({
+                                             ...building,
+                                             description: value
+                                         })}
+                                         placeHolder='Введите описание об объекте'
+                                         error={!building.address || building.address.trim() === ''}
+                                         icon='paragraph'
                             />
                         </div>
                     </div>

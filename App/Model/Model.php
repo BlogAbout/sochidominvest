@@ -140,6 +140,8 @@ class Model
     }
 
     /**
+     * Загрузка файла на сервер
+     *
      * @param string $file
      * @param string $objectType
      * @param int $objectId
@@ -181,5 +183,31 @@ class Model
         }
 
         return null;
+    }
+
+    /**
+     * Формирует строку запроса where для фильтрации по обобщенным параметрам
+     *
+     * @param array $filter Массив параметров фильтрации
+     * @return string
+     */
+    protected static function generateFilterQuery(array $filter): string
+    {
+        $sqlWhere = '';
+        $where = [];
+
+        if (!empty($filter['active'])) {
+            array_push($where, '`active` IN (' . implode(',', $filter['active']) . ')');
+        }
+
+        if (!empty($filter['buildingId'])) {
+            array_push($where, "`id_building` IN (" . implode(',', $filter['buildingId']) . ")");
+        }
+
+        if (count($where)) {
+            $sqlWhere = " WHERE " . implode(' AND ', $where);
+        }
+
+        return $sqlWhere;
     }
 }

@@ -4,8 +4,7 @@ import {useNavigate} from 'react-router-dom'
 import {declension} from '../../../helpers/stringHelper'
 import {numberWithSpaces, round} from '../../../helpers/numberHelper'
 import {IBuilding} from '../../../@types/IBuilding'
-import {useTypedSelector} from '../../../hooks/useTypedSelector'
-import {useActions} from '../../../hooks/useActions'
+import BuildingService from '../../../api/BuildingService'
 import BlockingElement from '../../../components/BlockingElement/BlockingElement'
 import HeaderDefault from '../../../components/HeaderDefault/HeaderDefault'
 import FooterDefault from '../../../components/FooterDefault/FooterDefault'
@@ -18,16 +17,23 @@ const BuildingListPage: React.FC = () => {
     const navigate = useNavigate()
 
     const [isUpdate, setIsUpdate] = useState(true)
-
-    const {buildings, fetching} = useTypedSelector(state => state.buildingReducer)
-    const {fetchBuildingList} = useActions()
+    const [buildings, setBuildings] = useState<IBuilding[]>()
+    const [fetching, setFetching] = useState(false)
 
     useEffect(() => {
-        if (isUpdate) {
-            fetchBuildingList({active: [1], publish: 1})
+        setFetching(true)
 
-            setIsUpdate(false)
-        }
+        BuildingService.fetchBuildings({active: [1], publish: 1})
+            .then((response: any) => {
+                setBuildings(response.data)
+            })
+            .catch((error: any) => {
+                console.error('Произошла ошибка загрузки данных', error)
+            })
+            .finally(() => {
+                setFetching(false)
+                setIsUpdate(false)
+            })
     }, [isUpdate])
 
     const renderBuildingItem = (building: IBuilding) => {

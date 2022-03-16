@@ -174,9 +174,9 @@ const RegistrationForm: React.FC<Props> = (props) => {
                         })
 
                         if (e.target.value.trim().length === 0) {
-                            setValidationError({...validationError, password: 'Введите номер телефона'})
+                            setValidationError({...validationError, phone: 'Введите номер телефона'})
                         } else {
-                            setValidationError({...validationError, password: ''})
+                            setValidationError({...validationError, phone: ''})
                         }
                     }}
                 />

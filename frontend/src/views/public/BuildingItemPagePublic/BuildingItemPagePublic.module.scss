@@ -81,44 +81,54 @@
                     }
                 }
 
-                .tags {
-                    width: 100%;
-                    margin-bottom: 20px;
+                .mainInfo {
+                    display: flex;
+                    align-items: flex-start;
+                    justify-content: space-between;
 
-                    > div {
-                        margin-right: 5px;
-                        background: #ffcc01;
-                        font-size: 14px;
-                        padding: 2px 5px;
-                        display: inline-block;
-                    }
-                }
+                    .col {
+                        width: 49%;
 
-                h1 {
-                    font-size: 28px;
-                    margin-bottom: 0;
-                }
+                        .tags {
+                            width: 100%;
+                            margin-bottom: 20px;
 
-                .address {
-                    margin-bottom: 50px;
-                    font-size: 20px;
-                }
+                            > div {
+                                margin-right: 5px;
+                                background: #ffcc01;
+                                font-size: 14px;
+                                padding: 2px 5px;
+                                display: inline-block;
+                            }
+                        }
 
-                .row {
-                    width: 25%;
-                    margin-bottom: 20px;
+                        h1 {
+                            font-size: 28px;
+                            margin-bottom: 0;
+                        }
 
-                    span:first-child {
-                        font-size: 24px;
-                        display: block;
-                        margin-bottom: 5px;
-                    }
+                        .address {
+                            margin-bottom: 50px;
+                            font-size: 20px;
+                        }
 
-                    span:last-child {
-                        text-transform: uppercase;
-                        color: #777;
-                        font-size: 18px;
-                        display: block;
+                        .row {
+                            width: 50%;
+                            margin-bottom: 20px;
+
+                            span:first-child {
+                                font-size: 24px;
+                                display: block;
+                                margin-bottom: 5px;
+                            }
+
+                            span:last-child {
+                                text-transform: uppercase;
+                                color: #777;
+                                font-size: 18px;
+                                display: block;
+                            }
+                        }
                     }
                 }
 

@@ -39,7 +39,10 @@ class BuildingModel extends Model
 
         if (!empty($building)) {
             $building = BuildingModel::formatDataToJson($building);
-            $images = BuildingModel::fetchBuildingImages([$building['id']]);
+            $images = BuildingModel::fetchBuildingImages([
+                'buildingId' => [$building['id']],
+                'active' => [1]
+            ]);
 
             if (count($images)) {
                 $building['images'] = $images;
@@ -100,7 +103,10 @@ class BuildingModel extends Model
                 array_push($ids, (int)$buildingData['id']);
             }
 
-            $images = BuildingModel::fetchBuildingImages($ids);
+            $images = BuildingModel::fetchBuildingImages([
+                'buildingId' => $ids,
+                'active' => [1]
+            ]);
 
             if (count($images)) {
                 foreach ($resultList as &$building) {
@@ -381,11 +387,15 @@ class BuildingModel extends Model
                 $fileName = parent::uploadFile($image->value, 'building', $buildingId);
 
                 if ($fileName) {
-                    $sql = "INSERT INTO `sdi_building_images` (`id_building`, `name`, `active`) VALUES (:buildingId, :name, 1)";
+                    $sql = "
+                        INSERT INTO `sdi_building_images` (`id_building`, `name`, `active`, `avatar`)
+                        VALUES (:buildingId, :name, 1, :avatar)
+                    ";
 
                     parent::query($sql);
                     parent::bindParams('buildingId', $buildingId);
                     parent::bindParams('name', $fileName);
+                    parent::bindParams('avatar', $image->avatar);
                     parent::execute();
                 }
             }
@@ -404,13 +414,15 @@ class BuildingModel extends Model
                 $sql = "
                     UPDATE `sdi_building_images`
                     SET
-                        active = :active
+                        active = :active,
+                        avatar = :avatar
                     WHERE id = :id
                 ";
 
                 parent::query($sql);
                 parent::bindParams('id', $image->id);
                 parent::bindParams('active', $image->active);
+                parent::bindParams('avatar', $image->avatar);
                 parent::execute();
             }
         }
@@ -419,17 +431,19 @@ class BuildingModel extends Model
     /**
      * Получение данных изображений к соответствующим объектам недвижимости
      *
-     * @param array $buildingIds Массив дентификаторов объектов недвижимости
+     * @param array $filter Массив параметров фильтрации
      * @return array
      */
-    private static function fetchBuildingImages(array $buildingIds): array
+    private static function fetchBuildingImages(array $filter): array
     {
         $resultList = [];
+        $sqlWhere = parent::generateFilterQuery($filter);
 
         $sql = "
             SELECT *
             FROM `sdi_building_images`
-            WHERE `id_building` IN (" . implode(',', $buildingIds) . ")
+            $sqlWhere
+            ORDER BY `avatar` DESC, `id` ASC
         ";
 
         parent::query($sql);
@@ -510,6 +524,7 @@ class BuildingModel extends Model
             'idObject' => (int)$data['id_building'],
             'name' => $data['name'],
             'active' => (int)$data['active'],
+            'avatar' => (int)$data['avatar'],
             'value' => '/uploads/building/' . $data['id_building'] . '/' . $data['name']
         ];
     }

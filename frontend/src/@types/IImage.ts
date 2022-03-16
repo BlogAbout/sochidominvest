@@ -1,6 +1,7 @@
 export interface IImage {
     name: string
     value: any
+    avatar: number
 }
 
 export interface IImageDb extends IImage {

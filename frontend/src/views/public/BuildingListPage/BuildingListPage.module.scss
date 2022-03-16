@@ -109,9 +109,13 @@
                 background: linear-gradient(180deg, transparent 0%, #075ea5 90%);
                 border: 1px solid #ffcc01;
                 padding: 20px;
+                height: 100%;
+                display: flex;
+                flex-direction: column;
 
                 .itemContent {
                     margin-top: 200px;
+                    flex-grow: 1;
 
                     h2 {
                         color: #fff;

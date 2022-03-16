@@ -26,6 +26,10 @@
     width: 49%;
     margin-bottom: 10px;
     position: relative;
+
+    &.full {
+        width: 100%;
+    }
 }
 
 .field_label {

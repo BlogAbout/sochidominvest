@@ -284,21 +284,10 @@ class BuildingController extends Controller
      */
     public function fetchBuildings($request, $response)
     {
-        $params = [];
-        $paramsGet = $request->paramsGet();
-
-        if ($paramsGet) {
-            if (!empty($paramsGet->active) && count($paramsGet->active)) {
-                $params['active'] = $paramsGet->active;
-            }
-
-            if (!empty($paramsGet->publish)) {
-                $params['publish'] = $paramsGet->publish;
-            }
-        }
+        $filter = parent::getFilterParams($request->paramsGet()->all());
 
         try {
-            $buildingList = $this->buildingModel->fetchBuildings($params);
+            $buildingList = $this->buildingModel->fetchBuildings($filter);
             $response->code(200)->json($buildingList);
 
             return;

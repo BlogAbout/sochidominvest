@@ -1,4 +1,5 @@
 import React, {useRef} from 'react'
+import classNames from 'classnames/bind'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import Resizer from 'react-image-file-resizer'
 import {IImage, IImageDb} from '../../@types/IImage'
@@ -18,6 +19,8 @@ interface Props {
     fetching?: boolean
 
     onChange(updateImages: IImageDb[], uploadImages: IImage[]): void
+
+    onClickImage?(index: number, type: string): void
 }
 
 const defaultProps: Props = {
@@ -33,6 +36,8 @@ const defaultProps: Props = {
         console.info('ImageUploader onChange', updateImages, uploadImages)
     }
 }
+
+const cx = classNames.bind(classes)
 
 const ImageUploader: React.FC<Props> = (props) => {
     const inputRef = useRef<HTMLInputElement | null>(null)
@@ -63,7 +68,7 @@ const ImageUploader: React.FC<Props> = (props) => {
         if (files && files.length) {
             for (const file of Array.from(files)) {
                 const image = await resizeFile(file)
-                imagesList.push({name: file.name, value: image})
+                imagesList.push({name: file.name, value: image, avatar: 0})
             }
         }
 
@@ -102,8 +107,18 @@ const ImageUploader: React.FC<Props> = (props) => {
                 {props.images.length ?
                     props.images.map((image: IImageDb, index: number) => {
                         return (
-                            <div key={'selected-' + image.id} className={classes.item}>
-                                <img src={'https://api.sochidominvest.ru' + image.value} alt={image.name}/>
+                            <div key={'selected-' + image.id}
+                                 className={cx({'item': true, 'avatar': !!image.avatar})}
+                            >
+                                <div className={classes.wrapper}
+                                     onClick={() => {
+                                         if (props.onClickImage != undefined) {
+                                             props.onClickImage(index, 'selected')
+                                         }
+                                     }}
+                                >
+                                    <img src={'https://api.sochidominvest.ru' + image.value} alt={image.name}/>
+                                </div>
 
                                 <div className={classes.remove}
                                      title='Удалить'
@@ -120,8 +135,18 @@ const ImageUploader: React.FC<Props> = (props) => {
                 {props.newImages.length ?
                     props.newImages.map((image: IImage, index: number) => {
                         return (
-                            <div key={'upload-' + index} className={classes.item}>
-                                <img src={image.value} alt={image.name}/>
+                            <div key={'upload-' + index}
+                                 className={cx({'item': true, 'avatar': !!image.avatar})}
+                            >
+                                <div className={classes.wrapper}
+                                     onClick={() => {
+                                         if (props.onClickImage != undefined) {
+                                             props.onClickImage(index, 'upload')
+                                         }
+                                     }}
+                                >
+                                    <img src={image.value} alt={image.name}/>
+                                </div>
 
                                 <div className={classes.remove}
                                      title='Удалить'

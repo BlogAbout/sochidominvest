@@ -38,5 +38,12 @@ $Klein->respond('GET', '/api/v1/tag/[:id]', [new TagController(), 'getTagById'])
 $Klein->respond('GET', '/api/v1/tag', [new TagController(), 'fetchTags']);
 $Klein->respond('DELETE', '/api/v1/tag/[:id]', [new TagController(), 'deleteTag']);
 
+// Feed Routes
+$Klein->respond('POST', '/api/v1/feed', [new FeedbackController(), 'createFeed']);
+$Klein->respond('PUT', '/api/v1/feed/[:id]', [new FeedbackController(), 'updateFeed']);
+$Klein->respond('GET', '/api/v1/feed/[:id]', [new FeedbackController(), 'getFeedById']);
+$Klein->respond('GET', '/api/v1/feed', [new FeedbackController(), 'fetchFeeds']);
+$Klein->respond('DELETE', '/api/v1/feed/[:id]', [new FeedbackController(), 'deleteFeed']);
+
 // Dispatch all routes
 $Klein->dispatch();

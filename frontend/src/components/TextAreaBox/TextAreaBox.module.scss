@@ -1,0 +1,31 @@
+.TextAreaBox {
+    box-sizing: border-box;
+    height: 102px;
+    border: 1px solid #075ea5;
+    display: flex;
+    align-items: flex-start;
+    cursor: pointer;
+    position: relative;
+    margin-bottom: 30px;
+    padding: 0 5px 0 10px;
+
+    .icon {
+        margin: 0 5px 0 0;
+        font-size: 14px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+    }
+
+    textarea {
+        max-width: 100%;
+        font-size: 12px;
+        height: 100px !important;
+        line-height: 30px;
+        padding: 0 10px;
+        flex-grow: 1;
+        border: none;
+        outline: none;
+        resize: none;
+    }
+}

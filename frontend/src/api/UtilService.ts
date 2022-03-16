@@ -1,0 +1,9 @@
+import {AxiosResponse} from 'axios'
+import API from '../axios.init'
+import {IFeed} from '../@types/IFeed'
+
+export default class UtilService {
+    static async sendCallback(data: IFeed): Promise<AxiosResponse> {
+        return API.post('/feed', data)
+    }
+}

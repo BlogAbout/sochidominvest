@@ -1,0 +1,30 @@
+.CallbackForm {
+    width: 100%;
+    background-color: #fff;
+    padding: 40px;
+    box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.4);
+    position: relative;
+    z-index: 4;
+
+    .info {
+        margin-bottom: 20px;
+    }
+
+    .errorMessage {
+        color: #fe5a9d;
+        text-align: center;
+        margin-bottom: 30px;
+        padding: 5px 10px;
+        border: 1px solid #fe5a9d;
+        white-space: pre-wrap;
+    }
+
+    .successMessage {
+        color: #075ea5;
+        text-align: center;
+        margin-bottom: 30px;
+        padding: 5px 10px;
+        border: 1px solid #075ea5;
+        white-space: pre-wrap;
+    }
+}

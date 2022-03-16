@@ -68,7 +68,9 @@ export const buildingTerritory: ISelector[] = [
  *  Список типов подездов к дому
  */
 export const buildingEntrance: ISelector[] = [
-    {key: 'asphalt', text: 'Асфальтная дорога'}
+    {key: 'asphalt', text: 'Асфальтная дорога'},
+    {key: 'gravel', text: 'Гравийная дорога'},
+    {key: 'ground', text: 'Грунтовая дорога'}
 ]
 
 /**

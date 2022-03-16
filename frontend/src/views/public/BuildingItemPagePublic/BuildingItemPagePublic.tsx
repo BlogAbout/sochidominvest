@@ -34,6 +34,7 @@ import {
     paymentsList
 } from '../../../helpers/buildingHelper'
 import classes from './BuildingItemPagePublic.module.scss'
+import CallbackForm from "../../../components/CallbackForm/CallbackForm";
 
 type BuildingItemPageParams = {
     id: string
@@ -95,7 +96,7 @@ const BuildingItemPagePublic: React.FC = (props) => {
         if (building.images && building.images.length) {
             listImages = building.images.filter((image: IImageDb) => image.active).map((image: IImageDb) => {
                 return {
-                    image: 'http://sochidominvest' + image.value,
+                    image: 'https://api.sochidominvest.ru' + image.value,
                     alt: building.name
                 }
             })
@@ -117,39 +118,47 @@ const BuildingItemPagePublic: React.FC = (props) => {
     const renderInfo = () => {
         return (
             <BlockingElement fetching={fetching} className={classes.block}>
-                {tags && tags.length && building.tags && building.tags.length ?
-                    <div className={classes.tags}>
-                        {building.tags.map((id: number) => {
-                            const findTag = tags.find((tag: ITag) => tag.id === id)
+                <div className={classes.mainInfo}>
+                    <div className={classes.col}>
+                        {tags && tags.length && building.tags && building.tags.length ?
+                            <div className={classes.tags}>
+                                {building.tags.map((id: number) => {
+                                    const findTag = tags.find((tag: ITag) => tag.id === id)
 
-                            return findTag ? <div key={findTag.id}>{findTag.name}</div> : null
-                        })}
+                                    return findTag ? <div key={findTag.id}>{findTag.name}</div> : null
+                                })}
+                            </div>
+                            : null
+                        }
+
+                        <h1>{building.name}</h1>
+                        <div className={classes.address}>{building.address}</div>
+
+                        <div className={classes.info}>
+                            <div className={classes.row}>
+                                <span>{building.countCheckers || 0}</span>
+                                <span>{declension(building.countCheckers || 0, ['квартира', 'квартиры', 'квартир'], true)}</span>
+                            </div>
+
+                            <div className={classes.row}>
+                                <span>{numberWithSpaces(round(building.costMinUnit || 0, 0))} руб.</span>
+                                <span>Мин. цена за м<sup>2</sup></span>
+                            </div>
+
+                            <div className={classes.row}>
+                                <span>{numberWithSpaces(round(building.costMin || 0, 0))} руб.</span>
+                                <span>Мин. цена</span>
+                            </div>
+
+                            <div className={classes.row}>
+                                <span>{building.areaMin || 0} - {building.areaMax || 0}</span>
+                                <span>Площади, м<sup>2</sup></span>
+                            </div>
+                        </div>
                     </div>
-                    : null
-                }
 
-                <h1>{building.name}</h1>
-                <div className={classes.address}>{building.address}</div>
-
-                <div className={classes.info}>
-                    <div className={classes.row}>
-                        <span>{building.countCheckers || 0}</span>
-                        <span>{declension(building.countCheckers || 0, ['квартира', 'квартиры', 'квартир'], true)}</span>
-                    </div>
-
-                    <div className={classes.row}>
-                        <span>{numberWithSpaces(round(building.costMinUnit || 0, 0))} руб.</span>
-                        <span>Мин. цена за м<sup>2</sup></span>
-                    </div>
-
-                    <div className={classes.row}>
-                        <span>{numberWithSpaces(round(building.costMin || 0, 0))} руб.</span>
-                        <span>Мин. цена</span>
-                    </div>
-
-                    <div className={classes.row}>
-                        <span>{building.areaMin || 0} - {building.areaMax || 0}</span>
-                        <span>Площади, м<sup>2</sup></span>
+                    <div className={classes.col}>
+                        <CallbackForm building={building}/>
                     </div>
                 </div>
             </BlockingElement>

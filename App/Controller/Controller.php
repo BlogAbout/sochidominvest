@@ -128,6 +128,17 @@ class Controller
                 } catch (Exception $e) {
                 }
             }
+
+            if ($payload->validator == 'feedExists') {
+                try {
+                    $checkFeed = FeedbackModel::fetchFeedById((int)$payload->data);
+
+                    if (!$checkFeed['id']) {
+                        array_push($response, "Заявка с таким идентификатором не найдена в базе данных.");
+                    }
+                } catch (Exception $e) {
+                }
+            }
         }
 
         $validationErrors = new \stdClass();
@@ -154,5 +165,28 @@ class Controller
     protected static function JWTSecret(): string
     {
         return 'K-lyniEXe8Gm-WOA7IhUd5xMrqCBSPzZFpv02Q6sJcVtaYD41wfHRL3';
+    }
+
+    /**
+     * Формирование массива фильтрации
+     *
+     * @param array $params Массив параметров
+     * @return array
+     */
+    protected static function getFilterParams(array $params): array
+    {
+        $filter = [];
+
+        if ($params) {
+            if (!empty($params['active']) && count($params['active'])) {
+                $filter['active'] = $params['active'];
+            }
+
+            if (!empty($params['publish'])) {
+                $filter['publish'] = $params['publish'];
+            }
+        }
+
+        return $filter;
     }
 }

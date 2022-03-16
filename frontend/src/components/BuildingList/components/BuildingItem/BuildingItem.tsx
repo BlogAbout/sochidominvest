@@ -127,11 +127,11 @@ const BuildingItem: React.FC<Props> = (props) => {
 
                 {props.building.payments && props.building.payments.length ?
                     <div className={classes.payments}>
-                        {props.building.payments.map((payment: string) => {
+                        {props.building.payments.map((payment: string, index: number) => {
                             const paymentInfo = paymentsList.find((item: ISelector) => item.key === payment)
                             if (paymentInfo) {
                                 return (
-                                    <div>{paymentInfo.text}</div>
+                                    <div key={'payment-' + index}>{paymentInfo.text}</div>
                                 )
                             }
                         })}
@@ -141,11 +141,11 @@ const BuildingItem: React.FC<Props> = (props) => {
 
                 {props.building.formalization && props.building.formalization.length ?
                     <div className={classes.payments}>
-                        {props.building.formalization.map((formalization: string) => {
+                        {props.building.formalization.map((formalization: string, index: number) => {
                             const formalizationInfo = formalizationList.find((item: ISelector) => item.key === formalization)
                             if (formalizationInfo) {
                                 return (
-                                    <div>{formalizationInfo.text}</div>
+                                    <div key={'formalization-' + index}>{formalizationInfo.text}</div>
                                 )
                             }
                         })}
