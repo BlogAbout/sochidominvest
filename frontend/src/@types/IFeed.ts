@@ -1,4 +1,5 @@
 export interface IFeed {
+    id: number | null
     userId: number | null
     author: number | null
     phone: string | null

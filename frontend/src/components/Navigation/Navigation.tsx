@@ -79,7 +79,14 @@ const Navigation: React.FC = () => {
                         <FontAwesomeIcon icon='screwdriver-wrench'/>
                     </NavLink>
                 </li>
-
+                <li>
+                    <NavLink to={RouteNames.SUPPORT}
+                             className={({isActive}) => isActive ? classes.active : ''}
+                             title='Поддержка'
+                    >
+                        <FontAwesomeIcon icon='question'/>
+                    </NavLink>
+                </li>
             </ul>
         </nav>
     )

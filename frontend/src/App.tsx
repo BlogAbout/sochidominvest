@@ -42,7 +42,7 @@ import {
     faArrowUpFromBracket,
     fa1,
     faUpRightAndDownLeftFromCenter,
-    faPaintRoller, faElevator, faBed, faTrash, faUpload, faTableList, faParagraph
+    faPaintRoller, faElevator, faBed, faTrash, faUpload, faTableList, faParagraph, faQuestion, faCircleQuestion
 } from '@fortawesome/free-solid-svg-icons'
 
 library.add(
@@ -91,7 +91,9 @@ library.add(
     faTrash,
     faUpload,
     faTableList,
-    faParagraph
+    faParagraph,
+    faQuestion,
+    faCircleQuestion
 )
 
 function App() {

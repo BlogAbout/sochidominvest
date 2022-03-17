@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
 import {IBuilding} from '../../@types/IBuilding'
 import {IFeed} from '../../@types/IFeed'
-import UtilService from '../../api/UtilService'
+import FeedService from '../../api/FeedService'
 import Preloader from '../Preloader/Preloader'
 import TextBox from '../TextBox/TextBox'
 import Button from '../Button/Button'
@@ -17,6 +17,7 @@ const defaultProps: Props = {
 
 const CallbackForm: React.FC<Props> = (props) => {
     const [info, setInfo] = useState<IFeed>({
+        id: null,
         userId: null,
         author: null,
         phone: '',
@@ -56,7 +57,7 @@ const CallbackForm: React.FC<Props> = (props) => {
                 error: ''
             })
 
-            UtilService.sendCallback(info)
+            FeedService.saveFeed(info)
                 .then(() => {
                     setResultResponse({
                         success: 'Ваша заявка получена. Мы свяжемся с Вами в ближайшее время.',

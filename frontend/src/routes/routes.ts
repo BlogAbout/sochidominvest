@@ -7,6 +7,7 @@ export enum RouteNames {
     DOCUMENT = '/panel/document',
     REPORT = '/panel/report',
     TOOL = '/panel/tool',
+    SUPPORT = '/panel/support',
     FAVORITE = '/panel/favorite',
     COMPILATION = '/panel/compilation',
     PROFILE = '/panel/profile',

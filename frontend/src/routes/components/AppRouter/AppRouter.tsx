@@ -15,6 +15,7 @@ import BuildingListPage from '../../../views/public/BuildingListPage/BuildingLis
 import Document from '../../../views/Document/Document'
 import Report from '../../../views/Report/Report'
 import Tool from '../../../views/Tool/Tool'
+import Support from '../../../views/private/Support/Support'
 import FavoritePage from '../../../views/FavoritePage/FavoritePage'
 import CompilationPage from '../../../views/CompilationPage/CompilationPage'
 import Navigation from '../../../components/Navigation/Navigation'
@@ -53,6 +54,7 @@ const AppRouter: React.FC = () => {
                             <Route path={RouteNames.DOCUMENT} element={<Document/>}/>
                             <Route path={RouteNames.REPORT} element={<Report/>}/>
                             <Route path={RouteNames.TOOL} element={<Tool/>}/>
+                            <Route path={RouteNames.SUPPORT} element={<Support/>}/>
                             <Route path={RouteNames.FAVORITE} element={<FavoritePage/>}/>
                             <Route path={RouteNames.COMPILATION} element={<CompilationPage/>}/>
                         </Routes>

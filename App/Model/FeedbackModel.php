@@ -69,6 +69,8 @@ class FeedbackModel extends Model
             $sql .= " WHERE " . implode(' AND ', $where);
         }
 
+        $sql .= " ORDER BY `id` DESC";
+
         parent::query($sql);
         $feedList = parent::fetchAll();
 
