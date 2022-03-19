@@ -3,10 +3,11 @@ import classNames from 'classnames/bind'
 import {IFeed} from '../../../../@types/IFeed'
 import {ISelector} from '../../../../@types/ISelector'
 import {feedStatuses, feedTypes} from '../../../../helpers/supportHelper'
+import FeedService from '../../../../api/FeedService'
 import openPopupAlert from '../../../PopupAlert/PopupAlert'
 import openContextMenu from '../../../ContextMenu/ContextMenu'
 import Preloader from '../../../Preloader/Preloader'
-import FeedService from '../../../../api/FeedService'
+import openPopupSupportInfo from '../../../PopupSupportInfo/PopupSupportInfo'
 import classes from './SupportItem.module.scss'
 
 interface Props {
@@ -41,6 +42,7 @@ const SupportItem: React.FC<Props> = (props) => {
                             FeedService.removeFeed(props.feed.id)
                                 .then(() => {
                                     setFetching(false)
+                                    props.onSave()
                                 })
                                 .catch((error: any) => {
                                     openPopupAlert(document.body, {
@@ -102,9 +104,10 @@ const SupportItem: React.FC<Props> = (props) => {
 
     return (
         <div className={cx({'SupportItem': true, [`${props.feed.type}`]: true})}
-             onClick={() => {
-                 // Todo
-             }}
+             onClick={(e: React.MouseEvent) => openPopupSupportInfo(e, {
+                 feed: props.feed,
+                 onSave: props.onSave
+             })}
              onContextMenu={(e: React.MouseEvent) => onContextMenu(e)}
         >
             {fetching && <Preloader/>}

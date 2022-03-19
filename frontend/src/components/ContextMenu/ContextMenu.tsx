@@ -108,7 +108,7 @@ const ContextMenu: React.FC<Props> = (props) => {
                         title={menu.title ? menu.title : menu.text}
                         style={menuStyle}
                     >
-                        {menu.text}
+                        {menu.title || menu.text}
                     </div>
             )
         })

@@ -10,4 +10,6 @@ export interface IFeed {
     objectType: string | null
     active: number
     status: string
+    dateCreated?: string
+    dateUpdate?: string
 }

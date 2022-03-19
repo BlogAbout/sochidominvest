@@ -43,6 +43,7 @@ const ImageUploader: React.FC<Props> = (props) => {
     const inputRef = useRef<HTMLInputElement | null>(null)
 
     const accept = !props.type || props.type === 'image' ? 'image/jpeg,image/png,image/jpg' : ''
+    const acceptText = !props.type || props.type === 'image' ? 'Доступны для загрузки: PNG, JPG, JPEG' : ''
 
     const resizeFile = (file: File) =>
         new Promise((resolve) => {
@@ -178,6 +179,7 @@ const ImageUploader: React.FC<Props> = (props) => {
                         icon='upload'
                         onClick={() => inputRef.current?.click()}
                         disabled={props.disabled || props.fetching}
+                        title={acceptText}
                 >{props.text}</Button>
             </div>
         )

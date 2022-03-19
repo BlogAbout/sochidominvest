@@ -1,0 +1,35 @@
+.StatusBox {
+    margin-top: 6px;
+    display: flex;
+    background-color: #075ea5;
+    line-height: 27px;
+}
+
+.status {
+    padding: 0 15px;
+    text-align: center;
+    color: #fff;
+    flex-grow: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.select {
+    flex-shrink: 0;
+    border-left: 1px solid #fff;
+    width: 29px;
+    box-sizing: border-box;
+    position: relative;
+
+    .icon {
+        position: absolute;
+        right: 0;
+        top: 0;
+        width: 29px;
+        height: 27px;
+        text-align: center;
+        z-index: 2;
+        color: #fff;
+    }
+}
