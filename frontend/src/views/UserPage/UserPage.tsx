@@ -14,7 +14,7 @@ const UserPage: React.FC = () => {
 
     useEffect(() => {
         if (isUpdate || !users.length) {
-            fetchUserList()
+            fetchUserList({active: [0, 1]})
 
             setIsUpdate(false)
         }

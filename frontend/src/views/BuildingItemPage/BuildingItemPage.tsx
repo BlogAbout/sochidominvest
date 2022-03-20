@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react'
 import {useParams} from 'react-router-dom'
+import {developerTypes} from '../../helpers/developerHelper'
 import {useTypedSelector} from '../../hooks/useTypedSelector'
 import {useActions} from '../../hooks/useActions'
 import {declension} from '../../helpers/stringHelper'
@@ -10,6 +11,8 @@ import {IImageCarousel} from '../../@types/IImageCarousel'
 import {IImageDb} from '../../@types/IImage'
 import {ISelector} from '../../@types/ISelector'
 import {ITag} from '../../@types/ITag'
+import {IDeveloper} from '../../@types/IDeveloper'
+import {IUser} from '../../@types/IUser'
 import Button from '../../components/Button/Button'
 import Empty from '../../components/Empty/Empty'
 import BlockingElement from '../../components/BlockingElement/BlockingElement'
@@ -48,8 +51,10 @@ const BuildingItemPage: React.FC = (props) => {
     const [fetchingCheckers, setFetchingCheckers] = useState(false)
 
     const {buildings, fetching} = useTypedSelector(state => state.buildingReducer)
+    const {developers, fetching: fetchingDeveloperList} = useTypedSelector(state => state.developerReducer)
+    const {users, fetching: fetchingUserList} = useTypedSelector(state => state.userReducer)
     const {tags} = useTypedSelector(state => state.tagReducer)
-    const {fetchBuildingList, fetchTagList} = useActions()
+    const {fetchBuildingList, fetchTagList, fetchDeveloperList, fetchUserList} = useActions()
 
     useEffect(() => {
         if (isUpdate || !buildings.length) {
@@ -86,6 +91,14 @@ const BuildingItemPage: React.FC = (props) => {
                 .finally(() => {
                     setFetchingCheckers(false)
                 })
+        }
+
+        if ((!developers || !developers.length) && (building.developers && building.developers.length)) {
+            fetchDeveloperList({active: [0, 1]})
+        }
+
+        if ((!users || !users.length) && (building.contacts && building.contacts.length)) {
+            fetchUserList({active: [0, 1]})
         }
     }, [building])
 
@@ -346,7 +359,8 @@ const BuildingItemPage: React.FC = (props) => {
 
                         <div className={classes.row}>
                             <div className={classes.label}>Продажа для нерезидентов России:</div>
-                            <div className={classes.param}>{!!building.saleNoResident ? 'Доступно' : 'Не доступно'}</div>
+                            <div
+                                className={classes.param}>{!!building.saleNoResident ? 'Доступно' : 'Не доступно'}</div>
                         </div>
                     </div>
 
@@ -456,14 +470,63 @@ const BuildingItemPage: React.FC = (props) => {
         )
     }
 
+    const renderDevelopersInfo = () => {
+        return (
+            <BlockingElement fetching={fetchingDeveloperList} className={classes.block}>
+                <h2>Застройщик</h2>
+
+                {building.developers && building.developers.length && developers && developers.length ?
+                    <div className={classes.list}>
+                        {building.developers.map((id: number) => {
+                            let developerType = null
+                            const developerInfo = developers.find((developer: IDeveloper) => developer.id === id)
+
+                            if (developerInfo) {
+                                developerType = developerTypes.find((item: ISelector) => item.key === developerInfo.type)
+                            }
+
+                            return developerInfo ? (
+                                <div key={id}>
+                                    <span>{developerInfo.name}</span>
+                                    {developerType && <span>{developerType.text}</span>}
+                                </div>
+                            ) : null
+                        })}
+                    </div>
+                    : <Empty message='Отсутствует информация о застройщике'/>
+                }
+            </BlockingElement>
+        )
+    }
+
+    const renderContactsInfo = () => {
+        return (
+            <BlockingElement fetching={fetchingUserList} className={classes.block}>
+                <h2>Контакты</h2>
+
+                {building.contacts && building.contacts.length && users && users.length ?
+                    <div className={classes.list}>
+                        {building.contacts.map((id: number) => {
+                            const userInfo = users.find((user: IUser) => user.id === id)
+
+                            return userInfo ? (
+                                <div key={id}>
+                                    <span>{userInfo.firstName}</span>
+                                    <span>{userInfo.phone}</span>
+                                </div>
+                            ) : null
+                        })}
+                    </div>
+                    : <Empty message='Отсутствует информация о контактах'/>
+                }
+            </BlockingElement>
+        )
+    }
+
     // Вывод служебной/специальной информации
-    const renderSpecialInfo = () => {
+    const renderDocumentsInfo = () => {
         return (
             <BlockingElement fetching={fetching} className={classes.block}>
-                <h2>Застройщик</h2>
-                <p>В разработке</p>
-                <h2>Контакты</h2>
-                <p>В разработке</p>
                 <h2>Документы</h2>
                 <p>В разработке</p>
             </BlockingElement>
@@ -488,7 +551,9 @@ const BuildingItemPage: React.FC = (props) => {
 
                             <div className={classes.rightColumn}>
                                 {renderInfo()}
-                                {renderSpecialInfo()}
+                                {renderDevelopersInfo()}
+                                {renderContactsInfo()}
+                                {renderDocumentsInfo()}
                             </div>
                         </div>
                     }

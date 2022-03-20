@@ -3,6 +3,7 @@ import API from '../axios.init'
 import {IUser} from '../@types/IUser'
 import {IAuth} from '../@types/IAuth'
 import {ISignUp} from '../@types/ISignUp'
+import {IFilter} from '../@types/IFilter'
 
 export default class UserService {
     static async authUser(auth: IAuth): Promise<AxiosResponse<any>> {
@@ -17,8 +18,8 @@ export default class UserService {
         return API.get(`/user/${userId}`)
     }
 
-    static async fetchUsers(): Promise<AxiosResponse> {
-        return API.get('/user')
+    static async fetchUsers(filter: IFilter): Promise<AxiosResponse> {
+        return API.get('/user', {params: filter})
     }
 
     static async saveUser(user: IUser): Promise<AxiosResponse> {

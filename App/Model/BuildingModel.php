@@ -23,6 +23,16 @@ class BuildingModel extends Model
                        WHERE bt.`id_building` = bu.`id`
                    ) AS tags,
                    (
+                       SELECT GROUP_CONCAT(DISTINCT(bu.`id_user`))
+                       FROM sdi_building_contact AS bu
+                       WHERE bu.`id_building` = bu.`id`
+                   ) AS contacts,
+                   (
+                       SELECT GROUP_CONCAT(DISTINCT(bd.`id_developer`))
+                       FROM sdi_building_developer AS bd
+                       WHERE bd.`id_building` = bu.`id`
+                   ) AS developers,
+                   (
                        SELECT COUNT(bc.`id`)
                        FROM sdi_building_checker AS bc
                        WHERE bc.`id_building` = bu.`id` AND bc.`active` = 1
@@ -72,6 +82,16 @@ class BuildingModel extends Model
                        FROM sdi_building_tag AS bt
                        WHERE bt.`id_building` = bu.`id`
                    ) AS tags,
+                   (
+                       SELECT GROUP_CONCAT(DISTINCT(bu.`id_user`))
+                       FROM sdi_building_contact AS bu
+                       WHERE bu.`id_building` = bu.`id`
+                   ) AS contacts,
+                   (
+                       SELECT GROUP_CONCAT(DISTINCT(bd.`id_developer`))
+                       FROM sdi_building_developer AS bd
+                       WHERE bd.`id_building` = bu.`id`
+                   ) AS developers,
                    (
                        SELECT COUNT(bc.`id`)
                        FROM sdi_building_checker AS bc
@@ -155,6 +175,8 @@ class BuildingModel extends Model
 
             BuildingModel::updateBuildingData($payload, false);
             BuildingModel::updateRelationsTags($payload['id'], $payload['tags']);
+            BuildingModel::updateRelationsDevelopers($payload['id'], $payload['developers']);
+            BuildingModel::updateRelationsContacts($payload['id'], $payload['contacts']);
             BuildingModel::uploadImages($payload['id'], $payload['newImages']);
 
             return array(
@@ -205,6 +227,8 @@ class BuildingModel extends Model
         if (parent::execute()) {
             BuildingModel::updateBuildingData($payload, true);
             BuildingModel::updateRelationsTags($payload['id'], $payload['tags']);
+            BuildingModel::updateRelationsDevelopers($payload['id'], $payload['developers']);
+            BuildingModel::updateRelationsContacts($payload['id'], $payload['contacts']);
             BuildingModel::updateImages($payload['images']);
             BuildingModel::uploadImages($payload['id'], $payload['newImages']);
 
@@ -375,6 +399,72 @@ class BuildingModel extends Model
     }
 
     /**
+     * Обновление связей между объектами недвижимости и пользователями (контактами)
+     *
+     * @param int $buildingId Идентификатор объекта недвижимости
+     * @param array $users Массив идентификаторов пользователей
+     */
+    private static function updateRelationsContacts(int $buildingId, array $users)
+    {
+        $sql = "DELETE FROM `sdi_building_contact` WHERE id_building = :id";
+
+        parent::query($sql);
+        parent::bindParams('id', $buildingId);
+        parent::execute();
+
+        if (count($users)) {
+            $usersSql = [];
+
+            foreach ($users as $user) {
+                array_push($usersSql, "($buildingId, $user)");
+            }
+
+            $sql = "
+                INSERT INTO `sdi_building_contact`
+                    (`id_building`, `id_user`)
+                VALUES
+            " . implode(",", $usersSql);
+
+            parent::query($sql);
+            parent::bindParams('id', $buildingId);
+            parent::execute();
+        }
+    }
+
+    /**
+     * Обновление связей между объектами недвижимости и застройщиками
+     *
+     * @param int $buildingId Идентификатор объекта недвижимости
+     * @param array $developers Массив идентификаторов застройщиков
+     */
+    private static function updateRelationsDevelopers(int $buildingId, array $developers)
+    {
+        $sql = "DELETE FROM `sdi_building_developer` WHERE id_building = :id";
+
+        parent::query($sql);
+        parent::bindParams('id', $buildingId);
+        parent::execute();
+
+        if (count($developers)) {
+            $developersSql = [];
+
+            foreach ($developers as $developer) {
+                array_push($developersSql, "($buildingId, $developer)");
+            }
+
+            $sql = "
+                INSERT INTO `sdi_building_developer`
+                    (`id_building`, `id_developer`)
+                VALUES
+            " . implode(",", $developersSql);
+
+            parent::query($sql);
+            parent::bindParams('id', $buildingId);
+            parent::execute();
+        }
+    }
+
+    /**
      * Загрузка изображений на сервер и сохранение в базу данных
      *
      * @param int $buildingId Идентификатор объекта недвижимости
@@ -506,6 +596,8 @@ class BuildingModel extends Model
             'surchargeGas' => (float)$data['surcharge_gas'],
             'saleNoResident' => (int)$data['sale_no_resident'],
             'tags' => array_map('intval', $data['tags'] ? explode(',', $data['tags']) : []),
+            'contacts' => array_map('intval', $data['contacts'] ? explode(',', $data['contacts']) : []),
+            'developers' => array_map('intval', $data['developers'] ? explode(',', $data['developers']) : []),
             'images' => [],
             'newImages' => []
         ];

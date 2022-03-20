@@ -1,0 +1,33 @@
+.DeveloperList {
+    margin-top: 30px;
+
+    .head {
+        padding: 10px 15px;
+        background-color: #075ea5;
+        color: #fff;
+        margin-bottom: 15px;
+        display: flex;
+        width: 100%;
+        font-weight: 700;
+        box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.4);
+
+        .id {
+            width: 50px;
+            flex-shrink: 0;
+        }
+
+        .name {
+            flex-grow: 1;
+        }
+
+        .type {
+            width: 200px;
+            flex-shrink: 0;
+        }
+
+        .phone {
+            width: 150px;
+            flex-shrink: 0;
+        }
+    }
+}

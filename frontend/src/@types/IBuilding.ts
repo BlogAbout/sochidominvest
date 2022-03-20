@@ -18,6 +18,8 @@ export interface IBuilding {
     costMinUnit?: number | null
     countCheckers?: number | null
     tags: number[]
+    contacts: number[]
+    developers: number[]
     houseClass?: string | null
     material?: string | null
     houseType?: string | null

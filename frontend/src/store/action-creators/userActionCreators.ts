@@ -1,5 +1,6 @@
 import {UserAction, UserActionTypes} from '../../@types/userTypes'
 import {IUser} from '../../@types/IUser'
+import {IFilter} from '../../@types/IFilter'
 import {AppDispatch} from '../reducers'
 import UserService from '../../api/UserService'
 
@@ -36,11 +37,11 @@ export const UserActionCreators = {
 
         window.location.replace('/')
     },
-    fetchUserList: () => async (dispatch: AppDispatch) => {
+    fetchUserList: (filter: IFilter) => async (dispatch: AppDispatch) => {
         dispatch(UserActionCreators.setFetching(true))
 
         try {
-            const response = await UserService.fetchUsers()
+            const response = await UserService.fetchUsers(filter)
 
             if (response.status === 200) {
                 dispatch(UserActionCreators.setUsers(response.data))

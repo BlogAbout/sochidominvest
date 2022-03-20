@@ -4,6 +4,7 @@ export enum RouteNames {
     USER_ITEM = '/panel/user/:id',
     BUILDING = '/panel/building',
     BUILDING_ITEM = '/panel/building/:id',
+    DEVELOPER = '/panel/developer',
     DOCUMENT = '/panel/document',
     REPORT = '/panel/report',
     TOOL = '/panel/tool',

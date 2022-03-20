@@ -19,8 +19,11 @@ import Tabs from '../Tabs/Tabs'
 import TagBox from '../TagBox/TagBox'
 import Empty from '../Empty/Empty'
 import CheckerList from './components/CheckerList/CheckerList'
+import DeveloperList from './components/DeveloperList/DeveloperList'
+import UserList from './components/UserList/UserList'
 import ImageUploader from '../ImageUploader/ImageUploader'
 import SelectorBox from '../SelectorBox/SelectorBox'
+import TextAreaBox from '../TextAreaBox/TextAreaBox'
 import openPopupAlert from '../PopupAlert/PopupAlert'
 import {
     amountContract,
@@ -42,7 +45,6 @@ import {
     paymentsList
 } from '../../helpers/buildingHelper'
 import classes from './PopupBuildingCreate.module.scss'
-import TextAreaBox from "../TextAreaBox/TextAreaBox";
 
 interface Props extends PopupProps {
     building?: IBuilding | null
@@ -117,21 +119,6 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
 
                 setFetching(false)
             })
-    }
-
-    // Смена выбранных особенностей объекта
-    const changeAdvantagesHandler = (key: string, value: boolean) => {
-        let advantagesList: string[] = building.advantages ? [...building.advantages] : []
-
-        if (value) {
-            advantagesList.push(key)
-        } else {
-            if (building.advantages) {
-                advantagesList = building.advantages.filter(item => item !== key)
-            }
-        }
-
-        setBuilding({...building, advantages: advantagesList})
     }
 
     // Загрузка изображений
@@ -486,8 +473,24 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
 
     // Вкладка застройщика объекта
     const renderDeveloperTab = () => {
-        // Todo
-        return 'В разработке'
+        return (
+            <div key='developer' className={classes.tabContent}>
+                <DeveloperList selected={building.developers}
+                               onSelect={(value: number[]) => setBuilding({...building, developers: value})}
+                />
+            </div>
+        )
+    }
+
+    // Вкладка контактов объекта
+    const renderContactTab = () => {
+        return (
+            <div key='developer' className={classes.tabContent}>
+                <UserList selected={building.contacts}
+                          onSelect={(value: number[]) => setBuilding({...building, contacts: value})}
+                />
+            </div>
+        )
     }
 
     // Вкладка документов объекта
@@ -502,6 +505,7 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
         checker: {title: 'Шахматка', render: renderCheckerBoardTab()},
         gallery: {title: 'Галерея', render: renderGalleryTab()},
         developer: {title: 'Застройщик', render: renderDeveloperTab()},
+        contact: {title: 'Контакты', render: renderContactTab()},
         documents: {title: 'Документы', render: renderDocumentTab()}
     }
 
@@ -555,7 +559,6 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
                                              description: value
                                          })}
                                          placeHolder='Введите описание об объекте'
-                                         error={!building.address || building.address.trim() === ''}
                                          icon='paragraph'
                             />
                         </div>

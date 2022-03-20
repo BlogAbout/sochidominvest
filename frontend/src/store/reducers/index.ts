@@ -3,11 +3,13 @@ import thunk from 'redux-thunk'
 import UserReducer from './userReducer'
 import BuildingReducer from './buildingReducer'
 import TagReducer from './tagReducer'
+import DeveloperReducer from './developerReducer'
 
 const rootReducer = combineReducers({
     userReducer: UserReducer,
     buildingReducer: BuildingReducer,
-    tagReducer: TagReducer
+    tagReducer: TagReducer,
+    developerReducer: DeveloperReducer
 })
 
 export const store = createStore(rootReducer, applyMiddleware(thunk))

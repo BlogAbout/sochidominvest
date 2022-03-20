@@ -12,6 +12,7 @@ import BuildingItemPage from '../../../views/BuildingItemPage/BuildingItemPage'
 import BuildingPage from '../../../views/BuildingPage/BuildingPage'
 import BuildingItemPagePublic from '../../../views/public/BuildingItemPagePublic/BuildingItemPagePublic'
 import BuildingListPage from '../../../views/public/BuildingListPage/BuildingListPage'
+import DeveloperPage from '../../../views/private/DeveloperPage/DeveloperPage'
 import Document from '../../../views/Document/Document'
 import Report from '../../../views/Report/Report'
 import Tool from '../../../views/Tool/Tool'
@@ -51,6 +52,7 @@ const AppRouter: React.FC = () => {
                             <Route path={RouteNames.USER} element={<UserPage/>}/>
                             <Route path={RouteNames.BUILDING_ITEM} element={<BuildingItemPage/>}/>
                             <Route path={RouteNames.BUILDING} element={<BuildingPage/>}/>
+                            <Route path={RouteNames.DEVELOPER} element={<DeveloperPage/>}/>
                             <Route path={RouteNames.DOCUMENT} element={<Document/>}/>
                             <Route path={RouteNames.REPORT} element={<Report/>}/>
                             <Route path={RouteNames.TOOL} element={<Tool/>}/>

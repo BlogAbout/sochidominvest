@@ -64,6 +64,14 @@ const Navigation: React.FC = () => {
                     </NavLink>
                 </li>
                 <li>
+                    <NavLink to={RouteNames.DEVELOPER}
+                             className={({isActive}) => isActive ? classes.active : ''}
+                             title='Застройщики'
+                    >
+                        <FontAwesomeIcon icon='city'/>
+                    </NavLink>
+                </li>
+                <li>
                     <NavLink to={RouteNames.REPORT}
                              className={({isActive}) => isActive ? classes.active : ''}
                              title='Отчеты'

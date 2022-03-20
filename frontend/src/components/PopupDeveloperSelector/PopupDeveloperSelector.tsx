@@ -1,14 +1,15 @@
 import React, {useEffect, useState} from 'react'
 import withStore from '../../hoc/withStore'
-import TagService from '../../api/TagService'
-import {ITag} from '../../@types/ITag'
-import {PopupDisplayOptions, PopupProps} from '../../@types/IPopup'
-import openPopupTagCreate from '../PopupTagCreate/PopupTagCreate'
-import {openPopup, removePopup} from '../../helpers/popupHelper'
+import {PopupProps} from '../../@types/IPopup'
+import {IDeveloper} from '../../@types/IDeveloper'
+import DeveloperService from '../../api/DeveloperService'
+import {getPopupContainer, openPopup, removePopup} from '../../helpers/popupHelper'
 import {Content, Footer, Header, Popup} from '../Popup/Popup'
 import BlockingElement from '../BlockingElement/BlockingElement'
 import Empty from '../Empty/Empty'
 import openContextMenu from '../ContextMenu/ContextMenu'
+import openPopupDeveloperCreate from '../PopupDeveloperCreate/PopupDeveloperCreate'
+import showBackgroundBlock from '../BackgroundBlock/BackgroundBlock'
 import ButtonAdd from '../ButtonAdd/ButtonAdd'
 import SearchBox from '../SearchBox/SearchBox'
 import CheckBox from '../CheckBox/CheckBox'
@@ -16,7 +17,7 @@ import Button from '../Button/Button'
 import openPopupAlert from '../PopupAlert/PopupAlert'
 import {useTypedSelector} from '../../hooks/useTypedSelector'
 import {useActions} from '../../hooks/useActions'
-import classes from './PopupTagSelector.module.scss'
+import classes from './PopupDeveloperSelector.module.scss'
 
 interface Props extends PopupProps {
     selected?: number[]
@@ -33,38 +34,42 @@ const defaultProps: Props = {
     buttonAdd: true,
     multi: false,
     onAdd: () => {
-        console.info('PopupTagSelector onAdd')
+        console.info('PopupDeveloperSelector onAdd')
     },
     onSelect: (value: number[]) => {
-        console.info('PopupTagSelector onSelect', value)
+        console.info('PopupDeveloperSelector onSelect', value)
     }
 }
 
-const PopupTagSelector: React.FC<Props> = (props) => {
+const PopupDeveloperSelector: React.FC<Props> = (props) => {
     const [isUpdate, setIsUpdate] = useState(false)
     const [searchText, setSearchText] = useState('')
-    const [tagFilter, setTagFilter] = useState<ITag[]>([])
-    const [selectedTags, setSelectedTags] = useState<number[]>(props.selected || [])
+    const [filterDevelopers, setFilterDevelopers] = useState<IDeveloper[]>([])
+    const [selectedDevelopers, setSelectedDevelopers] = useState<number[]>(props.selected || [])
     const [fetching, setFetching] = useState(false)
 
-    const {fetching: fetchingTagList, tags} = useTypedSelector(state => state.tagReducer)
-    const {fetchTagList} = useActions()
+    const {fetching: fetchingDeveloperList, developers} = useTypedSelector(state => state.developerReducer)
+    const {fetchDeveloperList} = useActions()
 
     useEffect(() => {
-        if (!tags.length || isUpdate) {
-            fetchTagList()
+        if (!developers.length || isUpdate) {
+            fetchDeveloperList({active: [0, 1]})
 
             setIsUpdate(false)
+        }
+
+        return () => {
+            removePopup(props.blockId ? props.blockId : '')
         }
     }, [isUpdate])
 
     useEffect(() => {
         search(searchText)
-    }, [tags])
+    }, [developers])
 
     useEffect(() => {
-        setFetching(fetchingTagList)
-    }, [fetchingTagList])
+        setFetching(fetchingDeveloperList)
+    }, [fetchingDeveloperList])
 
     // Закрытие Popup
     const close = () => {
@@ -72,29 +77,29 @@ const PopupTagSelector: React.FC<Props> = (props) => {
     }
 
     // Клик на строку
-    const selectRow = (tag: ITag) => {
+    const selectRow = (developer: IDeveloper) => {
         if (props.multi) {
-            selectRowMulti(tag)
+            selectRowMulti(developer)
         } else if (props.onSelect !== null) {
-            props.onSelect(tag.id ? [tag.id] : [0])
+            props.onSelect(developer.id ? [developer.id] : [0])
             close()
         }
     }
 
     // Клик на строку в мульти режиме
-    const selectRowMulti = (tag: ITag) => {
-        if (tag.id) {
-            if (checkSelected(tag.id)) {
-                setSelectedTags(selectedTags.filter((key: number) => key !== tag.id))
+    const selectRowMulti = (developer: IDeveloper) => {
+        if (developer.id) {
+            if (checkSelected(developer.id)) {
+                setSelectedDevelopers(selectedDevelopers.filter((key: number) => key !== developer.id))
             } else {
-                setSelectedTags([...selectedTags, tag.id])
+                setSelectedDevelopers([...selectedDevelopers, developer.id])
             }
         }
     }
 
     // Проверка наличия элемента среди выбранных
     const checkSelected = (id: number | null) => {
-        return id !== null && selectedTags.includes(id)
+        return id !== null && selectedDevelopers.includes(id)
     }
 
     // Поиск
@@ -102,17 +107,17 @@ const PopupTagSelector: React.FC<Props> = (props) => {
         setSearchText(value)
 
         if (value.trim() !== '') {
-            setTagFilter(tags.filter((tag: ITag) => {
-                return tag.name.toLocaleLowerCase().indexOf(value.toLocaleLowerCase()) !== -1
+            setFilterDevelopers(developers.filter((developer: IDeveloper) => {
+                return developer.name.toLocaleLowerCase().indexOf(value.toLocaleLowerCase()) !== -1
             }))
         } else {
-            setTagFilter(tags)
+            setFilterDevelopers(developers)
         }
     }
 
     // Добавление нового элемента
     const onClickAdd = (e: React.MouseEvent) => {
-        openPopupTagCreate(e.currentTarget, {
+        openPopupDeveloperCreate(e.currentTarget, {
             onSave: () => {
                 setIsUpdate(true)
             }
@@ -120,9 +125,9 @@ const PopupTagSelector: React.FC<Props> = (props) => {
     }
 
     // Редактирование элемента
-    const onClickEdit = (e: React.MouseEvent, tag: ITag) => {
-        openPopupTagCreate(e.currentTarget, {
-            tag: tag,
+    const onClickEdit = (e: React.MouseEvent, developer: IDeveloper) => {
+        openPopupDeveloperCreate(e.currentTarget, {
+            developer: developer,
             onSave: () => {
                 setIsUpdate(true)
             }
@@ -131,22 +136,22 @@ const PopupTagSelector: React.FC<Props> = (props) => {
 
     // Сохранение выбора
     const onClickSave = () => {
-        props.onSelect(selectedTags)
+        props.onSelect(selectedDevelopers)
         close()
     }
 
     // Удаление элемента справочника
-    const onClickDelete = (e: React.MouseEvent, tag: ITag) => {
+    const onClickDelete = (e: React.MouseEvent, developer: IDeveloper) => {
         openPopupAlert(e, {
-            text: `Вы действительно хотите удалить ${tag.name}?`,
+            text: `Вы действительно хотите удалить ${developer.name}?`,
             buttons: [
                 {
                     text: 'Удалить',
                     onClick: () => {
                         setFetching(true)
 
-                        if (tag.id) {
-                            TagService.removeTag(tag.id)
+                        if (developer.id) {
+                            DeveloperService.removeDeveloper(developer.id)
                                 .then(() => {
                                     setFetching(false)
                                     setIsUpdate(true)
@@ -169,12 +174,12 @@ const PopupTagSelector: React.FC<Props> = (props) => {
     }
 
     // Открытие контекстного меню на элементе справочника
-    const onContextMenu = (e: React.MouseEvent, tag: ITag) => {
+    const onContextMenu = (e: React.MouseEvent, developer: IDeveloper) => {
         e.preventDefault()
 
         const menuItems = [
-            {text: 'Редактировать', onClick: (e: React.MouseEvent) => onClickEdit(e, tag)},
-            {text: 'Удалить', onClick: (e: React.MouseEvent) => onClickDelete(e, tag)}
+            {text: 'Редактировать', onClick: (e: React.MouseEvent) => onClickEdit(e, developer)},
+            {text: 'Удалить', onClick: (e: React.MouseEvent) => onClickDelete(e, developer)}
         ]
 
         openContextMenu(e, menuItems)
@@ -202,7 +207,7 @@ const PopupTagSelector: React.FC<Props> = (props) => {
             <div className={classes['search_and_button']}>
                 <SearchBox value={searchText}
                            onChange={(value: string) => search(value)}
-                           countFind={tagFilter ? tagFilter.length : 0}
+                           countFind={filterDevelopers ? filterDevelopers.length : 0}
                            showClear
                            flexGrow
                            autoFocus
@@ -216,10 +221,10 @@ const PopupTagSelector: React.FC<Props> = (props) => {
     const renderLeftTab = () => {
         return (
             <div className={classes['box_content']}>
-                {tagFilter.length ?
-                    tagFilter.map((tag: ITag) => renderRow(tag, 'left', checkSelected(tag.id)))
+                {filterDevelopers.length ?
+                    filterDevelopers.map((developer: IDeveloper) => renderRow(developer, 'left', checkSelected(developer.id)))
                     :
-                    <Empty message={!tags.length ? 'Нет меток' : 'Метки не найдены'}/>
+                    <Empty message={!developers.length ? 'Нет застройщиков' : 'Застройщики не найдены'}/>
                 }
             </div>
         )
@@ -237,21 +242,21 @@ const PopupTagSelector: React.FC<Props> = (props) => {
     }
 
     const renderRightTab = () => {
-        const rows = tagFilter.filter((tag: ITag) => checkSelected(tag.id))
+        const rows = filterDevelopers.filter((developer: IDeveloper) => checkSelected(developer.id))
 
         return (
             <div className={classes['box_content']}>
-                {rows.length ? rows.map((tag: ITag) => renderRow(tag, 'right', checkSelected(tag.id))) : ''}
+                {rows.length ? rows.map((developer: IDeveloper) => renderRow(developer, 'right', checkSelected(developer.id))) : ''}
             </div>
         )
     }
 
-    const renderRow = (tag: ITag, side: string, checked: boolean) => {
+    const renderRow = (developer: IDeveloper, side: string, checked: boolean) => {
         return (
             <div className={classes['row']}
-                 key={tag.id}
-                 onClick={() => selectRow(tag)}
-                 onContextMenu={(e: React.MouseEvent) => onContextMenu(e, tag)}
+                 key={developer.id}
+                 onClick={() => selectRow(developer)}
+                 onContextMenu={(e: React.MouseEvent) => onContextMenu(e, developer)}
             >
                 {props.multi && side === 'left' ?
                     <CheckBox type={'classic'} onChange={e => e}
@@ -262,7 +267,7 @@ const PopupTagSelector: React.FC<Props> = (props) => {
                     : null
                 }
 
-                <div className={classes['item_name']}>{tag.name}</div>
+                <div className={classes['item_name']}>{developer.name}</div>
 
                 {!checked || props.multi ? null : <div className={classes['selected_icon']}/>}
 
@@ -273,7 +278,7 @@ const PopupTagSelector: React.FC<Props> = (props) => {
 
     return (
         <Popup className={classes.popup}>
-            <Header title='Выбрать метку' popupId={props.id ? props.id : ''} onClose={() => close()}/>
+            <Header title='Выбрать застройщика' popupId={props.id ? props.id : ''} onClose={() => close()}/>
 
             <BlockingElement fetching={fetching}>
                 <Content className={props.multi ? classes['content_multi'] : classes['content']}>
@@ -304,9 +309,18 @@ const PopupTagSelector: React.FC<Props> = (props) => {
     )
 }
 
-PopupTagSelector.defaultProps = defaultProps
-PopupTagSelector.displayName = 'PopupTagSelector'
+PopupDeveloperSelector.defaultProps = defaultProps
+PopupDeveloperSelector.displayName = 'PopupDeveloperSelector'
 
-export default function openPopupTagSelector(target: any, popupProps = {} as Props, displayOptions: PopupDisplayOptions = {} as PopupDisplayOptions) {
-    return openPopup(withStore(PopupTagSelector), popupProps, undefined, target, displayOptions)
+export default function openPopupDeveloperSelector(target: any, popupProps = {} as Props) {
+    const displayOptions = {
+        autoClose: false,
+        center: true
+    }
+    const blockId = showBackgroundBlock(target, {animate: true}, displayOptions)
+    let block = getPopupContainer(blockId)
+
+    popupProps = {...popupProps, blockId: blockId}
+
+    return openPopup(withStore(PopupDeveloperSelector), popupProps, undefined, block, displayOptions)
 }

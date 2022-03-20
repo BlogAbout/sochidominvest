@@ -96,6 +96,8 @@ class BuildingController extends Controller
             'surchargeGas' => (float)htmlentities(stripcslashes(strip_tags($data->surchargeGas))),
             'saleNoResident' => (int)htmlentities(stripcslashes(strip_tags($data->saleNoResident))),
             'tags' => $data->tags,
+            'contacts' => $data->contacts,
+            'developers' => $data->developers,
             'images' => $data->images,
             'newImages' => $data->newImages
         );
@@ -204,6 +206,8 @@ class BuildingController extends Controller
             'surchargeGas' => (float)htmlentities(stripcslashes(strip_tags($data->surchargeGas))),
             'saleNoResident' => (int)htmlentities(stripcslashes(strip_tags($data->saleNoResident))),
             'tags' => $data->tags,
+            'contacts' => $data->contacts,
+            'developers' => $data->developers,
             'images' => $data->images,
             'newImages' => $data->newImages
         );

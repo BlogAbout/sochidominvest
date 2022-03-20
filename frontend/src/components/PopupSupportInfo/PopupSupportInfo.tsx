@@ -4,6 +4,7 @@ import {IFeed} from '../../@types/IFeed'
 import {ISelector} from '../../@types/ISelector'
 import {feedStatuses, feedTypes, objectTypes} from '../../helpers/supportHelper'
 import FeedService from '../../api/FeedService'
+import BuildingService from '../../api/BuildingService'
 import {getPopupContainer, openPopup, removePopup} from '../../helpers/popupHelper'
 import showBackgroundBlock from '../BackgroundBlock/BackgroundBlock'
 import openPopupAlert from '../PopupAlert/PopupAlert'
@@ -12,7 +13,6 @@ import BlockingElement from '../BlockingElement/BlockingElement'
 import StatusBox from '../StatusBox/StatusBox'
 import Button from '../Button/Button'
 import classes from './PopupSupportInfo.module.scss'
-import BuildingService from "../../api/BuildingService";
 
 interface Props extends PopupProps {
     feed?: IFeed | null

@@ -6,7 +6,7 @@ use Klein\Klein;
 
 $Klein = new Klein();
 
-// UserPage Routes, Authentication Routes
+// Authentication Routes
 $Klein->respond('POST', '/api/v1/registration', [new UserController(), 'signUp']);
 $Klein->respond('POST', '/api/v1/auth', [new UserController(), 'signIn']);
 
@@ -37,6 +37,13 @@ $Klein->respond('PUT', '/api/v1/tag/[:id]', [new TagController(), 'updateTag']);
 $Klein->respond('GET', '/api/v1/tag/[:id]', [new TagController(), 'getTagById']);
 $Klein->respond('GET', '/api/v1/tag', [new TagController(), 'fetchTags']);
 $Klein->respond('DELETE', '/api/v1/tag/[:id]', [new TagController(), 'deleteTag']);
+
+// Developer Routes
+$Klein->respond('POST', '/api/v1/developer', [new DeveloperController(), 'createDeveloper']);
+$Klein->respond('PUT', '/api/v1/developer/[:id]', [new DeveloperController(), 'updateDeveloper']);
+$Klein->respond('GET', '/api/v1/developer/[:id]', [new DeveloperController(), 'getDeveloperById']);
+$Klein->respond('GET', '/api/v1/developer', [new DeveloperController(), 'fetchDevelopers']);
+$Klein->respond('DELETE', '/api/v1/developer/[:id]', [new DeveloperController(), 'deleteDeveloper']);
 
 // Feed Routes
 $Klein->respond('POST', '/api/v1/feed', [new FeedbackController(), 'createFeed']);

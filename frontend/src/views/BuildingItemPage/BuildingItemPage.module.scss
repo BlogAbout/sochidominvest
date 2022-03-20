@@ -184,6 +184,35 @@
                                 display: block;
                             }
                         }
+
+                        .list {
+
+                            div {
+                                margin-bottom: 20px;
+
+                                + div {
+                                    margin-top: 5px;
+                                    padding-top: 5px;
+                                    border-top: 1px solid #dfdfdf;
+                                }
+                            }
+
+                            + .list {
+                                margin-top: 10px;
+                            }
+
+                            span:first-child {
+                                font-weight: 700;
+                                font-size: 18px;
+                                display: block;
+                            }
+
+                            span:last-child {
+                                display: block;
+                                margin-top: 5px;
+                                font-size: 16px;
+                            }
+                        }
                     }
                 }
             }
