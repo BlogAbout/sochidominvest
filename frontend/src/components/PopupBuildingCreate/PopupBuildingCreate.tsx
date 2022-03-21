@@ -71,6 +71,8 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
         active: 1,
         author: 0,
         tags: [],
+        contacts: [],
+        developers: [],
         advantages: [],
         images: [],
         newImages: [],
@@ -101,6 +103,7 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
 
         BuildingService.saveBuilding(building)
             .then((response: any) => {
+                console.log('response', response)
                 setFetching(false)
                 setBuilding(response.data)
 
@@ -456,7 +459,7 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
 
     // Вкладка галереии объекта
     const renderGalleryTab = () => {
-        const listActiveImages: IImageDb[] = building.images.filter((image: IImageDb) => image.active)
+        const listActiveImages: IImageDb[] = building.images && building.images.length ? building.images.filter((image: IImageDb) => image.active) : []
 
         return (
             <div key='gallery' className={classes.tabContent}>

@@ -33,10 +33,17 @@ class JwtMiddleware
     {
         $headers = getallheaders();
 
-        // self::$token = $_SERVER['HTTP_AUTHORIZATION'];
-        self::$token = $headers['Authorization'];
+        $token = '';
 
-        return $_SERVER['HTTP_AUTHORIZATION'];
+        if ($headers['Authorization']) {
+            $token = $headers['Authorization'];
+        } else if ($headers['authorization']) {
+            $token = $headers['authorization'];
+        }
+
+        self::$token = $token;
+
+        return $token;
     }
 
     /**
