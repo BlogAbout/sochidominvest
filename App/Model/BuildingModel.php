@@ -537,12 +537,11 @@ class BuildingModel extends Model
         ";
 
         parent::query($sql);
+        $list = parent::fetchAll();
 
-        $images = parent::fetchAll();
-
-        if (!empty($images)) {
-            foreach ($images as $image) {
-                array_push($resultList, BuildingModel::formatImagesToJson($image));
+        if (!empty($list)) {
+            foreach ($list as $item) {
+                array_push($resultList, BuildingModel::formatImagesToJson($item));
             }
         }
 

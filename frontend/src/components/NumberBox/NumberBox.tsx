@@ -43,7 +43,7 @@ const defaultProps: Props = {
     styleType: 'standard',
     showMaxAfterOverflow: true,
     onChange(e: React.ChangeEvent<HTMLInputElement>, value?: string | number, up?: any): void {
-        console.log('NumberBox onChange', e, value, up)
+        console.info('NumberBox onChange', e, value, up)
     }
 }
 

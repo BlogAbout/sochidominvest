@@ -205,6 +205,18 @@ class Model
             array_push($where, "`id_building` IN (" . implode(',', $filter['buildingId']) . ")");
         }
 
+        if (!empty($filter['userId'])) {
+            array_push($where, "`id_user` = " . $filter['userId']);
+        }
+
+        if (!empty($filter['type'])) {
+            array_push($where, "`type` = " . $filter['type']);
+        }
+
+        if (!empty($filter['typeObject'])) {
+            array_push($where, "`type_object` = " . $filter['typeObject']);
+        }
+
         if (count($where)) {
             $sqlWhere = " WHERE " . implode(' AND ', $where);
         }

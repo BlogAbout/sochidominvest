@@ -50,7 +50,7 @@ export const UserActionCreators = {
             }
         } catch (e) {
             dispatch(UserActionCreators.setError('Непредвиденная ошибка загрузки данных'))
-            console.log('Непредвиденная ошибка загрузки данных', e)
+            console.error('Непредвиденная ошибка загрузки данных', e)
         }
     }
 }

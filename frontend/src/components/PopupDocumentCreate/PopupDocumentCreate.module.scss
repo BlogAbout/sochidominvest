@@ -1,0 +1,34 @@
+.PopupDocumentCreate {
+    width: 800px;
+    height: 500px;
+}
+
+.content {
+    padding: 15px 15px 0;
+    height: 393px;
+    overflow: auto;
+
+    .info {
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        padding: 15px 15px 0;
+    }
+}
+
+.field {
+    width: 49%;
+    margin-bottom: 10px;
+    position: relative;
+
+    &.full {
+        width: 100%;
+    }
+}
+
+.field_label {
+    font-size: 14px;
+    color: black;
+    margin-bottom: 3px;
+    display: flex;
+}

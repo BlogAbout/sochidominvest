@@ -3,50 +3,50 @@
 namespace App;
 
 /**
- * FeedbackModel - Эта модель используется в основном FeedbackController, а также другими контроллерами
+ * DocumentModel - Эта модель используется в основном DocumentController, а также другими контроллерами
  */
-class FeedbackModel extends Model
+class DocumentModel extends Model
 {
     /**
-     * Вернет заявку по id
+     * Вернет документ по id
      *
-     * @param int $id Идентификатор заявки
+     * @param int $id Идентификатор документа
      * @return array
      */
-    public static function fetchFeedById(int $id): array
+    public static function fetchDocumentById(int $id): array
     {
         $sql = "
             SELECT *
-            FROM `sdi_feedback`
-            WHERE sdi_feedback.`id` = :id
+            FROM `sdi_document`
+            WHERE sdi_document.`id` = :id
         ";
 
         parent::query($sql);
         parent::bindParams('id', $id);
 
-        $feed = parent::fetch();
+        $document = parent::fetch();
 
-        if (!empty($feed)) {
-            return FeedbackModel::formatDataToJson($feed);
+        if (!empty($document)) {
+            return DocumentModel::formatDataToJson($document);
         }
 
         return [];
     }
 
     /**
-     * Вернет список заявок
+     * Вернет список документов
      *
      * @param array $filter Массив фильтров
      * @return array
      */
-    public static function fetchFeeds(array $filter): array
+    public static function fetchDocuments(array $filter): array
     {
         $resultList = [];
         $sqlWhere = parent::generateFilterQuery($filter);
 
         $sql = "
             SELECT *
-            FROM `sdi_feedback`
+            FROM `sdi_document`
             $sqlWhere
             ORDER BY `id` DESC
         ";
@@ -56,7 +56,7 @@ class FeedbackModel extends Model
 
         if (!empty($list)) {
             foreach ($list as $item) {
-                array_push($resultList, FeedbackModel::formatDataToJson($item));
+                array_push($resultList, DocumentModel::formatDataToJson($item));
             }
         }
 
@@ -64,37 +64,34 @@ class FeedbackModel extends Model
     }
 
     /**
-     * Создание заявки
+     * Создание документа
      *
      * @param array $payload Содержит все поля, которые будут созданы
      * @return array
      */
-    public static function createFeed(array $payload): array
+    public static function createDocument(array $payload): array
     {
         $sql = "
-            INSERT INTO `sdi_feedback`
-                (id_user, author, phone, name, title, type, id_object, type_object, date_created, date_update, active, status)
+            INSERT INTO `sdi_document`
+                (id_user, name, id_object, type_object, type, content, date_created, date_update, active)
             VALUES
-                (:userId, :author, :phone, :name, :title, :type, :objectId, :objectType, :dateCreated, :dateUpdate, :active, :status)
+                (:userId, :name, :objectId, :objectType, :type, :content, :dateCreated, :dateUpdate, :active)
         ";
 
         parent::query($sql);
         parent::bindParams('userId', $payload['userId']);
-        parent::bindParams('author', $payload['author']);
-        parent::bindParams('phone', $payload['phone']);
         parent::bindParams('name', $payload['name']);
-        parent::bindParams('title', $payload['title']);
-        parent::bindParams('type', $payload['type']);
+        parent::bindParams('content', $payload['content']);
         parent::bindParams('objectId', $payload['objectId']);
         parent::bindParams('objectType', $payload['objectType']);
+        parent::bindParams('type', $payload['type']);
         parent::bindParams('dateCreated', $payload['dateCreated']);
         parent::bindParams('dateUpdate', $payload['dateUpdate']);
         parent::bindParams('active', $payload['active']);
-        parent::bindParams('status', $payload['status']);
 
-        $feed = parent::execute();
+        $document = parent::execute();
 
-        if ($feed) {
+        if ($document) {
             $payload['id'] = parent::lastInsertedId();
 
             return array(
@@ -110,43 +107,37 @@ class FeedbackModel extends Model
     }
 
     /**
-     * Обновляет заявку по id
+     * Обновляет документ по id
      *
      * @param array $payload Содержит все поля, которые будут обновлены
      * @return array
      */
-    public static function updateFeed(array $payload): array
+    public static function updateDocument(array $payload): array
     {
         $sql = "
-            UPDATE `sdi_feedback`
+            UPDATE `sdi_document`
             SET
                 id_user = :userId,
-                author = :author,
-                phone = :phone,
                 name = :name,
-                title = :title,
-                type = :type,
                 id_object = :objectId,
                 type_object = :objectType,
+                type = :type,
+                content = :content,
                 date_update = :dateUpdate,
-                active = :active,
-                status = :status
+                active = :active
             WHERE id = :id
         ";
 
         parent::query($sql);
         parent::bindParams('id', $payload['id']);
         parent::bindParams('userId', $payload['userId']);
-        parent::bindParams('author', $payload['author']);
-        parent::bindParams('phone', $payload['phone']);
         parent::bindParams('name', $payload['name']);
-        parent::bindParams('title', $payload['title']);
-        parent::bindParams('type', $payload['type']);
+        parent::bindParams('content', $payload['content']);
         parent::bindParams('objectId', $payload['objectId']);
         parent::bindParams('objectType', $payload['objectType']);
+        parent::bindParams('type', $payload['type']);
         parent::bindParams('dateUpdate', $payload['dateUpdate']);
         parent::bindParams('active', $payload['active']);
-        parent::bindParams('status', $payload['status']);
 
         if (parent::execute()) {
             return array(
@@ -162,14 +153,14 @@ class FeedbackModel extends Model
     }
 
     /**
-     * Удаляет заявку по id (меняет статус активности)
+     * Удаляет документ по id (меняет статус активности)
      *
-     * @param int $id Идентификатор заявки
+     * @param int $id Идентификатор документа
      * @return bool
      */
-    public static function deleteFeed(int $id): bool
+    public static function deleteDocument(int $id): bool
     {
-        $sql = "UPDATE `sdi_feedback` SET active = -1 WHERE id = :id";
+        $sql = "UPDATE `sdi_document` SET active = -1 WHERE id = :id";
 
         parent::query($sql);
         parent::bindParams('id', $id);
@@ -187,17 +178,14 @@ class FeedbackModel extends Model
         return [
             'id' => (int)$data['id'],
             'userId' => $data['id_user'] ? (int)$data['id_user'] : null,
-            'author' => $data['author'] ? (int)$data['author'] : null,
-            'phone' => $data['phone'],
             'name' => $data['name'],
-            'title' => $data['title'],
-            'type' => $data['type'],
             'objectId' => $data['id_object'] ? (int)$data['id_object'] : null,
             'objectType' => $data['type_object'],
+            'type' => $data['type'],
+            'content' => $data['content'],
             'dateCreated' => $data['date_created'],
             'dateUpdate' => $data['date_update'],
-            'active' => (int)$data['active'],
-            'status' => $data['status']
+            'active' => (int)$data['active']
         ];
     }
 }

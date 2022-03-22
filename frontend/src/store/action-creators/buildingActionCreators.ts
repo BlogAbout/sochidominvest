@@ -30,7 +30,7 @@ export const BuildingActionCreators = {
             }
         } catch (e) {
             dispatch(BuildingActionCreators.setError('Непредвиденная ошибка загрузки данных'))
-            console.log('Непредвиденная ошибка загрузки данных', e)
+            console.error('Непредвиденная ошибка загрузки данных', e)
         }
     }
 }

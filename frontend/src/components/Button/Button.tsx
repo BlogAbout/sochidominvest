@@ -22,7 +22,7 @@ const defaultProps: Props = {
     disabled: false,
     notValid: false,
     onClick: (e: React.MouseEvent<HTMLElement>) => {
-        console.log(e)
+        console.info(e)
     }
 }
 

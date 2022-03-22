@@ -103,7 +103,6 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
 
         BuildingService.saveBuilding(building)
             .then((response: any) => {
-                console.log('response', response)
                 setFetching(false)
                 setBuilding(response.data)
 
@@ -114,7 +113,7 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
                 }
             })
             .catch((error: any) => {
-                console.log('error', error)
+                console.error('error', error)
                 openPopupAlert(document.body, {
                     title: 'Ошибка!',
                     text: error.data
@@ -131,7 +130,6 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
 
     // Смена главного изображения
     const selectImageAvatarHandler = (index: number, type: string) => {
-        console.log(index, type)
         const images: IImageDb[] = [...building.images]
         const newImages: IImage[] = [...building.newImages]
 

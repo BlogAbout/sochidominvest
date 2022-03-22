@@ -20,7 +20,7 @@ const defaultProps: Props = {
     margin: '0',
     size: 'S',
     onClick: (e: React.MouseEvent<HTMLElement>) => {
-        console.log(e)
+        console.info(e)
     }
 }
 

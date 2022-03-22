@@ -44,7 +44,7 @@ const TagBox: React.FC<Props> = (props) => {
             updateTagListStore()
                 .then(() => updateSelectedInfo())
                 .catch((error) => {
-                    console.log('Ошибка загрузки тегов в store', error)
+                    console.error('Ошибка загрузки тегов в store', error)
                 })
         } else {
             updateSelectedInfo()

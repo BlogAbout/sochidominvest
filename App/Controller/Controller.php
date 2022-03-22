@@ -139,6 +139,17 @@ class Controller
                 } catch (Exception $e) {
                 }
             }
+
+            if ($payload->validator == 'documentExists') {
+                try {
+                    $checkDocument = DocumentModel::fetchDocumentById((int)$payload->data);
+
+                    if (!$checkDocument['id']) {
+                        array_push($response, "Документ с таким идентификатором не найден в базе данных.");
+                    }
+                } catch (Exception $e) {
+                }
+            }
         }
 
         $validationErrors = new \stdClass();

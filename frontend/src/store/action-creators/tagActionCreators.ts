@@ -29,7 +29,7 @@ export const TagActionCreators = {
             }
         } catch (e) {
             dispatch(TagActionCreators.setError('Непредвиденная ошибка загрузки данных'))
-            console.log('Непредвиденная ошибка загрузки данных', e)
+            console.error('Непредвиденная ошибка загрузки данных', e)
         }
     }
 }
