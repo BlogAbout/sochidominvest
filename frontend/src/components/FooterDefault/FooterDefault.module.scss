@@ -24,3 +24,40 @@
         }
     }
 }
+
+@media (max-width: 1200px) {
+    .Footer {
+        .container {
+            padding: 0 10px;
+        }
+    }
+}
+
+@media (max-width: 768px) {
+    .Footer {
+        .container {
+            flex-wrap: wrap;
+
+            p {
+                width: 50%;
+                margin-bottom: 20px;
+            }
+        }
+    }
+}
+
+@media (max-width: 480px) {
+    .Footer {
+        .container {
+            flex-wrap: wrap;
+
+            p {
+                width: 100%;
+
+                &:last-child {
+                    margin-bottom: 0;
+                }
+            }
+        }
+    }
+}

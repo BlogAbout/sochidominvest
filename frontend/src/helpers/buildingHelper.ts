@@ -12,11 +12,10 @@ export const buildingStatuses: ISelector[] = [
  * Список типов объектов недвижимости
  */
 export const buildingTypes: ISelector[] = [
-    {key: 'new_building', text: 'Новостройка'},
-    {key: 'secondary', text: 'Вторичная'},
-    {key: 'land_plot', text: 'Земля/участок'},
-    {key: 'commercial', text: 'Коммерческая'},
-    {key: 'rent', text: 'Аренда'}
+    {key: 'building', text: 'Жилой комплекс'},
+    {key: 'apartment', text: 'Квартира'},
+    {key: 'land', text: 'Участок'},
+    {key: 'commerce', text: 'Коммерция'}
 ]
 
 /**
@@ -34,7 +33,8 @@ export const buildingClasses: ISelector[] = [
 export const buildingMaterials: ISelector[] = [
     {key: 'monolith', text: 'Монолитный'},
     {key: 'monolith-frame', text: 'Монолит-каркас'},
-    {key: 'monolith-brick', text: 'Монолитно-кирпичный'}
+    {key: 'monolith-brick', text: 'Монолитно-кирпичный'},
+    {key: 'monolith-block', text: 'Монолитно-блочный'}
 ]
 
 /**

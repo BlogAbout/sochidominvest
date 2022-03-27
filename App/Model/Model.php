@@ -210,11 +210,15 @@ class Model
         }
 
         if (!empty($filter['type'])) {
-            array_push($where, "`type` = " . $filter['type']);
+            array_push($where, "`type` = '" . $filter['type'] . "'");
         }
 
         if (!empty($filter['typeObject'])) {
-            array_push($where, "`type_object` = " . $filter['typeObject']);
+            array_push($where, "`type_object` = '" . $filter['typeObject'] . "'");
+        }
+
+        if (!empty($filter['objectId'])) {
+            array_push($where, "`id_object` = " . $filter['objectId']);
         }
 
         if (count($where)) {

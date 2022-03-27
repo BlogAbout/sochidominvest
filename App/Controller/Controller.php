@@ -196,6 +196,14 @@ class Controller
             if (!empty($params['publish'])) {
                 $filter['publish'] = $params['publish'];
             }
+
+            if (!empty($params['objectId'])) {
+                $filter['objectId'] = $params['objectId'];
+            }
+
+            if (!empty($params['typeObject'])) {
+                $filter['typeObject'] = $params['typeObject'];
+            }
         }
 
         return $filter;

@@ -1,5 +1,6 @@
 .AboutPagePublic {
     position: relative;
+    flex-grow: 1;
 }
 
 .Content {
@@ -29,5 +30,11 @@
             background: #fff;
             padding: 30px;
         }
+    }
+}
+
+@media (max-width: 1200px) {
+    .container {
+        padding: 0 10px;
     }
 }

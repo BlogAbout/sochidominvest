@@ -1,5 +1,6 @@
 .BuildingItemPagePublic {
     position: relative;
+    flex-grow: 1;
 
     .Content {
         padding: 40px 0 0;
@@ -180,6 +181,60 @@
                         .param {
                             width: 70%;
                             text-align: right;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 1200px) {
+    .BuildingItemPagePublic {
+        .Content {
+            .container {
+                padding: 0 10px;
+            }
+        }
+    }
+}
+
+@media (max-width: 768px) {
+    .BuildingItemPagePublic {
+        .Content {
+            .information {
+                .block {
+                    padding: 10px;
+
+                    .mainInfo {
+                        flex-wrap: wrap;
+
+                        .col {
+                            width: 100%;
+                        }
+                    }
+                }
+
+                .block {
+                    .col {
+                        width: 100%;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 400px) {
+    .BuildingItemPagePublic {
+        .Content {
+            .information {
+                .block {
+                    .mainInfo {
+                        .col {
+                            .row {
+                                width: 100%;
+                            }
                         }
                     }
                 }

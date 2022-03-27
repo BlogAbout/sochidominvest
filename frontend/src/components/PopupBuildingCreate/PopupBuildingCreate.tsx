@@ -20,6 +20,7 @@ import TagBox from '../TagBox/TagBox'
 import Empty from '../Empty/Empty'
 import CheckerList from './components/CheckerList/CheckerList'
 import DeveloperList from './components/DeveloperList/DeveloperList'
+import DocumentList from './components/DocumentList/DocumentList'
 import UserList from './components/UserList/UserList'
 import ImageUploader from '../ImageUploader/ImageUploader'
 import SelectorBox from '../SelectorBox/SelectorBox'
@@ -39,7 +40,6 @@ import {
     buildingSewerage,
     buildingStatuses,
     buildingTerritory,
-    buildingTypes,
     buildingWaterSupply,
     formalizationList,
     paymentsList
@@ -48,12 +48,14 @@ import classes from './PopupBuildingCreate.module.scss'
 
 interface Props extends PopupProps {
     building?: IBuilding | null
+    type?: 'building' | 'apartment' | 'land' | 'commerce'
 
     onSave(): void
 }
 
 const defaultProps: Props = {
     building: null,
+    type: 'building',
     onSave: () => {
         console.info('PopupBuildingCreate onSave')
     }
@@ -66,7 +68,7 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
         id: null,
         name: '',
         address: '',
-        type: 'new_building',
+        type: props.type || 'building',
         status: 'sold',
         active: 1,
         author: 0,
@@ -77,7 +79,9 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
         images: [],
         newImages: [],
         surchargeDoc: 0,
-        surchargeGas: 0
+        surchargeGas: 0,
+        area: 0,
+        cost: 0
     })
 
     const [fetching, setFetching] = useState(false)
@@ -136,20 +140,16 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
         if (type === 'selected') {
             newImages.map((image: IImage) => image.avatar = 0)
             images.map((image: IImageDb, imageIndex: number) => {
-                if (index === imageIndex) {
-                    image.avatar = 1
-                } else {
-                    image.avatar = 0
-                }
+                image.avatar = index === imageIndex ? 1 : 0
+
+                return image
             })
         } else if (type === 'upload') {
             images.map((image: IImageDb) => image.avatar = 0)
             newImages.map((image: IImage, imageIndex: number) => {
-                if (index === imageIndex) {
-                    image.avatar = 1
-                } else {
-                    image.avatar = 0
-                }
+                image.avatar = index === imageIndex ? 1 : 0
+
+                return image
             })
         }
 
@@ -251,6 +251,41 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
     const renderInformationTab = () => {
         return (
             <div key='info' className={classes.tabContent}>
+                {building.type !== 'building' ?
+                    <>
+                        <div className={classes.field}>
+                            <div className={classes.field_label}>Площадь, м<sup>2</sup></div>
+
+                            <NumberBox value={building.area || 0}
+                                       min={0}
+                                       step={1}
+                                       max={999999999}
+                                       onChange={(e: React.ChangeEvent<HTMLInputElement>, value: number) => setBuilding({
+                                           ...building,
+                                           area: value
+                                       })}
+                                       placeHolder='Введите площадь'
+                            />
+                        </div>
+
+                        <div className={classes.field}>
+                            <div className={classes.field_label}>Стоимость, руб.</div>
+
+                            <NumberBox value={building.cost || 0}
+                                       min={0}
+                                       step={1}
+                                       max={999999999}
+                                       onChange={(e: React.ChangeEvent<HTMLInputElement>, value: number) => setBuilding({
+                                           ...building,
+                                           cost: value
+                                       })}
+                                       placeHolder='Введите стоимость'
+                            />
+                        </div>
+                    </>
+                    : null
+                }
+
                 <div className={classes.field}>
                     <div className={classes.field_label}>Особенности</div>
 
@@ -304,18 +339,6 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
                                  title='Выберите варианты оформления покупки'
                                  placeHolder='Выберите варианты оформления покупки'
                                  multi
-                    />
-                </div>
-
-                <div className={classes.field}>
-                    <div className={classes.field_label}>Тип</div>
-
-                    <ComboBox selected={building.type}
-                              items={Object.values(buildingTypes)}
-                              onSelect={(value: string) => setBuilding({...building, type: value})}
-                              placeHolder='Выберите тип'
-                              styleType='standard'
-                              icon='user-check'
                     />
                 </div>
 
@@ -496,8 +519,14 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
 
     // Вкладка документов объекта
     const renderDocumentTab = () => {
-        // Todo
-        return 'В разработке'
+        return (
+            <div key='document' className={classes.tabContent}>
+                {building.id ?
+                    <DocumentList buildingId={building.id}/>
+                    : <Empty message='Для получения доступа к документам сохраните изменения'/>
+                }
+            </div>
+        )
     }
 
     const tabs: ITab = {
@@ -508,6 +537,10 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
         developer: {title: 'Застройщик', render: renderDeveloperTab()},
         contact: {title: 'Контакты', render: renderContactTab()},
         documents: {title: 'Документы', render: renderDocumentTab()}
+    }
+
+    if (building.type !== 'building') {
+        delete tabs.checker
     }
 
     return (
@@ -572,20 +605,20 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
             </Content>
 
             <Footer>
-                <Button type="save"
+                <Button type='save'
                         icon='check-double'
                         onClick={() => saveHandler(true)}
                         disabled={fetching || building.name.trim() === '' || !building.address || building.address.trim() === ''}
                 >Сохранить и закрыть</Button>
 
-                <Button type="apply"
+                <Button type='apply'
                         icon='check'
                         onClick={() => saveHandler()}
                         disabled={fetching || building.name.trim() === '' || !building.address || building.address.trim() === ''}
                         className='marginLeft'
                 >Сохранить</Button>
 
-                <Button type="regular"
+                <Button type='regular'
                         icon='arrow-rotate-left'
                         onClick={close.bind(this)}
                         className='marginLeft'

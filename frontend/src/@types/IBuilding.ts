@@ -5,7 +5,7 @@ export interface IBuilding {
     name: string
     description?: string
     address: string | null
-    type: string | null
+    type: 'building' | 'apartment' | 'land' | 'commerce'
     status: string | null
     active: number
     publish: number
@@ -16,6 +16,8 @@ export interface IBuilding {
     areaMax?: number | null
     costMin?: number | null
     costMinUnit?: number | null
+    area?: number | null
+    cost?: number | null
     countCheckers?: number | null
     tags: number[]
     contacts: number[]

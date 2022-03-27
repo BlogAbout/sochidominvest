@@ -13,8 +13,6 @@ import {ITag} from '../../../@types/ITag'
 import Empty from '../../../components/Empty/Empty'
 import BlockingElement from '../../../components/BlockingElement/BlockingElement'
 import ImageCarousel from '../../../components/ImageCarousel/ImageCarousel'
-import HeaderDefault from '../../../components/HeaderDefault/HeaderDefault'
-import FooterDefault from '../../../components/FooterDefault/FooterDefault'
 import {
     amountContract,
     buildingAdvantages,
@@ -69,7 +67,7 @@ const BuildingItemPagePublic: React.FC = (props) => {
                 setBuilding(buildingInfo)
             }
         }
-    }, [buildings])
+    }, [buildings, params.id])
 
     useEffect(() => {
         if (building.id) {
@@ -135,24 +133,54 @@ const BuildingItemPagePublic: React.FC = (props) => {
                         <div className={classes.address}>{building.address}</div>
 
                         <div className={classes.info}>
+                            {building.type === 'building' ?
+                                <div className={classes.row}>
+                                    <span>{building.countCheckers || 0}</span>
+                                    <span>{declension(building.countCheckers || 0, ['квартира', 'квартиры', 'квартир'], true)}</span>
+                                </div>
+                                : null
+                            }
+
                             <div className={classes.row}>
-                                <span>{building.countCheckers || 0}</span>
-                                <span>{declension(building.countCheckers || 0, ['квартира', 'квартиры', 'квартир'], true)}</span>
+                                {building.type === 'building' ?
+                                    <>
+                                        <span>{numberWithSpaces(round(building.costMinUnit || 0, 0))} руб.</span>
+                                        <span>Мин. цена за м<sup>2</sup></span>
+                                    </>
+                                    :
+                                    <>
+                                        <span>{numberWithSpaces(round(building.area && building.cost ? building.cost / building.area : 0, 0))} руб.</span>
+                                        <span>Цена за м<sup>2</sup></span>
+                                    </>
+                                }
                             </div>
 
                             <div className={classes.row}>
-                                <span>{numberWithSpaces(round(building.costMinUnit || 0, 0))} руб.</span>
-                                <span>Мин. цена за м<sup>2</sup></span>
+                                {building.type === 'building' ?
+                                    <>
+                                        <span>{numberWithSpaces(round(building.costMin || 0, 0))} руб.</span>
+                                        <span>Мин. цена</span>
+                                    </>
+                                    :
+                                    <>
+                                        <span>{numberWithSpaces(round(building.cost || 0, 0))} руб.</span>
+                                        <span>Цена</span>
+                                    </>
+                                }
                             </div>
 
                             <div className={classes.row}>
-                                <span>{numberWithSpaces(round(building.costMin || 0, 0))} руб.</span>
-                                <span>Мин. цена</span>
-                            </div>
-
-                            <div className={classes.row}>
-                                <span>{building.areaMin || 0} - {building.areaMax || 0}</span>
-                                <span>Площади, м<sup>2</sup></span>
+                                {building.type === 'building' ?
+                                    <>
+                                        <span>{building.areaMin || 0} - {building.areaMax || 0}</span>
+                                        <span>Площади, м<sup>2</sup></span>
+                                    </>
+                                    :
+                                    <>
+                                        <span>{building.area || 0}</span>
+                                        <span>Площадь, м<sup>2</sup></span>
+                                    </>
+                                }
                             </div>
                         </div>
                     </div>
@@ -181,28 +209,8 @@ const BuildingItemPagePublic: React.FC = (props) => {
         const contract = amountContract.find(item => item.key === building.amountContract)
         const type = buildingTypes.find(item => item.key === building.type)
 
-        const payments: string[] = []
-        const formalizations: string[] = []
-
-        if (building.payments && building.payments.length) {
-            building.payments.map((payment: string) => {
-                const paymentInfo = paymentsList.find((item: ISelector) => item.key === payment)
-
-                if (paymentInfo) {
-                    payments.push(paymentInfo.text)
-                }
-            })
-        }
-
-        if (building.formalization && building.formalization.length) {
-            building.formalization.map((formalization: string) => {
-                const formalizationInfo = formalizationList.find((item: ISelector) => item.key === formalization)
-
-                if (formalizationInfo) {
-                    formalizations.push(formalizationInfo.text)
-                }
-            })
-        }
+        let payments: string[] = paymentsList.filter((item: ISelector) => building.payments?.includes(item.key)).map((item: ISelector) => item.text)
+        let formalizations: string[] = formalizationList.filter((item: ISelector) => building.formalization?.includes(item.key)).map((item: ISelector) => item.text)
 
         return (
             <BlockingElement fetching={fetching} className={classes.block}>
@@ -265,56 +273,79 @@ const BuildingItemPagePublic: React.FC = (props) => {
                     <div className={classes.col}>
                         <h2>Коммуникации</h2>
 
-                        {gas && <div className={classes.row}>
-                            <div className={classes.label}>Газ:</div>
-                            <div className={classes.param}>{gas.text}</div>
-                        </div>}
+                        {gas ?
+                            <div className={classes.row}>
+                                <div className={classes.label}>Газ:</div>
+                                <div className={classes.param}>{gas.text}</div>
+                            </div>
+                            : null
+                        }
 
-                        {heating && <div className={classes.row}>
-                            <div className={classes.label}>Отопление:</div>
-                            <div className={classes.param}>{heating.text}</div>
-                        </div>}
+                        {heating ?
+                            <div className={classes.row}>
+                                <div className={classes.label}>Отопление:</div>
+                                <div className={classes.param}>{heating.text}</div>
+                            </div>
+                            : null
+                        }
 
-                        {electricity && <div className={classes.row}>
-                            <div className={classes.label}>Электричество:</div>
-                            <div className={classes.param}>{electricity.text}</div>
-                        </div>}
+                        {electricity ?
+                            <div className={classes.row}>
+                                <div className={classes.label}>Электричество:</div>
+                                <div className={classes.param}>{electricity.text}</div>
+                            </div>
+                            : null
+                        }
 
-                        {sewerage && <div className={classes.row}>
-                            <div className={classes.label}>Канализация:</div>
-                            <div className={classes.param}>{sewerage.text}</div>
-                        </div>}
+                        {sewerage ?
+                            <div className={classes.row}>
+                                <div className={classes.label}>Канализация:</div>
+                                <div className={classes.param}>{sewerage.text}</div>
+                            </div>
+                            : null
+                        }
 
-                        {waterSupply && <div className={classes.row}>
-                            <div className={classes.label}>Водоснабжение:</div>
-                            <div className={classes.param}>{waterSupply.text}</div>
-                        </div>}
+                        {waterSupply ?
+                            <div className={classes.row}>
+                                <div className={classes.label}>Водоснабжение:</div>
+                                <div className={classes.param}>{waterSupply.text}</div>
+                            </div>
+                            : null
+                        }
                     </div>
 
                     <div className={classes.col}>
                         <h2>Оформление</h2>
 
-                        {payments.length &&
-                        <div className={classes.row}>
-                            <div className={classes.label}>Варианты оформления:</div>
-                            <div className={classes.param}>{payments.join(', ')}</div>
-                        </div>
+                        {payments.length ?
+                            <div className={classes.row}>
+                                <div className={classes.label}>Варианты оформления:</div>
+                                <div className={classes.param}>{payments.join(', ')}</div>
+                            </div>
+                            : null
                         }
 
-                        {type && <div className={classes.row}>
-                            <div className={classes.label}>Тип недвижимости:</div>
-                            <div className={classes.param}>{type.text}</div>
-                        </div>}
+                        {type ?
+                            <div className={classes.row}>
+                                <div className={classes.label}>Тип недвижимости:</div>
+                                <div className={classes.param}>{type.text}</div>
+                            </div>
+                            : null
+                        }
 
-                        {contract && <div className={classes.row}>
-                            <div className={classes.label}>Сумма в договоре:</div>
-                            <div className={classes.param}>{contract.text}</div>
-                        </div>}
+                        {contract ?
+                            <div className={classes.row}>
+                                <div className={classes.label}>Сумма в договоре:</div>
+                                <div className={classes.param}>{contract.text}</div>
+                            </div>
+                            : null
+                        }
 
                         <div className={classes.row}>
                             <div className={classes.label}>Продажа для нерезидентов России:</div>
-                            <div
-                                className={classes.param}>{!!building.saleNoResident ? 'Доступно' : 'Не доступно'}</div>
+                            <div className={classes.param}>
+                                {!!building.saleNoResident ? 'Доступно' : 'Не доступно'}
+                            </div>
                         </div>
                     </div>
 
@@ -335,9 +366,25 @@ const BuildingItemPagePublic: React.FC = (props) => {
             return null
         }
 
+        let titleAbout = ''
+        switch (building.type) {
+            case 'building':
+                titleAbout = 'О жилом комплексе'
+                break
+            case 'apartment':
+                titleAbout = 'О квартире'
+                break
+            case 'land':
+                titleAbout = 'Об участке'
+                break
+            case 'commerce':
+                titleAbout = 'О коммерции'
+                break
+        }
+
         return (
             <BlockingElement fetching={fetching} className={classes.block}>
-                <h2>О ЖК</h2>
+                <h2>{titleAbout}</h2>
 
                 <div className={classes.text}>
                     {building.description}
@@ -384,7 +431,7 @@ const BuildingItemPagePublic: React.FC = (props) => {
         const housingIds: number[] = Array.from(new Set(checkers.map((checker: IBuildingChecker) => checker.housing)))
         const housingList: IBuildingHousing = {} as IBuildingHousing
 
-        housingIds.map((housingId: number) => {
+        housingIds.forEach((housingId: number) => {
             housingList[housingId] = checkers.filter((checker: IBuildingChecker) => checker.housing === housingId)
         })
 
@@ -396,7 +443,7 @@ const BuildingItemPagePublic: React.FC = (props) => {
                     let minCost = 0
                     let minCostUnit = 0
 
-                    housingList[parseInt(key)].map((checker: IBuildingChecker) => {
+                    housingList[parseInt(key)].forEach((checker: IBuildingChecker) => {
                         const cost = checker.cost && checker.cost ? checker.cost : 0
                         const costUnit = checker.cost && checker.area ? checker.cost / checker.area : 0
 
@@ -427,8 +474,6 @@ const BuildingItemPagePublic: React.FC = (props) => {
     return (
         <div className={classes.BuildingItemPagePublic}>
             <div className={classes.Content}>
-                <HeaderDefault/>
-
                 <div className={classes.container}>
                     {!building || !building.id ?
                         <Empty message='Объект недвижимости не найден'/>
@@ -439,12 +484,10 @@ const BuildingItemPagePublic: React.FC = (props) => {
                             {renderDescription()}
                             {renderAdvantages()}
                             {renderAdvanced()}
-                            {renderHousing()}
+                            {building.type === 'building' ? renderHousing() : null}
                         </div>
                     }
                 </div>
-
-                <FooterDefault/>
             </div>
         </div>
     )

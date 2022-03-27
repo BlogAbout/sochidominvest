@@ -9,7 +9,6 @@ const FooterDefault: React.FC = () => {
             <div className={classes.container}>
                 <p>ИНН 123456789</p>
                 <p>ОГРН 123456789</p>
-                <p><Link to={RouteNames.PUBLIC_ABOUT}>О компании</Link></p>
                 <p><Link to={RouteNames.PUBLIC_POLICY}>Политика конфиденциальности</Link></p>
                 <p>2022. Все права защищены</p>
             </div>

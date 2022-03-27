@@ -119,20 +119,29 @@
         padding: 20px;
         border-left: 1px solid #075ea5;
 
+        .type {
+            background: #075ea5;
+            padding: 3px 6px;
+            display: inline-block;
+            font-size: 14px;
+            margin-bottom: 10px;
+            color: #fff;
+        }
+
         .counter {
             font-weight: 700;
             font-size: 16px;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
         }
 
         .cost {
             font-size: 20px;
             font-weight: 700;
-            margin-bottom: 10px;
+            margin-bottom: 5px;
         }
 
         .costPer {
-            margin-bottom: 30px;
+            margin-bottom: 25px;
         }
 
         .area {

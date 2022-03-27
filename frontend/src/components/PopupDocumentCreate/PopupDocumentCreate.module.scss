@@ -1,11 +1,10 @@
 .PopupDocumentCreate {
-    width: 800px;
-    height: 500px;
+    width: 400px;
+    height: 350px;
 }
 
 .content {
     padding: 15px 15px 0;
-    height: 393px;
     overflow: auto;
 
     .info {
@@ -17,13 +16,9 @@
 }
 
 .field {
-    width: 49%;
+    width: 100%;
     margin-bottom: 10px;
     position: relative;
-
-    &.full {
-        width: 100%;
-    }
 }
 
 .field_label {

@@ -1,14 +1,10 @@
 import React from 'react'
-import HeaderDefault from '../../../components/HeaderDefault/HeaderDefault'
-import FooterDefault from '../../../components/FooterDefault/FooterDefault'
 import classes from './AboutPagePublic.module.scss'
 
 const AboutPagePublic: React.FC = () => {
     return (
-        <main className={classes.BuildingListPage}>
+        <main className={classes.AboutPagePublic}>
             <div className={classes.Content}>
-                <HeaderDefault/>
-
                 <div className={classes.container}>
                     <div className={classes.block}>
                         <h1>
@@ -25,8 +21,6 @@ const AboutPagePublic: React.FC = () => {
                             недвижимости.</p>
                     </div>
                 </div>
-
-                <FooterDefault/>
             </div>
         </main>
     )

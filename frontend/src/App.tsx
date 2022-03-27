@@ -52,7 +52,7 @@ import {
     faQuestion,
     faCircleQuestion,
     faXmark,
-    faChevronDown, faCity
+    faChevronDown, faCity, faPaperclip
 } from '@fortawesome/free-solid-svg-icons'
 
 library.add(
@@ -106,7 +106,8 @@ library.add(
     faCircleQuestion,
     faXmark,
     faChevronDown,
-    faCity
+    faCity,
+    faPaperclip
 )
 
 function App() {

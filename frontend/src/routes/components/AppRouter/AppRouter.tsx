@@ -22,6 +22,8 @@ import CompilationPage from '../../../views/CompilationPage/CompilationPage'
 import Navigation from '../../../components/Navigation/Navigation'
 import SidebarLeft from '../../../components/SidebarLeft/SidebarLeft'
 import SidebarRight from '../../../components/SidebarRight/SidebarRight'
+import HeaderDefault from '../../../components/HeaderDefault/HeaderDefault'
+import FooterDefault from '../../../components/FooterDefault/FooterDefault'
 import classes from './AppRouter.module.scss'
 
 const AppRouter: React.FC = () => {
@@ -31,6 +33,8 @@ const AppRouter: React.FC = () => {
         <div className={classes.AppRouter}>
             {!isAuth ?
                 <div className={classes.container}>
+                    <HeaderDefault/>
+
                     <Routes>
                         <Route path={RouteNames.MAIN} element={<Main/>}/>
                         <Route path={RouteNames.PUBLIC_POLICY} element={<Policy/>}/>
@@ -38,6 +42,8 @@ const AppRouter: React.FC = () => {
                         <Route path={RouteNames.PUBLIC_BUILDING} element={<BuildingListPage/>}/>
                         <Route path={RouteNames.PUBLIC_ABOUT} element={<AboutPagePublic/>}/>
                     </Routes>
+
+                    <FooterDefault/>
                 </div>
                 :
                 <div className={classes.container}>

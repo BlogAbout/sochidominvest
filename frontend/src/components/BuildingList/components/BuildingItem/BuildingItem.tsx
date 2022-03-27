@@ -3,7 +3,7 @@ import classNames from 'classnames/bind'
 import {useNavigate} from 'react-router-dom'
 import {declension} from '../../../../helpers/stringHelper'
 import {numberWithSpaces, round} from '../../../../helpers/numberHelper'
-import {formalizationList, paymentsList} from '../../../../helpers/buildingHelper'
+import {buildingTypes, formalizationList, paymentsList} from '../../../../helpers/buildingHelper'
 import BuildingService from '../../../../api/BuildingService'
 import {IBuilding} from '../../../../@types/IBuilding'
 import {ISelector} from '../../../../@types/ISelector'
@@ -91,6 +91,8 @@ const BuildingItem: React.FC<Props> = (props) => {
         openContextMenu(e, menuItems)
     }
 
+    const buildingType = buildingTypes.find((item: ISelector) => item.key === props.building.type)
+
     return (
         <div className={classes.BuildingItem}
              onClick={() => navigate('/panel/building/' + props.building.id)}
@@ -155,17 +157,34 @@ const BuildingItem: React.FC<Props> = (props) => {
             </div>
 
             <div className={classes.itemInfo}>
-                <div className={classes.counter}>
-                    {declension(props.building.countCheckers || 0, ['квартира', 'квартиры', 'квартир'], false)}
+                {buildingType && <div className={classes.type}>{buildingType.text}</div>}
+
+                {props.building.type === 'building' ?
+                    <div className={classes.counter}>
+                        {declension(props.building.countCheckers || 0, ['квартира', 'квартиры', 'квартир'], false)}
+                    </div>
+                    : null
+                }
+
+                <div className={classes.cost}>
+                    {props.building.type === 'building'
+                        ? `От ${numberWithSpaces(round(props.building.costMin || 0, 0))} руб.`
+                        : `${numberWithSpaces(round(props.building.cost || 0, 0))} руб.`
+                    }
                 </div>
 
-                <div className={classes.cost}>От {numberWithSpaces(round(props.building.costMin || 0, 0))} руб.</div>
-
-                <div className={classes.costPer}>{numberWithSpaces(round(props.building.costMinUnit || 0, 0))} руб. за м<sup>2</sup>
+                <div className={classes.costPer}>
+                    {props.building.type === 'building'
+                        ? numberWithSpaces(round(props.building.costMinUnit || 0, 0))
+                        : numberWithSpaces(round(props.building.cost && props.building.area ? props.building.cost / props.building.area : 0, 0))
+                    } руб. за м<sup>2</sup>
                 </div>
 
                 <div className={classes.area}>
-                    {props.building.areaMin || 0} м<sup>2</sup> - {props.building.areaMax || 0} м<sup>2</sup>
+                    {props.building.type === 'building'
+                        ? (props.building.areaMin || 0) + ' - ' + (props.building.areaMax || 0)
+                        : props.building.area || 0
+                    } м<sup>2</sup>
                 </div>
             </div>
         </div>

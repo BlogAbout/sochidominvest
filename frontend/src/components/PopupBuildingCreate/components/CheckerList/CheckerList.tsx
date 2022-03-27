@@ -89,7 +89,6 @@ const CheckerList: React.FC<Props> = (props) => {
 
                             CheckerService.removeChecker(checker.id)
                                 .then(() => {
-                                    setFetching(false)
                                     onSave()
                                 })
                                 .catch((error: any) => {
@@ -97,7 +96,8 @@ const CheckerList: React.FC<Props> = (props) => {
                                         title: 'Ошибка!',
                                         text: error.data
                                     })
-
+                                })
+                                .finally(() => {
                                     setFetching(false)
                                 })
                         }

@@ -152,9 +152,9 @@ class BuildingModel extends Model
     {
         $sql = "
             INSERT INTO `sdi_building`
-                (name, description, address, date_created, date_update, active, publish, status, type)
+                (name, description, address, date_created, date_update, active, publish, status, type, area, cost)
             VALUES
-                (:name, :description, :address, :dateCreated, :dateUpdate, :active, :publish, :status, :type)
+                (:name, :description, :address, :dateCreated, :dateUpdate, :active, :publish, :status, :type, :area, :cost)
         ";
 
         parent::query($sql);
@@ -167,6 +167,8 @@ class BuildingModel extends Model
         parent::bindParams('publish', $payload['publish']);
         parent::bindParams('status', $payload['status']);
         parent::bindParams('type', $payload['type']);
+        parent::bindParams('area', $payload['area']);
+        parent::bindParams('cost', $payload['cost']);
 
         $building = parent::execute();
 
@@ -209,7 +211,9 @@ class BuildingModel extends Model
                 active = :active,
                 publish = :publish,
                 status = :status,
-                type = :type
+                type = :type,
+                area = :area,
+                cost = :cost
             WHERE id = :id
         ";
 
@@ -223,6 +227,8 @@ class BuildingModel extends Model
         parent::bindParams('publish', $payload['publish']);
         parent::bindParams('status', $payload['status']);
         parent::bindParams('type', $payload['type']);
+        parent::bindParams('area', $payload['area']);
+        parent::bindParams('cost', $payload['cost']);
 
         if (parent::execute()) {
             BuildingModel::updateBuildingData($payload, true);
@@ -598,7 +604,9 @@ class BuildingModel extends Model
             'contacts' => array_map('intval', $data['contacts'] ? explode(',', $data['contacts']) : []),
             'developers' => array_map('intval', $data['developers'] ? explode(',', $data['developers']) : []),
             'images' => [],
-            'newImages' => []
+            'newImages' => [],
+            'area' => (float)$data['area'],
+            'cost' => (float)$data['cost']
         ];
     }
 

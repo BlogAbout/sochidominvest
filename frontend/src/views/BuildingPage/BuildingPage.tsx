@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react'
 import Button from '../../components/Button/Button'
 import openPopupBuildingCreate from '../../components/PopupBuildingCreate/PopupBuildingCreate'
+import openContextMenu from '../../components/ContextMenu/ContextMenu'
 import BuildingList from '../../components/BuildingList/BuildingList'
 import {useTypedSelector} from '../../hooks/useTypedSelector'
 import {useActions} from '../../hooks/useActions'
@@ -25,10 +26,25 @@ const BuildingPage: React.FC = () => {
         setIsUpdate(true)
     }
 
-    const onClickAddHandler = () => {
+    const addHandler = (type: 'building' | 'apartment' | 'land' | 'commerce') => {
         openPopupBuildingCreate(document.body, {
+            type: type,
             onSave: () => onSave()
         })
+    }
+
+    // Меню выбора создания объекта
+    const onContextMenu = (e: React.MouseEvent) => {
+        e.preventDefault()
+
+        const menuItems = [
+            {text: 'Жилой комплекс', onClick: () => addHandler('building')},
+            {text: 'Квартиру', onClick: () => addHandler('apartment')},
+            {text: 'Участок', onClick: () => addHandler('land')},
+            {text: 'Коммерцию', onClick: () => addHandler('commerce')}
+        ]
+
+        openContextMenu(e, menuItems)
     }
 
     return (
@@ -46,7 +62,7 @@ const BuildingPage: React.FC = () => {
             <div className={classes.Content}>
                 <h1>
                     <span>Недвижимость</span>
-                    <Button type='apply' icon='plus' onClick={onClickAddHandler.bind(this)}>Добавить</Button>
+                    <Button type='apply' icon='plus' onClick={onContextMenu.bind(this)}>Добавить</Button>
                 </h1>
 
                 <BuildingList buildings={buildings} fetching={fetching} onSave={onSave.bind(this)}/>

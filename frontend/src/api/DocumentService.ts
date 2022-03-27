@@ -23,4 +23,16 @@ export default class DocumentService {
     static async removeDocument(documentId: number): Promise<AxiosResponse> {
         return API.delete(`/document/${documentId}`)
     }
+
+    static async uploadDocument(file: any, onUploadProgress: any): Promise<AxiosResponse> {
+        let formData = new FormData()
+        formData.append('file', file)
+
+        return API.post('/document-upload', formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+            onUploadProgress
+        })
+    }
 }

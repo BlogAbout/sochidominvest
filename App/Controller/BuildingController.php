@@ -99,7 +99,9 @@ class BuildingController extends Controller
             'contacts' => $data->contacts,
             'developers' => $data->developers,
             'images' => $data->images,
-            'newImages' => $data->newImages
+            'newImages' => $data->newImages,
+            'area' => (float)htmlentities(stripcslashes(strip_tags($data->area))),
+            'cost' => (float)htmlentities(stripcslashes(strip_tags($data->cost)))
         );
 
         try {
@@ -209,7 +211,9 @@ class BuildingController extends Controller
             'contacts' => $data->contacts,
             'developers' => $data->developers,
             'images' => $data->images,
-            'newImages' => $data->newImages
+            'newImages' => $data->newImages,
+            'area' => (float)htmlentities(stripcslashes(strip_tags($data->area))),
+            'cost' => (float)htmlentities(stripcslashes(strip_tags($data->cost)))
         );
 
         try {

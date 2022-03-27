@@ -10,18 +10,21 @@ import BlockingElement from '../BlockingElement/BlockingElement'
 import TextBox from '../TextBox/TextBox'
 import Button from '../Button/Button'
 import CheckBox from '../CheckBox/CheckBox'
+import FileUploader from '../FileUploader/FileUploader'
 import classes from './PopupDocumentCreate.module.scss'
 
 interface Props extends PopupProps {
     document?: IDocument | null
+    objectId?: number
+    objectType?: string
 
-    onSave(): void
+    onSave(document: IDocument): void
 }
 
 const defaultProps: Props = {
     document: null,
-    onSave: () => {
-        console.info('PopupDocumentCreate onSave')
+    onSave: (document: IDocument) => {
+        console.info('PopupDocumentCreate onSave', document)
     }
 }
 
@@ -29,8 +32,8 @@ const PopupDocumentCreate: React.FC<Props> = (props) => {
     const [documentInfo, setDocumentInfo] = useState<IDocument>(props.document || {
         id: null,
         name: '',
-        objectId: null,
-        objectType: null,
+        objectId: props.objectId || null,
+        objectType: props.objectType || null,
         type: '',
         content: '',
         active: 1
@@ -58,7 +61,7 @@ const PopupDocumentCreate: React.FC<Props> = (props) => {
                 setFetching(false)
                 setDocumentInfo(response.data)
 
-                props.onSave()
+                props.onSave(response.data)
                 close()
             })
             .catch((error: any) => {
@@ -71,6 +74,10 @@ const PopupDocumentCreate: React.FC<Props> = (props) => {
             })
     }
 
+    const changeUploadFile = (document: IDocument) => {
+        setDocumentInfo(document)
+    }
+
     return (
         <Popup className={classes.PopupDocumentCreate}>
             <Header title={documentInfo.id ? 'Редактировать документ' : 'Добавить документ'}
@@ -79,47 +86,55 @@ const PopupDocumentCreate: React.FC<Props> = (props) => {
 
             <Content className={classes['popup-content']}>
                 <BlockingElement fetching={fetching} className={classes.content}>
-                    <div className={classes.info}>
-                        <div className={classes.field}>
-                            <div className={classes.field_label}>Название</div>
+                    <div className={classes.field}>
+                        <div className={classes.field_label}>Название</div>
 
-                            <TextBox value={documentInfo.name}
-                                     onChange={(e: React.MouseEvent, value: string) => setDocumentInfo({
-                                         ...documentInfo,
-                                         name: value
-                                     })}
-                                     placeHolder='Введите название'
-                                     error={documentInfo.name.trim() === ''}
-                                     showRequired
-                                     errorText='Поле обязательно для заполнения'
-                                     icon='heading'
-                            />
-                        </div>
+                        <TextBox value={documentInfo.name}
+                                 onChange={(e: React.MouseEvent, value: string) => setDocumentInfo({
+                                     ...documentInfo,
+                                     name: value
+                                 })}
+                                 placeHolder='Введите название'
+                                 error={documentInfo.name.trim() === ''}
+                                 showRequired
+                                 errorText='Поле обязательно для заполнения'
+                                 icon='heading'
+                        />
+                    </div>
 
-                        <div className={classes.field}>
-                            <CheckBox label='Активен'
-                                      type='modern'
-                                      checked={!!documentInfo.active}
-                                      onChange={(e: React.MouseEvent, value: boolean) => setDocumentInfo({
-                                          ...documentInfo,
-                                          active: value ? 1 : 0
-                                      })}
-                            />
-                        </div>
+                    <div className={classes.field}>
+                        <div className={classes.field_label}>Файл</div>
+
+                        <FileUploader document={documentInfo}
+                                      onChange={changeUploadFile.bind(this)}
+                                      text='Загрузить файл'
+                        />
+                    </div>
+
+                    <div className={classes.field}>
+                        <CheckBox label='Активен'
+                                  type='modern'
+                                  checked={!!documentInfo.active}
+                                  onChange={(e: React.MouseEvent, value: boolean) => setDocumentInfo({
+                                      ...documentInfo,
+                                      active: value ? 1 : 0
+                                  })}
+                        />
                     </div>
                 </BlockingElement>
             </Content>
 
             <Footer>
-                <Button type="apply"
+                <Button type='apply'
                         icon='check'
                         onClick={() => saveHandler()}
                         disabled={fetching || documentInfo.name.trim() === ''}
                 >Сохранить</Button>
 
-                <Button type="regular"
+                <Button type='regular'
                         icon='arrow-rotate-left'
                         onClick={close.bind(this)}
+                        className='marginLeft'
                 >Отменить</Button>
             </Footer>
         </Popup>

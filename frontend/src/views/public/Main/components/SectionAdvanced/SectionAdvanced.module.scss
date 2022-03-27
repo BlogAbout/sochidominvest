@@ -3,36 +3,6 @@
     width: 100%;
     position: relative;
 
-    &::before {
-        content: '';
-        display: block;
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        background: #075ea5;
-        background: linear-gradient(135deg, #000000 0%, transparent 60%, transparent 80%, #ffcc01 100%);
-        z-index: 1;
-    }
-
-    &::after {
-        content: '';
-        display: block;
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        opacity: 0.5;
-        background-color: #075ea5;
-        background-image: url('../../img/bg-pattern.png');
-        background-position: center;
-        background-size: 3px;
-        background-repeat: repeat;
-        z-index: 2;
-    }
-
     .container {
         width: 100%;
         height: 100%;
@@ -108,6 +78,60 @@
                             color: #000;
                             background-color: #fff;
                         }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 1200px) {
+    .SectionAdvanced {
+        .container {
+            padding: 0 10px;
+        }
+    }
+}
+
+@media (max-width: 1024px) {
+    .SectionAdvanced {
+        .container {
+            .list {
+                .item {
+                    width: 32%;
+                    padding: 0 10px;
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 768px) {
+    .SectionAdvanced {
+        .container {
+            .list {
+                flex-wrap: wrap;
+                justify-content: center;
+
+                .item {
+                    width: 48%;
+                    margin: 0 1% 20px;
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 480px) {
+    .SectionAdvanced {
+        .container {
+            .list {
+                .item {
+                    width: 100%;
+                    margin: 0 0 20px;
+
+                    &:last-child {
+                        margin-bottom: 0;
                     }
                 }
             }

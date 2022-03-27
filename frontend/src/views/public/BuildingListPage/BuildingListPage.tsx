@@ -6,10 +6,10 @@ import {numberWithSpaces, round} from '../../../helpers/numberHelper'
 import {IBuilding} from '../../../@types/IBuilding'
 import BuildingService from '../../../api/BuildingService'
 import BlockingElement from '../../../components/BlockingElement/BlockingElement'
-import HeaderDefault from '../../../components/HeaderDefault/HeaderDefault'
-import FooterDefault from '../../../components/FooterDefault/FooterDefault'
 import Empty from '../../../components/Empty/Empty'
 import classes from './BuildingListPage.module.scss'
+import {buildingTypes} from "../../../helpers/buildingHelper";
+import {ISelector} from "../../../@types/ISelector";
 
 const cx = classNames.bind(classes)
 
@@ -37,6 +37,8 @@ const BuildingListPage: React.FC = () => {
     }, [isUpdate])
 
     const renderBuildingItem = (building: IBuilding) => {
+        const buildingType = buildingTypes.find((item: ISelector) => item.key === building.type)
+
         return (
             <div key={building.id} className={classes.item} onClick={() => navigate('/building/' + building.id)}>
                 <div className={cx({'itemImage': true, 'noImage': !building.images || !building.images.length})}>
@@ -53,6 +55,8 @@ const BuildingListPage: React.FC = () => {
                     </div>
 
                     <div className={classes.itemInfo}>
+                        {buildingType && <div className={classes.type}>{buildingType.text}</div>}
+
                         <div className={classes.counter}>
                             {declension(building.countCheckers || 0, ['квартира', 'квартиры', 'квартир'], false)} от {numberWithSpaces(round(building.costMin || 0, 0))} руб.
                         </div>
@@ -70,8 +74,6 @@ const BuildingListPage: React.FC = () => {
     return (
         <main className={classes.BuildingListPage}>
             <div className={classes.Content}>
-                <HeaderDefault/>
-
                 <div className={classes.container}>
                     <h1>
                         <span>Недвижимость</span>
@@ -84,8 +86,6 @@ const BuildingListPage: React.FC = () => {
                         }
                     </BlockingElement>
                 </div>
-
-                <FooterDefault/>
             </div>
         </main>
     )
