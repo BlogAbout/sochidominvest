@@ -14,8 +14,10 @@ export const buildingStatuses: ISelector[] = [
 export const buildingTypes: ISelector[] = [
     {key: 'building', text: 'Жилой комплекс'},
     {key: 'apartment', text: 'Квартира'},
-    {key: 'land', text: 'Участок'},
-    {key: 'commerce', text: 'Коммерция'}
+    {key: 'house', text: 'Дом'},
+    {key: 'land', text: 'Земельный участок'},
+    {key: 'commerce', text: 'Коммерция'},
+    {key: 'garage', text: 'Гараж, машиноместо'}
 ]
 
 /**

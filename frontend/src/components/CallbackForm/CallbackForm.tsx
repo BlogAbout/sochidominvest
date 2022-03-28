@@ -91,12 +91,12 @@ const CallbackForm: React.FC<Props> = (props) => {
                 <>
                     <div className={classes['field-wrapper']}>
                         <TextBox
-                            type="tel"
+                            type='tel'
                             value={info.phone}
                             placeHolder='Телефон'
                             error={validationPhone !== ''}
                             errorText={validationPhone}
-                            icon="phone"
+                            icon='phone'
                             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                                 setInfo({
                                     ...info,
@@ -114,10 +114,10 @@ const CallbackForm: React.FC<Props> = (props) => {
 
                     <div className={classes['field-wrapper']}>
                         <TextBox
-                            type="text"
+                            type='text'
                             value={info.name}
                             placeHolder='Имя'
-                            icon="user"
+                            icon='user'
                             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                                 setInfo({
                                     ...info,

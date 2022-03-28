@@ -10,9 +10,9 @@ const Main: React.FC = () => {
             <main className={classes.Content}>
                 <HeadPanel/>
 
-                <SectionInfo/>
-
                 <SectionAdvanced/>
+
+                <SectionInfo/>
             </main>
         </div>
     )

@@ -51,7 +51,7 @@ const NumberBox: React.FC<Props> = (props) => {
     const [isEdit, setIsEdit] = useState(false)
 
     const trim = (value: string) => {
-        return value.replace(/ /g, "")
+        return value.replace(/ /g, '')
     }
 
     const checkTransform = () => {
@@ -104,7 +104,7 @@ const NumberBox: React.FC<Props> = (props) => {
         let value = checkTransform() ? props.value : e.target.value
 
         if (value) {
-            value = trim(value.toString()).replace(/,/g, ".")
+            value = trim(value.toString()).replace(/,/g, '.')
 
             if (props.notNull && value === '') {
                 value = props.min

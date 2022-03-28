@@ -73,9 +73,9 @@ class DocumentModel extends Model
     {
         $sql = "
             INSERT INTO `sdi_document`
-                (id_user, name, id_object, type_object, type, content, date_created, date_update, active)
+                (id_user, name, id_object, type_object, type, extension, content, date_created, date_update, active)
             VALUES
-                (:userId, :name, :objectId, :objectType, :type, :content, :dateCreated, :dateUpdate, :active)
+                (:userId, :name, :objectId, :objectType, :type, :extension, :content, :dateCreated, :dateUpdate, :active)
         ";
 
         parent::query($sql);
@@ -85,6 +85,7 @@ class DocumentModel extends Model
         parent::bindParams('objectId', $payload['objectId']);
         parent::bindParams('objectType', $payload['objectType']);
         parent::bindParams('type', $payload['type']);
+        parent::bindParams('extension', $payload['extension']);
         parent::bindParams('dateCreated', $payload['dateCreated']);
         parent::bindParams('dateUpdate', $payload['dateUpdate']);
         parent::bindParams('active', $payload['active']);
@@ -122,6 +123,7 @@ class DocumentModel extends Model
                 id_object = :objectId,
                 type_object = :objectType,
                 type = :type,
+                extension = :extension,
                 content = :content,
                 date_update = :dateUpdate,
                 active = :active
@@ -136,6 +138,7 @@ class DocumentModel extends Model
         parent::bindParams('objectId', $payload['objectId']);
         parent::bindParams('objectType', $payload['objectType']);
         parent::bindParams('type', $payload['type']);
+        parent::bindParams('extension', $payload['extension']);
         parent::bindParams('dateUpdate', $payload['dateUpdate']);
         parent::bindParams('active', $payload['active']);
 
@@ -182,6 +185,7 @@ class DocumentModel extends Model
             'objectId' => $data['id_object'] ? (int)$data['id_object'] : null,
             'objectType' => $data['type_object'],
             'type' => $data['type'],
+            'extension' => $data['extension'],
             'content' => $data['content'],
             'dateCreated' => $data['date_created'],
             'dateUpdate' => $data['date_update'],

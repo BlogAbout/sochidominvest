@@ -47,15 +47,6 @@ const DocumentList: React.FC<Props> = (props) => {
         setIsUpdate(true)
     }
 
-    // Добавление элемента
-    const createHandler = () => {
-        openPopupDocumentCreate(document.body, {
-            objectId: props.buildingId || undefined,
-            objectType: 'building',
-            onSave: () => onSave()
-        })
-    }
-
     // Обновление элемента
     const updateHandler = (documentInfo: IDocument) => {
         openPopupDocumentCreate(document.body, {
@@ -110,6 +101,43 @@ const DocumentList: React.FC<Props> = (props) => {
         openContextMenu(e, menuItems)
     }
 
+    const onContextMenuCreate = (e: React.MouseEvent) => {
+        e.preventDefault()
+
+        const menuItems = [
+            {
+                text: 'Загрузить документ',
+                onClick: () => {
+                    openPopupDocumentCreate(document.body, {
+                        objectId: props.buildingId || undefined,
+                        objectType: 'building',
+                        type: 'file',
+                        onSave: () => onSave()
+                    })
+                }
+            },
+            {
+                text: 'Ссылка на документ',
+                onClick: () => {
+                    openPopupDocumentCreate(document.body, {
+                        objectId: props.buildingId || undefined,
+                        objectType: 'building',
+                        type: 'link',
+                        onSave: () => onSave()
+                    })
+                }
+            },
+            {
+                text: 'Сгенерировать документ',
+                onClick: () => {
+                    // Todo
+                }
+            }
+        ]
+
+        openContextMenu(e, menuItems)
+    }
+
     return (
         <div className={classes.DocumentList}>
             {fetching && <Preloader/>}
@@ -118,15 +146,29 @@ const DocumentList: React.FC<Props> = (props) => {
                 <div className={classes.id}>#</div>
                 <div className={classes.name}>Название</div>
                 <div className={classes.type}>Тип</div>
+                <div className={classes.extension}>Расширение</div>
             </div>
 
-            <div className={classes.addDocument} onClick={createHandler.bind(this)}>
+            <div className={classes.addDocument} onClick={onContextMenuCreate.bind(this)}>
                 <FontAwesomeIcon icon='plus'/> Добавить
             </div>
 
             <div className={classes.list}>
                 {documents && documents.length ?
                     documents.map((document: IDocument) => {
+                        let type = ''
+                        switch (document.type) {
+                            case 'file':
+                                type = 'Файл'
+                                break
+                            case 'link':
+                                type = 'Ссылка'
+                                break
+                            case 'constructor':
+                                type = 'Конструктор'
+                                break
+                        }
+
                         return (
                             <div key={document.id}
                                  className={classes.row}
@@ -134,7 +176,8 @@ const DocumentList: React.FC<Props> = (props) => {
                             >
                                 <div className={classes.id}>#{document.id}</div>
                                 <div className={classes.name}>{document.name}</div>
-                                <div className={classes.type}>{document.type}</div>
+                                <div className={classes.type}>{type}</div>
+                                <div className={classes.extension}>{document.extension}</div>
                             </div>
                         )
                     })

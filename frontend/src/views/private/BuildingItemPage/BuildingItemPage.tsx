@@ -1,23 +1,23 @@
 import React, {useEffect, useState} from 'react'
 import {useParams} from 'react-router-dom'
-import {developerTypes} from '../../helpers/developerHelper'
-import {useTypedSelector} from '../../hooks/useTypedSelector'
-import {useActions} from '../../hooks/useActions'
-import {declension} from '../../helpers/stringHelper'
-import {numberWithSpaces, round} from '../../helpers/numberHelper'
-import CheckerService from '../../api/CheckerService'
-import {IBuilding, IBuildingChecker, IBuildingHousing} from '../../@types/IBuilding'
-import {IImageCarousel} from '../../@types/IImageCarousel'
-import {IImageDb} from '../../@types/IImage'
-import {ISelector} from '../../@types/ISelector'
-import {ITag} from '../../@types/ITag'
-import {IDeveloper} from '../../@types/IDeveloper'
-import {IUser} from '../../@types/IUser'
-import Button from '../../components/Button/Button'
-import Empty from '../../components/Empty/Empty'
-import BlockingElement from '../../components/BlockingElement/BlockingElement'
-import ImageCarousel from '../../components/ImageCarousel/ImageCarousel'
-import openPopupBuildingCreate from '../../components/PopupBuildingCreate/PopupBuildingCreate'
+import {developerTypes} from '../../../helpers/developerHelper'
+import {useTypedSelector} from '../../../hooks/useTypedSelector'
+import {useActions} from '../../../hooks/useActions'
+import {declension} from '../../../helpers/stringHelper'
+import {numberWithSpaces, round} from '../../../helpers/numberHelper'
+import CheckerService from '../../../api/CheckerService'
+import {IBuilding, IBuildingChecker, IBuildingHousing} from '../../../@types/IBuilding'
+import {IImageCarousel} from '../../../@types/IImageCarousel'
+import {IImageDb} from '../../../@types/IImage'
+import {ISelector} from '../../../@types/ISelector'
+import {ITag} from '../../../@types/ITag'
+import {IDeveloper} from '../../../@types/IDeveloper'
+import {IUser} from '../../../@types/IUser'
+import Button from '../../../components/Button/Button'
+import Empty from '../../../components/Empty/Empty'
+import BlockingElement from '../../../components/BlockingElement/BlockingElement'
+import ImageCarousel from '../../../components/ImageCarousel/ImageCarousel'
+import openPopupBuildingCreate from '../../../components/PopupBuildingCreate/PopupBuildingCreate'
 import {
     amountContract,
     buildingAdvantages,
@@ -35,11 +35,11 @@ import {
     buildingWaterSupply,
     formalizationList,
     paymentsList
-} from '../../helpers/buildingHelper'
+} from '../../../helpers/buildingHelper'
 import classes from './BuildingItemPage.module.scss'
-import {IDocument} from "../../@types/IDocument";
-import DocumentService from "../../api/DocumentService";
-import openPopupAlert from "../../components/PopupAlert/PopupAlert";
+import {IDocument} from "../../../@types/IDocument";
+import DocumentService from "../../../api/DocumentService";
+import openPopupAlert from "../../../components/PopupAlert/PopupAlert";
 
 type BuildingItemPageParams = {
     id: string
@@ -441,11 +441,17 @@ const BuildingItemPage: React.FC = (props) => {
             case 'apartment':
                 titleAbout = 'О квартире'
                 break
+            case 'house':
+                titleAbout = 'О доме'
+                break
             case 'land':
-                titleAbout = 'Об участке'
+                titleAbout = 'О земельном участке'
                 break
             case 'commerce':
                 titleAbout = 'О коммерции'
+                break
+            case 'garage':
+                titleAbout = 'О гараже, машиноместе'
                 break
         }
 
@@ -601,7 +607,7 @@ const BuildingItemPage: React.FC = (props) => {
                     documents.map((document: IDocument) => {
                         return (
                             <p key={document.id}>
-                                <a href={`https://api.sochidominvest/uploads/documents/${document.content}`}
+                                <a href={`https://api.sochidominvest.ru/uploads/documents/${document.content}`}
                                    target='_blank'
                                 >{document.name}</a>
                             </p>

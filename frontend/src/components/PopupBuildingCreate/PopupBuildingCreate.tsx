@@ -48,7 +48,7 @@ import classes from './PopupBuildingCreate.module.scss'
 
 interface Props extends PopupProps {
     building?: IBuilding | null
-    type?: 'building' | 'apartment' | 'land' | 'commerce'
+    type?: 'building' | 'apartment' | 'house' | 'land' | 'commerce' | 'garage'
 
     onSave(): void
 }

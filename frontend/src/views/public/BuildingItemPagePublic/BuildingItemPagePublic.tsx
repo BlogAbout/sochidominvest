@@ -374,11 +374,17 @@ const BuildingItemPagePublic: React.FC = (props) => {
             case 'apartment':
                 titleAbout = 'О квартире'
                 break
+            case 'house':
+                titleAbout = 'О доме'
+                break
             case 'land':
-                titleAbout = 'Об участке'
+                titleAbout = 'О земельном участке'
                 break
             case 'commerce':
                 titleAbout = 'О коммерции'
+                break
+            case 'garage':
+                titleAbout = 'О гараже, машиноместе'
                 break
         }
 

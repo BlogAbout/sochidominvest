@@ -188,13 +188,13 @@ const PopupSelector: React.FC<Props> = (props) => {
 
                 {props.multi ?
                     <Footer>
-                        <Button type="apply"
+                        <Button type='apply'
                                 icon='check'
                                 onClick={() => onClickSave()}
                                 className='marginLeft'
                         >Сохранить</Button>
 
-                        <Button type="regular"
+                        <Button type='regular'
                                 icon='arrow-rotate-left'
                                 onClick={close.bind(this)}
                                 className='marginLeft'

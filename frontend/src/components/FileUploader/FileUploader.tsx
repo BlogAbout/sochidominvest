@@ -1,13 +1,10 @@
 import React, {useRef, useState} from 'react'
 import classNames from 'classnames/bind'
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {IDocument} from '../../@types/IDocument'
+import DocumentService from '../../api/DocumentService'
 import Button from '../Button/Button'
-import Preloader from '../Preloader/Preloader'
+import openPopupAlert from '../PopupAlert/PopupAlert'
 import classes from './FileUploader.module.scss'
-import {IImage} from "../../@types/IImage";
-import DocumentService from "../../api/DocumentService";
-import openPopupAlert from "../PopupAlert/PopupAlert";
 
 interface Props {
     document: IDocument
@@ -53,7 +50,7 @@ const FileUploader: React.FC<Props> = (props) => {
                     const result = response.data.split('.')
 
                     documentInfo.content = response.data
-                    documentInfo.type = result[1]
+                    documentInfo.extension = result[1]
 
                     props.onChange(documentInfo)
                 })
@@ -79,7 +76,7 @@ const FileUploader: React.FC<Props> = (props) => {
     const renderInput = () => {
         return (
             <div className={classes.field}>
-                <input type="file"
+                <input type='file'
                        accept={accept}
                        disabled={props.disabled}
                        onChange={uploadFileHandler.bind(this)}
@@ -93,7 +90,7 @@ const FileUploader: React.FC<Props> = (props) => {
 
                             <Button type='regular'
                                     icon='paperclip'
-                                    onClick={() => window.open(`https://api.sochidominvest/uploads/documents/${props.document.content}`, "_blank")}
+                                    onClick={() => window.open(`https://api.sochidominvest.ru/uploads/documents/${props.document.content}`, '_blank')}
                                     disabled={props.disabled || fetching}
                                     title={acceptText}
                                     className='marginLeft'

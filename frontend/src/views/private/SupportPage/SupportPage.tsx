@@ -3,9 +3,9 @@ import {IFeed} from '../../../@types/IFeed'
 import FeedService from '../../../api/FeedService'
 import Button from '../../../components/Button/Button'
 import SupportList from '../../../components/SupportList/SupportList'
-import classes from './Support.module.scss'
+import classes from './SupportPage.module.scss'
 
-const Support: React.FC = () => {
+const SupportPage: React.FC = () => {
     const [isUpdate, setIsUpdate] = useState(true)
     const [fetching, setFetching] = useState(false)
     const [feeds, setFeeds] = useState<IFeed[]>([])
@@ -32,7 +32,7 @@ const Support: React.FC = () => {
     }
 
     return (
-        <main className={classes.BuildingPage}>
+        <main className={classes.SupportPage}>
             <div className={classes.filter}>
                 <Button type='save' icon={'headset'} onClick={() => console.log('add')}>Заявки</Button>
 
@@ -52,6 +52,6 @@ const Support: React.FC = () => {
     )
 }
 
-Support.displayName = 'Support'
+SupportPage.displayName = 'SupportPage'
 
-export default Support
+export default SupportPage

@@ -1,15 +1,15 @@
 import React from 'react'
-import classes from './Desktop.module.scss'
+import classes from './DesktopPage.module.scss'
 
-const Desktop: React.FC = () => {
+const DesktopPage: React.FC = () => {
     return (
-        <div className={classes.Desktop}>
+        <div className={classes.DesktopPage}>
             <p>В разработке</p>
             <p>Здесь будут различные информационные блоки по принципу рабочего стола</p>
         </div>
     )
 }
 
-Desktop.displayName = 'Desktop'
+DesktopPage.displayName = 'DesktopPage'
 
-export default Desktop
+export default DesktopPage

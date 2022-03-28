@@ -51,13 +51,13 @@ const ImageUploader: React.FC<Props> = (props) => {
                 file,
                 1200,
                 1200,
-                "JPEG",
+                'JPEG',
                 90,
                 0,
                 (uri) => {
                     resolve(uri)
                 },
-                "base64"
+                'base64'
             )
         })
 
@@ -167,7 +167,7 @@ const ImageUploader: React.FC<Props> = (props) => {
     const renderInput = () => {
         return (
             <div className={classes.field}>
-                <input type="file"
+                <input type='file'
                        multiple={props.multi}
                        accept={accept}
                        disabled={props.disabled}
@@ -175,7 +175,7 @@ const ImageUploader: React.FC<Props> = (props) => {
                        ref={inputRef}
                 />
 
-                <Button type="apply"
+                <Button type='apply'
                         icon='upload'
                         onClick={() => inputRef.current?.click()}
                         disabled={props.disabled || props.fetching}

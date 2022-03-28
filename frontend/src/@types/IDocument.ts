@@ -3,7 +3,8 @@ export interface IDocument {
     name: string
     objectId: number | null
     objectType: string | null
-    type: string
+    type: 'file' | 'link' | 'constructor'
+    extension?: string
     content: string
     active: number
 }

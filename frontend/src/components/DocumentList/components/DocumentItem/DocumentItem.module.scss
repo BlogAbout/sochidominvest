@@ -1,4 +1,4 @@
-.DeveloperItem {
+.DocumentItem {
     padding: 10px 15px;
     background-color: #fff;
     margin-bottom: 15px;
@@ -11,7 +11,6 @@
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
-    cursor: pointer;
 
     &:hover {
         box-shadow: 6px 6px 8px rgba(0, 0, 0, 0.7);
@@ -26,13 +25,19 @@
         flex-grow: 1;
     }
 
-    .type {
-        width: 200px;
+    .object {
+        width: 300px;
         flex-shrink: 0;
     }
 
-    .phone {
+    .type {
         width: 150px;
         flex-shrink: 0;
+    }
+
+    .extension {
+        width: 150px;
+        flex-shrink: 0;
+        text-transform: uppercase;
     }
 }

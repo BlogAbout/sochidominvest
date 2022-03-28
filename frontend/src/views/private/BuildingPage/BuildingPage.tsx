@@ -1,10 +1,10 @@
 import React, {useEffect, useState} from 'react'
-import Button from '../../components/Button/Button'
-import openPopupBuildingCreate from '../../components/PopupBuildingCreate/PopupBuildingCreate'
-import openContextMenu from '../../components/ContextMenu/ContextMenu'
-import BuildingList from '../../components/BuildingList/BuildingList'
-import {useTypedSelector} from '../../hooks/useTypedSelector'
-import {useActions} from '../../hooks/useActions'
+import Button from '../../../components/Button/Button'
+import openPopupBuildingCreate from '../../../components/PopupBuildingCreate/PopupBuildingCreate'
+import openContextMenu from '../../../components/ContextMenu/ContextMenu'
+import BuildingList from '../../../components/BuildingList/BuildingList'
+import {useTypedSelector} from '../../../hooks/useTypedSelector'
+import {useActions} from '../../../hooks/useActions'
 import classes from './BuildingPage.module.scss'
 
 const BuildingPage: React.FC = () => {
@@ -26,7 +26,7 @@ const BuildingPage: React.FC = () => {
         setIsUpdate(true)
     }
 
-    const addHandler = (type: 'building' | 'apartment' | 'land' | 'commerce') => {
+    const addHandler = (type: 'building' | 'apartment' | 'house' | 'land' | 'commerce' | 'garage') => {
         openPopupBuildingCreate(document.body, {
             type: type,
             onSave: () => onSave()
@@ -40,8 +40,10 @@ const BuildingPage: React.FC = () => {
         const menuItems = [
             {text: 'Жилой комплекс', onClick: () => addHandler('building')},
             {text: 'Квартиру', onClick: () => addHandler('apartment')},
-            {text: 'Участок', onClick: () => addHandler('land')},
-            {text: 'Коммерцию', onClick: () => addHandler('commerce')}
+            {text: 'Дом', onClick: () => addHandler('house')},
+            {text: 'Земельный участок', onClick: () => addHandler('land')},
+            {text: 'Коммерцию', onClick: () => addHandler('commerce')},
+            {text: 'Гараж, машиноместо', onClick: () => addHandler('garage')}
         ]
 
         openContextMenu(e, menuItems)

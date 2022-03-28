@@ -5,18 +5,18 @@ import {useTypedSelector} from '../../../hooks/useTypedSelector'
 import Main from '../../../views/public/Main/Main'
 import Policy from '../../../views/public/Policy/Policy'
 import AboutPagePublic from '../../../views/public/AboutPagePublic/AboutPagePublic'
-import Desktop from '../../../views/private/Desktop/Desktop'
-import UserItemPage from '../../../views/UserItemPage/UserItemPage'
-import UserPage from '../../../views/UserPage/UserPage'
-import BuildingItemPage from '../../../views/BuildingItemPage/BuildingItemPage'
-import BuildingPage from '../../../views/BuildingPage/BuildingPage'
+import DesktopPage from '../../../views/private/DesktopPage/DesktopPage'
+import UserItemPage from '../../../views/private/UserItemPage/UserItemPage'
+import UserPage from '../../../views/private/UserPage/UserPage'
+import BuildingItemPage from '../../../views/private/BuildingItemPage/BuildingItemPage'
+import BuildingPage from '../../../views/private/BuildingPage/BuildingPage'
 import BuildingItemPagePublic from '../../../views/public/BuildingItemPagePublic/BuildingItemPagePublic'
 import BuildingListPage from '../../../views/public/BuildingListPage/BuildingListPage'
 import DeveloperPage from '../../../views/private/DeveloperPage/DeveloperPage'
-import Document from '../../../views/Document/Document'
+import DocumentPage from '../../../views/private/DocumentPage/DocumentPage'
 import Report from '../../../views/Report/Report'
 import Tool from '../../../views/Tool/Tool'
-import Support from '../../../views/private/Support/Support'
+import SupportPage from '../../../views/private/SupportPage/SupportPage'
 import FavoritePage from '../../../views/FavoritePage/FavoritePage'
 import CompilationPage from '../../../views/CompilationPage/CompilationPage'
 import Navigation from '../../../components/Navigation/Navigation'
@@ -53,16 +53,16 @@ const AppRouter: React.FC = () => {
 
                     <div className={classes.serviceContent}>
                         <Routes>
-                            <Route path={RouteNames.MAIN} element={<Desktop/>}/>
+                            <Route path={RouteNames.MAIN} element={<DesktopPage/>}/>
                             <Route path={RouteNames.USER_ITEM} element={<UserItemPage/>}/>
                             <Route path={RouteNames.USER} element={<UserPage/>}/>
                             <Route path={RouteNames.BUILDING_ITEM} element={<BuildingItemPage/>}/>
                             <Route path={RouteNames.BUILDING} element={<BuildingPage/>}/>
                             <Route path={RouteNames.DEVELOPER} element={<DeveloperPage/>}/>
-                            <Route path={RouteNames.DOCUMENT} element={<Document/>}/>
+                            <Route path={RouteNames.DOCUMENT} element={<DocumentPage/>}/>
                             <Route path={RouteNames.REPORT} element={<Report/>}/>
                             <Route path={RouteNames.TOOL} element={<Tool/>}/>
-                            <Route path={RouteNames.SUPPORT} element={<Support/>}/>
+                            <Route path={RouteNames.SUPPORT} element={<SupportPage/>}/>
                             <Route path={RouteNames.FAVORITE} element={<FavoritePage/>}/>
                             <Route path={RouteNames.COMPILATION} element={<CompilationPage/>}/>
                         </Routes>

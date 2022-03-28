@@ -25,7 +25,7 @@ const defaultProps: Props = {
 const DeveloperItem: React.FC<Props> = (props) => {
     const [fetching, setFetching] = useState(false)
 
-    // Редактирование застройщика
+    // Редактирование
     const updateHandler = (developer: IDeveloper) => {
         openPopupDeveloperCreate(document.body, {
             developer: developer,
@@ -35,7 +35,7 @@ const DeveloperItem: React.FC<Props> = (props) => {
         })
     }
 
-    // Удаление застройщика
+    // Удаление
     const removeHandler = (developer: IDeveloper) => {
         openPopupAlert(document.body, {
             text: `Вы действительно хотите удалить ${developer.name}?`,

@@ -57,14 +57,27 @@ const BuildingListPage: React.FC = () => {
                     <div className={classes.itemInfo}>
                         {buildingType && <div className={classes.type}>{buildingType.text}</div>}
 
-                        <div className={classes.counter}>
-                            {declension(building.countCheckers || 0, ['квартира', 'квартиры', 'квартир'], false)} от {numberWithSpaces(round(building.costMin || 0, 0))} руб.
-                        </div>
+                        {building.type === 'building' ?
+                            <div className={classes.counter}>
+                                {declension(building.countCheckers || 0, ['квартира', 'квартиры', 'квартир'], false)} от {numberWithSpaces(round(building.costMin || 0, 0))} руб.
+                            </div>
+                            :
+                            <div className={classes.counter}>
+                                {numberWithSpaces(round(building.cost || 0, 0))} руб.
+                            </div>
+                        }
 
-                        <div className={classes.area}>
-                            <h3>Площади</h3>
-                            <div>{building.areaMin || 0} м<sup>2</sup> - {building.areaMax || 0} м<sup>2</sup></div>
-                        </div>
+                        {building.type === 'building' ?
+                            <div className={classes.area}>
+                                <h3>Площади</h3>
+                                <div>{building.areaMin || 0} м<sup>2</sup> - {building.areaMax || 0} м<sup>2</sup></div>
+                            </div>
+                            :
+                            <div className={classes.area}>
+                                <h3>Площадь</h3>
+                                <div>{building.area || 0} м<sup>2</sup></div>
+                            </div>
+                        }
                     </div>
                 </div>
             </div>

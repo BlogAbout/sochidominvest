@@ -91,12 +91,12 @@ const LoginForm: React.FC<Props> = (props) => {
 
             <div className={classes['field-wrapper']}>
                 <TextBox
-                    type="text"
+                    type='text'
                     value={auth.email}
                     placeHolder='E-mail'
                     error={validationError.email !== ''}
                     errorText={validationError.email}
-                    icon="at"
+                    icon='at'
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                         setAuth({
                             ...auth,
@@ -116,13 +116,13 @@ const LoginForm: React.FC<Props> = (props) => {
 
             <div className={classes['field-wrapper']}>
                 <TextBox
-                    type="password"
+                    type='password'
                     password={true}
                     value={auth.password}
                     placeHolder='Пароль'
                     error={validationError.password !== ''}
                     errorText={validationError.password}
-                    icon="lock"
+                    icon='lock'
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                         setAuth({
                             ...auth,

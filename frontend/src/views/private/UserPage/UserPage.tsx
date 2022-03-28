@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from 'react'
-import openPopupUserCreate from '../../components/PopupUserCreate/PopupUserCreate'
-import Button from '../../components/Button/Button'
-import UserList from '../../components/UserList/UserList'
-import {useTypedSelector} from '../../hooks/useTypedSelector'
-import {useActions} from '../../hooks/useActions'
+import openPopupUserCreate from '../../../components/PopupUserCreate/PopupUserCreate'
+import Button from '../../../components/Button/Button'
+import UserList from '../../../components/UserList/UserList'
+import {useTypedSelector} from '../../../hooks/useTypedSelector'
+import {useActions} from '../../../hooks/useActions'
 import classes from './UserPage.module.scss'
 
 const UserPage: React.FC = () => {

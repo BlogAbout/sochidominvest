@@ -17,12 +17,14 @@ interface Props extends PopupProps {
     document?: IDocument | null
     objectId?: number
     objectType?: string
+    type?: 'file' | 'link' | 'constructor'
 
     onSave(document: IDocument): void
 }
 
 const defaultProps: Props = {
     document: null,
+    type: 'file',
     onSave: (document: IDocument) => {
         console.info('PopupDocumentCreate onSave', document)
     }
@@ -34,7 +36,8 @@ const PopupDocumentCreate: React.FC<Props> = (props) => {
         name: '',
         objectId: props.objectId || null,
         objectType: props.objectType || null,
-        type: '',
+        type: props.type || 'file',
+        extension: '',
         content: '',
         active: 1
     })
@@ -78,6 +81,14 @@ const PopupDocumentCreate: React.FC<Props> = (props) => {
         setDocumentInfo(document)
     }
 
+    const checkDisabledButton = () => {
+        if (documentInfo.type === 'link' && documentInfo.content.trim() === '') {
+            return true
+        }
+
+        return fetching || documentInfo.name.trim() === ''
+    }
+
     return (
         <Popup className={classes.PopupDocumentCreate}>
             <Header title={documentInfo.id ? 'Редактировать документ' : 'Добавить документ'}
@@ -102,14 +113,36 @@ const PopupDocumentCreate: React.FC<Props> = (props) => {
                         />
                     </div>
 
-                    <div className={classes.field}>
-                        <div className={classes.field_label}>Файл</div>
+                    {documentInfo.type === 'file' ?
+                        <div className={classes.field}>
+                            <div className={classes.field_label}>Файл</div>
 
-                        <FileUploader document={documentInfo}
-                                      onChange={changeUploadFile.bind(this)}
-                                      text='Загрузить файл'
-                        />
-                    </div>
+                            <FileUploader document={documentInfo}
+                                          onChange={changeUploadFile.bind(this)}
+                                          text='Загрузить файл'
+                            />
+                        </div>
+                        : null
+                    }
+
+                    {documentInfo.type === 'link' ?
+                        <div className={classes.field}>
+                            <div className={classes.field_label}>Ссылка</div>
+
+                            <TextBox value={documentInfo.content}
+                                     onChange={(e: React.MouseEvent, value: string) => setDocumentInfo({
+                                         ...documentInfo,
+                                         content: value
+                                     })}
+                                     placeHolder='Введите ссылку'
+                                     error={documentInfo.content.trim() === ''}
+                                     showRequired
+                                     errorText='Поле обязательно для заполнения'
+                                     icon='link'
+                            />
+                        </div>
+                        : null
+                    }
 
                     <div className={classes.field}>
                         <CheckBox label='Активен'
@@ -128,7 +161,7 @@ const PopupDocumentCreate: React.FC<Props> = (props) => {
                 <Button type='apply'
                         icon='check'
                         onClick={() => saveHandler()}
-                        disabled={fetching || documentInfo.name.trim() === ''}
+                        disabled={checkDisabledButton()}
                 >Сохранить</Button>
 
                 <Button type='regular'

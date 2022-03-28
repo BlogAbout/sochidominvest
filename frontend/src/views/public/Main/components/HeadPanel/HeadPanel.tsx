@@ -16,8 +16,7 @@ const HeadPanel: React.FC = () => {
                     </div>
 
                     <div className={classes.slogan}>
-                        <h1>Платформа недвижимости Сочи</h1>
-                        <div>для агентов и агентств недвижимости</div>
+                        <h1>Авторизованный брокер недвижимости Сочи</h1>
                     </div>
 
                     <div className={classes.contacts}>

@@ -216,20 +216,20 @@ const PopupCheckerCreate: React.FC<Props> = (props) => {
             </Content>
 
             <Footer>
-                <Button type="save"
+                <Button type='save'
                         icon='check-double'
                         onClick={() => saveHandler(true)}
                         disabled={fetching || !checker.buildingId || checker.name.trim() === '' || !checker.area || !checker.cost}
                 >Сохранить и закрыть</Button>
 
-                <Button type="apply"
+                <Button type='apply'
                         icon='check'
                         onClick={() => saveHandler()}
                         disabled={fetching || !checker.buildingId || checker.name.trim() === '' || !checker.area || !checker.cost}
                         className='marginLeft'
                 >Сохранить</Button>
 
-                <Button type="regular"
+                <Button type='regular'
                         icon='arrow-rotate-left'
                         onClick={close.bind(this)}
                         className='marginLeft'

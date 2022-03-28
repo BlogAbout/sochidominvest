@@ -174,13 +174,13 @@ const PopupDeveloperCreate: React.FC<Props> = (props) => {
             </Content>
 
             <Footer>
-                <Button type="apply"
+                <Button type='apply'
                         icon='check'
                         onClick={() => saveHandler()}
                         disabled={fetching || developer.name.trim() === '' || developer.address.trim() === '' || developer.phone.trim() === ''}
                 >Сохранить</Button>
 
-                <Button type="regular"
+                <Button type='regular'
                         icon='arrow-rotate-left'
                         onClick={close.bind(this)}
                 >Отменить</Button>
