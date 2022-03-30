@@ -150,6 +150,17 @@ class Controller
                 } catch (Exception $e) {
                 }
             }
+
+            if ($payload->validator == 'articleExists') {
+                try {
+                    $checkArticle = ArticleModel::fetchItemById((int)$payload->data);
+
+                    if (!$checkArticle['id']) {
+                        array_push($response, "Статья с таким идентификатором не найдена в базе данных.");
+                    }
+                } catch (Exception $e) {
+                }
+            }
         }
 
         $validationErrors = new \stdClass();

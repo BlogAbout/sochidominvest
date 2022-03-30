@@ -147,7 +147,7 @@ const DocumentItem: React.FC<Props> = (props) => {
             <div className={classes.id}>#{props.document.id}</div>
             <div className={classes.name}>{props.document.name}</div>
             <div className={classes.object}>{objectInfo}</div>
-            <div className={classes.type}>{props.document.type}</div>
+            <div className={classes.type}>{type}</div>
             <div className={classes.extension}>{props.document.extension}</div>
         </div>
     )

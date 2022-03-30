@@ -60,5 +60,12 @@ $Klein->respond('GET', '/api/v1/document/[:id]', [new DocumentController(), 'get
 $Klein->respond('GET', '/api/v1/document', [new DocumentController(), 'fetchDocuments']);
 $Klein->respond('DELETE', '/api/v1/document/[:id]', [new DocumentController(), 'deleteDocument']);
 
+// Article Routes
+$Klein->respond('POST', '/api/v1/article', [new ArticleController(), 'createItem']);
+$Klein->respond('PUT', '/api/v1/article/[:id]', [new ArticleController(), 'updateItem']);
+$Klein->respond('GET', '/api/v1/article/[:id]', [new ArticleController(), 'fetchItemById']);
+$Klein->respond('GET', '/api/v1/article', [new ArticleController(), 'fetchList']);
+$Klein->respond('DELETE', '/api/v1/article/[:id]', [new ArticleController(), 'deleteItem']);
+
 // Dispatch all routes
 $Klein->dispatch();
