@@ -21,6 +21,35 @@ body {
     font-family: 'PT Serif', serif;
 }
 
+::-webkit-scrollbar {
+    width: 6px;
+    cursor: pointer;
+    background-color: transparent;
+}
+
+::-webkit-scrollbar:horizontal {
+    height: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+    border-radius: 25px;
+    background-color: #075ea5;
+    cursor: pointer;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: #ffcc01;
+}
+
+::-webkit-scrollbar-track {
+    background-color: transparent;
+}
+
+::-webkit-scrollbar-track:hover {
+    background-color: transparent;
+    cursor: pointer;
+}
+
 a {
     text-decoration: none;
     color: #075ea5;

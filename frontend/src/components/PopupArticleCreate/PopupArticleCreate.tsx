@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react'
+import withStore from '../../hoc/withStore'
 import classNames from 'classnames/bind'
 import ArticleService from '../../api/ArticleService'
 import {PopupProps} from '../../@types/IPopup'
@@ -156,22 +157,6 @@ const PopupArticleCreate: React.FC<Props> = (props) => {
             <div key='relation' className={classes.tabContent}>
                 <div className={classes.info}>
                     <div className={classes.field}>
-                        <div className={classes.field_label}>Название</div>
-
-                        <TextBox value={article.name}
-                                 onChange={(e: React.MouseEvent, value: string) => setArticle({
-                                     ...article,
-                                     name: value
-                                 })}
-                                 placeHolder='Введите название'
-                                 error={article.name.trim() === ''}
-                                 showRequired
-                                 errorText='Поле обязательно для заполнения'
-                                 icon='heading'
-                        />
-                    </div>
-
-                    <div className={classes.field}>
                         <div className={classes.field_label}>Объекты недвижимости</div>
 
                         <BuildingBox buildings={article.buildings}
@@ -266,5 +251,5 @@ export default function openPopupArticleCreate(target: any, popupProps = {} as P
 
     popupProps = {...popupProps, blockId: blockId}
 
-    return openPopup(PopupArticleCreate, popupProps, undefined, block, displayOptions)
+    return openPopup(withStore(PopupArticleCreate), popupProps, undefined, block, displayOptions)
 }

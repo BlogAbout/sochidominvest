@@ -35,6 +35,7 @@ import {
     faLock,
     faMagnifyingGlass,
     faMessage,
+    faNewspaper,
     faPaintRoller,
     faPaperclip,
     faParagraph,
@@ -111,7 +112,8 @@ library.add(
     faChevronDown,
     faCity,
     faPaperclip,
-    faLink
+    faLink,
+    faNewspaper
 )
 
 function App() {

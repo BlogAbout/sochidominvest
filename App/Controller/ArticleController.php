@@ -75,7 +75,9 @@ class ArticleController extends Controller
             'publish' => (int)htmlentities(stripcslashes(strip_tags($data->publish))),
             'metaTitle' => htmlentities(stripcslashes(strip_tags($data->meta_title))),
             'metaDescription' => htmlentities(stripcslashes(strip_tags($data->meta_description))),
-            'buildings' => $data->buildings
+            'buildings' => $data->buildings,
+            'images' => $data->images,
+            'newImages' => $data->newImages
         );
 
         try {
@@ -161,7 +163,9 @@ class ArticleController extends Controller
             'publish' => (int)htmlentities(stripcslashes(strip_tags($data->publish))),
             'metaTitle' => htmlentities(stripcslashes(strip_tags($data->meta_title))),
             'metaDescription' => htmlentities(stripcslashes(strip_tags($data->meta_description))),
-            'buildings' => $data->buildings
+            'buildings' => $data->buildings,
+            'images' => $data->images,
+            'newImages' => $data->newImages
         );
 
         try {

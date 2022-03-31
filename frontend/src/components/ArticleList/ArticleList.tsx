@@ -21,10 +21,10 @@ const defaultProps: Props = {
 
 const ArticleList: React.FC<Props> = (props) => {
     return (
-        <div className={classes.DeveloperList}>
+        <div className={classes.ArticleList}>
             <div className={classes.head}>
                 <div className={classes.id}>#</div>
-                <div className={classes.name}>Имя</div>
+                <div className={classes.name}>Название</div>
                 <div className={classes.type}>Тип</div>
             </div>
 

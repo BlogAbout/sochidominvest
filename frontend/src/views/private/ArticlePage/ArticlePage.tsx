@@ -32,7 +32,7 @@ const ArticlePage: React.FC = () => {
     }
 
     return (
-        <main className={classes.BuildingPage}>
+        <main className={classes.ArticlePage}>
             <div className={classes.filter}>
                 <Button type='save' icon={'bolt'} onClick={() => console.log('add')}>Новости</Button>
 
