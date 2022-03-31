@@ -3,11 +3,12 @@ export interface IArticle {
     name: string
     description: string
     author: number | null
-    type: 'article' | 'action' | 'news'
+    type: string
     dateCreated?: string | null
     dateUpdate?: string | null
     active: number
     publish: number
     metaTitle?: string | null
     metaDescription?: string | null
+    buildings: number[]
 }

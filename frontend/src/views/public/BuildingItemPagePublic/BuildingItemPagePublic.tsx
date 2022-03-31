@@ -38,7 +38,7 @@ type BuildingItemPageParams = {
     id: string
 }
 
-const BuildingItemPagePublic: React.FC = (props) => {
+const BuildingItemPagePublic: React.FC = () => {
     const params = useParams<BuildingItemPageParams>()
 
     const [isUpdate, setIsUpdate] = useState(false)

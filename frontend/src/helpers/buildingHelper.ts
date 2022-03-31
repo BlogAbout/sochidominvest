@@ -26,7 +26,8 @@ export const buildingTypes: ISelector[] = [
 export const buildingClasses: ISelector[] = [
     {key: 'business', text: 'Бизнес'},
     {key: 'comfort', text: 'Комфорт'},
-    {key: 'elite', text: 'Элит'}
+    {key: 'elite', text: 'Элит'},
+    {key: 'economy', text: 'Эконом'}
 ]
 
 /**
@@ -134,7 +135,9 @@ export const buildingAdvantages: ISelector[] = [
     {key: 'concierge', text: 'Консьерж'},
     {key: 'elevator', text: 'Лифт'},
     {key: 'commercial-space', text: 'Коммерческие площади'},
-    {key: 'cctv', text: 'Видеонаблюдение'}
+    {key: 'cctv', text: 'Видеонаблюдение'},
+    {key: 'bbq', text: 'Зона барбекю'},
+    {key: 'exploited-roof', text: 'Эксплуатированная кровля'}
 ]
 
 /**

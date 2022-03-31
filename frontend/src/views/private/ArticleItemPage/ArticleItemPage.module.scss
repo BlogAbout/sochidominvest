@@ -1,4 +1,4 @@
-.Policy {
+.ArticleItemPage {
     position: relative;
     flex-grow: 1;
 }
@@ -29,6 +29,10 @@
             box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.4);
             background: #fff;
             padding: 30px;
+
+            .relations {
+
+            }
         }
     }
 }

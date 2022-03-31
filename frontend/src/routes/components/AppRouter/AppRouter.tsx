@@ -12,6 +12,8 @@ import BuildingItemPage from '../../../views/private/BuildingItemPage/BuildingIt
 import BuildingPage from '../../../views/private/BuildingPage/BuildingPage'
 import BuildingItemPagePublic from '../../../views/public/BuildingItemPagePublic/BuildingItemPagePublic'
 import BuildingListPage from '../../../views/public/BuildingListPage/BuildingListPage'
+import ArticleItemPage from '../../../views/private/ArticleItemPage/ArticleItemPage'
+import ArticlePage from '../../../views/private/ArticlePage/ArticlePage'
 import DeveloperPage from '../../../views/private/DeveloperPage/DeveloperPage'
 import DocumentPage from '../../../views/private/DocumentPage/DocumentPage'
 import Report from '../../../views/Report/Report'
@@ -58,6 +60,8 @@ const AppRouter: React.FC = () => {
                             <Route path={RouteNames.USER} element={<UserPage/>}/>
                             <Route path={RouteNames.BUILDING_ITEM} element={<BuildingItemPage/>}/>
                             <Route path={RouteNames.BUILDING} element={<BuildingPage/>}/>
+                            <Route path={RouteNames.ARTICLE_ITEM} element={<ArticleItemPage/>}/>
+                            <Route path={RouteNames.ARTICLE} element={<ArticlePage/>}/>
                             <Route path={RouteNames.DEVELOPER} element={<DeveloperPage/>}/>
                             <Route path={RouteNames.DOCUMENT} element={<DocumentPage/>}/>
                             <Route path={RouteNames.REPORT} element={<Report/>}/>

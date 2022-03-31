@@ -1,12 +1,12 @@
 import React, {useEffect, useState} from 'react'
-import {ITag} from '../../@types/ITag'
-import openPopupTagSelector from '../PopupTagSelector/PopupTagSelector'
+import {IBuilding} from '../../@types/IBuilding'
+import openPopupBuildingSelector from '../PopupBuildingSelector/PopupBuildingSelector'
 import {useTypedSelector} from '../../hooks/useTypedSelector'
 import {useActions} from '../../hooks/useActions'
 import Box from '../Box/Box'
 
 interface Props {
-    tags?: number[]
+    buildings?: number[]
     multi?: boolean
     width?: number | string
     margin?: number | string
@@ -24,47 +24,47 @@ interface Props {
 }
 
 const defaultProps: Props = {
-    tags: [],
+    buildings: [],
     multi: false,
     onSelect: (value: number[], e: React.MouseEvent) => {
-        console.info('TagBox onSelect', value, e)
+        console.info('BuildingBox onSelect', value, e)
     }
 }
 
-const TagBox: React.FC<Props> = (props) => {
+const BuildingBox: React.FC<Props> = (props) => {
     const [title, setTitle] = useState('')
     const [text, setText] = useState('')
 
-    const {tags} = useTypedSelector(state => state.tagReducer)
-    const {fetchTagList} = useActions()
+    const {buildings} = useTypedSelector(state => state.buildingReducer)
+    const {fetchBuildingList} = useActions()
 
-    // Если в store нет тегов, пробуем их загрузить и обновить текст в поле
+    // Если в store нет объектов недвижимости, пробуем их загрузить и обновить текст в поле
     useEffect(() => {
-        if (!tags.length) {
-            updateTagListStore()
+        if (!buildings.length) {
+            updateBuildingListStore()
                 .then(() => updateSelectedInfo())
                 .catch((error) => {
-                    console.error('Ошибка загрузки тегов в store', error)
+                    console.error('Ошибка загрузки объектов недвижимости в store', error)
                 })
         } else {
             updateSelectedInfo()
         }
-    }, [props.tags])
+    }, [props.buildings])
 
     useEffect(() => {
         updateSelectedInfo()
-    }, [tags])
+    }, [buildings])
 
-    // Обновление списка тегов в store
-    const updateTagListStore = async () => {
-        await fetchTagList()
+    // Обновление списка объектов недвижимости в store
+    const updateBuildingListStore = async () => {
+        await fetchBuildingList({active: [0, 1]})
     }
 
     // Обработчик клика на поле
     const clickHandler = (e: React.MouseEvent) => {
-        openPopupTagSelector(document.body, {
+        openPopupBuildingSelector(document.body, {
             multi: props.multi,
-            selected: props.tags,
+            selected: props.buildings,
             onSelect: (value: number[]) => {
                 props.onSelect(value, e)
             }
@@ -83,27 +83,27 @@ const TagBox: React.FC<Props> = (props) => {
         let tmpText = ''
         let tmpTitle = ''
 
-        if (props.tags && props.tags.length) {
-            const firstTagId: number = props.tags[0]
-            const tagsNames: string[] = []
-            const tagFirstInfo = tags.find((tag: ITag) => tag.id === firstTagId)
+        if (props.buildings && props.buildings.length) {
+            const firstBuildingId: number = props.buildings[0]
+            const buildingsNames: string[] = []
+            const buildingFirstInfo = buildings.find((building: IBuilding) => building.id === firstBuildingId)
 
-            if (tagFirstInfo) {
-                tmpText += tagFirstInfo.name
+            if (buildingFirstInfo) {
+                tmpText += buildingFirstInfo.name
             }
 
-            if (props.tags.length > 1) {
-                tmpText += ` + ещё ${props.tags.length - 1}`
+            if (props.buildings.length > 1) {
+                tmpText += ` + ещё ${props.buildings.length - 1}`
             }
 
-            props.tags.map((id: number) => {
-                const tagInfo = tags.find((tag: ITag) => tag.id === id)
-                if (tagInfo) {
-                    tagsNames.push(tagInfo.name)
+            props.buildings.map((id: number) => {
+                const buildingInfo = buildings.find((building: IBuilding) => building.id === id)
+                if (buildingInfo) {
+                    buildingsNames.push(buildingInfo.name)
                 }
             })
 
-            tmpTitle = tagsNames.join('\n')
+            tmpTitle = buildingsNames.join('\n')
         }
 
         setText(tmpText)
@@ -123,7 +123,7 @@ const TagBox: React.FC<Props> = (props) => {
     )
 }
 
-TagBox.defaultProps = defaultProps
-TagBox.displayName = 'TagBox'
+BuildingBox.defaultProps = defaultProps
+BuildingBox.displayName = 'BuildingBox'
 
-export default TagBox
+export default BuildingBox
