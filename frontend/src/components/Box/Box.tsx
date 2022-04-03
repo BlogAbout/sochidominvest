@@ -170,11 +170,11 @@ const Box = React.forwardRef<HTMLInputElement, Props>((props, ref) => {
         return (
             <div className={cx({'box_item': true, 'minimal': isMinimal})}>
                 <div onClick={onUp.bind(this, true)}
-                     title='Приблизить'
+                     title='Увеличить'
                      className={cx({'box_arrow_up': true, 'minimal': isMinimal})}
                 />
                 <div onClick={onUp.bind(this, false)}
-                     title='Отдалить'
+                     title='Уменьшить'
                      className={cx({'box_arrow_down': true, 'minimal': isMinimal})}
                 />
             </div>

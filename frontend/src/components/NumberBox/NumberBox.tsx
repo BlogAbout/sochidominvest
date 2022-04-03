@@ -145,7 +145,7 @@ const NumberBox: React.FC<Props> = (props) => {
         onTransformHandler(false)
     }
 
-    const onArrowHandler = (e: React.ChangeEvent<HTMLInputElement>, up: boolean) => {
+    const onArrowHandler = (up: boolean, e: React.ChangeEvent<HTMLInputElement>) => {
         let value = +(props.value || 0)
 
         value += up ? (props.step || 1) : -(props.step || 1)

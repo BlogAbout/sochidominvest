@@ -116,7 +116,7 @@ const PopupCheckerCreate: React.FC<Props> = (props) => {
                         <NumberBox value={checker.housing || 1}
                                    min={0}
                                    step={1}
-                                   max={999999999}
+                                   max={999}
                                    onChange={(e: React.ChangeEvent<HTMLInputElement>, value: number) => setChecker({
                                        ...checker,
                                        housing: value
@@ -135,7 +135,8 @@ const PopupCheckerCreate: React.FC<Props> = (props) => {
                         <NumberBox value={checker.area || 0}
                                    min={0}
                                    step={0.01}
-                                   max={999999999}
+                                   max={999}
+                                   countAfterComma={2}
                                    onChange={(e: React.ChangeEvent<HTMLInputElement>, value: number) => setChecker({
                                        ...checker,
                                        area: value
