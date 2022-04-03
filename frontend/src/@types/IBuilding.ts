@@ -22,6 +22,7 @@ export interface IBuilding {
     tags: number[]
     contacts: number[]
     developers: number[]
+    articles?: number[]
     houseClass?: string | null
     material?: string | null
     houseType?: string | null
@@ -45,6 +46,8 @@ export interface IBuilding {
     saleNoResident?: number | null
     images: IImageDb[]
     newImages: IImage[]
+    metaTitle?: string | null
+    metaDescription?: string | null
 }
 
 export interface IBuildingChecker {

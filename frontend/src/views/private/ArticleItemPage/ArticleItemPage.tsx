@@ -1,20 +1,24 @@
 import React, {useEffect, useState} from 'react'
-import {useParams} from 'react-router-dom'
+import {useParams, useNavigate} from 'react-router-dom'
+import classNames from 'classnames/bind'
 import {IArticle} from '../../../@types/IArticle'
-import {IImageCarousel} from '../../../@types/IImageCarousel'
-import {IImageDb} from '../../../@types/IImage'
+import {IBuilding} from '../../../@types/IBuilding'
 import {useTypedSelector} from '../../../hooks/useTypedSelector'
 import {useActions} from '../../../hooks/useActions'
 import BlockingElement from '../../../components/BlockingElement/BlockingElement'
-import ImageCarousel from '../../../components/ImageCarousel/ImageCarousel'
+import Gallery from '../../../components/Gallery/Gallery'
 import classes from './ArticleItemPage.module.scss'
 
 type ArticleItemPageParams = {
     id: string
 }
 
+const cx = classNames.bind(classes)
+
 const ArticleItemPage: React.FC = () => {
     const params = useParams<ArticleItemPageParams>()
+
+    const navigate = useNavigate()
 
     const [isUpdate, setIsUpdate] = useState(false)
     const [article, setArticle] = useState<IArticle>({} as IArticle)
@@ -48,41 +52,48 @@ const ArticleItemPage: React.FC = () => {
         }
     }, [article])
 
-    // Вывод галереи
-    const renderGallery = () => {
-        // let listImages: IImageCarousel[] = []
-        // if (building.images && building.images.length) {
-        //     listImages = building.images.filter((image: IImageDb) => image.active).map((image: IImageDb) => {
-        //         return {
-        //             image: 'https://api.sochidominvest.ru' + image.value,
-        //             alt: building.name
-        //         }
-        //     })
-        // }
-        //
-        // return (
-        //     <BlockingElement fetching={fetchingArticleList || fetchingBuildingList} className={classes.gallery}>
-        //         <div className={classes.carousel}>
-        //             {listImages.length ?
-        //                 <ImageCarousel images={listImages} alt={building.name} fancy/>
-        //                 : <img src='https://api.sochidominvest.ru/uploads/no-image.jpg' alt={building.name}/>
-        //             }
-        //         </div>
-        //     </BlockingElement>
-        // )
-        return null
-    }
-
     const renderBuildingsInfo = () => {
-        if (article.buildings && article.buildings.length) {
-            return (
-                <div className={classes.relations}>
-
-                </div>
-            )
+        if (!article.buildings || !article.buildings.length || !buildings || !buildings.length) {
+            return null
         }
 
-        return null
+        const relationList = buildings.filter((building: IBuilding) => building.id && article.buildings.includes(building.id))
+
+        if (!relationList || !relationList.length) {
+            return null
+        }
+        return (
+            <BlockingElement fetching={fetchingArticleList || fetchingBuildingList} className={classes.relations}>
+                <h2>Связанные объекты</h2>
+
+                {relationList.map((building: IBuilding) => {
+                    return (
+                        <div key={building.id}
+                             className={classes.item}
+                             onClick={() => navigate('/panel/building/' + building.id)}
+                        >
+                            <div className={
+                                cx({'itemImage': true, 'noImage': !building.images || !building.images.length})
+                            }>
+                                {building.images && building.images.length ?
+                                    (
+                                        <img src={'https://api.sochidominvest.ru' + building.images[0].value}
+                                             alt={building.name}
+                                        />
+                                    )
+                                    : null
+                                }
+                            </div>
+
+                            <div className={classes.title}>
+                                <h3>{building.name}</h3>
+                                <span>{building.address}</span>
+                            </div>
+                        </div>
+                    )
+                })}
+            </BlockingElement>
+        )
     }
 
     return (
@@ -90,13 +101,13 @@ const ArticleItemPage: React.FC = () => {
             <div className={classes.Content}>
                 <div className={classes.container}>
                     <BlockingElement fetching={fetchingArticleList || fetchingBuildingList} className={classes.block}>
-                        {renderGallery()}
+                        <Gallery alt={article.name} images={article.images} type='carousel' fetching={false}/>
 
                         <h1>
-                            <span>Политика конфиденциальности</span>
+                            <span>{article.name}</span>
                         </h1>
 
-                        {article.description}
+                        <div className={classes.description}>{article.description}</div>
 
                         {renderBuildingsInfo()}
                     </BlockingElement>

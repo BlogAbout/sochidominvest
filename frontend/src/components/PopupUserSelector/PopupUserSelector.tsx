@@ -9,6 +9,7 @@ import BlockingElement from '../BlockingElement/BlockingElement'
 import Empty from '../Empty/Empty'
 import openContextMenu from '../ContextMenu/ContextMenu'
 import openPopupUserCreate from '../PopupUserCreate/PopupUserCreate'
+import showBackgroundBlock from '../BackgroundBlock/BackgroundBlock'
 import ButtonAdd from '../ButtonAdd/ButtonAdd'
 import SearchBox from '../SearchBox/SearchBox'
 import CheckBox from '../CheckBox/CheckBox'
@@ -17,7 +18,6 @@ import openPopupAlert from '../PopupAlert/PopupAlert'
 import {useTypedSelector} from '../../hooks/useTypedSelector'
 import {useActions} from '../../hooks/useActions'
 import classes from './PopupUserSelector.module.scss'
-import showBackgroundBlock from "../BackgroundBlock/BackgroundBlock";
 
 interface Props extends PopupProps {
     selected?: number[]
@@ -289,13 +289,13 @@ const PopupUserSelector: React.FC<Props> = (props) => {
 
                 {props.multi ?
                     <Footer>
-                        <Button type="apply"
+                        <Button type='apply'
                                 icon='check'
                                 onClick={() => onClickSave()}
                                 className='marginLeft'
                         >Сохранить</Button>
 
-                        <Button type="regular"
+                        <Button type='regular'
                                 icon='arrow-rotate-left'
                                 onClick={close.bind(this)}
                                 className='marginLeft'

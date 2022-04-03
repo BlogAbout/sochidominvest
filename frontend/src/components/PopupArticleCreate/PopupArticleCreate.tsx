@@ -5,6 +5,7 @@ import ArticleService from '../../api/ArticleService'
 import {PopupProps} from '../../@types/IPopup'
 import {IArticle} from '../../@types/IArticle'
 import {ITab} from '../../@types/ITab'
+import {IImage, IImageDb} from '../../@types/IImage'
 import {articleTypes} from '../../helpers/articleHelper'
 import {getPopupContainer, openPopup, removePopup} from '../../helpers/popupHelper'
 import showBackgroundBlock from '../BackgroundBlock/BackgroundBlock'
@@ -18,6 +19,7 @@ import TextAreaBox from '../TextAreaBox/TextAreaBox'
 import ComboBox from '../ComboBox/ComboBox'
 import Tabs from '../Tabs/Tabs'
 import BuildingBox from '../BuildingBox/BuildingBox'
+import ImageUploader from '../ImageUploader/ImageUploader'
 import classes from './PopupArticleCreate.module.scss'
 
 interface Props extends PopupProps {
@@ -44,7 +46,9 @@ const PopupArticleCreate: React.FC<Props> = (props) => {
         type: 'article',
         active: 1,
         publish: 0,
-        buildings: []
+        buildings: [],
+        images: [],
+        newImages: []
     })
 
     const [fetching, setFetching] = useState(false)
@@ -82,6 +86,35 @@ const PopupArticleCreate: React.FC<Props> = (props) => {
             })
     }
 
+    // Загрузка изображений
+    const uploadImagesHandler = (images: IImageDb[], newImages: IImage[]) => {
+        setArticle({...article, images: images, newImages: newImages})
+    }
+
+    // Смена главного изображения
+    const selectImageAvatarHandler = (index: number, type: string) => {
+        const images: IImageDb[] = [...article.images]
+        const newImages: IImage[] = [...article.newImages]
+
+        if (type === 'selected') {
+            newImages.map((image: IImage) => image.avatar = 0)
+            images.map((image: IImageDb, imageIndex: number) => {
+                image.avatar = index === imageIndex ? 1 : 0
+
+                return image
+            })
+        } else if (type === 'upload') {
+            images.map((image: IImageDb) => image.avatar = 0)
+            newImages.map((image: IImage, imageIndex: number) => {
+                image.avatar = index === imageIndex ? 1 : 0
+
+                return image
+            })
+        }
+
+        uploadImagesHandler(images, newImages)
+    }
+
     const renderContentTab = () => {
         return (
             <div key='content' className={classes.tabContent}>
@@ -95,7 +128,7 @@ const PopupArticleCreate: React.FC<Props> = (props) => {
                                      name: value
                                  })}
                                  placeHolder='Введите название'
-                                 error={article.name.trim() === ''}
+                                 error={!article.name || article.name.trim() === ''}
                                  showRequired
                                  errorText='Поле обязательно для заполнения'
                                  icon='heading'
@@ -148,6 +181,24 @@ const PopupArticleCreate: React.FC<Props> = (props) => {
                         />
                     </div>
                 </div>
+            </div>
+        )
+    }
+
+    // Вкладка галереии
+    const renderGalleryTab = () => {
+        const listActiveImages: IImageDb[] = article.images && article.images.length ? article.images.filter((image: IImageDb) => image.active) : []
+
+        return (
+            <div key='gallery' className={classes.tabContent}>
+                <ImageUploader images={listActiveImages}
+                               newImages={article.newImages}
+                               objectType='article'
+                               multi
+                               showUploadList
+                               onChange={uploadImagesHandler.bind(this)}
+                               onClickImage={selectImageAvatarHandler.bind(this)}
+                />
             </div>
         )
     }
@@ -206,6 +257,7 @@ const PopupArticleCreate: React.FC<Props> = (props) => {
 
     const tabs: ITab = {
         content: {title: 'Содержимое', render: renderContentTab()},
+        gallery: {title: 'Галерея', render: renderGalleryTab()},
         relation: {title: 'Связи', render: renderRelationTab()},
         seo: {title: 'СЕО', render: renderSeoTab()}
     }
@@ -232,6 +284,7 @@ const PopupArticleCreate: React.FC<Props> = (props) => {
                 <Button type='regular'
                         icon='arrow-rotate-left'
                         onClick={close.bind(this)}
+                        className='marginLeft'
                 >Отменить</Button>
             </Footer>
         </Popup>

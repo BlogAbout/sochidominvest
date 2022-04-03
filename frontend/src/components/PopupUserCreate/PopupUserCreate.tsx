@@ -136,7 +136,7 @@ const PopupUserCreate: React.FC<Props> = (props) => {
                         </div>
 
                         <TextBox
-                            type="password"
+                            type='password'
                             password={true}
                             value={user.password}
                             placeHolder='Пароль'
@@ -186,20 +186,20 @@ const PopupUserCreate: React.FC<Props> = (props) => {
             </BlockingElement>
 
             <Footer>
-                <Button type="save"
+                <Button type='save'
                         icon='check-double'
                         onClick={() => saveHandler(true)}
                         disabled={fetching || checkFormValidation()}
                 >Сохранить и закрыть</Button>
 
-                <Button type="apply"
+                <Button type='apply'
                         icon='check'
                         onClick={() => saveHandler()}
                         disabled={fetching || checkFormValidation()}
                         className='marginLeft'
                 >Сохранить</Button>
 
-                <Button type="regular"
+                <Button type='regular'
                         icon='arrow-rotate-left'
                         onClick={close.bind(this)}
                         className='marginLeft'

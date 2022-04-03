@@ -57,8 +57,8 @@ class LogModel extends Model
             array_push($where, '`type` = ' . $params['type']);
         }
 
-        if (!empty($params['typeObject'])) {
-            array_push($where, '`type_object` = ' . $params['typeObject']);
+        if (!empty($params['objectType'])) {
+            array_push($where, '`type_object` = ' . $params['objectType']);
         }
 
         if (!empty($params['userId'])) {
@@ -93,7 +93,7 @@ class LogModel extends Model
             INSERT INTO `sdi_log`
                 (id_user, content, type, id_object, type_object, date_created, active)
             VALUES
-                (:userId, :content, :type, :objectId, :typeObject, :dateCreated, :active)
+                (:userId, :content, :type, :objectId, :objectType, :dateCreated, :active)
         ";
 
         parent::query($sql);

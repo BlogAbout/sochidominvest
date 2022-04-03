@@ -24,7 +24,7 @@ const DocumentList: React.FC<Props> = (props) => {
 
     useEffect(() => {
         if (isUpdate && props.buildingId) {
-            DocumentService.fetchDocuments({active: [0, 1], objectId: props.buildingId, typeObject: 'building'})
+            DocumentService.fetchDocuments({active: [0, 1], objectId: [props.buildingId], objectType: 'building'})
                 .then((response: any) => {
                     setFetching(false)
                     setDocuments(response.data)

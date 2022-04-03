@@ -13,6 +13,7 @@ interface Props {
     newImages: IImage[]
     multi?: boolean
     type?: 'image' | 'document'
+    objectType: string
     showUploadList?: boolean
     disabled?: boolean
     text?: string
@@ -28,6 +29,7 @@ const defaultProps: Props = {
     newImages: [],
     multi: false,
     type: 'image',
+    objectType: 'building',
     showUploadList: false,
     disabled: false,
     text: 'Загрузить',
@@ -49,10 +51,10 @@ const ImageUploader: React.FC<Props> = (props) => {
         new Promise((resolve) => {
             Resizer.imageFileResizer(
                 file,
-                1200,
-                1200,
+                2000,
+                2000,
                 'JPEG',
-                90,
+                95,
                 0,
                 (uri) => {
                     resolve(uri)
@@ -69,7 +71,7 @@ const ImageUploader: React.FC<Props> = (props) => {
         if (files && files.length) {
             for (const file of Array.from(files)) {
                 const image = await resizeFile(file)
-                imagesList.push({name: file.name, value: image, avatar: 0})
+                imagesList.push({name: file.name, value: image, avatar: 0, objectType: props.objectType})
             }
         }
 

@@ -1,18 +1,19 @@
 import React, {useEffect, useState} from 'react'
-import {useParams} from 'react-router-dom'
+import {Link, useParams} from 'react-router-dom'
 import {useTypedSelector} from '../../../hooks/useTypedSelector'
 import {useActions} from '../../../hooks/useActions'
 import {declension} from '../../../helpers/stringHelper'
 import {numberWithSpaces, round} from '../../../helpers/numberHelper'
 import CheckerService from '../../../api/CheckerService'
+import ArticleService from '../../../api/ArticleService'
 import {IBuilding, IBuildingChecker, IBuildingHousing} from '../../../@types/IBuilding'
-import {IImageCarousel} from '../../../@types/IImageCarousel'
-import {IImageDb} from '../../../@types/IImage'
 import {ISelector} from '../../../@types/ISelector'
 import {ITag} from '../../../@types/ITag'
+import {IArticle} from '../../../@types/IArticle'
 import Empty from '../../../components/Empty/Empty'
 import BlockingElement from '../../../components/BlockingElement/BlockingElement'
-import ImageCarousel from '../../../components/ImageCarousel/ImageCarousel'
+import CallbackForm from '../../../components/CallbackForm/CallbackForm'
+import Gallery from '../../../components/Gallery/Gallery'
 import {
     amountContract,
     buildingAdvantages,
@@ -32,7 +33,6 @@ import {
     paymentsList
 } from '../../../helpers/buildingHelper'
 import classes from './BuildingItemPagePublic.module.scss'
-import CallbackForm from "../../../components/CallbackForm/CallbackForm";
 
 type BuildingItemPageParams = {
     id: string
@@ -44,7 +44,9 @@ const BuildingItemPagePublic: React.FC = () => {
     const [isUpdate, setIsUpdate] = useState(false)
     const [building, setBuilding] = useState<IBuilding>({} as IBuilding)
     const [checkers, setCheckers] = useState<IBuildingChecker[]>([])
+    const [articles, setArticles] = useState<IArticle[]>([])
     const [fetchingCheckers, setFetchingCheckers] = useState(false)
+    const [fetchingArticles, setFetchingArticles] = useState(false)
 
     const {buildings, fetching} = useTypedSelector(state => state.buildingReducer)
     const {tags} = useTypedSelector(state => state.tagReducer)
@@ -72,6 +74,7 @@ const BuildingItemPagePublic: React.FC = () => {
     useEffect(() => {
         if (building.id) {
             setFetchingCheckers(true)
+            setFetchingArticles(true)
 
             CheckerService.fetchCheckers(building.id)
                 .then((response) => {
@@ -85,32 +88,19 @@ const BuildingItemPagePublic: React.FC = () => {
                 .finally(() => {
                     setFetchingCheckers(false)
                 })
+
+            ArticleService.fetchArticles({active: [0, 1], publish: 1})
+                .then((response) => {
+                    setArticles(response.data)
+                })
+                .catch((error: any) => {
+                    console.error('Ошибка загрузки статей', error)
+                })
+                .finally(() => {
+                    setFetchingArticles(false)
+                })
         }
     }, [building])
-
-    // Вывод галереи
-    const renderGallery = () => {
-        let listImages: IImageCarousel[] = []
-        if (building.images && building.images.length) {
-            listImages = building.images.filter((image: IImageDb) => image.active).map((image: IImageDb) => {
-                return {
-                    image: 'https://api.sochidominvest.ru' + image.value,
-                    alt: building.name
-                }
-            })
-        }
-
-        return (
-            <BlockingElement fetching={fetching} className={classes.gallery}>
-                <div className={classes.carousel}>
-                    {listImages.length ?
-                        <ImageCarousel images={listImages} alt={building.name} fancy/>
-                        : <img src='https://api.sochidominvest.ru/uploads/no-image.jpg' alt={building.name}/>
-                    }
-                </div>
-            </BlockingElement>
-        )
-    }
 
     // Вывод базовой информации
     const renderInfo = () => {
@@ -477,6 +467,30 @@ const BuildingItemPagePublic: React.FC = () => {
         )
     }
 
+    // Вывод списка статей
+    const renderArticlesInfo = () => {
+        return (
+            <BlockingElement fetching={fetchingArticles} className={classes.block}>
+                <h2>Статьи</h2>
+
+                {building.articles && building.articles.length && articles && articles.length ?
+                    articles.map((article: IArticle) => {
+                        if (article.id && [0, 1].includes(article.active) && building.articles && building.articles.includes(article.id)) {
+                            return (
+                                <p key={article.id}>
+                                    <Link to={`/article/${article.id}`}>{article.name}</Link>
+                                </p>
+                            )
+                        } else {
+                            return null
+                        }
+                    })
+                    : <Empty message='Отсутствует информация о статьях'/>
+                }
+            </BlockingElement>
+        )
+    }
+
     return (
         <div className={classes.BuildingItemPagePublic}>
             <div className={classes.Content}>
@@ -485,12 +499,20 @@ const BuildingItemPagePublic: React.FC = () => {
                         <Empty message='Объект недвижимости не найден'/>
                         :
                         <div className={classes.information}>
-                            {renderGallery()}
+                            <Gallery alt={building.name}
+                                     images={building.images}
+                                     type='carousel'
+                                     fetching={fetching}
+                            />
+
                             {renderInfo()}
                             {renderDescription()}
                             {renderAdvantages()}
                             {renderAdvanced()}
+
                             {building.type === 'building' ? renderHousing() : null}
+
+                            {renderArticlesInfo()}
                         </div>
                     }
                 </div>

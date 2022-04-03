@@ -187,6 +187,92 @@ class Model
     }
 
     /**
+     * Загрузка изображений на сервер и сохранение в базу данных
+     *
+     * @param int $objectId Идентификатор объекта
+     * @param string $objectType Тип объекта
+     * @param array $images Массив изображений
+     */
+    protected static function uploadImages(int $objectId, string $objectType, array $images)
+    {
+        if (count($images)) {
+            foreach ($images as $image) {
+                $fileName = self::uploadFile($image->value, $objectType, $objectId);
+
+                if ($fileName) {
+                    $sql = "
+                        INSERT INTO `sdi_images` (`id_object`, `type_object`, `name`, `active`, `avatar`)
+                        VALUES (:objectId, :objectType, :name, 1, :avatar)
+                    ";
+
+                    self::query($sql);
+                    self::bindParams('objectId', $objectId);
+                    self::bindParams('objectType', $objectType);
+                    self::bindParams('name', $fileName);
+                    self::bindParams('avatar', $image->avatar);
+                    self::execute();
+                }
+            }
+        }
+    }
+
+    /**
+     * Обновление данных изображений в базе данных
+     *
+     * @param array $images Массив изображений
+     */
+    protected static function updateImages(array $images)
+    {
+        if (count($images)) {
+            foreach ($images as $image) {
+                $sql = "
+                    UPDATE `sdi_images`
+                    SET
+                        active = :active,
+                        avatar = :avatar
+                    WHERE id = :id
+                ";
+
+                self::query($sql);
+                self::bindParams('id', $image->id);
+                self::bindParams('active', $image->active);
+                self::bindParams('avatar', $image->avatar);
+                self::execute();
+            }
+        }
+    }
+
+    /**
+     * Получение данных изображений к соответствующим объектам
+     *
+     * @param array $filter Массив параметров фильтрации
+     * @return array
+     */
+    protected static function fetchImages(array $filter): array
+    {
+        $resultList = [];
+        $sqlWhere = self::generateFilterQuery($filter);
+
+        $sql = "
+            SELECT *
+            FROM `sdi_images`
+            $sqlWhere
+            ORDER BY `avatar` DESC, `id` ASC
+        ";
+
+        self::query($sql);
+        $list = self::fetchAll();
+
+        if (!empty($list)) {
+            foreach ($list as $item) {
+                array_push($resultList, self::formatImagesToJson($item));
+            }
+        }
+
+        return $resultList;
+    }
+
+    /**
      * Формирует строку запроса where для фильтрации по обобщенным параметрам
      *
      * @param array $filter Массив параметров фильтрации
@@ -213,12 +299,12 @@ class Model
             array_push($where, "`type` = '" . $filter['type'] . "'");
         }
 
-        if (!empty($filter['typeObject'])) {
-            array_push($where, "`type_object` = '" . $filter['typeObject'] . "'");
+        if (!empty($filter['objectId'])) {
+            array_push($where, "`id_object` IN (" . implode(',', $filter['objectId']) . ")");
         }
 
-        if (!empty($filter['objectId'])) {
-            array_push($where, "`id_object` = " . $filter['objectId']);
+        if (!empty($filter['objectType'])) {
+            array_push($where, "`type_object` = '" . $filter['objectType'] . "'");
         }
 
         if (count($where)) {
@@ -226,5 +312,24 @@ class Model
         }
 
         return $sqlWhere;
+    }
+
+    /**
+     * Преобразование выходящих данных изображений в формат для frontend
+     *
+     * @param array $data Массив из базы данных
+     * @return array
+     */
+    private static function formatImagesToJson(array $data): array
+    {
+        return [
+            'id' => (int)$data['id'],
+            'objectId' => (int)$data['id_object'],
+            'objectType' => $data['type_object'],
+            'name' => $data['name'],
+            'active' => (int)$data['active'],
+            'avatar' => (int)$data['avatar'],
+            'value' => '/uploads/' . $data['type_object'] . '/' . $data['id_object'] . '/' . $data['name']
+        ];
     }
 }

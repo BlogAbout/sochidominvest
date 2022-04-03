@@ -85,7 +85,7 @@ const ComboBox: React.FC<Props> = (props) => {
     }
 
     const onClearHandler = (e: React.MouseEvent<HTMLInputElement>) => {
-        props.onSelect('', e);
+        props.onSelect('', e)
     }
 
     return (

@@ -113,12 +113,12 @@ const RegistrationForm: React.FC<Props> = (props) => {
 
             <div className={classes['field-wrapper']}>
                 <TextBox
-                    type="text"
+                    type='text'
                     value={signUp.firstName}
                     placeHolder='Имя'
                     error={validationError.firstName !== ''}
                     errorText={validationError.firstName}
-                    icon="user"
+                    icon='user'
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                         setSignUp({
                             ...signUp,
@@ -136,12 +136,12 @@ const RegistrationForm: React.FC<Props> = (props) => {
 
             <div className={classes['field-wrapper']}>
                 <TextBox
-                    type="text"
+                    type='text'
                     value={signUp.email}
                     placeHolder='Email'
                     error={validationError.email !== ''}
                     errorText={validationError.email}
-                    icon="at"
+                    icon='at'
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                         setSignUp({
                             ...signUp,
@@ -161,12 +161,12 @@ const RegistrationForm: React.FC<Props> = (props) => {
 
             <div className={classes['field-wrapper']}>
                 <TextBox
-                    type="tel"
+                    type='tel'
                     value={signUp.phone}
                     placeHolder='Телефон'
                     error={validationError.phone !== ''}
                     errorText={validationError.phone}
-                    icon="phone"
+                    icon='phone'
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                         setSignUp({
                             ...signUp,
@@ -184,13 +184,13 @@ const RegistrationForm: React.FC<Props> = (props) => {
 
             <div className={classes['field-wrapper']}>
                 <TextBox
-                    type="password"
+                    type='password'
                     password={true}
                     value={signUp.password}
                     placeHolder='Пароль'
                     error={validationError.password !== ''}
                     errorText={validationError.password}
-                    icon="lock"
+                    icon='lock'
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                         setSignUp({
                             ...signUp,

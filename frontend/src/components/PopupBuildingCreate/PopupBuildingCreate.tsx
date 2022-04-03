@@ -486,6 +486,7 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
             <div key='gallery' className={classes.tabContent}>
                 <ImageUploader images={listActiveImages}
                                newImages={building.newImages}
+                               objectType='building'
                                multi
                                showUploadList
                                onChange={uploadImagesHandler.bind(this)}
@@ -529,6 +530,40 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
         )
     }
 
+    const renderSeoTab = () => {
+        return (
+            <div key='seo' className={classes.tabContent}>
+                <div className={classes.info}>
+                    <div className={cx({'field': true, 'full': true})}>
+                        <div className={classes.field_label}>Meta Title</div>
+
+                        <TextBox value={building.metaTitle}
+                                 onChange={(e: React.MouseEvent, value: string) => setBuilding({
+                                     ...building,
+                                     metaTitle: value
+                                 })}
+                                 placeHolder='Введите Meta Title'
+                                 icon='heading'
+                        />
+                    </div>
+
+                    <div className={cx({'field': true, 'full': true})}>
+                        <div className={classes.field_label}>Meta Description</div>
+
+                        <TextAreaBox value={building.metaDescription || ''}
+                                     onChange={(value: string) => setBuilding({
+                                         ...building,
+                                         metaDescription: value
+                                     })}
+                                     placeHolder='Введите Meta Description'
+                                     icon='paragraph'
+                        />
+                    </div>
+                </div>
+            </div>
+        )
+    }
+
     const tabs: ITab = {
         state: {title: 'Состояние', render: renderStateTab()},
         info: {title: 'Информация', render: renderInformationTab()},
@@ -536,7 +571,8 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
         gallery: {title: 'Галерея', render: renderGalleryTab()},
         developer: {title: 'Застройщик', render: renderDeveloperTab()},
         contact: {title: 'Контакты', render: renderContactTab()},
-        documents: {title: 'Документы', render: renderDocumentTab()}
+        documents: {title: 'Документы', render: renderDocumentTab()},
+        seo: {title: 'СЕО', render: renderSeoTab()}
     }
 
     if (building.type !== 'building') {

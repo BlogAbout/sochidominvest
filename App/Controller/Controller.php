@@ -212,8 +212,8 @@ class Controller
                 $filter['objectId'] = $params['objectId'];
             }
 
-            if (!empty($params['typeObject'])) {
-                $filter['typeObject'] = $params['typeObject'];
+            if (!empty($params['objectType'])) {
+                $filter['objectType'] = $params['objectType'];
             }
         }
 

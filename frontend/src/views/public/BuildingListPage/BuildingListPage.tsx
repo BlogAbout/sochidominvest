@@ -4,12 +4,12 @@ import {useNavigate} from 'react-router-dom'
 import {declension} from '../../../helpers/stringHelper'
 import {numberWithSpaces, round} from '../../../helpers/numberHelper'
 import {IBuilding} from '../../../@types/IBuilding'
+import {ISelector} from '../../../@types/ISelector'
+import {buildingTypes} from '../../../helpers/buildingHelper'
 import BuildingService from '../../../api/BuildingService'
 import BlockingElement from '../../../components/BlockingElement/BlockingElement'
 import Empty from '../../../components/Empty/Empty'
 import classes from './BuildingListPage.module.scss'
-import {buildingTypes} from "../../../helpers/buildingHelper";
-import {ISelector} from "../../../@types/ISelector";
 
 const cx = classNames.bind(classes)
 

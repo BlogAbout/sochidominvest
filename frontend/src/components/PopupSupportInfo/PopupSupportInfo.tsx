@@ -195,7 +195,7 @@ const PopupSupportInfo: React.FC<Props> = (props) => {
             </Content>
 
             <Footer>
-                <Button type="regular"
+                <Button type='regular'
                         icon='xmark'
                         onClick={close.bind(this)}
                 >Закрыть</Button>

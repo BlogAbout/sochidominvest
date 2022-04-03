@@ -33,8 +33,9 @@ class ArticleModel extends Model
 
         if (!empty($item)) {
             $item = ArticleModel::formatDataToJson($item);
-            $images = ArticleModel::fetchArticleImages([
-                'articleId' => [$item['id']],
+            $images = parent::fetchImages([
+                'objectId' => [$item['id']],
+                'objectType' => 'article',
                 'active' => [1]
             ]);
 
@@ -82,15 +83,16 @@ class ArticleModel extends Model
                 array_push($ids, (int)$item['id']);
             }
 
-            $images = ArticleModel::fetchArticleImages([
-                'articleId' => $ids,
+            $images = parent::fetchImages([
+                'objectId' => $ids,
+                'objectType' => 'article',
                 'active' => [1]
             ]);
 
             if (count($images)) {
                 foreach ($resultList as &$item) {
                     foreach ($images as $image) {
-                        if ($image['idObject'] == $item['id']) {
+                        if ($image['objectId'] == $item['id']) {
                             array_push($item['images'], $image);
                         }
                     }
@@ -134,7 +136,7 @@ class ArticleModel extends Model
             $payload['id'] = parent::lastInsertedId();
 
             ArticleModel::updateRelationsBuildings($payload['id'], $payload['buildings']);
-            ArticleModel::uploadImages($payload['id'], $payload['newImages']);
+            parent::uploadImages($payload['id'], 'article', $payload['newImages']);
 
             return array(
                 'status' => true,
@@ -185,8 +187,8 @@ class ArticleModel extends Model
 
         if (parent::execute()) {
             ArticleModel::updateRelationsBuildings($payload['id'], $payload['buildings']);
-            ArticleModel::updateImages($payload['images']);
-            ArticleModel::uploadImages($payload['id'], $payload['newImages']);
+            parent::updateImages($payload['images']);
+            parent::uploadImages($payload['id'], 'article', $payload['newImages']);
 
             return array(
                 'status' => true,
@@ -249,90 +251,6 @@ class ArticleModel extends Model
     }
 
     /**
-     * Загрузка изображений на сервер и сохранение в базу данных
-     *
-     * @param int $articleId Идентификатор статьи
-     * @param array $images Массив изображений
-     */
-    private static function uploadImages(int $articleId, array $images)
-    {
-        if (count($images)) {
-            foreach ($images as $image) {
-                $fileName = parent::uploadFile($image->value, 'article', $articleId);
-
-                if ($fileName) {
-                    $sql = "
-                        INSERT INTO `sdi_article_images` (`id_article`, `name`, `active`, `avatar`)
-                        VALUES (:articleId, :name, 1, :avatar)
-                    ";
-
-                    parent::query($sql);
-                    parent::bindParams('articleId', $articleId);
-                    parent::bindParams('name', $fileName);
-                    parent::bindParams('avatar', $image->avatar);
-                    parent::execute();
-                }
-            }
-        }
-    }
-
-    /**
-     * Обновление данных изображений в базе данных
-     *
-     * @param array $images Массив изображений
-     */
-    private static function updateImages(array $images)
-    {
-        if (count($images)) {
-            foreach ($images as $image) {
-                $sql = "
-                    UPDATE `sdi_article_images`
-                    SET
-                        active = :active,
-                        avatar = :avatar
-                    WHERE id = :id
-                ";
-
-                parent::query($sql);
-                parent::bindParams('id', $image->id);
-                parent::bindParams('active', $image->active);
-                parent::bindParams('avatar', $image->avatar);
-                parent::execute();
-            }
-        }
-    }
-
-    /**
-     * Получение данных изображений к соответствующим статьям
-     *
-     * @param array $filter Массив параметров фильтрации
-     * @return array
-     */
-    private static function fetchImages(array $filter): array
-    {
-        $resultList = [];
-        $sqlWhere = parent::generateFilterQuery($filter);
-
-        $sql = "
-            SELECT *
-            FROM `sdi_article_images`
-            $sqlWhere
-            ORDER BY `avatar` DESC, `id` ASC
-        ";
-
-        parent::query($sql);
-        $list = parent::fetchAll();
-
-        if (!empty($list)) {
-            foreach ($list as $item) {
-                array_push($resultList, ArticleModel::formatImagesToJson($item));
-            }
-        }
-
-        return $resultList;
-    }
-
-    /**
      * Преобразование выходящих данных в формат для frontend
      * @param array $data Массив из базы данных
      * @return array
@@ -351,25 +269,9 @@ class ArticleModel extends Model
             'publish' => (int)$data['publish'],
             'metaTitle' => $data['meta_title'],
             'metaDescription' => $data['meta_description'],
-            'buildings' => array_map('intval', $data['buildings'] ? explode(',', $data['buildings']) : [])
-        ];
-    }
-
-    /**
-     * Преобразование выходящих данных изображений в формат для frontend
-     *
-     * @param array $data Массив из базы данных
-     * @return array
-     */
-    private static function formatImagesToJson(array $data): array
-    {
-        return [
-            'id' => (int)$data['id'],
-            'idObject' => (int)$data['id_article'],
-            'name' => $data['name'],
-            'active' => (int)$data['active'],
-            'avatar' => (int)$data['avatar'],
-            'value' => '/uploads/article/' . $data['id_article'] . '/' . $data['name']
+            'buildings' => array_map('intval', $data['buildings'] ? explode(',', $data['buildings']) : []),
+            'images' => [],
+            'newImages' => []
         ];
     }
 }

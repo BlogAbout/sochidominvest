@@ -101,7 +101,9 @@ class BuildingController extends Controller
             'images' => $data->images,
             'newImages' => $data->newImages,
             'area' => (float)htmlentities(stripcslashes(strip_tags($data->area))),
-            'cost' => (float)htmlentities(stripcslashes(strip_tags($data->cost)))
+            'cost' => (float)htmlentities(stripcslashes(strip_tags($data->cost))),
+            'metaTitle' => htmlentities(stripcslashes(strip_tags($data->metaTitle))),
+            'metaDescription' => htmlentities(stripcslashes(strip_tags($data->metaDescription)))
         );
 
         try {
@@ -213,7 +215,9 @@ class BuildingController extends Controller
             'images' => $data->images,
             'newImages' => $data->newImages,
             'area' => (float)htmlentities(stripcslashes(strip_tags($data->area))),
-            'cost' => (float)htmlentities(stripcslashes(strip_tags($data->cost)))
+            'cost' => (float)htmlentities(stripcslashes(strip_tags($data->cost))),
+            'metaTitle' => htmlentities(stripcslashes(strip_tags($data->metaTitle))),
+            'metaDescription' => htmlentities(stripcslashes(strip_tags($data->metaDescription)))
         );
 
         try {

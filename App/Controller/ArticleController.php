@@ -161,8 +161,8 @@ class ArticleController extends Controller
             'dateUpdate' => date('Y-m-d H:i:s'),
             'active' => (int)htmlentities(stripcslashes(strip_tags($data->active))),
             'publish' => (int)htmlentities(stripcslashes(strip_tags($data->publish))),
-            'metaTitle' => htmlentities(stripcslashes(strip_tags($data->meta_title))),
-            'metaDescription' => htmlentities(stripcslashes(strip_tags($data->meta_description))),
+            'metaTitle' => htmlentities(stripcslashes(strip_tags($data->metaTitle))),
+            'metaDescription' => htmlentities(stripcslashes(strip_tags($data->metaDescription))),
             'buildings' => $data->buildings,
             'images' => $data->images,
             'newImages' => $data->newImages
