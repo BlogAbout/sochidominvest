@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react'
+import Helmet from 'react-helmet'
 import openPopupDeveloperCreate from '../../../components/PopupDeveloperCreate/PopupDeveloperCreate'
 import Button from '../../../components/Button/Button'
 import DeveloperList from '../../../components/DeveloperList/DeveloperList'
@@ -36,6 +37,13 @@ const DeveloperPage: React.FC = () => {
 
     return (
         <main className={classes.DeveloperPage}>
+            <Helmet>
+                <meta charSet="utf-8"/>
+                <title>Застройщики - СочиДомИнвест</title>
+                <meta name='description' content=''/>
+                <link rel='canonical' href={`${window.location.href}`}/>
+            </Helmet>
+
             <div className={classes.Content}>
                 <h1>
                     <span>Застройщики</span>

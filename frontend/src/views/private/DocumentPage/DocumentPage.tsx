@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react'
+import Helmet from 'react-helmet'
 import openPopupDocumentCreate from '../../../components/PopupDocumentCreate/PopupDocumentCreate'
 import openContextMenu from '../../../components/ContextMenu/ContextMenu'
 import Button from '../../../components/Button/Button'
@@ -62,6 +63,13 @@ const DocumentPage: React.FC = () => {
 
     return (
         <main className={classes.DocumentPage}>
+            <Helmet>
+                <meta charSet="utf-8"/>
+                <title>Документы - СочиДомИнвест</title>
+                <meta name='description' content=''/>
+                <link rel='canonical' href={`${window.location.href}`}/>
+            </Helmet>
+
             <div className={classes.Content}>
                 <h1>
                     <span>Документы</span>

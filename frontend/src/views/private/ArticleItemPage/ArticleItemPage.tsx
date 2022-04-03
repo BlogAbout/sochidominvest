@@ -1,8 +1,10 @@
 import React, {useEffect, useState} from 'react'
-import {useParams, useNavigate} from 'react-router-dom'
+import Helmet from 'react-helmet'
+import {useNavigate, useParams} from 'react-router-dom'
 import classNames from 'classnames/bind'
 import {IArticle} from '../../../@types/IArticle'
 import {IBuilding} from '../../../@types/IBuilding'
+import {IFilter} from '../../../@types/IFilter'
 import {useTypedSelector} from '../../../hooks/useTypedSelector'
 import {useActions} from '../../../hooks/useActions'
 import BlockingElement from '../../../components/BlockingElement/BlockingElement'
@@ -13,9 +15,17 @@ type ArticleItemPageParams = {
     id: string
 }
 
+interface Props {
+    public?: boolean
+}
+
+const defaultProps: Props = {
+    public: false
+}
+
 const cx = classNames.bind(classes)
 
-const ArticleItemPage: React.FC = () => {
+const ArticleItemPage: React.FC<Props> = (props) => {
     const params = useParams<ArticleItemPageParams>()
 
     const navigate = useNavigate()
@@ -28,6 +38,8 @@ const ArticleItemPage: React.FC = () => {
     const {fetchArticleList, fetchBuildingList} = useActions()
 
     useEffect(() => {
+        document.title = 'Статьи'
+
         if (isUpdate || !articles.length) {
             fetchArticleList({active: [0, 1]})
 
@@ -48,7 +60,17 @@ const ArticleItemPage: React.FC = () => {
 
     useEffect(() => {
         if (article.id && (!buildings || !buildings.length)) {
-            fetchBuildingList({active: [0, 1]})
+            document.title = article.metaTitle || 'Статьи'
+            document.title = article.metaDescription || ''
+
+            const filter: IFilter = {} as IFilter
+            filter.active = [0, 1]
+
+            if (props.public) {
+                filter.publish = 1
+            }
+
+            fetchBuildingList(filter)
         }
     }, [article])
 
@@ -57,7 +79,9 @@ const ArticleItemPage: React.FC = () => {
             return null
         }
 
-        const relationList = buildings.filter((building: IBuilding) => building.id && article.buildings.includes(building.id))
+        const relationList = buildings.filter((building: IBuilding) => {
+            return (!props.public || (props.public && building.active === 1)) && building.id && article.buildings.includes(building.id)
+        })
 
         if (!relationList || !relationList.length) {
             return null
@@ -98,14 +122,23 @@ const ArticleItemPage: React.FC = () => {
 
     return (
         <main className={classes.ArticleItemPage}>
+            <Helmet>
+                <meta charSet="utf-8"/>
+                <title>
+                    {!article ? 'Статьи - СочиДомИнвест' : !article.metaTitle ? `${article.name} - СочиДомИнвест` : `${article.metaTitle} - СочиДомИнвест`}
+                </title>
+                <meta name='description'
+                      content={!article || !article.metaDescription ? '' : article.metaDescription}
+                />
+                <link rel='canonical' href={`${window.location.href}`}/>
+            </Helmet>
+
             <div className={classes.Content}>
                 <div className={classes.container}>
                     <BlockingElement fetching={fetchingArticleList || fetchingBuildingList} className={classes.block}>
                         <Gallery alt={article.name} images={article.images} type='carousel' fetching={false}/>
 
-                        <h1>
-                            <span>{article.name}</span>
-                        </h1>
+                        <h1><span>{article.name}</span></h1>
 
                         <div className={classes.description}>{article.description}</div>
 
@@ -117,6 +150,7 @@ const ArticleItemPage: React.FC = () => {
     )
 }
 
+ArticleItemPage.defaultProps = defaultProps
 ArticleItemPage.displayName = 'ArticleItemPage'
 
 export default ArticleItemPage

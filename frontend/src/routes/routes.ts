@@ -16,6 +16,8 @@ export enum RouteNames {
     PROFILE = '/panel/profile',
     PUBLIC_BUILDING = '/building',
     PUBLIC_BUILDING_ITEM = '/building/:id',
+    PUBLIC_ARTICLE = '/article',
+    PUBLIC_ARTICLE_ITEM = '/article/:id',
     PUBLIC_POLICY = '/policy',
     PUBLIC_ABOUT = '/about'
 }

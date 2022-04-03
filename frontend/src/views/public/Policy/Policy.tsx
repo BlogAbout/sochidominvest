@@ -1,9 +1,17 @@
 import React from 'react'
+import Helmet from 'react-helmet'
 import classes from './Policy.module.scss'
 
 const Policy: React.FC = () => {
     return (
         <main className={classes.AboutPagePublic}>
+            <Helmet>
+                <meta charSet="utf-8"/>
+                <title>Политика конфиденциальности - СочиДомИнвест</title>
+                <meta name='description' content=''/>
+                <link rel='canonical' href={`${window.location.href}`}/>
+            </Helmet>
+
             <div className={classes.Content}>
                 <div className={classes.container}>
                     <div className={classes.block}>

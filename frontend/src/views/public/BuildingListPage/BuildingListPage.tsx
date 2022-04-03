@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react'
+import Helmet from 'react-helmet'
 import classNames from 'classnames/bind'
 import {useNavigate} from 'react-router-dom'
 import {declension} from '../../../helpers/stringHelper'
@@ -21,19 +22,21 @@ const BuildingListPage: React.FC = () => {
     const [fetching, setFetching] = useState(false)
 
     useEffect(() => {
-        setFetching(true)
+        if (isUpdate) {
+            setFetching(true)
 
-        BuildingService.fetchBuildings({active: [1], publish: 1})
-            .then((response: any) => {
-                setBuildings(response.data)
-            })
-            .catch((error: any) => {
-                console.error('Произошла ошибка загрузки данных', error)
-            })
-            .finally(() => {
-                setFetching(false)
-                setIsUpdate(false)
-            })
+            BuildingService.fetchBuildings({active: [1], publish: 1})
+                .then((response: any) => {
+                    setBuildings(response.data)
+                })
+                .catch((error: any) => {
+                    console.error('Произошла ошибка загрузки данных', error)
+                })
+                .finally(() => {
+                    setFetching(false)
+                    setIsUpdate(false)
+                })
+        }
     }, [isUpdate])
 
     const renderBuildingItem = (building: IBuilding) => {
@@ -86,6 +89,13 @@ const BuildingListPage: React.FC = () => {
 
     return (
         <main className={classes.BuildingListPage}>
+            <Helmet>
+                <meta charSet="utf-8"/>
+                <title>Недвижимость - СочиДомИнвест</title>
+                <meta name='description' content=''/>
+                <link rel='canonical' href={`${window.location.href}`}/>
+            </Helmet>
+
             <div className={classes.Content}>
                 <div className={classes.container}>
                     <h1>

@@ -1,9 +1,17 @@
 import React from 'react'
+import Helmet from 'react-helmet'
 import classes from './AboutPagePublic.module.scss'
 
 const AboutPagePublic: React.FC = () => {
     return (
         <main className={classes.AboutPagePublic}>
+            <Helmet>
+                <meta charSet="utf-8"/>
+                <title>О Компании - СочиДомИнвест</title>
+                <meta name='description' content=''/>
+                <link rel='canonical' href={`${window.location.href}`}/>
+            </Helmet>
+
             <div className={classes.Content}>
                 <div className={classes.container}>
                     <div className={classes.block}>

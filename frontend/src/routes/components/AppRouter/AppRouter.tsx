@@ -14,6 +14,7 @@ import BuildingItemPagePublic from '../../../views/public/BuildingItemPagePublic
 import BuildingListPage from '../../../views/public/BuildingListPage/BuildingListPage'
 import ArticleItemPage from '../../../views/private/ArticleItemPage/ArticleItemPage'
 import ArticlePage from '../../../views/private/ArticlePage/ArticlePage'
+import ArticlePagePublic from '../../../views/public/ArticlePagePublic/ArticlePagePublic'
 import DeveloperPage from '../../../views/private/DeveloperPage/DeveloperPage'
 import DocumentPage from '../../../views/private/DocumentPage/DocumentPage'
 import Report from '../../../views/Report/Report'
@@ -42,6 +43,8 @@ const AppRouter: React.FC = () => {
                         <Route path={RouteNames.PUBLIC_POLICY} element={<Policy/>}/>
                         <Route path={RouteNames.PUBLIC_BUILDING_ITEM} element={<BuildingItemPagePublic/>}/>
                         <Route path={RouteNames.PUBLIC_BUILDING} element={<BuildingListPage/>}/>
+                        <Route path={RouteNames.PUBLIC_ARTICLE_ITEM} element={<ArticleItemPage public/>}/>
+                        <Route path={RouteNames.PUBLIC_ARTICLE} element={<ArticlePagePublic/>}/>
                         <Route path={RouteNames.PUBLIC_ABOUT} element={<AboutPagePublic/>}/>
                     </Routes>
 

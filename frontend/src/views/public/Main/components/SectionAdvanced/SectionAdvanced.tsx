@@ -24,9 +24,8 @@ const SectionAdvanced: React.FC = () => {
 
                     <div className={classes.item}>
                         <div className={classes.content}>
-                            <p>The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those
-                                interested.</p>
-                            <a>Подробнее</a>
+                            <p>Узнайте о последних событиях и будьте в курсе новостей на рынке недвижимости. Не пропустите наши выгодные акции от застройщиков.</p>
+                            <Link to={RouteNames.PUBLIC_ARTICLE}>Узнать</Link>
                         </div>
                     </div>
                 </div>

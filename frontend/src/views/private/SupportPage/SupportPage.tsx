@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react'
+import Helmet from 'react-helmet'
 import {IFeed} from '../../../@types/IFeed'
 import FeedService from '../../../api/FeedService'
 import Button from '../../../components/Button/Button'
@@ -33,6 +34,13 @@ const SupportPage: React.FC = () => {
 
     return (
         <main className={classes.SupportPage}>
+            <Helmet>
+                <meta charSet="utf-8"/>
+                <title>Техническая поддержка - СочиДомИнвест</title>
+                <meta name='description' content=''/>
+                <link rel='canonical' href={`${window.location.href}`}/>
+            </Helmet>
+
             <div className={classes.filter}>
                 <Button type='save' icon={'headset'} onClick={() => console.log('add')}>Заявки</Button>
 

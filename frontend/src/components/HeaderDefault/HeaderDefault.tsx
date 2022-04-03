@@ -42,6 +42,14 @@ const HeaderDefault: React.FC = () => {
                     >
                         <span>Недвижимость</span>
                     </NavLink>
+
+                    <NavLink to={RouteNames.PUBLIC_ARTICLE}
+                             className={({isActive}) => isActive ? classes.active : ''}
+                             title='Статьи'
+                             onClick={() => setOpenMenu(false)}
+                    >
+                        <span>Статьи</span>
+                    </NavLink>
                 </nav>
 
                 <div className={classes.contacts}>

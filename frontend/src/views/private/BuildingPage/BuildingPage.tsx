@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react'
+import Helmet from 'react-helmet'
 import Button from '../../../components/Button/Button'
 import openPopupBuildingCreate from '../../../components/PopupBuildingCreate/PopupBuildingCreate'
 import openContextMenu from '../../../components/ContextMenu/ContextMenu'
@@ -51,6 +52,13 @@ const BuildingPage: React.FC = () => {
 
     return (
         <main className={classes.BuildingPage}>
+            <Helmet>
+                <meta charSet="utf-8"/>
+                <title>Недвижимость - СочиДомИнвест</title>
+                <meta name='description' content=''/>
+                <link rel='canonical' href={`${window.location.href}`}/>
+            </Helmet>
+
             <div className={classes.filter}>
                 <Button type='save' icon={'bolt'} onClick={() => console.log('add')}>Новинки</Button>
 

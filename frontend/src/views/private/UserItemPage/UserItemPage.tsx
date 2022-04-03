@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react'
+import Helmet from 'react-helmet'
 import {useParams} from 'react-router-dom'
 import {useTypedSelector} from '../../../hooks/useTypedSelector'
 import {useActions} from '../../../hooks/useActions'
@@ -112,6 +113,13 @@ const UserItemPage: React.FC = () => {
 
     return (
         <div className={classes.UserItemPage}>
+            <Helmet>
+                <meta charSet="utf-8"/>
+                <title>{!user ? 'Пользователи - СочиДомИнвест' : `${user.firstName} - СочиДомИнвест`}</title>
+                <meta name='description' content=''/>
+                <link rel='canonical' href={`${window.location.href}`}/>
+            </Helmet>
+
             <div className={classes.Content}>
                 {fetching && <Preloader/>}
 

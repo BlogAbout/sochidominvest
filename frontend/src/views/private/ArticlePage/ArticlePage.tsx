@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react'
+import Helmet from 'react-helmet'
 import Button from '../../../components/Button/Button'
 import openPopupArticleCreate from '../../../components/PopupArticleCreate/PopupArticleCreate'
 import ArticleList from '../../../components/ArticleList/ArticleList'
@@ -33,6 +34,13 @@ const ArticlePage: React.FC = () => {
 
     return (
         <main className={classes.ArticlePage}>
+            <Helmet>
+                <meta charSet="utf-8"/>
+                <title>Статьи - СочиДомИнвест</title>
+                <meta name='description' content=''/>
+                <link rel='canonical' href={`${window.location.href}`}/>
+            </Helmet>
+
             <div className={classes.filter}>
                 <Button type='save' icon={'bolt'} onClick={() => console.log('add')}>Новости</Button>
 

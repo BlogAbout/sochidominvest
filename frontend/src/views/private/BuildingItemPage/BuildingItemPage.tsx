@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react'
+import Helmet from 'react-helmet'
 import {Link, useParams} from 'react-router-dom'
 import {developerTypes} from '../../../helpers/developerHelper'
 import {useTypedSelector} from '../../../hooks/useTypedSelector'
@@ -627,6 +628,13 @@ const BuildingItemPage: React.FC = (props) => {
 
     return (
         <div className={classes.BuildingItemPage}>
+            <Helmet>
+                <meta charSet="utf-8"/>
+                <title>{!building ? 'Недвижимость - СочиДомИнвест' : `${building.name} - СочиДомИнвест`}</title>
+                <meta name='description' content=''/>
+                <link rel='canonical' href={`${window.location.href}`}/>
+            </Helmet>
+
             <div className={classes.Content}>
                 <div className={classes.information}>
                     {!building || !building.id ?
