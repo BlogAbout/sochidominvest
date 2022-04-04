@@ -6,7 +6,7 @@ import {declension} from '../../../helpers/stringHelper'
 import {numberWithSpaces, round} from '../../../helpers/numberHelper'
 import {IBuilding} from '../../../@types/IBuilding'
 import {ISelector} from '../../../@types/ISelector'
-import {buildingTypes} from '../../../helpers/buildingHelper'
+import {buildingTypes, getDistrictText} from '../../../helpers/buildingHelper'
 import BuildingService from '../../../api/BuildingService'
 import BlockingElement from '../../../components/BlockingElement/BlockingElement'
 import Empty from '../../../components/Empty/Empty'
@@ -42,6 +42,21 @@ const BuildingListPage: React.FC = () => {
     const renderBuildingItem = (building: IBuilding) => {
         const buildingType = buildingTypes.find((item: ISelector) => item.key === building.type)
 
+        let passedInfo = ''
+        if (building.passed) {
+            passedInfo += building.passed.is ? 'Сдан: ' : 'Срок сдачи: '
+
+            if (building.passed.quarter) {
+                passedInfo += building.passed.quarter + ' квартал '
+            }
+
+            if (building.passed.year) {
+                passedInfo += building.passed.year
+            }
+        }
+
+        const districtText = getDistrictText(building.district, building.districtZone)
+
         return (
             <div key={building.id} className={classes.item} onClick={() => navigate('/building/' + building.id)}>
                 <div className={cx({'itemImage': true, 'noImage': !building.images || !building.images.length})}>
@@ -54,11 +69,23 @@ const BuildingListPage: React.FC = () => {
                 <div className={classes.itemContainer}>
                     <div className={classes.itemContent}>
                         <h2>{building.name}</h2>
-                        <div className={classes.address}>{building.address}</div>
+
+                        <div className={classes.address}>
+                            {districtText !== '' && <span>{districtText}</span>}
+                            <span>{building.address}</span>
+                        </div>
                     </div>
 
                     <div className={classes.itemInfo}>
                         {buildingType && <div className={classes.type}>{buildingType.text}</div>}
+
+                        {passedInfo !== '' &&
+                        <div className={cx({
+                            'passed': true,
+                            'is': building.passed && building.passed.is
+                        })}>
+                            <span>{passedInfo}</span>
+                        </div>}
 
                         {building.type === 'building' ?
                             <div className={classes.counter}>

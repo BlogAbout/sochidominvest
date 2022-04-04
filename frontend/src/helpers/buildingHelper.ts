@@ -224,3 +224,25 @@ export const districtList: ISelector[] = [
         children: []
     }
 ]
+
+export const getDistrictText = (district?: string | null, districtZone?: string | null) => {
+    let districtText = ''
+
+    if (district && district.trim() !== '') {
+        const districtInfo = districtList.find((item: ISelector) => item.key === district)
+
+        if (districtInfo) {
+            districtText = districtInfo.text
+
+            if (districtZone && districtInfo.children) {
+                const districtZoneInfo = districtInfo.children.find((item: ISelector) => item.key === districtZone)
+
+                if (districtZoneInfo) {
+                    districtText += ' / ' + districtZoneInfo.text
+                }
+            }
+        }
+    }
+
+    return districtText
+}

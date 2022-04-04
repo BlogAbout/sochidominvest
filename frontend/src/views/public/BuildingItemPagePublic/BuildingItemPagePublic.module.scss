@@ -72,6 +72,27 @@
                     .col {
                         width: 49%;
 
+                        .passed {
+                            margin-bottom: 10px;
+
+                            span {
+                                display: inline-block;
+                                font-size: 14px;
+                                line-height: 14px;
+                                padding: 5px;
+                                background: #075ea5;
+                                color: #fff;
+                                z-index: 3;
+                            }
+
+                            &.is {
+                                span {
+                                    background: #ffcc01;
+                                    color: #000;
+                                }
+                            }
+                        }
+
                         .tags {
                             width: 100%;
                             margin-bottom: 20px;
@@ -93,6 +114,10 @@
                         .address {
                             margin-bottom: 50px;
                             font-size: 20px;
+
+                            span {
+                                display: block;
+                            }
                         }
 
                         .row {

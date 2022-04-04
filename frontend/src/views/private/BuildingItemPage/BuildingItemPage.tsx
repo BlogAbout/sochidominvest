@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react'
 import Helmet from 'react-helmet'
+import classNames from 'classnames/bind'
 import {Link, useParams} from 'react-router-dom'
 import {developerTypes} from '../../../helpers/developerHelper'
 import {useTypedSelector} from '../../../hooks/useTypedSelector'
@@ -36,7 +37,7 @@ import {
     buildingTerritory,
     buildingTypes,
     buildingWaterSupply,
-    formalizationList,
+    formalizationList, getDistrictText,
     paymentsList
 } from '../../../helpers/buildingHelper'
 import classes from './BuildingItemPage.module.scss'
@@ -44,6 +45,8 @@ import classes from './BuildingItemPage.module.scss'
 type BuildingItemPageParams = {
     id: string
 }
+
+const cx = classNames.bind(classes)
 
 const BuildingItemPage: React.FC = (props) => {
     const params = useParams<BuildingItemPageParams>()
@@ -138,8 +141,28 @@ const BuildingItemPage: React.FC = (props) => {
 
     // Вывод базовой информации
     const renderInfo = () => {
+        let passedInfo = ''
+        if (building.passed) {
+            passedInfo += building.passed.is ? 'Сдан: ' : 'Срок сдачи: '
+
+            if (building.passed.quarter) {
+                passedInfo += building.passed.quarter + ' квартал '
+            }
+
+            if (building.passed.year) {
+                passedInfo += building.passed.year
+            }
+        }
+
+        const districtText = getDistrictText(building.district, building.districtZone)
+
         return (
             <BlockingElement fetching={fetching} className={classes.block}>
+                {passedInfo !== '' &&
+                <div className={cx({'passed': true, 'is': building.passed && building.passed.is})}>
+                    <span>{passedInfo}</span>
+                </div>}
+
                 {tags && tags.length && building.tags && building.tags.length ?
                     <div className={classes.tags}>
                         {building.tags.map((id: number) => {
@@ -152,7 +175,10 @@ const BuildingItemPage: React.FC = (props) => {
                 }
 
                 <h1>{building.name}</h1>
-                <div className={classes.address}>{building.address}</div>
+                <div className={classes.address}>
+                    {districtText !== '' && <span>{districtText}</span>}
+                    <span>{building.address}</span>
+                </div>
 
                 <div className={classes.container}>
                     {building.type === 'building' ?
@@ -583,7 +609,7 @@ const BuildingItemPage: React.FC = (props) => {
     // Вывод информации о документах
     const renderDocumentsInfo = () => {
         return (
-            <BlockingElement fetching={fetching} className={classes.block}>
+            <BlockingElement fetching={fetching || fetchingDocuments} className={classes.block}>
                 <h2>Документы</h2>
 
                 {documents && documents.length ?

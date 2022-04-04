@@ -3,7 +3,13 @@ import classNames from 'classnames/bind'
 import {useNavigate} from 'react-router-dom'
 import {declension} from '../../../../helpers/stringHelper'
 import {numberWithSpaces, round} from '../../../../helpers/numberHelper'
-import {buildingTypes, formalizationList, paymentsList} from '../../../../helpers/buildingHelper'
+import {
+    buildingTypes,
+    districtList,
+    formalizationList,
+    getDistrictText,
+    paymentsList
+} from '../../../../helpers/buildingHelper'
 import BuildingService from '../../../../api/BuildingService'
 import {IBuilding} from '../../../../@types/IBuilding'
 import {ISelector} from '../../../../@types/ISelector'
@@ -93,6 +99,21 @@ const BuildingItem: React.FC<Props> = (props) => {
 
     const buildingType = buildingTypes.find((item: ISelector) => item.key === props.building.type)
 
+    let passedInfo = ''
+    if (props.building.passed) {
+        passedInfo += props.building.passed.is ? 'Сдан: ' : 'Срок сдачи: '
+
+        if (props.building.passed.quarter) {
+            passedInfo += props.building.passed.quarter + ' квартал '
+        }
+
+        if (props.building.passed.year) {
+            passedInfo += props.building.passed.year
+        }
+    }
+
+    const districtText = getDistrictText(props.building.district, props.building.districtZone)
+
     return (
         <div className={classes.BuildingItem}
              onClick={() => navigate('/panel/building/' + props.building.id)}
@@ -100,32 +121,44 @@ const BuildingItem: React.FC<Props> = (props) => {
         >
             {fetching && <Preloader/>}
 
-            <div
-                className={cx({'itemImage': true, 'noImage': !props.building.images || !props.building.images.length})}>
+            <div className={cx({
+                'itemImage': true,
+                'noImage': !props.building.images || !props.building.images.length})
+            }>
                 {props.building.images && props.building.images.length ?
-                    (
-                        <>
-                            {tags && tags.length && props.building.tags && props.building.tags.length ?
-                                <div className={classes.tags}>
-                                    {props.building.tags.map((id: number) => {
-                                        const findTag = tags.find((tag: ITag) => tag.id === id)
-
-                                        return findTag ? <div key={findTag.id}>{findTag.name}</div> : null
-                                    })}
-                                </div>
-                                : null
-                            }
-                            <img src={'https://api.sochidominvest.ru' + props.building.images[0].value}
-                                 alt={props.building.name}/>
-                        </>
-                    )
+                    <img src={'https://api.sochidominvest.ru' + props.building.images[0].value}
+                         alt={props.building.name}
+                    />
                     : null
                 }
+
+                {tags && tags.length && props.building.tags && props.building.tags.length ?
+                    <div className={classes.tags}>
+                        {props.building.tags.map((id: number) => {
+                            const findTag = tags.find((tag: ITag) => tag.id === id)
+
+                            return findTag ? <div key={findTag.id}>{findTag.name}</div> : null
+                        })}
+                    </div>
+                    : null
+                }
+
+                {passedInfo !== '' &&
+                <div className={cx({
+                    'passed': true,
+                    'is': props.building.passed && props.building.passed.is
+                })}>
+                    {passedInfo}
+                </div>}
             </div>
 
             <div className={classes.itemContent}>
                 <h2>{props.building.name}</h2>
-                <div className={classes.address}>{props.building.address}</div>
+
+                <div className={classes.address}>
+                    {districtText !== '' && <span>{districtText}</span>}
+                    <span>{props.building.address}</span>
+                </div>
 
                 {props.building.payments && props.building.payments.length ?
                     <div className={classes.payments}>

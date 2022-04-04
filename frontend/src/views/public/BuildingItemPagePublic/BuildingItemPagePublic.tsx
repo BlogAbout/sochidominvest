@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react'
 import Helmet from 'react-helmet'
+import classNames from 'classnames/bind'
 import {Link, useParams} from 'react-router-dom'
 import {useTypedSelector} from '../../../hooks/useTypedSelector'
 import {useActions} from '../../../hooks/useActions'
@@ -30,7 +31,7 @@ import {
     buildingTerritory,
     buildingTypes,
     buildingWaterSupply,
-    formalizationList,
+    formalizationList, getDistrictText,
     paymentsList
 } from '../../../helpers/buildingHelper'
 import classes from './BuildingItemPagePublic.module.scss'
@@ -38,6 +39,8 @@ import classes from './BuildingItemPagePublic.module.scss'
 type BuildingItemPageParams = {
     id: string
 }
+
+const cx = classNames.bind(classes)
 
 const BuildingItemPagePublic: React.FC = () => {
     const params = useParams<BuildingItemPageParams>()
@@ -105,10 +108,30 @@ const BuildingItemPagePublic: React.FC = () => {
 
     // Вывод базовой информации
     const renderInfo = () => {
+        let passedInfo = ''
+        if (building.passed) {
+            passedInfo += building.passed.is ? 'Сдан: ' : 'Срок сдачи: '
+
+            if (building.passed.quarter) {
+                passedInfo += building.passed.quarter + ' квартал '
+            }
+
+            if (building.passed.year) {
+                passedInfo += building.passed.year
+            }
+        }
+
+        const districtText = getDistrictText(building.district, building.districtZone)
+
         return (
             <BlockingElement fetching={fetching} className={classes.block}>
                 <div className={classes.mainInfo}>
                     <div className={classes.col}>
+                        {passedInfo !== '' &&
+                        <div className={cx({'passed': true, 'is': building.passed && building.passed.is})}>
+                            <span>{passedInfo}</span>
+                        </div>}
+
                         {tags && tags.length && building.tags && building.tags.length ?
                             <div className={classes.tags}>
                                 {building.tags.map((id: number) => {
@@ -121,7 +144,10 @@ const BuildingItemPagePublic: React.FC = () => {
                         }
 
                         <h1>{building.name}</h1>
-                        <div className={classes.address}>{building.address}</div>
+                        <div className={classes.address}>
+                            {districtText !== '' && <span>{districtText}</span>}
+                            <span>{building.address}</span>
+                        </div>
 
                         <div className={classes.info}>
                             {building.type === 'building' ?

@@ -126,6 +126,10 @@
                     .address {
                         margin-bottom: 40px;
                         color: #fff;
+
+                        span {
+                            display: block;
+                        }
                     }
                 }
 
@@ -139,6 +143,27 @@
                         font-size: 14px;
                         margin-bottom: 10px;
                         color: #fff;
+                    }
+
+                    .passed {
+                        margin-bottom: 10px;
+
+                        span {
+                            display: inline-block;
+                            font-size: 14px;
+                            line-height: 14px;
+                            padding: 5px;
+                            background: #075ea5;
+                            color: #fff;
+                            z-index: 3;
+                        }
+
+                        &.is {
+                            span {
+                                background: #ffcc01;
+                                color: #000;
+                            }
+                        }
                     }
 
                     .counter {
