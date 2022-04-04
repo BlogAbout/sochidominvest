@@ -1,6 +1,6 @@
 .search_wrapper {
     composes: box from '../Box/Box.module.scss';
-    transition: all .3s;
+    transition: all 0.3s ease-in;
     flex-shrink: 0;
 }
 
@@ -12,7 +12,7 @@
 .ico_search {
     width: 18px;
     height: 17px;
-    transition: all .3s;
+    transition: all 0.3s ease-in;
 }
 
 .count_find {

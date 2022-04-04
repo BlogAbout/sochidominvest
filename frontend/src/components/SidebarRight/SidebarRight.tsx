@@ -14,6 +14,18 @@ const SidebarRight: React.FC = () => {
                 <FontAwesomeIcon icon='user'/>
             </div>
 
+            <div className={classes.icon}>
+                <Link to={RouteNames.FAVORITE} title='Избранное'>
+                    <FontAwesomeIcon icon='heart'/>
+                </Link>
+            </div>
+
+            <div className={classes.icon}>
+                <Link to={RouteNames.COMPILATION} title='Подборка'>
+                    <FontAwesomeIcon icon='table-list'/>
+                </Link>
+            </div>
+
             <div className={classes.icon} title='Мессенджер'>
                 <FontAwesomeIcon icon='message'/>
             </div>

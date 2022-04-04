@@ -1,15 +1,16 @@
 .SidebarLeft {
     position: fixed;
-    left: -250px;
+    left: -200px;
     top: 100px;
     bottom: 100px;
     background-color: #fff;
-    z-index: 2;
+    z-index: 5;
     width: 250px;
-    transition: all 0.3s ease-out;
+    transition: all 0.3s ease-in;
 
     &.show {
-        left: 0;
+        left: 50px;
+        box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.4);
     }
 
     .content {
@@ -34,9 +35,10 @@
         align-items: center;
         justify-content: center;
         cursor: pointer;
+        box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.4);
 
         svg {
-            transition: all 0.3s ease-out;
+            transition: all 0.3s ease-in;
             transform: rotate(180deg);
         }
 

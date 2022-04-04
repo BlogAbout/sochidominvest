@@ -13,94 +13,92 @@ const Navigation: React.FC = () => {
                              className={({isActive}) => isActive ? classes.active : ''}
                              title='Рабочий стол'
                     >
-                        <FontAwesomeIcon icon='house'/>
+                        <span className={classes.icon}><FontAwesomeIcon icon='house'/></span>
+                        <span className={classes.title}>Рабочий стол</span>
                     </NavLink>
                 </li>
 
-                <li>
-                    <NavLink to={RouteNames.FAVORITE}
-                             className={({isActive}) => isActive ? classes.active : ''}
-                             title='Избранное'
-                    >
-                        <FontAwesomeIcon icon='heart'/>
-                    </NavLink>
-                </li>
-                <li>
-                    <NavLink to={RouteNames.COMPILATION}
-                             className={({isActive}) => isActive ? classes.active : ''}
-                             title='Подборка'
-                    >
-                        <FontAwesomeIcon icon='table-list'/>
-                    </NavLink>
-                </li>
-            </ul>
+                <li className={classes.spacer}/>
 
-            <ul className={classes.links}>
                 <li>
                     <NavLink to={RouteNames.USER}
                              className={({isActive}) => isActive ? classes.active : ''}
                              title='Пользователи'
                     >
-                        <FontAwesomeIcon icon='user'/>
-                        <span>Пользователи</span>
+                        <span className={classes.icon}><FontAwesomeIcon icon='user'/></span>
+                        <span className={classes.title}>Пользователи</span>
                     </NavLink>
                 </li>
+
                 <li>
                     <NavLink to={RouteNames.BUILDING}
                              className={({isActive}) => isActive ? classes.active : ''}
                              title='Недвижимость'
                     >
-                        <FontAwesomeIcon icon='building'/>
-                        <span>Недвижимость</span>
+                        <span className={classes.icon}><FontAwesomeIcon icon='building'/></span>
+                        <span className={classes.title}>Недвижимость</span>
                     </NavLink>
                 </li>
+
                 <li>
                     <NavLink to={RouteNames.DOCUMENT}
                              className={({isActive}) => isActive ? classes.active : ''}
                              title='Документы'
                     >
-                        <FontAwesomeIcon icon='book'/>
-                        <span>Документы</span>
+                        <span className={classes.icon}><FontAwesomeIcon icon='book'/></span>
+                        <span className={classes.title}>Документы</span>
                     </NavLink>
                 </li>
+
                 <li>
                     <NavLink to={RouteNames.ARTICLE}
                              className={({isActive}) => isActive ? classes.active : ''}
                              title='Статьи'
                     >
-                        <FontAwesomeIcon icon='newspaper'/>
+                        <span className={classes.icon}><FontAwesomeIcon icon='newspaper'/></span>
+                        <span className={classes.title}>Статьи</span>
                     </NavLink>
                 </li>
+
+                <li className={classes.spacer}/>
+
                 <li>
                     <NavLink to={RouteNames.DEVELOPER}
                              className={({isActive}) => isActive ? classes.active : ''}
                              title='Застройщики'
                     >
-                        <FontAwesomeIcon icon='city'/>
+                        <span className={classes.icon}><FontAwesomeIcon icon='city'/></span>
+                        <span className={classes.title}>Застройщики</span>
                     </NavLink>
                 </li>
+
                 <li>
                     <NavLink to={RouteNames.REPORT}
                              className={({isActive}) => isActive ? classes.active : ''}
                              title='Отчеты'
                     >
-                        <FontAwesomeIcon icon='file-excel'/>
+                        <span className={classes.icon}><FontAwesomeIcon icon='file-excel'/></span>
+                        <span className={classes.title}>Отчеты</span>
                     </NavLink>
                 </li>
+
                 <li>
                     <NavLink to={RouteNames.TOOL}
                              className={({isActive}) => isActive ? classes.active : ''}
-                             title='Инструкменты'
+                             title='Инструменты'
                     >
-                        <FontAwesomeIcon icon='screwdriver-wrench'/>
+                        <span className={classes.icon}><FontAwesomeIcon icon='screwdriver-wrench'/></span>
+                        <span className={classes.title}>Инструменты</span>
                     </NavLink>
                 </li>
+
                 <li>
                     <NavLink to={RouteNames.SUPPORT}
                              className={({isActive}) => isActive ? classes.active : ''}
                              title='Поддержка'
                     >
-                        <FontAwesomeIcon icon='question'/>
+                        <span className={classes.icon}><FontAwesomeIcon icon='question'/></span>
+                        <span className={classes.title}>Поддержка</span>
                     </NavLink>
                 </li>
             </ul>
