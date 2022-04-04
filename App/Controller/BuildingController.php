@@ -105,7 +105,8 @@ class BuildingController extends Controller
             'area' => (float)htmlentities(stripcslashes(strip_tags($data->area))),
             'cost' => (float)htmlentities(stripcslashes(strip_tags($data->cost))),
             'metaTitle' => htmlentities(stripcslashes(strip_tags($data->metaTitle))),
-            'metaDescription' => htmlentities(stripcslashes(strip_tags($data->metaDescription)))
+            'metaDescription' => htmlentities(stripcslashes(strip_tags($data->metaDescription))),
+            'passed' => $data->passed ? json_encode($data->passed) : ''
         );
 
         try {
@@ -221,7 +222,8 @@ class BuildingController extends Controller
             'area' => (float)htmlentities(stripcslashes(strip_tags($data->area))),
             'cost' => (float)htmlentities(stripcslashes(strip_tags($data->cost))),
             'metaTitle' => htmlentities(stripcslashes(strip_tags($data->metaTitle))),
-            'metaDescription' => htmlentities(stripcslashes(strip_tags($data->metaDescription)))
+            'metaDescription' => htmlentities(stripcslashes(strip_tags($data->metaDescription))),
+            'passed' => $data->passed ? json_encode($data->passed) : ''
         );
 
         try {

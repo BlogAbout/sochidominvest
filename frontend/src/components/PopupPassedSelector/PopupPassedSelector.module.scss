@@ -1,0 +1,53 @@
+.PopupPassedSelector {
+    width: 400px;
+    height: 250px;
+
+    .content {
+        padding: 15px;
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+    }
+
+    .field {
+        width: 49%;
+        margin-bottom: 10px;
+        position: relative;
+    }
+
+    .field_label {
+        font-size: 14px;
+        color: black;
+        margin-bottom: 3px;
+        display: flex;
+    }
+
+    .radio {
+        display: flex;
+        align-items: center;
+
+        span {
+            display: block;
+            width: 40px;
+            height: 40px;
+            border-top: 1px solid #075ea5;
+            border-left: 1px solid #075ea5;
+            border-bottom: 1px solid #075ea5;
+            color: #075ea5;
+            line-height: 38px;
+            text-align: center;
+            transition: all 0.3s ease-out;
+            cursor: pointer;
+
+            &:hover,
+            &.active {
+                background: #075ea5;
+                color: #fff;
+            }
+
+            &:last-child {
+                border-right: 1px solid #075ea5;
+            }
+        }
+    }
+}

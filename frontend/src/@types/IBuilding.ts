@@ -50,6 +50,13 @@ export interface IBuilding {
     newImages: IImage[]
     metaTitle?: string | null
     metaDescription?: string | null
+    passed?: IBuildingPassed
+}
+
+export interface IBuildingPassed {
+    is: number
+    quarter: number
+    year: number
 }
 
 export interface IBuildingChecker {

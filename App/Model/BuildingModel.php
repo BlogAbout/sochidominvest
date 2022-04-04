@@ -350,7 +350,8 @@ class BuildingModel extends Model
                     amount_contract = :amountContract,
                     surcharge_doc = :surchargeDoc,
                     surcharge_gas = :surchargeGas,
-                    sale_no_resident = :saleNoResident
+                    sale_no_resident = :saleNoResident,
+                    passed = :passed
                 WHERE id = :id
             ";
         } else {
@@ -359,12 +360,12 @@ class BuildingModel extends Model
                     (id, district, district_zone, house_class, material, house_type, entrance_house, parking,
                      territory, ceiling_height, maintenance_cost, distance_sea, gas, heating, electricity,
                      sewerage, water_supply, advantages, payments, formalization, amount_contract, surcharge_doc,
-                     surcharge_gas, sale_no_resident)
+                     surcharge_gas, sale_no_resident, passed)
                 VALUES
                     (:id, :district, :districtZone, :houseClass, :material, :houseType, :entranceHouse, :parking,
                      :territory, :ceilingHeight, :maintenanceCost, :distanceSea, :gas, :heating, :electricity,
                      :sewerage, :waterSupply, :advantages, :payments, :formalization, :amountContract, :surchargeDoc,
-                     :surchargeGas, :saleNoResident)
+                     :surchargeGas, :saleNoResident, :passed)
             ";
         }
 
@@ -393,6 +394,7 @@ class BuildingModel extends Model
         parent::bindParams('surchargeDoc', $payload['surchargeDoc']);
         parent::bindParams('surchargeGas', $payload['surchargeGas']);
         parent::bindParams('saleNoResident', $payload['saleNoResident']);
+        parent::bindParams('passed', $payload['passed']);
         parent::execute();
     }
 
@@ -552,7 +554,8 @@ class BuildingModel extends Model
             'area' => (float)$data['area'],
             'cost' => (float)$data['cost'],
             'metaTitle' => $data['meta_title'],
-            'metaDescription' => $data['meta_description']
+            'metaDescription' => $data['meta_description'],
+            'passed' => $data['passed'] ? json_decode($data['passed']) : null
         ];
     }
 }

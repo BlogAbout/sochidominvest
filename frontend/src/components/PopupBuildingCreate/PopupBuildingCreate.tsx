@@ -3,9 +3,10 @@ import withStore from '../../hoc/withStore'
 import classNames from 'classnames/bind'
 import BuildingService from '../../api/BuildingService'
 import {PopupProps} from '../../@types/IPopup'
-import {IBuilding} from '../../@types/IBuilding'
+import {IBuilding, IBuildingPassed} from '../../@types/IBuilding'
 import {ITab} from '../../@types/ITab'
 import {IImage, IImageDb} from '../../@types/IImage'
+import {ISelector} from '../../@types/ISelector'
 import {getPopupContainer, openPopup, removePopup} from '../../helpers/popupHelper'
 import showBackgroundBlock from '../BackgroundBlock/BackgroundBlock'
 import {Content, Footer, Header, Popup} from '../Popup/Popup'
@@ -25,6 +26,7 @@ import UserList from './components/UserList/UserList'
 import ImageUploader from '../ImageUploader/ImageUploader'
 import SelectorBox from '../SelectorBox/SelectorBox'
 import TextAreaBox from '../TextAreaBox/TextAreaBox'
+import PassedBox from '../PassedBox/PassedBox'
 import openPopupAlert from '../PopupAlert/PopupAlert'
 import {
     amountContract,
@@ -40,12 +42,12 @@ import {
     buildingSewerage,
     buildingStatuses,
     buildingTerritory,
-    buildingWaterSupply, districtList,
+    buildingWaterSupply,
+    districtList,
     formalizationList,
     paymentsList
 } from '../../helpers/buildingHelper'
 import classes from './PopupBuildingCreate.module.scss'
-import {ISelector} from "../../@types/ISelector";
 
 interface Props extends PopupProps {
     building?: IBuilding | null
@@ -173,12 +175,32 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
                 </div>
 
                 <div className={classes.field}>
+                    <div className={classes.field_label}>Дата сдачи</div>
+
+                    <PassedBox selected={building.passed || null}
+                               onChange={(value: IBuildingPassed) => setBuilding({...building, passed: value})}
+                               placeHolder='Укажите дату сдачи'
+                    />
+                </div>
+
+                <div className={classes.field}>
                     <div className={classes.field_label}>Теги</div>
 
                     <TagBox tags={building.tags}
                             onSelect={(value: number[]) => setBuilding({...building, tags: value})}
                             placeHolder='Выберите теги'
                             multi
+                    />
+                </div>
+
+                <div className={classes.field}>
+                    <div className={classes.field_label}>Сумма в договоре</div>
+
+                    <ComboBox selected={building.amountContract || null}
+                              items={Object.values(amountContract)}
+                              onSelect={(value: string) => setBuilding({...building, amountContract: value})}
+                              placeHolder='Выберите сумму в договоре'
+                              styleType='standard'
                     />
                 </div>
 
@@ -324,17 +346,6 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
                                  title='Выберите особенности'
                                  placeHolder='Выберите особенности'
                                  multi
-                    />
-                </div>
-
-                <div className={classes.field}>
-                    <div className={classes.field_label}>Сумма в договоре</div>
-
-                    <ComboBox selected={building.amountContract || null}
-                              items={Object.values(amountContract)}
-                              onSelect={(value: string) => setBuilding({...building, amountContract: value})}
-                              placeHolder='Выберите сумму в договоре'
-                              styleType='standard'
                     />
                 </div>
 
