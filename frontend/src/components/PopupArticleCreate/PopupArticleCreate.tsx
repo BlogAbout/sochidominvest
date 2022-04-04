@@ -187,11 +187,9 @@ const PopupArticleCreate: React.FC<Props> = (props) => {
 
     // Вкладка галереии
     const renderGalleryTab = () => {
-        const listActiveImages: IImageDb[] = article.images && article.images.length ? article.images.filter((image: IImageDb) => image.active) : []
-
         return (
             <div key='gallery' className={classes.tabContent}>
-                <ImageUploader images={listActiveImages}
+                <ImageUploader images={article.images}
                                newImages={article.newImages}
                                objectType='article'
                                multi

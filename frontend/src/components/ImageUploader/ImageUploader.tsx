@@ -109,6 +109,10 @@ const ImageUploader: React.FC<Props> = (props) => {
 
                 {props.images.length ?
                     props.images.map((image: IImageDb, index: number) => {
+                        if (image.active !== 1) {
+                            return null
+                        }
+
                         return (
                             <div key={'selected-' + image.id}
                                  className={cx({'item': true, 'avatar': !!image.avatar})}

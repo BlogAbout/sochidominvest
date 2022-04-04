@@ -152,11 +152,13 @@ export const checkerFurnish: ISelector[] = [
  *  Список типов оплаты
  */
 export const paymentsList: ISelector[] = [
-    {key: 'maternal-capital', text: 'Материнский капитал'},
-    {key: 'installment-plan', text: 'Рассрочка'},
     {key: 'mortgage', text: 'Ипотека'},
     {key: 'mortgage-individual', text: 'Ипотека (индивидуально)'},
-    {key: 'military-mortgage', text: 'Военная ипотека'}
+    {key: 'military-mortgage', text: 'Военная ипотека'},
+    {key: 'maternal-capital', text: 'Материнский капитал'},
+    {key: 'installment-plan', text: 'Рассрочка'},
+    {key: 'cash', text: 'Наличный расчёт'},
+    {key: 'cashless', text: 'Безналичный расчёт'}
 ]
 
 /**
@@ -177,4 +179,48 @@ export const formalizationList: ISelector[] = [
 export const amountContract: ISelector[] = [
     {key: 'full', text: 'Полная'},
     {key: 'partial', text: 'Неполная'}
+]
+
+export const districtList: ISelector[] = [
+    {
+        key: 'Центральный район',
+        text: 'Центральный район',
+        children: [
+            {key: 'Донская', text: 'Донская'},
+            {key: 'Завокзальный', text: 'Завокзальный'},
+            {key: 'Заречный', text: 'Заречный'},
+            {key: 'КСМ', text: 'КСМ'},
+            {key: 'Макаренко', text: 'Макаренко'},
+            {key: 'Мамайка низ', text: 'Мамайка низ'},
+            {key: 'Мамайка верх', text: 'Мамайка верх'},
+            {key: 'Новый Сочи', text: 'Новый Сочи'},
+            {key: 'Клубничная', text: 'Клубничная'},
+            {key: 'Центр', text: 'Центр'}
+        ]
+    },
+    {
+        key: 'Хостинский район',
+        text: 'Хостинский район',
+        children: []
+    },
+    {
+        key: 'Адлерский район',
+        text: 'Адлерский район',
+        children: []
+    },
+    {
+        key: 'Лазаревский район',
+        text: 'Лазаревский район',
+        children: []
+    },
+    {
+        key: 'Туапсе',
+        text: 'Туапсе',
+        children: []
+    },
+    {
+        key: 'Крым',
+        text: 'Крым',
+        children: []
+    }
 ]

@@ -94,7 +94,9 @@ const ArticleItemPage: React.FC<Props> = (props) => {
                     return (
                         <div key={building.id}
                              className={classes.item}
-                             onClick={() => navigate('/panel/building/' + building.id)}
+                             onClick={() => {
+                                 navigate(props.public ? `/building/${building.id}` : `/panel/building/${building.id}`)
+                             }}
                         >
                             <div className={
                                 cx({'itemImage': true, 'noImage': !building.images || !building.images.length})

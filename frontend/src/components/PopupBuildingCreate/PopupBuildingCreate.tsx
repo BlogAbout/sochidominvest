@@ -40,11 +40,12 @@ import {
     buildingSewerage,
     buildingStatuses,
     buildingTerritory,
-    buildingWaterSupply,
+    buildingWaterSupply, districtList,
     formalizationList,
     paymentsList
 } from '../../helpers/buildingHelper'
 import classes from './PopupBuildingCreate.module.scss'
+import {ISelector} from "../../@types/ISelector";
 
 interface Props extends PopupProps {
     building?: IBuilding | null
@@ -249,6 +250,8 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
 
     // Вкладка информации объекта
     const renderInformationTab = () => {
+        const districtZones = districtList.find((item: ISelector) => item.key === building.district)
+
         return (
             <div key='info' className={classes.tabContent}>
                 {building.type !== 'building' ?
@@ -286,6 +289,28 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
                     </>
                     : null
                 }
+
+                <div className={classes.field}>
+                    <div className={classes.field_label}>Район</div>
+
+                    <ComboBox selected={building.district || null}
+                              items={Object.values(districtList)}
+                              onSelect={(value: string) => setBuilding({...building, district: value})}
+                              placeHolder='Выберите район'
+                              styleType='standard'
+                    />
+                </div>
+
+                <div className={classes.field}>
+                    <div className={classes.field_label}>Микрорайон</div>
+
+                    <ComboBox selected={building.districtZone || null}
+                              items={districtZones && districtZones.children ? Object.values(districtZones.children) : []}
+                              onSelect={(value: string) => setBuilding({...building, districtZone: value})}
+                              placeHolder='Выберите микрорайон'
+                              styleType='standard'
+                    />
+                </div>
 
                 <div className={classes.field}>
                     <div className={classes.field_label}>Особенности</div>
@@ -481,11 +506,9 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
 
     // Вкладка галереии объекта
     const renderGalleryTab = () => {
-        const listActiveImages: IImageDb[] = building.images && building.images.length ? building.images.filter((image: IImageDb) => image.active) : []
-
         return (
             <div key='gallery' className={classes.tabContent}>
-                <ImageUploader images={listActiveImages}
+                <ImageUploader images={building.images}
                                newImages={building.newImages}
                                objectType='building'
                                multi

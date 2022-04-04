@@ -328,6 +328,8 @@ class BuildingModel extends Model
             $sql = "
                 UPDATE `sdi_building_data`
                 SET
+                    district = :district,
+                    district_zone = :districtZone,
                     house_class = :houseClass,
                     material = :material,
                     house_type = :houseType,
@@ -354,18 +356,22 @@ class BuildingModel extends Model
         } else {
             $sql = "
                 INSERT INTO `sdi_building_data`
-                    (id, house_class, material, house_type, entrance_house, parking, territory, ceiling_height,
-                     maintenance_cost, distance_sea, gas, heating, electricity, sewerage, water_supply, advantages,
-                     payments, formalization, amount_contract, surcharge_doc, surcharge_gas, sale_no_resident)
+                    (id, district, district_zone, house_class, material, house_type, entrance_house, parking,
+                     territory, ceiling_height, maintenance_cost, distance_sea, gas, heating, electricity,
+                     sewerage, water_supply, advantages, payments, formalization, amount_contract, surcharge_doc,
+                     surcharge_gas, sale_no_resident)
                 VALUES
-                    (:id, :houseClass, :material, :houseType, :entranceHouse, :parking, :territory, :ceilingHeight,
-                     :maintenanceCost, :distanceSea, :gas, :heating, :electricity, :sewerage, :waterSupply, :advantages,
-                     :payments, :formalization, :amountContract, :surchargeDoc, :surchargeGas, :saleNoResident)
+                    (:id, :district, :districtZone, :houseClass, :material, :houseType, :entranceHouse, :parking,
+                     :territory, :ceilingHeight, :maintenanceCost, :distanceSea, :gas, :heating, :electricity,
+                     :sewerage, :waterSupply, :advantages, :payments, :formalization, :amountContract, :surchargeDoc,
+                     :surchargeGas, :saleNoResident)
             ";
         }
 
         parent::query($sql);
         parent::bindParams('id', $payload['id']);
+        parent::bindParams('district', $payload['district']);
+        parent::bindParams('districtZone', $payload['districtZone']);
         parent::bindParams('houseClass', $payload['houseClass']);
         parent::bindParams('material', $payload['material']);
         parent::bindParams('houseType', $payload['houseType']);
@@ -514,6 +520,8 @@ class BuildingModel extends Model
             'costMin' => $data['cost_min'],
             'costMinUnit' => $data['cost_min_unit'],
             'countCheckers' => $data['countCheckers'],
+            'district' => $data['district'],
+            'districtZone' => $data['district_zone'],
             'houseClass' => $data['house_class'],
             'material' => $data['material'],
             'houseType' => $data['house_type'],

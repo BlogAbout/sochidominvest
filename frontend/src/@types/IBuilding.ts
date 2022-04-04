@@ -23,6 +23,8 @@ export interface IBuilding {
     contacts: number[]
     developers: number[]
     articles?: number[]
+    district?: string | null
+    districtZone?: string | null
     houseClass?: string | null
     material?: string | null
     houseType?: string | null
