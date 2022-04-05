@@ -4,12 +4,16 @@ import Button from '../../../components/Button/Button'
 import openPopupBuildingCreate from '../../../components/PopupBuildingCreate/PopupBuildingCreate'
 import openContextMenu from '../../../components/ContextMenu/ContextMenu'
 import BuildingList from '../../../components/BuildingList/BuildingList'
+import SearchBox from '../../../components/SearchBox/SearchBox'
+import {IBuilding} from '../../../@types/IBuilding'
 import {useTypedSelector} from '../../../hooks/useTypedSelector'
 import {useActions} from '../../../hooks/useActions'
 import classes from './BuildingPagePanel.module.scss'
 
 const BuildingPagePanel: React.FC = () => {
     const [isUpdate, setIsUpdate] = useState(false)
+    const [searchText, setSearchText] = useState('')
+    const [filterBuilding, setFilterBuilding] = useState<IBuilding[]>([])
 
     const {buildings, fetching} = useTypedSelector(state => state.buildingReducer)
     const {fetchBuildingList} = useActions()
@@ -22,9 +26,31 @@ const BuildingPagePanel: React.FC = () => {
         }
     }, [isUpdate])
 
+    useEffect(() => {
+        search(searchText)
+    }, [buildings])
+
     // Обработчик изменений
     const onSave = () => {
         setIsUpdate(true)
+    }
+
+    // Поиск
+    const search = (value: string) => {
+        setSearchText(value)
+
+        if (!buildings || !buildings.length) {
+            setFilterBuilding([])
+        }
+
+        if (value !== '') {
+            setFilterBuilding(buildings.filter((building: IBuilding) => {
+                return building.name.toLocaleLowerCase().indexOf(value.toLocaleLowerCase()) !== -1 ||
+                    (building.address && building.address.toLocaleLowerCase().indexOf(value.toLocaleLowerCase()) !== -1)
+            }))
+        } else {
+            setFilterBuilding(buildings)
+        }
     }
 
     const addHandler = (type: 'building' | 'apartment' | 'house' | 'land' | 'commerce' | 'garage') => {
@@ -60,13 +86,19 @@ const BuildingPagePanel: React.FC = () => {
             </Helmet>
 
             <div className={classes.filter}>
-                <Button type='save' icon={'bolt'} onClick={() => console.log('add')}>Новинки</Button>
+                <Button type='save' icon={'building'} onClick={() => console.log('add')}>ЖК</Button>
 
-                <Button type='save' icon={'percent'} onClick={() => console.log('add')}>Акции</Button>
+                <Button type='save' icon={'house-user'} onClick={() => console.log('add')}>Квартиры</Button>
 
-                <Button type='save' icon={'star'} onClick={() => console.log('add')}>Популярное</Button>
+                <Button type='save' icon={'house'} onClick={() => console.log('add')}>Дома</Button>
 
-                <Button type='save' icon={'flag'} onClick={() => console.log('add')}>Незаконные</Button>
+                <Button type='save' icon={'tree'} onClick={() => console.log('add')}>Участки</Button>
+
+                <Button type='save' icon={'cash-register'} onClick={() => console.log('add')}>Коммерция</Button>
+
+                <Button type='save' icon={'car'} onClick={() => console.log('add')}>Гаражи</Button>
+
+                <SearchBox value={searchText} onChange={search.bind(this)}/>
             </div>
 
             <div className={classes.Content}>
@@ -75,7 +107,7 @@ const BuildingPagePanel: React.FC = () => {
                     <Button type='apply' icon='plus' onClick={onContextMenu.bind(this)}>Добавить</Button>
                 </h1>
 
-                <BuildingList buildings={buildings} fetching={fetching} onSave={onSave.bind(this)}/>
+                <BuildingList buildings={filterBuilding} fetching={fetching} onSave={onSave.bind(this)}/>
             </div>
         </main>
     )

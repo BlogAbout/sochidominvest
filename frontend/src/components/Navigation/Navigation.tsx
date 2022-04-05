@@ -41,16 +41,6 @@ const Navigation: React.FC = () => {
                 </li>
 
                 <li>
-                    <NavLink to={RouteNames.DOCUMENT}
-                             className={({isActive}) => isActive ? classes.active : ''}
-                             title='Документы'
-                    >
-                        <span className={classes.icon}><FontAwesomeIcon icon='book'/></span>
-                        <span className={classes.title}>Документы</span>
-                    </NavLink>
-                </li>
-
-                <li>
                     <NavLink to={RouteNames.ARTICLE}
                              className={({isActive}) => isActive ? classes.active : ''}
                              title='Статьи'
@@ -73,6 +63,16 @@ const Navigation: React.FC = () => {
                 </li>
 
                 <li>
+                    <NavLink to={RouteNames.DOCUMENT}
+                             className={({isActive}) => isActive ? classes.active : ''}
+                             title='Документы'
+                    >
+                        <span className={classes.icon}><FontAwesomeIcon icon='book'/></span>
+                        <span className={classes.title}>Документы</span>
+                    </NavLink>
+                </li>
+
+                <li>
                     <NavLink to={RouteNames.REPORT}
                              className={({isActive}) => isActive ? classes.active : ''}
                              title='Отчеты'
@@ -81,6 +81,8 @@ const Navigation: React.FC = () => {
                         <span className={classes.title}>Отчеты</span>
                     </NavLink>
                 </li>
+
+                <li className={classes.spacer}/>
 
                 <li>
                     <NavLink to={RouteNames.TOOL}

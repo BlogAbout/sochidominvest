@@ -3,12 +3,16 @@ import Helmet from 'react-helmet'
 import Button from '../../../components/Button/Button'
 import openPopupArticleCreate from '../../../components/PopupArticleCreate/PopupArticleCreate'
 import ArticleList from '../../../components/ArticleList/ArticleList'
+import SearchBox from '../../../components/SearchBox/SearchBox'
+import {IArticle} from '../../../@types/IArticle'
 import {useTypedSelector} from '../../../hooks/useTypedSelector'
 import {useActions} from '../../../hooks/useActions'
 import classes from './ArticlePagePanel.module.scss'
 
 const ArticlePagePanel: React.FC = () => {
     const [isUpdate, setIsUpdate] = useState(false)
+    const [searchText, setSearchText] = useState('')
+    const [filterArticle, setFilterArticle] = useState<IArticle[]>([])
 
     const {articles, fetching} = useTypedSelector(state => state.articleReducer)
     const {fetchArticleList} = useActions()
@@ -21,9 +25,30 @@ const ArticlePagePanel: React.FC = () => {
         }
     }, [isUpdate])
 
+    useEffect(() => {
+        search(searchText)
+    }, [articles])
+
     // Обработчик изменений
     const onSave = () => {
         setIsUpdate(true)
+    }
+
+    // Поиск
+    const search = (value: string) => {
+        setSearchText(value)
+
+        if (!articles || !articles.length) {
+            setFilterArticle([])
+        }
+
+        if (value !== '') {
+            setFilterArticle(articles.filter((article: IArticle) => {
+                return article.name.toLocaleLowerCase().indexOf(value.toLocaleLowerCase()) !== -1
+            }))
+        } else {
+            setFilterArticle(articles)
+        }
     }
 
     const addHandler = () => {
@@ -47,6 +72,8 @@ const ArticlePagePanel: React.FC = () => {
                 <Button type='save' icon={'percent'} onClick={() => console.log('add')}>Акции</Button>
 
                 <Button type='save' icon={'star'} onClick={() => console.log('add')}>Статьи</Button>
+
+                <SearchBox value={searchText} onChange={search.bind(this)}/>
             </div>
 
             <div className={classes.Content}>
@@ -55,7 +82,7 @@ const ArticlePagePanel: React.FC = () => {
                     <Button type='apply' icon='plus' onClick={addHandler.bind(this)}>Добавить</Button>
                 </h1>
 
-                <ArticleList articles={articles} fetching={fetching} onSave={onSave.bind(this)}/>
+                <ArticleList articles={filterArticle} fetching={fetching} onSave={onSave.bind(this)}/>
             </div>
         </main>
     )

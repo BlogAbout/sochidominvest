@@ -96,6 +96,17 @@ class Controller
                 }
             }
 
+            if ($payload->validator == 'userNotDirector') {
+                try {
+                    $checkUser = UserModel::fetchUserById((int)$payload->data);
+
+                    if ($checkUser['role'] === 'director') {
+                        array_push($response, "Директора нельзя удалить из системы.");
+                    }
+                } catch (Exception $e) {
+                }
+            }
+
             if ($payload->validator == 'buildingExists') {
                 try {
                     $checkBuilding = BuildingModel::fetchBuildingById((int)$payload->data);

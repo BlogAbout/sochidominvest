@@ -4,12 +4,16 @@ import openPopupDocumentCreate from '../../../components/PopupDocumentCreate/Pop
 import openContextMenu from '../../../components/ContextMenu/ContextMenu'
 import Button from '../../../components/Button/Button'
 import DocumentList from '../../../components/DocumentList/DocumentList'
+import SearchBox from '../../../components/SearchBox/SearchBox'
+import {IDocument} from '../../../@types/IDocument'
 import {useTypedSelector} from '../../../hooks/useTypedSelector'
 import {useActions} from '../../../hooks/useActions'
 import classes from './DocumentPagePanel.module.scss'
 
 const DocumentPagePanel: React.FC = () => {
     const [isUpdate, setIsUpdate] = useState(false)
+    const [searchText, setSearchText] = useState('')
+    const [filterDocument, setFilterDocument] = useState<IDocument[]>([])
 
     const {documents, fetching} = useTypedSelector(state => state.documentReducer)
     const {fetchDocumentList} = useActions()
@@ -22,9 +26,30 @@ const DocumentPagePanel: React.FC = () => {
         }
     }, [isUpdate])
 
+    useEffect(() => {
+        search(searchText)
+    }, [documents])
+
     // Обработчик изменений
     const onSave = () => {
         setIsUpdate(true)
+    }
+
+    // Поиск
+    const search = (value: string) => {
+        setSearchText(value)
+
+        if (!documents || !documents.length) {
+            setFilterDocument([])
+        }
+
+        if (value !== '') {
+            setFilterDocument(documents.filter((document: IDocument) => {
+                return document.name.toLocaleLowerCase().indexOf(value.toLocaleLowerCase()) !== -1
+            }))
+        } else {
+            setFilterDocument(documents)
+        }
     }
 
     // Меню выбора создания объекта
@@ -70,13 +95,23 @@ const DocumentPagePanel: React.FC = () => {
                 <link rel='canonical' href={`${window.location.href}`}/>
             </Helmet>
 
+            <div className={classes.filter}>
+                <Button type='save' icon='file-lines' onClick={() => console.log('add')}>Файлы</Button>
+
+                <Button type='save' icon='link' onClick={() => console.log('add')}>Ссылки</Button>
+
+                <Button type='save' icon='file-invoice' onClick={() => console.log('add')}>Конструктор</Button>
+
+                <SearchBox value={searchText} onChange={search.bind(this)}/>
+            </div>
+
             <div className={classes.Content}>
                 <h1>
                     <span>Документы</span>
                     <Button type='apply' icon='plus' onClick={onContextMenu.bind(this)}>Добавить</Button>
                 </h1>
 
-                <DocumentList documents={documents} fetching={fetching} onSave={onSave.bind(this)}/>
+                <DocumentList documents={filterDocument} fetching={fetching} onSave={onSave.bind(this)}/>
             </div>
         </main>
     )

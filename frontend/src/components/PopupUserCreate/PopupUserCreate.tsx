@@ -160,28 +160,33 @@ const PopupUserCreate: React.FC<Props> = (props) => {
                         />
                     </div>
 
-                    <div className={classes.field}>
-                        <div className={classes.field_label}>Роль</div>
+                    {user.role !== 'director' ?
+                        <>
+                            <div className={classes.field}>
+                                <div className={classes.field_label}>Роль</div>
 
-                        <ComboBox selected={user.role}
-                                  items={Object.values(rolesList)}
-                                  onSelect={(value: string) => setUser({...user, role: value})}
-                                  placeHolder='Выберите роль'
-                                  styleType='standard'
-                                  icon='user-check'
-                        />
-                    </div>
+                                <ComboBox selected={user.role}
+                                          items={Object.values(rolesList)}
+                                          onSelect={(value: string) => setUser({...user, role: value})}
+                                          placeHolder='Выберите роль'
+                                          styleType='standard'
+                                          icon='user-check'
+                                />
+                            </div>
 
-                    <div className={classes.field}>
-                        <CheckBox label='Активен'
-                                  type='modern'
-                                  checked={!!user.active}
-                                  onChange={(e: React.MouseEvent, value: boolean) => setUser({
-                                      ...user,
-                                      active: value ? 1 : 0
-                                  })}
-                        />
-                    </div>
+                            <div className={classes.field}>
+                                <CheckBox label='Активен'
+                                          type='modern'
+                                          checked={!!user.active}
+                                          onChange={(e: React.MouseEvent, value: boolean) => setUser({
+                                              ...user,
+                                              active: value ? 1 : 0
+                                          })}
+                                />
+                            </div>
+                        </>
+                        : null
+                    }
                 </div>
             </BlockingElement>
 

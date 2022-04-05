@@ -304,8 +304,7 @@ class UserController extends Controller
             ],
             (object)[
                 'validator' => 'userExists',
-                'data' => $request->id ?? '',
-                'key' => 'Идентификатор'
+                'data' => $request->id ?? ''
             ],
             (object)[
                 'validator' => 'required',
@@ -393,8 +392,7 @@ class UserController extends Controller
             ],
             (object)[
                 'validator' => 'userExists',
-                'data' => $request->id ?? '',
-                'key' => 'Идентификатор'
+                'data' => $request->id ?? ''
             ]
         );
 
@@ -467,8 +465,11 @@ class UserController extends Controller
             ],
             (object)[
                 'validator' => 'userExists',
-                'data' => $request->id ?? '',
-                'key' => 'Идентификатор'
+                'data' => $request->id ?? ''
+            ],
+            (object)[
+                'validator' => 'userNotDirector',
+                'data' => $request->id ?? ''
             ]
         );
 

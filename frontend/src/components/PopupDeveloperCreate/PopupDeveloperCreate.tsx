@@ -183,6 +183,7 @@ const PopupDeveloperCreate: React.FC<Props> = (props) => {
                 <Button type='regular'
                         icon='arrow-rotate-left'
                         onClick={close.bind(this)}
+                        className='marginLeft'
                 >Отменить</Button>
             </Footer>
         </Popup>

@@ -53,14 +53,15 @@ const UserItem: React.FC<Props> = (props) => {
 
                             UserService.removeUser(user.id)
                                 .then(() => {
-                                    setFetching(false)
+                                    props.onSave()
                                 })
                                 .catch((error: any) => {
                                     openPopupAlert(document.body, {
                                         title: 'Ошибка!',
                                         text: error.data
                                     })
-
+                                })
+                                .finally(() => {
                                     setFetching(false)
                                 })
                         }
@@ -78,8 +79,6 @@ const UserItem: React.FC<Props> = (props) => {
 
         UserService.saveUser(user)
             .then(() => {
-                setFetching(false)
-
                 props.onSave()
             })
             .catch((error: any) => {
@@ -87,7 +86,8 @@ const UserItem: React.FC<Props> = (props) => {
                     title: 'Ошибка!',
                     text: error.data
                 })
-
+            })
+            .finally(() => {
                 setFetching(false)
             })
     }
@@ -96,11 +96,21 @@ const UserItem: React.FC<Props> = (props) => {
     const onContextMenu = (e: React.MouseEvent) => {
         e.preventDefault()
 
-        const menuItems = [
-            {text: 'Редактировать', onClick: () => updateHandler(props.user)},
-            {text: props.user.block ? 'Разблокировать' : 'Заблокировать', onClick: () => blockingHandler()},
-            {text: 'Удалить', onClick: () => removeHandler(props.user)}
-        ]
+        const menuItems = [{
+            text: 'Редактировать',
+            onClick: () => updateHandler(props.user)
+        }]
+
+        if (props.user.role !== 'director') {
+            menuItems.push({
+                text: props.user.block ? 'Разблокировать' : 'Заблокировать',
+                onClick: () => blockingHandler()
+            })
+            menuItems.push({
+                text: 'Удалить',
+                onClick: () => removeHandler(props.user)
+            })
+        }
 
         openContextMenu(e, menuItems)
     }

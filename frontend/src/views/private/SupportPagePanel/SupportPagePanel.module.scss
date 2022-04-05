@@ -1,20 +1,28 @@
 .SupportPagePanel {
     position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
 }
 
 .filter {
     display: flex;
     justify-content: center;
-    margin-bottom: 20px;
+    height: 70px;
 
     > div {
         margin-right: 20px;
+
+        &:last-child {
+            margin-right: 0;
+        }
     }
 }
 
 .Content {
-    padding: 40px 0;
     color: #000;
+    width: 100%;
+    height: calc(100% - 70px);
 
     h1 {
         display: flex;
