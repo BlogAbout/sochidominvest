@@ -625,7 +625,7 @@ const BuildingItemPagePanel: React.FC = (props) => {
                     documents.map((document: IDocument) => {
                         return (
                             <p key={document.id}>
-                                <a href={`https://api.sochidominvest.ru/uploads/documents/${document.content}`}
+                                <a href={`https://api.sochidominvest.ru/uploads/${document.content}`}
                                    target='_blank'
                                 >{document.name}</a>
                             </p>

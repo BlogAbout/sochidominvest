@@ -1,21 +1,24 @@
 import React, {useRef, useState} from 'react'
-import classNames from 'classnames/bind'
 import {IDocument} from '../../@types/IDocument'
-import DocumentService from '../../api/DocumentService'
+import UploadService from '../../api/UploadService'
 import Button from '../Button/Button'
 import openPopupAlert from '../PopupAlert/PopupAlert'
 import classes from './FileUploader.module.scss'
 
 interface Props {
     document: IDocument
+    type: string
     disabled?: boolean
     text?: string
+    objectType?: string
+    objectId?: number
 
     onChange(file: IDocument | null): void
 }
 
 const defaultProps: Props = {
     document: {} as IDocument,
+    type: 'document',
     disabled: false,
     text: 'Загрузить',
     onChange: (file: IDocument) => {
@@ -23,17 +26,29 @@ const defaultProps: Props = {
     }
 }
 
-const cx = classNames.bind(classes)
-
 const FileUploader: React.FC<Props> = (props) => {
     const inputRef = useRef<HTMLInputElement | null>(null)
 
     const [progress, setProgress] = useState(0)
     const [fetching, setFetching] = useState(false)
 
-    // const accept = 'image/jpeg,image/png,image/jpg'
-    const accept = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/msword,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,application/pdf'
-    const acceptText = 'Доступны для загрузки: DOC, DOCX, XLS, XLSX, PDF. Максимальный размер: 50 Мб.'
+    let accept = ''
+    let acceptText = ''
+
+    switch (props.type) {
+        case 'document':
+            accept = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/msword,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,application/pdf'
+            acceptText = 'Доступны для загрузки: DOC, DOCX, XLS, XLSX, PDF. Максимальный размер: 50 Мб.'
+            break
+        case 'image':
+            accept = 'image/jpeg,image/png,image/jpg'
+            acceptText = 'Доступны для загрузки: PNG, JPG, JPEG. Максимальный размер: 50 Мб.'
+            break
+        case 'video':
+            accept = ''
+            acceptText = 'Доступны для загрузки: . Максимальный размер: 50 Мб.'
+            break
+    }
 
     // Загрузчик файла
     const uploadFileHandler = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -43,9 +58,9 @@ const FileUploader: React.FC<Props> = (props) => {
         if (files && files.length) {
             setFetching(true)
 
-            DocumentService.uploadDocument(files[0], (event: any) => {
+            UploadService.uploadFile(files[0], props.type, (event: any) => {
                 setProgress(Math.round((100 * event.loaded) / event.total))
-            })
+            }, props.objectType, props.objectId)
                 .then((response) => {
                     const result = response.data.split('.')
 
@@ -86,13 +101,12 @@ const FileUploader: React.FC<Props> = (props) => {
                 {progress === 0 ?
                     props.document.content ?
                         <div className={classes.info}>
-                            <div className={classes.type}>{props.document.type}</div>
+                            <div className={classes.type}>{props.document.extension}</div>
 
                             <Button type='regular'
                                     icon='paperclip'
-                                    onClick={() => window.open(`https://api.sochidominvest.ru/uploads/documents/${props.document.content}`, '_blank')}
+                                    onClick={() => window.open(`https://api.sochidominvest.ru/uploads/${props.document.content}`, '_blank')}
                                     disabled={props.disabled || fetching}
-                                    title={acceptText}
                                     className='marginLeft'
                             >Открыть</Button>
 

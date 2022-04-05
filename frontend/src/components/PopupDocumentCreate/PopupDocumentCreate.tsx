@@ -120,6 +120,9 @@ const PopupDocumentCreate: React.FC<Props> = (props) => {
                             <FileUploader document={documentInfo}
                                           onChange={changeUploadFile.bind(this)}
                                           text='Загрузить файл'
+                                          type='document'
+                                          objectType={props.objectType}
+                                          objectId={props.objectId}
                             />
                         </div>
                         : null
