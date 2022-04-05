@@ -15,6 +15,7 @@ const BuildingPagePanel: React.FC = () => {
     const [searchText, setSearchText] = useState('')
     const [filterBuilding, setFilterBuilding] = useState<IBuilding[]>([])
 
+    const {role} = useTypedSelector(state => state.userReducer)
     const {buildings, fetching} = useTypedSelector(state => state.buildingReducer)
     const {fetchBuildingList} = useActions()
 
@@ -104,7 +105,11 @@ const BuildingPagePanel: React.FC = () => {
             <div className={classes.Content}>
                 <h1>
                     <span>Недвижимость</span>
-                    <Button type='apply' icon='plus' onClick={onContextMenu.bind(this)}>Добавить</Button>
+
+                    {['director', 'administrator', 'manager'].includes(role) ?
+                        <Button type='apply' icon='plus' onClick={onContextMenu.bind(this)}>Добавить</Button>
+                        : null
+                    }
                 </h1>
 
                 <BuildingList buildings={filterBuilding} fetching={fetching} onSave={onSave.bind(this)}/>

@@ -15,6 +15,7 @@ const DocumentPagePanel: React.FC = () => {
     const [searchText, setSearchText] = useState('')
     const [filterDocument, setFilterDocument] = useState<IDocument[]>([])
 
+    const {role} = useTypedSelector(state => state.userReducer)
     const {documents, fetching} = useTypedSelector(state => state.documentReducer)
     const {fetchDocumentList} = useActions()
 
@@ -108,7 +109,11 @@ const DocumentPagePanel: React.FC = () => {
             <div className={classes.Content}>
                 <h1>
                     <span>Документы</span>
-                    <Button type='apply' icon='plus' onClick={onContextMenu.bind(this)}>Добавить</Button>
+
+                    {['director', 'administrator', 'manager'].includes(role) ?
+                        <Button type='apply' icon='plus' onClick={onContextMenu.bind(this)}>Добавить</Button>
+                        : null
+                    }
                 </h1>
 
                 <DocumentList documents={filterDocument} fetching={fetching} onSave={onSave.bind(this)}/>

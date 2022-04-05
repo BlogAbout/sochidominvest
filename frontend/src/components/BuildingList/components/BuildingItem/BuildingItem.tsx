@@ -3,13 +3,7 @@ import classNames from 'classnames/bind'
 import {useNavigate} from 'react-router-dom'
 import {declension} from '../../../../helpers/stringHelper'
 import {numberWithSpaces, round} from '../../../../helpers/numberHelper'
-import {
-    buildingTypes,
-    districtList,
-    formalizationList,
-    getDistrictText,
-    paymentsList
-} from '../../../../helpers/buildingHelper'
+import {buildingTypes, formalizationList, getDistrictText, paymentsList} from '../../../../helpers/buildingHelper'
 import BuildingService from '../../../../api/BuildingService'
 import {IBuilding} from '../../../../@types/IBuilding'
 import {ISelector} from '../../../../@types/ISelector'
@@ -41,6 +35,7 @@ const BuildingItem: React.FC<Props> = (props) => {
 
     const [fetching, setFetching] = useState(false)
 
+    const {role} = useTypedSelector(state => state.userReducer)
     const {tags} = useTypedSelector(state => state.tagReducer)
 
     // Редактирование объекта
@@ -89,12 +84,15 @@ const BuildingItem: React.FC<Props> = (props) => {
     const onContextMenu = (e: React.MouseEvent) => {
         e.preventDefault()
 
-        const menuItems = [
-            {text: 'Редактировать', onClick: () => updateHandler(props.building)},
-            {text: 'Удалить', onClick: () => removeHandler(props.building)}
-        ]
+        if (['director', 'administrator', 'manager'].includes(role)) {
+            const menuItems = [{text: 'Редактировать', onClick: () => updateHandler(props.building)}]
 
-        openContextMenu(e, menuItems)
+            if (['director', 'administrator'].includes(role)) {
+                menuItems.push({text: 'Удалить', onClick: () => removeHandler(props.building)})
+            }
+
+            openContextMenu(e, menuItems)
+        }
     }
 
     const buildingType = buildingTypes.find((item: ISelector) => item.key === props.building.type)
@@ -123,7 +121,8 @@ const BuildingItem: React.FC<Props> = (props) => {
 
             <div className={cx({
                 'itemImage': true,
-                'noImage': !props.building.images || !props.building.images.length})
+                'noImage': !props.building.images || !props.building.images.length
+            })
             }>
                 {props.building.images && props.building.images.length ?
                     <img src={'https://api.sochidominvest.ru' + props.building.images[0].value}

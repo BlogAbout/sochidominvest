@@ -1,4 +1,5 @@
 import React, {useState} from 'react'
+import {useTypedSelector} from '../../../../hooks/useTypedSelector'
 import {IDeveloper} from '../../../../@types/IDeveloper'
 import {developerTypes} from '../../../../helpers/developerHelper'
 import DeveloperService from '../../../../api/DeveloperService'
@@ -24,6 +25,8 @@ const defaultProps: Props = {
 
 const DeveloperItem: React.FC<Props> = (props) => {
     const [fetching, setFetching] = useState(false)
+
+    const {role} = useTypedSelector(state => state.userReducer)
 
     // Редактирование
     const updateHandler = (developer: IDeveloper) => {
@@ -71,12 +74,15 @@ const DeveloperItem: React.FC<Props> = (props) => {
     const onContextMenu = (e: React.MouseEvent) => {
         e.preventDefault()
 
-        const menuItems = [
-            {text: 'Редактировать', onClick: () => updateHandler(props.developer)},
-            {text: 'Удалить', onClick: () => removeHandler(props.developer)}
-        ]
+        if (['director', 'administrator', 'manager'].includes(role)) {
+            const menuItems = [{text: 'Редактировать', onClick: () => updateHandler(props.developer)}]
 
-        openContextMenu(e, menuItems)
+            if (['director', 'administrator'].includes(role)) {
+                menuItems.push({text: 'Удалить', onClick: () => removeHandler(props.developer)})
+            }
+
+            openContextMenu(e, menuItems)
+        }
     }
 
     const developerType = developerTypes.find(item => item.key === props.developer.type)

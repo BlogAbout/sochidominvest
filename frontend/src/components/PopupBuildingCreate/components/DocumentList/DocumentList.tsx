@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {useTypedSelector} from '../../../../hooks/useTypedSelector'
 import {IDocument} from '../../../../@types/IDocument'
 import DocumentService from '../../../../api/DocumentService'
 import Empty from '../../../Empty/Empty'
@@ -21,6 +22,8 @@ const DocumentList: React.FC<Props> = (props) => {
     const [isUpdate, setIsUpdate] = useState(true)
     const [fetching, setFetching] = useState(false)
     const [documents, setDocuments] = useState<IDocument[]>([])
+
+    const {role} = useTypedSelector(state => state.userReducer)
 
     useEffect(() => {
         if (isUpdate && props.buildingId) {
@@ -93,12 +96,15 @@ const DocumentList: React.FC<Props> = (props) => {
     const onContextMenu = (e: React.MouseEvent, document: IDocument) => {
         e.preventDefault()
 
-        const menuItems = [
-            {text: 'Редактировать', onClick: () => updateHandler(document)},
-            {text: 'Удалить', onClick: () => removeHandler(document)}
-        ]
+        if (['director', 'administrator', 'manager'].includes(role)) {
+            const menuItems = [{text: 'Редактировать', onClick: () => updateHandler(document)}]
 
-        openContextMenu(e, menuItems)
+            if (['director', 'administrator'].includes(role)) {
+                menuItems.push({text: 'Удалить', onClick: () => removeHandler(document)})
+            }
+
+            openContextMenu(e, menuItems)
+        }
     }
 
     const onContextMenuCreate = (e: React.MouseEvent) => {

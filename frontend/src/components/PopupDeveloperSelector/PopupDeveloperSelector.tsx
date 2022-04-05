@@ -48,6 +48,7 @@ const PopupDeveloperSelector: React.FC<Props> = (props) => {
     const [selectedDevelopers, setSelectedDevelopers] = useState<number[]>(props.selected || [])
     const [fetching, setFetching] = useState(false)
 
+    const {role} = useTypedSelector(state => state.userReducer)
     const {fetching: fetchingDeveloperList, developers} = useTypedSelector(state => state.developerReducer)
     const {fetchDeveloperList} = useActions()
 
@@ -177,12 +178,15 @@ const PopupDeveloperSelector: React.FC<Props> = (props) => {
     const onContextMenu = (e: React.MouseEvent, developer: IDeveloper) => {
         e.preventDefault()
 
-        const menuItems = [
-            {text: 'Редактировать', onClick: (e: React.MouseEvent) => onClickEdit(e, developer)},
-            {text: 'Удалить', onClick: (e: React.MouseEvent) => onClickDelete(e, developer)}
-        ]
+        if (['director', 'administrator', 'manager'].includes(role)) {
+            const menuItems = [{text: 'Редактировать', onClick: (e: React.MouseEvent) => onClickEdit(e, developer)}]
 
-        openContextMenu(e, menuItems)
+            if (['director', 'administrator'].includes(role)) {
+                menuItems.push({text: 'Удалить', onClick: (e: React.MouseEvent) => onClickDelete(e, developer)})
+            }
+
+            openContextMenu(e, menuItems)
+        }
     }
 
     const renderLeftBox = () => {
@@ -213,7 +217,9 @@ const PopupDeveloperSelector: React.FC<Props> = (props) => {
                            autoFocus
                 />
 
-                {props.buttonAdd && <ButtonAdd onClick={onClickAdd.bind(this)}/>}
+                {props.buttonAdd && ['director', 'administrator', 'manager'].includes(role) ?
+                    <ButtonAdd onClick={onClickAdd.bind(this)}/>
+                    : null}
             </div>
         )
     }

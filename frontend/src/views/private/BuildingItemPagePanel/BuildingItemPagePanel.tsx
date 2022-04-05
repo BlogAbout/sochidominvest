@@ -37,7 +37,8 @@ import {
     buildingTerritory,
     buildingTypes,
     buildingWaterSupply,
-    formalizationList, getDistrictText,
+    formalizationList,
+    getDistrictText,
     paymentsList
 } from '../../../helpers/buildingHelper'
 import classes from './BuildingItemPagePanel.module.scss'
@@ -60,7 +61,7 @@ const BuildingItemPagePanel: React.FC = (props) => {
 
     const {buildings, fetching} = useTypedSelector(state => state.buildingReducer)
     const {developers, fetching: fetchingDeveloperList} = useTypedSelector(state => state.developerReducer)
-    const {users, fetching: fetchingUserList} = useTypedSelector(state => state.userReducer)
+    const {users, fetching: fetchingUserList, role} = useTypedSelector(state => state.userReducer)
     const {tags} = useTypedSelector(state => state.tagReducer)
     const {articles} = useTypedSelector(state => state.articleReducer)
     const {fetchBuildingList, fetchTagList, fetchDeveloperList, fetchUserList, fetchArticleList} = useActions()
@@ -233,33 +234,41 @@ const BuildingItemPagePanel: React.FC = (props) => {
                 </div>
 
                 <div className={classes.container}>
-                    <Button type='apply'
-                            icon='pen-to-square'
-                            onClick={onClickEditHandler.bind(this)}
-                            className='marginRight'
-                            title='Редактировать'
-                    />
+                    {['director', 'administrator', 'manager'].includes(role) ?
+                        <Button type='apply'
+                                icon='pen-to-square'
+                                onClick={onClickEditHandler.bind(this)}
+                                className='marginRight'
+                                title='Редактировать'
+                        />
+                        : null
+                    }
+
                     <Button type='regular'
                             icon='plus'
-                            onClick={onClickEditHandler.bind(this)}
+                            onClick={() => {
+                            }}
                             className='marginRight'
                             title='Добавить в подборку'
                     />
                     <Button type='regular'
                             icon='heart'
-                            onClick={onClickEditHandler.bind(this)}
+                            onClick={() => {
+                            }}
                             className='marginRight'
                             title='Добавить в избранное'
                     />
                     <Button type='regular'
                             icon='arrow-up-from-bracket'
-                            onClick={onClickEditHandler.bind(this)}
+                            onClick={() => {
+                            }}
                             className='marginRight'
                             title='Поделиться ссылкой'
                     />
                     <Button type='regular'
                             icon='print'
-                            onClick={onClickEditHandler.bind(this)}
+                            onClick={() => {
+                            }}
                             title='Печать информации'
                     />
                 </div>

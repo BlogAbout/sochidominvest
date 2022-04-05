@@ -14,7 +14,7 @@ const UserPagePanel: React.FC = () => {
     const [searchText, setSearchText] = useState('')
     const [filterUser, setFilterUser] = useState<IUser[]>([])
 
-    const {users, fetching} = useTypedSelector(state => state.userReducer)
+    const {users, fetching, role} = useTypedSelector(state => state.userReducer)
     const {fetchUserList} = useActions()
 
     useEffect(() => {
@@ -84,7 +84,11 @@ const UserPagePanel: React.FC = () => {
             <div className={classes.Content}>
                 <h1>
                     <span>Пользователи</span>
-                    <Button type='apply' icon='plus' onClick={onClickAddHandler.bind(this)}>Добавить</Button>
+
+                    {['director', 'administrator', 'manager'].includes(role) ?
+                        <Button type='apply' icon='plus' onClick={onClickAddHandler.bind(this)}>Добавить</Button>
+                        : null
+                    }
                 </h1>
 
                 <UserList users={filterUser} fetching={fetching} onSave={onSave.bind(this)}/>

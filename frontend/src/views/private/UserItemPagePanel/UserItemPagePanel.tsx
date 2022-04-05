@@ -22,7 +22,7 @@ const UserItemPagePanel: React.FC = () => {
     const [isUpdate, setIsUpdate] = useState(false)
     const [user, setUser] = useState<IUser>({} as IUser)
 
-    const {users, fetching} = useTypedSelector(state => state.userReducer)
+    const {users, fetching, role} = useTypedSelector(state => state.userReducer)
     const {fetchUserList} = useActions()
 
     useEffect(() => {
@@ -125,7 +125,11 @@ const UserItemPagePanel: React.FC = () => {
 
                 <h1>
                     <span>Пользователь: {user.firstName}</span>
-                    <Button type='apply' icon='plus' onClick={onClickEditHandler.bind(this)}>Редактировать</Button>
+
+                    {['director', 'administrator', 'manager'].includes(role) ?
+                        <Button type='apply' icon='plus' onClick={onClickEditHandler.bind(this)}>Редактировать</Button>
+                        : null
+                    }
                 </h1>
 
                 {!user || !user.id ?

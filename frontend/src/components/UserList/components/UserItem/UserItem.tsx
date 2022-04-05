@@ -1,6 +1,7 @@
 import React, {useState} from 'react'
 import classNames from 'classnames/bind'
 import {useNavigate} from 'react-router-dom'
+import {useTypedSelector} from '../../../../hooks/useTypedSelector'
 import {IUser} from '../../../../@types/IUser'
 import {rolesList} from '../../../../helpers/userHelper'
 import UserService from '../../../../api/UserService'
@@ -29,6 +30,8 @@ const UserItem: React.FC<Props> = (props) => {
     const navigate = useNavigate()
 
     const [fetching, setFetching] = useState(false)
+
+    const {role} = useTypedSelector(state => state.userReducer)
 
     // Редактирование пользователя
     const updateHandler = (user: IUser) => {
@@ -96,23 +99,27 @@ const UserItem: React.FC<Props> = (props) => {
     const onContextMenu = (e: React.MouseEvent) => {
         e.preventDefault()
 
-        const menuItems = [{
-            text: 'Редактировать',
-            onClick: () => updateHandler(props.user)
-        }]
+        if (['director', 'administrator', 'manager'].includes(role)) {
+            const menuItems = [{
+                text: 'Редактировать',
+                onClick: () => updateHandler(props.user)
+            }]
 
-        if (props.user.role !== 'director') {
-            menuItems.push({
-                text: props.user.block ? 'Разблокировать' : 'Заблокировать',
-                onClick: () => blockingHandler()
-            })
-            menuItems.push({
-                text: 'Удалить',
-                onClick: () => removeHandler(props.user)
-            })
+            if (props.user.role !== 'director') {
+                if (['director', 'administrator'].includes(role)) {
+                    menuItems.push({
+                        text: props.user.block ? 'Разблокировать' : 'Заблокировать',
+                        onClick: () => blockingHandler()
+                    })
+                    menuItems.push({
+                        text: 'Удалить',
+                        onClick: () => removeHandler(props.user)
+                    })
+                }
+            }
+
+            openContextMenu(e, menuItems)
         }
-
-        openContextMenu(e, menuItems)
     }
 
     const userRole = rolesList.find(item => item.key === props.user.role)

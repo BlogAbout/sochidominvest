@@ -30,7 +30,7 @@ import FooterDefault from '../../../components/FooterDefault/FooterDefault'
 import classes from './AppRouter.module.scss'
 
 const AppRouter: React.FC = () => {
-    const {isAuth} = useTypedSelector(state => state.userReducer)
+    const {isAuth, role} = useTypedSelector(state => state.userReducer)
 
     return (
         <div className={classes.AppRouter}>
@@ -58,17 +58,27 @@ const AppRouter: React.FC = () => {
 
                     <div className={classes.serviceContent}>
                         <Routes>
+                            {['director', 'administrator'].includes(role) &&
+                            <>
+                                <Route path={RouteNames.USER_ITEM} element={<UserItemPagePanel/>}/>
+                                <Route path={RouteNames.USER} element={<UserPagePanel/>}/>
+                                <Route path={RouteNames.TOOL} element={<ToolPanel/>}/>
+                            </>
+                            }
+
+                            {['director', 'administrator', 'manager'].includes(role) &&
+                            <>
+                                <Route path={RouteNames.DEVELOPER} element={<DeveloperPagePanel/>}/>
+                                <Route path={RouteNames.DOCUMENT} element={<DocumentPagePanel/>}/>
+                                <Route path={RouteNames.REPORT} element={<ReportPanel/>}/>
+                            </>
+                            }
+
                             <Route path={RouteNames.MAIN} element={<DesktopPagePanel/>}/>
-                            <Route path={RouteNames.USER_ITEM} element={<UserItemPagePanel/>}/>
-                            <Route path={RouteNames.USER} element={<UserPagePanel/>}/>
                             <Route path={RouteNames.BUILDING_ITEM} element={<BuildingItemPagePanel/>}/>
                             <Route path={RouteNames.BUILDING} element={<BuildingPagePanel/>}/>
                             <Route path={RouteNames.ARTICLE_ITEM} element={<ArticleItemPagePanel/>}/>
                             <Route path={RouteNames.ARTICLE} element={<ArticlePagePanel/>}/>
-                            <Route path={RouteNames.DEVELOPER} element={<DeveloperPagePanel/>}/>
-                            <Route path={RouteNames.DOCUMENT} element={<DocumentPagePanel/>}/>
-                            <Route path={RouteNames.REPORT} element={<ReportPanel/>}/>
-                            <Route path={RouteNames.TOOL} element={<ToolPanel/>}/>
                             <Route path={RouteNames.SUPPORT} element={<SupportPagePanel/>}/>
                             <Route path={RouteNames.FAVORITE} element={<FavoritePagePanel/>}/>
                             <Route path={RouteNames.COMPILATION} element={<CompilationPagePanel/>}/>

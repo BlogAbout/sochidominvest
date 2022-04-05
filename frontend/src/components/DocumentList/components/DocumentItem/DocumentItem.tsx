@@ -26,6 +26,7 @@ const defaultProps: Props = {
 const DocumentItem: React.FC<Props> = (props) => {
     const [fetchingDocument, setFetchingDocument] = useState(false)
 
+    const {role} = useTypedSelector(state => state.userReducer)
     const {buildings, fetching} = useTypedSelector(state => state.buildingReducer)
     const {fetchBuildingList} = useActions()
 
@@ -97,16 +98,16 @@ const DocumentItem: React.FC<Props> = (props) => {
                             break
                     }
                 }
-            },
-            {
-                text: 'Редактировать',
-                onClick: () => updateHandler(props.document)
-            },
-            {
-                text: 'Удалить',
-                onClick: () => removeHandler(props.document)
             }
         ]
+
+        if (['director', 'administrator', 'manager'].includes(role)) {
+            menuItems.push({text: 'Редактировать', onClick: () => updateHandler(props.document)})
+
+            if (['director', 'administrator'].includes(role)) {
+                menuItems.push({text: 'Удалить', onClick: () => removeHandler(props.document)})
+            }
+        }
 
         openContextMenu(e, menuItems)
     }

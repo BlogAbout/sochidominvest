@@ -1,5 +1,6 @@
 import React, {useState} from 'react'
 import classNames from 'classnames/bind'
+import {useTypedSelector} from '../../../../hooks/useTypedSelector'
 import {IFeed} from '../../../../@types/IFeed'
 import {ISelector} from '../../../../@types/ISelector'
 import {feedStatuses, feedTypes} from '../../../../helpers/supportHelper'
@@ -27,6 +28,8 @@ const cx = classNames.bind(classes)
 
 const SupportItem: React.FC<Props> = (props) => {
     const [fetching, setFetching] = useState(false)
+
+    const {role} = useTypedSelector(state => state.userReducer)
 
     // Удаление заявки
     const removeHandler = () => {
@@ -90,13 +93,18 @@ const SupportItem: React.FC<Props> = (props) => {
     const onContextMenu = (e: React.MouseEvent) => {
         e.preventDefault()
 
-        const menuItems = [
-            {text: 'Взять в обработку', onClick: () => processHandler()},
-            {text: 'Закрыть заявку', onClick: () => closeHandler()},
-            {text: 'Удалить', onClick: () => removeHandler()}
-        ]
+        if (['director', 'administrator', 'manager'].includes(role)) {
+            const menuItems = [
+                {text: 'Взять в обработку', onClick: () => processHandler()},
+                {text: 'Закрыть заявку', onClick: () => closeHandler()}
+            ]
 
-        openContextMenu(e, menuItems)
+            if (['director', 'administrator'].includes(role)) {
+                menuItems.push({text: 'Удалить', onClick: () => removeHandler()})
+            }
+
+            openContextMenu(e, menuItems)
+        }
     }
 
     const feedType = feedTypes.find((type: ISelector) => type.key === props.feed.type)

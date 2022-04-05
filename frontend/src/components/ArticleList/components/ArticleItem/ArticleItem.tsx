@@ -1,5 +1,6 @@
 import React, {useState} from 'react'
 import {useNavigate} from 'react-router-dom'
+import {useTypedSelector} from '../../../../hooks/useTypedSelector'
 import {IArticle} from '../../../../@types/IArticle'
 import {articleTypes} from '../../../../helpers/articleHelper'
 import ArticleService from '../../../../api/ArticleService'
@@ -26,6 +27,8 @@ const ArticleItem: React.FC<Props> = (props) => {
     const navigate = useNavigate()
 
     const [fetching, setFetching] = useState(false)
+
+    const {role} = useTypedSelector(state => state.userReducer)
 
     // Редактирование
     const updateHandler = (article: IArticle) => {
@@ -73,12 +76,15 @@ const ArticleItem: React.FC<Props> = (props) => {
     const onContextMenu = (e: React.MouseEvent) => {
         e.preventDefault()
 
-        const menuItems = [
-            {text: 'Редактировать', onClick: () => updateHandler(props.article)},
-            {text: 'Удалить', onClick: () => removeHandler(props.article)}
-        ]
+        if (['director', 'administrator', 'manager'].includes(role)) {
+            const menuItems = [{text: 'Редактировать', onClick: () => updateHandler(props.article)}]
 
-        openContextMenu(e, menuItems)
+            if (['director', 'administrator'].includes(role)) {
+                menuItems.push({text: 'Удалить', onClick: () => removeHandler(props.article)})
+            }
+
+            openContextMenu(e, menuItems)
+        }
     }
 
     const articleType = articleTypes.find(item => item.key === props.article.type)

@@ -122,11 +122,15 @@ library.add(
 )
 
 function App() {
-    const {setIsAuth} = useActions()
+    const {setIsAuth, setUserRole} = useActions()
 
     useEffect(() => {
         if (localStorage.getItem('auth')) {
             setIsAuth(true)
+
+            if (localStorage.getItem('role')) {
+                setUserRole(localStorage.getItem('role') || '')
+            }
         }
     })
 

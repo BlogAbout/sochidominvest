@@ -47,6 +47,7 @@ const PopupTagSelector: React.FC<Props> = (props) => {
     const [selectedTags, setSelectedTags] = useState<number[]>(props.selected || [])
     const [fetching, setFetching] = useState(false)
 
+    const {role} = useTypedSelector(state => state.userReducer)
     const {fetching: fetchingTagList, tags} = useTypedSelector(state => state.tagReducer)
     const {fetchTagList} = useActions()
 
@@ -172,12 +173,15 @@ const PopupTagSelector: React.FC<Props> = (props) => {
     const onContextMenu = (e: React.MouseEvent, tag: ITag) => {
         e.preventDefault()
 
-        const menuItems = [
-            {text: 'Редактировать', onClick: (e: React.MouseEvent) => onClickEdit(e, tag)},
-            {text: 'Удалить', onClick: (e: React.MouseEvent) => onClickDelete(e, tag)}
-        ]
+        if (['director', 'administrator', 'manager'].includes(role)) {
+            const menuItems = [{text: 'Редактировать', onClick: (e: React.MouseEvent) => onClickEdit(e, tag)}]
 
-        openContextMenu(e, menuItems)
+            if (['director', 'administrator'].includes(role)) {
+                menuItems.push({text: 'Удалить', onClick: (e: React.MouseEvent) => onClickDelete(e, tag)})
+            }
+
+            openContextMenu(e, menuItems)
+        }
     }
 
     const renderLeftBox = () => {
@@ -208,7 +212,9 @@ const PopupTagSelector: React.FC<Props> = (props) => {
                            autoFocus
                 />
 
-                {props.buttonAdd && <ButtonAdd onClick={onClickAdd.bind(this)}/>}
+                {props.buttonAdd && ['director', 'administrator', 'manager'].includes(role) ?
+                    <ButtonAdd onClick={onClickAdd.bind(this)}/>
+                    : null}
             </div>
         )
     }

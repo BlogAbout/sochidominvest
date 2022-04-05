@@ -14,6 +14,7 @@ const DeveloperPagePanel: React.FC = () => {
     const [searchText, setSearchText] = useState('')
     const [filterDeveloper, setFilterDeveloper] = useState<IDeveloper[]>([])
 
+    const {role} = useTypedSelector(state => state.userReducer)
     const {developers, fetching} = useTypedSelector(state => state.developerReducer)
     const {fetchDeveloperList} = useActions()
 
@@ -72,7 +73,11 @@ const DeveloperPagePanel: React.FC = () => {
             </Helmet>
 
             <div className={classes.filter}>
-                <Button type='save' icon='building-columns' onClick={() => console.log('add')}>Строительные компании</Button>
+                <Button type='save'
+                        icon='building-columns'
+                        onClick={() => console.log('add')
+                        }
+                >Строительные компании</Button>
 
                 <SearchBox value={searchText} onChange={search.bind(this)}/>
             </div>
@@ -80,7 +85,11 @@ const DeveloperPagePanel: React.FC = () => {
             <div className={classes.Content}>
                 <h1>
                     <span>Застройщики</span>
-                    <Button type='apply' icon='plus' onClick={onClickAddHandler.bind(this)}>Добавить</Button>
+
+                    {['director', 'administrator', 'manager'].includes(role) ?
+                        <Button type='apply' icon='plus' onClick={onClickAddHandler.bind(this)}>Добавить</Button>
+                        : null
+                    }
                 </h1>
 
                 <DeveloperList developers={filterDeveloper} fetching={fetching} onSave={onSave.bind(this)}/>

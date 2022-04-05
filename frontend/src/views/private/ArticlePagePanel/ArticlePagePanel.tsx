@@ -14,6 +14,7 @@ const ArticlePagePanel: React.FC = () => {
     const [searchText, setSearchText] = useState('')
     const [filterArticle, setFilterArticle] = useState<IArticle[]>([])
 
+    const {role} = useTypedSelector(state => state.userReducer)
     const {articles, fetching} = useTypedSelector(state => state.articleReducer)
     const {fetchArticleList} = useActions()
 
@@ -79,7 +80,11 @@ const ArticlePagePanel: React.FC = () => {
             <div className={classes.Content}>
                 <h1>
                     <span>Статьи</span>
-                    <Button type='apply' icon='plus' onClick={addHandler.bind(this)}>Добавить</Button>
+
+                    {['director', 'administrator', 'manager'].includes(role) ?
+                        <Button type='apply' icon='plus' onClick={addHandler.bind(this)}>Добавить</Button>
+                        : null
+                    }
                 </h1>
 
                 <ArticleList articles={filterArticle} fetching={fetching} onSave={onSave.bind(this)}/>

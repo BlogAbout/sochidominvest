@@ -9,6 +9,10 @@ export const UserActionCreators = {
         type: UserActionTypes.USER_AUTH,
         payload: auth
     }),
+    setUserRole: (role: string): UserAction => ({
+        type: UserActionTypes.USER_ROLE,
+        payload: role
+    }),
     setUsers: (users: IUser[]): UserAction => ({
         type: UserActionTypes.USER_FETCH_LIST,
         payload: users
@@ -25,10 +29,11 @@ export const UserActionCreators = {
         localStorage.setItem('auth', 'true')
         localStorage.setItem('id', user.id ? user.id.toString() : '')
         localStorage.setItem('token', user.token || '')
-        localStorage.setItem('role', user.role)
+        localStorage.setItem('role', user.role || '')
         localStorage.setItem('settings', user.settings || '')
 
         dispatch(UserActionCreators.setIsAuth(true))
+        dispatch(UserActionCreators.setUserRole(user.role || ''))
     },
     logout: () => async (dispatch: AppDispatch) => {
         localStorage.clear()

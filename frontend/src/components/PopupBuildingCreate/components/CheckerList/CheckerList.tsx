@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {useTypedSelector} from '../../../../hooks/useTypedSelector'
 import {IBuildingChecker} from '../../../../@types/IBuilding'
 import Empty from '../../../Empty/Empty'
 import openPopupCheckerCreate from '../../../PopupCheckerCreate/PopupCheckerCreate'
@@ -21,6 +22,8 @@ const CheckerList: React.FC<Props> = (props) => {
     const [isUpdate, setIsUpdate] = useState(true)
     const [fetching, setFetching] = useState(false)
     const [checkers, setCheckers] = useState<IBuildingChecker[]>([])
+
+    const {role} = useTypedSelector(state => state.userReducer)
 
     useEffect(() => {
         if (isUpdate && props.buildingId) {
@@ -68,12 +71,15 @@ const CheckerList: React.FC<Props> = (props) => {
     const onContextMenu = (e: React.MouseEvent, checker: IBuildingChecker) => {
         e.preventDefault()
 
-        const menuItems = [
-            {text: 'Редактировать', onClick: () => updateHandler(checker)},
-            {text: 'Удалить', onClick: () => removeHandler(checker)}
-        ]
+        if (['director', 'administrator', 'manager'].includes(role)) {
+            const menuItems = [{text: 'Редактировать', onClick: () => updateHandler(checker)}]
 
-        openContextMenu(e, menuItems)
+            if (['director', 'administrator'].includes(role)) {
+                menuItems.push({text: 'Удалить', onClick: () => removeHandler(checker)})
+            }
+
+            openContextMenu(e, menuItems)
+        }
     }
 
     // Удаление элемента

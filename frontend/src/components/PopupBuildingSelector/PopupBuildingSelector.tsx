@@ -47,6 +47,7 @@ const PopupBuildingSelector: React.FC<Props> = (props) => {
     const [selectedBuildings, setSelectedBuildings] = useState<number[]>(props.selected || [])
     const [fetching, setFetching] = useState(false)
 
+    const {role} = useTypedSelector(state => state.userReducer)
     const {fetching: fetchingBuildingList, buildings} = useTypedSelector(state => state.buildingReducer)
     const {fetchBuildingList} = useActions()
 
@@ -172,12 +173,15 @@ const PopupBuildingSelector: React.FC<Props> = (props) => {
     const onContextMenu = (e: React.MouseEvent, building: IBuilding) => {
         e.preventDefault()
 
-        const menuItems = [
-            {text: 'Редактировать', onClick: (e: React.MouseEvent) => onClickEdit(e, building)},
-            {text: 'Удалить', onClick: (e: React.MouseEvent) => onClickDelete(e, building)}
-        ]
+        if (['director', 'administrator', 'manager'].includes(role)) {
+            const menuItems = [{text: 'Редактировать', onClick: (e: React.MouseEvent) => onClickEdit(e, building)}]
 
-        openContextMenu(e, menuItems)
+            if (['director', 'administrator'].includes(role)) {
+                menuItems.push({text: 'Удалить', onClick: (e: React.MouseEvent) => onClickDelete(e, building)})
+            }
+
+            openContextMenu(e, menuItems)
+        }
     }
 
     const renderLeftBox = () => {
@@ -208,7 +212,9 @@ const PopupBuildingSelector: React.FC<Props> = (props) => {
                            autoFocus
                 />
 
-                {props.buttonAdd && <ButtonAdd onClick={onClickAdd.bind(this)}/>}
+                {props.buttonAdd && ['director', 'administrator', 'manager'].includes(role) ?
+                    <ButtonAdd onClick={onClickAdd.bind(this)}/>
+                    : null}
             </div>
         )
     }
