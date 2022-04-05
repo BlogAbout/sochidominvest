@@ -77,16 +77,12 @@ const PopupDocumentCreate: React.FC<Props> = (props) => {
             })
     }
 
-    const changeUploadFile = (document: IDocument) => {
-        setDocumentInfo(document)
+    const changeUploadFile = (content: string, extension?: string) => {
+        setDocumentInfo({...documentInfo, content: content, extension: extension})
     }
 
     const checkDisabledButton = () => {
-        if (documentInfo.type === 'link' && documentInfo.content.trim() === '') {
-            return true
-        }
-
-        return fetching || documentInfo.name.trim() === ''
+        return fetching || documentInfo.name.trim() === '' || documentInfo.content.trim() === ''
     }
 
     return (
@@ -117,7 +113,8 @@ const PopupDocumentCreate: React.FC<Props> = (props) => {
                         <div className={classes.field}>
                             <div className={classes.field_label}>Файл</div>
 
-                            <FileUploader document={documentInfo}
+                            <FileUploader fileContent={documentInfo.content}
+                                          extension={documentInfo.extension}
                                           onChange={changeUploadFile.bind(this)}
                                           text='Загрузить файл'
                                           type='document'

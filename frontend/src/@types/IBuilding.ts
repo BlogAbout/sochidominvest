@@ -48,6 +48,7 @@ export interface IBuilding {
     saleNoResident?: number | null
     images: IImageDb[]
     newImages: IImage[]
+    video: string
     metaTitle?: string | null
     metaDescription?: string | null
     passed?: IBuildingPassed

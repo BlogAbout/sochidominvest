@@ -48,6 +48,7 @@ import {
     paymentsList
 } from '../../helpers/buildingHelper'
 import classes from './PopupBuildingCreate.module.scss'
+import FileUploader from "../FileUploader/FileUploader";
 
 interface Props extends PopupProps {
     building?: IBuilding | null
@@ -84,7 +85,8 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
         surchargeDoc: 0,
         surchargeGas: 0,
         area: 0,
-        cost: 0
+        cost: 0,
+        video: ''
     })
 
     const [fetching, setFetching] = useState(false)
@@ -516,17 +518,41 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
     }
 
     // Вкладка галереии объекта
-    const renderGalleryTab = () => {
+    const renderMediaTab = () => {
+        const videoInfo = building.video ? building.video.split('.') : []
+        const videoExtension = videoInfo.length ? videoInfo[videoInfo.length - 1] : ''
+
         return (
-            <div key='gallery' className={classes.tabContent}>
-                <ImageUploader images={building.images}
-                               newImages={building.newImages}
-                               objectType='building'
-                               multi
-                               showUploadList
-                               onChange={uploadImagesHandler.bind(this)}
-                               onClickImage={selectImageAvatarHandler.bind(this)}
-                />
+            <div key='media' className={classes.tabContent}>
+                <div className={cx({'field': true, 'full': true})}>
+                    <div className={classes.field_label}>Фотогалерея</div>
+
+                    <ImageUploader images={building.images}
+                                   newImages={building.newImages}
+                                   objectType='building'
+                                   multi
+                                   showUploadList
+                                   onChange={uploadImagesHandler.bind(this)}
+                                   onClickImage={selectImageAvatarHandler.bind(this)}
+                    />
+                </div>
+
+                {building.id ?
+                    <div className={cx({'field': true, 'full': true})}>
+                        <div className={classes.field_label}>Видео</div>
+
+                        <FileUploader fileContent={building.video}
+                                      extension={videoExtension}
+                                      onChange={(value: string) => setBuilding({...building, video: value})}
+                                      text='Загрузить видео'
+                                      type='video'
+                                      objectType={'building'}
+                                      objectId={building.id}
+                                      showRemove
+                        />
+                    </div>
+                    : null
+                }
             </div>
         )
     }
@@ -603,7 +629,7 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
         state: {title: 'Состояние', render: renderStateTab()},
         info: {title: 'Информация', render: renderInformationTab()},
         checker: {title: 'Шахматка', render: renderCheckerBoardTab()},
-        gallery: {title: 'Галерея', render: renderGalleryTab()},
+        media: {title: 'Медиа', render: renderMediaTab()},
         developer: {title: 'Застройщик', render: renderDeveloperTab()},
         contact: {title: 'Контакты', render: renderContactTab()},
         documents: {title: 'Документы', render: renderDocumentTab()},

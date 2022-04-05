@@ -1,28 +1,30 @@
 import React, {useRef, useState} from 'react'
-import {IDocument} from '../../@types/IDocument'
 import UploadService from '../../api/UploadService'
 import Button from '../Button/Button'
 import openPopupAlert from '../PopupAlert/PopupAlert'
 import classes from './FileUploader.module.scss'
 
 interface Props {
-    document: IDocument
+    fileContent: string
+    extension?: string
     type: string
     disabled?: boolean
     text?: string
     objectType?: string
     objectId?: number
+    showRemove?: boolean
 
-    onChange(file: IDocument | null): void
+    onChange(content: string, extension?: string): void
 }
 
 const defaultProps: Props = {
-    document: {} as IDocument,
+    fileContent: '',
     type: 'document',
     disabled: false,
     text: 'Загрузить',
-    onChange: (file: IDocument) => {
-        console.info('FileUploader onChange', file)
+    showRemove: false,
+    onChange: (content: string, extension?: string) => {
+        console.info('FileUploader onChange', content, extension)
     }
 }
 
@@ -45,14 +47,13 @@ const FileUploader: React.FC<Props> = (props) => {
             acceptText = 'Доступны для загрузки: PNG, JPG, JPEG. Максимальный размер: 50 Мб.'
             break
         case 'video':
-            accept = ''
-            acceptText = 'Доступны для загрузки: . Максимальный размер: 50 Мб.'
+            accept = 'video/webm'
+            acceptText = 'Доступны для загрузки: WEBM. Максимальный размер: 50 Мб.'
             break
     }
 
     // Загрузчик файла
     const uploadFileHandler = async (e: React.ChangeEvent<HTMLInputElement>) => {
-        const documentInfo: IDocument = {...props.document}
         const files: FileList | null = e.currentTarget.files
 
         if (files && files.length) {
@@ -64,10 +65,7 @@ const FileUploader: React.FC<Props> = (props) => {
                 .then((response) => {
                     const result = response.data.split('.')
 
-                    documentInfo.content = response.data
-                    documentInfo.extension = result[1]
-
-                    props.onChange(documentInfo)
+                    props.onChange(response.data, result[result.length - 1])
                 })
                 .catch((error) => {
                     console.error('Ошибка загрузки файла', error)
@@ -99,13 +97,13 @@ const FileUploader: React.FC<Props> = (props) => {
                 />
 
                 {progress === 0 ?
-                    props.document.content ?
+                    props.fileContent ?
                         <div className={classes.info}>
-                            <div className={classes.type}>{props.document.extension}</div>
+                            <div className={classes.type}>{props.extension}</div>
 
                             <Button type='regular'
                                     icon='paperclip'
-                                    onClick={() => window.open(`https://api.sochidominvest.ru/uploads/${props.document.content}`, '_blank')}
+                                    onClick={() => window.open(`https://api.sochidominvest.ru/uploads/${props.fileContent}`, '_blank')}
                                     disabled={props.disabled || fetching}
                                     className='marginLeft'
                             >Открыть</Button>
@@ -117,6 +115,15 @@ const FileUploader: React.FC<Props> = (props) => {
                                     title={acceptText}
                                     className='marginLeft'
                             >Заменить</Button>
+
+                            {props.showRemove &&
+                            <Button type='apply'
+                                    icon='xmark'
+                                    onClick={() => props.onChange('', '')}
+                                    disabled={props.disabled || fetching}
+                                    title={acceptText}
+                                    className='marginLeft'
+                            />}
                         </div>
                         :
                         <Button type='apply'

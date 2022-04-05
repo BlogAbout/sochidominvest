@@ -351,7 +351,8 @@ class BuildingModel extends Model
                     surcharge_doc = :surchargeDoc,
                     surcharge_gas = :surchargeGas,
                     sale_no_resident = :saleNoResident,
-                    passed = :passed
+                    passed = :passed,
+                    video = :video
                 WHERE id = :id
             ";
         } else {
@@ -360,12 +361,12 @@ class BuildingModel extends Model
                     (id, district, district_zone, house_class, material, house_type, entrance_house, parking,
                      territory, ceiling_height, maintenance_cost, distance_sea, gas, heating, electricity,
                      sewerage, water_supply, advantages, payments, formalization, amount_contract, surcharge_doc,
-                     surcharge_gas, sale_no_resident, passed)
+                     surcharge_gas, sale_no_resident, passed, video)
                 VALUES
                     (:id, :district, :districtZone, :houseClass, :material, :houseType, :entranceHouse, :parking,
                      :territory, :ceilingHeight, :maintenanceCost, :distanceSea, :gas, :heating, :electricity,
                      :sewerage, :waterSupply, :advantages, :payments, :formalization, :amountContract, :surchargeDoc,
-                     :surchargeGas, :saleNoResident, :passed)
+                     :surchargeGas, :saleNoResident, :passed, :video)
             ";
         }
 
@@ -395,6 +396,7 @@ class BuildingModel extends Model
         parent::bindParams('surchargeGas', $payload['surchargeGas']);
         parent::bindParams('saleNoResident', $payload['saleNoResident']);
         parent::bindParams('passed', $payload['passed']);
+        parent::bindParams('video', $payload['video']);
         parent::execute();
     }
 
@@ -555,7 +557,8 @@ class BuildingModel extends Model
             'cost' => (float)$data['cost'],
             'metaTitle' => $data['meta_title'],
             'metaDescription' => $data['meta_description'],
-            'passed' => $data['passed'] ? json_decode($data['passed']) : null
+            'passed' => $data['passed'] ? json_decode($data['passed']) : null,
+            'video' => $data['video']
         ];
     }
 }
