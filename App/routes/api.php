@@ -52,7 +52,7 @@ $Klein->respond('GET', '/api/v1/feed/[:id]', [new FeedbackController(), 'getFeed
 $Klein->respond('GET', '/api/v1/feed', [new FeedbackController(), 'fetchFeeds']);
 $Klein->respond('DELETE', '/api/v1/feed/[:id]', [new FeedbackController(), 'deleteFeed']);
 
-// DocumentPage Routes
+// DocumentPagePanel Routes
 $Klein->respond('POST', '/api/v1/document-upload', [new DocumentController(), 'uploadDocument']);
 $Klein->respond('POST', '/api/v1/document', [new DocumentController(), 'createDocument']);
 $Klein->respond('PUT', '/api/v1/document/[:id]', [new DocumentController(), 'updateDocument']);

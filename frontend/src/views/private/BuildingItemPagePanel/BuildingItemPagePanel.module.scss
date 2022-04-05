@@ -1,0 +1,228 @@
+.BuildingItemPagePanel {
+    position: relative;
+
+    .Content {
+        padding: 40px 0;
+        color: #000;
+
+        .information {
+            margin-top: 40px;
+
+            .container {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: space-between;
+
+                h2 {
+                    text-transform: uppercase;
+                    color: #777;
+                    font-size: 20px;
+                    display: block;
+                    padding-bottom: 10px;
+                    margin-bottom: 20px;
+                    position: relative;
+
+                    &::after {
+                        content: '';
+                        display: block;
+                        position: absolute;
+                        left: 0;
+                        bottom: 0;
+                        width: 150px;
+                        height: 1px;
+                        background: #ffcc01;
+                    }
+                }
+
+                .col {
+                    width: 48%;
+                    margin-bottom: 15px;
+
+                    .row {
+                        display: flex;
+                        width: 100%;
+
+                        + .row {
+                            margin-top: 10px;
+                        }
+
+                        .label {
+                            width: 30%;
+                            font-weight: 700;
+                        }
+
+                        .param {
+                            width: 70%;
+                            text-align: right;
+                        }
+                    }
+                }
+
+                .leftColumn {
+                    width: calc(100% - 480px);
+                    margin-right: 30px;
+                    box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.4);
+                    display: flex;
+                    flex-direction: column;
+
+                    .block {
+                        background: #fff;
+                        padding: 30px;
+                        flex-grow: 1;
+
+                        + .block {
+                            border-top: 1px solid #075ea5;
+                        }
+
+                        .advantage {
+                            margin-right: 20px;
+                            width: auto;
+                            display: flex;
+
+                            svg {
+                                width: 32px;
+                                height: 32px;
+                                margin-right: 5px;
+                            }
+                        }
+
+                        .housing {
+                            position: relative;
+                            padding-left: 20px;
+
+                            &::before {
+                                content: '';
+                                display: block;
+                                position: absolute;
+                                left: 0;
+                                top: 0;
+                                width: 4px;
+                                height: 100%;
+                                background: #075ea5;
+                            }
+
+                            + .housing {
+                                margin-top: 20px;
+                            }
+
+                            .title {
+                                font-weight: 700;
+                                font-size: 18px;
+                                line-height: 24px;
+                            }
+                        }
+                    }
+                }
+
+                .rightColumn {
+                    width: 450px;
+
+                    .block {
+                        background: #fff;
+                        padding: 30px;
+                        box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.4);
+
+                        + .block {
+                            margin-top: 30px;
+                        }
+
+                        .passed {
+                            margin-bottom: 10px;
+
+                            span {
+                                display: inline-block;
+                                font-size: 14px;
+                                line-height: 14px;
+                                padding: 5px;
+                                background: #075ea5;
+                                color: #fff;
+                                z-index: 3;
+                            }
+
+                            &.is {
+                                span {
+                                    background: #ffcc01;
+                                    color: #000;
+                                }
+                            }
+                        }
+
+                        .tags {
+                            width: 100%;
+                            margin-bottom: 20px;
+
+                            > div {
+                                margin-right: 5px;
+                                background: #ffcc01;
+                                font-size: 14px;
+                                padding: 2px 5px;
+                                display: inline-block;
+                            }
+                        }
+
+                        h1 {
+                            font-size: 28px;
+                            margin-bottom: 0;
+                        }
+
+                        .address {
+                            margin-bottom: 50px;
+                            font-size: 20px;
+
+                            span {
+                                display: block;
+                            }
+                        }
+
+                        .row {
+                            width: 50%;
+                            margin-bottom: 20px;
+
+                            span:first-child {
+                                font-size: 24px;
+                                display: block;
+                                margin-bottom: 5px;
+                            }
+
+                            span:last-child {
+                                text-transform: uppercase;
+                                color: #777;
+                                font-size: 18px;
+                                display: block;
+                            }
+                        }
+
+                        .list {
+
+                            div {
+                                margin-bottom: 20px;
+
+                                + div {
+                                    margin-top: 5px;
+                                    padding-top: 5px;
+                                    border-top: 1px solid #dfdfdf;
+                                }
+                            }
+
+                            + .list {
+                                margin-top: 10px;
+                            }
+
+                            span:first-child {
+                                font-weight: 700;
+                                font-size: 18px;
+                                display: block;
+                            }
+
+                            span:last-child {
+                                display: block;
+                                margin-top: 5px;
+                                font-size: 16px;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
