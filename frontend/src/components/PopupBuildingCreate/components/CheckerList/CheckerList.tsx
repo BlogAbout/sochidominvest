@@ -2,6 +2,9 @@ import React, {useEffect, useState} from 'react'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {useTypedSelector} from '../../../../hooks/useTypedSelector'
 import {IBuildingChecker} from '../../../../@types/IBuilding'
+import {ISelector} from '../../../../@types/ISelector'
+import {checkerStatuses} from '../../../../helpers/buildingHelper'
+import BlockingElement from '../../../BlockingElement/BlockingElement'
 import Empty from '../../../Empty/Empty'
 import openPopupCheckerCreate from '../../../PopupCheckerCreate/PopupCheckerCreate'
 import CheckerService from '../../../../api/CheckerService'
@@ -121,6 +124,7 @@ const CheckerList: React.FC<Props> = (props) => {
             <div className={classes.header}>
                 <div className={classes.id}>#</div>
                 <div className={classes.name}>Название</div>
+                <div className={classes.status}>Статус</div>
                 <div className={classes.housing}>Корпус</div>
                 <div className={classes.stage}>Этаж</div>
                 <div className={classes.area}>Площадь</div>
@@ -131,9 +135,11 @@ const CheckerList: React.FC<Props> = (props) => {
                 <FontAwesomeIcon icon='plus'/> Добавить
             </div>
 
-            <div className={classes.list}>
+            <BlockingElement fetching={fetching} className={classes.list}>
                 {checkers && checkers.length ?
                     checkers.map((checker: IBuildingChecker) => {
+                        const status = checkerStatuses.find((item: ISelector) => item.key === checker.status)
+
                         return (
                             <div key={checker.id}
                                  className={classes.row}
@@ -141,6 +147,7 @@ const CheckerList: React.FC<Props> = (props) => {
                             >
                                 <div className={classes.id}>#{checker.id}</div>
                                 <div className={classes.name}>{checker.name}</div>
+                                <div className={classes.status}>{status ? status.text : ''}</div>
                                 <div className={classes.housing}>{checker.housing}</div>
                                 <div className={classes.stage}>{checker.stage}</div>
                                 <div className={classes.area}>{checker.area ? `${checker.area} кв.м` : ''}</div>
@@ -150,7 +157,7 @@ const CheckerList: React.FC<Props> = (props) => {
                     })
                     : <Empty message='Объект недвижимости не имеет шахматок'/>
                 }
-            </div>
+            </BlockingElement>
         </div>
     )
 }

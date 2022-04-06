@@ -3,6 +3,7 @@ import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {IUser} from '../../../../@types/IUser'
 import {useTypedSelector} from '../../../../hooks/useTypedSelector'
 import {useActions} from '../../../../hooks/useActions'
+import BlockingElement from '../../../BlockingElement/BlockingElement'
 import Empty from '../../../Empty/Empty'
 import openPopupAlert from '../../../PopupAlert/PopupAlert'
 import openContextMenu from '../../../ContextMenu/ContextMenu'
@@ -100,7 +101,7 @@ const UserList: React.FC<Props> = (props) => {
                 <FontAwesomeIcon icon='plus'/> Добавить
             </div>
 
-            <div className={classes.list}>
+            <BlockingElement fetching={fetchingUserList} className={classes.list}>
                 {selectedUsers && selectedUsers.length ?
                     selectedUsers.map((user: IUser) => {
                         return (
@@ -116,7 +117,7 @@ const UserList: React.FC<Props> = (props) => {
                     })
                     : <Empty message='Объект недвижимости не имеет контактов'/>
                 }
-            </div>
+            </BlockingElement>
         </div>
     )
 }

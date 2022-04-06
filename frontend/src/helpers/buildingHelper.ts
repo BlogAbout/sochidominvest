@@ -141,11 +141,21 @@ export const buildingAdvantages: ISelector[] = [
 ]
 
 /**
- *  Список типов отделки
+ *  Список типов отделки для шахматки
  */
 export const checkerFurnish: ISelector[] = [
     {key: 'draft', text: 'черновая'},
     {key: 'repair', text: 'ремонт'}
+]
+
+/**
+ *  Список статусов для шахматки
+ */
+export const checkerStatuses: ISelector[] = [
+    {key: 'free', text: 'свободно'},
+    {key: 'booking', text: 'бронь'},
+    {key: 'assignment', text: 'переуступка'},
+    {key: 'sold', text: 'продано'}
 ]
 
 /**

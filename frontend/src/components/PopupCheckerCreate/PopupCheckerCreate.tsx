@@ -12,7 +12,7 @@ import TextBox from '../TextBox/TextBox'
 import NumberBox from '../NumberBox/NumberBox'
 import CheckBox from '../CheckBox/CheckBox'
 import ComboBox from '../ComboBox/ComboBox'
-import {checkerFurnish} from '../../helpers/buildingHelper'
+import {checkerFurnish, checkerStatuses} from '../../helpers/buildingHelper'
 import classes from './PopupCheckerCreate.module.scss'
 
 interface Props extends PopupProps {
@@ -41,7 +41,7 @@ const PopupCheckerCreate: React.FC<Props> = (props) => {
         stage: 'Ц',
         rooms: 1,
         active: 1,
-        status: 'sold'
+        status: 'free'
     })
 
     const [fetching, setFetching] = useState(false)
@@ -200,6 +200,17 @@ const PopupCheckerCreate: React.FC<Props> = (props) => {
                                    })}
                                    placeHolder='Укажите количество комнат'
                                    icon='bed'
+                        />
+                    </div>
+
+                    <div className={classes.field}>
+                        <div className={classes.field_label}>Статус</div>
+
+                        <ComboBox selected={checker.status || 'free'}
+                                  items={Object.values(checkerStatuses)}
+                                  onSelect={(value: string) => setChecker({...checker, status: value})}
+                                  placeHolder='Выберите статус'
+                                  styleType='standard'
                         />
                     </div>
 

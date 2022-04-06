@@ -78,10 +78,15 @@
     }
 
     .housing,
-    .stage,
+    .stage {
+        flex-shrink: 0;
+        width: 70px;
+    }
+
+    .status,
     .area {
         flex-shrink: 0;
-        width: 90px;
+        width: 110px;
     }
 
     .cost {

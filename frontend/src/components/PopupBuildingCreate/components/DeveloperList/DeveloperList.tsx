@@ -3,6 +3,7 @@ import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {IDeveloper} from '../../../../@types/IDeveloper'
 import {useTypedSelector} from '../../../../hooks/useTypedSelector'
 import {useActions} from '../../../../hooks/useActions'
+import BlockingElement from '../../../BlockingElement/BlockingElement'
 import Empty from '../../../Empty/Empty'
 import openPopupAlert from '../../../PopupAlert/PopupAlert'
 import openContextMenu from '../../../ContextMenu/ContextMenu'
@@ -105,7 +106,7 @@ const DeveloperList: React.FC<Props> = (props) => {
                 <FontAwesomeIcon icon='plus'/> Добавить
             </div>
 
-            <div className={classes.list}>
+            <BlockingElement fetching={fetchingDeveloperList} className={classes.list}>
                 {selectedDevelopers && selectedDevelopers.length ?
                     selectedDevelopers.map((developer: IDeveloper) => {
                         return (
@@ -121,7 +122,7 @@ const DeveloperList: React.FC<Props> = (props) => {
                     })
                     : <Empty message='Объект недвижимости не имеет застройщиков'/>
                 }
-            </div>
+            </BlockingElement>
         </div>
     )
 }

@@ -3,6 +3,7 @@ import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {useTypedSelector} from '../../../../hooks/useTypedSelector'
 import {IDocument} from '../../../../@types/IDocument'
 import DocumentService from '../../../../api/DocumentService'
+import BlockingElement from '../../../BlockingElement/BlockingElement'
 import Empty from '../../../Empty/Empty'
 import openPopupAlert from '../../../PopupAlert/PopupAlert'
 import openContextMenu from '../../../ContextMenu/ContextMenu'
@@ -159,7 +160,7 @@ const DocumentList: React.FC<Props> = (props) => {
                 <FontAwesomeIcon icon='plus'/> Добавить
             </div>
 
-            <div className={classes.list}>
+            <BlockingElement fetching={fetching} className={classes.list}>
                 {documents && documents.length ?
                     documents.map((document: IDocument) => {
                         let type = ''
@@ -189,7 +190,7 @@ const DocumentList: React.FC<Props> = (props) => {
                     })
                     : <Empty message='Объект недвижимости не содержит документов'/>
                 }
-            </div>
+            </BlockingElement>
         </div>
     )
 }

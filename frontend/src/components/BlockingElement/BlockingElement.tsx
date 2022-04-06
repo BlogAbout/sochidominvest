@@ -16,6 +16,7 @@ const cx = classNames.bind(classes)
 
 const BlockingElement: React.FC<Props> = (props) => {
     const blockingElementStyle = cx({
+        [classes.BlockingElement]: true,
         [`${props.className}`]: props.className !== undefined,
         [classes.fetching]: props.fetching
     })
@@ -38,5 +39,6 @@ const BlockingElement: React.FC<Props> = (props) => {
 }
 
 BlockingElement.defaultProps = defaultProps
+BlockingElement.displayName = 'BlockingElement'
 
 export default BlockingElement
