@@ -10,6 +10,7 @@ import classes from './ImageCarousel.module.scss'
 
 interface Props {
     images: IImageCarousel[]
+    video?: string
     alt: string
     fancy?: boolean
     group?: string
@@ -40,6 +41,16 @@ const ImageCarousel: React.FC<Props> = (props) => {
         )
     }
 
+    const renderSlideVideo = () => {
+        return (
+            <SwiperSlide className={classes.video}>
+                <video controls preload='metadata'>
+                    <source src={`https://api.sochidominvest.ru/uploads/${props.video}`} type='video/webm; codecs="vp8, vorbis"'/>
+                </video>
+            </SwiperSlide>
+        )
+    }
+
     return (
         <div className={classes.ImageCarousel}>
             <Swiper
@@ -48,6 +59,8 @@ const ImageCarousel: React.FC<Props> = (props) => {
                 navigation
                 scrollbar={{draggable: true}}
             >
+                {props.video && renderSlideVideo()}
+
                 {props.images.map((image: IImageCarousel, index: number) => {
                     return (
                         <SwiperSlide key={index} className={classes.image}>

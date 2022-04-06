@@ -501,6 +501,37 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
                               styleType='standard'
                     />
                 </div>
+
+                <div className={classes.field}>
+                    <div className={classes.field_label}>Расстояние до моря, м.</div>
+
+                    <NumberBox value={building.distanceSea || 0}
+                               min={0}
+                               step={1}
+                               max={999999999}
+                               onChange={(e: React.ChangeEvent<HTMLInputElement>, value: number) => setBuilding({
+                                   ...building,
+                                   distanceSea: value
+                               })}
+                               placeHolder='Укажите расстояние до моря'
+                    />
+                </div>
+
+                <div className={classes.field}>
+                    <div className={classes.field_label}>Высота потолков, м.</div>
+
+                    <NumberBox value={building.ceilingHeight || 0}
+                               min={0}
+                               step={0.01}
+                               max={99}
+                               countAfterComma={2}
+                               onChange={(e: React.ChangeEvent<HTMLInputElement>, value: number) => setBuilding({
+                                   ...building,
+                                   ceilingHeight: value
+                               })}
+                               placeHolder='Укажите высоту потолков'
+                    />
+                </div>
             </div>
         )
     }

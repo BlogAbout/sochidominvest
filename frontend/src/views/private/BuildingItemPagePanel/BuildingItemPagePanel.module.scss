@@ -1,8 +1,9 @@
 .BuildingItemPagePanel {
     position: relative;
+    height: 100%;
+    overflow: auto;
 
     .Content {
-        padding: 40px 0;
         color: #000;
 
         .information {

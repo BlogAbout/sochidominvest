@@ -679,6 +679,7 @@ const BuildingItemPagePanel: React.FC = (props) => {
                             <div className={classes.leftColumn}>
                                 <Gallery alt={building.name}
                                          images={building.images}
+                                         video={building.video}
                                          type='carousel'
                                          fetching={fetching}
                                 />

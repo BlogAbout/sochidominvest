@@ -7,6 +7,7 @@ import classes from './Gallery.module.scss'
 
 interface Props {
     images: IImageDb[]
+    video?: string
     alt: string
     fetching: boolean
     type?: 'carousel'
@@ -39,7 +40,7 @@ const Gallery: React.FC<Props> = (props) => {
         <BlockingElement fetching={props.fetching} className={classes.Gallery}>
             <div className={classes.carousel}>
                 {listImages.length ?
-                    <ImageCarousel images={listImages} alt={props.alt} fancy/>
+                    <ImageCarousel images={listImages} video={props.video} alt={props.alt} fancy/>
                     : <img src='https://api.sochidominvest.ru/uploads/no-image.jpg' alt={props.alt}/>
                 }
             </div>
