@@ -232,7 +232,7 @@ class Controller
     }
 
     /**
-     * Удаление документа по id
+     * Загрузка файла
      *
      * @param mixed $request Содержит объект запроса
      * @param mixed $response Содержит объект ответа от маршрутизатора

@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react'
 import Helmet from 'react-helmet'
 import classNames from 'classnames/bind'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {useNavigate} from 'react-router-dom'
 import {declension} from '../../../helpers/stringHelper'
 import {numberWithSpaces, round} from '../../../helpers/numberHelper'
@@ -43,7 +44,7 @@ const BuildingPage: React.FC = () => {
         const buildingType = buildingTypes.find((item: ISelector) => item.key === building.type)
 
         let passedInfo = ''
-        if (building.passed) {
+        if (building.passed && (building.passed.is || building.passed.quarter || building.passed.year)) {
             passedInfo += building.passed.is ? 'Сдан: ' : 'Срок сдачи: '
 
             if (building.passed.quarter) {
@@ -67,6 +68,10 @@ const BuildingPage: React.FC = () => {
                 </div>
 
                 <div className={classes.itemContainer}>
+                    <span className={classes.views} title={`Просмотров: ${building.views}`}>
+                        <FontAwesomeIcon icon='eye'/> {building.views}
+                    </span>
+
                     <div className={classes.itemContent}>
                         <h2>{building.name}</h2>
 

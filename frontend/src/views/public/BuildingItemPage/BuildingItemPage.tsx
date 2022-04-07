@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react'
 import Helmet from 'react-helmet'
 import classNames from 'classnames/bind'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {Link, useParams} from 'react-router-dom'
 import {useTypedSelector} from '../../../hooks/useTypedSelector'
 import {useActions} from '../../../hooks/useActions'
@@ -8,6 +9,7 @@ import {declension} from '../../../helpers/stringHelper'
 import {numberWithSpaces, round} from '../../../helpers/numberHelper'
 import CheckerService from '../../../api/CheckerService'
 import ArticleService from '../../../api/ArticleService'
+import UtilService from '../../../api/UtilService'
 import {IBuilding, IBuildingChecker, IBuildingHousing} from '../../../@types/IBuilding'
 import {ISelector} from '../../../@types/ISelector'
 import {ITag} from '../../../@types/ITag'
@@ -32,7 +34,8 @@ import {
     buildingTerritory,
     buildingTypes,
     buildingWaterSupply,
-    formalizationList, getDistrictText,
+    formalizationList,
+    getDistrictText,
     paymentsList
 } from '../../../helpers/buildingHelper'
 import classes from './BuildingItemPage.module.scss'
@@ -104,13 +107,19 @@ const BuildingItemPage: React.FC = () => {
                 .finally(() => {
                     setFetchingArticles(false)
                 })
+
+            UtilService.updateViews('building', building.id)
+                .then()
+                .catch((error: any) => {
+                    console.error('Ошибка регистрации количества просмотров', error)
+                })
         }
     }, [building])
 
     // Вывод базовой информации
     const renderInfo = () => {
         let passedInfo = ''
-        if (building.passed) {
+        if (building.passed && (building.passed.is || building.passed.quarter || building.passed.year)) {
             passedInfo += building.passed.is ? 'Сдан: ' : 'Срок сдачи: '
 
             if (building.passed.quarter) {
@@ -144,7 +153,13 @@ const BuildingItemPage: React.FC = () => {
                             : null
                         }
 
-                        <h1>{building.name}</h1>
+                        <h1>
+                            {building.name}
+                            <span className={classes.views} title={`Просмотров: ${building.views}`}>
+                                <FontAwesomeIcon icon='eye'/> {building.views}
+                            </span>
+                        </h1>
+
                         <div className={classes.address}>
                             {districtText !== '' && <span>{districtText}</span>}
                             <span>{building.address}</span>
@@ -464,7 +479,7 @@ const BuildingItemPage: React.FC = () => {
                 <h2>Корпуса ({housingIds.length})</h2>
 
                 {Object.keys(housingList).map((key: string) => {
-                    const housingId: number =  parseInt(key)
+                    const housingId: number = parseInt(key)
                     let minCost = 0
                     let minCostUnit = 0
 

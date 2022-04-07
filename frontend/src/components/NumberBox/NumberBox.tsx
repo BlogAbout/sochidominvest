@@ -121,6 +121,8 @@ const NumberBox: React.FC<Props> = (props) => {
             }
 
             checkTransform() ? onTransformHandler(true) : props.onChange(e, value)
+        } else {
+            props.onChange(e, '')
         }
     }
 

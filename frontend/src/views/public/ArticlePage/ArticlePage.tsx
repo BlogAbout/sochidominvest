@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react'
 import Helmet from 'react-helmet'
 import classNames from 'classnames/bind'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {useNavigate} from 'react-router-dom'
 import {IArticle} from '../../../@types/IArticle'
 import {ISelector} from '../../../@types/ISelector'
@@ -46,6 +47,10 @@ const ArticlePage: React.FC = () => {
                         <img src={'https://api.sochidominvest.ru' + article.images[0].value} alt={article.name}/>
                         : null
                     }
+
+                    <span className={classes.views} title={`Просмотров: ${article.views}`}>
+                        <FontAwesomeIcon icon='eye'/> {article.views}
+                    </span>
                 </div>
 
                 <div className={classes.itemContent}>

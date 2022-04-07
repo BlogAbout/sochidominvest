@@ -2,6 +2,8 @@ import React, {useEffect, useState} from 'react'
 import Helmet from 'react-helmet'
 import {useNavigate, useParams} from 'react-router-dom'
 import classNames from 'classnames/bind'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import UtilService from '../../../api/UtilService'
 import {IArticle} from '../../../@types/IArticle'
 import {IBuilding} from '../../../@types/IBuilding'
 import {IFilter} from '../../../@types/IFilter'
@@ -71,6 +73,12 @@ const ArticleItemPagePanel: React.FC<Props> = (props) => {
             }
 
             fetchBuildingList(filter)
+
+            UtilService.updateViews('article', article.id)
+                .then()
+                .catch((error: any) => {
+                    console.error('Ошибка регистрации количества просмотров', error)
+                })
         }
     }, [article])
 
@@ -143,6 +151,10 @@ const ArticleItemPagePanel: React.FC<Props> = (props) => {
                         <h1><span>{article.name}</span></h1>
 
                         <div className={classes.description}>{article.description}</div>
+
+                        <div className={classes.views} title={`Просмотров: ${article.views}`}>
+                            <FontAwesomeIcon icon='eye'/> {article.views}
+                        </div>
 
                         {renderBuildingsInfo()}
                     </BlockingElement>

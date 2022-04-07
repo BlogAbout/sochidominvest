@@ -52,12 +52,13 @@ export interface IBuilding {
     metaTitle?: string | null
     metaDescription?: string | null
     passed?: IBuildingPassed
+    views?: number
 }
 
 export interface IBuildingPassed {
-    is: number
-    quarter: number
-    year: number
+    is: number | null
+    quarter: number | null
+    year: number | null
 }
 
 export interface IBuildingChecker {

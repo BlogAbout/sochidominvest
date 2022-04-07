@@ -113,7 +113,7 @@ const PopupCheckerCreate: React.FC<Props> = (props) => {
                     <div className={classes.field}>
                         <div className={classes.field_label}>Корпус</div>
 
-                        <NumberBox value={checker.housing || 1}
+                        <NumberBox value={checker.housing || ''}
                                    min={0}
                                    step={1}
                                    max={999}
@@ -132,7 +132,7 @@ const PopupCheckerCreate: React.FC<Props> = (props) => {
                     <div className={classes.field}>
                         <div className={classes.field_label}>Площадь, кв.м.</div>
 
-                        <NumberBox value={checker.area || 0}
+                        <NumberBox value={checker.area || ''}
                                    min={0}
                                    step={0.01}
                                    max={999}
@@ -149,7 +149,7 @@ const PopupCheckerCreate: React.FC<Props> = (props) => {
                     <div className={classes.field}>
                         <div className={classes.field_label}>Цена, руб.</div>
 
-                        <NumberBox value={checker.cost || 0}
+                        <NumberBox value={checker.cost || ''}
                                    min={0}
                                    step={1}
                                    max={999999999}
@@ -190,7 +190,7 @@ const PopupCheckerCreate: React.FC<Props> = (props) => {
                     <div className={classes.field}>
                         <div className={classes.field_label}>Количество комнат</div>
 
-                        <NumberBox value={checker.rooms || 1}
+                        <NumberBox value={checker.rooms || ''}
                                    min={0}
                                    step={1}
                                    max={99}

@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react'
 import Helmet from 'react-helmet'
 import classNames from 'classnames/bind'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {Link, useParams} from 'react-router-dom'
 import {developerTypes} from '../../../helpers/developerHelper'
 import {useTypedSelector} from '../../../hooks/useTypedSelector'
@@ -9,6 +10,7 @@ import {declension} from '../../../helpers/stringHelper'
 import {numberWithSpaces, round} from '../../../helpers/numberHelper'
 import CheckerService from '../../../api/CheckerService'
 import DocumentService from '../../../api/DocumentService'
+import UtilService from '../../../api/UtilService'
 import {IBuilding, IBuildingChecker, IBuildingHousing} from '../../../@types/IBuilding'
 import {IDocument} from '../../../@types/IDocument'
 import {ISelector} from '../../../@types/ISelector'
@@ -116,6 +118,12 @@ const BuildingItemPagePanel: React.FC = (props) => {
 
                     setFetchingDocuments(false)
                 })
+
+            UtilService.updateViews('building', building.id)
+                .then()
+                .catch((error: any) => {
+                    console.error('Ошибка регистрации количества просмотров', error)
+                })
         }
 
         if ((!developers || !developers.length) && (building.developers && building.developers.length)) {
@@ -144,7 +152,7 @@ const BuildingItemPagePanel: React.FC = (props) => {
     // Вывод базовой информации
     const renderInfo = () => {
         let passedInfo = ''
-        if (building.passed) {
+        if (building.passed && (building.passed.is || building.passed.quarter || building.passed.year)) {
             passedInfo += building.passed.is ? 'Сдан: ' : 'Срок сдачи: '
 
             if (building.passed.quarter) {
@@ -176,7 +184,13 @@ const BuildingItemPagePanel: React.FC = (props) => {
                     : null
                 }
 
-                <h1>{building.name}</h1>
+                <h1>
+                    {building.name}
+                    <span className={classes.views} title={`Просмотров: ${building.views}`}>
+                        <FontAwesomeIcon icon='eye'/> {building.views}
+                    </span>
+                </h1>
+
                 <div className={classes.address}>
                     {districtText !== '' && <span>{districtText}</span>}
                     <span>{building.address}</span>

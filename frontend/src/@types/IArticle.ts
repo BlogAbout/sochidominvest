@@ -15,4 +15,5 @@ export interface IArticle {
     buildings: number[]
     images: IImageDb[]
     newImages: IImage[]
+    views?: number
 }

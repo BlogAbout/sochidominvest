@@ -21,7 +21,12 @@ class ArticleModel extends Model
                        SELECT GROUP_CONCAT(DISTINCT(ba.`id_building`))
                        FROM sdi_building_article AS ba
                        WHERE ba.`id_article` = `id`
-                   ) AS buildings
+                   ) AS buildings,
+                   (
+                       SELECT v.`views`
+                       FROM `sdi_views` AS v
+                       WHERE v.`id_object` = `id` AND v.`type_object` = 'article'
+                   ) AS views
             FROM `sdi_article`
             WHERE sdi_article.`id` = :id
         ";
@@ -66,7 +71,12 @@ class ArticleModel extends Model
                        SELECT GROUP_CONCAT(DISTINCT(ba.`id_building`))
                        FROM sdi_building_article AS ba
                        WHERE ba.`id_article` = `id`
-                   ) AS buildings
+                   ) AS buildings,
+                   (
+                       SELECT v.`views`
+                       FROM `sdi_views` AS v
+                       WHERE v.`id_object` = `id` AND v.`type_object` = 'article'
+                   ) AS views
             FROM `sdi_article`
             $sqlWhere
             ORDER BY `id` DESC
@@ -271,7 +281,8 @@ class ArticleModel extends Model
             'metaDescription' => $data['meta_description'],
             'buildings' => array_map('intval', $data['buildings'] ? explode(',', $data['buildings']) : []),
             'images' => [],
-            'newImages' => []
+            'newImages' => [],
+            'views' => $data['views'] ? (int)$data['views'] : 0
         ];
     }
 }

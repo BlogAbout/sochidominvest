@@ -41,7 +41,12 @@ class BuildingModel extends Model
                        SELECT COUNT(bc.`id`)
                        FROM sdi_building_checker AS bc
                        WHERE bc.`id_building` = bu.`id` AND bc.`active` = 1
-                   ) AS countCheckers
+                   ) AS countCheckers,
+                   (
+                       SELECT v.`views`
+                       FROM `sdi_views` AS v
+                       WHERE v.`id_object` = bu.`id` AND v.`type_object` = 'building'
+                   ) AS views
             FROM `sdi_building` AS bu
             LEFT JOIN sdi_building_data bd on bu.`id` = bd.`id`
             WHERE bu.`id` = :id
@@ -107,7 +112,12 @@ class BuildingModel extends Model
                        SELECT COUNT(bc.`id`)
                        FROM sdi_building_checker AS bc
                        WHERE bc.`id_building` = bu.`id` AND bc.`active` = 1
-                   ) AS countCheckers
+                   ) AS countCheckers,
+                   (
+                       SELECT v.`views`
+                       FROM `sdi_views` AS v
+                       WHERE v.`id_object` = bu.`id` AND v.`type_object` = 'building'
+                   ) AS views
             FROM `sdi_building` AS bu
             LEFT JOIN sdi_building_data bd on bu.`id` = bd.`id`
         ";
@@ -558,7 +568,8 @@ class BuildingModel extends Model
             'metaTitle' => $data['meta_title'],
             'metaDescription' => $data['meta_description'],
             'passed' => $data['passed'] ? json_decode($data['passed']) : null,
-            'video' => $data['video']
+            'video' => $data['video'],
+            'views' => $data['views'] ? (int)$data['views'] : 0
         ];
     }
 }

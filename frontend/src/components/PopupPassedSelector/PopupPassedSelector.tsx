@@ -48,7 +48,7 @@ const PopupPassedSelector: React.FC<Props> = (props) => {
                                           className={passed.quarter === item ? classes.active : undefined}
                                           onClick={() => setPassed({
                                               ...passed,
-                                              quarter: item
+                                              quarter: passed.quarter === item ? null : item
                                           })}
                                     >{item}</span>
                                 )
@@ -59,7 +59,7 @@ const PopupPassedSelector: React.FC<Props> = (props) => {
                     <div className={classes.field}>
                         <div className={classes.field_label}>Год</div>
 
-                        <NumberBox value={passed.year}
+                        <NumberBox value={passed.year || ''}
                                    min={1}
                                    step={1}
                                    max={2100}

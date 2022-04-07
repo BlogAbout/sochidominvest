@@ -45,7 +45,7 @@ const ImageCarousel: React.FC<Props> = (props) => {
         return (
             <SwiperSlide className={classes.video}>
                 <video controls preload='metadata'>
-                    <source src={`https://api.sochidominvest.ru/uploads/${props.video}`} type='video/webm; codecs="vp8, vorbis"'/>
+                    <source src={`https://api.sochidominvest.ru/uploads/${props.video}`} type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"'/>
                 </video>
             </SwiperSlide>
         )

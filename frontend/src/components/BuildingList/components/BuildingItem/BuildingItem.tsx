@@ -1,5 +1,6 @@
 import React, {useState} from 'react'
 import classNames from 'classnames/bind'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {useNavigate} from 'react-router-dom'
 import {declension} from '../../../../helpers/stringHelper'
 import {numberWithSpaces, round} from '../../../../helpers/numberHelper'
@@ -98,7 +99,7 @@ const BuildingItem: React.FC<Props> = (props) => {
     const buildingType = buildingTypes.find((item: ISelector) => item.key === props.building.type)
 
     let passedInfo = ''
-    if (props.building.passed) {
+    if (props.building.passed && (props.building.passed.is || props.building.passed.quarter || props.building.passed.year)) {
         passedInfo += props.building.passed.is ? 'Сдан: ' : 'Срок сдачи: '
 
         if (props.building.passed.quarter) {
@@ -152,7 +153,12 @@ const BuildingItem: React.FC<Props> = (props) => {
             </div>
 
             <div className={classes.itemContent}>
-                <h2>{props.building.name}</h2>
+                <h2>
+                    {props.building.name}
+                    <span className={classes.views} title={`Просмотров: ${props.building.views}`}>
+                        <FontAwesomeIcon icon='eye'/> {props.building.views}
+                    </span>
+                </h2>
 
                 <div className={classes.address}>
                     {districtText !== '' && <span>{districtText}</span>}

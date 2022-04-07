@@ -209,7 +209,7 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
                 <div className={classes.field}>
                     <div className={classes.field_label}>Доплата за документы, руб.</div>
 
-                    <NumberBox value={building.surchargeDoc || 0}
+                    <NumberBox value={building.surchargeDoc || ''}
                                min={0}
                                step={1}
                                max={999999999}
@@ -224,7 +224,7 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
                 <div className={classes.field}>
                     <div className={classes.field_label}>Доплата за газ, руб.</div>
 
-                    <NumberBox value={building.surchargeGas || 0}
+                    <NumberBox value={building.surchargeGas || ''}
                                min={0}
                                step={1}
                                max={999999999}
@@ -283,7 +283,7 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
                         <div className={classes.field}>
                             <div className={classes.field_label}>Площадь, м<sup>2</sup></div>
 
-                            <NumberBox value={building.area || 0}
+                            <NumberBox value={building.area || ''}
                                        min={0}
                                        step={0.01}
                                        max={999}
@@ -299,7 +299,7 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
                         <div className={classes.field}>
                             <div className={classes.field_label}>Стоимость, руб.</div>
 
-                            <NumberBox value={building.cost || 0}
+                            <NumberBox value={building.cost || ''}
                                        min={0}
                                        step={1}
                                        max={999999999}
@@ -505,7 +505,7 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
                 <div className={classes.field}>
                     <div className={classes.field_label}>Расстояние до моря, м.</div>
 
-                    <NumberBox value={building.distanceSea || 0}
+                    <NumberBox value={building.distanceSea || ''}
                                min={0}
                                step={1}
                                max={999999999}
@@ -520,7 +520,7 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
                 <div className={classes.field}>
                     <div className={classes.field_label}>Высота потолков, м.</div>
 
-                    <NumberBox value={building.ceilingHeight || 0}
+                    <NumberBox value={building.ceilingHeight || ''}
                                min={0}
                                step={0.01}
                                max={99}

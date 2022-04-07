@@ -47,8 +47,8 @@ const FileUploader: React.FC<Props> = (props) => {
             acceptText = 'Доступны для загрузки: PNG, JPG, JPEG. Максимальный размер: 50 Мб.'
             break
         case 'video':
-            accept = 'video/webm'
-            acceptText = 'Доступны для загрузки: WEBM. Максимальный размер: 50 Мб.'
+            accept = 'video/mp4'
+            acceptText = 'Доступны для загрузки: MP4. Максимальный размер: 50 Мб.'
             break
     }
 
