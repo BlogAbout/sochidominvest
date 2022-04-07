@@ -89,7 +89,13 @@
 
                         .housing {
                             position: relative;
-                            padding-left: 20px;
+                            padding: 3px 20px;
+                            cursor: pointer;
+
+                            &:hover {
+                                color: #fff;
+                                background: #075ea5;
+                            }
 
                             &::before {
                                 content: '';

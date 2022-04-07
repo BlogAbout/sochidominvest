@@ -16,6 +16,7 @@ import Empty from '../../../components/Empty/Empty'
 import BlockingElement from '../../../components/BlockingElement/BlockingElement'
 import CallbackForm from '../../../components/CallbackForm/CallbackForm'
 import Gallery from '../../../components/Gallery/Gallery'
+import openPopupCheckerInfo from '../../../components/PopupCheckerInfo/PopupCheckerInfo'
 import {
     amountContract,
     buildingAdvantages,
@@ -463,10 +464,11 @@ const BuildingItemPage: React.FC = () => {
                 <h2>Корпуса ({housingIds.length})</h2>
 
                 {Object.keys(housingList).map((key: string) => {
+                    const housingId: number =  parseInt(key)
                     let minCost = 0
                     let minCostUnit = 0
 
-                    housingList[parseInt(key)].forEach((checker: IBuildingChecker) => {
+                    housingList[housingId].forEach((checker: IBuildingChecker) => {
                         const cost = checker.cost && checker.cost ? checker.cost : 0
                         const costUnit = checker.cost && checker.area ? checker.cost / checker.area : 0
 
@@ -480,10 +482,18 @@ const BuildingItemPage: React.FC = () => {
                     })
 
                     return (
-                        <div key={key} className={classes.housing}>
+                        <div key={key}
+                             className={classes.housing}
+                             onClick={() => openPopupCheckerInfo(document.body, {
+                                 buildingName: building.name,
+                                 list: housingList[housingId],
+                                 housing: housingId,
+                                 fetching: fetchingCheckers
+                             })}
+                        >
                             <div className={classes.title}>Корпус #{key}</div>
                             <div className={classes.counter}>
-                                {declension(housingList[parseInt(key)].length, ['квартира', 'квартиры', 'квартир'], false)},
+                                {declension(housingList[housingId].length, ['квартира', 'квартиры', 'квартир'], false)},
                                 от {numberWithSpaces(round(minCost, 0))} рублей,
                                 от {numberWithSpaces(round(minCostUnit, 0))} рублей за м<sup>2</sup>
                             </div>
@@ -539,6 +549,7 @@ const BuildingItemPage: React.FC = () => {
                         <div className={classes.information}>
                             <Gallery alt={building.name}
                                      images={building.images}
+                                     video={building.video}
                                      type='carousel'
                                      fetching={fetching}
                             />

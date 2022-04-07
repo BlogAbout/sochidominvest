@@ -1,0 +1,78 @@
+.PopupCheckerInfo {
+    width: 1000px;
+    height: 600px;
+}
+
+.content {
+    width: 100%;
+    height: 563px;
+    display: flex;
+    flex-direction: column;
+    border-left: 1px solid #e6e6e6;
+    border-right: 1px solid #e6e6e6;
+    border-bottom: 1px solid #e6e6e6;
+    box-sizing: border-box;
+    overflow: hidden;
+
+    .filter {
+        height: 40px;
+    }
+
+    .header {
+        display: flex;
+        height: 30px;
+        flex: none;
+        border-bottom: 1px solid #e8e8e8;
+        align-items: center;
+        width: 100%;
+        background: #075ea5;
+        color: #fff;
+
+        > div {
+            padding: 0 10px;
+            border-right: 1px solid #fff;
+        }
+    }
+
+    .list {
+        .row {
+            display: flex;
+            height: 30px;
+            flex: none;
+            border-bottom: 1px solid #e8e8e8;
+            align-items: center;
+            width: 100%;
+
+            > div {
+                padding: 0 10px;
+                border-right: 1px solid #fff;
+            }
+        }
+    }
+
+    .id {
+        flex-shrink: 0;
+        width: 50px;
+    }
+
+    .name {
+        flex-grow: 1;
+        width: 100%;
+    }
+
+    .column {
+        flex-shrink: 0;
+        width: 120px;
+    }
+
+    .columnSmall {
+        flex-shrink: 0;
+        width: 80px;
+    }
+
+    .status {
+        flex-shrink: 0;
+        width: 130px;
+        border-right: none !important;
+    }
+}

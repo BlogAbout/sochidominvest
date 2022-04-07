@@ -27,6 +27,7 @@ import ImageUploader from '../ImageUploader/ImageUploader'
 import SelectorBox from '../SelectorBox/SelectorBox'
 import TextAreaBox from '../TextAreaBox/TextAreaBox'
 import PassedBox from '../PassedBox/PassedBox'
+import FileUploader from '../FileUploader/FileUploader'
 import openPopupAlert from '../PopupAlert/PopupAlert'
 import {
     amountContract,
@@ -48,7 +49,6 @@ import {
     paymentsList
 } from '../../helpers/buildingHelper'
 import classes from './PopupBuildingCreate.module.scss'
-import FileUploader from "../FileUploader/FileUploader";
 
 interface Props extends PopupProps {
     building?: IBuilding | null

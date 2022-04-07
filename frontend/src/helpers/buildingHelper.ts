@@ -155,6 +155,7 @@ export const checkerStatuses: ISelector[] = [
     {key: 'free', text: 'свободно'},
     {key: 'booking', text: 'бронь'},
     {key: 'assignment', text: 'переуступка'},
+    {key: 'action', text: 'акция'},
     {key: 'sold', text: 'продано'}
 ]
 
