@@ -1,5 +1,5 @@
 import {UserAction, UserActionTypes} from '../../@types/userTypes'
-import {IUser} from '../../@types/IUser'
+import {IUser, IUserSetting} from '../../@types/IUser'
 import {IFilter} from '../../@types/IFilter'
 import {AppDispatch} from '../reducers'
 import UserService from '../../api/UserService'
@@ -16,6 +16,10 @@ export const UserActionCreators = {
     setUserId: (userId: number): UserAction => ({
         type: UserActionTypes.USER_ID,
         payload: userId
+    }),
+    setUserSetting: (setting: IUserSetting): UserAction => ({
+        type: UserActionTypes.USER_SETTING,
+        payload: setting
     }),
     setUsers: (users: IUser[]): UserAction => ({
         type: UserActionTypes.USER_FETCH_LIST,
@@ -34,10 +38,12 @@ export const UserActionCreators = {
         localStorage.setItem('id', user.id ? user.id.toString() : '')
         localStorage.setItem('token', user.token || '')
         localStorage.setItem('role', user.role || '')
-        localStorage.setItem('settings', user.settings || '')
+        localStorage.setItem('settings', user.settings ? JSON.stringify(user.settings) : '')
 
         dispatch(UserActionCreators.setIsAuth(true))
         dispatch(UserActionCreators.setUserRole(user.role || ''))
+        dispatch(UserActionCreators.setUserId(user.id || 0))
+        dispatch(UserActionCreators.setUserSetting(user.settings || {} as IUserSetting))
     },
     logout: () => async (dispatch: AppDispatch) => {
         localStorage.clear()

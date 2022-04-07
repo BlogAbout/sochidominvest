@@ -1,9 +1,10 @@
-import {IUser} from './IUser'
+import {IUser, IUserSetting} from './IUser'
 
 export interface UserState {
     isAuth: boolean
     role: string
     userId: number
+    userSetting: IUserSetting
     users: IUser[]
     fetching: boolean
     error: string
@@ -13,6 +14,7 @@ export enum UserActionTypes {
     USER_AUTH = 'USER_AUTH',
     USER_ROLE = 'USER_ROLE',
     USER_ID = 'USER_ID',
+    USER_SETTING = 'USER_SETTING',
     USER_FETCH_LIST = 'USER_FETCH_LIST',
     USER_IS_FETCHING = 'USER_IS_FETCHING',
     USER_ERROR = 'USER_ERROR'
@@ -31,6 +33,11 @@ interface UserRoleAction {
 interface UserIdAction {
     type: UserActionTypes.USER_ID
     payload: number
+}
+
+interface UserSettingAction {
+    type: UserActionTypes.USER_SETTING
+    payload: IUserSetting
 }
 
 interface UserFetchListAction {
@@ -52,6 +59,7 @@ export type UserAction =
     UserAuthAction
     | UserRoleAction
     | UserIdAction
+    | UserSettingAction
     | UserFetchListAction
     | UserIsFetchingAction
     | UserErrorAction

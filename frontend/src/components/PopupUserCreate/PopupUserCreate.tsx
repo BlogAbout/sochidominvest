@@ -45,7 +45,7 @@ const PopupUserCreate: React.FC<Props> = (props) => {
         role: 'subscriber',
         active: 1,
         lastActive: null,
-        settings: null,
+        settings: null
     })
 
     const [fetching, setFetching] = useState(false)
@@ -211,7 +211,82 @@ const PopupUserCreate: React.FC<Props> = (props) => {
     const renderSettingTab = () => {
         return (
             <div key='setting' className={classes.tabContent}>
-                В разработке
+                <div className={classes.fieldFull}>
+                    <CheckBox label='Уведомлять об изменениях в системе'
+                              type='classic'
+                              checked={!!(user.settings && !!user.settings.notifyEdit)}
+                              onChange={(e: React.MouseEvent, value: boolean) => setUser({
+                                  ...user,
+                                  settings: {...user.settings, notifyEdit: value ? 1 : 0}
+                              })}
+                    />
+                </div>
+
+                <div className={classes.fieldFull}>
+                    <CheckBox label='Уведомлять о новых объектах недвижимости'
+                              type='classic'
+                              checked={!!(user.settings && !!user.settings.notifyNewItem)}
+                              onChange={(e: React.MouseEvent, value: boolean) => setUser({
+                                  ...user,
+                                  settings: {...user.settings, notifyNewItem: value ? 1 : 0}
+                              })}
+                    />
+                </div>
+
+                <div className={classes.fieldFull}>
+                    <CheckBox label='Уведомлять об акциях и событиях'
+                              type='classic'
+                              checked={!!(user.settings && !!user.settings.notifyNewAction)}
+                              onChange={(e: React.MouseEvent, value: boolean) => setUser({
+                                  ...user,
+                                  settings: {...user.settings, notifyNewAction: value ? 1 : 0}
+                              })}
+                    />
+                </div>
+
+                <div className={classes.fieldFull}>
+                    <CheckBox label='Звуковой сигнал о новых уведомлениях'
+                              type='classic'
+                              checked={!!(user.settings && !!user.settings.soundAlert)}
+                              onChange={(e: React.MouseEvent, value: boolean) => setUser({
+                                  ...user,
+                                  settings: {...user.settings, soundAlert: value ? 1 : 0}
+                              })}
+                    />
+                </div>
+
+                <div className={classes.fieldFull}>
+                    <CheckBox label='PUSH-уведомления о новинках и событиях'
+                              type='classic'
+                              checked={!!(user.settings && !!user.settings.pushNotify)}
+                              onChange={(e: React.MouseEvent, value: boolean) => setUser({
+                                  ...user,
+                                  settings: {...user.settings, pushNotify: value ? 1 : 0}
+                              })}
+                    />
+                </div>
+
+                <div className={classes.fieldFull}>
+                    <CheckBox label='PUSH-уведомления о новых личных сообщениях'
+                              type='classic'
+                              checked={!!(user.settings && !!user.settings.pushMessenger)}
+                              onChange={(e: React.MouseEvent, value: boolean) => setUser({
+                                  ...user,
+                                  settings: {...user.settings, pushMessenger: value ? 1 : 0}
+                              })}
+                    />
+                </div>
+
+                <div className={classes.fieldFull}>
+                    <CheckBox label='Отправлять уведомления на почту'
+                              type='classic'
+                              checked={!!(user.settings && !!user.settings.sendEmail)}
+                              onChange={(e: React.MouseEvent, value: boolean) => setUser({
+                                  ...user,
+                                  settings: {...user.settings, sendEmail: value ? 1 : 0}
+                              })}
+                    />
+                </div>
             </div>
         )
     }

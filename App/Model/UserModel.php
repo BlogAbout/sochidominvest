@@ -152,7 +152,8 @@ class UserModel extends Model
                     date_update = :dateUpdate,
                     active = :active,
                     block = :block,
-                    role = :role
+                    role = :role,
+                    settings = :settings
                 WHERE id = :id
             ";
         } else {
@@ -165,7 +166,8 @@ class UserModel extends Model
                     date_update = :dateUpdate,
                     active = :active,
                     block = :block,
-                    role = :role
+                    role = :role,
+                    settings = :settings
                 WHERE id = :id
             ";
         }
@@ -180,6 +182,7 @@ class UserModel extends Model
         parent::bindParams('active', $payload['active']);
         parent::bindParams('block', $payload['block']);
         parent::bindParams('role', $payload['role']);
+        parent::bindParams('settings', $payload['settings']);
 
         if ($payload['password'] && $payload['password'] !== '') {
             parent::bindParams('password', $payload['password']);
@@ -233,7 +236,7 @@ class UserModel extends Model
             'active' => (int)$data['active'],
             'block' => (int)$data['block'],
             'role' => $data['role'],
-            'settings' => $data['settings'],
+            'settings' => $data['settings'] ? json_decode($data['settings']) : null,
         ];
     }
 }

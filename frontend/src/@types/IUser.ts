@@ -8,6 +8,16 @@ export interface IUser {
     active?: number
     block?: number
     lastActive?: string | null
-    settings?: string | null
+    settings?: IUserSetting | null
     token?: string
+}
+
+export interface IUserSetting {
+    notifyEdit?: number
+    notifyNewItem?: number
+    notifyNewAction?: number
+    soundAlert?: number
+    pushNotify?: number
+    pushMessenger?: number
+    sendEmail?: number
 }

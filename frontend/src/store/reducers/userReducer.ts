@@ -1,9 +1,11 @@
 import {UserAction, UserActionTypes, UserState} from '../../@types/userTypes'
+import {IUserSetting} from '../../@types/IUser'
 
 const initialState: UserState = {
     isAuth: false,
     role: '',
     userId: 0,
+    userSetting: {} as IUserSetting,
     users: [],
     fetching: false,
     error: ''
@@ -17,6 +19,8 @@ export default function UserReducer(state: UserState = initialState, action: Use
             return {...state, role: action.payload}
         case UserActionTypes.USER_ID:
             return {...state, userId: action.payload}
+        case UserActionTypes.USER_SETTING:
+            return {...state, userSetting: action.payload}
         case UserActionTypes.USER_FETCH_LIST:
             return {...state, users: action.payload, fetching: false}
         case UserActionTypes.USER_IS_FETCHING:
