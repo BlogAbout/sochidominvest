@@ -13,6 +13,10 @@ export const UserActionCreators = {
         type: UserActionTypes.USER_ROLE,
         payload: role
     }),
+    setUserId: (userId: number): UserAction => ({
+        type: UserActionTypes.USER_ID,
+        payload: userId
+    }),
     setUsers: (users: IUser[]): UserAction => ({
         type: UserActionTypes.USER_FETCH_LIST,
         payload: users

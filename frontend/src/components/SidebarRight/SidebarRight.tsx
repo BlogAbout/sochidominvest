@@ -1,16 +1,31 @@
 import React from 'react'
 import {Link} from 'react-router-dom'
-import {useActions} from '../../hooks/useActions'
-import {RouteNames} from '../../routes/routes'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {useActions} from '../../hooks/useActions'
+import {useTypedSelector} from '../../hooks/useTypedSelector'
+import {RouteNames} from '../../routes/routes'
+import openPopupUserCreate from '../PopupUserCreate/PopupUserCreate'
 import classes from './SidebarRight.module.scss'
 
 const SidebarRight: React.FC = () => {
+    const {userId} = useTypedSelector(state => state.userReducer)
     const {logout} = useActions()
 
     return (
         <aside className={classes.SidebarRight}>
-            <div className={classes.icon} title='Профиль'>
+            <div className={classes.icon}
+                 title='Профиль'
+                 onClick={() => {
+                     if (userId) {
+                         openPopupUserCreate(document.body, {
+                             user: null,
+                             userId: userId,
+                             onSave: () => {
+                             }
+                         })
+                     }
+                 }}
+            >
                 <FontAwesomeIcon icon='user'/>
             </div>
 

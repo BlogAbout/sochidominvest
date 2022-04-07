@@ -3,10 +3,18 @@
 }
 
 .content {
-    padding: 15px 15px 0;
+
+}
+
+.tabContent {
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
 }
 
 .cols {
+    width: 100%;
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;

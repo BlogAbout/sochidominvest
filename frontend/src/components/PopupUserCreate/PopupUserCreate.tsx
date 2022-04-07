@@ -5,6 +5,7 @@ import withStore from '../../hoc/withStore'
 import {rolesList} from '../../helpers/userHelper'
 import {PopupProps} from '../../@types/IPopup'
 import {IUser} from '../../@types/IUser'
+import {ITab} from '../../@types/ITab'
 import UserService from '../../api/UserService'
 import {getPopupContainer, openPopup, removePopup} from '../../helpers/popupHelper'
 import showBackgroundBlock from '../BackgroundBlock/BackgroundBlock'
@@ -15,17 +16,20 @@ import TextBox from '../TextBox/TextBox'
 import Button from '../Button/Button'
 import CheckBox from '../CheckBox/CheckBox'
 import ComboBox from '../ComboBox/ComboBox'
+import Tabs from '../Tabs/Tabs'
 import {generatePassword} from '../../helpers/generatePasswordHelper'
 import classes from './PopupUserCreate.module.scss'
 
 interface Props extends PopupProps {
     user?: IUser | null
+    userId?: number
 
     onSave(): void
 }
 
 const defaultProps: Props = {
     user: null,
+    userId: 0,
     onSave: () => {
         console.info('PopupUserCreate onSave')
     }
@@ -51,6 +55,22 @@ const PopupUserCreate: React.FC<Props> = (props) => {
             removePopup(props.blockId ? props.blockId : '')
         }
     }, [props.blockId])
+
+    useEffect(() => {
+        if (props.userId) {
+            UserService.fetchUserById(props.userId)
+                .then((response: any) => {
+                    setUser(response.data)
+                })
+                .catch((error: any) => {
+                    console.error('error', error)
+                    openPopupAlert(document.body, {
+                        title: 'Ошибка!',
+                        text: error.data
+                    })
+                })
+        }
+    }, [props.userId])
 
     // Закрытие popup
     const close = () => {
@@ -95,13 +115,9 @@ const PopupUserCreate: React.FC<Props> = (props) => {
         setUser({...user, password: generatePassword(8, true, true, true, true)})
     }
 
-    return (
-        <Popup className={classes.PopupUserCreate}>
-            <Header title={user.id ? 'Редактировать пользователя' : 'Добавить пользователя'}
-                    popupId={props.id ? props.id : ''}
-            />
-
-            <BlockingElement fetching={fetching} className={classes.content}>
+    const renderInfoTab = () => {
+        return (
+            <div key='info' className={classes.tabContent}>
                 <div className={classes.cols}>
                     <div className={classes.field}>
                         <div className={classes.field_label}>Имя</div>
@@ -188,6 +204,36 @@ const PopupUserCreate: React.FC<Props> = (props) => {
                         : null
                     }
                 </div>
+            </div>
+        )
+    }
+
+    const renderSettingTab = () => {
+        return (
+            <div key='setting' className={classes.tabContent}>
+                В разработке
+            </div>
+        )
+    }
+
+    const tabs: ITab = {
+        state: {title: 'Информация', render: renderInfoTab()},
+        info: {title: 'Настройки', render: renderSettingTab()}
+    }
+
+    return (
+        <Popup className={classes.PopupUserCreate}>
+            <Header title={user.id ? 'Редактировать пользователя' : 'Добавить пользователя'}
+                    popupId={props.id ? props.id : ''}
+            />
+
+            <BlockingElement fetching={fetching} className={classes.content}>
+                {props.userId && user ?
+                    <div className={classes['tabs']}>
+                        <Tabs tabs={tabs} paddingFirstTab='popup'/>
+                    </div>
+                    : renderInfoTab()
+                }
             </BlockingElement>
 
             <Footer>

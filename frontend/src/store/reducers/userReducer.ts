@@ -3,6 +3,7 @@ import {UserAction, UserActionTypes, UserState} from '../../@types/userTypes'
 const initialState: UserState = {
     isAuth: false,
     role: '',
+    userId: 0,
     users: [],
     fetching: false,
     error: ''
@@ -14,6 +15,8 @@ export default function UserReducer(state: UserState = initialState, action: Use
             return {...state, isAuth: action.payload, fetching: false}
         case UserActionTypes.USER_ROLE:
             return {...state, role: action.payload}
+        case UserActionTypes.USER_ID:
+            return {...state, userId: action.payload}
         case UserActionTypes.USER_FETCH_LIST:
             return {...state, users: action.payload, fetching: false}
         case UserActionTypes.USER_IS_FETCHING:

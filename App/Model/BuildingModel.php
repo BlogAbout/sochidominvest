@@ -534,7 +534,7 @@ class BuildingModel extends Model
             'territory' => $data['territory'],
             'ceilingHeight' => (float)$data['ceiling_height'],
             'maintenanceCost' => (float)$data['maintenance_cost'],
-            'distanceSea' => (float)$data['distance_sea'],
+            'distanceSea' => (int)$data['distance_sea'],
             'gas' => $data['gas'],
             'heating' => $data['heating'],
             'electricity' => $data['electricity'],

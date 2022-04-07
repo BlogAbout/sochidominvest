@@ -405,6 +405,8 @@ class UserController extends Controller
 
         try {
             $user = $this->userModel->fetchUserById($request->id);
+            unset($user['password']);
+
             $response->code(200)->json($user);
 
             return;
