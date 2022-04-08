@@ -67,9 +67,10 @@ class DocumentController extends Controller
             'type' => $data->type ? htmlentities(stripcslashes(strip_tags($data->type))) : 'file',
             'extension' => $data->extension ? htmlentities(stripcslashes(strip_tags($data->extension))) : null,
             'content' => $data->content ? htmlentities(stripcslashes(strip_tags($data->content))) : '',
+            'active' => (int)htmlentities(stripcslashes(strip_tags($data->active))),
             'dateCreated' => date('Y-m-d H:i:s'),
             'dateUpdate' => date('Y-m-d H:i:s'),
-            'active' => (int)htmlentities(stripcslashes(strip_tags($data->active)))
+            'author' => JwtMiddleware::getUserId()
         );
 
         try {

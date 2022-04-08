@@ -127,7 +127,6 @@ class DeveloperModel extends Model
                 description = :description,
                 address = :address,
                 phone = :phone,
-                author = :author,
                 type = :type,
                 date_update = :dateUpdate,
                 active = :active
@@ -140,7 +139,6 @@ class DeveloperModel extends Model
         parent::bindParams('description', $payload['description']);
         parent::bindParams('address', $payload['address']);
         parent::bindParams('phone', $payload['phone']);
-        parent::bindParams('author', $payload['author']);
         parent::bindParams('type', $payload['type']);
         parent::bindParams('dateUpdate', $payload['dateUpdate']);
         parent::bindParams('active', $payload['active']);
@@ -187,7 +185,7 @@ class DeveloperModel extends Model
             'description' => $data['description'],
             'address' => $data['address'],
             'phone' => $data['phone'],
-            'author' => $data['author'],
+            'author' => (int)$data['author'],
             'type' => $data['type'],
             'dateCreated' => $data['date_created'],
             'dateUpdate' => $data['date_update'],

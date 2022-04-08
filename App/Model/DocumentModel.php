@@ -73,14 +73,15 @@ class DocumentModel extends Model
     {
         $sql = "
             INSERT INTO `sdi_document`
-                (id_user, name, id_object, type_object, type, extension, content, date_created, date_update, active)
+                (id_user, name, author, id_object, type_object, type, extension, content, date_created, date_update, active)
             VALUES
-                (:userId, :name, :objectId, :objectType, :type, :extension, :content, :dateCreated, :dateUpdate, :active)
+                (:userId, :name, :author, :objectId, :objectType, :type, :extension, :content, :dateCreated, :dateUpdate, :active)
         ";
 
         parent::query($sql);
         parent::bindParams('userId', $payload['userId']);
         parent::bindParams('name', $payload['name']);
+        parent::bindParams('author', $payload['author']);
         parent::bindParams('content', $payload['content']);
         parent::bindParams('objectId', $payload['objectId']);
         parent::bindParams('objectType', $payload['objectType']);
@@ -181,6 +182,7 @@ class DocumentModel extends Model
         return [
             'id' => (int)$data['id'],
             'userId' => $data['id_user'] ? (int)$data['id_user'] : null,
+            'author' => (int)$data['author'],
             'name' => $data['name'],
             'objectId' => $data['id_object'] ? (int)$data['id_object'] : null,
             'objectType' => $data['type_object'],

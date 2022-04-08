@@ -75,10 +75,10 @@ class DeveloperController extends Controller
             'address' => htmlentities(stripcslashes(strip_tags($data->address))),
             'phone' => htmlentities(stripcslashes(strip_tags($data->phone))),
             'type' => htmlentities(stripcslashes(strip_tags($data->type))),
-            'author' => (int)htmlentities(stripcslashes(strip_tags($data->author))),
+            'active' => (int)htmlentities(stripcslashes(strip_tags($data->active))),
             'dateCreated' => date('Y-m-d H:i:s'),
             'dateUpdate' => date('Y-m-d H:i:s'),
-            'active' => (int)htmlentities(stripcslashes(strip_tags($data->active)))
+            'author' => JwtMiddleware::getUserId()
         );
 
         try {
@@ -165,7 +165,6 @@ class DeveloperController extends Controller
             'address' => htmlentities(stripcslashes(strip_tags($data->address))),
             'phone' => htmlentities(stripcslashes(strip_tags($data->phone))),
             'type' => htmlentities(stripcslashes(strip_tags($data->type))),
-            'author' => (int)htmlentities(stripcslashes(strip_tags($data->author))),
             'dateUpdate' => date('Y-m-d H:i:s'),
             'active' => (int)htmlentities(stripcslashes(strip_tags($data->active)))
         );

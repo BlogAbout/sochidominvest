@@ -173,7 +173,6 @@ class ArticleModel extends Model
             SET
                 name = :name,
                 description = :description,
-                author = :author,
                 type = :type,
                 date_update = :dateUpdate,
                 active = :active,
@@ -187,7 +186,6 @@ class ArticleModel extends Model
         parent::bindParams('id', $payload['id']);
         parent::bindParams('name', $payload['name']);
         parent::bindParams('description', $payload['description']);
-        parent::bindParams('author', $payload['author']);
         parent::bindParams('type', $payload['type']);
         parent::bindParams('dateUpdate', $payload['dateUpdate']);
         parent::bindParams('active', $payload['active']);
@@ -271,7 +269,7 @@ class ArticleModel extends Model
             'id' => (int)$data['id'],
             'name' => $data['name'],
             'description' => $data['description'],
-            'author' => $data['author'],
+            'author' => (int)$data['author'],
             'type' => $data['type'],
             'dateCreated' => $data['date_created'],
             'dateUpdate' => $data['date_update'],

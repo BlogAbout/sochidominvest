@@ -175,15 +175,16 @@ class BuildingModel extends Model
     {
         $sql = "
             INSERT INTO `sdi_building`
-                (name, description, address, date_created, date_update, active, publish, status, type, area, cost, meta_title, meta_description)
+                (name, description, address, author, date_created, date_update, active, publish, status, type, area, cost, meta_title, meta_description)
             VALUES
-                (:name, :description, :address, :dateCreated, :dateUpdate, :active, :publish, :status, :type, :area, :cost, :metaTitle, :metaDescription)
+                (:name, :description, :address, :author, :dateCreated, :dateUpdate, :active, :publish, :status, :type, :area, :cost, :metaTitle, :metaDescription)
         ";
 
         parent::query($sql);
         parent::bindParams('name', $payload['name']);
         parent::bindParams('description', $payload['description']);
         parent::bindParams('address', $payload['address']);
+        parent::bindParams('author', $payload['author']);
         parent::bindParams('dateCreated', $payload['dateCreated']);
         parent::bindParams('dateUpdate', $payload['dateUpdate']);
         parent::bindParams('active', $payload['active']);

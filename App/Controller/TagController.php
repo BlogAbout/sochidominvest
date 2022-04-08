@@ -61,7 +61,8 @@ class TagController extends Controller
 
         $payload = array(
             'name' => htmlentities(stripcslashes(strip_tags($data->name))),
-            'active' => (int)htmlentities(stripcslashes(strip_tags($data->active)))
+            'active' => (int)htmlentities(stripcslashes(strip_tags($data->active))),
+            'author' => JwtMiddleware::getUserId()
         );
 
         try {

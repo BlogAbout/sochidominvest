@@ -121,7 +121,6 @@ class FeedbackModel extends Model
             UPDATE `sdi_feedback`
             SET
                 id_user = :userId,
-                author = :author,
                 phone = :phone,
                 name = :name,
                 title = :title,
@@ -137,7 +136,6 @@ class FeedbackModel extends Model
         parent::query($sql);
         parent::bindParams('id', $payload['id']);
         parent::bindParams('userId', $payload['userId']);
-        parent::bindParams('author', $payload['author']);
         parent::bindParams('phone', $payload['phone']);
         parent::bindParams('name', $payload['name']);
         parent::bindParams('title', $payload['title']);

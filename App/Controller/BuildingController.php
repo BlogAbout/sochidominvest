@@ -88,8 +88,6 @@ class BuildingController extends Controller
             'electricity' => htmlentities(stripcslashes(strip_tags($data->electricity))),
             'sewerage' => htmlentities(stripcslashes(strip_tags($data->sewerage))),
             'waterSupply' => htmlentities(stripcslashes(strip_tags($data->waterSupply))),
-            'dateCreated' => date('Y-m-d H:i:s'),
-            'dateUpdate' => date('Y-m-d H:i:s'),
             'advantages' => is_array($data->advantages) && count($data->advantages) ? htmlentities(stripcslashes(strip_tags(implode(',', $data->advantages)))) : '',
             'payments' => is_array($data->payments) && count($data->payments) ? htmlentities(stripcslashes(strip_tags(implode(',', $data->payments)))) : '',
             'formalization' => is_array($data->formalization) && count($data->formalization) ? htmlentities(stripcslashes(strip_tags(implode(',', $data->formalization)))) : '',
@@ -107,7 +105,10 @@ class BuildingController extends Controller
             'metaTitle' => htmlentities(stripcslashes(strip_tags($data->metaTitle))),
             'metaDescription' => htmlentities(stripcslashes(strip_tags($data->metaDescription))),
             'passed' => $data->passed ? json_encode($data->passed) : '',
-            'video' => htmlentities(stripcslashes(strip_tags($data->video)))
+            'video' => htmlentities(stripcslashes(strip_tags($data->video))),
+            'dateCreated' => date('Y-m-d H:i:s'),
+            'dateUpdate' => date('Y-m-d H:i:s'),
+            'author' => JwtMiddleware::getUserId()
         );
 
         try {

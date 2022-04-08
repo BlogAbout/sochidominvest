@@ -70,14 +70,15 @@ class TagModel extends Model
     {
         $sql = "
             INSERT INTO `sdi_tag`
-                (name, active)
+                (name, active, author)
             VALUES
-                (:name, :active)
+                (:name, :active, :author)
         ";
 
         parent::query($sql);
         parent::bindParams('name', $payload['name']);
         parent::bindParams('active', $payload['active']);
+        parent::bindParams('author', $payload['author']);
 
         $tag = parent::execute();
 
@@ -156,7 +157,8 @@ class TagModel extends Model
         return [
             'id' => (int)$data['id'],
             'name' => $data['name'],
-            'active' => (int)$data['active']
+            'active' => (int)$data['active'],
+            'author' => (int)$data['author']
         ];
     }
 }

@@ -65,17 +65,17 @@ class FeedbackController extends Controller
 
         $payload = array(
             'userId' => $data->userId ? (int)htmlentities(stripcslashes(strip_tags($data->userId))) : null,
-            'author' => $data->author ? (int)htmlentities(stripcslashes(strip_tags($data->author))) : null,
             'phone' => $data->phone ? htmlentities(stripcslashes(strip_tags($data->phone))) : '',
             'name' => $data->name ? htmlentities(stripcslashes(strip_tags($data->name))) : '',
             'title' => htmlentities(stripcslashes(strip_tags($data->title))),
             'type' => $data->type ? htmlentities(stripcslashes(strip_tags($data->type))) : 'feed',
             'objectId' => $data->objectId ? (int)htmlentities(stripcslashes(strip_tags($data->objectId))) : null,
             'objectType' => $data->objectType ? htmlentities(stripcslashes(strip_tags($data->objectType))) : '',
+            'active' => (int)htmlentities(stripcslashes(strip_tags($data->active))),
+            'status' => htmlentities(stripcslashes(strip_tags($data->status))),
             'dateCreated' => date('Y-m-d H:i:s'),
             'dateUpdate' => date('Y-m-d H:i:s'),
-            'active' => (int)htmlentities(stripcslashes(strip_tags($data->active))),
-            'status' => htmlentities(stripcslashes(strip_tags($data->status)))
+            'author' => JwtMiddleware::getUserId()
         );
 
         try {
@@ -157,7 +157,6 @@ class FeedbackController extends Controller
         $payload = array(
             'id' => $request->id,
             'userId' => $data->userId ? (int)htmlentities(stripcslashes(strip_tags($data->userId))) : null,
-            'author' => $data->author ? (int)htmlentities(stripcslashes(strip_tags($data->author))) : null,
             'phone' => $data->phone ? htmlentities(stripcslashes(strip_tags($data->phone))) : '',
             'name' => $data->name ? htmlentities(stripcslashes(strip_tags($data->name))) : '',
             'title' => htmlentities(stripcslashes(strip_tags($data->title))),

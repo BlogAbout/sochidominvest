@@ -83,16 +83,17 @@ class CheckerModel extends Model
     {
         $sql = "
             INSERT INTO `sdi_building_checker`
-                (id_building, name, area, cost, furnish, housing, stage,
+                (id_building, name, author, area, cost, furnish, housing, stage,
                  rooms, date_created, date_update, active, status)
             VALUES
-                (:buildingId, :name, :area, :cost, :furnish, :housing, :stage,
+                (:buildingId, :name, :author, :area, :cost, :furnish, :housing, :stage,
                  :rooms, :dateCreated, :dateUpdate, :active, :status)
         ";
 
         parent::query($sql);
         parent::bindParams('buildingId', $payload['buildingId']);
         parent::bindParams('name', $payload['name']);
+        parent::bindParams('author', $payload['author']);
         parent::bindParams('area', $payload['area']);
         parent::bindParams('cost', $payload['cost']);
         parent::bindParams('furnish', $payload['furnish']);
@@ -210,6 +211,7 @@ class CheckerModel extends Model
         return [
             'id' => (int)$data['id'],
             'buildingId' => (int)$data['id_building'],
+            'author' => (int)$data['author'],
             'name' => $data['name'],
             'area' => (float)$data['area'],
             'cost' => (float)$data['cost'],

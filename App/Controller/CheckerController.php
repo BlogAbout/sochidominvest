@@ -88,10 +88,11 @@ class CheckerController extends Controller
             'housing' => (int)htmlentities(stripcslashes(strip_tags($data->housing))),
             'stage' => htmlentities(stripcslashes(strip_tags($data->stage))),
             'rooms' => (int)htmlentities(stripcslashes(strip_tags($data->rooms))),
+            'active' => (int)htmlentities(stripcslashes(strip_tags($data->active))),
+            'status' => htmlentities(stripcslashes(strip_tags($data->status))),
             'dateCreated' => date('Y-m-d H:i:s'),
             'dateUpdate' => date('Y-m-d H:i:s'),
-            'active' => (int)htmlentities(stripcslashes(strip_tags($data->active))),
-            'status' => htmlentities(stripcslashes(strip_tags($data->status)))
+            'author' => JwtMiddleware::getUserId()
         );
 
         try {

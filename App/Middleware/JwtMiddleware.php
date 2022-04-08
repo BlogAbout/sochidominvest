@@ -98,8 +98,8 @@ class JwtMiddleware
             $decodedToken = (array)JWT::decode($token, self::JWTSecret(), array('HS256'));
 
             if (isset($decodedToken['user_id'])) {
-//                self::$userId = $decodedToken['user_id'];
-//
+                self::$userId = $decodedToken['user_id'];
+
 //                return $decodedToken['user_id'];
                 return true;
             }
@@ -123,5 +123,15 @@ class JwtMiddleware
         } catch (Exception $e) {
             return [];
         }
+    }
+
+    /**
+     * Возвращает идентификатор авторизованного пользователя
+     *
+     * @return int Идентификатор пользователя
+     */
+    public static function getUserId(): int
+    {
+        return self::$userId;
     }
 }
