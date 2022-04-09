@@ -68,6 +68,7 @@ $Klein->respond('DELETE', '/api/v1/article/[:id]', [new ArticleController(), 'de
 
 $Klein->respond('POST', '/api/v1/upload-file', [new Controller(), 'uploadFile']);
 $Klein->respond('GET', '/api/v1/views/[:objectType]/[:objectId]', [new UtilController(), 'updateCountViews']);
+$Klein->respond('GET', '/api/v1/log', [new UtilController(), 'fetchLogs']);
 
 // Dispatch all routes
 $Klein->dispatch();

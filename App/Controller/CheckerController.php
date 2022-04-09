@@ -99,15 +99,18 @@ class CheckerController extends Controller
             $checkerData = $this->checkerModel->createChecker($payload);
 
             if ($checkerData['status']) {
+                LogModel::log('create', 'checker', JwtMiddleware::getUserId(), $checkerData['data']);
                 $response->code(201)->json($checkerData['data']);
 
                 return;
             }
 
+            LogModel::error('Ошибка создания квартиры.', $payload);
             $response->code(400)->json('Ошибка создания квартиры. Повторите попытку позже.');
 
             return;
         } catch (Exception $e) {
+            LogModel::error($e->getMessage(), $payload);
             $response->code(500)->json($e->getMessage());
 
             return;
@@ -203,15 +206,18 @@ class CheckerController extends Controller
 
             if ($checkerData['status']) {
                 $checker = $this->checkerModel->fetchCheckerById($request->id);
+                LogModel::log('update', 'checker', JwtMiddleware::getUserId(), $checker);
                 $response->code(200)->json($checker);
 
                 return;
             }
 
+            LogModel::error('Ошибка обновления квартиры.', $payload);
             $response->code(400)->json('Ошибка обновления квартиры. Повторите попытку позже.');
 
             return;
         } catch (Exception $e) {
+            LogModel::error($e->getMessage(), $payload);
             $response->code(500)->json($e->getMessage());
 
             return;
@@ -259,6 +265,7 @@ class CheckerController extends Controller
 
             return;
         } catch (Exception $e) {
+            LogModel::error($e->getMessage());
             $response->code(500)->json($e->getMessage());
 
             return;
@@ -304,6 +311,7 @@ class CheckerController extends Controller
 
             return;
         } catch (Exception $e) {
+            LogModel::error($e->getMessage());
             $response->code(500)->json($e->getMessage());
 
             return;
@@ -347,15 +355,18 @@ class CheckerController extends Controller
 
         try {
             if ($this->checkerModel->deleteChecker($request->id)) {
+                LogModel::log('remove', 'checker', JwtMiddleware::getUserId(), ['id' => $request->id]);
                 $response->code(200)->json('');
 
                 return;
             }
 
+            LogModel::error('Ошибка удаления квартиры.', ['id' => $request->id]);
             $response->code(400)->json('Ошибка удаления квартиры. Повторите попытку позже.');
 
             return;
         } catch (Exception $e) {
+            LogModel::error($e->getMessage());
             $response->code(500)->json($e->getMessage());
 
             return;

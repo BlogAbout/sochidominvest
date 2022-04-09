@@ -82,15 +82,18 @@ class FeedbackController extends Controller
             $feedData = $this->feedbackModel->createFeed($payload);
 
             if ($feedData['status']) {
+                LogModel::log('create', 'feed', JwtMiddleware::getUserId(), $feedData['data']);
                 $response->code(201)->json($feedData['data']);
 
                 return;
             }
 
+            LogModel::error('Ошибка создания заявки.', $payload);
             $response->code(400)->json('Ошибка создания заявки. Повторите попытку позже.');
 
             return;
         } catch (Exception $e) {
+            LogModel::error($e->getMessage(), $payload);
             $response->code(500)->json($e->getMessage());
 
             return;
@@ -173,15 +176,18 @@ class FeedbackController extends Controller
 
             if ($feedData['status']) {
                 $feed = $this->feedbackModel->fetchFeedById($request->id);
+                LogModel::log('update', 'feed', JwtMiddleware::getUserId(), $feed);
                 $response->code(200)->json($feed);
 
                 return;
             }
 
+            LogModel::error('Ошибка обновления заявки.', $payload);
             $response->code(400)->json('Ошибка обновления заявки. Повторите попытку позже.');
 
             return;
         } catch (Exception $e) {
+            LogModel::error($e->getMessage(), $payload);
             $response->code(500)->json($e->getMessage());
 
             return;
@@ -229,6 +235,7 @@ class FeedbackController extends Controller
 
             return;
         } catch (Exception $e) {
+            LogModel::error($e->getMessage());
             $response->code(500)->json($e->getMessage());
 
             return;
@@ -252,6 +259,7 @@ class FeedbackController extends Controller
 
             return;
         } catch (Exception $e) {
+            LogModel::error($e->getMessage());
             $response->code(500)->json($e->getMessage());
 
             return;
@@ -295,15 +303,18 @@ class FeedbackController extends Controller
 
         try {
             if ($this->feedbackModel->deleteFeed($request->id)) {
+                LogModel::log('remove', 'feed', JwtMiddleware::getUserId(), ['id' => $request->id]);
                 $response->code(200)->json('');
 
                 return;
             }
 
+            LogModel::error('Ошибка удаления заявки.', ['id' => $request->id]);
             $response->code(400)->json('Ошибка удаления заявки. Повторите попытку позже.');
 
             return;
         } catch (Exception $e) {
+            LogModel::error($e->getMessage());
             $response->code(500)->json($e->getMessage());
 
             return;

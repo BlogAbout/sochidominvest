@@ -219,6 +219,14 @@ class Controller
                 $filter['publish'] = $params['publish'];
             }
 
+            if (!empty($params['userId'])) {
+                $filter['userId'] = $params['userId'];
+            }
+
+            if (!empty($params['author'])) {
+                $filter['author'] = $params['author'];
+            }
+
             if (!empty($params['objectId'])) {
                 $filter['objectId'] = $params['objectId'];
             }

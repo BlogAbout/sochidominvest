@@ -94,10 +94,12 @@ class UserController extends Controller
                 return;
             }
 
+            LogModel::error('Ошибка создания учетной записи.', $payload);
             $response->code(500)->json('Ошибка создания учетной записи. Повторите попытку позже.');
 
             return;
         } catch (Exception $e) {
+            LogModel::error($e->getMessage());
             $response->code(500)->json($e->getMessage());
 
             return;
@@ -176,10 +178,12 @@ class UserController extends Controller
                 return;
             }
 
+            LogModel::error('Непредвиденная ошибка.', $payload);
             $response->code(500)->json('Непредвиденная ошибка. Ваше действие не может быть выполнено. Повторите попытку позже.');
 
             return;
         } catch (Exception $e) {
+            LogModel::error($e->getMessage());
             $response->code(500)->json($e->getMessage());
 
             return;
@@ -257,16 +261,18 @@ class UserController extends Controller
 
             if ($userData['status']) {
                 unset($userData['data']['password']);
-
+                LogModel::log('create', 'user', JwtMiddleware::getUserId(), $userData['data']);
                 $response->code(201)->json($userData['data']);
 
                 return;
             }
 
+            LogModel::error('Непредвиденная ошибка. Пользователь не может быть создан.', $payload);
             $response->code(400)->json('Непредвиденная ошибка. Пользователь не может быть создан. Повторите попытку позже.');
 
             return;
         } catch (Exception $e) {
+            LogModel::error($e->getMessage(), $payload);
             $response->code(500)->json($e->getMessage());
 
             return;
@@ -352,6 +358,7 @@ class UserController extends Controller
 
             if ($userData['status']) {
                 $user = $this->userModel->fetchUserById($request->id);
+                LogModel::log('update', 'user', JwtMiddleware::getUserId(), $user);
                 unset($user['password']);
 
                 $response->code(200)->json($user);
@@ -359,10 +366,12 @@ class UserController extends Controller
                 return;
             }
 
+            LogModel::error('Непредвиденная ошибка. Пользователь не может быть обновлен.', $payload);
             $response->code(400)->json('Непредвиденная ошибка. Пользователь не может быть обновлен. Повторите попытку позже.');
 
             return;
         } catch (Exception $e) {
+            LogModel::error($e->getMessage(), $payload);
             $response->code(500)->json($e->getMessage());
 
             return;
@@ -411,6 +420,7 @@ class UserController extends Controller
 
             return;
         } catch (Exception $e) {
+            LogModel::error($e->getMessage());
             $response->code(500)->json($e->getMessage());
 
             return;
@@ -438,6 +448,7 @@ class UserController extends Controller
 
             return;
         } catch (Exception $e) {
+            LogModel::error($e->getMessage());
             $response->code(500)->json($e->getMessage());
 
             return;
@@ -484,15 +495,18 @@ class UserController extends Controller
 
         try {
             if ($this->userModel->deleteUser($request->id)) {
+                LogModel::log('remove', 'user', JwtMiddleware::getUserId(), ['id' => $request->id]);
                 $response->code(200)->json('');
 
                 return;
             }
 
+            LogModel::error('Ошибка удаления пользователя.', ['id' => $request->id]);
             $response->code(400)->json('Ошибка удаления пользователя. Повторите попытку позже.');
 
             return;
         } catch (Exception $e) {
+            LogModel::error($e->getMessage());
             $response->code(500)->json($e->getMessage());
 
             return;

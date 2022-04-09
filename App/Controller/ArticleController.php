@@ -84,15 +84,18 @@ class ArticleController extends Controller
             $itemData = $this->articleModel->createItem($payload);
 
             if ($itemData['status']) {
+                LogModel::log('create', 'article', JwtMiddleware::getUserId(), $itemData['data']);
                 $response->code(201)->json($itemData['data']);
 
                 return;
             }
 
+            LogModel::error('Ошибка создания статьи.', $payload);
             $response->code(400)->json('Ошибка создания статьи. Повторите попытку позже.');
 
             return;
         } catch (Exception $e) {
+            LogModel::error($e->getMessage(), $payload);
             $response->code(500)->json($e->getMessage());
 
             return;
@@ -172,15 +175,18 @@ class ArticleController extends Controller
 
             if ($itemData['status']) {
                 $item = $this->articleModel->fetchItemById($request->id);
+                LogModel::log('update', 'article', JwtMiddleware::getUserId(), $item);
                 $response->code(200)->json($item);
 
                 return;
             }
 
+            LogModel::error('Ошибка обновления статьи.', $payload);
             $response->code(400)->json('Ошибка обновления статьи. Повторите попытку позже.');
 
             return;
         } catch (Exception $e) {
+            LogModel::error($e->getMessage(), $payload);
             $response->code(500)->json($e->getMessage());
 
             return;
@@ -228,6 +234,7 @@ class ArticleController extends Controller
 
             return;
         } catch (Exception $e) {
+            LogModel::error($e->getMessage());
             $response->code(500)->json($e->getMessage());
 
             return;
@@ -251,6 +258,7 @@ class ArticleController extends Controller
 
             return;
         } catch (Exception $e) {
+            LogModel::error($e->getMessage());
             $response->code(500)->json($e->getMessage());
 
             return;
@@ -294,15 +302,18 @@ class ArticleController extends Controller
 
         try {
             if ($this->articleModel->deleteItem($request->id)) {
+                LogModel::log('remove', 'article', JwtMiddleware::getUserId(), ['id' => $request->id]);
                 $response->code(200)->json('');
 
                 return;
             }
 
+            LogModel::error('Ошибка удаления статьи.', ['id' => $request->id]);
             $response->code(400)->json('Ошибка удаления статьи. Повторите попытку позже.');
 
             return;
         } catch (Exception $e) {
+            LogModel::error($e->getMessage());
             $response->code(500)->json($e->getMessage());
 
             return;

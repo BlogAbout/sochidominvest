@@ -69,15 +69,18 @@ class TagController extends Controller
             $tagData = $this->tagModel->createTag($payload);
 
             if ($tagData['status']) {
+                LogModel::log('create', 'tag', JwtMiddleware::getUserId(), $tagData['data']);
                 $response->code(201)->json($tagData['data']);
 
                 return;
             }
 
+            LogModel::error('Ошибка создания метки.', $payload);
             $response->code(400)->json('Ошибка создания метки. Повторите попытку позже.');
 
             return;
         } catch (Exception $e) {
+            LogModel::error($e->getMessage(), $payload);
             $response->code(500)->json($e->getMessage());
 
             return;
@@ -143,15 +146,18 @@ class TagController extends Controller
 
             if ($tagData['status']) {
                 $tag = $this->tagModel->fetchTagById($request->id);
+                LogModel::log('update', 'tag', JwtMiddleware::getUserId(), $tag);
                 $response->code(200)->json($tag);
 
                 return;
             }
 
+            LogModel::error('Ошибка обновления метки.', $payload);
             $response->code(400)->json('Ошибка обновления метки. Повторите попытку позже.');
 
             return;
         } catch (Exception $e) {
+            LogModel::error($e->getMessage(), $payload);
             $response->code(500)->json($e->getMessage());
 
             return;
@@ -199,6 +205,7 @@ class TagController extends Controller
 
             return;
         } catch (Exception $e) {
+            LogModel::error($e->getMessage());
             $response->code(500)->json($e->getMessage());
 
             return;
@@ -220,6 +227,7 @@ class TagController extends Controller
 
             return;
         } catch (Exception $e) {
+            LogModel::error($e->getMessage());
             $response->code(500)->json($e->getMessage());
 
             return;
@@ -263,15 +271,18 @@ class TagController extends Controller
 
         try {
             if ($this->tagModel->deleteTag($request->id)) {
+                LogModel::log('remove', 'tag', JwtMiddleware::getUserId(), ['id' => $request->id]);
                 $response->code(200)->json('');
 
                 return;
             }
 
+            LogModel::error('Ошибка удаления метки', ['id' => $request->id]);
             $response->code(400)->json('Ошибка удаления метки. Повторите попытку позже.');
 
             return;
         } catch (Exception $e) {
+            LogModel::error($e->getMessage());
             $response->code(500)->json($e->getMessage());
 
             return;

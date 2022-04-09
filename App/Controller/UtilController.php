@@ -2,6 +2,8 @@
 
 namespace App;
 
+use Exception;
+
 /**
  * UtilController. Содержит точки доступа для дополнительных функций
  */
@@ -36,5 +38,29 @@ class UtilController extends Controller
         }
 
         $response->code(200)->json('');
+    }
+
+    /**
+     * Получение списка логов
+     *
+     * @param mixed $request Содержит объект запроса
+     * @param mixed $response Содержит объект ответа от маршрутизатора
+     * @return void
+     */
+    public function fetchLogs($request, $response)
+    {
+        $filter = parent::getFilterParams($request->paramsGet()->all());
+
+        try {
+            $list = LogModel::fetchLogs($filter);
+            $response->code(200)->json($list);
+
+            return;
+        } catch (Exception $e) {
+            LogModel::error($e->getMessage());
+            $response->code(500)->json($e->getMessage());
+
+            return;
+        }
     }
 }

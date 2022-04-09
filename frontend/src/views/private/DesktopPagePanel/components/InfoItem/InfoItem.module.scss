@@ -1,0 +1,15 @@
+.InfoItem {
+    display: flex;
+    overflow: auto;
+    width: 100%;
+    padding: 5px 15px;
+
+    .name {
+        flex-grow: 1;
+    }
+
+    .date {
+        width: 150px;
+        flex-shrink: 0;
+    }
+}

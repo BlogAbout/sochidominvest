@@ -77,15 +77,18 @@ class DocumentController extends Controller
             $documentData = $this->documentModel->createDocument($payload);
 
             if ($documentData['status']) {
+                LogModel::log('create', 'document', JwtMiddleware::getUserId(), $documentData['data']);
                 $response->code(201)->json($documentData['data']);
 
                 return;
             }
 
+            LogModel::error('Ошибка создания документа.', $payload);
             $response->code(400)->json('Ошибка создания документа. Повторите попытку позже.');
 
             return;
         } catch (Exception $e) {
+            LogModel::error($e->getMessage(), $payload);
             $response->code(500)->json($e->getMessage());
 
             return;
@@ -158,15 +161,18 @@ class DocumentController extends Controller
 
             if ($documentData['status']) {
                 $document = $this->documentModel->fetchDocumentById($request->id);
+                LogModel::log('update', 'document', JwtMiddleware::getUserId(), $document);
                 $response->code(200)->json($document);
 
                 return;
             }
 
+            LogModel::error('Ошибка обновления документа.', $payload);
             $response->code(400)->json('Ошибка обновления документа. Повторите попытку позже.');
 
             return;
         } catch (Exception $e) {
+            LogModel::error($e->getMessage(), $payload);
             $response->code(500)->json($e->getMessage());
 
             return;
@@ -214,6 +220,7 @@ class DocumentController extends Controller
 
             return;
         } catch (Exception $e) {
+            LogModel::error($e->getMessage());
             $response->code(500)->json($e->getMessage());
 
             return;
@@ -237,6 +244,7 @@ class DocumentController extends Controller
 
             return;
         } catch (Exception $e) {
+            LogModel::error($e->getMessage());
             $response->code(500)->json($e->getMessage());
 
             return;
@@ -280,15 +288,18 @@ class DocumentController extends Controller
 
         try {
             if ($this->documentModel->deleteDocument($request->id)) {
+                LogModel::log('remove', 'document', JwtMiddleware::getUserId(), ['id' => $request->id]);
                 $response->code(200)->json('');
 
                 return;
             }
 
+            LogModel::error('Ошибка удаления документа.', ['id' => $request->id]);
             $response->code(400)->json('Ошибка удаления документа. Повторите попытку позже.');
 
             return;
         } catch (Exception $e) {
+            LogModel::error($e->getMessage());
             $response->code(500)->json($e->getMessage());
 
             return;

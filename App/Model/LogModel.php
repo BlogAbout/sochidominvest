@@ -3,36 +3,10 @@
 namespace App;
 
 /**
- * LogModel - Эта модель используется другими контроллерами и моделями
+ * LogModel - Модель взаимодействия для логирования действий, событий и изменений
  */
 class LogModel extends Model
 {
-    /**
-     * Вернет элемент лога по id
-     *
-     * @param int $id Идентификатор элемента лога
-     * @return array
-     */
-    public static function fetchLogById(int $id): array
-    {
-        $sql = "
-            SELECT *
-            FROM `sdi_log`
-            WHERE sdi_log.`id` = :id
-        ";
-
-        parent::query($sql);
-        parent::bindParams('id', $id);
-
-        $log = parent::fetch();
-
-        if (!empty($log)) {
-            return LogModel::formatDataToJson($log);
-        }
-
-        return [];
-    }
-
     /**
      * Вернет список логов
      *
@@ -87,7 +61,7 @@ class LogModel extends Model
      * @param array $payload Содержит все поля, которые будут созданы
      * @return array
      */
-    public static function createLog(array $payload): array
+    private static function createLog(array $payload): array
     {
         $sql = "
             INSERT INTO `sdi_log`
@@ -139,7 +113,89 @@ class LogModel extends Model
     }
 
     /**
+     * Логирование базовой информации
+     *
+     * @param string $type Тип лога
+     * @param string $typeObject Тип объекта
+     * @param int $userId Идентификатор пользователя
+     * @param array $payload Содержит все поля объекта для логирования
+     * @return void
+     */
+    public static function log(string $type, string $typeObject, int $userId, array $payload)
+    {
+        $content = self::generateContentLog($typeObject, $payload);
+
+        $data = [
+            'userId' => $userId,
+            'content' => $content,
+            'type' => $type,
+            'objectType' => $typeObject,
+            'objectId' => $payload['id'],
+            'dateCreated' => date('Y-m-d H:i:s'),
+            'active' => 1
+        ];
+
+        self::createLog($data);
+    }
+
+    /**
+     * Логирование ошибок в файл
+     *
+     * @param string $error Текст ошибки
+     * @param array $payload Содержит все поля объекта для логирования
+     * @return void
+     */
+    public static function error(string $error, array $payload = null)
+    {
+        if (parent::$logLevel === 'error') {
+            $dir = $_SERVER['DOCUMENT_ROOT'] . '/logs/';
+
+            if (!file_exists($dir)) {
+                mkdir($dir, 0777, true);
+            }
+
+            if ($payload) {
+                file_put_contents($dir . '/log.txt', date('Y-m-d H:i:s') . ': ' . $error . ' ' . json_encode($payload) . PHP_EOL, FILE_APPEND);
+            } else {
+                file_put_contents($dir . '/log.txt', date('Y-m-d H:i:s') . ': ' . $error . PHP_EOL, FILE_APPEND);
+            }
+        }
+    }
+
+    /**
+     * Генерация содержимого лога на основе объекта данных
+     *
+     * @param string $type Тип объекта
+     * @param array $data Объект данных
+     * @return string Строка содержимого лога
+     */
+    private static function generateContentLog(string $type, array $data): string
+    {
+        $content = '';
+
+        switch ($type) {
+            case 'article':
+            case 'building':
+            case 'checker':
+            case 'developer':
+            case 'document':
+            case 'tag':
+                $content .= $data['name'];
+                break;
+            case 'feed':
+                $content .= $data['title'];
+                break;
+            case 'user':
+                $content .= $data['firstName'];
+                break;
+        }
+
+        return $content;
+    }
+
+    /**
      * Преобразование выходящих данных в формат для frontend
+     *
      * @param array $data Массив из базы данных
      * @return array
      */

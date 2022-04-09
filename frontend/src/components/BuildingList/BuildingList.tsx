@@ -16,7 +16,7 @@ const defaultProps: Props = {
     buildings: [],
     fetching: false,
     onSave: () => {
-        console.info('BuildingList onSave')
+        console.info('InfoList onSave')
     }
 }
 

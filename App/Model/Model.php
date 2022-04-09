@@ -19,6 +19,7 @@ class Model
     protected static $dbPass = '';
     protected static $dbConn;
     protected static $stmt;
+    protected static $logLevel = 'error';
 
     /**
      * Создание нового подключения к базе данных
@@ -292,7 +293,11 @@ class Model
         }
 
         if (!empty($filter['userId'])) {
-            array_push($where, "`id_user` = " . $filter['userId']);
+            array_push($where, "`id_user` IN (" . implode(',', $filter['userId']) . ")");
+        }
+
+        if (!empty($filter['author'])) {
+            array_push($where, "`author` IN (" . implode(',', $filter['author']) . ")");
         }
 
         if (!empty($filter['type'])) {

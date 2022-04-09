@@ -115,15 +115,18 @@ class BuildingController extends Controller
             $buildingData = $this->buildingModel->createBuilding($payload);
 
             if ($buildingData['status']) {
+                LogModel::log('create', 'building', JwtMiddleware::getUserId(), $buildingData['data']);
                 $response->code(201)->json($buildingData['data']);
 
                 return;
             }
 
+            LogModel::error('Ошибка создания объекта.', $payload);
             $response->code(400)->json('Ошибка создания объекта. Повторите попытку позже.');
 
             return;
         } catch (Exception $e) {
+            LogModel::error($e->getMessage(), $payload);
             $response->code(500)->json($e->getMessage());
 
             return;
@@ -234,15 +237,18 @@ class BuildingController extends Controller
 
             if ($buildingData['status']) {
                 $building = $this->buildingModel->fetchBuildingById($request->id);
+                LogModel::log('update', 'building', JwtMiddleware::getUserId(), $building);
                 $response->code(200)->json($building);
 
                 return;
             }
 
+            LogModel::error('Ошибка обновления объекта.', $payload);
             $response->code(400)->json('Ошибка обновления объекта. Повторите попытку позже.');
 
             return;
         } catch (Exception $e) {
+            LogModel::error($e->getMessage(), $payload);
             $response->code(500)->json($e->getMessage());
 
             return;
@@ -290,6 +296,7 @@ class BuildingController extends Controller
 
             return;
         } catch (Exception $e) {
+            LogModel::error($e->getMessage());
             $response->code(500)->json($e->getMessage());
 
             return;
@@ -313,6 +320,7 @@ class BuildingController extends Controller
 
             return;
         } catch (Exception $e) {
+            LogModel::error($e->getMessage());
             $response->code(500)->json($e->getMessage());
 
             return;
@@ -356,15 +364,18 @@ class BuildingController extends Controller
 
         try {
             if ($this->buildingModel->deleteBuilding($request->id)) {
+                LogModel::log('remove', 'building', JwtMiddleware::getUserId(), ['id' => $request->id]);
                 $response->code(200)->json('');
 
                 return;
             }
 
+            LogModel::error('Ошибка удаления объекта.', ['id' => $request->id]);
             $response->code(400)->json('Ошибка удаления объекта. Повторите попытку позже.');
 
             return;
         } catch (Exception $e) {
+            LogModel::error($e->getMessage());
             $response->code(500)->json($e->getMessage());
 
             return;

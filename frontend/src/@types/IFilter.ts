@@ -4,4 +4,6 @@ export interface IFilter {
     buildingId?: number
     objectId?: number[]
     objectType?: string
+    author?: number[]
+    userId?: number[]
 }

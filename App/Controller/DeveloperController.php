@@ -85,15 +85,18 @@ class DeveloperController extends Controller
             $developerData = $this->developerModel->createDeveloper($payload);
 
             if ($developerData['status']) {
+                LogModel::log('create', 'developer', JwtMiddleware::getUserId(), $developerData['data']);
                 $response->code(201)->json($developerData['data']);
 
                 return;
             }
 
+            LogModel::error('Ошибка создания застройщика.', $payload);
             $response->code(400)->json('Ошибка создания застройщика. Повторите попытку позже.');
 
             return;
         } catch (Exception $e) {
+            LogModel::error($e->getMessage(), $payload);
             $response->code(500)->json($e->getMessage());
 
             return;
@@ -174,15 +177,18 @@ class DeveloperController extends Controller
 
             if ($developerData['status']) {
                 $developer = $this->developerModel->fetchDeveloperById($request->id);
+                LogModel::log('update', 'developer', JwtMiddleware::getUserId(), $developer);
                 $response->code(200)->json($developer);
 
                 return;
             }
 
+            LogModel::error('Ошибка обновления застройщика.', $payload);
             $response->code(400)->json('Ошибка обновления застройщика. Повторите попытку позже.');
 
             return;
         } catch (Exception $e) {
+            LogModel::error($e->getMessage(), $payload);
             $response->code(500)->json($e->getMessage());
 
             return;
@@ -230,6 +236,7 @@ class DeveloperController extends Controller
 
             return;
         } catch (Exception $e) {
+            LogModel::error($e->getMessage());
             $response->code(500)->json($e->getMessage());
 
             return;
@@ -253,6 +260,7 @@ class DeveloperController extends Controller
 
             return;
         } catch (Exception $e) {
+            LogModel::error($e->getMessage());
             $response->code(500)->json($e->getMessage());
 
             return;
@@ -296,15 +304,18 @@ class DeveloperController extends Controller
 
         try {
             if ($this->developerModel->deleteDeveloper($request->id)) {
+                LogModel::log('remove', 'developer', JwtMiddleware::getUserId(), ['id' => $request->id]);
                 $response->code(200)->json('');
 
                 return;
             }
 
+            LogModel::error('Ошибка удаления застройщика.', ['id' => $request->id]);
             $response->code(400)->json('Ошибка удаления застройщика. Повторите попытку позже.');
 
             return;
         } catch (Exception $e) {
+            LogModel::error($e->getMessage());
             $response->code(500)->json($e->getMessage());
 
             return;
