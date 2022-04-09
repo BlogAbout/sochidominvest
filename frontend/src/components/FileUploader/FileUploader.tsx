@@ -39,8 +39,8 @@ const FileUploader: React.FC<Props> = (props) => {
 
     switch (props.type) {
         case 'document':
-            accept = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/msword,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,application/pdf'
-            acceptText = 'Доступны для загрузки: DOC, DOCX, XLS, XLSX, PDF. Максимальный размер: 50 Мб.'
+            accept = 'image/jpeg,image/png,image/jpg,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/msword,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,application/pdf'
+            acceptText = 'Доступны для загрузки: PNG, JPG, JPEG, DOC, DOCX, XLS, XLSX, PDF. Максимальный размер: 50 Мб.'
             break
         case 'image':
             accept = 'image/jpeg,image/png,image/jpg'

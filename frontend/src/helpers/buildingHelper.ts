@@ -1,4 +1,5 @@
 import {ISelector} from '../@types/ISelector'
+import {IBuildingPassed} from '../@types/IBuilding'
 
 /**
  * Список статусов объектов недвижимости
@@ -289,4 +290,34 @@ export const getDistrictText = (district?: string | null, districtZone?: string 
     }
 
     return districtText
+}
+
+export const getPassedText = (passed?: IBuildingPassed) => {
+    let passedText = ''
+
+    if (passed) {
+        if (passed.is) {
+            passedText = 'Сдан'
+
+            if (passed.quarter || passed.year) {
+                passedText += ': '
+
+                if (passed.quarter) {
+                    passedText += passed.quarter + ' квартал '
+                }
+
+                if (passed.year) {
+                    passedText += passed.year
+                }
+            }
+        } else if (passed.quarter || passed.year) {
+
+        } else {
+            passedText = 'Не сдан'
+        }
+    } else {
+        passedText = 'Не сдан'
+    }
+
+    return passedText
 }

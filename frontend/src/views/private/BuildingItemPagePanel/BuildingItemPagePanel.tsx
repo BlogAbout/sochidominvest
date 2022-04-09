@@ -41,7 +41,7 @@ import {
     buildingTypes,
     buildingWaterSupply,
     formalizationList,
-    getDistrictText,
+    getDistrictText, getPassedText,
     paymentsList
 } from '../../../helpers/buildingHelper'
 import classes from './BuildingItemPagePanel.module.scss'
@@ -151,19 +151,7 @@ const BuildingItemPagePanel: React.FC = (props) => {
 
     // Вывод базовой информации
     const renderInfo = () => {
-        let passedInfo = ''
-        if (building.passed && (building.passed.is || building.passed.quarter || building.passed.year)) {
-            passedInfo += building.passed.is ? 'Сдан: ' : 'Срок сдачи: '
-
-            if (building.passed.quarter) {
-                passedInfo += building.passed.quarter + ' квартал '
-            }
-
-            if (building.passed.year) {
-                passedInfo += building.passed.year
-            }
-        }
-
+        const passedInfo = getPassedText(building.passed)
         const districtText = getDistrictText(building.district, building.districtZone)
 
         return (
@@ -311,7 +299,7 @@ const BuildingItemPagePanel: React.FC = (props) => {
         let formalizations: string[] = formalizationList.filter((item: ISelector) => building.formalization?.includes(item.key)).map((item: ISelector) => item.text)
 
         return (
-            <BlockingElement fetching={fetching} className={classes.block}>
+            <div className={classes.block}>
                 <div className={classes.container}>
                     <div className={classes.col}>
                         <h2>Общие характеристики</h2>
@@ -415,10 +403,10 @@ const BuildingItemPagePanel: React.FC = (props) => {
                     <div className={classes.col}>
                         <h2>Оформление</h2>
 
-                        {payments.length ?
+                        {formalizations.length ?
                             <div className={classes.row}>
                                 <div className={classes.label}>Варианты оформления:</div>
-                                <div className={classes.param}>{payments.join(', ')}</div>
+                                <div className={classes.param}>{formalizations.join(', ')}</div>
                             </div>
                             : null
                         }
@@ -449,12 +437,17 @@ const BuildingItemPagePanel: React.FC = (props) => {
 
                     <div className={classes.col}>
                         <h2>Оплата</h2>
-                        {formalizations.length ? formalizations.map((item: string, index: number) => {
-                            return <div key={index} className={classes.row}>{item}</div>
-                        }) : null}
+
+                        {payments.length ?
+                            <div className={classes.row}>
+                                <div className={classes.label}>Варианты оплаты:</div>
+                                <div className={classes.param}>{payments.join(', ')}</div>
+                            </div>
+                            : null
+                        }
                     </div>
                 </div>
-            </BlockingElement>
+            </div>
         )
     }
 
@@ -487,13 +480,13 @@ const BuildingItemPagePanel: React.FC = (props) => {
         }
 
         return (
-            <BlockingElement fetching={fetching} className={classes.block}>
+            <div className={classes.block}>
                 <h2>{titleAbout}</h2>
 
                 <div className={classes.text}>
                     {building.description}
                 </div>
-            </BlockingElement>
+            </div>
         )
     }
 
@@ -504,7 +497,7 @@ const BuildingItemPagePanel: React.FC = (props) => {
         }
 
         return (
-            <BlockingElement fetching={fetching} className={classes.block}>
+            <div className={classes.block}>
                 <h2>Преимущества</h2>
 
                 <div className={classes.container}>
@@ -522,7 +515,7 @@ const BuildingItemPagePanel: React.FC = (props) => {
                         )
                     })}
                 </div>
-            </BlockingElement>
+            </div>
         )
     }
 

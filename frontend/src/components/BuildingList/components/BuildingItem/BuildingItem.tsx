@@ -4,7 +4,13 @@ import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {useNavigate} from 'react-router-dom'
 import {declension} from '../../../../helpers/stringHelper'
 import {numberWithSpaces, round} from '../../../../helpers/numberHelper'
-import {buildingTypes, formalizationList, getDistrictText, paymentsList} from '../../../../helpers/buildingHelper'
+import {
+    buildingTypes,
+    formalizationList,
+    getDistrictText,
+    getPassedText,
+    paymentsList
+} from '../../../../helpers/buildingHelper'
 import BuildingService from '../../../../api/BuildingService'
 import {IBuilding} from '../../../../@types/IBuilding'
 import {ISelector} from '../../../../@types/ISelector'
@@ -97,20 +103,7 @@ const BuildingItem: React.FC<Props> = (props) => {
     }
 
     const buildingType = buildingTypes.find((item: ISelector) => item.key === props.building.type)
-
-    let passedInfo = ''
-    if (props.building.passed && (props.building.passed.is || props.building.passed.quarter || props.building.passed.year)) {
-        passedInfo += props.building.passed.is ? 'Сдан: ' : 'Срок сдачи: '
-
-        if (props.building.passed.quarter) {
-            passedInfo += props.building.passed.quarter + ' квартал '
-        }
-
-        if (props.building.passed.year) {
-            passedInfo += props.building.passed.year
-        }
-    }
-
+    const passedInfo = getPassedText(props.building.passed)
     const districtText = getDistrictText(props.building.district, props.building.districtZone)
 
     return (

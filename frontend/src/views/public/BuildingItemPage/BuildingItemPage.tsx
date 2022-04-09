@@ -35,7 +35,7 @@ import {
     buildingTypes,
     buildingWaterSupply,
     formalizationList,
-    getDistrictText,
+    getDistrictText, getPassedText,
     paymentsList
 } from '../../../helpers/buildingHelper'
 import classes from './BuildingItemPage.module.scss'
@@ -118,19 +118,7 @@ const BuildingItemPage: React.FC = () => {
 
     // Вывод базовой информации
     const renderInfo = () => {
-        let passedInfo = ''
-        if (building.passed && (building.passed.is || building.passed.quarter || building.passed.year)) {
-            passedInfo += building.passed.is ? 'Сдан: ' : 'Срок сдачи: '
-
-            if (building.passed.quarter) {
-                passedInfo += building.passed.quarter + ' квартал '
-            }
-
-            if (building.passed.year) {
-                passedInfo += building.passed.year
-            }
-        }
-
+        const passedInfo = getPassedText(building.passed)
         const districtText = getDistrictText(building.district, building.districtZone)
 
         return (
@@ -246,7 +234,7 @@ const BuildingItemPage: React.FC = () => {
         let formalizations: string[] = formalizationList.filter((item: ISelector) => building.formalization?.includes(item.key)).map((item: ISelector) => item.text)
 
         return (
-            <BlockingElement fetching={fetching} className={classes.block}>
+            <div className={classes.block}>
                 <div className={classes.info}>
                     <div className={classes.col}>
                         <h2>Общие характеристики</h2>
@@ -350,10 +338,10 @@ const BuildingItemPage: React.FC = () => {
                     <div className={classes.col}>
                         <h2>Оформление</h2>
 
-                        {payments.length ?
+                        {formalizations.length ?
                             <div className={classes.row}>
                                 <div className={classes.label}>Варианты оформления:</div>
-                                <div className={classes.param}>{payments.join(', ')}</div>
+                                <div className={classes.param}>{formalizations.join(', ')}</div>
                             </div>
                             : null
                         }
@@ -384,12 +372,17 @@ const BuildingItemPage: React.FC = () => {
 
                     <div className={classes.col}>
                         <h2>Оплата</h2>
-                        {formalizations.length ? formalizations.map((item: string, index: number) => {
-                            return <div key={index} className={classes.row}>{item}</div>
-                        }) : null}
+
+                        {payments.length ?
+                            <div className={classes.row}>
+                                <div className={classes.label}>Варианты оплаты:</div>
+                                <div className={classes.param}>{payments.join(', ')}</div>
+                            </div>
+                            : null
+                        }
                     </div>
                 </div>
-            </BlockingElement>
+            </div>
         )
     }
 
@@ -439,7 +432,7 @@ const BuildingItemPage: React.FC = () => {
         }
 
         return (
-            <BlockingElement fetching={fetching} className={classes.block}>
+            <div className={classes.block}>
                 <h2>Преимущества</h2>
 
                 <div className={classes.info}>
@@ -457,7 +450,7 @@ const BuildingItemPage: React.FC = () => {
                         )
                     })}
                 </div>
-            </BlockingElement>
+            </div>
         )
     }
 

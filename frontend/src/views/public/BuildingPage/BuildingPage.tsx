@@ -7,7 +7,7 @@ import {declension} from '../../../helpers/stringHelper'
 import {numberWithSpaces, round} from '../../../helpers/numberHelper'
 import {IBuilding} from '../../../@types/IBuilding'
 import {ISelector} from '../../../@types/ISelector'
-import {buildingTypes, getDistrictText} from '../../../helpers/buildingHelper'
+import {buildingTypes, getDistrictText, getPassedText} from '../../../helpers/buildingHelper'
 import BuildingService from '../../../api/BuildingService'
 import BlockingElement from '../../../components/BlockingElement/BlockingElement'
 import Empty from '../../../components/Empty/Empty'
@@ -42,20 +42,7 @@ const BuildingPage: React.FC = () => {
 
     const renderBuildingItem = (building: IBuilding) => {
         const buildingType = buildingTypes.find((item: ISelector) => item.key === building.type)
-
-        let passedInfo = ''
-        if (building.passed && (building.passed.is || building.passed.quarter || building.passed.year)) {
-            passedInfo += building.passed.is ? 'Сдан: ' : 'Срок сдачи: '
-
-            if (building.passed.quarter) {
-                passedInfo += building.passed.quarter + ' квартал '
-            }
-
-            if (building.passed.year) {
-                passedInfo += building.passed.year
-            }
-        }
-
+        const passedInfo = getPassedText(building.passed)
         const districtText = getDistrictText(building.district, building.districtZone)
 
         return (

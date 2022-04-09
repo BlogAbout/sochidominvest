@@ -4,6 +4,7 @@ import {useTypedSelector} from '../../../../hooks/useTypedSelector'
 import {IBuildingChecker} from '../../../../@types/IBuilding'
 import {ISelector} from '../../../../@types/ISelector'
 import {checkerStatuses} from '../../../../helpers/buildingHelper'
+import {numberWithSpaces} from '../../../../helpers/numberHelper'
 import BlockingElement from '../../../BlockingElement/BlockingElement'
 import Empty from '../../../Empty/Empty'
 import openPopupCheckerCreate from '../../../PopupCheckerCreate/PopupCheckerCreate'
@@ -151,7 +152,7 @@ const CheckerList: React.FC<Props> = (props) => {
                                 <div className={classes.housing}>{checker.housing}</div>
                                 <div className={classes.stage}>{checker.stage}</div>
                                 <div className={classes.area}>{checker.area ? `${checker.area} кв.м` : ''}</div>
-                                <div className={classes.cost}>{checker.cost ? `${checker.cost} руб.` : ''}</div>
+                                <div className={classes.cost}>{checker.cost ? `${numberWithSpaces(checker.cost)} руб.` : ''}</div>
                             </div>
                         )
                     })
