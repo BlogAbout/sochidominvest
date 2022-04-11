@@ -48,8 +48,8 @@ const BuildingPage: React.FC = () => {
         return (
             <div key={building.id} className={classes.item} onClick={() => navigate('/building/' + building.id)}>
                 <div className={cx({'itemImage': true, 'noImage': !building.images || !building.images.length})}>
-                    {building.images && building.images.length ?
-                        <img src={'https://api.sochidominvest.ru' + building.images[0].value} alt={building.name}/>
+                    {building.avatar ?
+                        <img src={'https://api.sochidominvest.ru' + building.avatar} alt={building.name}/>
                         : null
                     }
                 </div>

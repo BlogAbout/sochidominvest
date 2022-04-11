@@ -5,12 +5,12 @@ import {LightgalleryItem} from 'react-lightgallery'
 import 'swiper/css'
 import 'swiper/css/navigation'
 import 'swiper/css/scrollbar'
-import {IImageCarousel} from '../../@types/IImageCarousel'
+import {IAttachment} from '../../@types/IAttachment'
 import classes from './ImageCarousel.module.scss'
 
 interface Props {
-    images: IImageCarousel[]
-    video?: string
+    images?: IAttachment[]
+    videos?: IAttachment[]
     alt: string
     fancy?: boolean
     group?: string
@@ -18,34 +18,41 @@ interface Props {
 
 const defaultProps: Props = {
     images: [],
-    alt: 'Картинка',
+    videos: [],
+    alt: '',
     fancy: false
 }
 
 const ImageCarousel: React.FC<Props> = (props) => {
-    if (!props.images.length) {
+    if ((!props.images || !props.images.length) && (!props.videos || !props.videos.length)) {
         return null
     }
 
-    const renderSlide = (image: IImageCarousel) => {
+    const renderSlide = (attachment: IAttachment) => {
         return (
-            <img src={image.image} alt={image.alt || props.alt}/>
+            <SwiperSlide key={attachment.id} className={classes.image}>
+                <img src={attachment.content} alt={attachment.name || props.alt}/>
+            </SwiperSlide>
         )
     }
 
-    const renderFancySlide = (image: IImageCarousel) => {
+    const renderFancySlide = (attachment: IAttachment) => {
         return (
-            <LightgalleryItem src={image.image} className={classes.image} group={props.group || 'any'}>
-                <img src={image.image} alt={image.alt || props.alt}/>
-            </LightgalleryItem>
+            <SwiperSlide key={attachment.id} className={classes.image}>
+                <LightgalleryItem src={attachment.content} className={classes.image} group={props.group || 'any'}>
+                    <img src={attachment.content} alt={attachment.name || props.alt}/>
+                </LightgalleryItem>
+            </SwiperSlide>
         )
     }
 
-    const renderSlideVideo = () => {
+    const renderSlideVideo = (attachment: IAttachment) => {
         return (
             <SwiperSlide className={classes.video}>
                 <video controls preload='metadata'>
-                    <source src={`https://api.sochidominvest.ru/uploads/${props.video}`} type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"'/>
+                    <source src={`https://api.sochidominvest.ru/uploads/${attachment.content}`}
+                            type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"'
+                    />
                 </video>
             </SwiperSlide>
         )
@@ -59,15 +66,15 @@ const ImageCarousel: React.FC<Props> = (props) => {
                 navigation
                 scrollbar={{draggable: true}}
             >
-                {props.video && renderSlideVideo()}
+                {props.videos ?
+                    props.videos.map((attachment: IAttachment) => renderSlideVideo(attachment))
+                    : null
+                }
 
-                {props.images.map((image: IImageCarousel, index: number) => {
-                    return (
-                        <SwiperSlide key={index} className={classes.image}>
-                            {props.fancy ? renderFancySlide(image) : renderSlide(image)}
-                        </SwiperSlide>
-                    )
-                })}
+                {props.images ?
+                    props.images.map((attachment: IAttachment) => props.fancy ? renderFancySlide(attachment) : renderSlide(attachment))
+                    : null
+                }
             </Swiper>
         </div>
     )

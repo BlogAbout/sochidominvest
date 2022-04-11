@@ -1,5 +1,3 @@
-import {IImage, IImageDb} from './IImage'
-
 export interface IBuilding {
     id: number | null
     name: string
@@ -46,13 +44,14 @@ export interface IBuilding {
     surchargeDoc?: number | null
     surchargeGas?: number | null
     saleNoResident?: number | null
-    images: IImageDb[]
-    newImages: IImage[]
-    video: string
+    images: number[]
+    videos: number[]
     metaTitle?: string | null
     metaDescription?: string | null
     passed?: IBuildingPassed
     views?: number
+    avatarId?: number
+    avatar?: string
 }
 
 export interface IBuildingPassed {

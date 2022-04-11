@@ -1,4 +1,5 @@
 export interface IFilter {
+    id?: number[]
     active?: number[]
     publish?: number
     buildingId?: number
@@ -6,4 +7,5 @@ export interface IFilter {
     objectType?: string
     author?: number[]
     userId?: number[]
+    type?: string
 }

@@ -118,8 +118,8 @@ const BuildingItem: React.FC<Props> = (props) => {
                 'noImage': !props.building.images || !props.building.images.length
             })
             }>
-                {props.building.images && props.building.images.length ?
-                    <img src={'https://api.sochidominvest.ru' + props.building.images[0].value}
+                {props.building.avatar ?
+                    <img src={'https://api.sochidominvest.ru/uploads' + props.building.avatar}
                          alt={props.building.name}
                     />
                     : null

@@ -11,6 +11,7 @@ import {numberWithSpaces, round} from '../../../helpers/numberHelper'
 import CheckerService from '../../../api/CheckerService'
 import DocumentService from '../../../api/DocumentService'
 import UtilService from '../../../api/UtilService'
+import AttachmentService from '../../../api/AttachmentService'
 import {IBuilding, IBuildingChecker, IBuildingHousing} from '../../../@types/IBuilding'
 import {IDocument} from '../../../@types/IDocument'
 import {ISelector} from '../../../@types/ISelector'
@@ -18,6 +19,7 @@ import {ITag} from '../../../@types/ITag'
 import {IDeveloper} from '../../../@types/IDeveloper'
 import {IUser} from '../../../@types/IUser'
 import {IArticle} from '../../../@types/IArticle'
+import {IAttachment} from '../../../@types/IAttachment'
 import Button from '../../../components/Button/Button'
 import Empty from '../../../components/Empty/Empty'
 import BlockingElement from '../../../components/BlockingElement/BlockingElement'
@@ -40,7 +42,7 @@ import {
     buildingTerritory,
     buildingTypes,
     buildingWaterSupply,
-    formalizationList,
+    formalizationList, getAboutBlockTitle,
     getDistrictText, getPassedText,
     paymentsList
 } from '../../../helpers/buildingHelper'
@@ -58,9 +60,13 @@ const BuildingItemPagePanel: React.FC = (props) => {
     const [isUpdate, setIsUpdate] = useState(false)
     const [building, setBuilding] = useState<IBuilding>({} as IBuilding)
     const [checkers, setCheckers] = useState<IBuildingChecker[]>([])
+    const [documents, setDocuments] = useState<IDocument[]>([])
+    const [images, setImages] = useState<IAttachment[]>([])
+    const [videos, setVideos] = useState<IAttachment[]>([])
     const [fetchingCheckers, setFetchingCheckers] = useState(false)
     const [fetchingDocuments, setFetchingDocuments] = useState(false)
-    const [documents, setDocuments] = useState<IDocument[]>([])
+    const [fetchingImages, setFetchingImages] = useState(false)
+    const [fetchingVideos, setFetchingVideos] = useState(false)
 
     const {buildings, fetching} = useTypedSelector(state => state.buildingReducer)
     const {developers, fetching: fetchingDeveloperList} = useTypedSelector(state => state.developerReducer)
@@ -124,6 +130,24 @@ const BuildingItemPagePanel: React.FC = (props) => {
                 .catch((error: any) => {
                     console.error('Ошибка регистрации количества просмотров', error)
                 })
+
+            if (building.images) {
+                setFetchingImages(true)
+                AttachmentService.fetchAttachments({active: [0, 1], id: building.images, type: 'image'})
+                    .then((response: any) => {
+                        setImages(response.data)
+                    })
+                    .finally(() => setFetchingImages(false))
+            }
+
+            if (building.videos) {
+                setFetchingVideos(true)
+                AttachmentService.fetchAttachments({active: [0, 1], id: building.videos, type: 'video'})
+                    .then((response: any) => {
+                        setVideos(response.data)
+                    })
+                    .finally(() => setFetchingVideos(false))
+            }
         }
 
         if ((!developers || !developers.length) && (building.developers && building.developers.length)) {
@@ -457,31 +481,9 @@ const BuildingItemPagePanel: React.FC = (props) => {
             return null
         }
 
-        let titleAbout = ''
-        switch (building.type) {
-            case 'building':
-                titleAbout = 'О жилом комплексе'
-                break
-            case 'apartment':
-                titleAbout = 'О квартире'
-                break
-            case 'house':
-                titleAbout = 'О доме'
-                break
-            case 'land':
-                titleAbout = 'О земельном участке'
-                break
-            case 'commerce':
-                titleAbout = 'О коммерции'
-                break
-            case 'garage':
-                titleAbout = 'О гараже, машиноместе'
-                break
-        }
-
         return (
             <div className={classes.block}>
-                <h2>{titleAbout}</h2>
+                <h2>{getAboutBlockTitle(building.type)}</h2>
 
                 <div className={classes.text}>
                     {building.description}
@@ -695,10 +697,10 @@ const BuildingItemPagePanel: React.FC = (props) => {
                         <div className={classes.container}>
                             <div className={classes.leftColumn}>
                                 <Gallery alt={building.name}
-                                         images={building.images}
-                                         video={building.video}
+                                         images={images}
+                                         videos={videos}
                                          type='carousel'
-                                         fetching={fetching}
+                                         fetching={fetching || fetchingImages || fetchingVideos}
                                 />
 
                                 {renderDescription()}

@@ -226,6 +226,10 @@ class Controller
                 $filter['active'] = $params['active'];
             }
 
+            if (!empty($params['id'])) {
+                $filter['id'] = $params['id'];
+            }
+
             if (!empty($params['publish'])) {
                 $filter['publish'] = $params['publish'];
             }

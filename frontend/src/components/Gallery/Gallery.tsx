@@ -1,13 +1,12 @@
-import React, {useEffect, useState} from 'react'
-import {IImageDb} from '../../@types/IImage'
-import {IImageCarousel} from '../../@types/IImageCarousel'
-import BlockingElement from '../BlockingElement/BlockingElement'
+import React from 'react'
+import {IAttachment} from '../../@types/IAttachment'
 import ImageCarousel from '../ImageCarousel/ImageCarousel'
+import Preloader from '../Preloader/Preloader'
 import classes from './Gallery.module.scss'
 
 interface Props {
-    images: IImageDb[]
-    video?: string
+    images?: IAttachment[]
+    videos?: IAttachment[]
     alt: string
     fetching: boolean
     type?: 'carousel'
@@ -15,36 +14,24 @@ interface Props {
 
 const defaultProps: Props = {
     images: [],
+    videos: [],
     alt: '',
     fetching: false,
     type: 'carousel'
 }
 
 const Gallery: React.FC<Props> = (props) => {
-    const [listImages, setListImages] = useState<IImageCarousel[]>([])
-
-    useEffect(() => {
-        if (props.images && props.images.length) {
-            setListImages(
-                props.images.filter((image: IImageDb) => image.active).map((image: IImageDb) => {
-                    return {
-                        image: 'https://api.sochidominvest.ru' + image.value,
-                        alt: props.alt
-                    }
-                })
-            )
-        }
-    }, [props.images])
-
     return (
-        <BlockingElement fetching={props.fetching} className={classes.Gallery}>
+        <div className={classes.Gallery}>
+            {props.fetching && <Preloader/>}
+
             <div className={classes.carousel}>
-                {listImages.length ?
-                    <ImageCarousel images={listImages} video={props.video} alt={props.alt} fancy/>
+                {(props.images && props.images.length) || (props.videos && props.videos.length) ?
+                    <ImageCarousel images={props.images} videos={props.videos} alt={props.alt} fancy/>
                     : <img src='https://api.sochidominvest.ru/uploads/no-image.jpg' alt={props.alt}/>
                 }
             </div>
-        </BlockingElement>
+        </div>
     )
 }
 

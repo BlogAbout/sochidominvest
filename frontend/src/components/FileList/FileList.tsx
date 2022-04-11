@@ -5,6 +5,7 @@ import {IAttachment} from '../../@types/IAttachment'
 import AttachmentService from '../../api/AttachmentService'
 import {useTypedSelector} from '../../hooks/useTypedSelector'
 import openContextMenu from '../ContextMenu/ContextMenu'
+import openPopupAttachmentCreate from '../PopupAttachmentCreate/PopupAttachmentCreate'
 import openPopupAlert from '../PopupAlert/PopupAlert'
 import Empty from '../Empty/Empty'
 import BlockingElement from '../BlockingElement/BlockingElement'
@@ -15,15 +16,16 @@ interface Props {
     selected?: number[]
     fetching: boolean
 
-    onSave(): void
+    onSave(file: IAttachment): void
+    onSelect?(attachment: IAttachment): void
 }
 
 const defaultProps: Props = {
     files: [],
     selected: [],
     fetching: false,
-    onSave: () => {
-        console.info('FileList onSave')
+    onSave: (file: IAttachment) => {
+        console.info('FileList onSave', file)
     }
 }
 
@@ -35,7 +37,10 @@ const FileList: React.FC<Props> = (props) => {
     const {role} = useTypedSelector(state => state.userReducer)
 
     const updateHandler = (file: IAttachment) => {
-        // Todo
+        openPopupAttachmentCreate(document.body, {
+            attachment: file,
+            onSave: props.onSave.bind(this)
+        })
     }
 
     const removeHandler = (file: IAttachment) => {
@@ -50,7 +55,7 @@ const FileList: React.FC<Props> = (props) => {
 
                             AttachmentService.removeAttachment(file.id)
                                 .then(() => {
-                                    props.onSave()
+                                    props.onSave(file)
                                 })
                                 .catch((error: any) => {
                                     openPopupAlert(document.body, {
@@ -95,7 +100,7 @@ const FileList: React.FC<Props> = (props) => {
                      }}
                      onContextMenu={(e: React.MouseEvent) => onContextMenu(e, file)}
                 >
-                    <img src={'https://api.sochidominvest.ru/upload' + file.content} alt={file.name || file.content}/>
+                    <img src={'http://sochidominvest/uploads/' + file.content} alt={file.name || file.content}/>
                 </div>
             </div>
         )
@@ -140,6 +145,10 @@ const FileList: React.FC<Props> = (props) => {
     }
 
     const renderFile = (file: IAttachment) => {
+        if (file.active === -1) {
+            return null
+        }
+
         const selected = !!(props.selected && props.selected.length && props.selected.includes(file.id))
 
         switch (file.type) {
@@ -155,14 +164,14 @@ const FileList: React.FC<Props> = (props) => {
     }
 
     return (
-        <BlockingElement fetching={props.fetching || fetching} className={classes.FileList}>
-            <div className={classes.content}>
-                {props.files ?
+        <div className={classes.FileList}>
+            <BlockingElement fetching={props.fetching || fetching} className={classes.content}>
+                {props.files && props.files.length ?
                     props.files.map((file: IAttachment) => renderFile(file))
                     : <Empty message='Нет файлов для отображения'/>
                 }
-            </div>
-        </BlockingElement>
+            </BlockingElement>
+        </div>
     )
 }
 

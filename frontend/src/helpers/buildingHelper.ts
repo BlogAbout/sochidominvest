@@ -321,3 +321,30 @@ export const getPassedText = (passed?: IBuildingPassed) => {
 
     return passedText
 }
+
+export const getAboutBlockTitle = (type: 'building' | 'apartment' | 'house' | 'land' | 'commerce' | 'garage') => {
+    let titleAbout = ''
+
+    switch (type) {
+        case 'building':
+            titleAbout = 'О жилом комплексе'
+            break
+        case 'apartment':
+            titleAbout = 'О квартире'
+            break
+        case 'house':
+            titleAbout = 'О доме'
+            break
+        case 'land':
+            titleAbout = 'О земельном участке'
+            break
+        case 'commerce':
+            titleAbout = 'О коммерции'
+            break
+        case 'garage':
+            titleAbout = 'О гараже, машиноместе'
+            break
+    }
+
+    return titleAbout
+}

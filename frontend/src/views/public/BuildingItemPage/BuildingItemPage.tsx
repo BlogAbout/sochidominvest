@@ -10,8 +10,10 @@ import {numberWithSpaces, round} from '../../../helpers/numberHelper'
 import CheckerService from '../../../api/CheckerService'
 import ArticleService from '../../../api/ArticleService'
 import UtilService from '../../../api/UtilService'
+import AttachmentService from '../../../api/AttachmentService'
 import {IBuilding, IBuildingChecker, IBuildingHousing} from '../../../@types/IBuilding'
 import {ISelector} from '../../../@types/ISelector'
+import {IAttachment} from '../../../@types/IAttachment'
 import {ITag} from '../../../@types/ITag'
 import {IArticle} from '../../../@types/IArticle'
 import Empty from '../../../components/Empty/Empty'
@@ -35,7 +37,9 @@ import {
     buildingTypes,
     buildingWaterSupply,
     formalizationList,
-    getDistrictText, getPassedText,
+    getAboutBlockTitle,
+    getDistrictText,
+    getPassedText,
     paymentsList
 } from '../../../helpers/buildingHelper'
 import classes from './BuildingItemPage.module.scss'
@@ -53,8 +57,12 @@ const BuildingItemPage: React.FC = () => {
     const [building, setBuilding] = useState<IBuilding>({} as IBuilding)
     const [checkers, setCheckers] = useState<IBuildingChecker[]>([])
     const [articles, setArticles] = useState<IArticle[]>([])
+    const [images, setImages] = useState<IAttachment[]>([])
+    const [videos, setVideos] = useState<IAttachment[]>([])
     const [fetchingCheckers, setFetchingCheckers] = useState(false)
     const [fetchingArticles, setFetchingArticles] = useState(false)
+    const [fetchingImages, setFetchingImages] = useState(false)
+    const [fetchingVideos, setFetchingVideos] = useState(false)
 
     const {buildings, fetching} = useTypedSelector(state => state.buildingReducer)
     const {tags} = useTypedSelector(state => state.tagReducer)
@@ -113,6 +121,24 @@ const BuildingItemPage: React.FC = () => {
                 .catch((error: any) => {
                     console.error('Ошибка регистрации количества просмотров', error)
                 })
+
+            if (building.images) {
+                setFetchingImages(true)
+                AttachmentService.fetchAttachments({active: [0, 1], id: building.images, type: 'image'})
+                    .then((response: any) => {
+                        setImages(response.data)
+                    })
+                    .finally(() => setFetchingImages(false))
+            }
+
+            if (building.videos) {
+                setFetchingVideos(true)
+                AttachmentService.fetchAttachments({active: [0, 1], id: building.videos, type: 'video'})
+                    .then((response: any) => {
+                        setVideos(response.data)
+                    })
+                    .finally(() => setFetchingVideos(false))
+            }
         }
     }, [building])
 
@@ -392,31 +418,9 @@ const BuildingItemPage: React.FC = () => {
             return null
         }
 
-        let titleAbout = ''
-        switch (building.type) {
-            case 'building':
-                titleAbout = 'О жилом комплексе'
-                break
-            case 'apartment':
-                titleAbout = 'О квартире'
-                break
-            case 'house':
-                titleAbout = 'О доме'
-                break
-            case 'land':
-                titleAbout = 'О земельном участке'
-                break
-            case 'commerce':
-                titleAbout = 'О коммерции'
-                break
-            case 'garage':
-                titleAbout = 'О гараже, машиноместе'
-                break
-        }
-
         return (
             <BlockingElement fetching={fetching} className={classes.block}>
-                <h2>{titleAbout}</h2>
+                <h2>{getAboutBlockTitle(building.type)}</h2>
 
                 <div className={classes.text}>
                     {building.description}
@@ -541,7 +545,12 @@ const BuildingItemPage: React.FC = () => {
             <Helmet>
                 <meta charSet="utf-8"/>
                 <title>
-                    {!building ? 'Недвижимость - СочиДомИнвест' : !building.metaTitle ? `${building.name} - СочиДомИнвест` : `${building.metaTitle} - СочиДомИнвест`}
+                    {!building
+                        ? 'Недвижимость - СочиДомИнвест'
+                        : !building.metaTitle
+                            ? `${building.name} - СочиДомИнвест`
+                            : `${building.metaTitle} - СочиДомИнвест`
+                    }
                 </title>
                 <meta name='description'
                       content={!building || !building.metaDescription ? '' : building.metaDescription}
@@ -556,10 +565,10 @@ const BuildingItemPage: React.FC = () => {
                         :
                         <div className={classes.information}>
                             <Gallery alt={building.name}
-                                     images={building.images}
-                                     video={building.video}
+                                     images={images}
+                                     videos={videos}
                                      type='carousel'
-                                     fetching={fetching}
+                                     fetching={fetching || fetchingImages || fetchingVideos}
                             />
 
                             {renderInfo()}

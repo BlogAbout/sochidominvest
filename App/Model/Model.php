@@ -284,6 +284,10 @@ class Model
         $sqlWhere = '';
         $where = [];
 
+        if (!empty($filter['id'])) {
+            array_push($where, "`id` IN (" . implode(',', $filter['id']) . ")");
+        }
+
         if (!empty($filter['active'])) {
             array_push($where, '`active` IN (' . implode(',', $filter['active']) . ')');
         }

@@ -12,7 +12,7 @@ import {useTypedSelector} from '../../../hooks/useTypedSelector'
 import classes from './FileManagerPagePanel.module.scss'
 
 const FileManagerPagePanel: React.FC = () => {
-    const [uploaderType, setUploaderType] = useState('image')
+    const [uploaderType, setUploaderType] = useState<'image' | 'video' | 'document'>('image')
     const [showUploader, setShowUploader] = useState(false)
     const [isUpdate, setIsUpdate] = useState(false)
     const [searchText, setSearchText] = useState('')
@@ -24,8 +24,8 @@ const FileManagerPagePanel: React.FC = () => {
 
     useEffect(() => {
         if (isUpdate || !files.length) {
-            setIsUpdate(false)
             setFetching(true)
+            setIsUpdate(false)
 
             AttachmentService.fetchAttachments({active: [0, 1]})
                 .then((response: any) => {
@@ -48,8 +48,19 @@ const FileManagerPagePanel: React.FC = () => {
     }, [files])
 
     // Обработчик изменений
-    const onSave = () => {
-        setIsUpdate(true)
+    const onSave = (attachment: IAttachment) => {
+        if (files && files.length) {
+            const findIndex = files.findIndex((file: IAttachment) => file.id === attachment.id)
+
+            setFiles([...files.slice(0, findIndex), attachment, ...files.slice(findIndex + 1)])
+        }
+    }
+
+    // Загрузка файла
+    const onUploadFile = (attachment: IAttachment) => {
+        const updateFiles: IAttachment[] = [attachment, ...files]
+        console.log(updateFiles)
+        setFiles(updateFiles)
     }
 
     // Поиск
@@ -94,23 +105,25 @@ const FileManagerPagePanel: React.FC = () => {
 
         switch (uploaderType) {
             case 'image':
-                labelTitle = 'Загрузка изображений'
+                labelTitle = 'Загрузить изображения'
                 break
             case 'video':
-                labelTitle = 'Загрузка видео'
+                labelTitle = 'Загрузить видео'
                 break
             case 'document':
-                labelTitle = 'Загрузка документов'
+                labelTitle = 'Загрузить документы'
                 break
         }
 
         return (
             <div className={classes.uploader}>
-                <div className={classes.label}>{labelTitle}</div>
-
-                <FileUploader type={uploaderType} onChange={onSave.bind(this)}/>
-
-                <Button type='save' icon='arrow-rotate-left' onClick={() => setShowUploader(false)}>Отменить</Button>
+                <FileUploader text={labelTitle}
+                              type={uploaderType}
+                              onChange={onUploadFile.bind(this)}
+                              onCancel={() => setShowUploader(false)}
+                              showCancel
+                              multi
+                />
             </div>
         )
     }

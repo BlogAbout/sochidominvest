@@ -2,11 +2,12 @@ import React, {useEffect, useState} from 'react'
 import withStore from '../../hoc/withStore'
 import classNames from 'classnames/bind'
 import BuildingService from '../../api/BuildingService'
+import AttachmentService from '../../api/AttachmentService'
 import {PopupProps} from '../../@types/IPopup'
 import {IBuilding, IBuildingPassed} from '../../@types/IBuilding'
 import {ITab} from '../../@types/ITab'
-import {IImage, IImageDb} from '../../@types/IImage'
 import {ISelector} from '../../@types/ISelector'
+import {IAttachment} from '../../@types/IAttachment'
 import {getPopupContainer, openPopup, removePopup} from '../../helpers/popupHelper'
 import showBackgroundBlock from '../BackgroundBlock/BackgroundBlock'
 import {Content, Footer, Header, Popup} from '../Popup/Popup'
@@ -23,11 +24,10 @@ import CheckerList from './components/CheckerList/CheckerList'
 import DeveloperList from './components/DeveloperList/DeveloperList'
 import DocumentList from './components/DocumentList/DocumentList'
 import UserList from './components/UserList/UserList'
-import ImageUploader from '../ImageUploader/ImageUploader'
 import SelectorBox from '../SelectorBox/SelectorBox'
 import TextAreaBox from '../TextAreaBox/TextAreaBox'
 import PassedBox from '../PassedBox/PassedBox'
-import FileUploader from '../FileUploader/FileUploader'
+import FileList from '../FileList/FileList'
 import openPopupAlert from '../PopupAlert/PopupAlert'
 import {
     amountContract,
@@ -81,7 +81,7 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
         developers: [],
         advantages: [],
         images: [],
-        newImages: [],
+        videos: [],
         surchargeDoc: 0,
         surchargeGas: 0,
         area: 0,
@@ -89,13 +89,41 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
         video: ''
     })
 
-    const [fetching, setFetching] = useState(false)
+    const [fetching, setFetching] = useState({
+        building: false,
+        image: false,
+        video: false
+    })
+    const [images, setImages] = useState<IAttachment[]>([])
+    const [videos, setVideos] = useState<IAttachment[]>([])
 
     useEffect(() => {
         return () => {
             removePopup(props.blockId ? props.blockId : '')
         }
     }, [props.blockId])
+
+    useEffect(() => {
+        if (building.id) {
+            if (building.images) {
+                setFetching({...fetching, image: true})
+                AttachmentService.fetchAttachments({active: [0, 1], id: building.images, type: 'image'})
+                    .then((response: any) => {
+                        setImages(response.data)
+                    })
+                    .finally(() => setFetching({...fetching, image: false}))
+            }
+
+            if (building.videos) {
+                setFetching({...fetching, video: true})
+                AttachmentService.fetchAttachments({active: [0, 1], id: building.videos, type: 'video'})
+                    .then((response: any) => {
+                        setVideos(response.data)
+                    })
+                    .finally(() => setFetching({...fetching, video: false}))
+            }
+        }
+    }, [building])
 
     // Закрытие popup
     const close = () => {
@@ -108,11 +136,10 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
             return
         }
 
-        setFetching(true)
+        setFetching({...fetching, building: true})
 
         BuildingService.saveBuilding(building)
             .then((response: any) => {
-                setFetching(false)
                 setBuilding(response.data)
 
                 props.onSave()
@@ -127,38 +154,38 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
                     title: 'Ошибка!',
                     text: error.data
                 })
-
-                setFetching(false)
             })
+            .finally(() => setFetching({...fetching, building: false}))
     }
 
-    // Загрузка изображений
-    const uploadImagesHandler = (images: IImageDb[], newImages: IImage[]) => {
-        setBuilding({...building, images: images, newImages: newImages})
+    // Добавление файла
+    const addAttachmentHandler = (attachment: IAttachment) => {
+        switch (attachment.type) {
+            case 'image':
+                setBuilding({
+                    ...building,
+                    images: [attachment.id, ...building.images]
+                })
+                setImages([attachment, ...images])
+                break
+            case 'video':
+                setBuilding({
+                    ...building,
+                    videos: [attachment.id, ...building.videos]
+                })
+                setVideos([attachment, ...images])
+                break
+        }
     }
 
     // Смена главного изображения
-    const selectImageAvatarHandler = (index: number, type: string) => {
-        const images: IImageDb[] = [...building.images]
-        const newImages: IImage[] = [...building.newImages]
+    const selectImageAvatarHandler = (attachment: IAttachment) => {
+        setBuilding({...building, avatarId: attachment.id, avatar: attachment.content})
+    }
 
-        if (type === 'selected') {
-            newImages.map((image: IImage) => image.avatar = 0)
-            images.map((image: IImageDb, imageIndex: number) => {
-                image.avatar = index === imageIndex ? 1 : 0
-
-                return image
-            })
-        } else if (type === 'upload') {
-            images.map((image: IImageDb) => image.avatar = 0)
-            newImages.map((image: IImage, imageIndex: number) => {
-                image.avatar = index === imageIndex ? 1 : 0
-
-                return image
-            })
-        }
-
-        uploadImagesHandler(images, newImages)
+    const isDisableButton = () => {
+        return fetching.building || fetching.image || fetching.video ||
+            building.name.trim() === '' || !building.address || building.address.trim() === ''
     }
 
     // Вкладка состояния объекта
@@ -550,21 +577,15 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
 
     // Вкладка галереии объекта
     const renderMediaTab = () => {
-        const videoInfo = building.video ? building.video.split('.') : []
-        const videoExtension = videoInfo.length ? videoInfo[videoInfo.length - 1] : ''
-
         return (
             <div key='media' className={classes.tabContent}>
                 <div className={cx({'field': true, 'full': true})}>
                     <div className={classes.field_label}>Фотогалерея</div>
 
-                    <ImageUploader images={building.images}
-                                   newImages={building.newImages}
-                                   objectType='building'
-                                   multi
-                                   showUploadList
-                                   onChange={uploadImagesHandler.bind(this)}
-                                   onClickImage={selectImageAvatarHandler.bind(this)}
+                    <FileList files={images}
+                              fetching={fetching.image}
+                              onSave={addAttachmentHandler.bind(this)}
+                              onSelect={selectImageAvatarHandler.bind(this)}
                     />
                 </div>
 
@@ -572,14 +593,10 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
                     <div className={cx({'field': true, 'full': true})}>
                         <div className={classes.field_label}>Видео</div>
 
-                        <FileUploader fileContent={building.video}
-                                      extension={videoExtension}
-                                      onChange={(value: string) => setBuilding({...building, video: value})}
-                                      text='Загрузить видео'
-                                      type='video'
-                                      objectType={'building'}
-                                      objectId={building.id}
-                                      showRemove
+                        <FileList files={videos}
+                                  fetching={fetching.video}
+                                  onSave={addAttachmentHandler.bind(this)}
+                                  onSelect={selectImageAvatarHandler.bind(this)}
                         />
                     </div>
                     : null
@@ -678,7 +695,7 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
             />
 
             <Content className={classes['popup-content']}>
-                <BlockingElement fetching={fetching} className={classes.content}>
+                <BlockingElement fetching={fetching.building} className={classes.content}>
                     <div className={classes.info}>
                         <div className={classes.field}>
                             <div className={classes.field_label}>Название</div>
@@ -736,13 +753,13 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
                 <Button type='save'
                         icon='check-double'
                         onClick={() => saveHandler(true)}
-                        disabled={fetching || building.name.trim() === '' || !building.address || building.address.trim() === ''}
+                        disabled={isDisableButton()}
                 >Сохранить и закрыть</Button>
 
                 <Button type='apply'
                         icon='check'
                         onClick={() => saveHandler()}
-                        disabled={fetching || building.name.trim() === '' || !building.address || building.address.trim() === ''}
+                        disabled={isDisableButton()}
                         className='marginLeft'
                 >Сохранить</Button>
 

@@ -55,10 +55,10 @@ class AttachmentController extends Controller
         }
 
         $payload = array(
-            'content' => htmlentities(stripcslashes(strip_tags($data->content))),
+            'content' => htmlentities(stripcslashes(strip_tags($result['data']['content']))),
+            'extension' => htmlentities(stripcslashes(strip_tags($result['data']['extension']))),
             'type' => htmlentities(stripcslashes(strip_tags($data->type))),
-            'extension' => htmlentities(stripcslashes(strip_tags($data->extension))),
-            'active' => (int)htmlentities(stripcslashes(strip_tags($data->active))),
+            'active' => 1,
             'dateCreated' => date('Y-m-d H:i:s'),
             'dateUpdate' => date('Y-m-d H:i:s'),
             'author' => JwtMiddleware::getUserId()

@@ -1,30 +1,31 @@
 import React, {useRef, useState} from 'react'
-import UploadService from '../../api/UploadService'
+import AttachmentService from '../../api/AttachmentService'
+import {IAttachment} from '../../@types/IAttachment'
 import Button from '../Button/Button'
 import openPopupAlert from '../PopupAlert/PopupAlert'
 import classes from './FileUploader.module.scss'
 
 interface Props {
-    fileContent?: string
     extension?: string
-    type: string
+    type: 'image' | 'video' | 'document'
     disabled?: boolean
     text?: string
-    objectType?: string
-    objectId?: number
-    showRemove?: boolean
+    showCancel?: boolean
+    multi?: boolean
 
-    onChange(content: string, extension?: string): void
+    onChange(file: IAttachment): void
+
+    onCancel?(): void
 }
 
 const defaultProps: Props = {
-    fileContent: '',
-    type: 'document',
+    type: 'image',
     disabled: false,
     text: 'Загрузить',
-    showRemove: false,
-    onChange: (content: string, extension?: string) => {
-        console.info('FileUploader onChange', content, extension)
+    showCancel: false,
+    multi: false,
+    onChange: (file: IAttachment) => {
+        console.info('FileUploader onChange', file)
     }
 }
 
@@ -33,6 +34,8 @@ const FileUploader: React.FC<Props> = (props) => {
 
     const [progress, setProgress] = useState(0)
     const [fetching, setFetching] = useState(false)
+    const [counter, setCounter] = useState(0)
+    const [countFiles, setCountFiles] = useState(0)
 
     let accept = ''
     let acceptText = ''
@@ -57,15 +60,22 @@ const FileUploader: React.FC<Props> = (props) => {
         const files: FileList | null = e.currentTarget.files
 
         if (files && files.length) {
+            setCountFiles(files.length)
             setFetching(true)
+            uploadFileToServer(files, 0)
+        }
+    }
 
-            UploadService.uploadFile(files[0], props.type, (event: any) => {
+    const uploadFileToServer = (files: FileList, index: number) => {
+        if (index < countFiles) {
+            setCounter(index + 1)
+
+            AttachmentService.uploadAttachment(files[index], props.type, (event: any) => {
                 setProgress(Math.round((100 * event.loaded) / event.total))
-            }, props.objectType, props.objectId)
+            })
                 .then((response) => {
-                    const result = response.data.split('.')
-
-                    props.onChange(response.data, result[result.length - 1])
+                    props.onChange(response.data)
+                    uploadFileToServer(files, ++index)
                 })
                 .catch((error) => {
                     console.error('Ошибка загрузки файла', error)
@@ -79,10 +89,12 @@ const FileUploader: React.FC<Props> = (props) => {
                     setProgress(0)
                     setFetching(false)
                 })
-        }
+        } else {
+            setFetching(false)
 
-        if (inputRef && inputRef.current) {
-            inputRef.current.value = ''
+            if (inputRef && inputRef.current) {
+                inputRef.current.value = ''
+            }
         }
     }
 
@@ -94,47 +106,30 @@ const FileUploader: React.FC<Props> = (props) => {
                        disabled={props.disabled}
                        onChange={uploadFileHandler.bind(this)}
                        ref={inputRef}
+                       multiple={props.multi}
                 />
 
                 {progress === 0 ?
-                    props.fileContent ?
-                        <div className={classes.info}>
-                            <div className={classes.type}>{props.extension}</div>
-
-                            <Button type='regular'
-                                    icon='paperclip'
-                                    onClick={() => window.open(`https://api.sochidominvest.ru/uploads/${props.fileContent}`, '_blank')}
-                                    disabled={props.disabled || fetching}
-                                    className='marginLeft'
-                            >Открыть</Button>
-
-                            <Button type='apply'
-                                    icon='upload'
-                                    onClick={() => inputRef.current?.click()}
-                                    disabled={props.disabled || fetching}
-                                    title={acceptText}
-                                    className='marginLeft'
-                            >Заменить</Button>
-
-                            {props.showRemove &&
-                            <Button type='apply'
-                                    icon='xmark'
-                                    onClick={() => props.onChange('', '')}
-                                    disabled={props.disabled || fetching}
-                                    title={acceptText}
-                                    className='marginLeft'
-                            />}
-                        </div>
-                        :
+                    <div className={classes.info}>
                         <Button type='apply'
                                 icon='upload'
                                 onClick={() => inputRef.current?.click()}
                                 disabled={props.disabled || fetching}
                                 title={acceptText}
                         >{props.text}</Button>
+
+                        {props.showCancel &&
+                        <Button type='regular'
+                                icon='arrow-rotate-left'
+                                onClick={() => props.onCancel ? props.onCancel() : undefined}
+                                disabled={props.disabled || fetching}
+                                title='Отменить'
+                                className='marginLeft'
+                        />}
+                    </div>
                     :
                     <div className={classes.progress}>
-                        <span style={{width: progress + '%'}}>{progress}%</span>
+                        <span style={{width: progress + '%'}}>{progress}% ({counter}/{countFiles})</span>
                     </div>
                 }
             </div>

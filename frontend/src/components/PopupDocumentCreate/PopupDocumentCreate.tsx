@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react'
 import DocumentService from '../../api/DocumentService'
 import {PopupProps} from '../../@types/IPopup'
 import {IDocument} from '../../@types/IDocument'
+import {IAttachment} from '../../@types/IAttachment'
 import {getPopupContainer, openPopup, removePopup} from '../../helpers/popupHelper'
 import showBackgroundBlock from '../BackgroundBlock/BackgroundBlock'
 import openPopupAlert from '../PopupAlert/PopupAlert'
@@ -77,8 +78,8 @@ const PopupDocumentCreate: React.FC<Props> = (props) => {
             })
     }
 
-    const changeUploadFile = (content: string, extension?: string) => {
-        setDocumentInfo({...documentInfo, content: content, extension: extension})
+    const changeUploadFile = (file: IAttachment) => {
+        // Todo setDocumentInfo({...documentInfo, content: content, extension: extension})
     }
 
     const checkDisabledButton = () => {
@@ -113,13 +114,9 @@ const PopupDocumentCreate: React.FC<Props> = (props) => {
                         <div className={classes.field}>
                             <div className={classes.field_label}>Файл</div>
 
-                            <FileUploader fileContent={documentInfo.content}
-                                          extension={documentInfo.extension}
-                                          onChange={changeUploadFile.bind(this)}
+                            <FileUploader onChange={changeUploadFile.bind(this)}
                                           text='Загрузить файл'
                                           type='document'
-                                          objectType={props.objectType}
-                                          objectId={props.objectId}
                             />
                         </div>
                         : null
