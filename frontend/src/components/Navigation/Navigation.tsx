@@ -60,6 +60,16 @@ const Navigation: React.FC = () => {
                     <li className={classes.spacer}/>
 
                     <li>
+                        <NavLink to={RouteNames.FILE_MANAGER}
+                                 className={({isActive}) => isActive ? classes.active : ''}
+                                 title='Файловый менеджер'
+                        >
+                            <span className={classes.icon}><FontAwesomeIcon icon='photo-film'/></span>
+                            <span className={classes.title}>Файловый менеджер</span>
+                        </NavLink>
+                    </li>
+
+                    <li>
                         <NavLink to={RouteNames.DEVELOPER}
                                  className={({isActive}) => isActive ? classes.active : ''}
                                  title='Застройщики'

@@ -19,6 +19,7 @@ import DeveloperPagePanel from '../../../views/private/DeveloperPagePanel/Develo
 import DocumentPagePanel from '../../../views/private/DocumentPagePanel/DocumentPagePanel'
 import ReportPanel from '../../../views/private/ReportPanel/ReportPanel'
 import ToolPanel from '../../../views/private/ToolPanel/ToolPanel'
+import FileManagerPagePanel from '../../../views/private/FileManagerPagePanel/FileManagerPagePanel'
 import SupportPagePanel from '../../../views/private/SupportPagePanel/SupportPagePanel'
 import FavoritePagePanel from '../../../views/private/FavoritePagePanel/FavoritePagePanel'
 import CompilationPagePanel from '../../../views/private/CompilationPagePanel/CompilationPagePanel'
@@ -71,6 +72,7 @@ const AppRouter: React.FC = () => {
                                 <Route path={RouteNames.DEVELOPER} element={<DeveloperPagePanel/>}/>
                                 <Route path={RouteNames.DOCUMENT} element={<DocumentPagePanel/>}/>
                                 <Route path={RouteNames.REPORT} element={<ReportPanel/>}/>
+                                <Route path={RouteNames.FILE_MANAGER} element={<FileManagerPagePanel/>}/>
                             </>
                             }
 

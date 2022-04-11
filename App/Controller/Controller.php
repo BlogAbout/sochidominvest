@@ -172,6 +172,17 @@ class Controller
                 } catch (Exception $e) {
                 }
             }
+
+            if ($payload->validator == 'attachmentExists') {
+                try {
+                    $checkArticle = AttachmentModel::fetchItemById((int)$payload->data);
+
+                    if (!$checkArticle['id']) {
+                        array_push($response, "Вложение с таким идентификатором не найдено в базе данных.");
+                    }
+                } catch (Exception $e) {
+                }
+            }
         }
 
         $validationErrors = new \stdClass();
@@ -246,34 +257,34 @@ class Controller
      * @param mixed $response Содержит объект ответа от маршрутизатора
      * @return void
      */
-    public function uploadFile($request, $response) {
-        if (!$this->requestMiddleware->acceptsFormData()) {
-            $response->code(400)->json('Доступ к конечной точке разрешен только содержимому FormData.');
-
-            return;
-        }
-
-        if (!JwtMiddleware::getAndDecodeToken()) {
-            $response->code(401)->json('Вы не авторизованы.');
-
-            return;
-        }
-
-        $files = $request->files()->all();
-        $data = $request->paramsPost();
-
-        $type = $data->type ?? 'documents';
-        $objectType = $data->objectType ?? null;
-        $objectId = $data->objectId ?? null;
-
-        $result = self::uploadFileToServer($files, $type, $objectType, $objectId);
-
-        if ($result['status']) {
-            $response->code(200)->json($result['data']);
-        } else {
-            $response->code(400)->json($result['data']);
-        }
-    }
+//    public function uploadFile($request, $response) {
+//        if (!$this->requestMiddleware->acceptsFormData()) {
+//            $response->code(400)->json('Доступ к конечной точке разрешен только содержимому FormData.');
+//
+//            return;
+//        }
+//
+//        if (!JwtMiddleware::getAndDecodeToken()) {
+//            $response->code(401)->json('Вы не авторизованы.');
+//
+//            return;
+//        }
+//
+//        $files = $request->files()->all();
+//        $data = $request->paramsPost();
+//
+//        $type = $data->type ?? 'documents';
+//        $objectType = $data->objectType ?? null;
+//        $objectId = $data->objectId ?? null;
+//
+//        $result = self::uploadFileToServer($files, $type, $objectType, $objectId);
+//
+//        if ($result['status']) {
+//            $response->code(200)->json($result['data']);
+//        } else {
+//            $response->code(400)->json($result['data']);
+//        }
+//    }
 
     /**
      * @param array $files
@@ -282,40 +293,40 @@ class Controller
      * @param int $objectId
      * @return array
      */
-    protected function uploadFileToServer(array $files, string $type, $objectType = null, $objectId = null): array
-    {
-        if (!$files || !$files['file'] || $files['file']['error'] > 0) {
-            return array(
-                'status' => false,
-                'data' => 'Ошибка загрузки файла. Повторите попытку позже.'
-            );
-        }
-
-        $nameArray = explode('.', $files['file']['name']);
-        $extension = array_pop($nameArray);
-        $fileTmpName = $files['file']['tmp_name'];
-
-        $path = $type . '/';
-        $path .= $objectType ? $objectType . '/' : '';
-        $path .= $objectId ? $objectId . '/' : '';
-
-        $fileName = base64_encode(microtime()) . '.' . $extension;
-
-        $dir = $_SERVER['DOCUMENT_ROOT'] . '/uploads/' . $path;
-        if (!file_exists($dir)) {
-            mkdir($dir, 0777, true);
-        }
-
-        if (!move_uploaded_file($fileTmpName, $dir . $fileName)) {
-            return array(
-                'status' => false,
-                'data' => ''
-            );
-        }
-
-        return array(
-            'status' => true,
-            'data' => $path . $fileName
-        );
-    }
+//    protected function uploadFileToServer(array $files, string $type, $objectType = null, $objectId = null): array
+//    {
+//        if (!$files || !$files['file'] || $files['file']['error'] > 0) {
+//            return array(
+//                'status' => false,
+//                'data' => 'Ошибка загрузки файла. Повторите попытку позже.'
+//            );
+//        }
+//
+//        $nameArray = explode('.', $files['file']['name']);
+//        $extension = array_pop($nameArray);
+//        $fileTmpName = $files['file']['tmp_name'];
+//
+//        $path = $type . '/';
+//        $path .= $objectType ? $objectType . '/' : '';
+//        $path .= $objectId ? $objectId . '/' : '';
+//
+//        $fileName = base64_encode(microtime()) . '.' . $extension;
+//
+//        $dir = $_SERVER['DOCUMENT_ROOT'] . '/uploads/' . $path;
+//        if (!file_exists($dir)) {
+//            mkdir($dir, 0777, true);
+//        }
+//
+//        if (!move_uploaded_file($fileTmpName, $dir . $fileName)) {
+//            return array(
+//                'status' => false,
+//                'data' => ''
+//            );
+//        }
+//
+//        return array(
+//            'status' => true,
+//            'data' => $path . $fileName
+//        );
+//    }
 }

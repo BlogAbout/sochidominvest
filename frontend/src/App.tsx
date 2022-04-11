@@ -26,6 +26,7 @@ import {
     faElevator,
     faEllipsis,
     faEye,
+    faFile,
     faFileExcel,
     faFileInvoice,
     faFileLines,
@@ -36,6 +37,7 @@ import {
     faHeart,
     faHouse,
     faHouseUser,
+    faImage,
     faLink,
     faLocationDot,
     faLock,
@@ -48,6 +50,7 @@ import {
     faPenToSquare,
     faPercent,
     faPhone,
+    faPhotoFilm,
     faPlus,
     faPrint,
     faQuestion,
@@ -63,6 +66,7 @@ import {
     faUser,
     faUserCheck,
     faUserTie,
+    faVideo,
     faXmark
 } from '@fortawesome/free-solid-svg-icons'
 
@@ -127,7 +131,11 @@ library.add(
     faCashRegister,
     faCar,
     faHouseUser,
-    faEye
+    faEye,
+    faPhotoFilm,
+    faImage,
+    faVideo,
+    faFile
 )
 
 function App() {

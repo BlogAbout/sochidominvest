@@ -5,7 +5,7 @@ import openPopupAlert from '../PopupAlert/PopupAlert'
 import classes from './FileUploader.module.scss'
 
 interface Props {
-    fileContent: string
+    fileContent?: string
     extension?: string
     type: string
     disabled?: boolean

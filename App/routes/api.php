@@ -66,6 +66,13 @@ $Klein->respond('GET', '/api/v1/article/[:id]', [new ArticleController(), 'fetch
 $Klein->respond('GET', '/api/v1/article', [new ArticleController(), 'fetchList']);
 $Klein->respond('DELETE', '/api/v1/article/[:id]', [new ArticleController(), 'deleteItem']);
 
+// Attachment Routes
+$Klein->respond('POST', '/api/v1/attachment', [new AttachmentController(), 'uploadAttachment']);
+$Klein->respond('PUT', '/api/v1/attachment/[:id]', [new AttachmentController(), 'updateItem']);
+$Klein->respond('GET', '/api/v1/attachment/[:id]', [new AttachmentController(), 'fetchItemById']);
+$Klein->respond('GET', '/api/v1/attachment', [new AttachmentController(), 'fetchList']);
+$Klein->respond('DELETE', '/api/v1/attachment/[:id]', [new AttachmentController(), 'deleteItem']);
+
 $Klein->respond('POST', '/api/v1/upload-file', [new Controller(), 'uploadFile']);
 $Klein->respond('GET', '/api/v1/views/[:objectType]/[:objectId]', [new UtilController(), 'updateCountViews']);
 $Klein->respond('GET', '/api/v1/log', [new UtilController(), 'fetchLogs']);

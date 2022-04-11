@@ -16,32 +16,15 @@ class LogModel extends Model
     public static function fetchLogs(array $filter): array
     {
         $resultList = [];
-        $where = [];
+        $sqlWhere = parent::generateFilterQuery($filter);
 
         $sql = "
             SELECT *
             FROM `sdi_log`
+            $sqlWhere
+            ORDER BY `id` DESC
+            LIMIT 50
         ";
-
-        if (!empty($params['active'])) {
-            array_push($where, '`active` IN (' . implode(',', $params['active']) . ')');
-        }
-
-        if (!empty($params['type'])) {
-            array_push($where, '`type` = ' . $params['type']);
-        }
-
-        if (!empty($params['objectType'])) {
-            array_push($where, '`type_object` = ' . $params['objectType']);
-        }
-
-        if (!empty($params['userId'])) {
-            array_push($where, '`id_user` = ' . $params['userId']);
-        }
-
-        if (count($where)) {
-            $sql .= " WHERE " . implode(' AND ', $where);
-        }
 
         parent::query($sql);
         $logList = parent::fetchAll();
