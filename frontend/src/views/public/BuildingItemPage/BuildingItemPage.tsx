@@ -122,7 +122,7 @@ const BuildingItemPage: React.FC = () => {
                     console.error('Ошибка регистрации количества просмотров', error)
                 })
 
-            if (building.images) {
+            if (building.images && building.images.length) {
                 setFetchingImages(true)
                 AttachmentService.fetchAttachments({active: [0, 1], id: building.images, type: 'image'})
                     .then((response: any) => {
@@ -131,7 +131,7 @@ const BuildingItemPage: React.FC = () => {
                     .finally(() => setFetchingImages(false))
             }
 
-            if (building.videos) {
+            if (building.videos && building.videos.length) {
                 setFetchingVideos(true)
                 AttachmentService.fetchAttachments({active: [0, 1], id: building.videos, type: 'video'})
                     .then((response: any) => {

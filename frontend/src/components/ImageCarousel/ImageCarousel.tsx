@@ -7,6 +7,7 @@ import 'swiper/css/navigation'
 import 'swiper/css/scrollbar'
 import {IAttachment} from '../../@types/IAttachment'
 import classes from './ImageCarousel.module.scss'
+import VideoPlayer from "../VideoPlayer/VideoPlayer";
 
 interface Props {
     images?: IAttachment[]
@@ -53,14 +54,21 @@ const ImageCarousel: React.FC<Props> = (props) => {
         )
     }
 
+    // const renderSlideVideo = (attachment: IAttachment) => {
+    //     return (
+    //         <SwiperSlide key={attachment.id} className={classes.video}>
+    //             <video controls preload='metadata'>
+    //                 <source src={`https://api.sochidominvest.ru/uploads/${attachment.content}`}
+    //                         type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"'
+    //                 />
+    //             </video>
+    //         </SwiperSlide>
+    //     )
+    // }
     const renderSlideVideo = (attachment: IAttachment) => {
         return (
-            <SwiperSlide className={classes.video}>
-                <video controls preload='metadata'>
-                    <source src={`https://api.sochidominvest.ru/uploads/${attachment.content}`}
-                            type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"'
-                    />
-                </video>
+            <SwiperSlide key={attachment.id} className={classes.video}>
+                <VideoPlayer video={`http://sochidominvest/uploads/${attachment.content}`}/>
             </SwiperSlide>
         )
     }

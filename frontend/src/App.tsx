@@ -48,10 +48,12 @@ import {
     faPaintRoller,
     faPaperclip,
     faParagraph,
+    faPause,
     faPenToSquare,
     faPercent,
     faPhone,
     faPhotoFilm,
+    faPlay,
     faPlus,
     faPrint,
     faQuestion,
@@ -68,6 +70,8 @@ import {
     faUserCheck,
     faUserTie,
     faVideo,
+    faVolumeHigh,
+    faVolumeXmark,
     faXmark
 } from '@fortawesome/free-solid-svg-icons'
 
@@ -137,7 +141,11 @@ library.add(
     faImage,
     faVideo,
     faFile,
-    faArrowPointer
+    faArrowPointer,
+    faPlay,
+    faPause,
+    faVolumeHigh,
+    faVolumeXmark
 )
 
 function App() {
