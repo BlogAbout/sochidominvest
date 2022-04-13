@@ -642,13 +642,23 @@ const BuildingItemPagePanel: React.FC = (props) => {
 
                 {documents && documents.length ?
                     documents.map((document: IDocument) => {
-                        return (
-                            <p key={document.id}>
-                                <a href={`https://api.sochidominvest.ru/uploads/${document.content}`}
-                                   target='_blank'
-                                >{document.name}</a>
-                            </p>
-                        )
+                        if (document.type === 'file') {
+                            return (
+                                <p key={document.id}>
+                                    <a href={`https://api.sochidominvest.ru/uploads/${document.url}`}
+                                       target='_blank'
+                                    >{document.name}</a>
+                                </p>
+                            )
+                        } else {
+                            return (
+                                <p key={document.id}>
+                                    <a href={document.content}
+                                       target='_blank'
+                                    >{document.name}</a>
+                                </p>
+                            )
+                        }
                     })
                     : <Empty message='Отсутствует информация о документах'/>
                 }

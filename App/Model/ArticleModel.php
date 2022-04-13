@@ -19,16 +19,21 @@ class ArticleModel extends Model
             SELECT *,
                    (
                        SELECT GROUP_CONCAT(DISTINCT(ba.`id_building`))
-                       FROM sdi_building_article AS ba
+                       FROM `sdi_building_article` AS ba
                        WHERE ba.`id_article` = `id`
                    ) AS buildings,
+                   (
+                       SELECT GROUP_CONCAT(DISTINCT(i.`id_attachment`))
+                       FROM `sdi_images` AS i
+                       WHERE i.`id_object` = `id` AND `type_object` = 'article'
+                   ) AS images,
                    (
                        SELECT v.`views`
                        FROM `sdi_views` AS v
                        WHERE v.`id_object` = `id` AND v.`type_object` = 'article'
                    ) AS views
             FROM `sdi_article`
-            WHERE sdi_article.`id` = :id
+            WHERE `id` = :id
         ";
 
         parent::query($sql);
@@ -37,18 +42,7 @@ class ArticleModel extends Model
         $item = parent::fetch();
 
         if (!empty($item)) {
-            $item = ArticleModel::formatDataToJson($item);
-            $images = parent::fetchImages([
-                'objectId' => [$item['id']],
-                'objectType' => 'article',
-                'active' => [1]
-            ]);
-
-            if (count($images)) {
-                $item['images'] = $images;
-            }
-
-            return $item;
+            return ArticleModel::formatDataToJson($item);
         }
 
         return [];
@@ -66,20 +60,25 @@ class ArticleModel extends Model
         $sqlWhere = parent::generateFilterQuery($filter);
 
         $sql = "
-            SELECT *,
+            SELECT sdi.*,
                    (
                        SELECT GROUP_CONCAT(DISTINCT(ba.`id_building`))
-                       FROM sdi_building_article AS ba
-                       WHERE ba.`id_article` = `id`
+                       FROM `sdi_building_article` AS ba
+                       WHERE ba.`id_article` = sdi.`id`
                    ) AS buildings,
+                   (
+                       SELECT GROUP_CONCAT(DISTINCT(i.`id_attachment`))
+                       FROM `sdi_images` AS i
+                       WHERE i.`id_object` = sdi.`id` AND `type_object` = 'article'
+                   ) AS images,
                    (
                        SELECT v.`views`
                        FROM `sdi_views` AS v
-                       WHERE v.`id_object` = `id` AND v.`type_object` = 'article'
+                       WHERE v.`id_object` = sdi.`id` AND v.`type_object` = 'article'
                    ) AS views
-            FROM `sdi_article`
+            FROM `sdi_article` sdi
             $sqlWhere
-            ORDER BY `id` DESC
+            ORDER BY sdi.`id` DESC
         ";
 
         parent::query($sql);
@@ -91,22 +90,6 @@ class ArticleModel extends Model
             foreach ($list as $item) {
                 array_push($resultList, ArticleModel::formatDataToJson($item));
                 array_push($ids, (int)$item['id']);
-            }
-
-            $images = parent::fetchImages([
-                'objectId' => $ids,
-                'objectType' => 'article',
-                'active' => [1]
-            ]);
-
-            if (count($images)) {
-                foreach ($resultList as &$item) {
-                    foreach ($images as $image) {
-                        if ($image['objectId'] == $item['id']) {
-                            array_push($item['images'], $image);
-                        }
-                    }
-                }
             }
         }
 
@@ -123,9 +106,11 @@ class ArticleModel extends Model
     {
         $sql = "
             INSERT INTO `sdi_article`
-                (name, description, author, type, date_created, date_update, active, publish, meta_title, meta_description)
+                (`name`, `description`, `author`, `type`, `date_created`, `date_update`, `active`, `publish`,
+                 `meta_title`, `meta_description`, `id_avatar`, `avatar`)
             VALUES
-                (:name, :description, :author, :type, :dateCreated, :dateUpdate, :active, :publish, :metaTitle, :metaDescription)
+                (:name, :description, :author, :type, :dateCreated, :dateUpdate, :active, :publish,
+                 :metaTitle, :metaDescription, :avatarId, :avatar)
         ";
 
         parent::query($sql);
@@ -139,6 +124,8 @@ class ArticleModel extends Model
         parent::bindParams('publish', $payload['publish']);
         parent::bindParams('metaTitle', $payload['metaTitle']);
         parent::bindParams('metaDescription', $payload['metaDescription']);
+        parent::bindParams('avatarId', $payload['avatarId']);
+        parent::bindParams('avatar', $payload['avatar']);
 
         $item = parent::execute();
 
@@ -146,7 +133,6 @@ class ArticleModel extends Model
             $payload['id'] = parent::lastInsertedId();
 
             ArticleModel::updateRelationsBuildings($payload['id'], $payload['buildings']);
-            parent::uploadImages($payload['id'], 'article', $payload['newImages']);
 
             return array(
                 'status' => true,
@@ -171,15 +157,17 @@ class ArticleModel extends Model
         $sql = "
             UPDATE `sdi_article`
             SET
-                name = :name,
-                description = :description,
-                type = :type,
-                date_update = :dateUpdate,
-                active = :active,
-                publish = :publish,
-                meta_title = :metaTitle,
-                meta_description = :metaDescription
-            WHERE id = :id
+                `name` = :name,
+                `description` = :description,
+                `type` = :type,
+                `date_update` = :dateUpdate,
+                `active` = :active,
+                `publish` = :publish,
+                `meta_title` = :metaTitle,
+                `meta_description` = :metaDescription,
+                `id_avatar` = :avatarId,
+                `avatar` = :avatar
+            WHERE `id` = :id
         ";
 
         parent::query($sql);
@@ -192,11 +180,12 @@ class ArticleModel extends Model
         parent::bindParams('publish', $payload['publish']);
         parent::bindParams('metaTitle', $payload['metaTitle']);
         parent::bindParams('metaDescription', $payload['metaDescription']);
+        parent::bindParams('avatarId', $payload['avatarId']);
+        parent::bindParams('avatar', $payload['avatar']);
 
         if (parent::execute()) {
             ArticleModel::updateRelationsBuildings($payload['id'], $payload['buildings']);
-            parent::updateImages($payload['images']);
-            parent::uploadImages($payload['id'], 'article', $payload['newImages']);
+            parent::updateRelationsImages($payload['images'], $payload['id'], 'article');
 
             return array(
                 'status' => true,
@@ -218,7 +207,7 @@ class ArticleModel extends Model
      */
     public static function deleteItem(int $id): bool
     {
-        $sql = "UPDATE `sdi_article` SET active = -1 WHERE id = :id";
+        $sql = "UPDATE `sdi_article` SET `active` = -1 WHERE `id` = :id";
 
         parent::query($sql);
         parent::bindParams('id', $id);
@@ -251,7 +240,7 @@ class ArticleModel extends Model
                 INSERT INTO `sdi_building_article`
                     (`id_building`, `id_article`)
                 VALUES
-            " . implode(",", $insertSql);
+            " . implode(',', $insertSql);
 
             parent::query($sql);
             parent::execute();
@@ -260,6 +249,7 @@ class ArticleModel extends Model
 
     /**
      * Преобразование выходящих данных в формат для frontend
+     *
      * @param array $data Массив из базы данных
      * @return array
      */
@@ -278,9 +268,10 @@ class ArticleModel extends Model
             'metaTitle' => $data['meta_title'],
             'metaDescription' => $data['meta_description'],
             'buildings' => array_map('intval', $data['buildings'] ? explode(',', $data['buildings']) : []),
-            'images' => [],
-            'newImages' => [],
-            'views' => $data['views'] ? (int)$data['views'] : 0
+            'images' => array_map('intval', $data['images'] ? explode(',', $data['images']) : []),
+            'views' => $data['views'] ? (int)$data['views'] : 0,
+            'avatarId' => (int)$data['id_avatar'],
+            'avatar' => $data['avatar']
         ];
     }
 }

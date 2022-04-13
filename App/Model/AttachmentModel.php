@@ -45,10 +45,10 @@ class AttachmentModel extends Model
         $sqlWhere = parent::generateFilterQuery($filter);
 
         $sql = "
-            SELECT *
-            FROM `sdi_attachment`
+            SELECT sdi.*
+            FROM `sdi_attachment` sdi
             $sqlWhere
-            ORDER BY `id` DESC
+            ORDER BY sdi.`id` DESC
         ";
 
         parent::query($sql);
@@ -73,7 +73,7 @@ class AttachmentModel extends Model
     {
         $sql = "
             INSERT INTO `sdi_attachment`
-                (author, content, type, extension, date_created, date_update, active)
+                (`author`, `content`, `type`, `extension`, `date_created`, `date_update`, `active`)
             VALUES
                 (:author, :content, :type, :extension, :dateCreated, :dateUpdate, :active)
         ";
@@ -90,7 +90,7 @@ class AttachmentModel extends Model
         $item = parent::execute();
 
         if ($item) {
-            $payload['id'] = parent::lastInsertedId();
+            $payload['id'] = (int)parent::lastInsertedId();
 
             return array(
                 'status' => true,
@@ -115,11 +115,11 @@ class AttachmentModel extends Model
         $sql = "
             UPDATE `sdi_attachment`
             SET
-                name = :name,
-                description = :description,
-                date_update = :dateUpdate,
-                active = :active
-            WHERE id = :id
+                `name` = :name,
+                `description` = :description,
+                `date_update` = :dateUpdate,
+                `active` = :active
+            WHERE `id` = :id
         ";
 
         parent::query($sql);
@@ -150,7 +150,7 @@ class AttachmentModel extends Model
      */
     public static function deleteItem(int $id): bool
     {
-        $sql = "UPDATE `sdi_attachment` SET active = -1 WHERE id = :id";
+        $sql = "UPDATE `sdi_attachment` SET `active` = -1 WHERE `id` = :id";
 
         parent::query($sql);
         parent::bindParams('id', $id);

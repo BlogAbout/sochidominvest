@@ -96,11 +96,13 @@ const FileList: React.FC<Props> = (props) => {
             <div key={file.id} className={cx({'item': true, [`${file.type}`]: true, 'selected': selected})}>
                 <div className={classes.wrapper}
                      onClick={() => {
-                         // Todo
+                         if (props.onSelect) {
+                             props.onSelect(file)
+                         }
                      }}
                      onContextMenu={(e: React.MouseEvent) => onContextMenu(e, file)}
                 >
-                    <img src={'http://sochidominvest/uploads/' + file.content} alt={file.name || file.content}/>
+                    <img src={'https://api.sochidominvest.ru/uploads/thumbs/400/' + file.content} alt={file.name || file.content}/>
                 </div>
             </div>
         )
@@ -111,7 +113,9 @@ const FileList: React.FC<Props> = (props) => {
             <div key={file.id} className={cx({'item': true, [`${file.type}`]: true, 'selected': selected})}>
                 <div className={classes.wrapper}
                      onClick={() => {
-                         // Todo
+                         if (props.onSelect) {
+                             props.onSelect(file)
+                         }
                      }}
                      onContextMenu={(e: React.MouseEvent) => onContextMenu(e, file)}
                 >
@@ -130,7 +134,9 @@ const FileList: React.FC<Props> = (props) => {
             <div key={file.id} className={cx({'item': true, [`${file.type}`]: true, 'selected': selected})}>
                 <div className={classes.wrapper}
                      onClick={() => {
-                         // Todo
+                         if (props.onSelect) {
+                             props.onSelect(file)
+                         }
                      }}
                      onContextMenu={(e: React.MouseEvent) => onContextMenu(e, file)}
                 >

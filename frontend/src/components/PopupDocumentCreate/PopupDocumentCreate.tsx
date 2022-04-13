@@ -6,12 +6,12 @@ import {IAttachment} from '../../@types/IAttachment'
 import {getPopupContainer, openPopup, removePopup} from '../../helpers/popupHelper'
 import showBackgroundBlock from '../BackgroundBlock/BackgroundBlock'
 import openPopupAlert from '../PopupAlert/PopupAlert'
+import openPopupFileManager from '../PopupFileManager/PopupFileManager'
 import {Content, Footer, Header, Popup} from '../Popup/Popup'
 import BlockingElement from '../BlockingElement/BlockingElement'
 import TextBox from '../TextBox/TextBox'
 import Button from '../Button/Button'
 import CheckBox from '../CheckBox/CheckBox'
-import FileUploader from '../FileUploader/FileUploader'
 import classes from './PopupDocumentCreate.module.scss'
 
 interface Props extends PopupProps {
@@ -35,11 +35,10 @@ const PopupDocumentCreate: React.FC<Props> = (props) => {
     const [documentInfo, setDocumentInfo] = useState<IDocument>(props.document || {
         id: null,
         name: '',
+        attachmentId: null,
         objectId: props.objectId || null,
         objectType: props.objectType || null,
         type: props.type || 'file',
-        extension: '',
-        content: '',
         active: 1
     })
 
@@ -78,12 +77,12 @@ const PopupDocumentCreate: React.FC<Props> = (props) => {
             })
     }
 
-    const changeUploadFile = (file: IAttachment) => {
-        // Todo setDocumentInfo({...documentInfo, content: content, extension: extension})
-    }
-
     const checkDisabledButton = () => {
-        return fetching || documentInfo.name.trim() === '' || documentInfo.content.trim() === ''
+        if (documentInfo.type === 'link' && (!documentInfo.content || documentInfo.content.trim() === '')) {
+            return true
+        }
+
+        return fetching || documentInfo.name.trim() === ''
     }
 
     return (
@@ -114,10 +113,20 @@ const PopupDocumentCreate: React.FC<Props> = (props) => {
                         <div className={classes.field}>
                             <div className={classes.field_label}>Файл</div>
 
-                            <FileUploader onChange={changeUploadFile.bind(this)}
-                                          text='Загрузить файл'
-                                          type='document'
-                            />
+                            <Button type='save'
+                                    icon='arrow-pointer'
+                                    onClick={() => openPopupFileManager(document.body, {
+                                        type: 'document',
+                                        selected: documentInfo.attachmentId ? [documentInfo.attachmentId] : [],
+                                        onSelect: (selected: number[], attachments: IAttachment[]) => {
+                                            setDocumentInfo({
+                                                ...documentInfo,
+                                                attachmentId: selected.length ? selected[0] : null
+                                            })
+                                        }
+                                    })}
+                                    disabled={checkDisabledButton()}
+                            >{documentInfo.attachmentId ? 'Заменить' : 'Выбрать / Загрузить'}</Button>
                         </div>
                         : null
                     }
@@ -132,7 +141,7 @@ const PopupDocumentCreate: React.FC<Props> = (props) => {
                                          content: value
                                      })}
                                      placeHolder='Введите ссылку'
-                                     error={documentInfo.content.trim() === ''}
+                                     error={!documentInfo.content || documentInfo.content.trim() === ''}
                                      showRequired
                                      errorText='Поле обязательно для заполнения'
                                      icon='link'

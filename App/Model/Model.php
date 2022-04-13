@@ -142,135 +142,71 @@ class Model
     }
 
     /**
-     * Загрузка файла на сервер
-     *
-     * @param string $file
-     * @param string $objectType
-     * @param int $objectId
-     * @param string $fileType
-     * @return string|null
-     */
-    protected static function uploadFile(string $file, string $objectType, int $objectId, $fileType = 'image')
-    {
-        $dir = $_SERVER['DOCUMENT_ROOT'] . "/uploads/$objectType/$objectId/";
-
-        if ($file) {
-            if (!file_exists($dir)) {
-                mkdir($dir, 0777, true);
-            }
-
-            if (preg_match('/^data:image\/(\w+);base64,/', $file, $type)) {
-                $content = substr($file, strpos($file, ',') + 1);
-                $type = strtolower($type[1]);
-
-                if ($fileType == 'image' && !in_array($type, ['jpg', 'jpeg', 'gif', 'png'])) {
-                    return null;
-                }
-
-                $content = str_replace(' ', '+', $content);
-                $content = base64_decode($content);
-
-                if ($content === false) {
-                    return null;
-                }
-
-                $fileName = base64_encode(microtime()) . '.' . $type;
-
-                if (!file_put_contents($dir . $fileName, $content)) {
-                    return null;
-                }
-
-                return $fileName;
-            }
-        }
-
-        return null;
-    }
-
-    /**
-     * Загрузка изображений на сервер и сохранение в базу данных
-     *
-     * @param int $objectId Идентификатор объекта
-     * @param string $objectType Тип объекта
-     * @param array $images Массив изображений
-     */
-    protected static function uploadImages(int $objectId, string $objectType, array $images)
-    {
-        if (count($images)) {
-            foreach ($images as $image) {
-                $fileName = self::uploadFile($image->value, $objectType, $objectId);
-
-                if ($fileName) {
-                    $sql = "
-                        INSERT INTO `sdi_images` (`id_object`, `type_object`, `name`, `active`, `avatar`)
-                        VALUES (:objectId, :objectType, :name, 1, :avatar)
-                    ";
-
-                    self::query($sql);
-                    self::bindParams('objectId', $objectId);
-                    self::bindParams('objectType', $objectType);
-                    self::bindParams('name', $fileName);
-                    self::bindParams('avatar', $image->avatar);
-                    self::execute();
-                }
-            }
-        }
-    }
-
-    /**
      * Обновление данных изображений в базе данных
      *
      * @param array $images Массив изображений
+     * @param int $objectId Идентификатор объекта
+     * @param string $objectType Тип объекта
      */
-    protected static function updateImages(array $images)
+    protected static function updateRelationsImages(array $images, int $objectId, string $objectType)
     {
-        if (count($images)) {
-            foreach ($images as $image) {
-                $sql = "
-                    UPDATE `sdi_images`
-                    SET
-                        active = :active,
-                        avatar = :avatar
-                    WHERE id = :id
-                ";
+        $sql = "DELETE FROM `sdi_images` WHERE `id_object` = :objectId AND `type_object` = :objectType";
 
-                self::query($sql);
-                self::bindParams('id', $image->id);
-                self::bindParams('active', $image->active);
-                self::bindParams('avatar', $image->avatar);
-                self::execute();
+        self::query($sql);
+        self::bindParams('objectId', $objectId);
+        self::bindParams('objectType', $objectType);
+        self::execute();
+
+        if (count($images)) {
+            $imagesSql = [];
+
+            foreach ($images as $image) {
+                array_push($imagesSql, "($image, $objectId, '$objectType')");
             }
+
+            $sql = "
+                INSERT INTO `sdi_images`
+                    (`id_attachment`, `id_object`, `type_object`)
+                VALUES
+            " . implode(",", $imagesSql);
+
+            self::query($sql);
+            self::execute();
         }
     }
 
     /**
-     * Получение данных изображений к соответствующим объектам
+     * Обновление данных видео в базе данных
      *
-     * @param array $filter Массив параметров фильтрации
-     * @return array
+     * @param array $videos Массив видео
+     * @param int $objectId Идентификатор объекта
+     * @param string $objectType Тип объекта
      */
-    protected static function fetchImages(array $filter): array
+    protected static function updateRelationsVideos(array $videos, int $objectId, string $objectType)
     {
-        $resultList = [];
-        $sqlWhere = self::generateFilterQuery($filter);
-
-        $sql = "
-            SELECT *
-            FROM `sdi_images`
-            $sqlWhere
-            ORDER BY `avatar` DESC, `id` ASC
-        ";
+        $sql = "DELETE FROM `sdi_videos` WHERE `id_object` = :objectId AND `type_object` = :objectType";
 
         self::query($sql);
-        $list = self::fetchAll();
+        self::bindParams('objectId', $objectId);
+        self::bindParams('objectType', $objectType);
+        self::execute();
 
-        if (!empty($list)) {
-            foreach ($list as $item) {
-                array_push($resultList, self::formatImagesToJson($item));
+        if (count($videos)) {
+            $videosSql = [];
+
+            foreach ($videos as $video) {
+                array_push($videosSql, "($video, $objectId, '$objectType')");
             }
-        }
 
-        return $resultList;
+            $sql = "
+                INSERT INTO `sdi_videos`
+                    (`id_attachment`, `id_object`, `type_object`)
+                VALUES
+            " . implode(",", $videosSql);
+
+            self::query($sql);
+            self::execute();
+        }
     }
 
     /**
@@ -285,35 +221,35 @@ class Model
         $where = [];
 
         if (!empty($filter['id'])) {
-            array_push($where, "`id` IN (" . implode(',', $filter['id']) . ")");
+            array_push($where, "sdi.`id` IN (" . implode(',', $filter['id']) . ")");
         }
 
         if (!empty($filter['active'])) {
-            array_push($where, '`active` IN (' . implode(',', $filter['active']) . ')');
+            array_push($where, 'sdi.`active` IN (' . implode(',', $filter['active']) . ')');
         }
 
         if (!empty($filter['buildingId'])) {
-            array_push($where, "`id_building` IN (" . implode(',', $filter['buildingId']) . ")");
+            array_push($where, "sdi.`id_building` IN (" . implode(',', $filter['buildingId']) . ")");
         }
 
         if (!empty($filter['userId'])) {
-            array_push($where, "`id_user` IN (" . implode(',', $filter['userId']) . ")");
+            array_push($where, "sdi.`id_user` IN (" . implode(',', $filter['userId']) . ")");
         }
 
         if (!empty($filter['author'])) {
-            array_push($where, "`author` IN (" . implode(',', $filter['author']) . ")");
+            array_push($where, "sdi.`author` IN (" . implode(',', $filter['author']) . ")");
         }
 
         if (!empty($filter['type'])) {
-            array_push($where, "`type` = '" . $filter['type'] . "'");
+            array_push($where, "sdi.`type` = '" . $filter['type'] . "'");
         }
 
         if (!empty($filter['objectId'])) {
-            array_push($where, "`id_object` IN (" . implode(',', $filter['objectId']) . ")");
+            array_push($where, "sdi.`id_object` IN (" . implode(',', $filter['objectId']) . ")");
         }
 
         if (!empty($filter['objectType'])) {
-            array_push($where, "`type_object` = '" . $filter['objectType'] . "'");
+            array_push($where, "sdi.`type_object` = '" . $filter['objectType'] . "'");
         }
 
         if (count($where)) {
@@ -321,24 +257,5 @@ class Model
         }
 
         return $sqlWhere;
-    }
-
-    /**
-     * Преобразование выходящих данных изображений в формат для frontend
-     *
-     * @param array $data Массив из базы данных
-     * @return array
-     */
-    private static function formatImagesToJson(array $data): array
-    {
-        return [
-            'id' => (int)$data['id'],
-            'objectId' => (int)$data['id_object'],
-            'objectType' => $data['type_object'],
-            'name' => $data['name'],
-            'active' => (int)$data['active'],
-            'avatar' => (int)$data['avatar'],
-            'value' => '/uploads/' . $data['type_object'] . '/' . $data['id_object'] . '/' . $data['name']
-        ];
     }
 }

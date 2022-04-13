@@ -2,10 +2,11 @@ import React, {useEffect, useState} from 'react'
 import withStore from '../../hoc/withStore'
 import classNames from 'classnames/bind'
 import ArticleService from '../../api/ArticleService'
+import AttachmentService from '../../api/AttachmentService'
 import {PopupProps} from '../../@types/IPopup'
 import {IArticle} from '../../@types/IArticle'
 import {ITab} from '../../@types/ITab'
-import {IImage, IImageDb} from '../../@types/IImage'
+import {IAttachment} from '../../@types/IAttachment'
 import {articleTypes} from '../../helpers/articleHelper'
 import {getPopupContainer, openPopup, removePopup} from '../../helpers/popupHelper'
 import showBackgroundBlock from '../BackgroundBlock/BackgroundBlock'
@@ -19,8 +20,8 @@ import TextAreaBox from '../TextAreaBox/TextAreaBox'
 import ComboBox from '../ComboBox/ComboBox'
 import Tabs from '../Tabs/Tabs'
 import BuildingBox from '../BuildingBox/BuildingBox'
-import ImageUploader from '../ImageUploader/ImageUploader'
 import classes from './PopupArticleCreate.module.scss'
+import FileList from "../FileList/FileList";
 
 interface Props extends PopupProps {
     article?: IArticle | null
@@ -48,16 +49,34 @@ const PopupArticleCreate: React.FC<Props> = (props) => {
         publish: 0,
         buildings: [],
         images: [],
-        newImages: []
     })
 
     const [fetching, setFetching] = useState(false)
+    const [fetchingImages, setFetchingImages] = useState(false)
+    const [images, setImages] = useState<IAttachment[]>([])
 
     useEffect(() => {
         return () => {
             removePopup(props.blockId ? props.blockId : '')
         }
     }, [props.blockId])
+
+    useEffect(() => {
+        if (article.id) {
+            if (article.images && article.images.length) {
+                setFetchingImages(true)
+                AttachmentService.fetchAttachments({active: [0, 1], id: article.images, type: 'image'})
+                    .then((response: any) => {
+                        setImages(response.data)
+                    })
+                    .finally(() => setFetchingImages(false))
+            }
+        }
+    }, [article])
+
+    useEffect(() => {
+        checkAvatar()
+    }, [images])
 
     // Закрытие popup
     const close = () => {
@@ -86,33 +105,33 @@ const PopupArticleCreate: React.FC<Props> = (props) => {
             })
     }
 
-    // Загрузка изображений
-    const uploadImagesHandler = (images: IImageDb[], newImages: IImage[]) => {
-        setArticle({...article, images: images, newImages: newImages})
+    // Добавление файла
+    const addAttachmentHandler = (attachment: IAttachment) => {
+        switch (attachment.type) {
+            case 'image':
+                setArticle({
+                    ...article,
+                    images: [attachment.id, ...article.images]
+                })
+                setImages([attachment, ...images])
+                break
+        }
     }
 
     // Смена главного изображения
-    const selectImageAvatarHandler = (index: number, type: string) => {
-        const images: IImageDb[] = [...article.images]
-        const newImages: IImage[] = [...article.newImages]
+    const selectImageAvatarHandler = (attachment: IAttachment) => {
+        setArticle({...article, avatarId: attachment.id, avatar: attachment.content})
+    }
 
-        if (type === 'selected') {
-            newImages.map((image: IImage) => image.avatar = 0)
-            images.map((image: IImageDb, imageIndex: number) => {
-                image.avatar = index === imageIndex ? 1 : 0
-
-                return image
-            })
-        } else if (type === 'upload') {
-            images.map((image: IImageDb) => image.avatar = 0)
-            newImages.map((image: IImage, imageIndex: number) => {
-                image.avatar = index === imageIndex ? 1 : 0
-
-                return image
-            })
+    // Проверка наличия главного изображения
+    const checkAvatar = () => {
+        if (article.images && article.images.length && images && images.length) {
+            if (!article.avatarId || !article.images.includes(article.avatarId)) {
+                selectImageAvatarHandler(images[0])
+            }
+        } else {
+            setArticle({...article, avatarId: null, avatar: null})
         }
-
-        uploadImagesHandler(images, newImages)
     }
 
     const renderContentTab = () => {
@@ -189,14 +208,16 @@ const PopupArticleCreate: React.FC<Props> = (props) => {
     const renderGalleryTab = () => {
         return (
             <div key='gallery' className={classes.tabContent}>
-                <ImageUploader images={article.images}
-                               newImages={article.newImages}
-                               objectType='article'
-                               multi
-                               showUploadList
-                               onChange={uploadImagesHandler.bind(this)}
-                               onClickImage={selectImageAvatarHandler.bind(this)}
-                />
+                <div className={cx({'field': true, 'full': true})}>
+                    <div className={classes.field_label}>Фотогалерея</div>
+
+                    <FileList files={images}
+                              selected={article.avatarId ? [article.avatarId] : []}
+                              fetching={fetchingImages}
+                              onSave={addAttachmentHandler.bind(this)}
+                              onSelect={selectImageAvatarHandler.bind(this)}
+                    />
+                </div>
             </div>
         )
     }

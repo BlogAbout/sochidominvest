@@ -1,0 +1,19 @@
+.PopupFileManager {
+    width: 70vw;
+    height: 70vh;
+
+    .popup-content {
+        padding: 10px;
+        height: calc(100% - 107px);
+
+        .uploader {
+            padding: 5px;
+            display: flex;
+            justify-content: space-between;
+
+            > div:first-child {
+                margin-right: 20px;
+            }
+        }
+    }
+}

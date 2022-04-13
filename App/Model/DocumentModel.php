@@ -16,9 +16,10 @@ class DocumentModel extends Model
     public static function fetchDocumentById(int $id): array
     {
         $sql = "
-            SELECT *
+            SELECT *, a.`content` AS url
             FROM `sdi_document`
-            WHERE sdi_document.`id` = :id
+            LEFT JOIN `sdi_attachment` a ON a.`id` = `id_attachment`
+            WHERE `id` = :id
         ";
 
         parent::query($sql);
@@ -45,10 +46,11 @@ class DocumentModel extends Model
         $sqlWhere = parent::generateFilterQuery($filter);
 
         $sql = "
-            SELECT *
-            FROM `sdi_document`
+            SELECT sdi.*, a.`content` AS url
+            FROM `sdi_document` sdi
+            LEFT JOIN `sdi_attachment` a ON a.`id` = sdi.`id_attachment`
             $sqlWhere
-            ORDER BY `id` DESC
+            ORDER BY sdi.`id` DESC
         ";
 
         parent::query($sql);
@@ -73,20 +75,19 @@ class DocumentModel extends Model
     {
         $sql = "
             INSERT INTO `sdi_document`
-                (id_user, name, author, id_object, type_object, type, extension, content, date_created, date_update, active)
+                (`name`, `author`, `id_attachment`, `id_object`, `type_object`, `type`, `content`, `date_created`, `date_update`, `active`)
             VALUES
-                (:userId, :name, :author, :objectId, :objectType, :type, :extension, :content, :dateCreated, :dateUpdate, :active)
+                (:name, :author, :attachmentId, :objectId, :objectType, :type, :content, :dateCreated, :dateUpdate, :active)
         ";
 
         parent::query($sql);
-        parent::bindParams('userId', $payload['userId']);
         parent::bindParams('name', $payload['name']);
         parent::bindParams('author', $payload['author']);
-        parent::bindParams('content', $payload['content']);
+        parent::bindParams('attachmentId', $payload['attachmentId']);
         parent::bindParams('objectId', $payload['objectId']);
         parent::bindParams('objectType', $payload['objectType']);
         parent::bindParams('type', $payload['type']);
-        parent::bindParams('extension', $payload['extension']);
+        parent::bindParams('content', $payload['content']);
         parent::bindParams('dateCreated', $payload['dateCreated']);
         parent::bindParams('dateUpdate', $payload['dateUpdate']);
         parent::bindParams('active', $payload['active']);
@@ -119,27 +120,25 @@ class DocumentModel extends Model
         $sql = "
             UPDATE `sdi_document`
             SET
-                id_user = :userId,
-                name = :name,
-                id_object = :objectId,
-                type_object = :objectType,
-                type = :type,
-                extension = :extension,
-                content = :content,
-                date_update = :dateUpdate,
-                active = :active
-            WHERE id = :id
+                `name` = :name,
+                `id_attachment` = :objectId,
+                `id_object` = :objectId,
+                `type_object` = :objectType,
+                `type` = :type,
+                `content` = :content,
+                `date_update` = :dateUpdate,
+                `active` = :active
+            WHERE `id` = :id
         ";
 
         parent::query($sql);
         parent::bindParams('id', $payload['id']);
-        parent::bindParams('userId', $payload['userId']);
         parent::bindParams('name', $payload['name']);
-        parent::bindParams('content', $payload['content']);
+        parent::bindParams('attachmentId', $payload['attachmentId']);
         parent::bindParams('objectId', $payload['objectId']);
         parent::bindParams('objectType', $payload['objectType']);
         parent::bindParams('type', $payload['type']);
-        parent::bindParams('extension', $payload['extension']);
+        parent::bindParams('content', $payload['content']);
         parent::bindParams('dateUpdate', $payload['dateUpdate']);
         parent::bindParams('active', $payload['active']);
 
@@ -164,7 +163,7 @@ class DocumentModel extends Model
      */
     public static function deleteDocument(int $id): bool
     {
-        $sql = "UPDATE `sdi_document` SET active = -1 WHERE id = :id";
+        $sql = "UPDATE `sdi_document` SET `active` = -1 WHERE `id` = :id";
 
         parent::query($sql);
         parent::bindParams('id', $id);
@@ -181,17 +180,17 @@ class DocumentModel extends Model
     {
         return [
             'id' => (int)$data['id'],
-            'userId' => $data['id_user'] ? (int)$data['id_user'] : null,
             'author' => (int)$data['author'],
             'name' => $data['name'],
+            'attachmentId' => $data['id_attachment'] ? (int)$data['id_attachment'] : null,
             'objectId' => $data['id_object'] ? (int)$data['id_object'] : null,
             'objectType' => $data['type_object'],
             'type' => $data['type'],
-            'extension' => $data['extension'],
             'content' => $data['content'],
             'dateCreated' => $data['date_created'],
             'dateUpdate' => $data['date_update'],
-            'active' => (int)$data['active']
+            'active' => (int)$data['active'],
+            'url' => $data['url']
         ];
     }
 }

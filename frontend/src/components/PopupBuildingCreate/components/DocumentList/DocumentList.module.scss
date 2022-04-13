@@ -64,10 +64,6 @@
                 padding: 0 10px;
                 border-right: 1px solid #fff;
             }
-
-            .extension {
-                text-transform: uppercase;
-            }
         }
     }
 
@@ -82,11 +78,6 @@
     }
 
     .type {
-        flex-shrink: 0;
-        width: 150px;
-    }
-
-    .extension {
         flex-shrink: 0;
         width: 150px;
         border-right: none !important;

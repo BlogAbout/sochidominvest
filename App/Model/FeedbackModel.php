@@ -18,7 +18,7 @@ class FeedbackModel extends Model
         $sql = "
             SELECT *
             FROM `sdi_feedback`
-            WHERE sdi_feedback.`id` = :id
+            WHERE `id` = :id
         ";
 
         parent::query($sql);
@@ -45,10 +45,10 @@ class FeedbackModel extends Model
         $sqlWhere = parent::generateFilterQuery($filter);
 
         $sql = "
-            SELECT *
-            FROM `sdi_feedback`
+            SELECT sdi.*
+            FROM `sdi_feedback` sdi
             $sqlWhere
-            ORDER BY `id` DESC
+            ORDER BY sdi.`id` DESC
         ";
 
         parent::query($sql);

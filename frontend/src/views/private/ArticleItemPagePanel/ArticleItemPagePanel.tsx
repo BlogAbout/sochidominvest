@@ -4,9 +4,11 @@ import {useNavigate, useParams} from 'react-router-dom'
 import classNames from 'classnames/bind'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import UtilService from '../../../api/UtilService'
+import AttachmentService from '../../../api/AttachmentService'
 import {IArticle} from '../../../@types/IArticle'
 import {IBuilding} from '../../../@types/IBuilding'
 import {IFilter} from '../../../@types/IFilter'
+import {IAttachment} from '../../../@types/IAttachment'
 import {useTypedSelector} from '../../../hooks/useTypedSelector'
 import {useActions} from '../../../hooks/useActions'
 import BlockingElement from '../../../components/BlockingElement/BlockingElement'
@@ -34,6 +36,8 @@ const ArticleItemPagePanel: React.FC<Props> = (props) => {
 
     const [isUpdate, setIsUpdate] = useState(false)
     const [article, setArticle] = useState<IArticle>({} as IArticle)
+    const [images, setImages] = useState<IAttachment[]>([])
+    const [fetchingImages, setFetchingImages] = useState(false)
 
     const {articles, fetching: fetchingArticleList} = useTypedSelector(state => state.articleReducer)
     const {buildings, fetching: fetchingBuildingList} = useTypedSelector(state => state.buildingReducer)
@@ -79,6 +83,15 @@ const ArticleItemPagePanel: React.FC<Props> = (props) => {
                 .catch((error: any) => {
                     console.error('Ошибка регистрации количества просмотров', error)
                 })
+
+            if (article.images) {
+                setFetchingImages(true)
+                AttachmentService.fetchAttachments({active: [0, 1], id: article.images, type: 'image'})
+                    .then((response: any) => {
+                        setImages(response.data)
+                    })
+                    .finally(() => setFetchingImages(false))
+            }
         }
     }, [article])
 
@@ -109,9 +122,9 @@ const ArticleItemPagePanel: React.FC<Props> = (props) => {
                             <div className={
                                 cx({'itemImage': true, 'noImage': !building.images || !building.images.length})
                             }>
-                                {building.images && building.images.length ?
+                                {building.avatar ?
                                     (
-                                        <img src={'https://api.sochidominvest.ru' + building.images[0].value}
+                                        <img src={'https://api.sochidominvest.ru/uploads' + building.avatar}
                                              alt={building.name}
                                         />
                                     )
@@ -146,7 +159,11 @@ const ArticleItemPagePanel: React.FC<Props> = (props) => {
             <div className={classes.Content}>
                 <div className={classes.container}>
                     <BlockingElement fetching={fetchingArticleList || fetchingBuildingList} className={classes.block}>
-                        <Gallery alt={article.name} images={article.images} type='carousel' fetching={false}/>
+                        <Gallery alt={article.name}
+                                 images={images}
+                                 type='carousel'
+                                 fetching={fetchingImages}
+                        />
 
                         <h1><span>{article.name}</span></h1>
 

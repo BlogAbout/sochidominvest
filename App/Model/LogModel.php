@@ -19,11 +19,11 @@ class LogModel extends Model
         $sqlWhere = parent::generateFilterQuery($filter);
 
         $sql = "
-            SELECT *
-            FROM `sdi_log`
+            SELECT sdi.*
+            FROM `sdi_log` sdi
             $sqlWhere
-            ORDER BY `id` DESC
-            LIMIT 50
+            ORDER BY sdi.`id` DESC
+            LIMIT 0, 50
         ";
 
         parent::query($sql);
@@ -42,9 +42,9 @@ class LogModel extends Model
      * Создание лога
      *
      * @param array $payload Содержит все поля, которые будут созданы
-     * @return array
+     * @return void
      */
-    private static function createLog(array $payload): array
+    private static function createLog(array $payload)
     {
         $sql = "
             INSERT INTO `sdi_log`
@@ -61,22 +61,7 @@ class LogModel extends Model
         parent::bindParams('objectType', $payload['objectType']);
         parent::bindParams('dateCreated', $payload['dateCreated']);
         parent::bindParams('active', $payload['active']);
-
-        $log = parent::execute();
-
-        if ($log) {
-            $payload['id'] = parent::lastInsertedId();
-
-            return array(
-                'status' => true,
-                'data' => $payload
-            );
-        }
-
-        return array(
-            'status' => false,
-            'data' => []
-        );
+        parent::execute();
     }
 
     /**

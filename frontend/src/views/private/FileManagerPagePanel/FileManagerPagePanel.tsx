@@ -57,10 +57,8 @@ const FileManagerPagePanel: React.FC = () => {
     }
 
     // Загрузка файла
-    const onUploadFile = (attachment: IAttachment) => {
-        const updateFiles: IAttachment[] = [attachment, ...files]
-        console.log(updateFiles)
-        setFiles(updateFiles)
+    const onUploadFile = (updateAttachments: IAttachment[]) => {
+        setFiles([...updateAttachments, ...files])
     }
 
     // Поиск
@@ -73,8 +71,8 @@ const FileManagerPagePanel: React.FC = () => {
 
         if (value !== '') {
             setFilterFiles(files.filter((file: IAttachment) => {
-                return file.name.toLocaleLowerCase().indexOf(value.toLocaleLowerCase()) !== -1 ||
-                    file.description.toLocaleLowerCase().indexOf(value.toLocaleLowerCase()) !== -1 ||
+                return (file.name && file.name.toLocaleLowerCase().indexOf(value.toLocaleLowerCase()) !== -1) ||
+                    (file.description && file.description.toLocaleLowerCase().indexOf(value.toLocaleLowerCase()) !== -1) ||
                     file.content.toLocaleLowerCase().indexOf(value.toLocaleLowerCase()) !== -1
             }))
         } else {

@@ -29,6 +29,7 @@ import TextAreaBox from '../TextAreaBox/TextAreaBox'
 import PassedBox from '../PassedBox/PassedBox'
 import FileList from '../FileList/FileList'
 import openPopupAlert from '../PopupAlert/PopupAlert'
+import openPopupFileManager from '../PopupFileManager/PopupFileManager'
 import {
     amountContract,
     buildingAdvantages,
@@ -86,14 +87,11 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
         surchargeGas: 0,
         area: 0,
         cost: 0,
-        video: ''
     })
 
-    const [fetching, setFetching] = useState({
-        building: false,
-        image: false,
-        video: false
-    })
+    const [fetchingBuilding, setFetchingBuilding] = useState(false)
+    const [fetchingImages, setFetchingImages] = useState(false)
+    const [fetchingVideos, setFetchingVideos] = useState(false)
     const [images, setImages] = useState<IAttachment[]>([])
     const [videos, setVideos] = useState<IAttachment[]>([])
 
@@ -105,25 +103,29 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
 
     useEffect(() => {
         if (building.id) {
-            if (building.images) {
-                setFetching({...fetching, image: true})
+            if (building.images && building.images.length) {
+                setFetchingImages(true)
                 AttachmentService.fetchAttachments({active: [0, 1], id: building.images, type: 'image'})
                     .then((response: any) => {
                         setImages(response.data)
                     })
-                    .finally(() => setFetching({...fetching, image: false}))
+                    .finally(() => setFetchingImages(false))
             }
 
-            if (building.videos) {
-                setFetching({...fetching, video: true})
+            if (building.videos && building.videos.length) {
+                setFetchingVideos(true)
                 AttachmentService.fetchAttachments({active: [0, 1], id: building.videos, type: 'video'})
                     .then((response: any) => {
                         setVideos(response.data)
                     })
-                    .finally(() => setFetching({...fetching, video: false}))
+                    .finally(() => setFetchingVideos(false))
             }
         }
     }, [building])
+
+    useEffect(() => {
+        checkAvatar()
+    }, [images])
 
     // Закрытие popup
     const close = () => {
@@ -136,7 +138,7 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
             return
         }
 
-        setFetching({...fetching, building: true})
+        setFetchingBuilding(true)
 
         BuildingService.saveBuilding(building)
             .then((response: any) => {
@@ -155,7 +157,9 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
                     text: error.data
                 })
             })
-            .finally(() => setFetching({...fetching, building: false}))
+            .finally(() => {
+                setFetchingBuilding(false)
+            })
     }
 
     // Добавление файла
@@ -183,8 +187,19 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
         setBuilding({...building, avatarId: attachment.id, avatar: attachment.content})
     }
 
+    // Проверка наличия главного изображения
+    const checkAvatar = () => {
+        if (building.images && building.images.length && images && images.length) {
+            if (!building.avatarId || !building.images.includes(building.avatarId)) {
+                selectImageAvatarHandler(images[0])
+            }
+        } else {
+            setBuilding({...building, avatarId: null, avatar: null})
+        }
+    }
+
     const isDisableButton = () => {
-        return fetching.building || fetching.image || fetching.video ||
+        return fetchingBuilding || fetchingImages || fetchingVideos ||
             building.name.trim() === '' || !building.address || building.address.trim() === ''
     }
 
@@ -582,25 +597,51 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
                 <div className={cx({'field': true, 'full': true})}>
                     <div className={classes.field_label}>Фотогалерея</div>
 
+                    <Button type='save'
+                            icon='arrow-pointer'
+                            onClick={() => openPopupFileManager(document.body, {
+                                type: 'image',
+                                selected: building.images,
+                                onSelect: (selected: number[], attachments: IAttachment[]) => {
+                                    setBuilding({...building, images: selected})
+                                    setImages(attachments)
+                                },
+                                multi: true
+                            })}
+                            disabled={isDisableButton()}
+                    >Выбрать / Загрузить</Button>
+
                     <FileList files={images}
-                              fetching={fetching.image}
+                              selected={building.avatarId ? [building.avatarId] : []}
+                              fetching={fetchingImages}
                               onSave={addAttachmentHandler.bind(this)}
                               onSelect={selectImageAvatarHandler.bind(this)}
                     />
                 </div>
 
-                {building.id ?
-                    <div className={cx({'field': true, 'full': true})}>
-                        <div className={classes.field_label}>Видео</div>
+                <div className={cx({'field': true, 'full': true})}>
+                    <div className={classes.field_label}>Видео</div>
 
-                        <FileList files={videos}
-                                  fetching={fetching.video}
-                                  onSave={addAttachmentHandler.bind(this)}
-                                  onSelect={selectImageAvatarHandler.bind(this)}
-                        />
-                    </div>
-                    : null
-                }
+                    <Button type='save'
+                            icon='arrow-pointer'
+                            onClick={() => openPopupFileManager(document.body, {
+                                type: 'video',
+                                selected: building.videos,
+                                onSelect: (selected: number[], attachments: IAttachment[]) => {
+                                    setBuilding({...building, videos: selected})
+                                    setVideos(attachments)
+                                },
+                                multi: true
+                            })}
+                            disabled={isDisableButton()}
+                    >Выбрать / Загрузить</Button>
+
+                    <FileList files={videos}
+                              fetching={fetchingVideos}
+                              onSave={addAttachmentHandler.bind(this)}
+                              onSelect={selectImageAvatarHandler.bind(this)}
+                    />
+                </div>
             </div>
         )
     }
@@ -695,7 +736,7 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
             />
 
             <Content className={classes['popup-content']}>
-                <BlockingElement fetching={fetching.building} className={classes.content}>
+                <BlockingElement fetching={fetchingBuilding} className={classes.content}>
                     <div className={classes.info}>
                         <div className={classes.field}>
                             <div className={classes.field_label}>Название</div>

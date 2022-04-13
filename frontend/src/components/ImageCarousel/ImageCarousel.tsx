@@ -31,7 +31,9 @@ const ImageCarousel: React.FC<Props> = (props) => {
     const renderSlide = (attachment: IAttachment) => {
         return (
             <SwiperSlide key={attachment.id} className={classes.image}>
-                <img src={attachment.content} alt={attachment.name || props.alt}/>
+                <img src={`https://api.sochidominvest.ru/uploads/thumbs/2000/${attachment.content}`}
+                     alt={attachment.name || props.alt}
+                />
             </SwiperSlide>
         )
     }
@@ -39,8 +41,13 @@ const ImageCarousel: React.FC<Props> = (props) => {
     const renderFancySlide = (attachment: IAttachment) => {
         return (
             <SwiperSlide key={attachment.id} className={classes.image}>
-                <LightgalleryItem src={attachment.content} className={classes.image} group={props.group || 'any'}>
-                    <img src={attachment.content} alt={attachment.name || props.alt}/>
+                <LightgalleryItem src={`https://api.sochidominvest.ru/uploads/thumbs/2000/${attachment.content}`}
+                                  className={classes.image}
+                                  group={props.group || 'any'}
+                >
+                    <img src={`https://api.sochidominvest.ru/uploads/thumbs/2000/${attachment.content}`}
+                         alt={attachment.name || props.alt}
+                    />
                 </LightgalleryItem>
             </SwiperSlide>
         )

@@ -3,6 +3,7 @@
 namespace App;
 
 use Exception;
+use Gumlet\ImageResize;
 
 /**
  * AttachmentController. Контроллер взаимодействия с моделью управления вложениями.
@@ -27,6 +28,7 @@ class AttachmentController extends Controller
      * @param mixed $request Содержит объект запроса
      * @param mixed $response Содержит объект ответа от маршрутизатора
      * @return void
+     * @throws \Gumlet\ImageResizeException
      */
     public function uploadAttachment($request, $response)
     {
@@ -68,7 +70,7 @@ class AttachmentController extends Controller
             $itemData = $this->attachmentModel->createItem($payload);
 
             if ($itemData['status']) {
-                LogModel::log('create', 'attachment', JwtMiddleware::getUserId(), $itemData['data']);
+                // Fixme: LogModel::log('create', 'attachment', JwtMiddleware::getUserId(), $itemData['data']);
                 $response->code(201)->json($itemData['data']);
 
                 return;
@@ -122,7 +124,7 @@ class AttachmentController extends Controller
 
             if ($itemData['status']) {
                 $item = $this->attachmentModel->fetchItemById($request->id);
-                LogModel::log('update', 'attachment', JwtMiddleware::getUserId(), $item);
+                // Fixme: LogModel::log('update', 'attachment', JwtMiddleware::getUserId(), $item);
                 $response->code(200)->json($item);
 
                 return;
@@ -249,7 +251,7 @@ class AttachmentController extends Controller
 
         try {
             if ($this->attachmentModel->deleteItem($request->id)) {
-                LogModel::log('remove', 'attachment', JwtMiddleware::getUserId(), ['id' => $request->id]);
+                // Fixme: LogModel::log('remove', 'attachment', JwtMiddleware::getUserId(), ['id' => $request->id]);
                 $response->code(200)->json('');
 
                 return;
@@ -273,6 +275,7 @@ class AttachmentController extends Controller
      * @param array $files
      * @param string $type
      * @return array
+     * @throws \Gumlet\ImageResizeException
      */
     private function uploadFileToServer(array $files, string $type): array
     {
@@ -304,6 +307,11 @@ class AttachmentController extends Controller
             );
         }
 
+        if ($type) {
+            self::imageResize($dir, $fileName, 400);
+            self::imageResize($dir, $fileName, 2000);
+        }
+
         return array(
             'status' => true,
             'data' => [
@@ -311,5 +319,26 @@ class AttachmentController extends Controller
                 'extension' => $extension
             ]
         );
+    }
+
+    /**
+     * Нарезка изображений
+     *
+     * @param string $dir Директорая
+     * @param string $name Название файла
+     * @param int $size Размер
+     * @throws \Gumlet\ImageResizeException
+     */
+    private static function imageResize(string $dir, string $name, int $size)
+    {
+        $thumbDir = $_SERVER['DOCUMENT_ROOT'] . '/uploads/thumbs/' . $size . '/image/';
+
+        if (!file_exists($thumbDir)) {
+            mkdir($thumbDir, 0777, true);
+        }
+
+        $image = new ImageResize($dir . $name);
+        $image->resizeToLongSide($size);
+        $image->save($thumbDir . $name);
     }
 }

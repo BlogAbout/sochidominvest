@@ -74,7 +74,8 @@ class ArticleController extends Controller
             'metaDescription' => htmlentities(stripcslashes(strip_tags($data->meta_description))),
             'buildings' => $data->buildings,
             'images' => $data->images,
-            'newImages' => $data->newImages,
+            'avatarId' => $data->avatarId ? (int)htmlentities(stripcslashes(strip_tags($data->avatarId))) : null,
+            'avatar' => $data->avatar ? htmlentities(stripcslashes(strip_tags($data->avatar))) : null,
             'dateCreated' => date('Y-m-d H:i:s'),
             'dateUpdate' => date('Y-m-d H:i:s'),
             'author' => JwtMiddleware::getUserId()
@@ -167,7 +168,8 @@ class ArticleController extends Controller
             'metaDescription' => htmlentities(stripcslashes(strip_tags($data->metaDescription))),
             'buildings' => $data->buildings,
             'images' => $data->images,
-            'newImages' => $data->newImages
+            'avatarId' => $data->avatarId ? (int)htmlentities(stripcslashes(strip_tags($data->avatarId))) : null,
+            'avatar' => $data->avatar ? htmlentities(stripcslashes(strip_tags($data->avatar))) : null
         );
 
         try {

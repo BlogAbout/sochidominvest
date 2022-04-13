@@ -153,7 +153,6 @@ const DocumentList: React.FC<Props> = (props) => {
                 <div className={classes.id}>#</div>
                 <div className={classes.name}>Название</div>
                 <div className={classes.type}>Тип</div>
-                <div className={classes.extension}>Расширение</div>
             </div>
 
             <div className={classes.addDocument} onClick={onContextMenuCreate.bind(this)}>
@@ -184,7 +183,6 @@ const DocumentList: React.FC<Props> = (props) => {
                                 <div className={classes.id}>#{document.id}</div>
                                 <div className={classes.name}>{document.name}</div>
                                 <div className={classes.type}>{type}</div>
-                                <div className={classes.extension}>{document.extension}</div>
                             </div>
                         )
                     })

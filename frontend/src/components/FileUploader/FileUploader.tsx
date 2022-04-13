@@ -1,4 +1,4 @@
-import React, {useRef, useState} from 'react'
+import React, {useEffect, useRef, useState} from 'react'
 import AttachmentService from '../../api/AttachmentService'
 import {IAttachment} from '../../@types/IAttachment'
 import Button from '../Button/Button'
@@ -13,7 +13,7 @@ interface Props {
     showCancel?: boolean
     multi?: boolean
 
-    onChange(file: IAttachment): void
+    onChange(attachments: IAttachment[]): void
 
     onCancel?(): void
 }
@@ -24,8 +24,8 @@ const defaultProps: Props = {
     text: 'Загрузить',
     showCancel: false,
     multi: false,
-    onChange: (file: IAttachment) => {
-        console.info('FileUploader onChange', file)
+    onChange: (attachments: IAttachment[]) => {
+        console.info('FileUploader onChange', attachments)
     }
 }
 
@@ -34,8 +34,22 @@ const FileUploader: React.FC<Props> = (props) => {
 
     const [progress, setProgress] = useState(0)
     const [fetching, setFetching] = useState(false)
-    const [counter, setCounter] = useState(0)
-    const [countFiles, setCountFiles] = useState(0)
+
+    const [uploadInfo, setUploadInfo] = useState<{
+        files: FileList | null,
+        counter: number,
+        countFiles: number,
+        attachments: IAttachment[]
+    }>({
+        files: null,
+        counter: 0,
+        countFiles: 0,
+        attachments: []
+    })
+
+    useEffect(() => {
+        uploadFileToServer()
+    }, [uploadInfo])
 
     let accept = ''
     let acceptText = ''
@@ -60,22 +74,22 @@ const FileUploader: React.FC<Props> = (props) => {
         const files: FileList | null = e.currentTarget.files
 
         if (files && files.length) {
-            setCountFiles(files.length)
             setFetching(true)
-            uploadFileToServer(files, 0)
+            setUploadInfo({...uploadInfo, countFiles: files.length, files: files})
         }
     }
 
-    const uploadFileToServer = (files: FileList, index: number) => {
-        if (index < countFiles) {
-            setCounter(index + 1)
-
-            AttachmentService.uploadAttachment(files[index], props.type, (event: any) => {
+    const uploadFileToServer = () => {
+        if (uploadInfo.counter < uploadInfo.countFiles && uploadInfo.files) {
+            AttachmentService.uploadAttachment(uploadInfo.files[uploadInfo.counter], props.type, (event: any) => {
                 setProgress(Math.round((100 * event.loaded) / event.total))
             })
                 .then((response) => {
-                    props.onChange(response.data)
-                    uploadFileToServer(files, ++index)
+                    setUploadInfo({
+                        ...uploadInfo,
+                        counter: uploadInfo.counter + 1,
+                        attachments: [response.data, ...uploadInfo.attachments]
+                    })
                 })
                 .catch((error) => {
                     console.error('Ошибка загрузки файла', error)
@@ -89,12 +103,21 @@ const FileUploader: React.FC<Props> = (props) => {
                     setProgress(0)
                     setFetching(false)
                 })
-        } else {
+        } else if (uploadInfo.counter === uploadInfo.countFiles && uploadInfo.files) {
             setFetching(false)
 
             if (inputRef && inputRef.current) {
                 inputRef.current.value = ''
             }
+
+            props.onChange(uploadInfo.attachments)
+
+            setUploadInfo({
+                files: null,
+                counter: 0,
+                countFiles: 0,
+                attachments: []
+            })
         }
     }
 
@@ -129,7 +152,9 @@ const FileUploader: React.FC<Props> = (props) => {
                     </div>
                     :
                     <div className={classes.progress}>
-                        <span style={{width: progress + '%'}}>{progress}% ({counter}/{countFiles})</span>
+                        <span style={{width: progress + '%'}}>
+                            {progress}% ({uploadInfo.counter + 1}/{uploadInfo.countFiles})
+                        </span>
                     </div>
                 }
             </div>

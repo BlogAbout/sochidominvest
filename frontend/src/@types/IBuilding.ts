@@ -50,8 +50,8 @@ export interface IBuilding {
     metaDescription?: string | null
     passed?: IBuildingPassed
     views?: number
-    avatarId?: number
-    avatar?: string
+    avatarId?: number | null
+    avatar?: string | null
 }
 
 export interface IBuildingPassed {

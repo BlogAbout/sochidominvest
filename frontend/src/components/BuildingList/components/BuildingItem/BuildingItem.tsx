@@ -119,7 +119,7 @@ const BuildingItem: React.FC<Props> = (props) => {
             })
             }>
                 {props.building.avatar ?
-                    <img src={'https://api.sochidominvest.ru/uploads' + props.building.avatar}
+                    <img src={'https://api.sochidominvest.ru/uploads/thumbs/400/' + props.building.avatar}
                          alt={props.building.name}
                     />
                     : null

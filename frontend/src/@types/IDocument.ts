@@ -1,10 +1,11 @@
 export interface IDocument {
     id: number | null
     name: string
+    attachmentId: number | null
     objectId: number | null
     objectType: string | null
     type: 'file' | 'link' | 'constructor'
-    extension?: string
-    content: string
-    active: number
+    content?: string
+    active: number,
+    url?: string
 }

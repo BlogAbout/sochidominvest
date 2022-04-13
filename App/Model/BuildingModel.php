@@ -19,24 +19,34 @@ class BuildingModel extends Model
             SELECT *,
                    (
                        SELECT GROUP_CONCAT(DISTINCT(bt.`id_tag`))
-                       FROM sdi_building_tag AS bt
+                       FROM `sdi_building_tag` AS bt
                        WHERE bt.`id_building` = bu.`id`
                    ) AS tags,
                    (
                        SELECT GROUP_CONCAT(DISTINCT(bu.`id_user`))
-                       FROM sdi_building_contact AS bu
+                       FROM `sdi_building_contact` AS bu
                        WHERE bu.`id_building` = bu.`id`
                    ) AS contacts,
                    (
                        SELECT GROUP_CONCAT(DISTINCT(bd.`id_developer`))
-                       FROM sdi_building_developer AS bd
+                       FROM `sdi_building_developer` AS bd
                        WHERE bd.`id_building` = bu.`id`
                    ) AS developers,
                    (
                        SELECT GROUP_CONCAT(DISTINCT(ba.`id_article`))
-                       FROM sdi_building_article AS ba
+                       FROM `sdi_building_article` AS ba
                        WHERE ba.`id_building` = bu.`id`
                    ) AS articles,
+                   (
+                       SELECT GROUP_CONCAT(DISTINCT(bi.`id_attachment`))
+                       FROM `sdi_images` AS bi
+                       WHERE bi.`id_object` = bu.`id` AND `type_object` = 'building'
+                   ) AS images,
+                   (
+                       SELECT GROUP_CONCAT(DISTINCT(bv.`id_attachment`))
+                       FROM `sdi_videos` AS bv
+                       WHERE bv.`id_object` = bu.`id` AND `type_object` = 'building'
+                   ) AS videos,
                    (
                        SELECT COUNT(bc.`id`)
                        FROM sdi_building_checker AS bc
@@ -48,7 +58,7 @@ class BuildingModel extends Model
                        WHERE v.`id_object` = bu.`id` AND v.`type_object` = 'building'
                    ) AS views
             FROM `sdi_building` AS bu
-            LEFT JOIN sdi_building_data bd on bu.`id` = bd.`id`
+            LEFT JOIN `sdi_building_data` bd on bu.`id` = bd.`id`
             WHERE bu.`id` = :id
         ";
 
@@ -58,18 +68,7 @@ class BuildingModel extends Model
         $building = parent::fetch();
 
         if (!empty($building)) {
-            $building = BuildingModel::formatDataToJson($building);
-            $images = parent::fetchImages([
-                'objectId' => [$building['id']],
-                'objectType' => 'building',
-                'active' => [1]
-            ]);
-
-            if (count($images)) {
-                $building['images'] = $images;
-            }
-
-            return $building;
+            return BuildingModel::formatDataToJson($building);
         }
 
         return [];
@@ -90,27 +89,37 @@ class BuildingModel extends Model
             SELECT *,
                    (
                        SELECT GROUP_CONCAT(DISTINCT(bt.`id_tag`))
-                       FROM sdi_building_tag AS bt
+                       FROM `sdi_building_tag` AS bt
                        WHERE bt.`id_building` = bu.`id`
                    ) AS tags,
                    (
                        SELECT GROUP_CONCAT(DISTINCT(bu.`id_user`))
-                       FROM sdi_building_contact AS bu
+                       FROM `sdi_building_contact` AS bu
                        WHERE bu.`id_building` = bu.`id`
                    ) AS contacts,
                    (
                        SELECT GROUP_CONCAT(DISTINCT(bd.`id_developer`))
-                       FROM sdi_building_developer AS bd
+                       FROM `sdi_building_developer` AS bd
                        WHERE bd.`id_building` = bu.`id`
                    ) AS developers,
                    (
                        SELECT GROUP_CONCAT(DISTINCT(ba.`id_article`))
-                       FROM sdi_building_article AS ba
+                       FROM `sdi_building_article` AS ba
                        WHERE ba.`id_building` = bu.`id`
                    ) AS articles,
                    (
+                       SELECT GROUP_CONCAT(DISTINCT(i.`id_attachment`))
+                       FROM `sdi_images` AS i
+                       WHERE i.`id_object` = bu.`id` AND `type_object` = 'building'
+                   ) AS images,
+                   (
+                       SELECT GROUP_CONCAT(DISTINCT(v.`id_attachment`))
+                       FROM `sdi_videos` AS v
+                       WHERE v.`id_object` = bu.`id` AND `type_object` = 'building'
+                   ) AS videos,
+                   (
                        SELECT COUNT(bc.`id`)
-                       FROM sdi_building_checker AS bc
+                       FROM `sdi_building_checker` AS bc
                        WHERE bc.`id_building` = bu.`id` AND bc.`active` = 1
                    ) AS countCheckers,
                    (
@@ -119,7 +128,7 @@ class BuildingModel extends Model
                        WHERE v.`id_object` = bu.`id` AND v.`type_object` = 'building'
                    ) AS views
             FROM `sdi_building` AS bu
-            LEFT JOIN sdi_building_data bd on bu.`id` = bd.`id`
+            LEFT JOIN `sdi_building_data` bd on bu.`id` = bd.`id`
         ";
 
         if (!empty($params['active'])) {
@@ -144,22 +153,6 @@ class BuildingModel extends Model
                 array_push($resultList, BuildingModel::formatDataToJson($buildingData));
                 array_push($ids, (int)$buildingData['id']);
             }
-
-            $images = parent::fetchImages([
-                'objectId' => $ids,
-                'objectType' => 'building',
-                'active' => [1]
-            ]);
-
-            if (count($images)) {
-                foreach ($resultList as &$building) {
-                    foreach ($images as $image) {
-                        if ($image['objectId'] == $building['id']) {
-                            array_push($building['images'], $image);
-                        }
-                    }
-                }
-            }
         }
 
         return $resultList;
@@ -175,9 +168,11 @@ class BuildingModel extends Model
     {
         $sql = "
             INSERT INTO `sdi_building`
-                (name, description, address, author, date_created, date_update, active, publish, status, type, area, cost, meta_title, meta_description)
+                (`name`, `description`, `address`, `author`, `date_created`, `date_update`, `active`, `publish`,
+                 `status`, `type`, `area`, `cost`, `meta_title`, `meta_description`)
             VALUES
-                (:name, :description, :address, :author, :dateCreated, :dateUpdate, :active, :publish, :status, :type, :area, :cost, :metaTitle, :metaDescription)
+                (:name, :description, :address, :author, :dateCreated, :dateUpdate, :active, :publish,
+                 :status, :type, :area, :cost, :metaTitle, :metaDescription)
         ";
 
         parent::query($sql);
@@ -202,10 +197,6 @@ class BuildingModel extends Model
             $payload['id'] = parent::lastInsertedId();
 
             BuildingModel::updateBuildingData($payload, false);
-            BuildingModel::updateRelationsTags($payload['id'], $payload['tags']);
-            BuildingModel::updateRelationsDevelopers($payload['id'], $payload['developers']);
-            BuildingModel::updateRelationsContacts($payload['id'], $payload['contacts']);
-            parent::uploadImages($payload['id'], 'building', $payload['newImages']);
 
             return array(
                 'status' => true,
@@ -230,19 +221,19 @@ class BuildingModel extends Model
         $sql = "
             UPDATE `sdi_building`
             SET
-                name = :name,
-                description = :description,
-                address = :address,
-                date_update = :dateUpdate,
-                active = :active,
-                publish = :publish,
-                status = :status,
-                type = :type,
-                area = :area,
-                cost = :cost,
-                meta_title = :metaTitle,
-                meta_description = :metaDescription
-            WHERE id = :id
+                `name` = :name,
+                `description` = :description,
+                `address` = :address,
+                `date_update` = :dateUpdate,
+                `active` = :active,
+                `publish` = :publish,
+                `status` = :status,
+                `type` = :type,
+                `area` = :area,
+                `cost` = :cost,
+                `meta_title` = :metaTitle,
+                `meta_description` = :metaDescription
+            WHERE `id` = :id
         ";
 
         parent::query($sql);
@@ -262,11 +253,6 @@ class BuildingModel extends Model
 
         if (parent::execute()) {
             BuildingModel::updateBuildingData($payload, true);
-            BuildingModel::updateRelationsTags($payload['id'], $payload['tags']);
-            BuildingModel::updateRelationsDevelopers($payload['id'], $payload['developers']);
-            BuildingModel::updateRelationsContacts($payload['id'], $payload['contacts']);
-            parent::updateImages($payload['images']);
-            parent::uploadImages($payload['id'], 'building', $payload['newImages']);
 
             return array(
                 'status' => true,
@@ -288,7 +274,7 @@ class BuildingModel extends Model
      */
     public static function deleteBuilding(int $id): bool
     {
-        $sql = "UPDATE `sdi_building` SET active = -1 WHERE id = :id";
+        $sql = "UPDATE `sdi_building` SET `active` = -1 WHERE `id` = :id";
 
         parent::query($sql);
         parent::bindParams('id', $id);
@@ -296,6 +282,11 @@ class BuildingModel extends Model
         return parent::execute();
     }
 
+    /**
+     * Обновляет значения площади и цены на основе шахматки
+     *
+     * @param int $buildingId Идентификатор объекта недвижимости
+     */
     public static function updateValuesBuilding(int $buildingId)
     {
         $sql = "
@@ -311,11 +302,11 @@ class BuildingModel extends Model
         $sql = "
             UPDATE `sdi_building`
             SET
-                area_min = :areaMin,
-                area_max = :areaMax,
-                cost_min = :costMin,
-                cost_min_unit = :costMinUnit
-            WHERE id = :id
+                `area_min` = :areaMin,
+                `area_max` = :areaMax,
+                `cost_min` = :costMin,
+                `cost_min_unit` = :costMinUnit
+            WHERE `id` = :id
         ";
 
         parent::query($sql);
@@ -339,45 +330,48 @@ class BuildingModel extends Model
             $sql = "
                 UPDATE `sdi_building_data`
                 SET
-                    district = :district,
-                    district_zone = :districtZone,
-                    house_class = :houseClass,
-                    material = :material,
-                    house_type = :houseType,
-                    entrance_house = :entranceHouse,
-                    parking = :parking,
-                    territory = :territory, 
-                    ceiling_height = :ceilingHeight,
-                    maintenance_cost = :maintenanceCost,
-                    distance_sea = :distanceSea,
-                    gas = :gas,
-                    heating = :heating,
-                    electricity = :electricity,
-                    sewerage = :sewerage,
-                    water_supply = :waterSupply,
-                    advantages = :advantages,
-                    payments = :payments,
-                    formalization = :formalization,
-                    amount_contract = :amountContract,
-                    surcharge_doc = :surchargeDoc,
-                    surcharge_gas = :surchargeGas,
-                    sale_no_resident = :saleNoResident,
-                    passed = :passed,
-                    video = :video
-                WHERE id = :id
+                    `district` = :district,
+                    `district_zone` = :districtZone,
+                    `house_class` = :houseClass,
+                    `material` = :material,
+                    `house_type` = :houseType,
+                    `entrance_house` = :entranceHouse,
+                    `parking` = :parking,
+                    `territory` = :territory, 
+                    `ceiling_height` = :ceilingHeight,
+                    `maintenance_cost` = :maintenanceCost,
+                    `distance_sea` = :distanceSea,
+                    `gas` = :gas,
+                    `heating` = :heating,
+                    `electricity` = :electricity,
+                    `sewerage` = :sewerage,
+                    `water_supply` = :waterSupply,
+                    `advantages` = :advantages,
+                    `payments` = :payments,
+                    `formalization` = :formalization,
+                    `amount_contract` = :amountContract,
+                    `surcharge_doc` = :surchargeDoc,
+                    `surcharge_gas` = :surchargeGas,
+                    `sale_no_resident` = :saleNoResident,
+                    `passed` = :passed,
+                    `id_avatar` = :avatarId,
+                    `avatar` = :avatar
+                WHERE `id` = :id
             ";
         } else {
             $sql = "
                 INSERT INTO `sdi_building_data`
-                    (id, district, district_zone, house_class, material, house_type, entrance_house, parking,
-                     territory, ceiling_height, maintenance_cost, distance_sea, gas, heating, electricity,
-                     sewerage, water_supply, advantages, payments, formalization, amount_contract, surcharge_doc,
-                     surcharge_gas, sale_no_resident, passed, video)
+                    (`id`, `district`, `district_zone`, `house_class`, `material`, `house_type`, `entrance_house`,
+                     `parking`, `territory`, `ceiling_height`, `maintenance_cost`, `distance_sea`, `gas`, `heating`,
+                     `electricity`, `sewerage`, `water_supply`, `advantages`, `payments`, `formalization`,
+                     `amount_contract`, `surcharge_doc`, `surcharge_gas`, `sale_no_resident`, `passed`, `id_avatar`,
+                     `avatar`)
                 VALUES
-                    (:id, :district, :districtZone, :houseClass, :material, :houseType, :entranceHouse, :parking,
-                     :territory, :ceilingHeight, :maintenanceCost, :distanceSea, :gas, :heating, :electricity,
-                     :sewerage, :waterSupply, :advantages, :payments, :formalization, :amountContract, :surchargeDoc,
-                     :surchargeGas, :saleNoResident, :passed, :video)
+                    (:id, :district, :districtZone, :houseClass, :material, :houseType, :entranceHouse,
+                     :parking, :territory, :ceilingHeight, :maintenanceCost, :distanceSea, :gas, :heating,
+                     :electricity, :sewerage, :waterSupply, :advantages, :payments, :formalization,
+                     :amountContract, :surchargeDoc, :surchargeGas, :saleNoResident, :passed, :avatarId,
+                     :avatar)
             ";
         }
 
@@ -407,8 +401,15 @@ class BuildingModel extends Model
         parent::bindParams('surchargeGas', $payload['surchargeGas']);
         parent::bindParams('saleNoResident', $payload['saleNoResident']);
         parent::bindParams('passed', $payload['passed']);
-        parent::bindParams('video', $payload['video']);
+        parent::bindParams('avatarId', $payload['avatarId']);
+        parent::bindParams('avatar', $payload['avatar']);
         parent::execute();
+
+        BuildingModel::updateRelationsTags($payload['id'], $payload['tags']);
+        BuildingModel::updateRelationsDevelopers($payload['id'], $payload['developers']);
+        BuildingModel::updateRelationsContacts($payload['id'], $payload['contacts']);
+        parent::updateRelationsImages($payload['images'], $payload['id'], 'building');
+        parent::updateRelationsVideos($payload['videos'], $payload['id'], 'building');
     }
 
     /**
@@ -419,7 +420,7 @@ class BuildingModel extends Model
      */
     private static function updateRelationsTags(int $buildingId, array $tags)
     {
-        $sql = "DELETE FROM `sdi_building_tag` WHERE id_building = :id";
+        $sql = "DELETE FROM `sdi_building_tag` WHERE `id_building` = :id";
 
         parent::query($sql);
         parent::bindParams('id', $buildingId);
@@ -436,10 +437,9 @@ class BuildingModel extends Model
                 INSERT INTO `sdi_building_tag`
                     (`id_building`, `id_tag`)
                 VALUES
-            " . implode(",", $tagsSql);
+            " . implode(',', $tagsSql);
 
             parent::query($sql);
-            parent::bindParams('id', $buildingId);
             parent::execute();
         }
     }
@@ -452,7 +452,7 @@ class BuildingModel extends Model
      */
     private static function updateRelationsContacts(int $buildingId, array $users)
     {
-        $sql = "DELETE FROM `sdi_building_contact` WHERE id_building = :id";
+        $sql = "DELETE FROM `sdi_building_contact` WHERE `id_building` = :id";
 
         parent::query($sql);
         parent::bindParams('id', $buildingId);
@@ -469,10 +469,9 @@ class BuildingModel extends Model
                 INSERT INTO `sdi_building_contact`
                     (`id_building`, `id_user`)
                 VALUES
-            " . implode(",", $usersSql);
+            " . implode(',', $usersSql);
 
             parent::query($sql);
-            parent::bindParams('id', $buildingId);
             parent::execute();
         }
     }
@@ -485,7 +484,7 @@ class BuildingModel extends Model
      */
     private static function updateRelationsDevelopers(int $buildingId, array $developers)
     {
-        $sql = "DELETE FROM `sdi_building_developer` WHERE id_building = :id";
+        $sql = "DELETE FROM `sdi_building_developer` WHERE `id_building` = :id";
 
         parent::query($sql);
         parent::bindParams('id', $buildingId);
@@ -502,7 +501,7 @@ class BuildingModel extends Model
                 INSERT INTO `sdi_building_developer`
                     (`id_building`, `id_developer`)
                 VALUES
-            " . implode(",", $developersSql);
+            " . implode(',', $developersSql);
 
             parent::query($sql);
             parent::bindParams('id', $buildingId);
@@ -562,15 +561,16 @@ class BuildingModel extends Model
             'contacts' => array_map('intval', $data['contacts'] ? explode(',', $data['contacts']) : []),
             'developers' => array_map('intval', $data['developers'] ? explode(',', $data['developers']) : []),
             'articles' => array_map('intval', $data['articles'] ? explode(',', $data['articles']) : []),
-            'images' => [],
-            'newImages' => [],
+            'images' => array_map('intval', $data['images'] ? explode(',', $data['images']) : []),
+            'videos' => array_map('intval', $data['videos'] ? explode(',', $data['videos']) : []),
             'area' => (float)$data['area'],
             'cost' => (float)$data['cost'],
             'metaTitle' => $data['meta_title'],
             'metaDescription' => $data['meta_description'],
             'passed' => $data['passed'] ? json_decode($data['passed']) : null,
-            'video' => $data['video'],
-            'views' => $data['views'] ? (int)$data['views'] : 0
+            'views' => $data['views'] ? (int)$data['views'] : 0,
+            'avatarId' => (int)$data['id_avatar'],
+            'avatar' => $data['avatar']
         ];
     }
 }

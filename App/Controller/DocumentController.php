@@ -60,13 +60,12 @@ class DocumentController extends Controller
         }
 
         $payload = array(
-            'userId' => $data->userId ? (int)htmlentities(stripcslashes(strip_tags($data->userId))) : null,
             'name' => $data->name ? htmlentities(stripcslashes(strip_tags($data->name))) : '',
+            'attachmentId' => (int)htmlentities(stripcslashes(strip_tags($data->attachmentId))),
             'objectId' => $data->objectId ? (int)htmlentities(stripcslashes(strip_tags($data->objectId))) : null,
             'objectType' => $data->objectType ? htmlentities(stripcslashes(strip_tags($data->objectType))) : '',
             'type' => $data->type ? htmlentities(stripcslashes(strip_tags($data->type))) : 'file',
-            'extension' => $data->extension ? htmlentities(stripcslashes(strip_tags($data->extension))) : null,
-            'content' => $data->content ? htmlentities(stripcslashes(strip_tags($data->content))) : '',
+            'content' => $data->content ? htmlentities(stripcslashes(strip_tags($data->content))) : null,
             'active' => (int)htmlentities(stripcslashes(strip_tags($data->active))),
             'dateCreated' => date('Y-m-d H:i:s'),
             'dateUpdate' => date('Y-m-d H:i:s'),
@@ -145,13 +144,12 @@ class DocumentController extends Controller
 
         $payload = array(
             'id' => $request->id,
-            'userId' => $data->userId ? (int)htmlentities(stripcslashes(strip_tags($data->userId))) : null,
             'name' => $data->name ? htmlentities(stripcslashes(strip_tags($data->name))) : '',
+            'attachmentId' => (int)htmlentities(stripcslashes(strip_tags($data->attachmentId))),
             'objectId' => $data->objectId ? (int)htmlentities(stripcslashes(strip_tags($data->objectId))) : null,
             'objectType' => $data->objectType ? htmlentities(stripcslashes(strip_tags($data->objectType))) : '',
             'type' => $data->type ? htmlentities(stripcslashes(strip_tags($data->type))) : 'file',
-            'extension' => $data->extension ? htmlentities(stripcslashes(strip_tags($data->extension))) : null,
-            'content' => $data->content ? htmlentities(stripcslashes(strip_tags($data->content))) : '',
+            'content' => $data->content ? htmlentities(stripcslashes(strip_tags($data->content))) : null,
             'dateUpdate' => date('Y-m-d H:i:s'),
             'active' => (int)htmlentities(stripcslashes(strip_tags($data->active)))
         );

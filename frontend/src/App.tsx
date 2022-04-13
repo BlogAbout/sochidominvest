@@ -6,6 +6,7 @@ import {
     fa1,
     faAngleDown,
     faAngleLeft,
+    faArrowPointer,
     faArrowRotateLeft,
     faArrowUpFromBracket,
     faArrowUpRightFromSquare,
@@ -135,7 +136,8 @@ library.add(
     faPhotoFilm,
     faImage,
     faVideo,
-    faFile
+    faFile,
+    faArrowPointer
 )
 
 function App() {

@@ -27,7 +27,6 @@ const DocumentList: React.FC<Props> = (props) => {
                 <div className={classes.name}>Название</div>
                 <div className={classes.object}>Объект</div>
                 <div className={classes.type}>Тип</div>
-                <div className={classes.extension}>Расширение</div>
             </div>
 
             {props.documents.length ?

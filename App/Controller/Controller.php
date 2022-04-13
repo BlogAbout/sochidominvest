@@ -249,6 +249,10 @@ class Controller
             if (!empty($params['objectType'])) {
                 $filter['objectType'] = $params['objectType'];
             }
+
+            if (!empty($params['type'])) {
+                $filter['type'] = $params['type'];
+            }
         }
 
         return $filter;
