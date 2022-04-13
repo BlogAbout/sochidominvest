@@ -14,6 +14,7 @@ const BuildingPagePanel: React.FC = () => {
     const [isUpdate, setIsUpdate] = useState(false)
     const [searchText, setSearchText] = useState('')
     const [filterBuilding, setFilterBuilding] = useState<IBuilding[]>([])
+    const [selectedType, setSelectedType] = useState<string[]>([])
 
     const {role} = useTypedSelector(state => state.userReducer)
     const {buildings, fetching} = useTypedSelector(state => state.buildingReducer)
@@ -29,7 +30,7 @@ const BuildingPagePanel: React.FC = () => {
 
     useEffect(() => {
         search(searchText)
-    }, [buildings])
+    }, [buildings, selectedType])
 
     // Обработчик изменений
     const onSave = () => {
@@ -46,11 +47,12 @@ const BuildingPagePanel: React.FC = () => {
 
         if (value !== '') {
             setFilterBuilding(buildings.filter((building: IBuilding) => {
-                return building.name.toLocaleLowerCase().indexOf(value.toLocaleLowerCase()) !== -1 ||
-                    (building.address && building.address.toLocaleLowerCase().indexOf(value.toLocaleLowerCase()) !== -1)
+                return (!selectedType.length || selectedType.includes(building.type)) &&
+                    (building.name.toLocaleLowerCase().indexOf(value.toLocaleLowerCase()) !== -1 ||
+                    (building.address && building.address.toLocaleLowerCase().indexOf(value.toLocaleLowerCase()) !== -1))
             }))
         } else {
-            setFilterBuilding(buildings)
+            setFilterBuilding(!selectedType.length ? buildings : buildings.filter((building: IBuilding) => selectedType.includes(building.type)))
         }
     }
 
@@ -77,6 +79,15 @@ const BuildingPagePanel: React.FC = () => {
         openContextMenu(e, menuItems)
     }
 
+    // Кнопки базовой фильтрации
+    const onClickFilterButtonHandler = (type: string) => {
+        if (selectedType.includes(type)) {
+            setSelectedType(selectedType.filter((item: string) => item !== type))
+        } else {
+            setSelectedType([type, ...selectedType])
+        }
+    }
+
     return (
         <main className={classes.BuildingPagePanel}>
             <Helmet>
@@ -87,17 +98,35 @@ const BuildingPagePanel: React.FC = () => {
             </Helmet>
 
             <div className={classes.filter}>
-                <Button type='save' icon={'building'} onClick={() => console.log('add')}>ЖК</Button>
+                <Button type={selectedType.includes('building') ? 'regular' : 'save'}
+                        icon={'building'}
+                        onClick={() => onClickFilterButtonHandler('building')}
+                >ЖК</Button>
 
-                <Button type='save' icon={'house-user'} onClick={() => console.log('add')}>Квартиры</Button>
+                <Button type={selectedType.includes('apartment') ? 'regular' : 'save'}
+                        icon={'house-user'}
+                        onClick={() => onClickFilterButtonHandler('apartment')}
+                >Квартиры</Button>
 
-                <Button type='save' icon={'house'} onClick={() => console.log('add')}>Дома</Button>
+                <Button type={selectedType.includes('house') ? 'regular' : 'save'}
+                        icon={'house'}
+                        onClick={() => onClickFilterButtonHandler('house')}
+                >Дома</Button>
 
-                <Button type='save' icon={'tree'} onClick={() => console.log('add')}>Участки</Button>
+                <Button type={selectedType.includes('land') ? 'regular' : 'save'}
+                        icon={'tree'}
+                        onClick={() => onClickFilterButtonHandler('land')}
+                >Участки</Button>
 
-                <Button type='save' icon={'cash-register'} onClick={() => console.log('add')}>Коммерция</Button>
+                <Button type={selectedType.includes('commerce') ? 'regular' : 'save'}
+                        icon={'cash-register'}
+                        onClick={() => onClickFilterButtonHandler('commerce')}
+                >Коммерция</Button>
 
-                <Button type='save' icon={'car'} onClick={() => console.log('add')}>Гаражи</Button>
+                <Button type={selectedType.includes('garage') ? 'regular' : 'save'}
+                        icon={'car'}
+                        onClick={() => onClickFilterButtonHandler('garage')}
+                >Гаражи</Button>
 
                 <SearchBox value={searchText} onChange={search.bind(this)}/>
             </div>

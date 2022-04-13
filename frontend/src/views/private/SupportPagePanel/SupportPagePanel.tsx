@@ -13,6 +13,7 @@ const SupportPagePanel: React.FC = () => {
     const [feeds, setFeeds] = useState<IFeed[]>([])
     const [searchText, setSearchText] = useState('')
     const [filterFeeds, setFilterFeeds] = useState<IFeed[]>([])
+    const [selectedType, setSelectedType] = useState<string[]>([])
 
     useEffect(() => {
         if (isUpdate) {
@@ -32,7 +33,7 @@ const SupportPagePanel: React.FC = () => {
 
     useEffect(() => {
         search(searchText)
-    }, [feeds])
+    }, [feeds, selectedType])
 
     // Обработчик изменений
     const onSave = () => {
@@ -49,12 +50,22 @@ const SupportPagePanel: React.FC = () => {
 
         if (value !== '') {
             setFilterFeeds(feeds.filter((feed: IFeed) => {
-                return feed.title.toLocaleLowerCase().indexOf(value.toLocaleLowerCase()) !== -1 ||
-                    (feed.name && feed.name.toLocaleLowerCase().indexOf(value.toLocaleLowerCase()) !== -1) ||
-                    (feed.phone && feed.phone.toLocaleLowerCase().indexOf(value.toLocaleLowerCase()) !== -1)
+                return (!selectedType.length || selectedType.includes(feed.type)) &&
+                    (feed.title.toLocaleLowerCase().indexOf(value.toLocaleLowerCase()) !== -1 ||
+                        (feed.name && feed.name.toLocaleLowerCase().indexOf(value.toLocaleLowerCase()) !== -1) ||
+                        (feed.phone && feed.phone.toLocaleLowerCase().indexOf(value.toLocaleLowerCase()) !== -1))
             }))
         } else {
-            setFilterFeeds(feeds)
+            setFilterFeeds(!selectedType.length ? feeds : feeds.filter((feed: IFeed) => selectedType.includes(feed.type)))
+        }
+    }
+
+    // Кнопки базовой фильтрации
+    const onClickFilterButtonHandler = (type: string) => {
+        if (selectedType.includes(type)) {
+            setSelectedType(selectedType.filter((item: string) => item !== type))
+        } else {
+            setSelectedType([type, ...selectedType])
         }
     }
 
@@ -68,13 +79,25 @@ const SupportPagePanel: React.FC = () => {
             </Helmet>
 
             <div className={classes.filter}>
-                <Button type='save' icon={'headset'} onClick={() => console.log('add')}>Заявки</Button>
+                <Button type={selectedType.includes('feed') ? 'regular' : 'save'}
+                        icon={'headset'}
+                        onClick={() => onClickFilterButtonHandler('feed')}
+                >Заявки</Button>
 
-                <Button type='save' icon={'phone'} onClick={() => console.log('add')}>Звонки</Button>
+                <Button type={selectedType.includes('callback') ? 'regular' : 'save'}
+                        icon={'phone'}
+                        onClick={() => onClickFilterButtonHandler('callback')}
+                >Звонки</Button>
 
-                <Button type='save' icon={'circle-question'} onClick={() => console.log('add')}>Вопросы</Button>
+                <Button type={selectedType.includes('question') ? 'regular' : 'save'}
+                        icon={'circle-question'}
+                        onClick={() => onClickFilterButtonHandler('question')}
+                >Вопросы</Button>
 
-                <Button type='save' icon={'star'} onClick={() => console.log('add')}>Другое</Button>
+                <Button type={selectedType.includes('other') ? 'regular' : 'save'}
+                        icon={'star'}
+                        onClick={() => onClickFilterButtonHandler('other')}
+                >Другое</Button>
 
                 <SearchBox value={searchText} onChange={search.bind(this)}/>
             </div>

@@ -4,7 +4,7 @@ export interface IDeveloper {
     description?: string
     address: string
     phone: string
-    type: string | null
+    type: string
     active: number
     author: number | null
     dateCreated?: string | null

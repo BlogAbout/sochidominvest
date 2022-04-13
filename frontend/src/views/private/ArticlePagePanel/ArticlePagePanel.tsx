@@ -13,6 +13,7 @@ const ArticlePagePanel: React.FC = () => {
     const [isUpdate, setIsUpdate] = useState(false)
     const [searchText, setSearchText] = useState('')
     const [filterArticle, setFilterArticle] = useState<IArticle[]>([])
+    const [selectedType, setSelectedType] = useState<string[]>([])
 
     const {role} = useTypedSelector(state => state.userReducer)
     const {articles, fetching} = useTypedSelector(state => state.articleReducer)
@@ -28,7 +29,7 @@ const ArticlePagePanel: React.FC = () => {
 
     useEffect(() => {
         search(searchText)
-    }, [articles])
+    }, [articles, selectedType])
 
     // Обработчик изменений
     const onSave = () => {
@@ -45,10 +46,11 @@ const ArticlePagePanel: React.FC = () => {
 
         if (value !== '') {
             setFilterArticle(articles.filter((article: IArticle) => {
-                return article.name.toLocaleLowerCase().indexOf(value.toLocaleLowerCase()) !== -1
+                return (!selectedType.length || selectedType.includes(article.type)) &&
+                    article.name.toLocaleLowerCase().indexOf(value.toLocaleLowerCase()) !== -1
             }))
         } else {
-            setFilterArticle(articles)
+            setFilterArticle(!selectedType.length ? articles : articles.filter((article: IArticle) => selectedType.includes(article.type)))
         }
     }
 
@@ -56,6 +58,15 @@ const ArticlePagePanel: React.FC = () => {
         openPopupArticleCreate(document.body, {
             onSave: () => onSave()
         })
+    }
+
+    // Кнопки базовой фильтрации
+    const onClickFilterButtonHandler = (type: string) => {
+        if (selectedType.includes(type)) {
+            setSelectedType(selectedType.filter((item: string) => item !== type))
+        } else {
+            setSelectedType([type, ...selectedType])
+        }
     }
 
     return (
@@ -68,11 +79,20 @@ const ArticlePagePanel: React.FC = () => {
             </Helmet>
 
             <div className={classes.filter}>
-                <Button type='save' icon={'bolt'} onClick={() => console.log('add')}>Новости</Button>
+                <Button type={selectedType.includes('news') ? 'regular' : 'save'}
+                        icon={'bolt'}
+                        onClick={() => onClickFilterButtonHandler('news')}
+                >Новости</Button>
 
-                <Button type='save' icon={'percent'} onClick={() => console.log('add')}>Акции</Button>
+                <Button type={selectedType.includes('action') ? 'regular' : 'save'}
+                        icon={'percent'}
+                        onClick={() => onClickFilterButtonHandler('action')}
+                >Акции</Button>
 
-                <Button type='save' icon={'star'} onClick={() => console.log('add')}>Статьи</Button>
+                <Button type={selectedType.includes('article') ? 'regular' : 'save'}
+                        icon={'star'}
+                        onClick={() => onClickFilterButtonHandler('article')}
+                >Статьи</Button>
 
                 <SearchBox value={searchText} onChange={search.bind(this)}/>
             </div>

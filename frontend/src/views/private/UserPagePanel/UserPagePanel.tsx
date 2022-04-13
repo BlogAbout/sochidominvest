@@ -13,6 +13,7 @@ const UserPagePanel: React.FC = () => {
     const [isUpdate, setIsUpdate] = useState(false)
     const [searchText, setSearchText] = useState('')
     const [filterUser, setFilterUser] = useState<IUser[]>([])
+    const [selectedType, setSelectedType] = useState<string[]>([])
 
     const {users, fetching, role} = useTypedSelector(state => state.userReducer)
     const {fetchUserList} = useActions()
@@ -27,7 +28,7 @@ const UserPagePanel: React.FC = () => {
 
     useEffect(() => {
         search(searchText)
-    }, [users])
+    }, [users, selectedType])
 
     // Обработчик изменений
     const onSave = () => {
@@ -42,14 +43,39 @@ const UserPagePanel: React.FC = () => {
             setFilterUser([])
         }
 
+        let usersByType: IUser[] = []
+
+        if (selectedType.length) {
+            const types: string[] = []
+            if (selectedType.includes('employee')) {
+                types.push('director')
+                types.push('administrator')
+                types.push('manager')
+            }
+            if (selectedType.includes('partner')) {
+                types.push('developer')
+                types.push('investor')
+                types.push('agent')
+            }
+            if (selectedType.includes('client')) {
+                types.push('owner')
+                types.push('buyer')
+                types.push('subscriber')
+            }
+
+            usersByType = users.filter((user: IUser) => types.includes(user.role))
+        } else {
+            usersByType = users
+        }
+
         if (value !== '') {
-            setFilterUser(users.filter((user: IUser) => {
+            setFilterUser(usersByType.filter((user: IUser) => {
                 return user.firstName.toLocaleLowerCase().indexOf(value.toLocaleLowerCase()) !== -1 ||
                     user.phone.toLocaleLowerCase().indexOf(value.toLocaleLowerCase()) !== -1 ||
                     user.email.toLocaleLowerCase().indexOf(value.toLocaleLowerCase()) !== -1
             }))
         } else {
-            setFilterUser(users)
+            setFilterUser(usersByType)
         }
     }
 
@@ -62,6 +88,15 @@ const UserPagePanel: React.FC = () => {
         })
     }
 
+    // Кнопки базовой фильтрации
+    const onClickFilterButtonHandler = (type: string) => {
+        if (selectedType.includes(type)) {
+            setSelectedType(selectedType.filter((item: string) => item !== type))
+        } else {
+            setSelectedType([type, ...selectedType])
+        }
+    }
+
     return (
         <main className={classes.UserPagePanel}>
             <Helmet>
@@ -72,11 +107,20 @@ const UserPagePanel: React.FC = () => {
             </Helmet>
 
             <div className={classes.filter}>
-                <Button type='save' icon='headset' onClick={() => console.log('add')}>Сотрудники</Button>
+                <Button type={selectedType.includes('employee') ? 'regular' : 'save'}
+                        icon='headset'
+                        onClick={() => onClickFilterButtonHandler('employee')}
+                >Сотрудники</Button>
 
-                <Button type='save' icon='user-tie' onClick={() => console.log('add')}>Партнёры</Button>
+                <Button type={selectedType.includes('partner') ? 'regular' : 'save'}
+                        icon='user-tie'
+                        onClick={() => onClickFilterButtonHandler('partner')}
+                >Партнёры</Button>
 
-                <Button type='save' icon='user' onClick={() => console.log('add')}>Клиенты</Button>
+                <Button type={selectedType.includes('client') ? 'regular' : 'save'}
+                        icon='user'
+                        onClick={() => onClickFilterButtonHandler('client')}
+                >Клиенты</Button>
 
                 <SearchBox value={searchText} onChange={search.bind(this)}/>
             </div>

@@ -13,6 +13,7 @@ const DeveloperPagePanel: React.FC = () => {
     const [isUpdate, setIsUpdate] = useState(false)
     const [searchText, setSearchText] = useState('')
     const [filterDeveloper, setFilterDeveloper] = useState<IDeveloper[]>([])
+    const [selectedType, setSelectedType] = useState<string[]>([])
 
     const {role} = useTypedSelector(state => state.userReducer)
     const {developers, fetching} = useTypedSelector(state => state.developerReducer)
@@ -28,7 +29,7 @@ const DeveloperPagePanel: React.FC = () => {
 
     useEffect(() => {
         search(searchText)
-    }, [developers])
+    }, [developers, selectedType])
 
     // Обработчик изменений
     const onSave = () => {
@@ -45,12 +46,13 @@ const DeveloperPagePanel: React.FC = () => {
 
         if (value !== '') {
             setFilterDeveloper(developers.filter((developer: IDeveloper) => {
-                return developer.name.toLocaleLowerCase().indexOf(value.toLocaleLowerCase()) !== -1 ||
-                    developer.address.toLocaleLowerCase().indexOf(value.toLocaleLowerCase()) !== -1 ||
-                    developer.phone.toLocaleLowerCase().indexOf(value.toLocaleLowerCase()) !== -1
+                return (!selectedType.length || selectedType.includes(developer.type)) &&
+                    (developer.name.toLocaleLowerCase().indexOf(value.toLocaleLowerCase()) !== -1 ||
+                        developer.address.toLocaleLowerCase().indexOf(value.toLocaleLowerCase()) !== -1 ||
+                        developer.phone.toLocaleLowerCase().indexOf(value.toLocaleLowerCase()) !== -1)
             }))
         } else {
-            setFilterDeveloper(developers)
+            setFilterDeveloper(!selectedType.length ? developers : developers.filter((developer: IDeveloper) => selectedType.includes(developer.type)))
         }
     }
 
@@ -63,6 +65,15 @@ const DeveloperPagePanel: React.FC = () => {
         })
     }
 
+    // Кнопки базовой фильтрации
+    const onClickFilterButtonHandler = (type: string) => {
+        if (selectedType.includes(type)) {
+            setSelectedType(selectedType.filter((item: string) => item !== type))
+        } else {
+            setSelectedType([type, ...selectedType])
+        }
+    }
+
     return (
         <main className={classes.DeveloperPagePanel}>
             <Helmet>
@@ -73,10 +84,9 @@ const DeveloperPagePanel: React.FC = () => {
             </Helmet>
 
             <div className={classes.filter}>
-                <Button type='save'
+                <Button type={selectedType.includes('constructionCompany') ? 'regular' : 'save'}
                         icon='building-columns'
-                        onClick={() => console.log('add')
-                        }
+                        onClick={() => onClickFilterButtonHandler('constructionCompany')}
                 >Строительные компании</Button>
 
                 <SearchBox value={searchText} onChange={search.bind(this)}/>

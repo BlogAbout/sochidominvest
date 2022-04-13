@@ -14,6 +14,7 @@ const DocumentPagePanel: React.FC = () => {
     const [isUpdate, setIsUpdate] = useState(false)
     const [searchText, setSearchText] = useState('')
     const [filterDocument, setFilterDocument] = useState<IDocument[]>([])
+    const [selectedType, setSelectedType] = useState<string[]>([])
 
     const {role} = useTypedSelector(state => state.userReducer)
     const {documents, fetching} = useTypedSelector(state => state.documentReducer)
@@ -29,7 +30,7 @@ const DocumentPagePanel: React.FC = () => {
 
     useEffect(() => {
         search(searchText)
-    }, [documents])
+    }, [documents, selectedType])
 
     // Обработчик изменений
     const onSave = () => {
@@ -46,10 +47,11 @@ const DocumentPagePanel: React.FC = () => {
 
         if (value !== '') {
             setFilterDocument(documents.filter((document: IDocument) => {
-                return document.name.toLocaleLowerCase().indexOf(value.toLocaleLowerCase()) !== -1
+                return (!selectedType.length || selectedType.includes(document.type)) &&
+                    document.name.toLocaleLowerCase().indexOf(value.toLocaleLowerCase()) !== -1
             }))
         } else {
-            setFilterDocument(documents)
+            setFilterDocument(!selectedType.length ? documents : documents.filter((document: IDocument) => selectedType.includes(document.type)))
         }
     }
 
@@ -87,6 +89,15 @@ const DocumentPagePanel: React.FC = () => {
         openContextMenu(e, menuItems)
     }
 
+    // Кнопки базовой фильтрации
+    const onClickFilterButtonHandler = (type: string) => {
+        if (selectedType.includes(type)) {
+            setSelectedType(selectedType.filter((item: string) => item !== type))
+        } else {
+            setSelectedType([type, ...selectedType])
+        }
+    }
+
     return (
         <main className={classes.DocumentPagePanel}>
             <Helmet>
@@ -97,11 +108,20 @@ const DocumentPagePanel: React.FC = () => {
             </Helmet>
 
             <div className={classes.filter}>
-                <Button type='save' icon='file-lines' onClick={() => console.log('add')}>Файлы</Button>
+                <Button type={selectedType.includes('file') ? 'regular' : 'save'}
+                        icon='file-lines'
+                        onClick={() => onClickFilterButtonHandler('file')}
+                >Файлы</Button>
 
-                <Button type='save' icon='link' onClick={() => console.log('add')}>Ссылки</Button>
+                <Button type={selectedType.includes('link') ? 'regular' : 'save'}
+                        icon='link'
+                        onClick={() => onClickFilterButtonHandler('link')}
+                >Ссылки</Button>
 
-                <Button type='save' icon='file-invoice' onClick={() => console.log('add')}>Конструктор</Button>
+                <Button type={selectedType.includes('constructor') ? 'regular' : 'save'}
+                        icon='file-invoice'
+                        onClick={() => onClickFilterButtonHandler('constructor')}
+                >Конструктор</Button>
 
                 <SearchBox value={searchText} onChange={search.bind(this)}/>
             </div>
