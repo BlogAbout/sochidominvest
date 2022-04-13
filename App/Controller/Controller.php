@@ -87,9 +87,7 @@ class Controller
 
             if ($payload->validator == 'userExists') {
                 try {
-                    $checkUser = UserModel::fetchUserById((int)$payload->data);
-
-                    if (!$checkUser['id']) {
+                    if (!Model::isExistsItem('sdi_user', (int)$payload->data)) {
                         array_push($response, "Пользователь с таким идентификатором не найден в базе данных.");
                     }
                 } catch (Exception $e) {
@@ -109,9 +107,7 @@ class Controller
 
             if ($payload->validator == 'buildingExists') {
                 try {
-                    $checkBuilding = BuildingModel::fetchBuildingById((int)$payload->data);
-
-                    if (!$checkBuilding['id']) {
+                    if (!Model::isExistsItem('sdi_building', (int)$payload->data)) {
                         array_push($response, "Объект с таким идентификатором не найден в базе данных.");
                     }
                 } catch (Exception $e) {
@@ -120,9 +116,7 @@ class Controller
 
             if ($payload->validator == 'checkerExists') {
                 try {
-                    $checkChecker = CheckerModel::fetchCheckerById((int)$payload->data);
-
-                    if (!$checkChecker['id']) {
+                    if (!Model::isExistsItem('sdi_building_checker', (int)$payload->data)) {
                         array_push($response, "Квартира с таким идентификатором не найдена в базе данных.");
                     }
                 } catch (Exception $e) {
@@ -131,9 +125,7 @@ class Controller
 
             if ($payload->validator == 'tagExists') {
                 try {
-                    $checkTag = TagModel::fetchTagById((int)$payload->data);
-
-                    if (!$checkTag['id']) {
+                    if (!Model::isExistsItem('sdi_tag', (int)$payload->data)) {
                         array_push($response, "Метка с таким идентификатором не найдена в базе данных.");
                     }
                 } catch (Exception $e) {
@@ -142,9 +134,7 @@ class Controller
 
             if ($payload->validator == 'feedExists') {
                 try {
-                    $checkFeed = FeedbackModel::fetchFeedById((int)$payload->data);
-
-                    if (!$checkFeed['id']) {
+                    if (!Model::isExistsItem('sdi_feedback', (int)$payload->data)) {
                         array_push($response, "Заявка с таким идентификатором не найдена в базе данных.");
                     }
                 } catch (Exception $e) {
@@ -153,9 +143,7 @@ class Controller
 
             if ($payload->validator == 'documentExists') {
                 try {
-                    $checkDocument = DocumentModel::fetchDocumentById((int)$payload->data);
-
-                    if (!$checkDocument['id']) {
+                    if (!Model::isExistsItem('sdi_document', (int)$payload->data)) {
                         array_push($response, "Документ с таким идентификатором не найден в базе данных.");
                     }
                 } catch (Exception $e) {
@@ -164,9 +152,7 @@ class Controller
 
             if ($payload->validator == 'articleExists') {
                 try {
-                    $checkArticle = ArticleModel::fetchItemById((int)$payload->data);
-
-                    if (!$checkArticle['id']) {
+                    if (!Model::isExistsItem('sdi_article', (int)$payload->data)) {
                         array_push($response, "Статья с таким идентификатором не найдена в базе данных.");
                     }
                 } catch (Exception $e) {
@@ -175,9 +161,7 @@ class Controller
 
             if ($payload->validator == 'attachmentExists') {
                 try {
-                    $checkArticle = AttachmentModel::fetchItemById((int)$payload->data);
-
-                    if (!$checkArticle['id']) {
+                    if (!Model::isExistsItem('sdi_attachment', (int)$payload->data)) {
                         array_push($response, "Вложение с таким идентификатором не найдено в базе данных.");
                     }
                 } catch (Exception $e) {

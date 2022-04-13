@@ -142,6 +142,24 @@ class Model
     }
 
     /**
+     * Проверка существования элемента в базе данных
+     *
+     * @param string $table
+     * @param int $id
+     * @return bool
+     */
+    public static function isExistsItem(string $table, int $id): bool
+    {
+        $sql = "SELECT EXISTS(SELECT `id` FROM :table WHERE `id` = :id)";
+
+        self::query($sql);
+        self::bindParams('table', $table);
+        self::bindParams('id', $id);
+
+        return self::execute();
+    }
+
+    /**
      * Обновление данных изображений в базе данных
      *
      * @param array $images Массив изображений
