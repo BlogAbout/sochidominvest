@@ -131,6 +131,18 @@ class Model
     }
 
     /**
+     * Выполняет инструкцию Sql и возвращает массив значений колонки из результирующего запроса Sql
+     *
+     * @return array
+     */
+    protected static function fetchColumn(): array
+    {
+        self::execute();
+
+        return self::$stmt->fetchAll(PDO::FETCH_COLUMN);
+    }
+
+    /**
      * Использует соединение с базой данных и возвращает последний вставленный идентификатор в базу данных
      *
      * @param void

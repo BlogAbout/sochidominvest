@@ -73,6 +73,12 @@ $Klein->respond('GET', '/api/v1/attachment/[:id]', [new AttachmentController(), 
 $Klein->respond('GET', '/api/v1/attachment', [new AttachmentController(), 'fetchList']);
 $Klein->respond('DELETE', '/api/v1/attachment/[:id]', [new AttachmentController(), 'deleteItem']);
 
+// Favorite Routes
+$Klein->respond('POST', '/api/v1/favorite', [new FavoriteController(), 'createItem']);
+$Klein->respond('GET', '/api/v1/favorite', [new FavoriteController(), 'fetchList']);
+$Klein->respond('DELETE', '/api/v1/favorite/[:buildingId]', [new FavoriteController(), 'deleteItem']);
+
+// Util Routes
 $Klein->respond('GET', '/api/v1/views/[:objectType]/[:objectId]', [new UtilController(), 'updateCountViews']);
 $Klein->respond('GET', '/api/v1/log', [new UtilController(), 'fetchLogs']);
 

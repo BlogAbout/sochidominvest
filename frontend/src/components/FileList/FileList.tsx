@@ -78,7 +78,12 @@ const FileList: React.FC<Props> = (props) => {
     const onContextMenu = (e: React.MouseEvent, file: IAttachment) => {
         e.preventDefault()
 
-        const menuItems = []
+        const menuItems = [{
+            text: 'Открыть',
+            onClick: () => {
+                window.open(`https://api.sochidominvest.ru/uploads/${file.content}`, '_blank')
+            }
+        }]
 
         if (['director', 'administrator', 'manager'].includes(role)) {
             menuItems.push({text: 'Редактировать', onClick: () => updateHandler(file)})

@@ -12,6 +12,7 @@ import {
     paymentsList
 } from '../../../../helpers/buildingHelper'
 import BuildingService from '../../../../api/BuildingService'
+import FavoriteService from '../../../../api/FavoriteService'
 import {IBuilding} from '../../../../@types/IBuilding'
 import {ISelector} from '../../../../@types/ISelector'
 import {ITag} from '../../../../@types/ITag'
@@ -24,12 +25,14 @@ import classes from './BuildingItem.module.scss'
 
 interface Props {
     building: IBuilding
+    isFavorite?: boolean
 
     onSave(): void
 }
 
 const defaultProps: Props = {
     building: {} as IBuilding,
+    isFavorite: false,
     onSave: () => {
         console.info('BuildingItem onSave')
     }
@@ -87,17 +90,43 @@ const BuildingItem: React.FC<Props> = (props) => {
         })
     }
 
+    // Удаление объекта из избранного
+    const removeBuildingFromFavorite = () => {
+        if (props.building.id) {
+            FavoriteService.removeFavorite(props.building.id)
+                .then(() => {
+                    props.onSave()
+                })
+                .catch((error: any) => {
+                    console.error('Ошибка удаления из избранного', error)
+
+                    openPopupAlert(document.body, {
+                        title: 'Ошибка!',
+                        text: error.data
+                    })
+                })
+        }
+    }
+
     // Открытие контекстного меню на элементе
     const onContextMenu = (e: React.MouseEvent) => {
         e.preventDefault()
 
+        const menuItems = []
+
+        if (props.isFavorite) {
+            menuItems.push({text: 'Удалить из избранного', onClick: () => removeBuildingFromFavorite()})
+        }
+
         if (['director', 'administrator', 'manager'].includes(role)) {
-            const menuItems = [{text: 'Редактировать', onClick: () => updateHandler(props.building)}]
+            menuItems.push({text: 'Редактировать', onClick: () => updateHandler(props.building)})
 
             if (['director', 'administrator'].includes(role)) {
                 menuItems.push({text: 'Удалить', onClick: () => removeHandler(props.building)})
             }
+        }
 
+        if (menuItems.length) {
             openContextMenu(e, menuItems)
         }
     }

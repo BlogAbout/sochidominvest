@@ -12,6 +12,7 @@ import CheckerService from '../../../api/CheckerService'
 import DocumentService from '../../../api/DocumentService'
 import UtilService from '../../../api/UtilService'
 import AttachmentService from '../../../api/AttachmentService'
+import FavoriteService from '../../../api/FavoriteService'
 import {IBuilding, IBuildingChecker, IBuildingHousing} from '../../../@types/IBuilding'
 import {IDocument} from '../../../@types/IDocument'
 import {ISelector} from '../../../@types/ISelector'
@@ -67,6 +68,7 @@ const BuildingItemPagePanel: React.FC = (props) => {
     const [fetchingDocuments, setFetchingDocuments] = useState(false)
     const [fetchingImages, setFetchingImages] = useState(false)
     const [fetchingVideos, setFetchingVideos] = useState(false)
+    const [favorites, setFavorites] = useState<number[]>([])
 
     const {buildings, fetching} = useTypedSelector(state => state.buildingReducer)
     const {developers, fetching: fetchingDeveloperList} = useTypedSelector(state => state.developerReducer)
@@ -131,6 +133,14 @@ const BuildingItemPagePanel: React.FC = (props) => {
                     console.error('Ошибка регистрации количества просмотров', error)
                 })
 
+            FavoriteService.fetchFavorites()
+                .then((response: any) => {
+                    setFavorites(response.data)
+                })
+                .catch((error: any) => {
+                    console.error('Ошибка загрузки избранного', error)
+                })
+
             if (building.images && building.images.length) {
                 setFetchingImages(true)
                 AttachmentService.fetchAttachments({active: [0, 1], id: building.images, type: 'image'})
@@ -162,6 +172,42 @@ const BuildingItemPagePanel: React.FC = (props) => {
             fetchArticleList({active: [0, 1]})
         }
     }, [building])
+
+    // Добавление объекта в избранное
+    const addBuildingToFavorite = () => {
+        if (building.id) {
+            FavoriteService.addFavorite(building.id)
+                .then((response: any) => {
+                    setFavorites(response.data)
+                })
+                .catch((error: any) => {
+                    console.error('Ошибка добавления в избранное', error)
+
+                    openPopupAlert(document.body, {
+                        title: 'Ошибка!',
+                        text: error.data
+                    })
+                })
+        }
+    }
+
+    // Удаление объекта из избранного
+    const removeBuildingFromFavorite = () => {
+        if (building.id) {
+            FavoriteService.removeFavorite(building.id)
+                .then((response: any) => {
+                    setFavorites(response.data)
+                })
+                .catch((error: any) => {
+                    console.error('Ошибка удаления из избранного', error)
+
+                    openPopupAlert(document.body, {
+                        title: 'Ошибка!',
+                        text: error.data
+                    })
+                })
+        }
+    }
 
     // Редактирование объекта
     const onClickEditHandler = () => {
@@ -278,13 +324,23 @@ const BuildingItemPagePanel: React.FC = (props) => {
                             className='marginRight'
                             title='Добавить в подборку'
                     />
-                    <Button type='regular'
-                            icon='heart'
-                            onClick={() => {
-                            }}
-                            className='marginRight'
-                            title='Добавить в избранное'
-                    />
+
+                    {building.id && favorites.length && favorites.includes(building.id) ?
+                        <Button type='apply'
+                                icon='heart'
+                                onClick={removeBuildingFromFavorite.bind(this)}
+                                className='marginRight'
+                                title='Удалить из избранного'
+                        />
+                        :
+                        <Button type='regular'
+                                icon='heart'
+                                onClick={addBuildingToFavorite.bind(this)}
+                                className='marginRight'
+                                title='Добавить в избранное'
+                        />
+                    }
+
                     <Button type='regular'
                             icon='arrow-up-from-bracket'
                             onClick={() => {

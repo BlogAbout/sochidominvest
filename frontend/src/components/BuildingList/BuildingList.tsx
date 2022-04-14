@@ -8,6 +8,7 @@ import classes from './BuildingList.module.scss'
 interface Props {
     buildings: IBuilding[]
     fetching: boolean
+    isFavorite?: boolean
 
     onSave(): void
 }
@@ -15,6 +16,7 @@ interface Props {
 const defaultProps: Props = {
     buildings: [],
     fetching: false,
+    isFavorite: false,
     onSave: () => {
         console.info('InfoList onSave')
     }
@@ -32,7 +34,11 @@ const BuildingList: React.FC<Props> = (props) => {
             {props.buildings.length ?
                 props.buildings.map((building: IBuilding) => {
                     return (
-                        <BuildingItem key={building.id} building={building} onSave={props.onSave.bind(this)}/>
+                        <BuildingItem key={building.id}
+                                      building={building}
+                                      onSave={props.onSave.bind(this)}
+                                      isFavorite={props.isFavorite}
+                        />
                     )
                 })
                 : <Empty message='Нет объектов недвижимости'/>
