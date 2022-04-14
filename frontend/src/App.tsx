@@ -15,8 +15,10 @@ import {
     faBell,
     faBolt,
     faBook,
+    faBorderAll,
     faBuilding,
     faBuildingColumns,
+    faCalendarPlus,
     faCar,
     faCashRegister,
     faCheck,
@@ -24,6 +26,7 @@ import {
     faChevronDown,
     faCircleQuestion,
     faCity,
+    faDatabase,
     faElevator,
     faEllipsis,
     faEye,
@@ -145,7 +148,10 @@ library.add(
     faPlay,
     faPause,
     faVolumeHigh,
-    faVolumeXmark
+    faVolumeXmark,
+    faBorderAll,
+    faCalendarPlus,
+    faDatabase
 )
 
 function App() {

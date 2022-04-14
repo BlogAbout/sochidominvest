@@ -4,6 +4,7 @@ import {TagActionCreators} from './tagActionCreators'
 import {DeveloperActionCreators} from './developerActionCreators'
 import {DocumentActionCreators} from './documentActionCreators'
 import {ArticleActionCreators} from './articleActionCreators'
+import {NotificationActionCreators} from './notificationActionCreators'
 
 export default {
     ...UserActionCreators,
@@ -11,5 +12,6 @@ export default {
     ...TagActionCreators,
     ...DeveloperActionCreators,
     ...DocumentActionCreators,
-    ...ArticleActionCreators
+    ...ArticleActionCreators,
+    ...NotificationActionCreators
 }

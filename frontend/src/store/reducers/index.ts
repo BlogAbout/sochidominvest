@@ -6,6 +6,7 @@ import TagReducer from './tagReducer'
 import DeveloperReducer from './developerReducer'
 import DocumentReducer from './documentReducer'
 import ArticleReducer from './articleReducer'
+import NotificationReducer from './notificationReducer'
 
 const rootReducer = combineReducers({
     userReducer: UserReducer,
@@ -13,7 +14,8 @@ const rootReducer = combineReducers({
     tagReducer: TagReducer,
     developerReducer: DeveloperReducer,
     documentReducer: DocumentReducer,
-    articleReducer: ArticleReducer
+    articleReducer: ArticleReducer,
+    notificationReducer: NotificationReducer
 })
 
 export const store = createStore(rootReducer, applyMiddleware(thunk))

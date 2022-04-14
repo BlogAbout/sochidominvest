@@ -1,0 +1,36 @@
+.NotificationPanel {
+    position: fixed;
+    right: 0;
+    top: 0;
+    width: 350px;
+    height: 100%;
+    background-color: #fff;
+    box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.4);
+    display: flex;
+    flex-direction: column;
+    max-width: 100vw;
+    max-height: 100vh;
+
+    .popupContent {
+        padding: 15px;
+        height: calc(100% - 103px);
+
+        .filter {
+            display: flex;
+            justify-content: center;
+            height: 70px;
+
+            > div {
+                margin-right: 10px;
+
+                &:last-child {
+                    margin-right: 0;
+                }
+            }
+        }
+
+        .content {
+
+        }
+    }
+}
