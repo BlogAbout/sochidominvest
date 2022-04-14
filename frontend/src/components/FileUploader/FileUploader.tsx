@@ -69,6 +69,15 @@ const FileUploader: React.FC<Props> = (props) => {
             break
     }
 
+    const setDefaultUploadInfo = () => {
+        setUploadInfo({
+            files: null,
+            counter: 0,
+            countFiles: 0,
+            attachments: []
+        })
+    }
+
     // Загрузчик файла
     const uploadFileHandler = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const files: FileList | null = e.currentTarget.files
@@ -92,6 +101,7 @@ const FileUploader: React.FC<Props> = (props) => {
                     })
                 })
                 .catch((error) => {
+                    setDefaultUploadInfo()
                     console.error('Ошибка загрузки файла', error)
 
                     openPopupAlert(document.body, {
@@ -112,12 +122,7 @@ const FileUploader: React.FC<Props> = (props) => {
 
             props.onChange(uploadInfo.attachments)
 
-            setUploadInfo({
-                files: null,
-                counter: 0,
-                countFiles: 0,
-                attachments: []
-            })
+            setDefaultUploadInfo()
         }
     }
 

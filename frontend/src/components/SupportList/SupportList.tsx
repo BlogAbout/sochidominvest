@@ -2,6 +2,7 @@ import React from 'react'
 import {IFeed} from '../../@types/IFeed'
 import Empty from '../Empty/Empty'
 import SupportItem from './components/SupportItem/SupportItem'
+import BlockingElement from '../BlockingElement/BlockingElement'
 import classes from './SupportList.module.scss'
 
 interface Props {
@@ -32,11 +33,13 @@ const SupportList: React.FC<Props> = (props) => {
             </div>
 
             {props.feeds.length ?
-                props.feeds.map((feed: IFeed) => {
-                    return (
-                        <SupportItem key={feed.id} feed={feed} onSave={props.onSave.bind(this)}/>
-                    )
-                })
+                (<BlockingElement fetching={props.fetching} className={classes.list}>
+                    {props.feeds.map((feed: IFeed) => {
+                        return (
+                            <SupportItem key={feed.id} feed={feed} onSave={props.onSave.bind(this)}/>
+                        )
+                    })}
+                </BlockingElement>)
                 : <Empty message='Нет заявок'/>
             }
         </div>

@@ -1,7 +1,7 @@
 .SupportList {
     margin-top: 20px;
     overflow: auto;
-    max-height: calc(100% - 80px);
+    height: 100%;
 
     .head {
         padding: 8px 10px;
@@ -33,5 +33,9 @@
             width: 150px;
             flex-shrink: 0;
         }
+    }
+
+    .list {
+        max-height: calc(100% - 110px);
     }
 }

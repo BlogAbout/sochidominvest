@@ -1,6 +1,7 @@
 import React from 'react'
 import Empty from '../Empty/Empty'
 import DeveloperItem from './components/DeveloperItem/DeveloperItem'
+import BlockingElement from '../BlockingElement/BlockingElement'
 import {IDeveloper} from '../../@types/IDeveloper'
 import classes from './DeveloperList.module.scss'
 
@@ -30,11 +31,13 @@ const DeveloperList: React.FC<Props> = (props) => {
             </div>
 
             {props.developers.length ?
-                props.developers.map((developer: IDeveloper) => {
-                    return (
-                        <DeveloperItem key={developer.id} developer={developer} onSave={props.onSave.bind(this)}/>
-                    )
-                })
+                (<BlockingElement fetching={props.fetching} className={classes.list}>
+                    {props.developers.map((developer: IDeveloper) => {
+                        return (
+                            <DeveloperItem key={developer.id} developer={developer} onSave={props.onSave.bind(this)}/>
+                        )
+                    })}
+                </BlockingElement>)
                 : <Empty message='Нет застройщиков'/>
             }
         </div>

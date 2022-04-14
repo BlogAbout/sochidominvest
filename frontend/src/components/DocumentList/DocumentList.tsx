@@ -1,6 +1,7 @@
 import React from 'react'
 import Empty from '../Empty/Empty'
 import DocumentItem from './components/DocumentItem/DocumentItem'
+import BlockingElement from '../BlockingElement/BlockingElement'
 import {IDocument} from '../../@types/IDocument'
 import classes from './DocumentList.module.scss'
 
@@ -30,11 +31,13 @@ const DocumentList: React.FC<Props> = (props) => {
             </div>
 
             {props.documents.length ?
-                props.documents.map((document: IDocument) => {
-                    return (
-                        <DocumentItem key={document.id} document={document} onSave={props.onSave.bind(this)}/>
-                    )
-                })
+                (<BlockingElement fetching={props.fetching} className={classes.list}>
+                    {props.documents.map((document: IDocument) => {
+                        return (
+                            <DocumentItem key={document.id} document={document} onSave={props.onSave.bind(this)}/>
+                        )
+                    })}
+                </BlockingElement>)
                 : <Empty message='Нет документов'/>
             }
         </div>

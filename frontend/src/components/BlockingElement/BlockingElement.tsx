@@ -1,5 +1,6 @@
 import * as React from 'react'
 import classNames from 'classnames'
+import Preloader from '../Preloader/Preloader'
 import classes from './BlockingElement.module.scss'
 
 interface Props {
@@ -25,15 +26,7 @@ const BlockingElement: React.FC<Props> = (props) => {
         <div className={blockingElementStyle} style={{position: 'relative'}}>
             {props.children}
 
-            {!props.fetching ? null :
-                <div className={classes.blockSpinner}>
-                    <div className={classes.spinner}>
-                        <div className={classes.bounce1}/>
-                        <div className={classes.bounce2}/>
-                        <div/>
-                    </div>
-                </div>
-            }
+            {props.fetching && <Preloader/>}
         </div>
     )
 }

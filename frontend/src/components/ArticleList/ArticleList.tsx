@@ -1,6 +1,7 @@
 import React from 'react'
 import Empty from '../Empty/Empty'
 import ArticleItem from './components/ArticleItem/ArticleItem'
+import BlockingElement from '../BlockingElement/BlockingElement'
 import {IArticle} from '../../@types/IArticle'
 import classes from './ArticleList.module.scss'
 
@@ -30,11 +31,13 @@ const ArticleList: React.FC<Props> = (props) => {
             </div>
 
             {props.articles.length ?
-                props.articles.map((article: IArticle) => {
-                    return (
-                        <ArticleItem key={article.id} article={article} onSave={props.onSave.bind(this)}/>
-                    )
-                })
+                (<BlockingElement fetching={props.fetching} className={classes.list}>
+                    {props.articles.map((article: IArticle) => {
+                        return (
+                            <ArticleItem key={article.id} article={article} onSave={props.onSave.bind(this)}/>
+                        )
+                    })}
+                </BlockingElement>)
                 : <Empty message='Нет статей'/>
             }
         </div>

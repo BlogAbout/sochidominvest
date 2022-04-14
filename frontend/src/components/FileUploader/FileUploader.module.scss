@@ -28,12 +28,13 @@
             height: 18px;
             margin: 11px 0;
             background: #dfdfdf;
-            font-size: 12px;
+            font-size: 11px;
 
             span {
                 padding: 2px 5px;
                 display: block;
                 background: #ffcc01;
+                white-space: nowrap;
             }
         }
     }

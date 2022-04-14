@@ -1,6 +1,7 @@
 import React from 'react'
 import Empty from '../Empty/Empty'
 import UserItem from './components/UserItem/UserItem'
+import BlockingElement from '../BlockingElement/BlockingElement'
 import {IUser} from '../../@types/IUser'
 import classes from './UserList.module.scss'
 
@@ -31,11 +32,13 @@ const UserList: React.FC<Props> = (props) => {
             </div>
 
             {props.users.length ?
-                props.users.map((user: IUser) => {
-                    return (
-                        <UserItem key={user.id} user={user} onSave={props.onSave.bind(this)}/>
-                    )
-                })
+                (<BlockingElement fetching={props.fetching} className={classes.list}>
+                    {props.users.map((user: IUser) => {
+                        return (
+                            <UserItem key={user.id} user={user} onSave={props.onSave.bind(this)}/>
+                        )
+                    })}
+                </BlockingElement>)
                 : <Empty message='Нет пользователей'/>
             }
         </div>

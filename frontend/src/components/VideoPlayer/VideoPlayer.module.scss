@@ -13,7 +13,6 @@
     display: flex;
     justify-content: center;
     overflow: hidden;
-    border-radius: 10px;
 
     &:hover {
         .controls {
@@ -45,7 +44,7 @@
         width: 100%;
         max-width: 500px;
         flex-wrap: wrap;
-        background: rgba(255, 255, 255, 0.25);
+        background: rgba(7, 94, 165, 0.25);
         box-shadow: 0 8px 32px 0 rgba(255, 255, 255, 0.1);
         backdrop-filter: blur(4px);
         -webkit-backdrop-filter: blur(4px);
@@ -61,7 +60,7 @@
                 transition: all 0.3s ease-in;
 
                 &:hover {
-                    color: #075ea5;
+                    opacity: 0.6;
                 }
             }
         }

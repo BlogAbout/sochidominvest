@@ -4,11 +4,16 @@ import classes from './Preloader.module.scss'
 const Preloader: React.FC = () => {
     return (
         <div className={classes['background']}>
-            <div className={classes['spinner']}>
-                <div className={classes['bounce1']}/>
-                <div className={classes['bounce2']}/>
-                <div/>
-            </div>
+        <div className={classes.roller}>
+            <div/>
+            <div/>
+            <div/>
+            <div/>
+            <div/>
+            <div/>
+            <div/>
+            <div/>
+        </div>
         </div>
     )
 }
