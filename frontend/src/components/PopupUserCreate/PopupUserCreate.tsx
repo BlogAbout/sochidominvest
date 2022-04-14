@@ -190,7 +190,7 @@ const PopupUserCreate: React.FC<Props> = (props) => {
                                 />
                             </div>
 
-                            <div className={classes.field}>
+                            <div className={classes.fieldFull}>
                                 <CheckBox label='Активен'
                                           type='modern'
                                           checked={!!user.active}

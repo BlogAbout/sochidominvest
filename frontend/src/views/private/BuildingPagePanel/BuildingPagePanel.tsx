@@ -76,7 +76,7 @@ const BuildingPagePanel: React.FC = () => {
             {text: 'Гараж, машиноместо', onClick: () => addHandler('garage')}
         ]
 
-        openContextMenu(e, menuItems)
+        openContextMenu(e.currentTarget, menuItems)
     }
 
     // Кнопки базовой фильтрации

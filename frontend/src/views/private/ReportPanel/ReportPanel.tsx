@@ -13,7 +13,11 @@ const ReportPanel: React.FC = () => {
             </Helmet>
 
             <div className={classes.Content}>
-                <h1>Отчеты</h1>
+                <h1>
+                    <span>Отчеты</span>
+                </h1>
+
+                <p style={{marginTop: 20, color: '#fff'}}>Раздел находится в стадии разработки</p>
             </div>
         </main>
     )

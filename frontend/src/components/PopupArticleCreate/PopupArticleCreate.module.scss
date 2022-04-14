@@ -1,11 +1,10 @@
 .PopupArticleCreate {
-    width: 800px;
-    height: 500px;
+    width: 650px;
+    height: 450px;
 }
 
 .content {
-    padding: 15px 15px 0;
-    height: 393px;
+    height: 343px;
     overflow: auto;
 
     .info {
@@ -18,10 +17,7 @@
 }
 
 .tabContent {
-    padding: 15px;
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
+
 }
 
 .field {

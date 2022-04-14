@@ -86,7 +86,7 @@ const DocumentPagePanel: React.FC = () => {
             }
         ]
 
-        openContextMenu(e, menuItems)
+        openContextMenu(e.currentTarget, menuItems)
     }
 
     // Кнопки базовой фильтрации

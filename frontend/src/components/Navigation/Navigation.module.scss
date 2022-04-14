@@ -1,5 +1,5 @@
 .Navigation {
-    width: 50px;
+    width: 46px;
     height: 100%;
     display: flex;
     flex-grow: 1;
@@ -20,7 +20,7 @@
         flex-direction: column;
 
         li {
-            line-height: 50px;
+            line-height: 46px;
             display: block;
             position: relative;
             padding: 5px;
@@ -59,8 +59,8 @@
                     font-size: 16px;
                     line-height: 40px;
                     display: flex;
-                    width: 40px;
-                    height: 40px;
+                    width: 36px;
+                    height: 36px;
                     align-items: center;
                     justify-content: center;
                     border: 2px solid #fff;

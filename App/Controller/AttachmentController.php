@@ -307,7 +307,7 @@ class AttachmentController extends Controller
             );
         }
 
-        if ($type) {
+        if ($type === 'image') {
             self::imageResize($dir, $fileName, 400);
             self::imageResize($dir, $fileName, 2000);
         }

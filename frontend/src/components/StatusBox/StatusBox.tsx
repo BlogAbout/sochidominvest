@@ -24,7 +24,7 @@ const StatusBox: React.FC<Props> = (props) => {
     const status = props.items.find(item => item.text === props.value)
 
     const changeStatus = (e: React.MouseEvent) => {
-        openContextMenu(e, props.items)
+        openContextMenu(e.currentTarget, props.items)
     }
 
     return (

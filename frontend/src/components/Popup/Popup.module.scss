@@ -47,31 +47,20 @@
     min-width: 0;
 }
 
-.header_icon {
+.cross {
     flex: none;
     cursor: pointer;
     margin-left: 10px;
-}
-
-.cross {
-    composes: header_icon;
-    background: url('./img/cross_small.png') no-repeat center;
     width: 14px;
     height: 14px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.3s ease-in;
 }
 
 .cross:hover {
-    background: url('./img/cross_small_active.png') no-repeat center;
-}
-
-.header_big .cross {
-    background: url('./img/cross.png') no-repeat center;
-    width: 20px;
-    height: 20px;
-}
-
-.header_big .cross:hover {
-    background: url('./img/cross_active.png') no-repeat center;
+    opacity: 0.5;
 }
 
 .content {

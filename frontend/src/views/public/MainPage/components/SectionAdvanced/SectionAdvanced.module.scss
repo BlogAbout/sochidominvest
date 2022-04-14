@@ -7,7 +7,7 @@
         width: 100%;
         height: 100%;
         margin: 0 auto;
-        max-width: 1200px;
+        max-width: 1024px;
         display: flex;
         position: relative;
         z-index: 3;
@@ -18,19 +18,20 @@
             justify-content: space-between;
 
             .item {
-                width: 28%;
+                width: 31%;
                 height: 450px;
                 display: flex;
                 align-items: center;
                 border: 1px solid #ffcc01;
                 color: #075ea5;
-                padding: 0 30px;
+                padding: 0 20px;
                 text-align: center;
                 position: relative;
                 background-image: url('../../img/bg-block.jpg');
                 background-position: center;
                 background-size: cover;
                 background-repeat: no-repeat;
+                box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.4);
 
                 &::before {
                     content: '';
@@ -59,8 +60,8 @@
                     p {
                         margin-bottom: 50px;
                         color: #fff;
-                        font-size: 18px;
-                        line-height: 30px;
+                        font-size: 17px;
+                        line-height: 28px;
                     }
 
                     span,
@@ -70,7 +71,7 @@
                         border: 1px solid #fff;
                         padding: 10px 20px;
                         text-align: center;
-                        font-size: 18px;
+                        font-size: 16px;
                         cursor: pointer;
 
                         &:hover {
@@ -85,17 +86,11 @@
     }
 }
 
-@media (max-width: 1200px) {
-    .SectionAdvanced {
-        .container {
-            padding: 0 10px;
-        }
-    }
-}
-
 @media (max-width: 1024px) {
     .SectionAdvanced {
         .container {
+            padding: 0 10px;
+
             .list {
                 .item {
                     width: 32%;

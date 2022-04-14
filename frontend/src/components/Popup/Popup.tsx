@@ -1,4 +1,5 @@
 import React, {CSSProperties} from 'react'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import classNames from 'classnames'
 import {removePopup} from '../../helpers/popupHelper'
 import classes from './Popup.module.scss'
@@ -55,7 +56,9 @@ const Header: React.FC<HeaderProps> = (props) => {
                 <div className={classes.cross}
                      title={props.closeTitle}
                      onClick={props.onClose || closePopup.bind(this)} onMouseDown={e => e.stopPropagation()}
-                />
+                >
+                    <FontAwesomeIcon icon='xmark'/>
+                </div>
             }
         </div>
     )

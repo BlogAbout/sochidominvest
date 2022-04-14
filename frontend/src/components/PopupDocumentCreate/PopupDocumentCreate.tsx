@@ -125,7 +125,7 @@ const PopupDocumentCreate: React.FC<Props> = (props) => {
                                             })
                                         }
                                     })}
-                                    disabled={checkDisabledButton()}
+                                    disabled={fetching}
                             >{documentInfo.attachmentId ? 'Заменить' : 'Выбрать / Загрузить'}</Button>
                         </div>
                         : null

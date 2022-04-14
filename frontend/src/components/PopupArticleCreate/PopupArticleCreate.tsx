@@ -20,8 +20,9 @@ import TextAreaBox from '../TextAreaBox/TextAreaBox'
 import ComboBox from '../ComboBox/ComboBox'
 import Tabs from '../Tabs/Tabs'
 import BuildingBox from '../BuildingBox/BuildingBox'
+import FileList from '../FileList/FileList'
+import openPopupFileManager from '../PopupFileManager/PopupFileManager'
 import classes from './PopupArticleCreate.module.scss'
-import FileList from "../FileList/FileList";
 
 interface Props extends PopupProps {
     article?: IArticle | null
@@ -48,7 +49,7 @@ const PopupArticleCreate: React.FC<Props> = (props) => {
         active: 1,
         publish: 0,
         buildings: [],
-        images: [],
+        images: []
     })
 
     const [fetching, setFetching] = useState(false)
@@ -208,15 +209,31 @@ const PopupArticleCreate: React.FC<Props> = (props) => {
     const renderGalleryTab = () => {
         return (
             <div key='gallery' className={classes.tabContent}>
-                <div className={cx({'field': true, 'full': true})}>
-                    <div className={classes.field_label}>Фотогалерея</div>
+                <div className={classes.info}>
+                    <div className={cx({'field': true, 'full': true})}>
+                        <div className={classes.field_label}>Фотогалерея</div>
 
-                    <FileList files={images}
-                              selected={article.avatarId ? [article.avatarId] : []}
-                              fetching={fetchingImages}
-                              onSave={addAttachmentHandler.bind(this)}
-                              onSelect={selectImageAvatarHandler.bind(this)}
-                    />
+                        <Button type='save'
+                                icon='arrow-pointer'
+                                onClick={() => openPopupFileManager(document.body, {
+                                    type: 'image',
+                                    selected: article.images,
+                                    onSelect: (selected: number[], attachments: IAttachment[]) => {
+                                        setArticle({...article, images: selected})
+                                        setImages(attachments)
+                                    },
+                                    multi: true
+                                })}
+                                disabled={fetching}
+                        >Выбрать / Загрузить</Button>
+
+                        <FileList files={images}
+                                  selected={article.avatarId ? [article.avatarId] : []}
+                                  fetching={fetchingImages}
+                                  onSave={addAttachmentHandler.bind(this)}
+                                  onSelect={selectImageAvatarHandler.bind(this)}
+                        />
+                    </div>
                 </div>
             </div>
         )

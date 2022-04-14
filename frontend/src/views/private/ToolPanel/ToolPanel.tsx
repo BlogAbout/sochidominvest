@@ -13,7 +13,11 @@ const ToolPanel: React.FC = () => {
             </Helmet>
 
             <div className={classes.Content}>
-                <h1>Инструменты</h1>
+                <h1>
+                    <span>Инструменты</span>
+                </h1>
+
+                <p style={{marginTop: 20, color: '#fff'}}>Раздел находится в стадии разработки</p>
             </div>
         </main>
     )

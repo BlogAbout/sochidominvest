@@ -10,7 +10,7 @@
             width: 100%;
             height: 100%;
             margin: 0 auto 60px;
-            max-width: 1200px;
+            max-width: 1024px;
             position: relative;
             box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.4);
             background: #fff;
@@ -127,8 +127,8 @@
                         }
 
                         .address {
-                            margin-bottom: 50px;
-                            font-size: 20px;
+                            margin-bottom: 20px;
+                            font-size: 16px;
 
                             span {
                                 display: block;
@@ -137,10 +137,10 @@
 
                         .row {
                             width: 50%;
-                            margin-bottom: 20px;
+                            margin-bottom: 15px;
 
                             span:first-child {
-                                font-size: 24px;
+                                font-size: 22px;
                                 display: block;
                                 margin-bottom: 5px;
                             }
@@ -148,7 +148,7 @@
                             span:last-child {
                                 text-transform: uppercase;
                                 color: #777;
-                                font-size: 18px;
+                                font-size: 16px;
                                 display: block;
                             }
                         }
@@ -211,18 +211,20 @@
     }
 }
 
-@media (max-width: 1200px) {
-    .BuildingItemPagePublic {
+@media (max-width: 1024px) {
+    .BuildingItemPage {
         .Content {
             .container {
-                padding: 0 10px;
+                .block {
+                    padding: 0 10px;
+                }
             }
         }
     }
 }
 
 @media (max-width: 768px) {
-    .BuildingItemPagePublic {
+    .BuildingItemPage {
         .Content {
             .information {
                 .block {
@@ -248,7 +250,7 @@
 }
 
 @media (max-width: 400px) {
-    .BuildingItemPagePublic {
+    .BuildingItemPage {
         .Content {
             .information {
                 .block {

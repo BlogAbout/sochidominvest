@@ -12,8 +12,7 @@ const DesktopPagePanel: React.FC = () => {
                 <link rel='canonical' href={`${window.location.href}`}/>
             </Helmet>
 
-            <p>В разработке</p>
-            <p>Здесь будут различные информационные блоки по принципу рабочего стола</p>
+            <p style={{marginTop: 20, color: '#fff'}}>Раздел находится в стадии разработки</p>
         </div>
     )
 }
