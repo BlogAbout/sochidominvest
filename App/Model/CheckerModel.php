@@ -212,7 +212,7 @@ class CheckerModel extends Model
             'id' => (int)$data['id'],
             'buildingId' => (int)$data['id_building'],
             'author' => (int)$data['author'],
-            'name' => $data['name'],
+            'name' => html_entity_decode($data['name']),
             'area' => (float)$data['area'],
             'cost' => (float)$data['cost'],
             'furnish' => $data['furnish'],

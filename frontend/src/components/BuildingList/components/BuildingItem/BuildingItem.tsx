@@ -136,7 +136,7 @@ const BuildingItem: React.FC<Props> = (props) => {
     const districtText = getDistrictText(props.building.district, props.building.districtZone)
 
     return (
-        <div className={classes.BuildingItem}
+        <div className={cx({'BuildingItem': true, 'disabled': props.building.active === 0})}
              onClick={() => navigate('/panel/building/' + props.building.id)}
              onContextMenu={(e: React.MouseEvent) => onContextMenu(e)}
         >

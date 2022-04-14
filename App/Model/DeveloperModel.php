@@ -181,8 +181,8 @@ class DeveloperModel extends Model
     {
         return [
             'id' => (int)$data['id'],
-            'name' => $data['name'],
-            'description' => $data['description'],
+            'name' => html_entity_decode($data['name']),
+            'description' => html_entity_decode($data['description']),
             'address' => $data['address'],
             'phone' => $data['phone'],
             'author' => (int)$data['author'],

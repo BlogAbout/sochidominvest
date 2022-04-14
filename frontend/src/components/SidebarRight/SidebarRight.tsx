@@ -49,12 +49,6 @@ const SidebarRight: React.FC = () => {
                 <FontAwesomeIcon icon='bell'/>
             </div>
 
-            <div className={classes.icon}>
-                <Link to={RouteNames.PROFILE} title='Настройки'>
-                    <FontAwesomeIcon icon='gear'/>
-                </Link>
-            </div>
-
             <div className={classes.icon} title='Выход' onClick={logout.bind(this)}>
                 <FontAwesomeIcon icon='right-from-bracket'/>
             </div>

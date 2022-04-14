@@ -156,7 +156,7 @@ class TagModel extends Model
     {
         return [
             'id' => (int)$data['id'],
-            'name' => $data['name'],
+            'name' => html_entity_decode($data['name']),
             'active' => (int)$data['active'],
             'author' => (int)$data['author']
         ];

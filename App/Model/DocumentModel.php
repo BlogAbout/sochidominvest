@@ -181,7 +181,7 @@ class DocumentModel extends Model
         return [
             'id' => (int)$data['id'],
             'author' => (int)$data['author'],
-            'name' => $data['name'],
+            'name' => html_entity_decode($data['name']),
             'attachmentId' => $data['id_attachment'] ? (int)$data['id_attachment'] : null,
             'objectId' => $data['id_object'] ? (int)$data['id_object'] : null,
             'objectType' => $data['type_object'],

@@ -226,7 +226,7 @@ class UserModel extends Model
     {
         return [
             'id' => (int)$data['id'],
-            'firstName' => $data['first_name'],
+            'firstName' => html_entity_decode($data['first_name']),
             'email' => $data['email'],
             'phone' => $data['phone'],
             'password' => $data['password'],

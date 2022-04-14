@@ -168,8 +168,8 @@ class AttachmentModel extends Model
         return [
             'id' => (int)$data['id'],
             'author' => (int)$data['author'],
-            'name' => $data['name'],
-            'description' => $data['description'],
+            'name' => html_entity_decode($data['name']),
+            'description' => html_entity_decode($data['description']),
             'content' => $data['content'],
             'type' => $data['type'],
             'extension' => $data['extension'],

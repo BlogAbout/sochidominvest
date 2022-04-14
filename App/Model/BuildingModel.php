@@ -519,9 +519,9 @@ class BuildingModel extends Model
     {
         return [
             'id' => (int)$data['id'],
-            'name' => $data['name'],
-            'description' => $data['description'],
-            'address' => $data['address'],
+            'name' => html_entity_decode($data['name']),
+            'description' => html_entity_decode($data['description']),
+            'address' => html_entity_decode($data['address']),
             'active' => (int)$data['active'],
             'publish' => (int)$data['publish'],
             'status' => $data['status'],
@@ -565,8 +565,8 @@ class BuildingModel extends Model
             'videos' => array_map('intval', $data['videos'] ? explode(',', $data['videos']) : []),
             'area' => (float)$data['area'],
             'cost' => (float)$data['cost'],
-            'metaTitle' => $data['meta_title'],
-            'metaDescription' => $data['meta_description'],
+            'metaTitle' => html_entity_decode($data['meta_title']),
+            'metaDescription' => html_entity_decode($data['meta_description']),
             'passed' => $data['passed'] ? json_decode($data['passed']) : null,
             'views' => $data['views'] ? (int)$data['views'] : 0,
             'avatarId' => (int)$data['id_avatar'],
