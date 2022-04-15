@@ -14,6 +14,7 @@
         cursor: pointer;
         font-size: 18px;
         text-align: center;
+        position: relative;
 
         &:hover {
             opacity: 0.7;
@@ -25,6 +26,20 @@
 
         + .icon {
             margin-top: 15px;
+        }
+
+        .counter {
+            position: absolute;
+            left: -12px;
+            top: -5px;
+            border-radius: 50%;
+            background: #ffcc01;
+            text-align: center;
+            z-index: 2;
+            font-size: 12px;
+            line-height: 17px;
+            width: 17px;
+            height: 17px;
         }
     }
 }

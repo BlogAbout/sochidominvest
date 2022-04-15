@@ -1,0 +1,26 @@
+.PopupNotificationCreate {
+    width: 400px;
+    height: 350px;
+}
+
+.content {
+    height: 243px;
+    overflow: auto;
+
+    .info {
+        padding: 15px 15px 0;
+    }
+}
+
+.field {
+    width: 100%;
+    margin-bottom: 10px;
+    position: relative;
+}
+
+.field_label {
+    font-size: 14px;
+    color: black;
+    margin-bottom: 3px;
+    display: flex;
+}

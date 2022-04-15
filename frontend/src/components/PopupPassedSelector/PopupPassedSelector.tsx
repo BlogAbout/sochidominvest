@@ -24,7 +24,7 @@ const defaultProps: Props = {
 const PopupPassedSelector: React.FC<Props> = (props) => {
     const [passed, setPassed] = useState<IBuildingPassed>(props.selected || {
         is: 0,
-        quarter: 1,
+        quarter: null,
         year: 2020
     })
 

@@ -167,6 +167,15 @@ class Controller
                 } catch (Exception $e) {
                 }
             }
+
+            if ($payload->validator == 'notificationExists') {
+                try {
+                    if (!Model::isExistsItem('sdi_notification', (int)$payload->data)) {
+                        array_push($response, "Уведомление с таким идентификатором не найдено в базе данных.");
+                    }
+                } catch (Exception $e) {
+                }
+            }
         }
 
         $validationErrors = new \stdClass();

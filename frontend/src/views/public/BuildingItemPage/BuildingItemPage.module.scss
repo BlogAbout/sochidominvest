@@ -71,86 +71,90 @@
                 }
 
                 .mainInfo {
-                    display: flex;
-                    align-items: flex-start;
-                    justify-content: space-between;
+                    .buttons {
+                        display: flex;
+                        align-items: center;
+                        justify-content: flex-start;
+                        flex-wrap: wrap;
 
-                    .col {
-                        width: 49%;
-
-                        .passed {
+                        > div {
+                            margin-right: 10px;
                             margin-bottom: 10px;
+                        }
+                    }
 
-                            span {
-                                display: inline-block;
-                                font-size: 14px;
-                                line-height: 14px;
-                                padding: 5px;
-                                background: #075ea5;
-                                color: #fff;
-                                z-index: 3;
-                            }
+                    .passed {
+                        margin-bottom: 10px;
 
-                            &.is {
-                                span {
-                                    background: #ffcc01;
-                                    color: #000;
-                                }
-                            }
+                        span {
+                            display: inline-block;
+                            font-size: 14px;
+                            line-height: 14px;
+                            padding: 5px;
+                            background: #075ea5;
+                            color: #fff;
+                            z-index: 3;
                         }
 
-                        .tags {
-                            width: 100%;
-                            margin-bottom: 20px;
-
-                            > div {
-                                margin-right: 5px;
+                        &.is {
+                            span {
                                 background: #ffcc01;
-                                font-size: 14px;
-                                padding: 2px 5px;
-                                display: inline-block;
+                                color: #000;
                             }
                         }
+                    }
 
-                        h1 {
-                            font-size: 28px;
-                            margin-bottom: 0;
-                            position: relative;
+                    .tags {
+                        width: 100%;
+                        margin-bottom: 20px;
 
-                            .views {
-                                position: absolute;
-                                right: 0;
-                                top: 1px;
-                                font-size: 12px;
-                                color: #ccc;
-                            }
+                        > div {
+                            margin-right: 5px;
+                            background: #ffcc01;
+                            font-size: 14px;
+                            padding: 2px 5px;
+                            display: inline-block;
+                        }
+                    }
+
+                    h1 {
+                        font-size: 28px;
+                        margin-bottom: 0;
+                        position: relative;
+
+                        .views {
+                            position: absolute;
+                            right: 0;
+                            top: 1px;
+                            font-size: 12px;
+                            color: #ccc;
+                        }
+                    }
+
+                    .address {
+                        margin-bottom: 20px;
+                        font-size: 16px;
+
+                        span {
+                            display: block;
+                        }
+                    }
+
+                    .row {
+                        width: 25%;
+                        margin-bottom: 15px;
+
+                        span:first-child {
+                            font-size: 22px;
+                            display: block;
+                            margin-bottom: 5px;
                         }
 
-                        .address {
-                            margin-bottom: 20px;
+                        span:last-child {
+                            text-transform: uppercase;
+                            color: #777;
                             font-size: 16px;
-
-                            span {
-                                display: block;
-                            }
-                        }
-
-                        .row {
-                            width: 50%;
-                            margin-bottom: 15px;
-
-                            span:first-child {
-                                font-size: 22px;
-                                display: block;
-                                margin-bottom: 5px;
-                            }
-
-                            span:last-child {
-                                text-transform: uppercase;
-                                color: #777;
-                                font-size: 16px;
-                                display: block;
-                            }
+                            display: block;
                         }
                     }
                 }
@@ -196,12 +200,12 @@
                         }
 
                         .label {
-                            width: 30%;
+                            width: 40%;
                             font-weight: 700;
                         }
 
                         .param {
-                            width: 70%;
+                            width: 60%;
                             text-align: right;
                         }
                     }
@@ -233,8 +237,8 @@
                     .mainInfo {
                         flex-wrap: wrap;
 
-                        .col {
-                            width: 100%;
+                        .row {
+                            width: 50%;
                         }
                     }
                 }
@@ -255,8 +259,13 @@
             .information {
                 .block {
                     .mainInfo {
-                        .col {
-                            .row {
+                        .row {
+                            width: 100%;
+                        }
+
+                        .buttons {
+                            > div {
+                                margin-right: 0;
                                 width: 100%;
                             }
                         }

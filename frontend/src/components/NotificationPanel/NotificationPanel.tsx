@@ -2,10 +2,11 @@ import React, {useEffect, useRef, useState} from 'react'
 import {useTypedSelector} from '../../hooks/useTypedSelector'
 import {useActions} from '../../hooks/useActions'
 import {INotification} from '../../@types/INotification'
-import {Content, Footer, Header, Popup} from '../Popup/Popup'
+import {Content, Footer, Header} from '../Popup/Popup'
 import BlockingElement from '../BlockingElement/BlockingElement'
 import Button from '../Button/Button'
 import Empty from '../Empty/Empty'
+import openPopupNotificationCreate from '../PopupNotificationCreate/PopupNotificationCreate'
 import classes from './NotificationPanel.module.scss'
 
 interface Props {
@@ -24,24 +25,26 @@ const defaultProps: Props = {
 const NotificationPanel: React.FC<Props> = (props) => {
     const refDepartmentItem = useRef<HTMLDivElement>(null)
 
-    const [isUpdate, setIsUpdate] = useState(false)
+    const [isUpdate, setIsUpdate] = useState(true)
     const [countNotification, setCountNotification] = useState(0)
     const [selectedType, setSelectedType] = useState('new')
+    const [filteredNotification, setFilteredNotification] = useState<INotification[]>([])
 
     const {role} = useTypedSelector(state => state.userReducer)
     const {notifications, fetching} = useTypedSelector(state => state.notificationReducer)
     const {fetchNotificationList, readNotificationAll} = useActions()
 
     useEffect(() => {
-        document.addEventListener('click', handleClickOutside, true)
-
-        return () => {
-            document.removeEventListener('click', handleClickOutside, true)
-        }
+        // document.addEventListener('click', handleClickOutside, true)
+        //
+        // return () => {
+        //     document.removeEventListener('click', handleClickOutside, true)
+        // }
     }, [])
 
     useEffect(() => {
         if (isUpdate || !notifications.length) {
+            filter()
             fetchNotificationList()
         }
     }, [isUpdate])
@@ -54,6 +57,24 @@ const NotificationPanel: React.FC<Props> = (props) => {
         }
     }, [notifications])
 
+    useEffect(() => {
+        filter()
+    }, [selectedType])
+
+    const filter = () => {
+        switch (selectedType) {
+            case 'all':
+                setFilteredNotification(notifications)
+                break
+            case 'new':
+                setFilteredNotification(notifications.filter((notification: INotification) => notification.status === 'new'))
+                break
+            default:
+                setFilteredNotification([])
+                break
+        }
+    }
+
     // Обработка клика вне блока
     const handleClickOutside = (event: Event): void => {
         if (refDepartmentItem.current && event.target && !refDepartmentItem.current.contains(event.target as Node)) {
@@ -63,7 +84,7 @@ const NotificationPanel: React.FC<Props> = (props) => {
 
     return (
         <div className={classes.NotificationPanel} ref={refDepartmentItem}>
-            <Header title={'Уведомления' + (countNotification > 0 ? `(${countNotification})` : '')}
+            <Header title={'Уведомления' + (countNotification > 0 ? ` (${countNotification})` : '')}
                     popupId=''
                     onClose={() => props.onShow()}
             />
@@ -101,9 +122,20 @@ const NotificationPanel: React.FC<Props> = (props) => {
                     />
                 </div>
 
-                {notifications && notifications.length ?
+                {filteredNotification && filteredNotification.length ?
                     <BlockingElement fetching={fetching} className={classes.content}>
+                        {filteredNotification.map((notification: INotification) =>
+                            <div key={notification.id} className={classes.item}>
+                                <div className={classes.date}>{notification.dateCreated}</div>
 
+                                <div className={classes.title}>{notification.name}</div>
+
+                                {notification.description ?
+                                    <div className={classes.description}>{notification.description}</div>
+                                    : null
+                                }
+                            </div>
+                        )}
                     </BlockingElement>
                     : <Empty message='Нет уведомлений для отображения'/>
                 }
@@ -114,7 +146,13 @@ const NotificationPanel: React.FC<Props> = (props) => {
                     {['director', 'administrator', 'manager'].includes(role) &&
                     <Button type='save'
                             icon='plus'
-                            onClick={() => readNotificationAll()}
+                            onClick={() => {
+                                openPopupNotificationCreate(document.body, {
+                                    onSave: () => {
+                                        setIsUpdate(true)
+                                    }
+                                })
+                            }}
                             disabled={fetching}
                     >Создать</Button>}
 

@@ -1,0 +1,44 @@
+.PopupFeedCreate {
+    width: 350px;
+    height: 350px;
+}
+
+.content {
+    height: 243px;
+    overflow: auto;
+
+    .info {
+        padding: 15px 15px 0;
+    }
+}
+
+.field {
+    width: 100%;
+    margin-bottom: 10px;
+    position: relative;
+}
+
+.field_label {
+    font-size: 14px;
+    color: black;
+    margin-bottom: 3px;
+    display: flex;
+}
+
+.errorMessage {
+    color: #fe5a9d;
+    text-align: center;
+    margin-bottom: 30px;
+    padding: 5px 10px;
+    border: 1px solid #fe5a9d;
+    white-space: pre-wrap;
+}
+
+.successMessage {
+    color: #075ea5;
+    text-align: center;
+    margin-bottom: 30px;
+    padding: 5px 10px;
+    border: 1px solid #075ea5;
+    white-space: pre-wrap;
+}

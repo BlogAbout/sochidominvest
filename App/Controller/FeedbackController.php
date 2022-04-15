@@ -36,6 +36,11 @@ class FeedbackController extends Controller
             return;
         }
 
+        $author = null;
+        if (JwtMiddleware::getAndDecodeToken()) {
+            $author = JwtMiddleware::getUserId();
+        }
+
         $data = json_decode($request->body());
 
         if ($data->userId) {
@@ -75,14 +80,17 @@ class FeedbackController extends Controller
             'status' => htmlentities(stripcslashes(strip_tags($data->status))),
             'dateCreated' => date('Y-m-d H:i:s'),
             'dateUpdate' => date('Y-m-d H:i:s'),
-            'author' => JwtMiddleware::getUserId()
+            'author' => $author
         );
 
         try {
             $feedData = $this->feedbackModel->createFeed($payload);
 
             if ($feedData['status']) {
-                LogModel::log('create', 'feed', JwtMiddleware::getUserId(), $feedData['data']);
+                if ($author) {
+                    LogModel::log('create', 'feed', $author, $feedData['data']);
+                }
+
                 $response->code(201)->json($feedData['data']);
 
                 return;

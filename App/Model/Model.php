@@ -282,6 +282,10 @@ class Model
             array_push($where, "sdi.`type_object` = '" . $filter['objectType'] . "'");
         }
 
+        if (!empty($filter['status'])) {
+            array_push($where, "sdi.`status` IN ('" . implode("','", $filter['status']) . "')");
+        }
+
         if (count($where)) {
             $sqlWhere = " WHERE " . implode(' AND ', $where);
         }

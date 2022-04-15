@@ -1,18 +1,40 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import {Link} from 'react-router-dom'
+import NotificationService from '../../api/NotificationService'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {useActions} from '../../hooks/useActions'
 import {useTypedSelector} from '../../hooks/useTypedSelector'
 import {RouteNames} from '../../routes/routes'
 import openPopupUserCreate from '../PopupUserCreate/PopupUserCreate'
+import NotificationPanel from '../NotificationPanel/NotificationPanel'
 import classes from './SidebarRight.module.scss'
-import NotificationPanel from "../NotificationPanel/NotificationPanel";
 
 const SidebarRight: React.FC = () => {
     const [isShowNotification, setIsShowNotification] = useState(false)
+    const [countNewNotification, setCountNewNotification] = useState(0)
 
     const {userId} = useTypedSelector(state => state.userReducer)
     const {logout} = useActions()
+
+    let intervalTimer: any = null
+
+    useEffect(() => {
+        updateCountNewNotification()
+
+        if (intervalTimer) {
+            clearInterval(intervalTimer)
+        }
+
+        intervalTimer = setInterval(function() {
+            updateCountNewNotification()
+        }, 7200000)
+    })
+
+    const updateCountNewNotification = () => {
+        NotificationService.fetchCountNewNotifications()
+            .then((response: any) => setCountNewNotification(response.data))
+            .catch((error: any) => console.error('Ошибка получения количества новых уведомлений', error))
+    }
 
     return (
         <>
@@ -54,6 +76,8 @@ const SidebarRight: React.FC = () => {
                      onClick={() => setIsShowNotification(!isShowNotification)}
                 >
                     <FontAwesomeIcon icon='bell'/>
+
+                    {countNewNotification > 0 ? <div className={classes.counter}>{countNewNotification}</div> : null}
                 </div>
 
                 <div className={classes.icon}

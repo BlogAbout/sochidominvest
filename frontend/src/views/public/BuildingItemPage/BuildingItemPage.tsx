@@ -18,8 +18,9 @@ import {ITag} from '../../../@types/ITag'
 import {IArticle} from '../../../@types/IArticle'
 import Empty from '../../../components/Empty/Empty'
 import BlockingElement from '../../../components/BlockingElement/BlockingElement'
-import CallbackForm from '../../../components/CallbackForm/CallbackForm'
 import Gallery from '../../../components/Gallery/Gallery'
+import Button from '../../../components/Button/Button'
+import openPopupFeedCreate from '../../../components/PopupFeedCreate/PopupFeedCreate'
 import openPopupCheckerInfo from '../../../components/PopupCheckerInfo/PopupCheckerInfo'
 import {
     amountContract,
@@ -142,6 +143,13 @@ const BuildingItemPage: React.FC = () => {
         }
     }, [building])
 
+    const onFeedButtonHandler = (type: 'callback' | 'get-document' | 'get-presentation' | 'get-view') => {
+        openPopupFeedCreate(document.body, {
+            building: building,
+            type: type
+        })
+    }
+
     // Вывод базовой информации
     const renderInfo = () => {
         const passedInfo = getPassedText(building.passed)
@@ -150,90 +158,99 @@ const BuildingItemPage: React.FC = () => {
         return (
             <BlockingElement fetching={fetching} className={classes.block}>
                 <div className={classes.mainInfo}>
-                    <div className={classes.col}>
-                        {passedInfo !== '' &&
-                        <div className={cx({'passed': true, 'is': building.passed && building.passed.is})}>
-                            <span>{passedInfo}</span>
-                        </div>}
+                    {passedInfo !== '' &&
+                    <div className={cx({'passed': true, 'is': building.passed && building.passed.is})}>
+                        <span>{passedInfo}</span>
+                    </div>}
 
-                        {tags && tags.length && building.tags && building.tags.length ?
-                            <div className={classes.tags}>
-                                {building.tags.map((id: number) => {
-                                    const findTag = tags.find((tag: ITag) => tag.id === id)
+                    {tags && tags.length && building.tags && building.tags.length ?
+                        <div className={classes.tags}>
+                            {building.tags.map((id: number) => {
+                                const findTag = tags.find((tag: ITag) => tag.id === id)
 
-                                    return findTag ? <div key={findTag.id}>{findTag.name}</div> : null
-                                })}
+                                return findTag ? <div key={findTag.id}>{findTag.name}</div> : null
+                            })}
+                        </div>
+                        : null
+                    }
+
+                    <h1>
+                        {building.name}
+                        <span className={classes.views} title={`Просмотров: ${building.views}`}>
+                                <FontAwesomeIcon icon='eye'/> {building.views}
+                            </span>
+                    </h1>
+
+                    <div className={classes.address}>
+                        {districtText !== '' && <span>{districtText}</span>}
+                        <span>{building.address}</span>
+                    </div>
+
+                    <div className={classes.info}>
+                        {building.type === 'building' ?
+                            <div className={classes.row}>
+                                <span>{building.countCheckers || 0}</span>
+                                <span>{declension(building.countCheckers || 0, ['квартира', 'квартиры', 'квартир'], true)}</span>
                             </div>
                             : null
                         }
 
-                        <h1>
-                            {building.name}
-                            <span className={classes.views} title={`Просмотров: ${building.views}`}>
-                                <FontAwesomeIcon icon='eye'/> {building.views}
-                            </span>
-                        </h1>
-
-                        <div className={classes.address}>
-                            {districtText !== '' && <span>{districtText}</span>}
-                            <span>{building.address}</span>
+                        <div className={classes.row}>
+                            {building.type === 'building' ?
+                                <>
+                                    <span>{numberWithSpaces(round(building.costMinUnit || 0, 0))} руб.</span>
+                                    <span>Мин. цена за м<sup>2</sup></span>
+                                </>
+                                :
+                                <>
+                                    <span>{numberWithSpaces(round(building.area && building.cost ? building.cost / building.area : 0, 0))} руб.</span>
+                                    <span>Цена за м<sup>2</sup></span>
+                                </>
+                            }
                         </div>
 
-                        <div className={classes.info}>
+                        <div className={classes.row}>
                             {building.type === 'building' ?
-                                <div className={classes.row}>
-                                    <span>{building.countCheckers || 0}</span>
-                                    <span>{declension(building.countCheckers || 0, ['квартира', 'квартиры', 'квартир'], true)}</span>
-                                </div>
-                                : null
+                                <>
+                                    <span>{numberWithSpaces(round(building.costMin || 0, 0))} руб.</span>
+                                    <span>Мин. цена</span>
+                                </>
+                                :
+                                <>
+                                    <span>{numberWithSpaces(round(building.cost || 0, 0))} руб.</span>
+                                    <span>Цена</span>
+                                </>
                             }
+                        </div>
 
-                            <div className={classes.row}>
-                                {building.type === 'building' ?
-                                    <>
-                                        <span>{numberWithSpaces(round(building.costMinUnit || 0, 0))} руб.</span>
-                                        <span>Мин. цена за м<sup>2</sup></span>
-                                    </>
-                                    :
-                                    <>
-                                        <span>{numberWithSpaces(round(building.area && building.cost ? building.cost / building.area : 0, 0))} руб.</span>
-                                        <span>Цена за м<sup>2</sup></span>
-                                    </>
-                                }
-                            </div>
-
-                            <div className={classes.row}>
-                                {building.type === 'building' ?
-                                    <>
-                                        <span>{numberWithSpaces(round(building.costMin || 0, 0))} руб.</span>
-                                        <span>Мин. цена</span>
-                                    </>
-                                    :
-                                    <>
-                                        <span>{numberWithSpaces(round(building.cost || 0, 0))} руб.</span>
-                                        <span>Цена</span>
-                                    </>
-                                }
-                            </div>
-
-                            <div className={classes.row}>
-                                {building.type === 'building' ?
-                                    <>
-                                        <span>{building.areaMin || 0} - {building.areaMax || 0}</span>
-                                        <span>Площади, м<sup>2</sup></span>
-                                    </>
-                                    :
-                                    <>
-                                        <span>{building.area || 0}</span>
-                                        <span>Площадь, м<sup>2</sup></span>
-                                    </>
-                                }
-                            </div>
+                        <div className={classes.row}>
+                            {building.type === 'building' ?
+                                <>
+                                    <span>{building.areaMin || 0} - {building.areaMax || 0}</span>
+                                    <span>Площади, м<sup>2</sup></span>
+                                </>
+                                :
+                                <>
+                                    <span>{building.area || 0}</span>
+                                    <span>Площадь, м<sup>2</sup></span>
+                                </>
+                            }
                         </div>
                     </div>
 
-                    <div className={classes.col}>
-                        <CallbackForm building={building}/>
+                    <div className={classes.buttons}>
+                        <Button type='save'
+                                onClick={() => onFeedButtonHandler('callback')}
+                        >Заказать обратный звонок</Button>
+                        <Button type='save'
+                                onClick={() => onFeedButtonHandler('get-document')}
+                        >Заказать документы</Button>
+                        <Button type='save'
+                                onClick={() => onFeedButtonHandler('get-presentation')}
+                        >Получить презентацию</Button>
+                        <Button type='save'
+                                onClick={() => onFeedButtonHandler('get-view')}
+                        >Записаться на просмотр</Button>
                     </div>
                 </div>
             </BlockingElement>

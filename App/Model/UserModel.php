@@ -77,7 +77,7 @@ class UserModel extends Model
         $userList = parent::fetchAll();
 
         if (!empty($userList)) {
-            foreach($userList as $userData) {
+            foreach ($userList as $userData) {
                 $user = UserModel::formatDataToJson($userData);
                 unset($user['password']);
 
@@ -86,6 +86,27 @@ class UserModel extends Model
         }
 
         return $resultList;
+    }
+
+    /**
+     * Извлекает список идентификаторов пользователей
+     *
+     * @param array $filter Массив параметров фильтрации
+     * @return array
+     */
+    public static function fetchUsersIds(array $filter): array
+    {
+        $sqlWhere = parent::generateFilterQuery($filter);
+
+        $sql = "
+            SELECT sdi.`id`
+            FROM `sdi_user` sdi
+            $sqlWhere
+        ";
+
+        parent::query($sql);
+
+        return parent::fetchColumn();
     }
 
     /**

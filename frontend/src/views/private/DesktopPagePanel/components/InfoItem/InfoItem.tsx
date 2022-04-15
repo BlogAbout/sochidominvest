@@ -158,6 +158,12 @@ const InfoItem: React.FC<Props> = (props) => {
             case 'user':
                 textContent += 'пользователь. '
                 break
+            case 'attachment':
+                textContent += 'вложение. '
+                break
+            case 'notification':
+                textContent += 'уведомление. '
+                break
         }
 
         return (
