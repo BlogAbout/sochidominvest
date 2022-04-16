@@ -85,11 +85,10 @@ class NotificationController extends Controller
         }
 
         try {
-            if ($this->notificationModel->readNotification($request->notificationId, JwtMiddleware::getUserId())) {
-                $response->code(200)->json('');
+            $list = $this->notificationModel->readNotification($request->notificationId, JwtMiddleware::getUserId());
+            $response->code(200)->json($list);
 
-                return;
-            }
+            return;
         } catch (Exception $e) {
             LogModel::error($e->getMessage());
             $response->code(500)->json($e->getMessage());
@@ -114,11 +113,10 @@ class NotificationController extends Controller
         }
 
         try {
-            if ($this->notificationModel->readNotificationsAll(JwtMiddleware::getUserId())) {
-                $response->code(200)->json('');
+            $list = $this->notificationModel->readNotificationsAll(JwtMiddleware::getUserId());
+            $response->code(200)->json($list);
 
-                return;
-            }
+            return;
         } catch (Exception $e) {
             LogModel::error($e->getMessage());
             $response->code(500)->json($e->getMessage());
@@ -310,15 +308,8 @@ class NotificationController extends Controller
         }
 
         try {
-            if ($this->notificationModel->deleteItem($request->notificationId)) {
-                LogModel::log('remove', 'notify', JwtMiddleware::getUserId(), ['id' => $request->notificationId]);
-                $response->code(200)->json('');
-
-                return;
-            }
-
-            LogModel::error('Ошибка удаления уведомления.', ['id' => $request->notificationId]);
-            $response->code(400)->json('Ошибка удаления уведомления. Повторите попытку позже.');
+            $list = $this->notificationModel->deleteItem($request->notificationId, JwtMiddleware::getUserId());
+            $response->code(200)->json($list);
 
             return;
         } catch (Exception $e) {

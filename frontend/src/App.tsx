@@ -29,6 +29,7 @@ import {
     faDatabase,
     faElevator,
     faEllipsis,
+    faEnvelope,
     faEye,
     faFile,
     faFileExcel,
@@ -151,7 +152,8 @@ library.add(
     faVolumeXmark,
     faBorderAll,
     faCalendarPlus,
-    faDatabase
+    faDatabase,
+    faEnvelope
 )
 
 function App() {

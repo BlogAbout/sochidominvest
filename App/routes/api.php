@@ -82,10 +82,10 @@ $Klein->respond('DELETE', '/api/v1/favorite/[:buildingId]', [new FavoriteControl
 $Klein->respond('GET', '/api/v1/notification/count', [new NotificationController(), 'fetchCountNewNotifications']);
 $Klein->respond('GET', '/api/v1/notification/read', [new NotificationController(), 'readNotificationsAll']);
 $Klein->respond('POST', '/api/v1/notification', [new NotificationController(), 'createItem']);
-$Klein->respond('GET', '/api/v1/notification/[:id]/info', [new NotificationController(), 'fetchItemById']);
-$Klein->respond('GET', '/api/v1/notification/[:id]/read', [new NotificationController(), 'readNotification']);
+$Klein->respond('GET', '/api/v1/notification/[:notificationId]/info', [new NotificationController(), 'fetchItemById']);
+$Klein->respond('GET', '/api/v1/notification/[:notificationId]/read', [new NotificationController(), 'readNotification']);
 $Klein->respond('GET', '/api/v1/notification', [new NotificationController(), 'fetchList']);
-$Klein->respond('DELETE', '/api/v1/notification/[:id]', [new NotificationController(), 'deleteItem']);
+$Klein->respond('DELETE', '/api/v1/notification/[:notificationId]', [new NotificationController(), 'deleteItem']);
 
 // Util Routes
 $Klein->respond('GET', '/api/v1/views/[:objectType]/[:objectId]', [new UtilController(), 'updateCountViews']);

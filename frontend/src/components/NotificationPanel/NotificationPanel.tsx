@@ -3,9 +3,8 @@ import {useTypedSelector} from '../../hooks/useTypedSelector'
 import {useActions} from '../../hooks/useActions'
 import {INotification} from '../../@types/INotification'
 import {Content, Footer, Header} from '../Popup/Popup'
-import BlockingElement from '../BlockingElement/BlockingElement'
 import Button from '../Button/Button'
-import Empty from '../Empty/Empty'
+import NotificationList from './components/NotificationList/NotificationList'
 import openPopupNotificationCreate from '../PopupNotificationCreate/PopupNotificationCreate'
 import classes from './NotificationPanel.module.scss'
 
@@ -55,19 +54,26 @@ const NotificationPanel: React.FC<Props> = (props) => {
         } else {
             setCountNotification(0)
         }
-    }, [notifications])
 
-    useEffect(() => {
         filter()
-    }, [selectedType])
+    }, [notifications, selectedType])
 
     const filter = () => {
+        if (!notifications || !notifications.length) {
+            setFilteredNotification([])
+
+            return
+        }
+
         switch (selectedType) {
             case 'all':
                 setFilteredNotification(notifications)
                 break
             case 'new':
                 setFilteredNotification(notifications.filter((notification: INotification) => notification.status === 'new'))
+                break
+            case 'system':
+                setFilteredNotification(notifications.filter((notification: INotification) => notification.type === 'system'))
                 break
             default:
                 setFilteredNotification([])
@@ -122,23 +128,7 @@ const NotificationPanel: React.FC<Props> = (props) => {
                     />
                 </div>
 
-                {filteredNotification && filteredNotification.length ?
-                    <BlockingElement fetching={fetching} className={classes.content}>
-                        {filteredNotification.map((notification: INotification) =>
-                            <div key={notification.id} className={classes.item}>
-                                <div className={classes.date}>{notification.dateCreated}</div>
-
-                                <div className={classes.title}>{notification.name}</div>
-
-                                {notification.description ?
-                                    <div className={classes.description}>{notification.description}</div>
-                                    : null
-                                }
-                            </div>
-                        )}
-                    </BlockingElement>
-                    : <Empty message='Нет уведомлений для отображения'/>
-                }
+                <NotificationList notifications={filteredNotification} fetching={fetching}/>
             </Content>
 
             {['director', 'administrator', 'manager'].includes(role) || countNotification > 0 ?

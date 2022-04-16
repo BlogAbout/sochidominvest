@@ -50,7 +50,7 @@ class NotificationModel extends Model
             SELECT sdi.*, n.*
             FROM `sdi_user_notification` sdi
             LEFT JOIN `sdi_notification` n ON sdi.`id_notification` = n.`id`
-            WHERE sdi.`id_user` = :userId
+            WHERE sdi.`id_user` = :userId AND sdi.`status` != 'drop'
             ORDER BY sdi.`id_notification` DESC
         ";
 
@@ -137,17 +137,24 @@ class NotificationModel extends Model
     /**
      * Удаляет элемент по id (меняет статус активности)
      *
-     * @param int $id Идентификатор элемента
-     * @return bool
+     * @param int $notificationId Идентификатор элемента
+     * @param int $userId Идентификатор пользователя
+     * @return array
      */
-    public static function deleteItem(int $id): bool
+    public static function deleteItem(int $notificationId, int $userId): array
     {
-        $sql = "UPDATE `sdi_notification` SET `active` = -1 WHERE `id` = :id";
+        $sql = "
+            UPDATE `sdi_user_notification`
+            SET `status` = 'drop'
+            WHERE `id_notification` = :notificationId AND `id_user` = :userId
+        ";
 
         parent::query($sql);
-        parent::bindParams('id', $id);
+        parent::bindParams('notificationId', $notificationId);
+        parent::bindParams('userId', $userId);
+        parent::execute();
 
-        return parent::execute();
+        return self::fetchList($userId);
     }
 
     /**
@@ -155,9 +162,9 @@ class NotificationModel extends Model
      *
      * @param int $notificationId Идентификатор уведомления
      * @param int $userId Идентификатор пользователя
-     * @return bool
+     * @return array
      */
-    public static function readNotification(int $notificationId, int $userId): bool
+    public static function readNotification(int $notificationId, int $userId): array
     {
         $sql = "
             UPDATE `sdi_user_notification`
@@ -168,17 +175,18 @@ class NotificationModel extends Model
         parent::query($sql);
         parent::bindParams('notificationId', $notificationId);
         parent::bindParams('userId', $userId);
+        parent::execute();
 
-        return parent::execute();
+        return self::fetchList($userId);
     }
 
     /**
      * Изменение статуса всех уведомлений
      *
      * @param int $userId Идентификатор пользователя
-     * @return bool
+     * @return array
      */
-    public static function readNotificationsAll(int $userId): bool
+    public static function readNotificationsAll(int $userId): array
     {
         $sql = "
             UPDATE `sdi_user_notification`
@@ -188,8 +196,9 @@ class NotificationModel extends Model
 
         parent::query($sql);
         parent::bindParams('userId', $userId);
+        parent::execute();
 
-        return parent::execute();
+        return self::fetchList($userId);
     }
 
     /**

@@ -28,6 +28,6 @@ export default class NotificationService {
     }
 
     static async readNotificationAll(): Promise<AxiosResponse> {
-        return API.get(`/notification/read/`)
+        return API.get('/notification/read')
     }
 }
