@@ -67,11 +67,6 @@
         }
     }
 
-    .id {
-        flex-shrink: 0;
-        width: 50px;
-    }
-
     .name {
         flex-grow: 1;
         width: 100%;
@@ -80,18 +75,22 @@
     .housing,
     .stage {
         flex-shrink: 0;
-        width: 70px;
+        width: 50px;
     }
 
-    .status,
-    .area {
+    .status {
         flex-shrink: 0;
         width: 110px;
     }
 
+    .area {
+        flex-shrink: 0;
+        width: 80px;
+    }
+
     .cost {
         flex-shrink: 0;
-        width: 150px;
+        width: 100px;
         border-right: none !important;
     }
 }

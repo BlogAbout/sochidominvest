@@ -22,6 +22,7 @@ import Tabs from '../Tabs/Tabs'
 import BuildingBox from '../BuildingBox/BuildingBox'
 import FileList from '../FileList/FileList'
 import openPopupFileManager from '../PopupFileManager/PopupFileManager'
+import {sortAttachments} from '../../helpers/attachmentHelper'
 import classes from './PopupArticleCreate.module.scss'
 
 interface Props extends PopupProps {
@@ -76,7 +77,9 @@ const PopupArticleCreate: React.FC<Props> = (props) => {
     }, [article])
 
     useEffect(() => {
-        checkAvatar()
+        if (images && images.length) {
+            checkAvatar()
+        }
     }, [images])
 
     // Закрытие popup
@@ -133,6 +136,17 @@ const PopupArticleCreate: React.FC<Props> = (props) => {
         } else {
             setArticle({...article, avatarId: null, avatar: null})
         }
+    }
+
+    const onUpdateOrderingImagesHandler = (files: IAttachment[]) => {
+        const ids: number[] = files.map((attachment: IAttachment) => attachment.id)
+        setImages(sortAttachments(files, ids))
+        setArticle({...article, images: ids})
+    }
+
+    const removeSelectedImageHandler = (file: IAttachment) => {
+        setArticle({...article, images: article.images.filter((id: number) => id !== file.id)})
+        setImages([...images.filter((attachment: IAttachment) => attachment.id !== file.id)])
     }
 
     const renderContentTab = () => {
@@ -232,6 +246,9 @@ const PopupArticleCreate: React.FC<Props> = (props) => {
                                   fetching={fetchingImages}
                                   onSave={addAttachmentHandler.bind(this)}
                                   onSelect={selectImageAvatarHandler.bind(this)}
+                                  onRemove={removeSelectedImageHandler.bind(this)}
+                                  onUpdateOrdering={onUpdateOrderingImagesHandler.bind(this)}
+                                  isOnlyList={true}
                         />
                     </div>
                 </div>

@@ -7,6 +7,7 @@ import classes from './Gallery.module.scss'
 interface Props {
     images?: IAttachment[]
     videos?: IAttachment[]
+    avatar?: number | null
     alt: string
     fetching: boolean
     type?: 'carousel'
@@ -15,6 +16,7 @@ interface Props {
 const defaultProps: Props = {
     images: [],
     videos: [],
+    avatar: null,
     alt: '',
     fetching: false,
     type: 'carousel'
@@ -27,7 +29,12 @@ const Gallery: React.FC<Props> = (props) => {
 
             <div className={classes.carousel}>
                 {(props.images && props.images.length) || (props.videos && props.videos.length) ?
-                    <ImageCarousel images={props.images} videos={props.videos} alt={props.alt} fancy/>
+                    <ImageCarousel images={props.images}
+                                   videos={props.videos}
+                                   alt={props.alt}
+                                   avatar={props.avatar}
+                                   fancy
+                    />
                     : <img src='https://api.sochidominvest.ru/uploads/no-image.jpg' alt={props.alt}/>
                 }
             </div>

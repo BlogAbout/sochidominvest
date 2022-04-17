@@ -7,6 +7,12 @@
         width: 100%;
         background: #fff;
 
+        .dnd {
+            display: flex;
+            width: 100%;
+            overflow-x: auto;
+        }
+
         .item {
             width: 75px;
             height: 75px;

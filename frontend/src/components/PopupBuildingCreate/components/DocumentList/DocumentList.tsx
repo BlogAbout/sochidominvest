@@ -150,7 +150,6 @@ const DocumentList: React.FC<Props> = (props) => {
             {fetching && <Preloader/>}
 
             <div className={classes.header}>
-                <div className={classes.id}>#</div>
                 <div className={classes.name}>Название</div>
                 <div className={classes.type}>Тип</div>
             </div>
@@ -180,7 +179,6 @@ const DocumentList: React.FC<Props> = (props) => {
                                  className={classes.row}
                                  onContextMenu={(e: React.MouseEvent) => onContextMenu(e, document)}
                             >
-                                <div className={classes.id}>#{document.id}</div>
                                 <div className={classes.name}>{document.name}</div>
                                 <div className={classes.type}>{type}</div>
                             </div>

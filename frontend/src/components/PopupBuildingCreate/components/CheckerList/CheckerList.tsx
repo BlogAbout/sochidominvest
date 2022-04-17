@@ -123,13 +123,12 @@ const CheckerList: React.FC<Props> = (props) => {
             {fetching && <Preloader/>}
 
             <div className={classes.header}>
-                <div className={classes.id}>#</div>
                 <div className={classes.name}>Название</div>
                 <div className={classes.status}>Статус</div>
-                <div className={classes.housing}>Корпус</div>
-                <div className={classes.stage}>Этаж</div>
-                <div className={classes.area}>Площадь</div>
-                <div className={classes.cost}>Цена</div>
+                <div className={classes.housing}>Кор.</div>
+                <div className={classes.stage}>Эт.</div>
+                <div className={classes.area}>Пл., м<sup>2</sup></div>
+                <div className={classes.cost}>Цена, руб.</div>
             </div>
 
             <div className={classes.addChecker} onClick={createHandler.bind(this)}>
@@ -146,13 +145,12 @@ const CheckerList: React.FC<Props> = (props) => {
                                  className={classes.row}
                                  onContextMenu={(e: React.MouseEvent) => onContextMenu(e, checker)}
                             >
-                                <div className={classes.id}>#{checker.id}</div>
                                 <div className={classes.name}>{checker.name}</div>
                                 <div className={classes.status}>{status ? status.text : ''}</div>
                                 <div className={classes.housing}>{checker.housing}</div>
                                 <div className={classes.stage}>{checker.stage}</div>
-                                <div className={classes.area}>{checker.area ? `${checker.area} кв.м` : ''}</div>
-                                <div className={classes.cost}>{checker.cost ? `${numberWithSpaces(checker.cost)} руб.` : ''}</div>
+                                <div className={classes.area}>{checker.area ? checker.area : ''}</div>
+                                <div className={classes.cost}>{checker.cost ? numberWithSpaces(checker.cost) : ''}</div>
                             </div>
                         )
                     })

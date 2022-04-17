@@ -92,7 +92,6 @@ const UserList: React.FC<Props> = (props) => {
             {fetchingUserList && <Preloader/>}
 
             <div className={classes.header}>
-                <div className={classes.id}>#</div>
                 <div className={classes.name}>Имя</div>
                 <div className={classes.phone}>Телефон</div>
             </div>
@@ -109,7 +108,6 @@ const UserList: React.FC<Props> = (props) => {
                                  className={classes.row}
                                  onContextMenu={(e: React.MouseEvent) => onContextMenu(e, user)}
                             >
-                                <div className={classes.id}>#{user.id}</div>
                                 <div className={classes.name}>{user.firstName}</div>
                                 <div className={classes.phone}>{user.phone}</div>
                             </div>

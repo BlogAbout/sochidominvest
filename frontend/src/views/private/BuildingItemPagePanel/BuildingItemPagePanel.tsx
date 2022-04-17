@@ -43,10 +43,13 @@ import {
     buildingTerritory,
     buildingTypes,
     buildingWaterSupply,
-    formalizationList, getAboutBlockTitle,
-    getDistrictText, getPassedText,
+    formalizationList,
+    getAboutBlockTitle,
+    getDistrictText,
+    getPassedText,
     paymentsList
 } from '../../../helpers/buildingHelper'
+import {sortAttachments} from '../../../helpers/attachmentHelper'
 import classes from './BuildingItemPagePanel.module.scss'
 
 type BuildingItemPageParams = {
@@ -145,7 +148,7 @@ const BuildingItemPagePanel: React.FC = (props) => {
                 setFetchingImages(true)
                 AttachmentService.fetchAttachments({active: [0, 1], id: building.images, type: 'image'})
                     .then((response: any) => {
-                        setImages(response.data)
+                        setImages(sortAttachments(response.data, building.images))
                     })
                     .finally(() => setFetchingImages(false))
             }
@@ -595,7 +598,7 @@ const BuildingItemPagePanel: React.FC = (props) => {
                 <h2>Корпуса ({housingIds.length})</h2>
 
                 {Object.keys(housingList).map((key: string) => {
-                    const housingId: number =  parseInt(key)
+                    const housingId: number = parseInt(key)
                     let minCost = 0
                     let minCostUnit = 0
 
@@ -667,6 +670,10 @@ const BuildingItemPagePanel: React.FC = (props) => {
 
     // Вывод информации о контактах
     const renderContactsInfo = () => {
+        if (!['director', 'administrator', 'manager'].includes(role)) {
+            return null
+        }
+
         return (
             <BlockingElement fetching={fetchingUserList} className={classes.block}>
                 <h2>Контакты</h2>
@@ -692,6 +699,10 @@ const BuildingItemPagePanel: React.FC = (props) => {
 
     // Вывод информации о документах
     const renderDocumentsInfo = () => {
+        if (!['director', 'administrator', 'manager'].includes(role)) {
+            return null
+        }
+
         return (
             <BlockingElement fetching={fetching || fetchingDocuments} className={classes.block}>
                 <h2>Документы</h2>
@@ -767,6 +778,7 @@ const BuildingItemPagePanel: React.FC = (props) => {
                                          videos={videos}
                                          type='carousel'
                                          fetching={fetching || fetchingImages || fetchingVideos}
+                                         avatar={building.avatarId}
                                 />
 
                                 {renderDescription()}

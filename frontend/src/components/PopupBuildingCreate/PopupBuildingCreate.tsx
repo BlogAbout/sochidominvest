@@ -49,6 +49,7 @@ import {
     formalizationList,
     paymentsList
 } from '../../helpers/buildingHelper'
+import {sortAttachments} from '../../helpers/attachmentHelper'
 import classes from './PopupBuildingCreate.module.scss'
 
 interface Props extends PopupProps {
@@ -107,7 +108,7 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
                 setFetchingImages(true)
                 AttachmentService.fetchAttachments({active: [0, 1], id: building.images, type: 'image'})
                     .then((response: any) => {
-                        setImages(response.data)
+                        setImages(sortAttachments(response.data, building.images))
                     })
                     .finally(() => setFetchingImages(false))
             }
@@ -116,15 +117,17 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
                 setFetchingVideos(true)
                 AttachmentService.fetchAttachments({active: [0, 1], id: building.videos, type: 'video'})
                     .then((response: any) => {
-                        setVideos(response.data)
+                        setVideos(sortAttachments(response.data, building.videos))
                     })
                     .finally(() => setFetchingVideos(false))
             }
         }
-    }, [building])
+    }, [building.id])
 
     useEffect(() => {
-        checkAvatar()
+        if (images && images.length) {
+            checkAvatar()
+        }
     }, [images])
 
     // Закрытие popup
@@ -201,6 +204,28 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
     const isDisableButton = () => {
         return fetchingBuilding || fetchingImages || fetchingVideos ||
             building.name.trim() === '' || !building.address || building.address.trim() === ''
+    }
+
+    const onUpdateOrderingImagesHandler = (files: IAttachment[]) => {
+        const ids: number[] = files.map((attachment: IAttachment) => attachment.id)
+        setImages(sortAttachments(files, ids))
+        setBuilding({...building, images: ids})
+    }
+
+    const onUpdateOrderingVideosHandler = (files: IAttachment[]) => {
+        const ids: number[] = files.map((attachment: IAttachment) => attachment.id)
+        setVideos(sortAttachments(files, ids))
+        setBuilding({...building, videos: ids})
+    }
+
+    const removeSelectedImageHandler = (file: IAttachment) => {
+        setBuilding({...building, images: building.images.filter((id: number) => id !== file.id)})
+        setImages([...images.filter((attachment: IAttachment) => attachment.id !== file.id)])
+    }
+
+    const removeSelectedVideoHandler = (file: IAttachment) => {
+        setBuilding({...building, videos: building.images.filter((id: number) => id !== file.id)})
+        setVideos([...videos.filter((attachment: IAttachment) => attachment.id !== file.id)])
     }
 
     // Вкладка состояния объекта
@@ -616,6 +641,9 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
                               fetching={fetchingImages}
                               onSave={addAttachmentHandler.bind(this)}
                               onSelect={selectImageAvatarHandler.bind(this)}
+                              onRemove={removeSelectedImageHandler.bind(this)}
+                              onUpdateOrdering={onUpdateOrderingImagesHandler.bind(this)}
+                              isOnlyList={true}
                     />
                 </div>
 
@@ -640,6 +668,9 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
                               fetching={fetchingVideos}
                               onSave={addAttachmentHandler.bind(this)}
                               onSelect={selectImageAvatarHandler.bind(this)}
+                              onRemove={removeSelectedVideoHandler.bind(this)}
+                              onUpdateOrdering={onUpdateOrderingVideosHandler.bind(this)}
+                              isOnlyList={true}
                     />
                 </div>
             </div>

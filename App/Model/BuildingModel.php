@@ -38,12 +38,12 @@ class BuildingModel extends Model
                        WHERE ba.`id_building` = bu.`id`
                    ) AS articles,
                    (
-                       SELECT GROUP_CONCAT(DISTINCT(bi.`id_attachment`))
+                       SELECT GROUP_CONCAT(DISTINCT(bi.`id_attachment`) ORDER BY bi.`ordering` ASC, bi.`id_attachment` ASC)
                        FROM `sdi_images` AS bi
                        WHERE bi.`id_object` = bu.`id` AND `type_object` = 'building'
                    ) AS images,
                    (
-                       SELECT GROUP_CONCAT(DISTINCT(bv.`id_attachment`))
+                       SELECT GROUP_CONCAT(DISTINCT(bv.`id_attachment`) ORDER BY bv.`ordering` ASC, bv.`id_attachment` ASC)
                        FROM `sdi_videos` AS bv
                        WHERE bv.`id_object` = bu.`id` AND `type_object` = 'building'
                    ) AS videos,
@@ -108,12 +108,12 @@ class BuildingModel extends Model
                        WHERE ba.`id_building` = bu.`id`
                    ) AS articles,
                    (
-                       SELECT GROUP_CONCAT(DISTINCT(i.`id_attachment`))
+                       SELECT GROUP_CONCAT(DISTINCT(i.`id_attachment`) ORDER BY i.`ordering` ASC, i.`id_attachment` ASC)
                        FROM `sdi_images` AS i
                        WHERE i.`id_object` = bu.`id` AND `type_object` = 'building'
                    ) AS images,
                    (
-                       SELECT GROUP_CONCAT(DISTINCT(v.`id_attachment`))
+                       SELECT GROUP_CONCAT(DISTINCT(v.`id_attachment`) ORDER BY v.`ordering` ASC, v.`id_attachment` ASC)
                        FROM `sdi_videos` AS v
                        WHERE v.`id_object` = bu.`id` AND `type_object` = 'building'
                    ) AS videos,

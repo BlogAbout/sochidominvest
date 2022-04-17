@@ -23,7 +23,7 @@ class ArticleModel extends Model
                        WHERE ba.`id_article` = `id`
                    ) AS buildings,
                    (
-                       SELECT GROUP_CONCAT(DISTINCT(i.`id_attachment`))
+                       SELECT GROUP_CONCAT(DISTINCT(i.`id_attachment`) ORDER BY i.`ordering` ASC, i.`id_attachment` ASC)
                        FROM `sdi_images` AS i
                        WHERE i.`id_object` = `id` AND `type_object` = 'article'
                    ) AS images,
@@ -67,7 +67,7 @@ class ArticleModel extends Model
                        WHERE ba.`id_article` = sdi.`id`
                    ) AS buildings,
                    (
-                       SELECT GROUP_CONCAT(DISTINCT(i.`id_attachment`))
+                       SELECT GROUP_CONCAT(DISTINCT(i.`id_attachment`) ORDER BY i.`ordering` ASC, i.`id_attachment` ASC)
                        FROM `sdi_images` AS i
                        WHERE i.`id_object` = sdi.`id` AND `type_object` = 'article'
                    ) AS images,

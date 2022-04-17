@@ -13,6 +13,7 @@ import {useTypedSelector} from '../../../hooks/useTypedSelector'
 import {useActions} from '../../../hooks/useActions'
 import BlockingElement from '../../../components/BlockingElement/BlockingElement'
 import Gallery from '../../../components/Gallery/Gallery'
+import {sortAttachments} from '../../../helpers/attachmentHelper'
 import classes from './ArticleItemPagePanel.module.scss'
 
 type ArticleItemPageParams = {
@@ -66,9 +67,6 @@ const ArticleItemPagePanel: React.FC<Props> = (props) => {
 
     useEffect(() => {
         if (article.id && (!buildings || !buildings.length)) {
-            document.title = article.metaTitle || 'Статьи'
-            document.title = article.metaDescription || ''
-
             const filter: IFilter = {} as IFilter
             filter.active = [0, 1]
 
@@ -88,7 +86,7 @@ const ArticleItemPagePanel: React.FC<Props> = (props) => {
                 setFetchingImages(true)
                 AttachmentService.fetchAttachments({active: [0, 1], id: article.images, type: 'image'})
                     .then((response: any) => {
-                        setImages(response.data)
+                        setImages(sortAttachments(response.data, article.images))
                     })
                     .finally(() => setFetchingImages(false))
             }
@@ -163,6 +161,7 @@ const ArticleItemPagePanel: React.FC<Props> = (props) => {
                                  images={images}
                                  type='carousel'
                                  fetching={fetchingImages}
+                                 avatar={article.avatarId}
                         />
 
                         <h1><span>{article.name}</span></h1>

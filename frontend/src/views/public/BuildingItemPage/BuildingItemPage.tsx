@@ -43,6 +43,7 @@ import {
     getPassedText,
     paymentsList
 } from '../../../helpers/buildingHelper'
+import {sortAttachments} from '../../../helpers/attachmentHelper'
 import classes from './BuildingItemPage.module.scss'
 
 type BuildingItemPageParams = {
@@ -127,7 +128,7 @@ const BuildingItemPage: React.FC = () => {
                 setFetchingImages(true)
                 AttachmentService.fetchAttachments({active: [0, 1], id: building.images, type: 'image'})
                     .then((response: any) => {
-                        setImages(response.data)
+                        setImages(sortAttachments(response.data, building.images))
                     })
                     .finally(() => setFetchingImages(false))
             }
@@ -586,6 +587,7 @@ const BuildingItemPage: React.FC = () => {
                                      videos={videos}
                                      type='carousel'
                                      fetching={fetching || fetchingImages || fetchingVideos}
+                                     avatar={building.avatarId}
                             />
 
                             {renderInfo()}

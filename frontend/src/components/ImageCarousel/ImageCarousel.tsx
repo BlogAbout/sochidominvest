@@ -6,12 +6,13 @@ import 'swiper/css'
 import 'swiper/css/navigation'
 import 'swiper/css/scrollbar'
 import {IAttachment} from '../../@types/IAttachment'
+import VideoPlayer from '../VideoPlayer/VideoPlayer'
 import classes from './ImageCarousel.module.scss'
-import VideoPlayer from "../VideoPlayer/VideoPlayer";
 
 interface Props {
     images?: IAttachment[]
     videos?: IAttachment[]
+    avatar?: number | null
     alt: string
     fancy?: boolean
     group?: string
@@ -20,6 +21,7 @@ interface Props {
 const defaultProps: Props = {
     images: [],
     videos: [],
+    avatar: null,
     alt: '',
     fancy: false
 }
@@ -62,6 +64,8 @@ const ImageCarousel: React.FC<Props> = (props) => {
         )
     }
 
+    const avatarAttachment = props.avatar && props.images ? props.images.find((attachment: IAttachment) => attachment.id === props.avatar) : null
+
     return (
         <div className={classes.ImageCarousel}>
             <Swiper
@@ -70,13 +74,24 @@ const ImageCarousel: React.FC<Props> = (props) => {
                 navigation
                 scrollbar={{draggable: true}}
             >
+                {avatarAttachment ?
+                    props.fancy ? renderFancySlide(avatarAttachment) : renderSlide(avatarAttachment)
+                    : null
+                }
+
                 {props.videos ?
                     props.videos.map((attachment: IAttachment) => renderSlideVideo(attachment))
                     : null
                 }
 
                 {props.images ?
-                    props.images.map((attachment: IAttachment) => props.fancy ? renderFancySlide(attachment) : renderSlide(attachment))
+                    props.images.map((attachment: IAttachment) => {
+                        if (props.avatar && attachment.id === props.avatar) {
+                            return null
+                        } else {
+                            return props.fancy ? renderFancySlide(attachment) : renderSlide(attachment)
+                        }
+                    })
                     : null
                 }
             </Swiper>

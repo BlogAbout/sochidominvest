@@ -97,7 +97,6 @@ const DeveloperList: React.FC<Props> = (props) => {
             {fetchingDeveloperList && <Preloader/>}
 
             <div className={classes.header}>
-                <div className={classes.id}>#</div>
                 <div className={classes.name}>Название</div>
                 <div className={classes.phone}>Телефон</div>
             </div>
@@ -114,7 +113,6 @@ const DeveloperList: React.FC<Props> = (props) => {
                                  className={classes.row}
                                  onContextMenu={(e: React.MouseEvent) => onContextMenu(e, developer)}
                             >
-                                <div className={classes.id}>#{developer.id}</div>
                                 <div className={classes.name}>{developer.name}</div>
                                 <div className={classes.phone}>{developer.phone}</div>
                             </div>

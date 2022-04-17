@@ -189,14 +189,16 @@ class Model
 
         if (count($images)) {
             $imagesSql = [];
+            $ordering = 0;
 
             foreach ($images as $image) {
-                array_push($imagesSql, "($image, $objectId, '$objectType')");
+                $ordering++;
+                array_push($imagesSql, "($image, $objectId, '$objectType', $ordering)");
             }
 
             $sql = "
                 INSERT INTO `sdi_images`
-                    (`id_attachment`, `id_object`, `type_object`)
+                    (`id_attachment`, `id_object`, `type_object`, `ordering`)
                 VALUES
             " . implode(",", $imagesSql);
 
@@ -223,14 +225,16 @@ class Model
 
         if (count($videos)) {
             $videosSql = [];
+            $ordering = 0;
 
             foreach ($videos as $video) {
-                array_push($videosSql, "($video, $objectId, '$objectType')");
+                $ordering++;
+                array_push($videosSql, "($video, $objectId, '$objectType', $ordering)");
             }
 
             $sql = "
                 INSERT INTO `sdi_videos`
-                    (`id_attachment`, `id_object`, `type_object`)
+                    (`id_attachment`, `id_object`, `type_object`, `ordering`)
                 VALUES
             " . implode(",", $videosSql);
 
