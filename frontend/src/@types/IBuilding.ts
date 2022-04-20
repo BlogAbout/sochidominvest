@@ -51,7 +51,8 @@ export interface IBuilding {
     passed?: IBuildingPassed
     views?: number
     avatarId?: number | null
-    avatar?: string | null
+    avatar?: string | null,
+    authorName?: string | null
 }
 
 export interface IBuildingPassed {

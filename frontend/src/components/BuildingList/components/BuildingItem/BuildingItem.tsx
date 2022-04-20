@@ -175,12 +175,26 @@ const BuildingItem: React.FC<Props> = (props) => {
             </div>
 
             <div className={classes.itemContent}>
-                <h2>
-                    {props.building.name}
-                    <span className={classes.views} title={`Просмотров: ${props.building.views}`}>
-                        <FontAwesomeIcon icon='eye'/> {props.building.views}
-                    </span>
-                </h2>
+                <div className={classes.information}>
+                    <div className={classes.icon} title={`Просмотры: ${props.building.views}`}>
+                        <FontAwesomeIcon icon='eye'/>
+                        <span>{props.building.views}</span>
+                    </div>
+
+                    <div className={classes.icon} title={`Дата публикации: ${props.building.dateCreated}`}>
+                        <FontAwesomeIcon icon='calendar'/>
+                        <span>{props.building.dateCreated}</span>
+                    </div>
+
+                    {props.building.authorName ?
+                        <div className={classes.icon} title={`Автор: ${props.building.authorName}`}>
+                            <FontAwesomeIcon icon='user'/>
+                            <span>{props.building.authorName}</span>
+                        </div>
+                        : null}
+                </div>
+
+                <h2>{props.building.name}</h2>
 
                 <div className={classes.address}>
                     {districtText !== '' && <span>{districtText}</span>}

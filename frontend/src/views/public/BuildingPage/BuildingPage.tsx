@@ -55,9 +55,17 @@ const BuildingPage: React.FC = () => {
                 </div>
 
                 <div className={classes.itemContainer}>
-                    <span className={classes.views} title={`Просмотров: ${building.views}`}>
-                        <FontAwesomeIcon icon='eye'/> {building.views}
-                    </span>
+                    <div className={classes.information}>
+                        <div className={classes.icon} title={`Просмотры: ${building.views}`}>
+                            <FontAwesomeIcon icon='eye'/>
+                            <span>{building.views}</span>
+                        </div>
+
+                        <div className={classes.icon} title={`Дата публикации: ${building.dateCreated}`}>
+                            <FontAwesomeIcon icon='calendar'/>
+                            <span>{building.dateCreated}</span>
+                        </div>
+                    </div>
 
                     <div className={classes.itemContent}>
                         <h2>{building.name}</h2>

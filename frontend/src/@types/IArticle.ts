@@ -15,4 +15,5 @@ export interface IArticle {
     views?: number
     avatarId?: number | null
     avatar?: string | null
+    authorName?: string | null
 }

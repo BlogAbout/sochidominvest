@@ -50,7 +50,7 @@ class NotificationModel extends Model
             SELECT sdi.*, n.*
             FROM `sdi_user_notification` sdi
             LEFT JOIN `sdi_notification` n ON sdi.`id_notification` = n.`id`
-            WHERE sdi.`id_user` = :userId AND sdi.`status` != 'drop'
+            WHERE sdi.`id_user` = :userId
             ORDER BY sdi.`id_notification` DESC
         ";
 
@@ -144,8 +144,7 @@ class NotificationModel extends Model
     public static function deleteItem(int $notificationId, int $userId): array
     {
         $sql = "
-            UPDATE `sdi_user_notification`
-            SET `status` = 'drop'
+            DELETE FROM `sdi_user_notification`
             WHERE `id_notification` = :notificationId AND `id_user` = :userId
         ";
 

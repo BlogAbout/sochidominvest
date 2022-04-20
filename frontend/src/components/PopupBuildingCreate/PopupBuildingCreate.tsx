@@ -811,6 +811,7 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
                                          })}
                                          placeHolder='Введите описание об объекте'
                                          icon='paragraph'
+                                         isVisual={true}
                             />
                         </div>
                     </div>

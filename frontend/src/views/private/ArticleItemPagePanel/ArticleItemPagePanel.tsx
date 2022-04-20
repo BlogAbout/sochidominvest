@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react'
 import Helmet from 'react-helmet'
+import * as Showdown from 'showdown'
 import {useNavigate, useParams} from 'react-router-dom'
 import classNames from 'classnames/bind'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
@@ -93,6 +94,13 @@ const ArticleItemPagePanel: React.FC<Props> = (props) => {
         }
     }, [article])
 
+    const converter = new Showdown.Converter({
+        tables: true,
+        simplifiedAutoLink: true,
+        strikethrough: true,
+        tasklists: true
+    })
+
     const renderBuildingsInfo = () => {
         if (!article.buildings || !article.buildings.length || !buildings || !buildings.length) {
             return null
@@ -166,10 +174,27 @@ const ArticleItemPagePanel: React.FC<Props> = (props) => {
 
                         <h1><span>{article.name}</span></h1>
 
-                        <div className={classes.description}>{article.description}</div>
+                        <div className={classes.description}
+                             dangerouslySetInnerHTML={{__html: converter.makeHtml(article.description)}}
+                        />
 
-                        <div className={classes.views} title={`Просмотров: ${article.views}`}>
-                            <FontAwesomeIcon icon='eye'/> {article.views}
+                        <div className={classes.information}>
+                            <div className={classes.icon} title={`Просмотры: ${article.views}`}>
+                                <FontAwesomeIcon icon='eye'/>
+                                <span>{article.views}</span>
+                            </div>
+
+                            <div className={classes.icon} title={`Дата публикации: ${article.dateCreated}`}>
+                                <FontAwesomeIcon icon='calendar'/>
+                                <span>{article.dateCreated}</span>
+                            </div>
+
+                            {article.authorName ?
+                                <div className={classes.icon} title={`Автор: ${article.authorName}`}>
+                                    <FontAwesomeIcon icon='user'/>
+                                    <span>{article.authorName}</span>
+                                </div>
+                            : null}
                         </div>
 
                         {renderBuildingsInfo()}

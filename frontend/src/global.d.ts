@@ -34,3 +34,4 @@ interface Window {
 
 declare module 'react-lightgallery'
 declare module 'react-helmet'
+declare module 'showdown'

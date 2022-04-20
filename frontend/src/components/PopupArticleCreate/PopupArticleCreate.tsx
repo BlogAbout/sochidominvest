@@ -190,6 +190,7 @@ const PopupArticleCreate: React.FC<Props> = (props) => {
                                      })}
                                      placeHolder='Введите текст статьи'
                                      icon='paragraph'
+                                     isVisual={true}
                         />
                     </div>
 

@@ -26,8 +26,13 @@
         flex-grow: 1;
     }
 
+    .author {
+        width: 200px;
+        flex-shrink: 0;
+    }
+
     .type {
-        width: 150px;
+        width: 100px;
         flex-shrink: 0;
     }
 

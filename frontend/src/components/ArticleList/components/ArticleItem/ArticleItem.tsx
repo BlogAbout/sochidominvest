@@ -98,6 +98,7 @@ const ArticleItem: React.FC<Props> = (props) => {
 
             <div className={classes.id}>#{props.article.id}</div>
             <div className={classes.name}>{props.article.name}</div>
+            <div className={classes.author}>{props.article.authorName || ''}</div>
             <div className={classes.type}>{articleType ? articleType.text : ''}</div>
             <div className={classes.views}>{props.article.views}</div>
         </div>

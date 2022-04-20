@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react'
 import Helmet from 'react-helmet'
+import * as Showdown from 'showdown'
 import classNames from 'classnames/bind'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {Link, useParams} from 'react-router-dom'
@@ -144,6 +145,13 @@ const BuildingItemPage: React.FC = () => {
         }
     }, [building])
 
+    const converter = new Showdown.Converter({
+        tables: true,
+        simplifiedAutoLink: true,
+        strikethrough: true,
+        tasklists: true
+    })
+
     const onFeedButtonHandler = (type: 'callback' | 'get-document' | 'get-presentation' | 'get-view') => {
         openPopupFeedCreate(document.body, {
             building: building,
@@ -177,9 +185,25 @@ const BuildingItemPage: React.FC = () => {
 
                     <h1>
                         {building.name}
-                        <span className={classes.views} title={`Просмотров: ${building.views}`}>
-                                <FontAwesomeIcon icon='eye'/> {building.views}
-                            </span>
+
+                        <div className={classes.information}>
+                            <div className={classes.icon} title={`Просмотры: ${building.views}`}>
+                                <FontAwesomeIcon icon='eye'/>
+                                <span>{building.views}</span>
+                            </div>
+
+                            <div className={classes.icon} title={`Дата публикации: ${building.dateCreated}`}>
+                                <FontAwesomeIcon icon='calendar'/>
+                                <span>{building.dateCreated}</span>
+                            </div>
+
+                            {building.authorName ?
+                                <div className={classes.icon} title={`Автор: ${building.authorName}`}>
+                                    <FontAwesomeIcon icon='user'/>
+                                    <span>{building.authorName}</span>
+                                </div>
+                                : null}
+                        </div>
                     </h1>
 
                     <div className={classes.address}>
@@ -245,10 +269,10 @@ const BuildingItemPage: React.FC = () => {
                         >Заказать обратный звонок</Button>
                         <Button type='save'
                                 onClick={() => onFeedButtonHandler('get-document')}
-                        >Заказать документы</Button>
+                        >Запросить документы</Button>
                         <Button type='save'
                                 onClick={() => onFeedButtonHandler('get-presentation')}
-                        >Получить презентацию</Button>
+                        >Скачать презентацию</Button>
                         <Button type='save'
                                 onClick={() => onFeedButtonHandler('get-view')}
                         >Записаться на просмотр</Button>
@@ -440,9 +464,9 @@ const BuildingItemPage: React.FC = () => {
             <BlockingElement fetching={fetching} className={classes.block}>
                 <h2>{getAboutBlockTitle(building.type)}</h2>
 
-                <div className={classes.text}>
-                    {building.description}
-                </div>
+                <div className={classes.text}
+                     dangerouslySetInnerHTML={{__html: converter.makeHtml(building.description)}}
+                />
             </BlockingElement>
         )
     }

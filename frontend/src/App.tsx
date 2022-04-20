@@ -18,6 +18,7 @@ import {
     faBorderAll,
     faBuilding,
     faBuildingColumns,
+    faCalendar,
     faCalendarPlus,
     faCar,
     faCashRegister,
@@ -153,7 +154,8 @@ library.add(
     faBorderAll,
     faCalendarPlus,
     faDatabase,
-    faEnvelope
+    faEnvelope,
+    faCalendar
 )
 
 function App() {

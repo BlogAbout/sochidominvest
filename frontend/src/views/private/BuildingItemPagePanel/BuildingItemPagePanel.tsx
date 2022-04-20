@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react'
 import Helmet from 'react-helmet'
+import * as Showdown from 'showdown'
 import classNames from 'classnames/bind'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {Link, useParams} from 'react-router-dom'
@@ -176,6 +177,13 @@ const BuildingItemPagePanel: React.FC = (props) => {
         }
     }, [building])
 
+    const converter = new Showdown.Converter({
+        tables: true,
+        simplifiedAutoLink: true,
+        strikethrough: true,
+        tasklists: true
+    })
+
     // Добавление объекта в избранное
     const addBuildingToFavorite = () => {
         if (building.id) {
@@ -245,12 +253,26 @@ const BuildingItemPagePanel: React.FC = (props) => {
                     : null
                 }
 
-                <h1>
-                    {building.name}
-                    <span className={classes.views} title={`Просмотров: ${building.views}`}>
-                        <FontAwesomeIcon icon='eye'/> {building.views}
-                    </span>
-                </h1>
+                <div className={classes.infoData}>
+                    <div className={classes.icon} title={`Просмотры: ${building.views}`}>
+                        <FontAwesomeIcon icon='eye'/>
+                        <span>{building.views}</span>
+                    </div>
+
+                    <div className={classes.icon} title={`Дата публикации: ${building.dateCreated}`}>
+                        <FontAwesomeIcon icon='calendar'/>
+                        <span>{building.dateCreated}</span>
+                    </div>
+
+                    {building.authorName ?
+                        <div className={classes.icon} title={`Автор: ${building.authorName}`}>
+                            <FontAwesomeIcon icon='user'/>
+                            <span>{building.authorName}</span>
+                        </div>
+                        : null}
+                </div>
+
+                <h1>{building.name}</h1>
 
                 <div className={classes.address}>
                     {districtText !== '' && <span>{districtText}</span>}
@@ -544,9 +566,9 @@ const BuildingItemPagePanel: React.FC = (props) => {
             <div className={classes.block}>
                 <h2>{getAboutBlockTitle(building.type)}</h2>
 
-                <div className={classes.text}>
-                    {building.description}
-                </div>
+                <div className={classes.text}
+                     dangerouslySetInnerHTML={{__html: converter.makeHtml(building.description)}}
+                />
             </div>
         )
     }

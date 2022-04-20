@@ -31,7 +31,12 @@ class ArticleModel extends Model
                        SELECT v.`views`
                        FROM `sdi_views` AS v
                        WHERE v.`id_object` = `id` AND v.`type_object` = 'article'
-                   ) AS views
+                   ) AS views,
+                   (
+                       SELECT u.`first_name`
+                       FROM `sdi_user` AS u
+                       WHERE u.`id` = `author` AND u.`active` IN (0, 1)
+                   ) AS authorName
             FROM `sdi_article`
             WHERE `id` = :id
         ";
@@ -75,7 +80,12 @@ class ArticleModel extends Model
                        SELECT v.`views`
                        FROM `sdi_views` AS v
                        WHERE v.`id_object` = sdi.`id` AND v.`type_object` = 'article'
-                   ) AS views
+                   ) AS views,
+                   (
+                       SELECT u.`first_name`
+                       FROM `sdi_user` AS u
+                       WHERE u.`id` = sdi.`author` AND u.`active` IN (0, 1)
+                   ) AS authorName
             FROM `sdi_article` sdi
             $sqlWhere
             ORDER BY sdi.`id` DESC
@@ -271,7 +281,8 @@ class ArticleModel extends Model
             'images' => array_map('intval', $data['images'] ? explode(',', $data['images']) : []),
             'views' => $data['views'] ? (int)$data['views'] : 0,
             'avatarId' => (int)$data['id_avatar'],
-            'avatar' => $data['avatar']
+            'avatar' => $data['avatar'],
+            'authorName' => $data['authorName']
         ];
     }
 }

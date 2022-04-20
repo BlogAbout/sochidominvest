@@ -56,7 +56,12 @@ class BuildingModel extends Model
                        SELECT v.`views`
                        FROM `sdi_views` AS v
                        WHERE v.`id_object` = bu.`id` AND v.`type_object` = 'building'
-                   ) AS views
+                   ) AS views,
+                   (
+                       SELECT u.`first_name`
+                       FROM `sdi_user` AS u
+                       WHERE u.`id` = bu.`author` AND u.`active` IN (0, 1)
+                   ) AS authorName
             FROM `sdi_building` AS bu
             LEFT JOIN `sdi_building_data` bd on bu.`id` = bd.`id`
             WHERE bu.`id` = :id
@@ -126,7 +131,12 @@ class BuildingModel extends Model
                        SELECT v.`views`
                        FROM `sdi_views` AS v
                        WHERE v.`id_object` = bu.`id` AND v.`type_object` = 'building'
-                   ) AS views
+                   ) AS views,
+                   (
+                       SELECT u.`first_name`
+                       FROM `sdi_user` AS u
+                       WHERE u.`id` = bu.`author` AND u.`active` IN (0, 1)
+                   ) AS authorName
             FROM `sdi_building` AS bu
             LEFT JOIN `sdi_building_data` bd on bu.`id` = bd.`id`
         ";
@@ -570,7 +580,8 @@ class BuildingModel extends Model
             'passed' => $data['passed'] ? json_decode($data['passed']) : null,
             'views' => $data['views'] ? (int)$data['views'] : 0,
             'avatarId' => (int)$data['id_avatar'],
-            'avatar' => $data['avatar']
+            'avatar' => $data['avatar'],
+            'authorName' => $data['authorName']
         ];
     }
 }

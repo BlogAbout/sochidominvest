@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react'
 import Helmet from 'react-helmet'
+import * as Showdown from 'showdown'
 import classNames from 'classnames/bind'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {useNavigate} from 'react-router-dom'
@@ -37,6 +38,13 @@ const ArticlePage: React.FC = () => {
         }
     }, [isUpdate])
 
+    const converter = new Showdown.Converter({
+        tables: true,
+        simplifiedAutoLink: true,
+        strikethrough: true,
+        tasklists: true
+    })
+
     const renderItem = (article: IArticle) => {
         const articleType = articleTypes.find((item: ISelector) => item.key === article.type)
 
@@ -44,13 +52,9 @@ const ArticlePage: React.FC = () => {
             <div key={article.id} className={classes.item} onClick={() => navigate('/article/' + article.id)}>
                 <div className={cx({'itemImage': true, 'noImage': !article.images || !article.images.length})}>
                     {article.avatar ?
-                        <img src={'https://api.sochidominvest.ru/uploads' + article.avatar} alt={article.name}/>
+                        <img src={'https://api.sochidominvest.ru/uploads/' + article.avatar} alt={article.name}/>
                         : null
                     }
-
-                    <span className={classes.views} title={`Просмотров: ${article.views}`}>
-                        <FontAwesomeIcon icon='eye'/> {article.views}
-                    </span>
                 </div>
 
                 <div className={classes.itemContent}>
@@ -59,9 +63,30 @@ const ArticlePage: React.FC = () => {
                         <div className={cx({'type': true, [`${article.type}`]: true})}>{articleType.text}</div>
                     </div>}
 
+                    <div className={classes.information}>
+                        <div className={classes.icon} title={`Просмотры: ${article.views}`}>
+                            <FontAwesomeIcon icon='eye'/>
+                            <span>{article.views}</span>
+                        </div>
+
+                        <div className={classes.icon} title={`Дата публикации: ${article.dateCreated}`}>
+                            <FontAwesomeIcon icon='calendar'/>
+                            <span>{article.dateCreated}</span>
+                        </div>
+
+                        {article.authorName ?
+                            <div className={classes.icon} title={`Автор: ${article.authorName}`}>
+                                <FontAwesomeIcon icon='user'/>
+                                <span>{article.authorName}</span>
+                            </div>
+                            : null}
+                    </div>
+
                     <h2>{article.name}</h2>
 
-                    <p>{article.description.substring(0, 150)}</p>
+                    <div className={classes.description}
+                         dangerouslySetInnerHTML={{__html: converter.makeHtml(article.description.substring(0, 150))}}
+                    />
                 </div>
             </div>
         )

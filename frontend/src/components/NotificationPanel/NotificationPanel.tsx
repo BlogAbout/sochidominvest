@@ -34,11 +34,11 @@ const NotificationPanel: React.FC<Props> = (props) => {
     const {fetchNotificationList, readNotificationAll} = useActions()
 
     useEffect(() => {
-        // document.addEventListener('click', handleClickOutside, true)
-        //
-        // return () => {
-        //     document.removeEventListener('click', handleClickOutside, true)
-        // }
+        document.addEventListener('click', handleClickOutside, true)
+
+        return () => {
+            document.removeEventListener('click', handleClickOutside, true)
+        }
     }, [])
 
     useEffect(() => {

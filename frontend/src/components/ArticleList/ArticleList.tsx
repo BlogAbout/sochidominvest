@@ -26,6 +26,7 @@ const ArticleList: React.FC<Props> = (props) => {
             <div className={classes.head}>
                 <div className={classes.id}>#</div>
                 <div className={classes.name}>Название</div>
+                <div className={classes.author}>Автор</div>
                 <div className={classes.type}>Тип</div>
                 <div className={classes.views}>Просмотры</div>
             </div>

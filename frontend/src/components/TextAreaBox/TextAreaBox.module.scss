@@ -9,6 +9,12 @@
     margin-bottom: 10px;
     padding: 0 5px 0 10px;
 
+    &.ReactMde {
+        padding: 0;
+        display: block;
+        height: auto;
+    }
+
     .icon {
         margin: 0 5px 0 0;
         font-size: 14px;
@@ -28,5 +34,13 @@
         border: none;
         outline: none;
         resize: none;
+    }
+
+    .reactMde {
+        border: none;
+    }
+
+    .mdeText {
+        line-height: 16px !important;
     }
 }

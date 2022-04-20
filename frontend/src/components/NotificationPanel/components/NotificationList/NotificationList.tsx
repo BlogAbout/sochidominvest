@@ -5,7 +5,6 @@ import {INotification} from '../../../../@types/INotification'
 import BlockingElement from '../../../BlockingElement/BlockingElement'
 import Empty from '../../../Empty/Empty'
 import classes from './NotificationList.module.scss'
-import {notification} from "antd";
 
 interface Props {
     notifications: INotification[]
