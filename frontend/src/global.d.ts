@@ -30,6 +30,7 @@ interface Window {
     defaultDragDropContext?: any
     HTMLElement?: any
     StyleMedia?: any
+    ym?: any
 }
 
 declare module 'react-lightgallery'
