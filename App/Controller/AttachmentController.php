@@ -70,7 +70,7 @@ class AttachmentController extends Controller
             $itemData = $this->attachmentModel->createItem($payload);
 
             if ($itemData['status']) {
-                // Fixme: LogModel::log('create', 'attachment', JwtMiddleware::getUserId(), $itemData['data']);
+                LogModel::log('create', 'attachment', JwtMiddleware::getUserId(), $itemData['data']);
                 $response->code(201)->json($itemData['data']);
 
                 return;
@@ -124,7 +124,7 @@ class AttachmentController extends Controller
 
             if ($itemData['status']) {
                 $item = $this->attachmentModel->fetchItemById($request->id);
-                // Fixme: LogModel::log('update', 'attachment', JwtMiddleware::getUserId(), $item);
+                LogModel::log('update', 'attachment', JwtMiddleware::getUserId(), $item);
                 $response->code(200)->json($item);
 
                 return;
@@ -251,7 +251,7 @@ class AttachmentController extends Controller
 
         try {
             if ($this->attachmentModel->deleteItem($request->id)) {
-                // Fixme: LogModel::log('remove', 'attachment', JwtMiddleware::getUserId(), ['id' => $request->id]);
+                LogModel::log('remove', 'attachment', JwtMiddleware::getUserId(), ['id' => $request->id]);
                 $response->code(200)->json('');
 
                 return;

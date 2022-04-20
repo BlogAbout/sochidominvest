@@ -1,9 +1,9 @@
 import React from 'react'
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {useActions} from '../../../../hooks/useActions'
 import {INotification} from '../../../../@types/INotification'
 import BlockingElement from '../../../BlockingElement/BlockingElement'
 import Empty from '../../../Empty/Empty'
+import NotificationItem from '../NotificationItem/NotificationItem'
 import classes from './NotificationList.module.scss'
 
 interface Props {
@@ -34,37 +34,15 @@ const NotificationList: React.FC<Props> = (props) => {
     if (props.notifications && props.notifications.length) {
         return (
             <BlockingElement fetching={props.fetching} className={classes.content}>
-                {props.notifications.map((notification: INotification) =>
-                    <div key={notification.id} className={classes.item}>
-                        <div className={classes.row}>
-                            <div className={classes.date}>{notification.dateCreated}</div>
-
-                            {notification.status === 'new' ?
-                                <div className={classes.btn}
-                                     onClick={() => onReadMessageHandler(notification)}
-                                     title='Отметить как прочитанное'
-                                >
-                                    <FontAwesomeIcon icon='envelope'/>
-                                </div>
-                                : null
-                            }
-
-                            <div className={classes.btn}
-                                 onClick={() => onRemoveMessageHandler(notification)}
-                                 title='Удалить'
-                            >
-                                <FontAwesomeIcon icon='trash'/>
-                            </div>
-                        </div>
-
-                        <div className={classes.title}>{notification.name}</div>
-
-                        {notification.description ?
-                            <div className={classes.description}>{notification.description}</div>
-                            : null
-                        }
-                    </div>
-                )}
+                {props.notifications.map((notification: INotification) => {
+                    return (
+                        <NotificationItem key={notification.id}
+                                          notification={notification}
+                                          readMessage={onReadMessageHandler.bind(this)}
+                                          removeMessage={onRemoveMessageHandler.bind(this)}
+                        />
+                    )
+                })}
             </BlockingElement>
         )
     } else {

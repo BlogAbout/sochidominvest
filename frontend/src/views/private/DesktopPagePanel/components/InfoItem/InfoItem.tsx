@@ -161,7 +161,7 @@ const InfoItem: React.FC<Props> = (props) => {
             case 'attachment':
                 textContent += 'вложение. '
                 break
-            case 'notification':
+            case 'notify':
                 textContent += 'уведомление. '
                 break
         }

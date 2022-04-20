@@ -148,6 +148,7 @@ class LogModel extends Model
             case 'developer':
             case 'document':
             case 'tag':
+            case 'notify':
                 $content .= $data['name'];
                 break;
             case 'feed':
@@ -156,6 +157,8 @@ class LogModel extends Model
             case 'user':
                 $content .= $data['firstName'];
                 break;
+            case 'attachment':
+                $content .= $data['name'] && trim($data['name']) !== '' ? $data['name'] : $data['content'];
         }
 
         return $content;
