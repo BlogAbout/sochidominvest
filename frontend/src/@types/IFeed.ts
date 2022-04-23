@@ -12,4 +12,16 @@ export interface IFeed {
     status: string
     dateCreated?: string
     dateUpdate?: string
+    messages?: IFeedMessage[]
+}
+
+export interface IFeedMessage {
+    id: number | null
+    feedId: number | null
+    author: number | null
+    active: number
+    status: string
+    content: string
+    dateCreated?: string,
+    authorName?: string | null
 }

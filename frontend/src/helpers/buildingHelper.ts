@@ -146,6 +146,7 @@ export const buildingAdvantages: ISelector[] = [
  */
 export const checkerFurnish: ISelector[] = [
     {key: 'draft', text: 'черновая'},
+    {key: 'pre-finishing', text: 'предчистовая'},
     {key: 'repair', text: 'ремонт'}
 ]
 

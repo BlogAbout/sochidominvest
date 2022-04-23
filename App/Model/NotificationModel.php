@@ -94,9 +94,10 @@ class NotificationModel extends Model
      * Создание элемента
      *
      * @param array $payload Содержит все поля, которые будут созданы
+     * @param array $notifyUsers Список идентификаторов пользователей для уведомления
      * @return array
      */
-    public static function createItem(array $payload): array
+    public static function createItem(array $payload, array $notifyUsers = []): array
     {
         $sql = "
             INSERT INTO `sdi_notification`
@@ -120,7 +121,7 @@ class NotificationModel extends Model
         if ($item) {
             $payload['id'] = parent::lastInsertedId();
 
-            self::setNotificationForUsers($payload, []);
+            self::setNotificationForUsers($payload, $notifyUsers);
 
             return array(
                 'status' => true,
@@ -220,7 +221,12 @@ class NotificationModel extends Model
                 // Todo
                 break;
             case 'feed':
-                // Todo
+                if (!count($usersIds)) {
+                    $filter = [
+                        'role' => ['director', 'administrator', 'manager']
+                    ];
+                    $usersIds = UserModel::fetchUsersIds($filter);
+                }
                 break;
             default:
                 // Todo

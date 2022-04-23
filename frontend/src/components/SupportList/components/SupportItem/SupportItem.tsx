@@ -112,8 +112,8 @@ const SupportItem: React.FC<Props> = (props) => {
 
     return (
         <div className={cx({'SupportItem': true, [`${props.feed.type}`]: true})}
-             onClick={(e: React.MouseEvent) => openPopupSupportInfo(e, {
-                 feed: props.feed,
+             onClick={() => openPopupSupportInfo(document.body, {
+                 feedId: props.feed.id,
                  onSave: props.onSave
              })}
              onContextMenu={(e: React.MouseEvent) => onContextMenu(e)}
@@ -123,9 +123,15 @@ const SupportItem: React.FC<Props> = (props) => {
             <div className={classes.id}>#{props.feed.id}</div>
             <div className={classes.title}>{props.feed.title}</div>
             <div className={classes.status}>{feedStatus ? feedStatus.text : ''}</div>
-            <div className={classes.name}>{props.feed.name}</div>
-            <div className={classes.phone}>{props.feed.phone}</div>
-            <div className={classes.type}>{feedType ? feedType.text : ''}</div>
+
+            {['director', 'administrator', 'manager'].includes(role) ?
+                <>
+                    <div className={classes.name}>{props.feed.name}</div>
+                    <div className={classes.phone}>{props.feed.phone}</div>
+                    <div className={classes.type}>{feedType ? feedType.text : ''}</div>
+                </>
+                : null
+            }
         </div>
     )
 }

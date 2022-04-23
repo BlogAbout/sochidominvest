@@ -73,7 +73,7 @@ const NotificationPanel: React.FC<Props> = (props) => {
                 setFilteredNotification(notifications.filter((notification: INotification) => notification.status === 'new'))
                 break
             case 'system':
-                setFilteredNotification(notifications.filter((notification: INotification) => notification.type === 'system'))
+                setFilteredNotification(notifications.filter((notification: INotification) => ['system', 'feed'].includes(notification.type) ))
                 break
             default:
                 setFilteredNotification([])

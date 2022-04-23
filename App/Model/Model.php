@@ -258,6 +258,10 @@ class Model
             array_push($where, "sdi.`id` IN (" . implode(',', $filter['id']) . ")");
         }
 
+        if (!empty($filter['role'])) {
+            array_push($where, "sdi.`role` IN ('" . implode("','", $filter['role']) . "')");
+        }
+
         if (!empty($filter['active'])) {
             array_push($where, 'sdi.`active` IN (' . implode(',', $filter['active']) . ')');
         }

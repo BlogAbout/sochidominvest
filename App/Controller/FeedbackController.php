@@ -43,15 +43,7 @@ class FeedbackController extends Controller
 
         $data = json_decode($request->body());
 
-        if ($data->userId) {
-            $validationObject = array(
-                (object)[
-                    'validator' => 'userExists',
-                    'data' => $data->userId ?? '',
-                    'key' => 'Идентификатор'
-                ]
-            );
-        } else {
+        if (!$author) {
             $validationObject = array(
                 (object)[
                     'validator' => 'required',
@@ -59,17 +51,16 @@ class FeedbackController extends Controller
                     'key' => 'Номер телефона'
                 ]
             );
-        }
 
-        $validationBag = parent::validation($validationObject);
-        if ($validationBag->status) {
-            $response->code(400)->json($validationBag->errors);
+            $validationBag = parent::validation($validationObject);
+            if ($validationBag->status) {
+                $response->code(400)->json($validationBag->errors);
 
-            return;
+                return;
+            }
         }
 
         $payload = array(
-            'userId' => $data->userId ? (int)htmlentities(stripcslashes(strip_tags($data->userId))) : null,
             'phone' => $data->phone ? htmlentities(stripcslashes(strip_tags($data->phone))) : '',
             'name' => $data->name ? htmlentities(stripcslashes(strip_tags($data->name))) : '',
             'title' => htmlentities(stripcslashes(strip_tags($data->title))),
@@ -80,7 +71,8 @@ class FeedbackController extends Controller
             'status' => htmlentities(stripcslashes(strip_tags($data->status))),
             'dateCreated' => date('Y-m-d H:i:s'),
             'dateUpdate' => date('Y-m-d H:i:s'),
-            'author' => $author
+            'author' => $author,
+            'messages' => $data->messages
         );
 
         try {
@@ -144,20 +136,6 @@ class FeedbackController extends Controller
             ]
         );
 
-        if ($data->userId) {
-            $validationObject[] = (object)[
-                'validator' => 'userExists',
-                'data' => $data->userId ?? '',
-                'key' => 'Идентификатор'
-            ];
-        } else {
-            $validationObject[] = (object)[
-                'validator' => 'required',
-                'data' => $data->phone ?? '',
-                'key' => 'Номер телефона'
-            ];
-        }
-
         $validationBag = parent::validation($validationObject);
         if ($validationBag->status) {
             $response->code(400)->json($validationBag->errors);
@@ -176,7 +154,10 @@ class FeedbackController extends Controller
             'objectType' => $data->objectType ? htmlentities(stripcslashes(strip_tags($data->objectType))) : '',
             'dateUpdate' => date('Y-m-d H:i:s'),
             'active' => (int)htmlentities(stripcslashes(strip_tags($data->active))),
-            'status' => htmlentities(stripcslashes(strip_tags($data->status)))
+            'status' => htmlentities(stripcslashes(strip_tags($data->status))),
+            'author' => JwtMiddleware::getUserId(),
+            'messages' => $data->messages,
+            'authorFeed' => $data->author
         );
 
         try {

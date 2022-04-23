@@ -1,4 +1,5 @@
 import React from 'react'
+import {useTypedSelector} from '../../hooks/useTypedSelector'
 import {IFeed} from '../../@types/IFeed'
 import Empty from '../Empty/Empty'
 import SupportItem from './components/SupportItem/SupportItem'
@@ -21,15 +22,23 @@ const defaultProps: Props = {
 }
 
 const SupportList: React.FC<Props> = (props) => {
+    const {role} = useTypedSelector(state => state.userReducer)
+
     return (
         <div className={classes.SupportList}>
             <div className={classes.head}>
                 <div className={classes.id}>#</div>
                 <div className={classes.title}>Заголовок</div>
                 <div className={classes.status}>Статус</div>
-                <div className={classes.name}>Имя</div>
-                <div className={classes.phone}>Телефон</div>
-                <div className={classes.type}>Тип</div>
+
+                {['director', 'administrator', 'manager'].includes(role) ?
+                    <>
+                        <div className={classes.name}>Имя</div>
+                        <div className={classes.phone}>Телефон</div>
+                        <div className={classes.type}>Тип</div>
+                    </>
+                    : null
+                }
             </div>
 
             {props.feeds.length ?

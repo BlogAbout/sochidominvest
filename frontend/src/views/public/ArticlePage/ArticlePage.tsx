@@ -52,7 +52,7 @@ const ArticlePage: React.FC = () => {
             <div key={article.id} className={classes.item} onClick={() => navigate('/article/' + article.id)}>
                 <div className={cx({'itemImage': true, 'noImage': !article.images || !article.images.length})}>
                     {article.avatar ?
-                        <img src={'https://api.sochidominvest.ru/uploads/' + article.avatar} alt={article.name}/>
+                        <img src={'https://api.sochidominvest.ru/uploads/thumbs/400/' + article.avatar} alt={article.name}/>
                         : null
                     }
                 </div>

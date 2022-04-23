@@ -1,10 +1,12 @@
 import React, {useEffect, useState} from 'react'
 import Helmet from 'react-helmet'
 import {IFeed} from '../../../@types/IFeed'
+import {useTypedSelector} from '../../../hooks/useTypedSelector'
 import FeedService from '../../../api/FeedService'
 import SearchBox from '../../../components/SearchBox/SearchBox'
 import Button from '../../../components/Button/Button'
 import SupportList from '../../../components/SupportList/SupportList'
+import openPopupSupportCreate from '../../../components/PopupSupportCreate/PopupSupportCreate'
 import classes from './SupportPagePanel.module.scss'
 
 const SupportPagePanel: React.FC = () => {
@@ -14,6 +16,9 @@ const SupportPagePanel: React.FC = () => {
     const [searchText, setSearchText] = useState('')
     const [filterFeeds, setFilterFeeds] = useState<IFeed[]>([])
     const [selectedType, setSelectedType] = useState<string[]>([])
+
+    const {role, userId} = useTypedSelector(state => state.userReducer)
+
 
     useEffect(() => {
         if (isUpdate) {
@@ -48,15 +53,28 @@ const SupportPagePanel: React.FC = () => {
             setFilterFeeds([])
         }
 
-        if (value !== '') {
-            setFilterFeeds(feeds.filter((feed: IFeed) => {
-                return (!selectedType.length || selectedType.includes(feed.type)) &&
-                    (feed.title.toLocaleLowerCase().indexOf(value.toLocaleLowerCase()) !== -1 ||
-                        (feed.name && feed.name.toLocaleLowerCase().indexOf(value.toLocaleLowerCase()) !== -1) ||
-                        (feed.phone && feed.phone.toLocaleLowerCase().indexOf(value.toLocaleLowerCase()) !== -1))
-            }))
+        if (['director', 'administrator', 'manager'].includes(role)) {
+            if (value !== '') {
+                setFilterFeeds(feeds.filter((feed: IFeed) => {
+                    return (!selectedType.length || selectedType.includes(feed.type)) &&
+                        (feed.title.toLocaleLowerCase().indexOf(value.toLocaleLowerCase()) !== -1 ||
+                            (feed.name && feed.name.toLocaleLowerCase().indexOf(value.toLocaleLowerCase()) !== -1) ||
+                            (feed.phone && feed.phone.toLocaleLowerCase().indexOf(value.toLocaleLowerCase()) !== -1))
+                }))
+            } else {
+                setFilterFeeds(!selectedType.length ? feeds : feeds.filter((feed: IFeed) => selectedType.includes(feed.type)))
+            }
         } else {
-            setFilterFeeds(!selectedType.length ? feeds : feeds.filter((feed: IFeed) => selectedType.includes(feed.type)))
+            if (value !== '') {
+                setFilterFeeds(feeds.filter((feed: IFeed) => {
+                    return (feed.author === userId) &&
+                        (feed.title.toLocaleLowerCase().indexOf(value.toLocaleLowerCase()) !== -1 ||
+                            (feed.name && feed.name.toLocaleLowerCase().indexOf(value.toLocaleLowerCase()) !== -1) ||
+                            (feed.phone && feed.phone.toLocaleLowerCase().indexOf(value.toLocaleLowerCase()) !== -1))
+                }))
+            } else {
+                setFilterFeeds(feeds.filter((feed: IFeed) => feed.author === userId))
+            }
         }
     }
 
@@ -69,6 +87,12 @@ const SupportPagePanel: React.FC = () => {
         }
     }
 
+    const addHandler = () => {
+        openPopupSupportCreate(document.body, {
+            onSave: () => onSave()
+        })
+    }
+
     return (
         <main className={classes.SupportPagePanel}>
             <Helmet>
@@ -78,33 +102,37 @@ const SupportPagePanel: React.FC = () => {
                 <link rel='canonical' href={`${window.location.href}`}/>
             </Helmet>
 
-            <div className={classes.filter}>
-                <Button type={selectedType.includes('feed') ? 'regular' : 'save'}
-                        icon={'headset'}
-                        onClick={() => onClickFilterButtonHandler('feed')}
-                >Заявки</Button>
+            {['director', 'administrator', 'manager'].includes(role) ?
+                <div className={classes.filter}>
+                    <Button type={selectedType.includes('feed') ? 'regular' : 'save'}
+                            icon={'headset'}
+                            onClick={() => onClickFilterButtonHandler('feed')}
+                    >Заявки</Button>
 
-                <Button type={selectedType.includes('callback') ? 'regular' : 'save'}
-                        icon={'phone'}
-                        onClick={() => onClickFilterButtonHandler('callback')}
-                >Звонки</Button>
+                    <Button type={selectedType.includes('callback') ? 'regular' : 'save'}
+                            icon={'phone'}
+                            onClick={() => onClickFilterButtonHandler('callback')}
+                    >Звонки</Button>
 
-                <Button type={selectedType.includes('question') ? 'regular' : 'save'}
-                        icon={'circle-question'}
-                        onClick={() => onClickFilterButtonHandler('question')}
-                >Вопросы</Button>
+                    <Button type={selectedType.includes('question') ? 'regular' : 'save'}
+                            icon={'circle-question'}
+                            onClick={() => onClickFilterButtonHandler('question')}
+                    >Вопросы</Button>
 
-                <Button type={selectedType.includes('other') ? 'regular' : 'save'}
-                        icon={'star'}
-                        onClick={() => onClickFilterButtonHandler('other')}
-                >Другое</Button>
+                    <Button type={selectedType.includes('other') ? 'regular' : 'save'}
+                            icon={'star'}
+                            onClick={() => onClickFilterButtonHandler('other')}
+                    >Другое</Button>
 
-                <SearchBox value={searchText} onChange={search.bind(this)}/>
-            </div>
+                    <SearchBox value={searchText} onChange={search.bind(this)}/>
+                </div>
+                : null
+            }
 
             <div className={classes.Content}>
                 <h1>
                     <span>Техническая поддержка</span>
+                    <Button type='apply' icon='plus' onClick={addHandler.bind(this)}>Создать заявку</Button>
                 </h1>
 
                 <SupportList feeds={filterFeeds} fetching={fetching} onSave={onSave.bind(this)}/>
