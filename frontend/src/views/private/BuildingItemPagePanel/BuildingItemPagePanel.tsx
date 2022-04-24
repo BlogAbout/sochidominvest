@@ -29,6 +29,7 @@ import Gallery from '../../../components/Gallery/Gallery'
 import openPopupBuildingCreate from '../../../components/PopupBuildingCreate/PopupBuildingCreate'
 import openPopupAlert from '../../../components/PopupAlert/PopupAlert'
 import openPopupCheckerInfo from '../../../components/PopupCheckerInfo/PopupCheckerInfo'
+import openPopupCompilationSelector from '../../../components/PopupCompilationSelector/PopupCompilationSelector'
 import {
     amountContract,
     buildingAdvantages,
@@ -345,6 +346,13 @@ const BuildingItemPagePanel: React.FC = (props) => {
                     <Button type='regular'
                             icon='plus'
                             onClick={() => {
+                                if (building.id) {
+                                    openPopupCompilationSelector(document.body, {
+                                        buildingId: building.id,
+                                        onSave: () => {
+                                        }
+                                    })
+                                }
                             }}
                             className='marginRight'
                             title='Добавить в подборку'

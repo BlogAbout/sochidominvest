@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react'
-import FeedService from '../../api/FeedService'
 import {PopupProps} from '../../@types/IPopup'
-import {IFeed, IFeedMessage} from '../../@types/IFeed'
+import {ICompilation} from '../../@types/ICompilation'
+import CompilationService from '../../api/CompilationService'
 import {getPopupContainer, openPopup, removePopup} from '../../helpers/popupHelper'
 import showBackgroundBlock from '../BackgroundBlock/BackgroundBlock'
 import openPopupAlert from '../PopupAlert/PopupAlert'
@@ -10,44 +10,28 @@ import BlockingElement from '../BlockingElement/BlockingElement'
 import TextBox from '../TextBox/TextBox'
 import Button from '../Button/Button'
 import TextAreaBox from '../TextAreaBox/TextAreaBox'
-import classes from './PopupSupportCreate.module.scss'
+import classes from './PopupCompilationCreate.module.scss'
 
 interface Props extends PopupProps {
-    objectId?: number | null
-    objectType?: string | null
+    compilation?: ICompilation | null
 
     onSave(): void
 }
 
 const defaultProps: Props = {
-    objectId: null,
-    objectType: null,
+    compilation: null,
     onSave: () => {
-        console.info('PopupSupportCreate onSave')
+        console.info('PopupCompilationCreate onSave')
     }
 }
 
-const PopupSupportCreate: React.FC<Props> = (props) => {
-    const [feed, setFeed] = useState<IFeed>({
+const PopupCompilationCreate: React.FC<Props> = (props) => {
+    const [compilation, setCompilation] = useState<ICompilation>(props.compilation || {
         id: null,
         author: null,
-        phone: null,
-        name: null,
-        title: '',
-        type: 'feed',
-        objectId: props.objectId || null,
-        objectType: props.objectType || null,
-        active: 1,
-        status: 'new'
-    })
-
-    const [message, setMessage] = useState<IFeedMessage>({
-        id: null,
-        feedId: null,
-        author: null,
-        active: 1,
-        status: 'new',
-        content: ''
+        name: '',
+        description: '',
+        active: 1
     })
 
     const [fetching, setFetching] = useState(false)
@@ -65,18 +49,12 @@ const PopupSupportCreate: React.FC<Props> = (props) => {
 
     // Сохранение изменений
     const saveHandler = () => {
-        if (feed.title.trim() === '' || message.content.trim() === '') {
-            return
-        }
-
-        const updateFeed = {...feed, messages: [message]}
-
         setFetching(true)
 
-        FeedService.saveFeed(updateFeed)
+        CompilationService.saveCompilation(compilation)
             .then((response: any) => {
                 setFetching(false)
-                setFeed(response.data)
+                setCompilation(response.data)
 
                 props.onSave()
                 close()
@@ -92,8 +70,10 @@ const PopupSupportCreate: React.FC<Props> = (props) => {
     }
 
     return (
-        <Popup className={classes.PopupSupportCreate}>
-            <Header title='Создать обращение' popupId={props.id || ''}/>
+        <Popup className={classes.PopupCompilationCreate}>
+            <Header title={compilation.id ? 'Редактировать подборку' : 'Добавить подборку'}
+                    popupId={props.id || ''}
+            />
 
             <Content className={classes['popup-content']}>
                 <BlockingElement fetching={fetching} className={classes.content}>
@@ -101,13 +81,13 @@ const PopupSupportCreate: React.FC<Props> = (props) => {
                         <div className={classes.field}>
                             <div className={classes.field_label}>Название</div>
 
-                            <TextBox value={feed.title}
-                                     onChange={(e: React.MouseEvent, value: string) => setFeed({
-                                         ...feed,
-                                         title: value
+                            <TextBox value={compilation.name}
+                                     onChange={(e: React.MouseEvent, value: string) => setCompilation({
+                                         ...compilation,
+                                         name: value
                                      })}
-                                     placeHolder='Введите тему'
-                                     error={feed.title.trim() === ''}
+                                     placeHolder='Введите название'
+                                     error={compilation.name.trim() === ''}
                                      showRequired
                                      errorText='Поле обязательно для заполнения'
                                      icon='heading'
@@ -115,14 +95,14 @@ const PopupSupportCreate: React.FC<Props> = (props) => {
                         </div>
 
                         <div className={classes.field}>
-                            <div className={classes.field_label}>Сообщение</div>
+                            <div className={classes.field_label}>Описание</div>
 
-                            <TextAreaBox value={message.content}
-                                         onChange={(value: string) => setMessage({
-                                             ...message,
-                                             content: value
+                            <TextAreaBox value={compilation.description}
+                                         onChange={(value: string) => setCompilation({
+                                             ...compilation,
+                                             description: value
                                          })}
-                                         placeHolder='Введите текст сообщения'
+                                         placeHolder='Введите описание о подборке'
                                          icon='paragraph'
                             />
                         </div>
@@ -134,8 +114,8 @@ const PopupSupportCreate: React.FC<Props> = (props) => {
                 <Button type='apply'
                         icon='check'
                         onClick={() => saveHandler()}
-                        disabled={fetching || feed.title.trim() === '' || message.content.trim() === ''}
-                >Отправить</Button>
+                        disabled={fetching || compilation.name.trim() === ''}
+                >Сохранить</Button>
 
                 <Button type='regular'
                         icon='arrow-rotate-left'
@@ -147,10 +127,10 @@ const PopupSupportCreate: React.FC<Props> = (props) => {
     )
 }
 
-PopupSupportCreate.defaultProps = defaultProps
-PopupSupportCreate.displayName = 'PopupSupportCreate'
+PopupCompilationCreate.defaultProps = defaultProps
+PopupCompilationCreate.displayName = 'PopupCompilationCreate'
 
-export default function openPopupSupportCreate(target: any, popupProps = {} as Props) {
+export default function openPopupCompilationCreate(target: any, popupProps = {} as Props) {
     const displayOptions = {
         autoClose: false,
         center: true
@@ -160,5 +140,5 @@ export default function openPopupSupportCreate(target: any, popupProps = {} as P
 
     popupProps = {...popupProps, blockId: blockId}
 
-    return openPopup(PopupSupportCreate, popupProps, undefined, block, displayOptions)
+    return openPopup(PopupCompilationCreate, popupProps, undefined, block, displayOptions)
 }

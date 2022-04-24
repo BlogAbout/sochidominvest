@@ -1,0 +1,18 @@
+.CompilationItemPagePanel {
+    position: relative;
+}
+
+.Content {
+    padding: 40px 0;
+    color: #000;
+
+    h1 {
+        display: flex;
+
+        span {
+            display: block;
+            margin-right: auto;
+            color: #fff;
+        }
+    }
+}

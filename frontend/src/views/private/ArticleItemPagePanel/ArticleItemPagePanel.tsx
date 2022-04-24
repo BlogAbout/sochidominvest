@@ -46,8 +46,6 @@ const ArticleItemPagePanel: React.FC<Props> = (props) => {
     const {fetchArticleList, fetchBuildingList} = useActions()
 
     useEffect(() => {
-        document.title = 'Статьи'
-
         if (isUpdate || !articles.length) {
             fetchArticleList({active: [0, 1]})
 

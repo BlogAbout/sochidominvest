@@ -23,6 +23,7 @@ import FileManagerPagePanel from '../../../views/private/FileManagerPagePanel/Fi
 import SupportPagePanel from '../../../views/private/SupportPagePanel/SupportPagePanel'
 import FavoritePagePanel from '../../../views/private/FavoritePagePanel/FavoritePagePanel'
 import CompilationPagePanel from '../../../views/private/CompilationPagePanel/CompilationPagePanel'
+import CompilationItemPagePanel from '../../../views/private/CompilationItemPagePanel/CompilationItemPagePanel'
 import Navigation from '../../../components/Navigation/Navigation'
 import SidebarLeft from '../../../components/SidebarLeft/SidebarLeft'
 import SidebarRight from '../../../components/SidebarRight/SidebarRight'
@@ -83,6 +84,7 @@ const AppRouter: React.FC = () => {
                             <Route path={RouteNames.ARTICLE} element={<ArticlePagePanel/>}/>
                             <Route path={RouteNames.SUPPORT} element={<SupportPagePanel/>}/>
                             <Route path={RouteNames.FAVORITE} element={<FavoritePagePanel/>}/>
+                            <Route path={RouteNames.COMPILATION_ITEM} element={<CompilationItemPagePanel/>}/>
                             <Route path={RouteNames.COMPILATION} element={<CompilationPagePanel/>}/>
                         </Routes>
                     </div>

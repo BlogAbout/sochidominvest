@@ -26,3 +26,76 @@
         }
     }
 }
+
+.CompilationList {
+    margin-top: 20px;
+    overflow: auto;
+    height: 100%;
+
+    .head {
+        padding: 8px 10px;
+        background-color: #075ea5;
+        color: #fff;
+        margin-bottom: 15px;
+        display: flex;
+        width: 100%;
+        font-weight: 700;
+        box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.4);
+
+        .name {
+            flex-grow: 1;
+        }
+
+        .date {
+            width: 180px;
+            flex-shrink: 0;
+        }
+
+        .count {
+            width: 100px;
+            flex-shrink: 0;
+        }
+    }
+
+    .list {
+        max-height: calc(100% - 110px);
+    }
+}
+
+.CompilationItem {
+    padding: 8px 10px;
+    background-color: #fff;
+    margin-bottom: 15px;
+    display: flex;
+    width: 100%;
+    position: relative;
+    box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.4);
+    transition: all 0.3s ease-in;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    cursor: pointer;
+
+    &:hover {
+        box-shadow: 6px 6px 8px rgba(0, 0, 0, 0.7);
+    }
+
+    &.block {
+        color: #999;
+    }
+
+    .name {
+        flex-grow: 1;
+    }
+
+    .date {
+        width: 180px;
+        flex-shrink: 0;
+    }
+
+    .count {
+        width: 100px;
+        flex-shrink: 0;
+    }
+}

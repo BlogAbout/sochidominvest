@@ -18,7 +18,6 @@ const defaultProps: Props = {
 const CallbackForm: React.FC<Props> = (props) => {
     const [info, setInfo] = useState<IFeed>({
         id: null,
-        userId: null,
         author: null,
         phone: '',
         name: '',

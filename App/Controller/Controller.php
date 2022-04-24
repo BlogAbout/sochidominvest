@@ -176,6 +176,15 @@ class Controller
                 } catch (Exception $e) {
                 }
             }
+
+            if ($payload->validator == 'compilationExists') {
+                try {
+                    if (!Model::isExistsItem('sdi_compilation', (int)$payload->data)) {
+                        array_push($response, "Подборка с таким идентификатором не найдена в базе данных.");
+                    }
+                } catch (Exception $e) {
+                }
+            }
         }
 
         $validationErrors = new \stdClass();

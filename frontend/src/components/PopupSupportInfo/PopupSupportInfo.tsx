@@ -34,7 +34,6 @@ const defaultProps: Props = {
 const PopupSupportInfo: React.FC<Props> = (props) => {
     const [feed, setFeed] = useState<IFeed>({
         id: null,
-        userId: null,
         author: null,
         phone: null,
         name: null,
@@ -234,14 +233,6 @@ const PopupSupportInfo: React.FC<Props> = (props) => {
                 {['director', 'administrator', 'manager'].includes(role) ?
                     <div className={classes.information}>
                         <div className={classes.col}>
-                            {feed.userId ?
-                                <div className={classes.row}>
-                                    <span>Ответственный</span>
-                                    <span>{feed.userId}</span>
-                                </div>
-                                : null
-                            }
-
                             {feed.author ?
                                 <div className={classes.row}>
                                     <span>Автор</span>

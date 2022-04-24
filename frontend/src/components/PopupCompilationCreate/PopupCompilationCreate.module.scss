@@ -1,0 +1,29 @@
+.PopupCompilationCreate {
+    width: 650px;
+    height: 460px;
+}
+
+.content {
+    height: 353px;
+    overflow: auto;
+
+    .info {
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        padding: 15px 15px 0;
+    }
+}
+
+.field {
+    width: 100%;
+    margin-bottom: 10px;
+    position: relative;
+}
+
+.field_label {
+    font-size: 14px;
+    color: black;
+    margin-bottom: 3px;
+    display: flex;
+}

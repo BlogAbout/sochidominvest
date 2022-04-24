@@ -95,11 +95,8 @@ class ArticleModel extends Model
         $list = parent::fetchAll();
 
         if (!empty($list)) {
-            $ids = [];
-
             foreach ($list as $item) {
                 array_push($resultList, ArticleModel::formatDataToJson($item));
-                array_push($ids, (int)$item['id']);
             }
         }
 

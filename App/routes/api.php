@@ -87,6 +87,16 @@ $Klein->respond('GET', '/api/v1/notification/[:notificationId]/read', [new Notif
 $Klein->respond('GET', '/api/v1/notification', [new NotificationController(), 'fetchList']);
 $Klein->respond('DELETE', '/api/v1/notification/[:notificationId]', [new NotificationController(), 'deleteItem']);
 
+// Compilation Routes
+$Klein->respond('GET', '/api/v1/compilation/[:compilationId]/[:buildingId]/[:compilationOldId]', [new CompilationController(), 'addBuildingInCompilation']);
+$Klein->respond('GET', '/api/v1/compilation/[:compilationId]/[:buildingId]', [new CompilationController(), 'addBuildingInCompilation']);
+$Klein->respond('DELETE', '/api/v1/compilation/[:compilationId]/[:buildingId]', [new CompilationController(), 'removeBuildingFromCompilation']);
+$Klein->respond('POST', '/api/v1/compilation', [new CompilationController(), 'createItem']);
+$Klein->respond('PUT', '/api/v1/compilation/[:id]', [new CompilationController(), 'updateItem']);
+$Klein->respond('GET', '/api/v1/compilation/[:id]', [new CompilationController(), 'fetchItemById']);
+$Klein->respond('GET', '/api/v1/compilation', [new CompilationController(), 'fetchList']);
+$Klein->respond('DELETE', '/api/v1/compilation/[:id]', [new CompilationController(), 'deleteItem']);
+
 // Util Routes
 $Klein->respond('GET', '/api/v1/views/[:objectType]/[:objectId]', [new UtilController(), 'updateCountViews']);
 $Klein->respond('GET', '/api/v1/log', [new UtilController(), 'fetchLogs']);

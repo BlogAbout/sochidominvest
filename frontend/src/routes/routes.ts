@@ -13,6 +13,7 @@ export enum RouteNames {
     SUPPORT = '/panel/support',
     FAVORITE = '/panel/favorite',
     COMPILATION = '/panel/compilation',
+    COMPILATION_ITEM = '/panel/compilation/:id',
     FILE_MANAGER = '/panel/file-manager',
     PUBLIC_BUILDING = '/building',
     PUBLIC_BUILDING_ITEM = '/building/:id',

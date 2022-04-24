@@ -145,7 +145,6 @@ class FeedbackController extends Controller
 
         $payload = array(
             'id' => $request->id,
-            'userId' => $data->userId ? (int)htmlentities(stripcslashes(strip_tags($data->userId))) : null,
             'phone' => $data->phone ? htmlentities(stripcslashes(strip_tags($data->phone))) : '',
             'name' => $data->name ? htmlentities(stripcslashes(strip_tags($data->name))) : '',
             'title' => htmlentities(stripcslashes(strip_tags($data->title))),

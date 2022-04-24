@@ -9,6 +9,7 @@ interface Props {
     buildings: IBuilding[]
     fetching: boolean
     isFavorite?: boolean
+    compilationId?: number | null
 
     onSave(): void
 }
@@ -17,6 +18,7 @@ const defaultProps: Props = {
     buildings: [],
     fetching: false,
     isFavorite: false,
+    compilationId: null,
     onSave: () => {
         console.info('InfoList onSave')
     }
@@ -38,6 +40,7 @@ const BuildingList: React.FC<Props> = (props) => {
                                       building={building}
                                       onSave={props.onSave.bind(this)}
                                       isFavorite={props.isFavorite}
+                                      compilationId={props.compilationId}
                         />
                     )
                 })

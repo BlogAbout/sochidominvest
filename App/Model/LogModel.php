@@ -149,6 +149,7 @@ class LogModel extends Model
             case 'document':
             case 'tag':
             case 'notify':
+            case 'compile':
                 $content .= $data['name'];
                 break;
             case 'feed':
