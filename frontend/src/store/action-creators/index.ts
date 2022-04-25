@@ -6,6 +6,7 @@ import {DocumentActionCreators} from './documentActionCreators'
 import {ArticleActionCreators} from './articleActionCreators'
 import {NotificationActionCreators} from './notificationActionCreators'
 import {CompilationActionCreators} from './compilationActionCreators'
+import {AdministrationActionCreators} from './administrationActionCreators'
 
 export default {
     ...UserActionCreators,
@@ -15,5 +16,6 @@ export default {
     ...DocumentActionCreators,
     ...ArticleActionCreators,
     ...NotificationActionCreators,
-    ...CompilationActionCreators
+    ...CompilationActionCreators,
+    ...AdministrationActionCreators
 }

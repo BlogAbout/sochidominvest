@@ -104,15 +104,26 @@ const Navigation: React.FC = () => {
                 <li className={classes.spacer}/>
 
                 {['director', 'administrator'].includes(role) &&
-                <li>
-                    <NavLink to={RouteNames.TOOL}
-                             className={({isActive}) => isActive ? classes.active : ''}
-                             title='Инструменты'
-                    >
-                        <span className={classes.icon}><FontAwesomeIcon icon='screwdriver-wrench'/></span>
-                        <span className={classes.title}>Инструменты</span>
-                    </NavLink>
-                </li>
+                <>
+                    <li>
+                        <NavLink to={RouteNames.TOOL}
+                                 className={({isActive}) => isActive ? classes.active : ''}
+                                 title='Инструменты'
+                        >
+                            <span className={classes.icon}><FontAwesomeIcon icon='screwdriver-wrench'/></span>
+                            <span className={classes.title}>Инструменты</span>
+                        </NavLink>
+                    </li>
+                    <li>
+                        <NavLink to={RouteNames.ADMINISTRATION}
+                                 className={({isActive}) => isActive ? classes.active : ''}
+                                 title='Администрирование'
+                        >
+                            <span className={classes.icon}><FontAwesomeIcon icon='gear'/></span>
+                            <span className={classes.title}>Администрирование</span>
+                        </NavLink>
+                    </li>
+                </>
                 }
 
                 <li>

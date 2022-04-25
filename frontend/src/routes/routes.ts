@@ -15,6 +15,7 @@ export enum RouteNames {
     COMPILATION = '/panel/compilation',
     COMPILATION_ITEM = '/panel/compilation/:id',
     FILE_MANAGER = '/panel/file-manager',
+    ADMINISTRATION = '/panel/administration',
     PUBLIC_BUILDING = '/building',
     PUBLIC_BUILDING_ITEM = '/building/:id',
     PUBLIC_ARTICLE = '/article',

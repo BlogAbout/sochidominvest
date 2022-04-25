@@ -24,6 +24,7 @@ import SupportPagePanel from '../../../views/private/SupportPagePanel/SupportPag
 import FavoritePagePanel from '../../../views/private/FavoritePagePanel/FavoritePagePanel'
 import CompilationPagePanel from '../../../views/private/CompilationPagePanel/CompilationPagePanel'
 import CompilationItemPagePanel from '../../../views/private/CompilationItemPagePanel/CompilationItemPagePanel'
+import AdministrationPagePanel from '../../../views/private/AdministrationPagePanel/AdministrationPagePanel'
 import Navigation from '../../../components/Navigation/Navigation'
 import SidebarLeft from '../../../components/SidebarLeft/SidebarLeft'
 import SidebarRight from '../../../components/SidebarRight/SidebarRight'
@@ -65,6 +66,7 @@ const AppRouter: React.FC = () => {
                                 <Route path={RouteNames.USER_ITEM} element={<UserItemPagePanel/>}/>
                                 <Route path={RouteNames.USER} element={<UserPagePanel/>}/>
                                 <Route path={RouteNames.TOOL} element={<ToolPanel/>}/>
+                                <Route path={RouteNames.ADMINISTRATION} element={<AdministrationPagePanel/>}/>
                             </>
                             }
 
