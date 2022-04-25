@@ -97,6 +97,10 @@ $Klein->respond('GET', '/api/v1/compilation/[:id]', [new CompilationController()
 $Klein->respond('GET', '/api/v1/compilation', [new CompilationController(), 'fetchList']);
 $Klein->respond('DELETE', '/api/v1/compilation/[:id]', [new CompilationController(), 'deleteItem']);
 
+// Administration Routes
+$Klein->respond('GET', '/api/v1/administration/setting', [new AdministrationController(), 'fetchSettings']);
+$Klein->respond('POST', '/api/v1/administration/setting', [new AdministrationController(), 'saveSettings']);
+
 // Util Routes
 $Klein->respond('GET', '/api/v1/views/[:objectType]/[:objectId]', [new UtilController(), 'updateCountViews']);
 $Klein->respond('GET', '/api/v1/log', [new UtilController(), 'fetchLogs']);

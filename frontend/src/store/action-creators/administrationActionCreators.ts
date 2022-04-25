@@ -4,7 +4,7 @@ import {AppDispatch} from '../reducers'
 import AdministrationService from '../../api/AdministrationService'
 
 export const AdministrationActionCreators = {
-    setSettings: (settings: ISetting[]): AdministrationAction => ({
+    setSettings: (settings: ISetting): AdministrationAction => ({
         type: AdministrationActionTypes.SETTING_FETCH_LIST,
         payload: settings
     }),
@@ -32,7 +32,7 @@ export const AdministrationActionCreators = {
             console.error('Непредвиденная ошибка загрузки данных', e)
         }
     },
-    saveSetting: (settings: ISetting[]) => async (dispatch: AppDispatch) => {
+    saveSetting: (settings: ISetting) => async (dispatch: AppDispatch) => {
         dispatch(AdministrationActionCreators.setFetching(true))
 
         try {

@@ -1,7 +1,8 @@
 import {AdministrationAction, AdministrationActionTypes, AdministrationState} from '../../@types/administrationTypes'
+import {ISetting} from '../../@types/ISetting'
 
 const initialState: AdministrationState = {
-    settings: [],
+    settings: {} as ISetting,
     fetching: false,
     error: ''
 }

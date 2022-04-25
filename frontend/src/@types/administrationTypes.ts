@@ -1,7 +1,7 @@
 import {ISetting} from './ISetting'
 
 export interface AdministrationState {
-    settings: ISetting[]
+    settings: ISetting
     fetching: boolean
     error: string
 }
@@ -14,7 +14,7 @@ export enum AdministrationActionTypes {
 
 interface SettingFetchListAction {
     type: AdministrationActionTypes.SETTING_FETCH_LIST
-    payload: ISetting[]
+    payload: ISetting
 }
 
 export interface AdministrationIsFetchingAction {

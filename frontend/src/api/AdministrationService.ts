@@ -7,7 +7,7 @@ export default class AdministrationService {
         return API.get('/administration/setting')
     }
 
-    static async saveSetting(setting: ISetting[]): Promise<AxiosResponse> {
+    static async saveSetting(setting: ISetting): Promise<AxiosResponse> {
         return API.post('/administration/setting', {settings: setting})
     }
 }
