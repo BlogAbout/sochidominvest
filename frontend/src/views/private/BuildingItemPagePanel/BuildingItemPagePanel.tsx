@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react'
 import Helmet from 'react-helmet'
+import {PDFDownloadLink, PDFViewer} from '@react-pdf/renderer'
 import * as Showdown from 'showdown'
 import classNames from 'classnames/bind'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
@@ -53,6 +54,7 @@ import {
 } from '../../../helpers/buildingHelper'
 import {sortAttachments} from '../../../helpers/attachmentHelper'
 import classes from './BuildingItemPagePanel.module.scss'
+import PdfDocumentGenerator from "../../../components/PdfDocumentGenerator/PdfDocumentGenerator";
 
 type BuildingItemPageParams = {
     id: string
@@ -381,12 +383,20 @@ const BuildingItemPagePanel: React.FC = (props) => {
                             className='marginRight'
                             title='Поделиться ссылкой'
                     />
-                    <Button type='regular'
-                            icon='print'
-                            onClick={() => {
-                            }}
-                            title='Печать информации'
-                    />
+
+                    <PDFDownloadLink document={<PdfDocumentGenerator type='building' building={building}/>}>
+                        {({loading}) => {
+                            return (
+                                <Button type='regular'
+                                        icon='print'
+                                        onClick={() => {
+                                        }}
+                                        title='Печать информации'
+                                        disabled={loading}
+                                />
+                            )
+                        }}
+                    </PDFDownloadLink>
                 </div>
             </BlockingElement>
         )

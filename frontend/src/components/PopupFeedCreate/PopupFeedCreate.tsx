@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react'
+import {PDFDownloadLink} from '@react-pdf/renderer'
 import FeedService from '../../api/FeedService'
 import {PopupProps} from '../../@types/IPopup'
 import {IFeed} from '../../@types/IFeed'
@@ -10,6 +11,7 @@ import BlockingElement from '../BlockingElement/BlockingElement'
 import TextBox from '../TextBox/TextBox'
 import Button from '../Button/Button'
 import CheckBox from '../CheckBox/CheckBox'
+import PdfDocumentGenerator from '../PdfDocumentGenerator/PdfDocumentGenerator'
 import classes from './PopupFeedCreate.module.scss'
 
 interface Props extends PopupProps {
@@ -185,7 +187,19 @@ const PopupFeedCreate: React.FC<Props> = (props) => {
                         {resultResponse.error !== '' &&
                         <div className={classes.errorMessage}>{resultResponse.error}</div>}
                         {resultResponse.success !== '' &&
-                        <div className={classes.successMessage}>{resultResponse.success}</div>}
+                        <div className={classes.successMessage}>
+                            {resultResponse.success}
+
+                            {props.type === 'get-presentation' ?
+                                <PDFDownloadLink className={classes.btn}
+                                                 document={
+                                                     <PdfDocumentGenerator type='building' building={props.building}/>
+                                                 }
+                                >
+                                    Скачать презентацию
+                                </PDFDownloadLink>
+                            : null}
+                        </div>}
                     </div>
                 </BlockingElement>
             </Content>
