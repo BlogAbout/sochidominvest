@@ -1,19 +1,26 @@
 import React, {useEffect, useState} from 'react'
 import Helmet from 'react-helmet'
+import {compareText} from '../../../helpers/filterHelper'
 import openPopupDeveloperCreate from '../../../components/PopupDeveloperCreate/PopupDeveloperCreate'
 import Button from '../../../components/Button/Button'
 import DeveloperList from '../../../components/DeveloperList/DeveloperList'
 import SearchBox from '../../../components/SearchBox/SearchBox'
+import SidebarLeft from '../../../components/SidebarLeft/SidebarLeft'
 import {IDeveloper} from '../../../@types/IDeveloper'
+import {IFilterContent} from '../../../@types/IFilter'
 import {useTypedSelector} from '../../../hooks/useTypedSelector'
 import {useActions} from '../../../hooks/useActions'
 import classes from './DeveloperPagePanel.module.scss'
+import {IUser} from "../../../@types/IUser";
 
 const DeveloperPagePanel: React.FC = () => {
     const [isUpdate, setIsUpdate] = useState(false)
     const [searchText, setSearchText] = useState('')
     const [filterDeveloper, setFilterDeveloper] = useState<IDeveloper[]>([])
     const [selectedType, setSelectedType] = useState<string[]>([])
+    const [filters, setFilters] = useState({
+
+    })
 
     const {role} = useTypedSelector(state => state.userReducer)
     const {developers, fetching} = useTypedSelector(state => state.developerReducer)
@@ -45,14 +52,12 @@ const DeveloperPagePanel: React.FC = () => {
         }
 
         if (value !== '') {
-            setFilterDeveloper(developers.filter((developer: IDeveloper) => {
+            setFilterDeveloper(filterItemsHandler(developers.filter((developer: IDeveloper) => {
                 return (!selectedType.length || selectedType.includes(developer.type)) &&
-                    (developer.name.toLocaleLowerCase().indexOf(value.toLocaleLowerCase()) !== -1 ||
-                        developer.address.toLocaleLowerCase().indexOf(value.toLocaleLowerCase()) !== -1 ||
-                        developer.phone.toLocaleLowerCase().indexOf(value.toLocaleLowerCase()) !== -1)
-            }))
+                    (compareText(developer.name, value) || compareText(developer.address, value) || compareText(developer.phone, value.toLocaleLowerCase()))
+            })))
         } else {
-            setFilterDeveloper(!selectedType.length ? developers : developers.filter((developer: IDeveloper) => selectedType.includes(developer.type)))
+            setFilterDeveloper(filterItemsHandler(!selectedType.length ? developers : developers.filter((developer: IDeveloper) => selectedType.includes(developer.type))))
         }
     }
 
@@ -74,6 +79,23 @@ const DeveloperPagePanel: React.FC = () => {
         }
     }
 
+    // Фильтрация элементов на основе установленных фильтров
+    const filterItemsHandler = (list: IDeveloper[]) => {
+        if (!list || !list.length) {
+            return []
+        }
+
+        return list
+        // Todo: Придумать фильтры
+        // return list.filter((item: IDeveloper) => {
+        //     return filters.block.includes(String(item.block))
+        // })
+    }
+
+    const filtersContent: IFilterContent[] = [
+
+    ]
+
     return (
         <main className={classes.DeveloperPagePanel}>
             <Helmet>
@@ -82,6 +104,8 @@ const DeveloperPagePanel: React.FC = () => {
                 <meta name='description' content=''/>
                 <link rel='canonical' href={`${window.location.href}`}/>
             </Helmet>
+
+            <SidebarLeft filters={filtersContent}/>
 
             <div className={classes.filter}>
                 <Button type={selectedType.includes('constructionCompany') ? 'regular' : 'save'}

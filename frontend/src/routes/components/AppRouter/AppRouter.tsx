@@ -26,7 +26,6 @@ import CompilationPagePanel from '../../../views/private/CompilationPagePanel/Co
 import CompilationItemPagePanel from '../../../views/private/CompilationItemPagePanel/CompilationItemPagePanel'
 import AdministrationPagePanel from '../../../views/private/AdministrationPagePanel/AdministrationPagePanel'
 import Navigation from '../../../components/Navigation/Navigation'
-import SidebarLeft from '../../../components/SidebarLeft/SidebarLeft'
 import SidebarRight from '../../../components/SidebarRight/SidebarRight'
 import HeaderDefault from '../../../components/HeaderDefault/HeaderDefault'
 import FooterDefault from '../../../components/FooterDefault/FooterDefault'
@@ -56,8 +55,6 @@ const AppRouter: React.FC = () => {
                 :
                 <div className={classes.container}>
                     <Navigation/>
-
-                    <SidebarLeft/>
 
                     <div className={classes.serviceContent}>
                         <Routes>

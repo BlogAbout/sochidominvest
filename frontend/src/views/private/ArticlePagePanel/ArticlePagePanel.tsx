@@ -1,19 +1,26 @@
 import React, {useEffect, useState} from 'react'
 import Helmet from 'react-helmet'
+import {compareText} from '../../../helpers/filterHelper'
 import Button from '../../../components/Button/Button'
 import openPopupArticleCreate from '../../../components/PopupArticleCreate/PopupArticleCreate'
 import ArticleList from '../../../components/ArticleList/ArticleList'
 import SearchBox from '../../../components/SearchBox/SearchBox'
+import SidebarLeft from '../../../components/SidebarLeft/SidebarLeft'
 import {IArticle} from '../../../@types/IArticle'
+import {IFilterContent} from '../../../@types/IFilter'
 import {useTypedSelector} from '../../../hooks/useTypedSelector'
 import {useActions} from '../../../hooks/useActions'
 import classes from './ArticlePagePanel.module.scss'
+import {IUser} from "../../../@types/IUser";
 
 const ArticlePagePanel: React.FC = () => {
     const [isUpdate, setIsUpdate] = useState(false)
     const [searchText, setSearchText] = useState('')
     const [filterArticle, setFilterArticle] = useState<IArticle[]>([])
     const [selectedType, setSelectedType] = useState<string[]>([])
+    const [filters, setFilters] = useState({
+
+    })
 
     const {role} = useTypedSelector(state => state.userReducer)
     const {articles, fetching} = useTypedSelector(state => state.articleReducer)
@@ -45,12 +52,11 @@ const ArticlePagePanel: React.FC = () => {
         }
 
         if (value !== '') {
-            setFilterArticle(articles.filter((article: IArticle) => {
-                return (!selectedType.length || selectedType.includes(article.type)) &&
-                    article.name.toLocaleLowerCase().indexOf(value.toLocaleLowerCase()) !== -1
-            }))
+            setFilterArticle(filterItemsHandler(articles.filter((article: IArticle) => {
+                return (!selectedType.length || selectedType.includes(article.type)) && compareText(article.name, value)
+            })))
         } else {
-            setFilterArticle(!selectedType.length ? articles : articles.filter((article: IArticle) => selectedType.includes(article.type)))
+            setFilterArticle(filterItemsHandler(!selectedType.length ? articles : articles.filter((article: IArticle) => selectedType.includes(article.type))))
         }
     }
 
@@ -69,6 +75,23 @@ const ArticlePagePanel: React.FC = () => {
         }
     }
 
+    // Фильтрация элементов на основе установленных фильтров
+    const filterItemsHandler = (list: IArticle[]) => {
+        if (!list || !list.length) {
+            return []
+        }
+
+        return list
+        // Todo: Придумать фильтры
+        // return list.filter((item: IArticle) => {
+        //     return filters.block.includes(String(item.block))
+        // })
+    }
+
+    const filtersContent: IFilterContent[] = [
+
+    ]
+
     return (
         <main className={classes.ArticlePagePanel}>
             <Helmet>
@@ -77,6 +100,8 @@ const ArticlePagePanel: React.FC = () => {
                 <meta name='description' content=''/>
                 <link rel='canonical' href={`${window.location.href}`}/>
             </Helmet>
+
+            <SidebarLeft filters={filtersContent}/>
 
             <div className={classes.filter}>
                 <Button type={selectedType.includes('news') ? 'regular' : 'save'}

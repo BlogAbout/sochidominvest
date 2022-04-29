@@ -1,20 +1,27 @@
 import React, {useEffect, useState} from 'react'
 import Helmet from 'react-helmet'
+import {compareText} from '../../../helpers/filterHelper'
 import openPopupDocumentCreate from '../../../components/PopupDocumentCreate/PopupDocumentCreate'
 import openContextMenu from '../../../components/ContextMenu/ContextMenu'
 import Button from '../../../components/Button/Button'
 import DocumentList from '../../../components/DocumentList/DocumentList'
 import SearchBox from '../../../components/SearchBox/SearchBox'
+import SidebarLeft from '../../../components/SidebarLeft/SidebarLeft'
 import {IDocument} from '../../../@types/IDocument'
+import {IFilterContent} from '../../../@types/IFilter'
 import {useTypedSelector} from '../../../hooks/useTypedSelector'
 import {useActions} from '../../../hooks/useActions'
 import classes from './DocumentPagePanel.module.scss'
+import {IUser} from "../../../@types/IUser";
 
 const DocumentPagePanel: React.FC = () => {
     const [isUpdate, setIsUpdate] = useState(false)
     const [searchText, setSearchText] = useState('')
     const [filterDocument, setFilterDocument] = useState<IDocument[]>([])
     const [selectedType, setSelectedType] = useState<string[]>([])
+    const [filters, setFilters] = useState({
+
+    })
 
     const {role} = useTypedSelector(state => state.userReducer)
     const {documents, fetching} = useTypedSelector(state => state.documentReducer)
@@ -46,12 +53,11 @@ const DocumentPagePanel: React.FC = () => {
         }
 
         if (value !== '') {
-            setFilterDocument(documents.filter((document: IDocument) => {
-                return (!selectedType.length || selectedType.includes(document.type)) &&
-                    document.name.toLocaleLowerCase().indexOf(value.toLocaleLowerCase()) !== -1
-            }))
+            setFilterDocument(filterItemsHandler(documents.filter((document: IDocument) => {
+                return (!selectedType.length || selectedType.includes(document.type)) && compareText(document.name, value)
+            })))
         } else {
-            setFilterDocument(!selectedType.length ? documents : documents.filter((document: IDocument) => selectedType.includes(document.type)))
+            setFilterDocument(filterItemsHandler(!selectedType.length ? documents : documents.filter((document: IDocument) => selectedType.includes(document.type))))
         }
     }
 
@@ -98,6 +104,23 @@ const DocumentPagePanel: React.FC = () => {
         }
     }
 
+    // Фильтрация элементов на основе установленных фильтров
+    const filterItemsHandler = (list: IDocument[]) => {
+        if (!list || !list.length) {
+            return []
+        }
+
+        return list
+        // Todo: Придумать фильтры
+        // return list.filter((item: IDocument) => {
+        //     return filters.block.includes(String(item.block))
+        // })
+    }
+
+    const filtersContent: IFilterContent[] = [
+
+    ]
+
     return (
         <main className={classes.DocumentPagePanel}>
             <Helmet>
@@ -106,6 +129,8 @@ const DocumentPagePanel: React.FC = () => {
                 <meta name='description' content=''/>
                 <link rel='canonical' href={`${window.location.href}`}/>
             </Helmet>
+
+            <SidebarLeft filters={filtersContent}/>
 
             <div className={classes.filter}>
                 <Button type={selectedType.includes('file') ? 'regular' : 'save'}

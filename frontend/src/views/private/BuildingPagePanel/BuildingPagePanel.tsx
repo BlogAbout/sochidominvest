@@ -1,13 +1,30 @@
 import React, {useEffect, useState} from 'react'
 import Helmet from 'react-helmet'
+import {compareText} from '../../../helpers/filterHelper'
 import Button from '../../../components/Button/Button'
 import openPopupBuildingCreate from '../../../components/PopupBuildingCreate/PopupBuildingCreate'
 import openContextMenu from '../../../components/ContextMenu/ContextMenu'
 import BuildingList from '../../../components/BuildingList/BuildingList'
 import SearchBox from '../../../components/SearchBox/SearchBox'
+import SidebarLeft from '../../../components/SidebarLeft/SidebarLeft'
 import {IBuilding} from '../../../@types/IBuilding'
+import {IFilterContent} from '../../../@types/IFilter'
+import {ISelector} from '../../../@types/ISelector'
 import {useTypedSelector} from '../../../hooks/useTypedSelector'
 import {useActions} from '../../../hooks/useActions'
+import {
+    buildingClasses,
+    buildingElectricity,
+    buildingEntrance,
+    buildingFormat,
+    buildingGas,
+    buildingHeating,
+    buildingMaterials,
+    buildingParking,
+    buildingSewerage,
+    buildingTerritory,
+    buildingWaterSupply
+} from '../../../helpers/buildingHelper'
 import classes from './BuildingPagePanel.module.scss'
 
 const BuildingPagePanel: React.FC = () => {
@@ -15,6 +32,19 @@ const BuildingPagePanel: React.FC = () => {
     const [searchText, setSearchText] = useState('')
     const [filterBuilding, setFilterBuilding] = useState<IBuilding[]>([])
     const [selectedType, setSelectedType] = useState<string[]>([])
+    const [filters, setFilters] = useState({
+        houseClass: buildingClasses.map((item: ISelector) => item.key),
+        material: buildingMaterials.map((item: ISelector) => item.key),
+        houseType: buildingFormat.map((item: ISelector) => item.key),
+        entranceHouse: buildingEntrance.map((item: ISelector) => item.key),
+        parking: buildingParking.map((item: ISelector) => item.key),
+        territory: buildingTerritory.map((item: ISelector) => item.key),
+        gas: buildingGas.map((item: ISelector) => item.key),
+        heating: buildingHeating.map((item: ISelector) => item.key),
+        electricity: buildingElectricity.map((item: ISelector) => item.key),
+        sewerage: buildingSewerage.map((item: ISelector) => item.key),
+        waterSupply: buildingWaterSupply.map((item: ISelector) => item.key)
+    })
 
     const {role} = useTypedSelector(state => state.userReducer)
     const {buildings, fetching} = useTypedSelector(state => state.buildingReducer)
@@ -46,13 +76,12 @@ const BuildingPagePanel: React.FC = () => {
         }
 
         if (value !== '') {
-            setFilterBuilding(buildings.filter((building: IBuilding) => {
+            setFilterBuilding(filterItemsHandler(buildings.filter((building: IBuilding) => {
                 return (!selectedType.length || selectedType.includes(building.type)) &&
-                    (building.name.toLocaleLowerCase().indexOf(value.toLocaleLowerCase()) !== -1 ||
-                    (building.address && building.address.toLocaleLowerCase().indexOf(value.toLocaleLowerCase()) !== -1))
-            }))
+                    (compareText(building.name, value) || (building.address && compareText(building.address, value)))
+            })))
         } else {
-            setFilterBuilding(!selectedType.length ? buildings : buildings.filter((building: IBuilding) => selectedType.includes(building.type)))
+            setFilterBuilding(filterItemsHandler(!selectedType.length ? buildings : buildings.filter((building: IBuilding) => selectedType.includes(building.type))))
         }
     }
 
@@ -88,6 +117,139 @@ const BuildingPagePanel: React.FC = () => {
         }
     }
 
+    // Фильтрация элементов на основе установленных фильтров
+    const filterItemsHandler = (list: IBuilding[]) => {
+        if (!list || !list.length) {
+            return []
+        }
+
+        return list.filter((item: IBuilding) => {
+            return (!item.houseClass || filters.houseClass.includes(item.houseClass)) &&
+                (!item.material || filters.material.includes(item.material)) &&
+                (!item.houseType || filters.houseType.includes(item.houseType)) &&
+                (!item.entranceHouse || filters.entranceHouse.includes(item.entranceHouse)) &&
+                (!item.parking || filters.parking.includes(item.parking)) &&
+                (!item.territory || filters.territory.includes(item.territory)) &&
+                (!item.gas || filters.gas.includes(item.gas)) &&
+                (!item.electricity || filters.electricity.includes(item.electricity)) &&
+                (!item.sewerage || filters.sewerage.includes(item.sewerage)) &&
+                (!item.waterSupply || filters.heating.includes(item.waterSupply))
+        })
+    }
+
+    const filtersContent: IFilterContent[] = [
+        {
+            title: 'Класс дома',
+            type: 'checker',
+            multi: true,
+            items: buildingClasses,
+            selected: filters.houseClass,
+            onSelect: (values: string[]) => {
+                setFilters({...filters, houseClass: values})
+            }
+        },
+        {
+            title: 'Материал здания',
+            type: 'checker',
+            multi: true,
+            items: buildingMaterials,
+            selected: filters.material,
+            onSelect: (values: string[]) => {
+                setFilters({...filters, material: values})
+            }
+        },
+        {
+            title: 'Тип дома',
+            type: 'checker',
+            multi: true,
+            items: buildingFormat,
+            selected: filters.houseType,
+            onSelect: (values: string[]) => {
+                setFilters({...filters, houseType: values})
+            }
+        },
+        {
+            title: 'Территория',
+            type: 'checker',
+            multi: true,
+            items: buildingEntrance,
+            selected: filters.entranceHouse,
+            onSelect: (values: string[]) => {
+                setFilters({...filters, entranceHouse: values})
+            }
+        },
+        {
+            title: 'Паркинг',
+            type: 'checker',
+            multi: true,
+            items: buildingParking,
+            selected: filters.parking,
+            onSelect: (values: string[]) => {
+                setFilters({...filters, parking: values})
+            }
+        },
+        {
+            title: 'Подъезд к дому',
+            type: 'checker',
+            multi: true,
+            items: buildingTerritory,
+            selected: filters.territory,
+            onSelect: (values: string[]) => {
+                setFilters({...filters, territory: values})
+            }
+        },
+        {
+            title: 'Газ',
+            type: 'checker',
+            multi: true,
+            items: buildingGas,
+            selected: filters.gas,
+            onSelect: (values: string[]) => {
+                setFilters({...filters, gas: values})
+            }
+        },
+        {
+            title: 'Отопление',
+            type: 'checker',
+            multi: true,
+            items: buildingHeating,
+            selected: filters.heating,
+            onSelect: (values: string[]) => {
+                setFilters({...filters, heating: values})
+            }
+        },
+        {
+            title: 'Электричество',
+            type: 'checker',
+            multi: true,
+            items: buildingElectricity,
+            selected: filters.electricity,
+            onSelect: (values: string[]) => {
+                setFilters({...filters, electricity: values})
+            }
+        },
+        {
+            title: 'Канализация',
+            type: 'checker',
+            multi: true,
+            items: buildingSewerage,
+            selected: filters.sewerage,
+            onSelect: (values: string[]) => {
+                setFilters({...filters, sewerage: values})
+            }
+        },
+        {
+            title: 'Водоснабжение',
+            type: 'checker',
+            multi: true,
+            items: buildingWaterSupply,
+            selected: filters.waterSupply,
+            onSelect: (values: string[]) => {
+                setFilters({...filters, waterSupply: values})
+            }
+        }
+    ]
+
     return (
         <main className={classes.BuildingPagePanel}>
             <Helmet>
@@ -96,6 +258,8 @@ const BuildingPagePanel: React.FC = () => {
                 <meta name='description' content=''/>
                 <link rel='canonical' href={`${window.location.href}`}/>
             </Helmet>
+
+            <SidebarLeft filters={filtersContent}/>
 
             <div className={classes.filter}>
                 <Button type={selectedType.includes('building') ? 'regular' : 'save'}

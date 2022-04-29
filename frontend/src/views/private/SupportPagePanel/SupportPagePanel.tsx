@@ -1,9 +1,13 @@
 import React, {useEffect, useState} from 'react'
 import Helmet from 'react-helmet'
+import {compareText} from '../../../helpers/filterHelper'
+import {feedStatuses} from '../../../helpers/supportHelper'
 import {IFeed} from '../../../@types/IFeed'
+import {IFilterContent} from '../../../@types/IFilter'
 import {useTypedSelector} from '../../../hooks/useTypedSelector'
 import FeedService from '../../../api/FeedService'
 import SearchBox from '../../../components/SearchBox/SearchBox'
+import SidebarLeft from '../../../components/SidebarLeft/SidebarLeft'
 import Button from '../../../components/Button/Button'
 import SupportList from '../../../components/SupportList/SupportList'
 import openPopupSupportCreate from '../../../components/PopupSupportCreate/PopupSupportCreate'
@@ -16,6 +20,9 @@ const SupportPagePanel: React.FC = () => {
     const [searchText, setSearchText] = useState('')
     const [filterFeeds, setFilterFeeds] = useState<IFeed[]>([])
     const [selectedType, setSelectedType] = useState<string[]>([])
+    const [filters, setFilters] = useState({
+        status: ['new', 'process', 'clarification']
+    })
 
     const {role, userId} = useTypedSelector(state => state.userReducer)
 
@@ -55,25 +62,23 @@ const SupportPagePanel: React.FC = () => {
 
         if (['director', 'administrator', 'manager'].includes(role)) {
             if (value !== '') {
-                setFilterFeeds(feeds.filter((feed: IFeed) => {
+                setFilterFeeds(filterItemsHandler(feeds.filter((feed: IFeed) => {
                     return (!selectedType.length || selectedType.includes(feed.type)) &&
-                        (feed.title.toLocaleLowerCase().indexOf(value.toLocaleLowerCase()) !== -1 ||
-                            (feed.name && feed.name.toLocaleLowerCase().indexOf(value.toLocaleLowerCase()) !== -1) ||
-                            (feed.phone && feed.phone.toLocaleLowerCase().indexOf(value.toLocaleLowerCase()) !== -1))
-                }))
+                        (compareText(feed.title, value) || (feed.name && compareText(feed.name, value)) || (feed.phone && compareText(feed.phone, value)))
+                })))
             } else {
-                setFilterFeeds(!selectedType.length ? feeds : feeds.filter((feed: IFeed) => selectedType.includes(feed.type)))
+                setFilterFeeds(filterItemsHandler(!selectedType.length ? feeds : feeds.filter((feed: IFeed) => selectedType.includes(feed.type))))
             }
         } else {
             if (value !== '') {
-                setFilterFeeds(feeds.filter((feed: IFeed) => {
+                setFilterFeeds(filterItemsHandler(feeds.filter((feed: IFeed) => {
                     return (feed.author === userId) &&
                         (feed.title.toLocaleLowerCase().indexOf(value.toLocaleLowerCase()) !== -1 ||
                             (feed.name && feed.name.toLocaleLowerCase().indexOf(value.toLocaleLowerCase()) !== -1) ||
                             (feed.phone && feed.phone.toLocaleLowerCase().indexOf(value.toLocaleLowerCase()) !== -1))
-                }))
+                })))
             } else {
-                setFilterFeeds(feeds.filter((feed: IFeed) => feed.author === userId))
+                setFilterFeeds(filterItemsHandler(feeds.filter((feed: IFeed) => feed.author === userId)))
             }
         }
     }
@@ -93,6 +98,30 @@ const SupportPagePanel: React.FC = () => {
         })
     }
 
+    // Фильтрация элементов на основе установленных фильтров
+    const filterItemsHandler = (list: IFeed[]) => {
+        if (!list || !list.length) {
+            return []
+        }
+
+        return list.filter((item: IFeed) => {
+            return filters.status.includes(item.status)
+        })
+    }
+
+    const filtersContent: IFilterContent[] = [
+        {
+            title: 'Статус',
+            type: 'checker',
+            multi: true,
+            items: feedStatuses,
+            selected: filters.status,
+            onSelect: (values: string[]) => {
+                setFilters({...filters, status: values})
+            }
+        }
+    ]
+
     return (
         <main className={classes.SupportPagePanel}>
             <Helmet>
@@ -101,6 +130,8 @@ const SupportPagePanel: React.FC = () => {
                 <meta name='description' content=''/>
                 <link rel='canonical' href={`${window.location.href}`}/>
             </Helmet>
+
+            <SidebarLeft filters={filtersContent}/>
 
             {['director', 'administrator', 'manager'].includes(role) ?
                 <div className={classes.filter}>
