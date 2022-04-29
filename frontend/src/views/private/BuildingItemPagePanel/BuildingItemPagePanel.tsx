@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react'
 import Helmet from 'react-helmet'
-import {PDFDownloadLink, PDFViewer} from '@react-pdf/renderer'
+import {PDFDownloadLink} from '@react-pdf/renderer'
 import * as Showdown from 'showdown'
 import classNames from 'classnames/bind'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
@@ -76,6 +76,7 @@ const BuildingItemPagePanel: React.FC = (props) => {
     const [fetchingImages, setFetchingImages] = useState(false)
     const [fetchingVideos, setFetchingVideos] = useState(false)
     const [favorites, setFavorites] = useState<number[]>([])
+    const [showCopyText, setShowCopyText] = useState(false)
 
     const {buildings, fetching} = useTypedSelector(state => state.buildingReducer)
     const {developers, fetching: fetchingDeveloperList} = useTypedSelector(state => state.developerReducer)
@@ -376,13 +377,23 @@ const BuildingItemPagePanel: React.FC = (props) => {
                         />
                     }
 
-                    <Button type='regular'
-                            icon='arrow-up-from-bracket'
-                            onClick={() => {
-                            }}
-                            className='marginRight'
-                            title='Поделиться ссылкой'
-                    />
+                    <div className={classes.btn}>
+                        <Button type='regular'
+                                icon='arrow-up-from-bracket'
+                                onClick={() => {
+                                    navigator.clipboard.writeText(`https://sochidominvest.ru/building/${building.id}`)
+                                        .then(() => {
+                                            setShowCopyText(true)
+                                            setTimeout(() => {
+                                                setShowCopyText(false)
+                                            }, 2000)
+                                        })
+                                }}
+                                title='Поделиться ссылкой'
+                        />
+
+                        <div className={cx({'copyText': true, 'show': showCopyText})}>Ссылка скопирована</div>
+                    </div>
 
                     <PDFDownloadLink document={<PdfDocumentGenerator type='building' building={building}/>}>
                         {({loading}) => {
