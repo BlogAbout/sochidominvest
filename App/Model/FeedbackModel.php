@@ -295,7 +295,7 @@ class FeedbackModel extends Model
             'objectType' => 'feed',
             'dateCreated' => date('Y-m-d H:i:s'),
             'active' => 1
-        ], $authorIdFeed === $authorId ? [] : [$authorIdFeed]);
+        ], !$authorIdFeed || $authorIdFeed === $authorId ? [] : [$authorIdFeed]);
     }
 
     /**

@@ -1,10 +1,10 @@
 import React, {useEffect, useState} from 'react'
 import Helmet from 'react-helmet'
+import {Link, useNavigate, useParams} from 'react-router-dom'
 import {PDFDownloadLink} from '@react-pdf/renderer'
 import * as Showdown from 'showdown'
 import classNames from 'classnames/bind'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {Link, useParams} from 'react-router-dom'
 import {developerTypes} from '../../../helpers/developerHelper'
 import {useTypedSelector} from '../../../hooks/useTypedSelector'
 import {useActions} from '../../../hooks/useActions'
@@ -29,8 +29,10 @@ import BlockingElement from '../../../components/BlockingElement/BlockingElement
 import Gallery from '../../../components/Gallery/Gallery'
 import openPopupBuildingCreate from '../../../components/PopupBuildingCreate/PopupBuildingCreate'
 import openPopupAlert from '../../../components/PopupAlert/PopupAlert'
+import openPopupSupportCreate from '../../../components/PopupSupportCreate/PopupSupportCreate'
 import openPopupCheckerInfo from '../../../components/PopupCheckerInfo/PopupCheckerInfo'
 import openPopupCompilationSelector from '../../../components/PopupCompilationSelector/PopupCompilationSelector'
+import PdfDocumentGenerator from '../../../components/PdfDocumentGenerator/PdfDocumentGenerator'
 import {
     amountContract,
     buildingAdvantages,
@@ -54,7 +56,6 @@ import {
 } from '../../../helpers/buildingHelper'
 import {sortAttachments} from '../../../helpers/attachmentHelper'
 import classes from './BuildingItemPagePanel.module.scss'
-import PdfDocumentGenerator from "../../../components/PdfDocumentGenerator/PdfDocumentGenerator";
 
 type BuildingItemPageParams = {
     id: string
@@ -64,6 +65,7 @@ const cx = classNames.bind(classes)
 
 const BuildingItemPagePanel: React.FC = (props) => {
     const params = useParams<BuildingItemPageParams>()
+    const navigate = useNavigate()
 
     const [isUpdate, setIsUpdate] = useState(false)
     const [building, setBuilding] = useState<IBuilding>({} as IBuilding)
@@ -345,6 +347,31 @@ const BuildingItemPagePanel: React.FC = (props) => {
                         />
                         : null
                     }
+
+                    <Button type={'regular'}
+                            icon='question'
+                            onClick={() => {
+                                openPopupSupportCreate(document.body, {
+                                    objectId: building.id,
+                                    objectType: 'building',
+                                    onSave: () => {
+                                        openPopupAlert(document.body, {
+                                            title: 'Сообщение отправлено',
+                                            text: 'Ваша заявка успешно принята, мы ответим Вам в ближайшее время.',
+                                            buttons: [
+                                                {
+                                                    text: 'Перейти к заявкам',
+                                                    onClick: () => navigate('/panel/support')
+                                                },
+                                                {text: 'Закрыть'}
+                                            ]
+                                        })
+                                    }
+                                })
+                            }}
+                            className='marginRight'
+                            title='Задать вопрос'
+                    />
 
                     <Button type='regular'
                             icon='plus'
