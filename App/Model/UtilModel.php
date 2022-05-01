@@ -28,4 +28,26 @@ class UtilModel extends Model
         self::bindParams('objectType', $objectType);
         self::execute();
     }
+
+    /**
+     * Вернет список результатов глобального поиска
+     *
+     * @param array $filter Массив параметров фильтрации
+     * @return array
+     */
+    public static function fetchSearchGlobal(array $filter): array
+    {
+        if (trim($filter['text']) === '') {
+            return [];
+        }
+
+        return [
+            'users' => UserModel::fetchUsers($filter),
+            'buildings' => BuildingModel::fetchBuildings($filter),
+            'articles' => ArticleModel::fetchList($filter),
+            'documents' => DocumentModel::fetchDocuments($filter),
+            'developers' => DeveloperModel::fetchDevelopers($filter),
+            'attachments' => AttachmentModel::fetchList($filter)
+        ];
+    }
 }

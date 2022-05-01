@@ -104,6 +104,7 @@ $Klein->respond('POST', '/api/v1/administration/setting', [new AdministrationCon
 // Util Routes
 $Klein->respond('GET', '/api/v1/views/[:objectType]/[:objectId]', [new UtilController(), 'updateCountViews']);
 $Klein->respond('GET', '/api/v1/log', [new UtilController(), 'fetchLogs']);
+$Klein->respond('GET', '/api/v1/search', [new UtilController(), 'fetchSearchGlobal']);
 
 // Dispatch all routes
 $Klein->dispatch();

@@ -53,6 +53,10 @@ class DeveloperModel extends Model
             array_push($where, '`active` IN (' . implode(',', $params['active']) . ')');
         }
 
+        if (!empty($params['text'])) {
+            array_push($where, '(`name` LIKE "%' . $params['text'] . '%")');
+        }
+
         if (count($where)) {
             $sql .= " WHERE " . implode(' AND ', $where);
         }

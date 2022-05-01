@@ -1,0 +1,29 @@
+.SearchList {
+    max-height: 300px;
+    margin-bottom: 20px;
+
+    .head {
+        padding: 10px 15px;
+        background-color: #075ea5;
+        color: #fff;
+        margin-bottom: 5px;
+        display: flex;
+        width: 100%;
+        font-weight: 700;
+        box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.4);
+
+        .name {
+            flex-grow: 1;
+        }
+
+        .date {
+            width: 150px;
+            flex-shrink: 0;
+        }
+    }
+
+    .content {
+        overflow: auto;
+        max-height: calc(100% - 45px);
+    }
+}

@@ -443,7 +443,7 @@ class UserController extends Controller
         }
 
         try {
-            $userList = $this->userModel->fetchUsers();
+            $userList = $this->userModel->fetchUsers(['active' => [0, 1]]);
             $response->code(200)->json($userList);
 
             return;

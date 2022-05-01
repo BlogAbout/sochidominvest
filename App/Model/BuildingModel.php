@@ -149,6 +149,10 @@ class BuildingModel extends Model
             array_push($where, 'bu.`publish` = ' . $params['publish']);
         }
 
+        if (!empty($params['text'])) {
+            array_push($where, '(bu.`name` LIKE "%' . $params['text'] . '%")');
+        }
+
         if (count($where)) {
             $sql .= " WHERE " . implode(' AND ', $where);
         }

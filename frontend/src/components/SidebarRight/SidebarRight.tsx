@@ -7,10 +7,12 @@ import {useTypedSelector} from '../../hooks/useTypedSelector'
 import {RouteNames} from '../../routes/routes'
 import openPopupUserCreate from '../PopupUserCreate/PopupUserCreate'
 import NotificationPanel from '../NotificationPanel/NotificationPanel'
+import SearchPanel from '../SearchPanel/SearchPanel'
 import classes from './SidebarRight.module.scss'
 
 const SidebarRight: React.FC = () => {
     const [isShowNotification, setIsShowNotification] = useState(false)
+    const [isShowSearch, setIsShowSearch] = useState(false)
     const [countNewNotification, setCountNewNotification] = useState(0)
 
     const {userId} = useTypedSelector(state => state.userReducer)
@@ -25,7 +27,7 @@ const SidebarRight: React.FC = () => {
             clearInterval(intervalTimer)
         }
 
-        intervalTimer = setInterval(function() {
+        intervalTimer = setInterval(function () {
             updateCountNewNotification()
         }, 7200000)
     })
@@ -39,6 +41,13 @@ const SidebarRight: React.FC = () => {
     return (
         <>
             <aside className={classes.SidebarRight}>
+                <div className={classes.icon}
+                     title='Глобальный поиск'
+                     onClick={() => setIsShowSearch(!isShowSearch)}
+                >
+                    <FontAwesomeIcon icon='magnifying-glass'/>
+                </div>
+
                 <div className={classes.icon}
                      title='Профиль'
                      onClick={() => {
@@ -90,6 +99,9 @@ const SidebarRight: React.FC = () => {
 
             {isShowNotification &&
             <NotificationPanel isShow={isShowNotification} onShow={() => setIsShowNotification(false)}/>}
+
+            {isShowSearch &&
+            <SearchPanel isShow={isShowSearch} onShow={() => setIsShowSearch(false)}/>}
         </>
     )
 }

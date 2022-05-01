@@ -10,6 +10,7 @@ export interface IFilter {
     author?: number[]
     userId?: number[]
     type?: string
+    text?: string
 }
 
 export interface IFilterContent {

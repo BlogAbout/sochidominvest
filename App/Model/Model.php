@@ -294,6 +294,10 @@ class Model
             array_push($where, "sdi.`status` IN ('" . implode("','", $filter['status']) . "')");
         }
 
+        if (!empty($filter['text'])) {
+            array_push($where, "(sdi.`name` LIKE '%" . $filter['text'] . "%')");
+        }
+
         if (count($where)) {
             $sqlWhere = " WHERE " . implode(' AND ', $where);
         }

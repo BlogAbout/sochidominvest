@@ -63,4 +63,28 @@ class UtilController extends Controller
             return;
         }
     }
+
+    /**
+     * Получение списка результатов глобального поиска
+     *
+     * @param mixed $request Содержит объект запроса
+     * @param mixed $response Содержит объект ответа от маршрутизатора
+     * @return void
+     */
+    public function fetchSearchGlobal($request, $response)
+    {
+        $filter = parent::getFilterParams($request->paramsGet()->all());
+
+        try {
+            $result = $this->utilModel->fetchSearchGlobal($filter);
+            $response->code(200)->json($result);
+
+            return;
+        } catch (Exception $e) {
+            LogModel::error($e->getMessage());
+            $response->code(500)->json($e->getMessage());
+
+            return;
+        }
+    }
 }

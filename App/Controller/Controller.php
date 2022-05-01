@@ -255,6 +255,10 @@ class Controller
             if (!empty($params['type'])) {
                 $filter['type'] = $params['type'];
             }
+
+            if (!empty($params['text'])) {
+                $filter['text'] = $params['text'];
+            }
         }
 
         return $filter;

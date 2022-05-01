@@ -10,4 +10,8 @@ export default class UtilService {
     static async fetchLogs(filter: IFilter): Promise<AxiosResponse> {
         return API.get('/log', {params: filter})
     }
+
+    static async fetchSearchGlobal(filter: IFilter): Promise<AxiosResponse> {
+        return API.get(`/search`, {params: filter})
+    }
 }

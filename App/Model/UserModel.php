@@ -61,17 +61,30 @@ class UserModel extends Model
     /**
      * Извлекает список пользователей
      *
+     * @param array $filter Массив параметров фильтрации
      * @return array
      */
-    public static function fetchUsers(): array
+    public static function fetchUsers(array $filter): array
     {
         $resultList = [];
+        $sqlWhere = [];
 
         $sql = "
-            SELECT *
-            FROM `sdi_user`
-            WHERE `active` != -1
+            SELECT sdi.*
+            FROM `sdi_user` sdi
         ";
+
+        if (!empty($filter['active'])) {
+            array_push($sqlWhere, 'sdi.`active` IN (' . implode(',', $filter['active']) . ')');
+        }
+
+        if (!empty($filter['text'])) {
+            array_push($sqlWhere, '(sdi.`first_name` LIKE "%' . $filter['text'] . '%")');
+        }
+
+        if (count($sqlWhere)) {
+            $sql .= " WHERE " . implode(' AND ', $sqlWhere);
+        }
 
         parent::query($sql);
         $userList = parent::fetchAll();
