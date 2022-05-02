@@ -1,5 +1,5 @@
-import React, {useEffect} from 'react'
-import {IBuildingChecker} from '../../@types/IBuilding'
+import React, {useEffect, useState} from 'react'
+import {IBuildingChecker, IBuildingHousing} from '../../@types/IBuilding'
 import {ISelector} from '../../@types/ISelector'
 import {PopupProps} from '../../@types/IPopup'
 import {checkerFurnish, checkerStatuses} from '../../helpers/buildingHelper'
@@ -9,42 +9,107 @@ import {Content, Header, Popup} from '../Popup/Popup'
 import showBackgroundBlock from '../BackgroundBlock/BackgroundBlock'
 import BlockingElement from '../BlockingElement/BlockingElement'
 import Empty from '../Empty/Empty'
+import ComboBox from '../ComboBox/ComboBox'
 import classes from './PopupCheckerInfo.module.scss'
 
 interface Props extends PopupProps {
     buildingName: string
-    list: IBuildingChecker[]
+    list: IBuildingHousing
     housing: number
     fetching: boolean
+    housingList: number[]
 }
 
 const defaultProps: Props = {
     buildingName: '',
-    list: [],
+    list: {} as IBuildingHousing,
     housing: 0,
-    fetching: false
+    fetching: false,
+    housingList: []
 }
 
 const PopupCheckerInfo: React.FC<Props> = (props) => {
+    const [housing, setHousing] = useState(props.housing)
+    const [filters, setFilters] = useState({
+        furnish: 'all',
+        status: 'all'
+    })
+    const [filteredCheckers, setFilteredCheckers] = useState<IBuildingChecker[]>(props.list[housing] || [])
+    const [housingList, setHousingList] = useState<ISelector[]>(props.housingList.map((item: number) => {
+        return {key: item.toString(), text: ''}
+    }))
+
     useEffect(() => {
         return () => {
             removePopup(props.blockId ? props.blockId : '')
         }
     }, [props.blockId])
 
-    // Todo: Реализовать фильтры
+    useEffect(() => {
+        if (props.list[housing].length) {
+            setFilteredCheckers(props.list[housing].filter((checker: IBuildingChecker) => {
+                return (filters.furnish === 'all' || checker.furnish === filters.furnish) &&
+                    (filters.status === 'all' || checker.status === filters.status)
+            }))
+        } else {
+            setFilteredCheckers([])
+        }
+    }, [housing, filters])
+
+    const changeHousingHandler = (value: string) => {
+        setHousing(parseInt(value))
+    }
+
+    const renderFilters = () => {
+        return (
+            <div className={classes.filter}>
+                <div className={classes.field}>
+                    <div className={classes.field_label}>Корпус</div>
+
+                    <ComboBox selected={housing.toString()}
+                              items={Object.values(props.housingList.map((item: number) => {
+                                  return {key: item.toString(), text: item.toString()}
+                              }))}
+                              onSelect={(value: string) => changeHousingHandler(value)}
+                              placeHolder='Выберите вид отделки'
+                              styleType='standard'
+                    />
+                </div>
+
+                <div className={classes.field}>
+                    <div className={classes.field_label}>Отделка</div>
+
+                    <ComboBox selected={filters.furnish}
+                              items={Object.values([{key: 'all', text: 'все виды отделки'}, ...checkerFurnish])}
+                              onSelect={(value: string) => setFilters({...filters, furnish: value})}
+                              placeHolder='Выберите вид отделки'
+                              styleType='standard'
+                    />
+                </div>
+
+                <div className={classes.field}>
+                    <div className={classes.field_label}>Статус</div>
+
+                    <ComboBox selected={filters.status || 'free'}
+                              items={Object.values([{key: 'all', text: 'все статусы'}, ...checkerStatuses])}
+                              onSelect={(value: string) => setFilters({...filters, status: value})}
+                              placeHolder='Выберите статус'
+                              styleType='standard'
+                    />
+                </div>
+            </div>
+        )
+    }
 
     return (
         <Popup className={classes.PopupCheckerInfo}>
-            <Header title={`${props.buildingName}. Корпус №${props.housing}`}
+            <Header title={`${props.buildingName}. Корпус №${housing}`}
                     popupId={props.id ? props.id : ''}
             />
 
             <Content className={classes['popup-content']}>
                 <div className={classes.content}>
-                    <div className={classes.filter}>
-                        Фильтры в разработке
-                    </div>
+                    {renderFilters()}
 
                     <div className={classes.header}>
                         <div className={classes.id}>#</div>
@@ -59,8 +124,8 @@ const PopupCheckerInfo: React.FC<Props> = (props) => {
                     </div>
 
                     <BlockingElement fetching={props.fetching} className={classes.list}>
-                        {props.list && props.list.length ?
-                            props.list.map((checker: IBuildingChecker) => {
+                        {props.list && props.list[housing] && props.list[housing].length && filteredCheckers.length ?
+                            filteredCheckers.map((checker: IBuildingChecker) => {
                                 const status = checkerStatuses.find((item: ISelector) => item.key === checker.status)
                                 const furnish = checkerFurnish.find((item: ISelector) => item.key === checker.furnish)
                                 const costPerUnit = checker.cost && checker.area ? numberWithSpaces(round(checker.cost / checker.area, 0)) : 0
@@ -83,7 +148,9 @@ const PopupCheckerInfo: React.FC<Props> = (props) => {
                                     </div>
                                 )
                             })
-                            : <Empty message='Корпус не имеет шахматок'/>
+                            :
+                            <Empty message={props.list && props.list[housing] && props.list[housing].length
+                                ? 'Нет шахматок по заданному фильтру' : 'Корпус не имеет шахматок'}/>
                         }
                     </BlockingElement>
                 </div>

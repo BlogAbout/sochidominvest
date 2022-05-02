@@ -15,7 +15,23 @@
     overflow: hidden;
 
     .filter {
-        height: 40px;
+        display: flex;
+        align-items: center;
+
+        .field {
+            width: 20%;
+
+            + .field {
+                margin-left: 15px;
+            }
+
+            .field_label {
+                font-size: 14px;
+                color: black;
+                margin-bottom: 3px;
+                display: flex;
+            }
+        }
     }
 
     .header {

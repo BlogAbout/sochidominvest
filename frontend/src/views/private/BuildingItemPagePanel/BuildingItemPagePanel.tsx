@@ -698,9 +698,10 @@ const BuildingItemPagePanel: React.FC = (props) => {
                              className={classes.housing}
                              onClick={() => openPopupCheckerInfo(document.body, {
                                  buildingName: building.name,
-                                 list: housingList[housingId],
+                                 list: housingList,
                                  housing: housingId,
-                                 fetching: fetchingCheckers
+                                 fetching: fetchingCheckers,
+                                 housingList: housingIds
                              })}
                         >
                             <div className={classes.title}>Корпус #{key}</div>

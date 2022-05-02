@@ -60,7 +60,7 @@ const BuildingPagePanel: React.FC = () => {
 
     useEffect(() => {
         search(searchText)
-    }, [buildings, selectedType])
+    }, [buildings, selectedType, filters])
 
     // Обработчик изменений
     const onSave = () => {

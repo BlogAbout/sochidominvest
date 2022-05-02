@@ -36,7 +36,7 @@ const DeveloperPagePanel: React.FC = () => {
 
     useEffect(() => {
         search(searchText)
-    }, [developers, selectedType])
+    }, [developers, selectedType, filters])
 
     // Обработчик изменений
     const onSave = () => {

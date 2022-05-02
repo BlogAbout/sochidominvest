@@ -45,7 +45,7 @@ const SupportPagePanel: React.FC = () => {
 
     useEffect(() => {
         search(searchText)
-    }, [feeds, selectedType])
+    }, [feeds, selectedType, filters])
 
     // Обработчик изменений
     const onSave = () => {

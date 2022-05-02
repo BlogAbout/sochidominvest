@@ -16,9 +16,14 @@ class DeveloperModel extends Model
     public static function fetchDeveloperById(int $id): array
     {
         $sql = "
-            SELECT *
+            SELECT *,
+                   (
+                       SELECT GROUP_CONCAT(DISTINCT(bd.`id_building`))
+                       FROM `sdi_building_developer` AS bd
+                       WHERE bd.`id_developer` = `id`
+                   ) AS buildings
             FROM `sdi_developer`
-            WHERE sdi_developer.`id` = :id
+            WHERE `id` = :id
         ";
 
         parent::query($sql);
@@ -45,7 +50,12 @@ class DeveloperModel extends Model
         $where = [];
 
         $sql = "
-            SELECT *
+            SELECT *,
+                   (
+                       SELECT GROUP_CONCAT(DISTINCT(bd.`id_building`))
+                       FROM `sdi_building_developer` AS bd
+                       WHERE bd.`id_developer` = `id`
+                   ) AS buildings
             FROM `sdi_developer`
         ";
 
@@ -193,7 +203,8 @@ class DeveloperModel extends Model
             'type' => $data['type'],
             'dateCreated' => $data['date_created'],
             'dateUpdate' => $data['date_update'],
-            'active' => (int)$data['active']
+            'active' => (int)$data['active'],
+            'buildings' => array_map('intval', $data['buildings'] ? explode(',', $data['buildings']) : [])
         ];
     }
 }

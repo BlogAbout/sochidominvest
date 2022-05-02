@@ -15,6 +15,7 @@ import BuildingPage from '../../../views/public/BuildingPage/BuildingPage'
 import ArticleItemPagePanel from '../../../views/private/ArticleItemPagePanel/ArticleItemPagePanel'
 import ArticlePagePanel from '../../../views/private/ArticlePagePanel/ArticlePagePanel'
 import ArticlePage from '../../../views/public/ArticlePage/ArticlePage'
+import DeveloperItemPagePanel from '../../../views/private/DeveloperItemPagePanel/DeveloperItemPagePanel'
 import DeveloperPagePanel from '../../../views/private/DeveloperPagePanel/DeveloperPagePanel'
 import DocumentPagePanel from '../../../views/private/DocumentPagePanel/DocumentPagePanel'
 import ReportPanel from '../../../views/private/ReportPanel/ReportPanel'
@@ -69,6 +70,7 @@ const AppRouter: React.FC = () => {
 
                             {['director', 'administrator', 'manager'].includes(role) &&
                             <>
+                                <Route path={RouteNames.DEVELOPER_ITEM} element={<DeveloperItemPagePanel/>}/>
                                 <Route path={RouteNames.DEVELOPER} element={<DeveloperPagePanel/>}/>
                                 <Route path={RouteNames.DOCUMENT} element={<DocumentPagePanel/>}/>
                                 <Route path={RouteNames.REPORT} element={<ReportPanel/>}/>

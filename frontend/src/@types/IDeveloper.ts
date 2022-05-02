@@ -9,4 +9,5 @@ export interface IDeveloper {
     author: number | null
     dateCreated?: string | null
     dateUpdate?: string | null
+    buildings?: number[]
 }

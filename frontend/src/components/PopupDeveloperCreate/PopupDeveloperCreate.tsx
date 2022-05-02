@@ -156,6 +156,7 @@ const PopupDeveloperCreate: React.FC<Props> = (props) => {
                                          })}
                                          placeHolder='Введите описание о застройщике'
                                          icon='paragraph'
+                                         isVisual={true}
                             />
                         </div>
 

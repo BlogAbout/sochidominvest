@@ -7,6 +7,7 @@ export enum RouteNames {
     ARTICLE = '/panel/article',
     ARTICLE_ITEM = '/panel/article/:id',
     DEVELOPER = '/panel/developer',
+    DEVELOPER_ITEM = '/panel/developer/:id',
     DOCUMENT = '/panel/document',
     REPORT = '/panel/report',
     TOOL = '/panel/tool',

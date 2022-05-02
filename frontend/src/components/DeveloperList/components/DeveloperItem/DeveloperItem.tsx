@@ -1,4 +1,5 @@
 import React, {useState} from 'react'
+import {useNavigate} from 'react-router-dom'
 import {useTypedSelector} from '../../../../hooks/useTypedSelector'
 import {IDeveloper} from '../../../../@types/IDeveloper'
 import {developerTypes} from '../../../../helpers/developerHelper'
@@ -24,6 +25,8 @@ const defaultProps: Props = {
 }
 
 const DeveloperItem: React.FC<Props> = (props) => {
+    const navigate = useNavigate()
+
     const [fetching, setFetching] = useState(false)
 
     const {role} = useTypedSelector(state => state.userReducer)
@@ -74,8 +77,10 @@ const DeveloperItem: React.FC<Props> = (props) => {
     const onContextMenu = (e: React.MouseEvent) => {
         e.preventDefault()
 
+        const menuItems = [{text: 'Открыть', onClick: () => navigate('/panel/developer/' + props.developer.id)}]
+
         if (['director', 'administrator', 'manager'].includes(role)) {
-            const menuItems = [{text: 'Редактировать', onClick: () => updateHandler(props.developer)}]
+            menuItems.push({text: 'Редактировать', onClick: () => updateHandler(props.developer)})
 
             if (['director', 'administrator'].includes(role)) {
                 menuItems.push({text: 'Удалить', onClick: () => removeHandler(props.developer)})

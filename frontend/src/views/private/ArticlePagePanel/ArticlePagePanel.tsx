@@ -36,7 +36,7 @@ const ArticlePagePanel: React.FC = () => {
 
     useEffect(() => {
         search(searchText)
-    }, [articles, selectedType])
+    }, [articles, selectedType, filters])
 
     // Обработчик изменений
     const onSave = () => {
