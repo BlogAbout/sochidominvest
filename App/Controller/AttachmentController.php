@@ -308,8 +308,8 @@ class AttachmentController extends Controller
         }
 
         if ($type === 'image') {
-            self::imageResize($dir, $fileName, 400);
-            self::imageResize($dir, $fileName, 2000);
+            self::imageResize($dir, $fileName, $this->settings->get('image_thumb_width'), $this->settings->get('image_thumb_height'));
+            self::imageResize($dir, $fileName, $this->settings->get('image_full_width'), $this->settings->get('image_full_height'));
         }
 
         return array(
@@ -326,19 +326,24 @@ class AttachmentController extends Controller
      *
      * @param string $dir Директорая
      * @param string $name Название файла
-     * @param int $size Размер
+     * @param int $width Ширина
+     * @param int $height Высота
      * @throws \Gumlet\ImageResizeException
      */
-    private static function imageResize(string $dir, string $name, int $size)
+    private static function imageResize(string $dir, string $name, int $width, int $height)
     {
-        $thumbDir = $_SERVER['DOCUMENT_ROOT'] . '/uploads/thumbs/' . $size . '/image/';
+        if ($width === $height) {
+            $thumbDir = $_SERVER['DOCUMENT_ROOT'] . '/uploads/thumbs/' . $width . '/image/';
+        } else {
+            $thumbDir = $_SERVER['DOCUMENT_ROOT'] . '/uploads/thumbs/' . $width . 'x' . $height . '/image/';
+        }
 
         if (!file_exists($thumbDir)) {
             mkdir($thumbDir, 0777, true);
         }
 
         $image = new ImageResize($dir . $name);
-        $image->resizeToLongSide($size);
+        $image->resizeToBestFit($width, $height);
         $image->save($thumbDir . $name);
     }
 }

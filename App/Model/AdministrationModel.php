@@ -14,26 +14,25 @@ class AdministrationModel extends Model
      */
     public static function fetchSettings(): array
     {
-        $sql = "
-            SELECT *
-            FROM `sdi_setting`
-        ";
+        $sql = "SELECT * FROM sdi_setting";
 
         parent::query($sql);
 
-        return parent::fetchAll();
+        $list = parent::fetchAll();
+
+        return AdministrationModel::formatSettingsDataToJson($list);
     }
 
     /**
      * Сохранение настроек
      *
-     * @param array $payload Содержит все поля, которые будут сохранены
+     * @param \stdClass $payload Содержит все поля, которые будут сохранены
      * @return array
      */
-    public static function saveSettings(array $payload): array
+    public static function saveSettings(\stdClass $payload): array
     {
         if ($payload) {
-            foreach ($payload as $item) {
+            foreach ($payload as $key => $val) {
                 $sql = "
                     INSERT INTO `sdi_setting` (`name`, `value`)
                     VALUES (:name, :value)
@@ -42,12 +41,30 @@ class AdministrationModel extends Model
                 ";
 
                 parent::query($sql);
-                parent::bindParams('name', $payload['name']);
-                parent::bindParams('value', $payload['value']);
+                parent::bindParams('name', $key);
+                parent::bindParams('value', $val);
                 parent::execute();
             }
         }
 
         return AdministrationModel::fetchSettings();
+    }
+
+    /**
+     * Преобразование выходящих данных в формат для frontend
+     * @param array $data Массив из базы данных
+     * @return array
+     */
+    private static function formatSettingsDataToJson(array $data): array
+    {
+        $resultList = [];
+
+        if (count($data)) {
+            foreach ($data as $item) {
+                $resultList[$item['name']] = $item['value'];
+            }
+        }
+
+        return $resultList;
     }
 }

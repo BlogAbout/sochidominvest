@@ -69,7 +69,7 @@ class AdministrationController extends Controller
 
             return;
         } catch (Exception $e) {
-            LogModel::error($e->getMessage(), $payload);
+            LogModel::error($e->getMessage());
             $response->code(500)->json($e->getMessage());
 
             return;

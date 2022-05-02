@@ -11,8 +11,8 @@ import Button from '../../../components/Button/Button'
 import TextBox from '../../../components/TextBox/TextBox'
 import CheckBox from '../../../components/CheckBox/CheckBox'
 import ComboBox from '../../../components/ComboBox/ComboBox'
+import NumberBox from '../../../components/NumberBox/NumberBox'
 import classes from './AdministrationPagePanel.module.scss'
-import NumberBox from "../../../components/NumberBox/NumberBox";
 
 const AdministrationPagePanel: React.FC = () => {
     const [isUpdate, setIsUpdate] = useState(false)
@@ -153,8 +153,8 @@ const AdministrationPagePanel: React.FC = () => {
                             <div className={classes.field}>
                                 <CheckBox label='Включить SMS уведомления'
                                           type='modern'
-                                          checked={(getSettingValue('telegram_enable') && getSettingValue('telegram_enable') === '1') || false}
-                                          onChange={(e: React.MouseEvent, value: boolean) => setSettingValue('telegram_enable', value ? '1' : '0')}
+                                          checked={(getSettingValue('sms_enable') && getSettingValue('sms_enable') === '1') || false}
+                                          onChange={(e: React.MouseEvent, value: boolean) => setSettingValue('sms_enable', value ? '1' : '0')}
                                 />
                             </div>
 

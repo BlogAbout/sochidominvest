@@ -10,6 +10,7 @@ use Exception;
 class Controller
 {
     protected $requestMiddleware;
+    protected $settings;
 
     /**
      * Инициализация базового контроллера
@@ -17,6 +18,7 @@ class Controller
     public function __construct()
     {
         $this->requestMiddleware = new RequestMiddleware();
+        $this->settings = SettingMiddleware::create();
     }
 
     /**
