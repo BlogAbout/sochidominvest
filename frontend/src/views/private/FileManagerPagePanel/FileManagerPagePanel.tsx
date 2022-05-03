@@ -127,7 +127,7 @@ const FileManagerPagePanel: React.FC = () => {
     }
 
     return (
-        <main className={classes.BuildingPagePanel}>
+        <main className={classes.FileManagerPagePanel}>
             <Helmet>
                 <meta charSet="utf-8"/>
                 <title>Файловый менеджер - СочиДомИнвест</title>
