@@ -6,7 +6,7 @@ import 'swiper/css'
 import 'swiper/css/navigation'
 import 'swiper/css/scrollbar'
 import {IAttachment} from '../../@types/IAttachment'
-import VideoPlayer from '../VideoPlayer/VideoPlayer'
+import MediaPlayer from '../MediaPlayer/MediaPlayer'
 import classes from './ImageCarousel.module.scss'
 
 interface Props {
@@ -59,7 +59,9 @@ const ImageCarousel: React.FC<Props> = (props) => {
     const renderSlideVideo = (attachment: IAttachment) => {
         return (
             <SwiperSlide key={attachment.id} className={classes.video}>
-                <VideoPlayer video={`https://api.sochidominvest.ru/uploads/${attachment.content}`}/>
+                <MediaPlayer source={`https://api.sochidominvest.ru/uploads/${attachment.content}`}
+                             poster={attachment.posterUrl}
+                />
             </SwiperSlide>
         )
     }

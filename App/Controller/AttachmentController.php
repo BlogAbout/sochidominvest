@@ -116,7 +116,8 @@ class AttachmentController extends Controller
             'name' => htmlentities(stripcslashes(strip_tags($data->name))),
             'description' => htmlentities(stripcslashes(strip_tags($data->description))),
             'dateUpdate' => date('Y-m-d H:i:s'),
-            'active' => (int)htmlentities(stripcslashes(strip_tags($data->active)))
+            'active' => (int)htmlentities(stripcslashes(strip_tags($data->active))),
+            'poster' => (int)htmlentities(stripcslashes(strip_tags($data->poster)))
         );
 
         try {

@@ -9,4 +9,6 @@ export interface IAttachment {
     dateCreated: string
     dateUpdate: string
     active: number
+    poster?: number | null
+    posterUrl?: string
 }

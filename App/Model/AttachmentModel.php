@@ -16,9 +16,14 @@ class AttachmentModel extends Model
     public static function fetchItemById(int $id): array
     {
         $sql = "
-            SELECT *
-            FROM `sdi_attachment`
-            WHERE `id` = :id
+            SELECT sdi.*,
+                   (
+                       SELECT a.`content`
+                       FROM `sdi_attachment` a
+                       WHERE a.`id` = sdi.`poster`
+                   ) AS posterUrl
+            FROM `sdi_attachment` sdi
+            WHERE sdi.`id` = :id
         ";
 
         parent::query($sql);
@@ -45,7 +50,12 @@ class AttachmentModel extends Model
         $sqlWhere = parent::generateFilterQuery($filter);
 
         $sql = "
-            SELECT sdi.*
+            SELECT sdi.*,
+                   (
+                       SELECT a.`content`
+                       FROM `sdi_attachment` a
+                       WHERE a.`id` = sdi.`poster`
+                   ) AS posterUrl
             FROM `sdi_attachment` sdi
             $sqlWhere
             ORDER BY sdi.`id` DESC
@@ -118,7 +128,8 @@ class AttachmentModel extends Model
                 `name` = :name,
                 `description` = :description,
                 `date_update` = :dateUpdate,
-                `active` = :active
+                `active` = :active,
+                `poster` = :poster
             WHERE `id` = :id
         ";
 
@@ -128,6 +139,7 @@ class AttachmentModel extends Model
         parent::bindParams('description', $payload['description']);
         parent::bindParams('dateUpdate', $payload['dateUpdate']);
         parent::bindParams('active', $payload['active']);
+        parent::bindParams('poster', $payload['poster']);
 
         if (parent::execute()) {
             return array(
@@ -175,7 +187,9 @@ class AttachmentModel extends Model
             'extension' => $data['extension'],
             'dateCreated' => $data['date_created'],
             'dateUpdate' => $data['date_update'],
-            'active' => (int)$data['active']
+            'active' => (int)$data['active'],
+            'poster' => $data['poster'] ? (int)$data['poster'] : null,
+            'posterUrl' => $data['posterUrl']
         ];
     }
 }

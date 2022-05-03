@@ -1,11 +1,11 @@
 import React, {useEffect, useState} from 'react'
-import classNames from 'classnames/bind'
 import {PopupProps} from '../../@types/IPopup'
 import {IAttachment} from '../../@types/IAttachment'
 import AttachmentService from '../../api/AttachmentService'
 import {getPopupContainer, openPopup, removePopup} from '../../helpers/popupHelper'
 import showBackgroundBlock from '../BackgroundBlock/BackgroundBlock'
 import openPopupAlert from '../PopupAlert/PopupAlert'
+import openPopupFileManager from '../PopupFileManager/PopupFileManager'
 import {Content, Footer, Header, Popup} from '../Popup/Popup'
 import BlockingElement from '../BlockingElement/BlockingElement'
 import TextBox from '../TextBox/TextBox'
@@ -26,8 +26,6 @@ const defaultProps: Props = {
         console.info('PopupAttachmentCreate onSave', attachment)
     }
 }
-
-const cx = classNames.bind(classes)
 
 const PopupAttachmentCreate: React.FC<Props> = (props) => {
     const [attachment, setAttachment] = useState<IAttachment>(props.attachment)
@@ -88,7 +86,7 @@ const PopupAttachmentCreate: React.FC<Props> = (props) => {
                         />
                     </div>
 
-                    <div className={cx({'field': true, 'full': true})}>
+                    <div className={classes.field}>
                         <div className={classes.field_label}>Описание</div>
 
                         <TextAreaBox value={attachment.description || ''}
@@ -100,6 +98,28 @@ const PopupAttachmentCreate: React.FC<Props> = (props) => {
                                      icon='paragraph'
                         />
                     </div>
+
+                    {attachment.type === 'video' ?
+                        <div className={classes.field}>
+                            <div className={classes.field_label}>Постер</div>
+
+                            <Button type='save'
+                                    icon='arrow-pointer'
+                                    onClick={() => openPopupFileManager(document.body, {
+                                        type: 'image',
+                                        selected: attachment.poster ? [attachment.poster] : [],
+                                        onSelect: (selected: number[]) => {
+                                            setAttachment({
+                                                ...attachment,
+                                                poster: selected.length ? selected[0] : null
+                                            })
+                                        }
+                                    })}
+                                    disabled={fetching}
+                            >{attachment.poster ? 'Заменить' : 'Выбрать / Загрузить'}</Button>
+                        </div>
+                        : null
+                    }
 
                     <div className={classes.field}>
                         <CheckBox label='Активен'
