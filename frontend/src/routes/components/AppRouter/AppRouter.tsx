@@ -26,6 +26,10 @@ import FavoritePagePanel from '../../../views/private/FavoritePagePanel/Favorite
 import CompilationPagePanel from '../../../views/private/CompilationPagePanel/CompilationPagePanel'
 import CompilationItemPagePanel from '../../../views/private/CompilationItemPagePanel/CompilationItemPagePanel'
 import AdministrationPagePanel from '../../../views/private/AdministrationPagePanel/AdministrationPagePanel'
+import AdvertisingMaterialsPagePanel from '../../../views/private/AdvertisingMaterialsPagePanel/AdvertisingMaterialsPagePanel'
+import PartnerPanel from '../../../views/private/AdvertisingMaterialsPagePanel/components/PartnerPanel/PartnerPanel'
+import BannerPanel from '../../../views/private/AdvertisingMaterialsPagePanel/components/BannerPanel/BannerPanel'
+import NinthMayPanel from '../../../views/private/AdvertisingMaterialsPagePanel/components/NinthMayPanel/NinthMayPanel'
 import Navigation from '../../../components/Navigation/Navigation'
 import SidebarRight from '../../../components/SidebarRight/SidebarRight'
 import HeaderDefault from '../../../components/HeaderDefault/HeaderDefault'
@@ -65,6 +69,10 @@ const AppRouter: React.FC = () => {
                                 <Route path={RouteNames.USER} element={<UserPagePanel/>}/>
                                 <Route path={RouteNames.TOOL} element={<ToolPanel/>}/>
                                 <Route path={RouteNames.ADMINISTRATION} element={<AdministrationPagePanel/>}/>
+                                <Route path={RouteNames.ADVERTISING} element={<AdvertisingMaterialsPagePanel/>}/>
+                                <Route path={RouteNames.ADVERTISING_PARTNER} element={<PartnerPanel/>}/>
+                                <Route path={RouteNames.ADVERTISING_BANNER} element={<BannerPanel/>}/>
+                                <Route path={RouteNames.ADVERTISING_NINTH_MAY} element={<NinthMayPanel/>}/>
                             </>
                             }
 

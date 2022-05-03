@@ -123,6 +123,15 @@ const Navigation: React.FC = () => {
                             <span className={classes.title}>Администрирование</span>
                         </NavLink>
                     </li>
+                    <li>
+                        <NavLink to={RouteNames.ADVERTISING}
+                                 className={({isActive}) => isActive ? classes.active : ''}
+                                 title='Рекламные материалы'
+                        >
+                            <span className={classes.icon}><FontAwesomeIcon icon='rectangle-ad'/></span>
+                            <span className={classes.title}>Рекламные материалы</span>
+                        </NavLink>
+                    </li>
                 </>
                 }
 

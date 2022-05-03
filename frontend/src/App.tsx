@@ -62,6 +62,7 @@ import {
     faPlus,
     faPrint,
     faQuestion,
+    faRectangleAd,
     faRightFromBracket,
     faRubleSign,
     faScrewdriverWrench,
@@ -155,7 +156,8 @@ library.add(
     faCalendarPlus,
     faDatabase,
     faEnvelope,
-    faCalendar
+    faCalendar,
+    faRectangleAd
 )
 
 function App() {
