@@ -30,7 +30,10 @@ const SearchItem: React.FC<Props> = (props) => {
         <div className={classes.SearchItem}
              onClick={() => {
                  if (props.type === 'attachment' && 'content' in props.item) {
-                     window.open(`https://api.sochidominvest.ru/uploads/${props.item.content}`, '_blank')
+                     window.open(
+                         `https://api.sochidominvest.ru/uploads/${props.item.type}/${props.item.content}`,
+                         '_blank'
+                     )
                  } else {
                      navigate(`/panel/${props.type}/${props.item.id}`)
                  }

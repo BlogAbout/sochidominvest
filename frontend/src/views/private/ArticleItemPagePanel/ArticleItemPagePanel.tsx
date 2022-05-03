@@ -128,7 +128,7 @@ const ArticleItemPagePanel: React.FC<Props> = (props) => {
                             }>
                                 {building.avatar ?
                                     (
-                                        <img src={'https://api.sochidominvest.ru/uploads/thumbs/400/' + building.avatar}
+                                        <img src={'https://api.sochidominvest.ru/uploads/image/thumb/' + building.avatar}
                                              alt={building.name}
                                         />
                                     )

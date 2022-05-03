@@ -34,7 +34,7 @@ const ImageCarousel: React.FC<Props> = (props) => {
     const renderSlide = (attachment: IAttachment) => {
         return (
             <SwiperSlide key={attachment.id} className={classes.image}>
-                <img src={`https://api.sochidominvest.ru/uploads/thumbs/2000/${attachment.content}`}
+                <img src={`https://api.sochidominvest.ru/uploads/image/full/${attachment.content}`}
                      alt={attachment.name || props.alt}
                 />
             </SwiperSlide>
@@ -44,11 +44,11 @@ const ImageCarousel: React.FC<Props> = (props) => {
     const renderFancySlide = (attachment: IAttachment) => {
         return (
             <SwiperSlide key={attachment.id} className={classes.image}>
-                <LightgalleryItem src={`https://api.sochidominvest.ru/uploads/thumbs/2000/${attachment.content}`}
+                <LightgalleryItem src={`https://api.sochidominvest.ru/uploads/image/full/${attachment.content}`}
                                   className={classes.image}
                                   group={props.group || 'any'}
                 >
-                    <img src={`https://api.sochidominvest.ru/uploads/thumbs/2000/${attachment.content}`}
+                    <img src={`https://api.sochidominvest.ru/uploads/image/full/${attachment.content}`}
                          alt={attachment.name || props.alt}
                     />
                 </LightgalleryItem>
@@ -59,7 +59,7 @@ const ImageCarousel: React.FC<Props> = (props) => {
     const renderSlideVideo = (attachment: IAttachment) => {
         return (
             <SwiperSlide key={attachment.id} className={classes.video}>
-                <MediaPlayer source={`https://api.sochidominvest.ru/uploads/${attachment.content}`}
+                <MediaPlayer source={`https://api.sochidominvest.ru/uploads/${attachment.type}/${attachment.content}`}
                              poster={attachment.posterUrl}
                 />
             </SwiperSlide>

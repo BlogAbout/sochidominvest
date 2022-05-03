@@ -88,7 +88,10 @@ const DocumentItem: React.FC<Props> = (props) => {
                 onClick: () => {
                     switch (props.document.type) {
                         case 'file':
-                            window.open(`https://api.sochidominvest.ru/uploads/${props.document.content}`, '_blank')
+                            window.open(
+                                `https://api.sochidominvest.ru/uploads/${props.document.type}/${props.document.content}`,
+                                '_blank'
+                            )
                             break
                         case 'link':
                             window.open(props.document.content, '_blank')

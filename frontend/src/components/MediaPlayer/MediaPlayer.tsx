@@ -34,7 +34,7 @@ const MediaPlayer: React.FC<Props> = (props) => {
 
     const renderVideoPlayer = () => {
         return (
-            <Player poster={props.poster ? `https://api.sochidominvest.ru/uploads/thumbs/2000/${props.poster}` : ''}
+            <Player poster={props.poster ? `https://api.sochidominvest.ru/uploads/image/full/${props.poster}` : ''}
                     src={props.source}
                     height='100%'
             >

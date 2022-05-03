@@ -296,12 +296,12 @@ class AttachmentController extends Controller
         $fileName = base64_encode(microtime()) . '.' . $extension;
         $path = $type . '/';
 
-        $dir = $_SERVER['DOCUMENT_ROOT'] . '/uploads/' . $path;
-        if (!file_exists($dir)) {
-            mkdir($dir, 0777, true);
+        $dir = $_SERVER['DOCUMENT_ROOT'] . '/uploads/';
+        if (!file_exists($dir . $path)) {
+            mkdir($dir . $path, 0777, true);
         }
 
-        if (!move_uploaded_file($fileTmpName, $dir . $fileName)) {
+        if (!move_uploaded_file($fileTmpName, $dir . $path . $fileName)) {
             return array(
                 'status' => false,
                 'data' => 'Ошибка сохранения файла на сервере. Возможно не достаточно прав. Повторите попытку позже.'
@@ -310,13 +310,13 @@ class AttachmentController extends Controller
 
         if ($type === 'image') {
             self::imageResize($dir, $fileName, $this->settings->get('image_thumb_width'), $this->settings->get('image_thumb_height'));
-            self::imageResize($dir, $fileName, $this->settings->get('image_full_width'), $this->settings->get('image_full_height'));
+            self::imageResize($dir, $fileName, $this->settings->get('image_full_width'), $this->settings->get('image_full_height'), true);
         }
 
         return array(
             'status' => true,
             'data' => [
-                'content' => $path . $fileName,
+                'content' => $fileName,
                 'extension' => $extension
             ]
         );
@@ -331,19 +331,19 @@ class AttachmentController extends Controller
      * @param int $height Высота
      * @throws \Gumlet\ImageResizeException
      */
-    private static function imageResize(string $dir, string $name, int $width, int $height)
+    private static function imageResize(string $dir, string $name, int $width, int $height, bool $isFull = false)
     {
-        if ($width === $height) {
-            $thumbDir = $_SERVER['DOCUMENT_ROOT'] . '/uploads/thumbs/' . $width . '/image/';
+        if ($isFull) {
+            $thumbDir = $dir . 'image/full/';
         } else {
-            $thumbDir = $_SERVER['DOCUMENT_ROOT'] . '/uploads/thumbs/' . $width . 'x' . $height . '/image/';
+            $thumbDir = $dir . 'image/thumb/';
         }
 
         if (!file_exists($thumbDir)) {
             mkdir($thumbDir, 0777, true);
         }
 
-        $image = new ImageResize($dir . $name);
+        $image = new ImageResize($dir . 'image/' . $name);
         $image->resizeToBestFit($width, $height);
         $image->save($thumbDir . $name);
     }

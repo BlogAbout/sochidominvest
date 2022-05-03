@@ -791,7 +791,7 @@ const BuildingItemPagePanel: React.FC = (props) => {
                         if (document.type === 'file') {
                             return (
                                 <p key={document.id}>
-                                    <a href={`https://api.sochidominvest.ru/uploads/${document.url}`}
+                                    <a href={`https://api.sochidominvest.ru/uploads/${document.type}/${document.url}`}
                                        target='_blank'
                                     >{document.name}</a>
                                 </p>

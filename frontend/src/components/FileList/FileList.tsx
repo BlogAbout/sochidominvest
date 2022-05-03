@@ -109,7 +109,7 @@ const FileList: React.FC<Props> = (props) => {
         const menuItems = [{
             text: 'Открыть',
             onClick: () => {
-                window.open(`https://api.sochidominvest.ru/uploads/${file.content}`, '_blank')
+                window.open(`https://api.sochidominvest.ru/uploads/${file.type}/${file.content}`, '_blank')
             }
         }]
 
@@ -157,7 +157,7 @@ const FileList: React.FC<Props> = (props) => {
                      }}
                      onContextMenu={(e: React.MouseEvent) => onContextMenu(e, file)}
                 >
-                    <img src={'https://api.sochidominvest.ru/uploads/thumbs/400/' + file.content}
+                    <img src={'https://api.sochidominvest.ru/uploads/image/thumb/' + file.content}
                          alt={file.name || file.content}/>
                 </div>
             </div>
