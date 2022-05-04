@@ -1,20 +1,22 @@
 import React from 'react'
 import Helmet from 'react-helmet'
-import classes from './NinthMayPanel.module.scss'
+import Button from '../../../../../components/Button/Button'
+import classes from './WidgetPanel.module.scss'
 
-const NinthMayPanel: React.FC = () => {
+const WidgetPanel: React.FC = () => {
     return (
-        <main className={classes.NinthMayPanel}>
+        <main className={classes.WidgetPanel}>
             <Helmet>
                 <meta charSet="utf-8"/>
-                <title>Управление материалами - 9 Мая - СочиДомИнвест</title>
+                <title>Виджеты - СочиДомИнвест</title>
                 <meta name='description' content=''/>
                 <link rel='canonical' href={`${window.location.href}`}/>
             </Helmet>
 
             <div className={classes.Content}>
                 <h1>
-                    <span>Управление материалами - 9 Мая</span>
+                    <span>Виджеты - 9 Мая</span>
+                    <Button type='apply' icon='plus' onClick={() => console.log('todo')}>Добавить</Button>
                 </h1>
 
                 <p style={{marginTop: 20, color: '#fff'}}>Раздел находится в стадии разработки</p>
@@ -23,6 +25,6 @@ const NinthMayPanel: React.FC = () => {
     )
 }
 
-NinthMayPanel.displayName = 'NinthMayPanel'
+WidgetPanel.displayName = 'WidgetPanel'
 
-export default NinthMayPanel
+export default WidgetPanel

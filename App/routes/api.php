@@ -101,6 +101,14 @@ $Klein->respond('DELETE', '/api/v1/compilation/[:id]', [new CompilationControlle
 $Klein->respond('GET', '/api/v1/administration/setting', [new AdministrationController(), 'fetchSettings']);
 $Klein->respond('POST', '/api/v1/administration/setting', [new AdministrationController(), 'saveSettings']);
 
+// Widget Routes
+$Klein->respond('POST', '/api/v1/widget/ordering', [new WidgetController(), 'updateWidgetOrdering']);
+$Klein->respond('POST', '/api/v1/widget', [new WidgetController(), 'createItem']);
+$Klein->respond('PUT', '/api/v1/widget/[:id]', [new WidgetController(), 'updateItem']);
+$Klein->respond('GET', '/api/v1/widget/[:id]', [new WidgetController(), 'fetchItemById']);
+$Klein->respond('GET', '/api/v1/widget', [new WidgetController(), 'fetchList']);
+$Klein->respond('DELETE', '/api/v1/widget/[:id]', [new WidgetController(), 'deleteItem']);
+
 // Util Routes
 $Klein->respond('GET', '/api/v1/views/[:objectType]/[:objectId]', [new UtilController(), 'updateCountViews']);
 $Klein->respond('GET', '/api/v1/log', [new UtilController(), 'fetchLogs']);
