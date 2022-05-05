@@ -93,16 +93,17 @@ class PartnerModel extends Model
     {
         $sql = "
             INSERT INTO `sdi_partner`
-                (`name`, `description`, `author`, `type`, `date_created`, `date_update`, `active`,
+                (`name`, `description`, `subtitle`, `author`, `type`, `date_created`, `date_update`, `active`,
                  `meta_title`, `meta_description`, `id_avatar`, `info`)
             VALUES
-                (:name, :description, :author, :type, :dateCreated, :dateUpdate, :active,
+                (:name, :description, :subtitle, :author, :type, :dateCreated, :dateUpdate, :active,
                  :metaTitle, :metaDescription, :avatarId, :info)
         ";
 
         parent::query($sql);
         parent::bindParams('name', $payload['name']);
         parent::bindParams('description', $payload['description']);
+        parent::bindParams('subtitle', $payload['subtitle']);
         parent::bindParams('author', $payload['author']);
         parent::bindParams('type', $payload['type']);
         parent::bindParams('dateCreated', $payload['dateCreated']);
@@ -143,6 +144,7 @@ class PartnerModel extends Model
             SET
                 `name` = :name,
                 `description` = :description,
+                `subtitle` = :subtitle,
                 `type` = :type,
                 `date_update` = :dateUpdate,
                 `active` = :active,
@@ -157,6 +159,7 @@ class PartnerModel extends Model
         parent::bindParams('id', $payload['id']);
         parent::bindParams('name', $payload['name']);
         parent::bindParams('description', $payload['description']);
+        parent::bindParams('subtitle', $payload['subtitle']);
         parent::bindParams('type', $payload['type']);
         parent::bindParams('dateUpdate', $payload['dateUpdate']);
         parent::bindParams('active', $payload['active']);
@@ -206,6 +209,7 @@ class PartnerModel extends Model
             'id' => (int)$data['id'],
             'name' => html_entity_decode($data['name']),
             'description' => html_entity_decode($data['description']),
+            'subtitle' => html_entity_decode($data['subtitle']),
             'author' => (int)$data['author'],
             'type' => $data['type'],
             'dateCreated' => $data['date_created'],

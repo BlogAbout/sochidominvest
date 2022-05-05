@@ -17,7 +17,7 @@ const AdvertisingMaterialsPagePanel: React.FC = () => {
     return (
         <main className={classes.BuildingPagePanel}>
             <Helmet>
-                <meta charSet="utf-8"/>
+                <meta charSet='utf-8'/>
                 <title>Недвижимость - СочиДомИнвест</title>
                 <meta name='description' content=''/>
                 <link rel='canonical' href={`${window.location.href}`}/>
@@ -29,7 +29,7 @@ const AdvertisingMaterialsPagePanel: React.FC = () => {
                 <div className={classes.list}>
                     {menu.map(item => {
                         return (
-                            <div className={cx({'item': true, 'disabled': item.disabled})}>
+                            <div key={item.href} className={cx({'item': true, 'disabled': item.disabled})}>
                                 {item.disabled ? <span>{item.title}</span>
                                     : <Link to={item.href} title={item.title}>{item.title}</Link>}
                             </div>

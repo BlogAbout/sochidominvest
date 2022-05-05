@@ -102,7 +102,7 @@ const PopupCheckerCreate: React.FC<Props> = (props) => {
                                      ...checker,
                                      name: value
                                  })}
-                                 placeHolder={'Введите название'}
+                                 placeHolder='Введите название'
                                  error={!checker.name || checker.name.trim() === ''}
                                  showRequired
                                  errorText='Поле обязательно для заполнения'

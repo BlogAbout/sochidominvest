@@ -94,7 +94,7 @@ const ArticlePagePanel: React.FC = () => {
     return (
         <main className={classes.ArticlePagePanel}>
             <Helmet>
-                <meta charSet="utf-8"/>
+                <meta charSet='utf-8'/>
                 <title>Статьи - СочиДомИнвест</title>
                 <meta name='description' content=''/>
                 <link rel='canonical' href={`${window.location.href}`}/>
@@ -104,17 +104,17 @@ const ArticlePagePanel: React.FC = () => {
 
             <div className={classes.filter}>
                 <Button type={selectedType.includes('news') ? 'regular' : 'save'}
-                        icon={'bolt'}
+                        icon='bolt'
                         onClick={() => onClickFilterButtonHandler('news')}
                 >Новости</Button>
 
                 <Button type={selectedType.includes('action') ? 'regular' : 'save'}
-                        icon={'percent'}
+                        icon='percent'
                         onClick={() => onClickFilterButtonHandler('action')}
                 >Акции</Button>
 
                 <Button type={selectedType.includes('article') ? 'regular' : 'save'}
-                        icon={'star'}
+                        icon='star'
                         onClick={() => onClickFilterButtonHandler('article')}
                 >Статьи</Button>
 

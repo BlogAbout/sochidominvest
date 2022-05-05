@@ -6,7 +6,7 @@ const AboutPage: React.FC = () => {
     return (
         <main className={classes.AboutPage}>
             <Helmet>
-                <meta charSet="utf-8"/>
+                <meta charSet='utf-8'/>
                 <title>О Компании - СочиДомИнвест</title>
                 <meta name='description' content=''/>
                 <link rel='canonical' href={`${window.location.href}`}/>

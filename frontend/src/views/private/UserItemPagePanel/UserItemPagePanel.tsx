@@ -205,7 +205,7 @@ const UserItemPagePanel: React.FC = () => {
     return (
         <div className={classes.UserItemPagePanel}>
             <Helmet>
-                <meta charSet="utf-8"/>
+                <meta charSet='utf-8'/>
                 <title>{!user ? 'Пользователи - СочиДомИнвест' : `${user.firstName} - СочиДомИнвест`}</title>
                 <meta name='description' content=''/>
                 <link rel='canonical' href={`${window.location.href}`}/>

@@ -150,7 +150,7 @@ const ArticleItemPagePanel: React.FC<Props> = (props) => {
     return (
         <main className={classes.ArticleItemPagePanel}>
             <Helmet>
-                <meta charSet="utf-8"/>
+                <meta charSet='utf-8'/>
                 <title>
                     {!article ? 'Статьи - СочиДомИнвест' : !article.metaTitle ? `${article.name} - СочиДомИнвест` : `${article.metaTitle} - СочиДомИнвест`}
                 </title>

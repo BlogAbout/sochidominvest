@@ -348,7 +348,7 @@ const BuildingItemPagePanel: React.FC = (props) => {
                         : null
                     }
 
-                    <Button type={'regular'}
+                    <Button type='regular'
                             icon='question'
                             onClick={() => {
                                 openPopupSupportCreate(document.body, {
@@ -839,7 +839,7 @@ const BuildingItemPagePanel: React.FC = (props) => {
     return (
         <div className={classes.BuildingItemPagePanel}>
             <Helmet>
-                <meta charSet="utf-8"/>
+                <meta charSet='utf-8'/>
                 <title>{!building ? 'Недвижимость - СочиДомИнвест' : `${building.name} - СочиДомИнвест`}</title>
                 <meta name='description' content=''/>
                 <link rel='canonical' href={`${window.location.href}`}/>

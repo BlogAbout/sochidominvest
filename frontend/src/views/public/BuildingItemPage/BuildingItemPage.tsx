@@ -586,7 +586,7 @@ const BuildingItemPage: React.FC = () => {
     return (
         <div className={classes.BuildingItemPage}>
             <Helmet>
-                <meta charSet="utf-8"/>
+                <meta charSet='utf-8'/>
                 <title>
                     {!building
                         ? 'Недвижимость - СочиДомИнвест'

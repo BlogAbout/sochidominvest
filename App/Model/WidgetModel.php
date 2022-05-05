@@ -50,7 +50,7 @@ class WidgetModel extends Model
             SELECT sdi.*
             FROM `sdi_widget` sdi
             $sqlWhere
-            ORDER BY sdi.`ordering` DESC
+            ORDER BY sdi.`ordering` ASC
         ";
 
         parent::query($sql);
@@ -162,7 +162,7 @@ class WidgetModel extends Model
     {
         $ordering = 0;
 
-        foreach($ids as $id) {
+        foreach ($ids as $id) {
             $ordering++;
 
             $sql = "
@@ -199,7 +199,7 @@ class WidgetModel extends Model
 
             foreach ($payload['data'] as $item) {
                 $ordering++;
-                array_push($dataSql, "(" . $payload['id'] . ", " . $item['objectId'] . ", '" . $item['objectType'] . "', " . $ordering . ")");
+                array_push($dataSql, "(" . $payload['id'] . ", " . $item->objectId . ", '" . $item->objectType . "', " . $ordering . ")");
             }
 
             $sql = "
@@ -241,13 +241,19 @@ class WidgetModel extends Model
             SELECT sdi.*
             FROM `sdi_widget_item` sdi
             WHERE sdi.`id_widget` = :id
-            ORDER BY sdi.`ordering` DESC
+            ORDER BY sdi.`ordering` ASC
         ";
 
         parent::query($sql);
         parent::bindParams('id', $id);
 
-        return parent::fetchAll();
+        $list = parent::fetchAll();
+
+        if (!empty($list)) {
+            return $list;
+        }
+
+        return [];
     }
 
     /**
@@ -278,11 +284,19 @@ class WidgetModel extends Model
      */
     private static function formatItemDataToJson(array $data): array
     {
-        return [
-            'widgetId' => (int)$data['id_widget'],
-            'objectId' => (int)$data['id_object'],
-            'objectType' => $data['type_object'],
-            'ordering' => (int)$data['ordering']
-        ];
+        $resultData = [];
+
+        if (count($data)) {
+            foreach ($data as $item) {
+                array_push($resultData, [
+                    'widgetId' => (int)$item['id_widget'],
+                    'objectId' => (int)$item['id_object'],
+                    'objectType' => $item['type_object'],
+                    'ordering' => (int)$item['ordering']
+                ]);
+            }
+        }
+
+        return $resultData;
     }
 }

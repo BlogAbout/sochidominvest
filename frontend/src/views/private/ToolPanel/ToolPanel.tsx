@@ -6,7 +6,7 @@ const ToolPanel: React.FC = () => {
     return (
         <main className={classes.ToolPanel}>
             <Helmet>
-                <meta charSet="utf-8"/>
+                <meta charSet='utf-8'/>
                 <title>Инструменты - СочиДомИнвест</title>
                 <meta name='description' content=''/>
                 <link rel='canonical' href={`${window.location.href}`}/>

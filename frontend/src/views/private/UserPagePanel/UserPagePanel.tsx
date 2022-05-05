@@ -131,7 +131,7 @@ const UserPagePanel: React.FC = () => {
     return (
         <main className={classes.UserPagePanel}>
             <Helmet>
-                <meta charSet="utf-8"/>
+                <meta charSet='utf-8'/>
                 <title>Пользователи - СочиДомИнвест</title>
                 <meta name='description' content=''/>
                 <link rel='canonical' href={`${window.location.href}`}/>

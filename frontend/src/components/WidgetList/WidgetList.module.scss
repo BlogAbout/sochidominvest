@@ -84,6 +84,16 @@
                         margin-top: 5px;
                         border-top: 1px solid #075ea5;
                     }
+
+                    .id {
+                        color: #999;
+                        width: 30px;
+                        flex-shrink: 0;
+                    }
+
+                    .name {
+                        flex-grow: 1;
+                    }
                 }
             }
         }

@@ -12,16 +12,13 @@ import {IFilterContent} from '../../../@types/IFilter'
 import {useTypedSelector} from '../../../hooks/useTypedSelector'
 import {useActions} from '../../../hooks/useActions'
 import classes from './DocumentPagePanel.module.scss'
-import {IUser} from "../../../@types/IUser";
 
 const DocumentPagePanel: React.FC = () => {
     const [isUpdate, setIsUpdate] = useState(false)
     const [searchText, setSearchText] = useState('')
     const [filterDocument, setFilterDocument] = useState<IDocument[]>([])
     const [selectedType, setSelectedType] = useState<string[]>([])
-    const [filters, setFilters] = useState({
-
-    })
+    const [filters, setFilters] = useState({})
 
     const {role} = useTypedSelector(state => state.userReducer)
     const {documents, fetching} = useTypedSelector(state => state.documentReducer)
@@ -117,14 +114,12 @@ const DocumentPagePanel: React.FC = () => {
         // })
     }
 
-    const filtersContent: IFilterContent[] = [
-
-    ]
+    const filtersContent: IFilterContent[] = []
 
     return (
         <main className={classes.DocumentPagePanel}>
             <Helmet>
-                <meta charSet="utf-8"/>
+                <meta charSet='utf-8'/>
                 <title>Документы - СочиДомИнвест</title>
                 <meta name='description' content=''/>
                 <link rel='canonical' href={`${window.location.href}`}/>

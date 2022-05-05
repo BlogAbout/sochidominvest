@@ -95,7 +95,7 @@ const ArticlePage: React.FC = () => {
     return (
         <main className={classes.ArticlePage}>
             <Helmet>
-                <meta charSet="utf-8"/>
+                <meta charSet='utf-8'/>
                 <title>Статьи - СочиДомИнвест</title>
                 <meta name='description' content=''/>
                 <link rel='canonical' href={`${window.location.href}`}/>

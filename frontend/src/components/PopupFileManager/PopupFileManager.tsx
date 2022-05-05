@@ -122,7 +122,7 @@ const PopupFileManager: React.FC<Props> = (props) => {
 
     return (
         <Popup className={classes.PopupFileManager}>
-            <Header title={'Файловый менеджер'} popupId={props.id || ''}/>
+            <Header title='Файловый менеджер' popupId={props.id || ''}/>
 
             <Content className={classes['popup-content']}>
                 <div className={classes.uploader}>

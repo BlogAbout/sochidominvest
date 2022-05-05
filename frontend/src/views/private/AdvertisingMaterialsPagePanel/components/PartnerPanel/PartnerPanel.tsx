@@ -72,7 +72,7 @@ const PartnerPanel: React.FC = () => {
     return (
         <main className={classes.PartnerPanel}>
             <Helmet>
-                <meta charSet="utf-8"/>
+                <meta charSet='utf-8'/>
                 <title>Спонсоры и партнеры - СочиДомИнвест</title>
                 <meta name='description' content=''/>
                 <link rel='canonical' href={`${window.location.href}`}/>

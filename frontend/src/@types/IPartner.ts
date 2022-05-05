@@ -2,6 +2,7 @@ export interface IPartner {
     id: number | null
     name: string
     description: string
+    subtitle: string | null
     author: number | null
     type: string
     dateCreated?: string | null

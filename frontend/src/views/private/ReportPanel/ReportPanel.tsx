@@ -6,7 +6,7 @@ const ReportPanel: React.FC = () => {
     return (
         <main className={classes.ReportPanel}>
             <Helmet>
-                <meta charSet="utf-8"/>
+                <meta charSet='utf-8'/>
                 <title>Отчеты - СочиДомИнвест</title>
                 <meta name='description' content=''/>
                 <link rel='canonical' href={`${window.location.href}`}/>

@@ -125,7 +125,7 @@ const SupportPagePanel: React.FC = () => {
     return (
         <main className={classes.SupportPagePanel}>
             <Helmet>
-                <meta charSet="utf-8"/>
+                <meta charSet='utf-8'/>
                 <title>Техническая поддержка - СочиДомИнвест</title>
                 <meta name='description' content=''/>
                 <link rel='canonical' href={`${window.location.href}`}/>
@@ -136,22 +136,22 @@ const SupportPagePanel: React.FC = () => {
             {['director', 'administrator', 'manager'].includes(role) ?
                 <div className={classes.filter}>
                     <Button type={selectedType.includes('feed') ? 'regular' : 'save'}
-                            icon={'headset'}
+                            icon='headset'
                             onClick={() => onClickFilterButtonHandler('feed')}
                     >Заявки</Button>
 
                     <Button type={selectedType.includes('callback') ? 'regular' : 'save'}
-                            icon={'phone'}
+                            icon='phone'
                             onClick={() => onClickFilterButtonHandler('callback')}
                     >Звонки</Button>
 
                     <Button type={selectedType.includes('question') ? 'regular' : 'save'}
-                            icon={'circle-question'}
+                            icon='circle-question'
                             onClick={() => onClickFilterButtonHandler('question')}
                     >Вопросы</Button>
 
                     <Button type={selectedType.includes('other') ? 'regular' : 'save'}
-                            icon={'star'}
+                            icon='star'
                             onClick={() => onClickFilterButtonHandler('other')}
                     >Другое</Button>
 

@@ -20,15 +20,15 @@ const WidgetPanel: React.FC = () => {
             fetchWidgetList({active: [0, 1]})
         }
 
-        if (isUpdate || !buildings.length) {
+        if (!buildings.length) {
             fetchBuildingList({active: [0, 1]})
         }
 
-        if (isUpdate || !articles.length) {
+        if (!articles.length) {
             fetchArticleList({active: [0, 1]})
         }
 
-        if (isUpdate || !partners.length) {
+        if (!partners.length) {
             fetchPartnerList({active: [0, 1]})
         }
 
@@ -47,7 +47,7 @@ const WidgetPanel: React.FC = () => {
     return (
         <main className={classes.WidgetPanel}>
             <Helmet>
-                <meta charSet="utf-8"/>
+                <meta charSet='utf-8'/>
                 <title>Виджеты - СочиДомИнвест</title>
                 <meta name='description' content=''/>
                 <link rel='canonical' href={`${window.location.href}`}/>

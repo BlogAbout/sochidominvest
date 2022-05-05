@@ -260,10 +260,10 @@ const PopupTagSelector: React.FC<Props> = (props) => {
                  onContextMenu={(e: React.MouseEvent) => onContextMenu(e, tag)}
             >
                 {props.multi && side === 'left' ?
-                    <CheckBox type={'classic'} onChange={e => e}
+                    <CheckBox type='classic' onChange={e => e}
                               checked={checked}
-                              margin={'0px 0px 0px 10px'}
-                              label={''}
+                              margin='0px 0px 0px 10px'
+                              label=''
                     />
                     : null
                 }

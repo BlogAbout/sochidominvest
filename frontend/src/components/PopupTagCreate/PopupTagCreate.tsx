@@ -91,7 +91,7 @@ const PopupTagCreate: React.FC<Props> = (props) => {
                                      ...tag,
                                      name: value
                                  })}
-                                 placeHolder={'Введите название'}
+                                 placeHolder='Введите название'
                                  error={tag.name.trim() === ''}
                                  showRequired
                                  errorText='Поле обязательно для заполнения'

@@ -87,7 +87,7 @@ const DeveloperItemPagePanel: React.FC = () => {
     return (
         <main className={classes.DeveloperItemPagePanel}>
             <Helmet>
-                <meta charSet="utf-8"/>
+                <meta charSet='utf-8'/>
                 <title>
                     {!developer ? 'Застройщики - СочиДомИнвест' : `${developer.name} - СочиДомИнвест`}
                 </title>

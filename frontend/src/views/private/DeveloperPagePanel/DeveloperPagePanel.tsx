@@ -11,16 +11,13 @@ import {IFilterContent} from '../../../@types/IFilter'
 import {useTypedSelector} from '../../../hooks/useTypedSelector'
 import {useActions} from '../../../hooks/useActions'
 import classes from './DeveloperPagePanel.module.scss'
-import {IUser} from "../../../@types/IUser";
 
 const DeveloperPagePanel: React.FC = () => {
     const [isUpdate, setIsUpdate] = useState(false)
     const [searchText, setSearchText] = useState('')
     const [filterDeveloper, setFilterDeveloper] = useState<IDeveloper[]>([])
     const [selectedType, setSelectedType] = useState<string[]>([])
-    const [filters, setFilters] = useState({
-
-    })
+    const [filters, setFilters] = useState({})
 
     const {role} = useTypedSelector(state => state.userReducer)
     const {developers, fetching} = useTypedSelector(state => state.developerReducer)
@@ -92,14 +89,12 @@ const DeveloperPagePanel: React.FC = () => {
         // })
     }
 
-    const filtersContent: IFilterContent[] = [
-
-    ]
+    const filtersContent: IFilterContent[] = []
 
     return (
         <main className={classes.DeveloperPagePanel}>
             <Helmet>
-                <meta charSet="utf-8"/>
+                <meta charSet='utf-8'/>
                 <title>Застройщики - СочиДомИнвест</title>
                 <meta name='description' content=''/>
                 <link rel='canonical' href={`${window.location.href}`}/>

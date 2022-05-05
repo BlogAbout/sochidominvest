@@ -129,18 +129,18 @@ const FileManagerPagePanel: React.FC = () => {
     return (
         <main className={classes.FileManagerPagePanel}>
             <Helmet>
-                <meta charSet="utf-8"/>
+                <meta charSet='utf-8'/>
                 <title>Файловый менеджер - СочиДомИнвест</title>
                 <meta name='description' content=''/>
                 <link rel='canonical' href={`${window.location.href}`}/>
             </Helmet>
 
             <div className={classes.filter}>
-                <Button type='save' icon={'image'} onClick={() => console.log('add')}>Изображения</Button>
+                <Button type='save' icon='image' onClick={() => console.log('add')}>Изображения</Button>
 
-                <Button type='save' icon={'video'} onClick={() => console.log('add')}>Видео</Button>
+                <Button type='save' icon='video' onClick={() => console.log('add')}>Видео</Button>
 
-                <Button type='save' icon={'file'} onClick={() => console.log('add')}>Документы</Button>
+                <Button type='save' icon='file' onClick={() => console.log('add')}>Документы</Button>
 
                 <SearchBox value={searchText} onChange={search.bind(this)}/>
             </div>

@@ -253,7 +253,7 @@ const BuildingPagePanel: React.FC = () => {
     return (
         <main className={classes.BuildingPagePanel}>
             <Helmet>
-                <meta charSet="utf-8"/>
+                <meta charSet='utf-8'/>
                 <title>Недвижимость - СочиДомИнвест</title>
                 <meta name='description' content=''/>
                 <link rel='canonical' href={`${window.location.href}`}/>
@@ -263,32 +263,32 @@ const BuildingPagePanel: React.FC = () => {
 
             <div className={classes.filter}>
                 <Button type={selectedType.includes('building') ? 'regular' : 'save'}
-                        icon={'building'}
+                        icon='building'
                         onClick={() => onClickFilterButtonHandler('building')}
                 >ЖК</Button>
 
                 <Button type={selectedType.includes('apartment') ? 'regular' : 'save'}
-                        icon={'house-user'}
+                        icon='house-user'
                         onClick={() => onClickFilterButtonHandler('apartment')}
                 >Квартиры</Button>
 
                 <Button type={selectedType.includes('house') ? 'regular' : 'save'}
-                        icon={'house'}
+                        icon='house'
                         onClick={() => onClickFilterButtonHandler('house')}
                 >Дома</Button>
 
                 <Button type={selectedType.includes('land') ? 'regular' : 'save'}
-                        icon={'tree'}
+                        icon='tree'
                         onClick={() => onClickFilterButtonHandler('land')}
                 >Участки</Button>
 
                 <Button type={selectedType.includes('commerce') ? 'regular' : 'save'}
-                        icon={'cash-register'}
+                        icon='cash-register'
                         onClick={() => onClickFilterButtonHandler('commerce')}
                 >Коммерция</Button>
 
                 <Button type={selectedType.includes('garage') ? 'regular' : 'save'}
-                        icon={'car'}
+                        icon='car'
                         onClick={() => onClickFilterButtonHandler('garage')}
                 >Гаражи</Button>
 

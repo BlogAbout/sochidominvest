@@ -40,8 +40,9 @@ const PopupPartnerCreate: React.FC<Props> = (props) => {
         id: null,
         name: '',
         description: '',
+        subtitle: '',
         author: null,
-        type: 'article',
+        type: 'partner',
         active: 1,
     })
 
@@ -104,6 +105,19 @@ const PopupPartnerCreate: React.FC<Props> = (props) => {
                     </div>
 
                     <div className={classes.field}>
+                        <div className={classes.field_label}>Подпись (слоган)</div>
+
+                        <TextBox value={partner.subtitle}
+                                 onChange={(e: React.MouseEvent, value: string) => setPartner({
+                                     ...partner,
+                                     subtitle: value
+                                 })}
+                                 placeHolder='Введите подпись'
+                                 icon='s'
+                        />
+                    </div>
+
+                    <div className={classes.field}>
                         <div className={classes.field_label}>Тип</div>
 
                         <ComboBox selected={partner.type}
@@ -111,20 +125,6 @@ const PopupPartnerCreate: React.FC<Props> = (props) => {
                                   onSelect={(value: string) => setPartner({...partner, type: value})}
                                   placeHolder='Выберите тип'
                                   styleType='standard'
-                        />
-                    </div>
-
-                    <div className={cx({'field': true, 'full': true})}>
-                        <div className={classes.field_label}>Описание</div>
-
-                        <TextAreaBox value={partner.description}
-                                     onChange={(value: string) => setPartner({
-                                         ...partner,
-                                         description: value
-                                     })}
-                                     placeHolder='Введите описание'
-                                     icon='paragraph'
-                                     isVisual={true}
                         />
                     </div>
 
@@ -145,6 +145,20 @@ const PopupPartnerCreate: React.FC<Props> = (props) => {
                                 })}
                                 disabled={fetching}
                         >{partner.avatarId ? 'Заменить' : 'Выбрать / Загрузить'}</Button>
+                    </div>
+
+                    <div className={cx({'field': true, 'full': true})}>
+                        <div className={classes.field_label}>Описание</div>
+
+                        <TextAreaBox value={partner.description}
+                                     onChange={(value: string) => setPartner({
+                                         ...partner,
+                                         description: value
+                                     })}
+                                     placeHolder='Введите описание'
+                                     icon='paragraph'
+                                     isVisual={true}
+                        />
                     </div>
 
                     <div className={classes.field}>

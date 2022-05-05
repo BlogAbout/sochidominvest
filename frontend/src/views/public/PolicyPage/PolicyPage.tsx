@@ -6,7 +6,7 @@ const PolicyPage: React.FC = () => {
     return (
         <main className={classes.PolicyPage}>
             <Helmet>
-                <meta charSet="utf-8"/>
+                <meta charSet='utf-8'/>
                 <title>Политика конфиденциальности - СочиДомИнвест</title>
                 <meta name='description' content=''/>
                 <link rel='canonical' href={`${window.location.href}`}/>

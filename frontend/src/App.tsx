@@ -67,6 +67,7 @@ import {
     faRectangleAd,
     faRightFromBracket,
     faRubleSign,
+    faS,
     faScrewdriverWrench,
     faStar,
     faTableList,
@@ -161,7 +162,8 @@ library.add(
     faCalendar,
     faRectangleAd,
     faHandshakeAngle,
-    faMoneyBill1Wave
+    faMoneyBill1Wave,
+    faS
 )
 
 function App() {

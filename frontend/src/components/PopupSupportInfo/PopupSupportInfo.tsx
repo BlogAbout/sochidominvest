@@ -12,11 +12,11 @@ import openPopupAlert from '../PopupAlert/PopupAlert'
 import {Content, Footer, Header, Popup} from '../Popup/Popup'
 import BlockingElement from '../BlockingElement/BlockingElement'
 import Button from '../Button/Button'
+import Empty from '../Empty/Empty'
+import TextAreaBox from '../TextAreaBox/TextAreaBox'
+import withStore from '../../hoc/withStore'
+import StatusBox from '../StatusBox/StatusBox'
 import classes from './PopupSupportInfo.module.scss'
-import Empty from "../Empty/Empty";
-import TextAreaBox from "../TextAreaBox/TextAreaBox";
-import withStore from "../../hoc/withStore";
-import StatusBox from "../StatusBox/StatusBox";
 
 interface Props extends PopupProps {
     feedId: number | null

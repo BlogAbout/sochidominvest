@@ -117,7 +117,7 @@ const BuildingPage: React.FC = () => {
     return (
         <main className={classes.BuildingPage}>
             <Helmet>
-                <meta charSet="utf-8"/>
+                <meta charSet='utf-8'/>
                 <title>Недвижимость - СочиДомИнвест</title>
                 <meta name='description' content=''/>
                 <link rel='canonical' href={`${window.location.href}`}/>

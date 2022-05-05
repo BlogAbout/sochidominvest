@@ -50,7 +50,7 @@ const FavoritePagePanel: React.FC = () => {
     return (
         <main className={classes.FavoritePagePanel}>
             <Helmet>
-                <meta charSet="utf-8"/>
+                <meta charSet='utf-8'/>
                 <title>Избранное - СочиДомИнвест</title>
                 <meta name='description' content=''/>
                 <link rel='canonical' href={`${window.location.href}`}/>

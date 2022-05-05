@@ -81,7 +81,7 @@ const PopupAttachmentCreate: React.FC<Props> = (props) => {
                                      ...attachment,
                                      name: value
                                  })}
-                                 placeHolder={'Введите название'}
+                                 placeHolder='Введите название'
                                  icon='heading'
                         />
                     </div>

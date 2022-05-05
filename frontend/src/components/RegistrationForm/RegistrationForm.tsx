@@ -212,7 +212,7 @@ const RegistrationForm: React.FC<Props> = (props) => {
                 <ComboBox selected={signUp.role || 'subscriber'}
                           items={Object.values(rolesList.filter(role => role.isRegistration))}
                           onSelect={(value: string) => setSignUp({...signUp, role: value})}
-                          placeHolder={'Выберите тип аккаунта'}
+                          placeHolder='Выберите тип аккаунта'
                           styleType='standard'
                 />
             </div>

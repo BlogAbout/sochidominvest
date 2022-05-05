@@ -57,7 +57,7 @@ const CompilationItemPagePanel: React.FC = () => {
     return (
         <main className={classes.CompilationItemPagePanel}>
             <Helmet>
-                <meta charSet="utf-8"/>
+                <meta charSet='utf-8'/>
                 <title>
                     {!compilation ? 'Подборки - СочиДомИнвест' : `${compilation.name} - СочиДомИнвест`}
                 </title>

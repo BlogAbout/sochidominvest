@@ -62,6 +62,7 @@ class PartnerController extends Controller
         $payload = array(
             'name' => htmlentities(stripcslashes(strip_tags($data->name))),
             'description' => htmlentities(stripcslashes(strip_tags($data->description))),
+            'subtitle' => htmlentities(stripcslashes(strip_tags($data->subtitle))),
             'type' => htmlentities(stripcslashes(strip_tags($data->type))),
             'active' => (int)htmlentities(stripcslashes(strip_tags($data->active))),
             'metaTitle' => htmlentities(stripcslashes(strip_tags($data->metaTitle))),
@@ -148,6 +149,7 @@ class PartnerController extends Controller
             'id' => $request->id,
             'name' => htmlentities(stripcslashes(strip_tags($data->name))),
             'description' => htmlentities(stripcslashes(strip_tags($data->description))),
+            'subtitle' => htmlentities(stripcslashes(strip_tags($data->subtitle))),
             'type' => htmlentities(stripcslashes(strip_tags($data->type))),
             'dateUpdate' => date('Y-m-d H:i:s'),
             'active' => (int)htmlentities(stripcslashes(strip_tags($data->active))),

@@ -112,7 +112,7 @@ const PopupSelector: React.FC<Props> = (props) => {
                            onChange={search.bind(this)}
                            countFind={filteredItems.length}
                            showClear
-                           margin={'0 0 11px 0'}
+                           margin='0 0 11px 0'
                            flexGrow
                            autoFocus={true}
                 />
@@ -158,10 +158,10 @@ const PopupSelector: React.FC<Props> = (props) => {
                  onClick={() => selectRow(item)}
             >
                 {props.multi && side === 'left' ?
-                    <CheckBox type={'classic'} onChange={e => e}
+                    <CheckBox type='classic' onChange={e => e}
                               checked={checked}
-                              margin={'0px 0px 0px 10px'}
-                              label={''}
+                              margin='0px 0px 0px 10px'
+                              label=''
                     />
                     : null
                 }

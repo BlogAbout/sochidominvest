@@ -12,6 +12,6 @@ export interface IWidget {
 export interface IWidgetData {
     widgetId: number | null
     objectId: number
-    typeObject: string
+    objectType: string
     ordering: number
 }
