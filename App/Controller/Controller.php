@@ -196,6 +196,15 @@ class Controller
                 } catch (Exception $e) {
                 }
             }
+
+            if ($payload->validator == 'partnerExists') {
+                try {
+                    if (!Model::isExistsItem('sdi_partner', (int)$payload->data)) {
+                        array_push($response, "Партнер с таким идентификатором не найден в базе данных.");
+                    }
+                } catch (Exception $e) {
+                }
+            }
         }
 
         $validationErrors = new \stdClass();

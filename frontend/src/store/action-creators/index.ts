@@ -8,6 +8,7 @@ import {NotificationActionCreators} from './notificationActionCreators'
 import {CompilationActionCreators} from './compilationActionCreators'
 import {AdministrationActionCreators} from './administrationActionCreators'
 import {WidgetActionCreators} from './widgetActionCreators'
+import {PartnerActionCreators} from './partnerActionCreators'
 
 export default {
     ...UserActionCreators,
@@ -19,5 +20,6 @@ export default {
     ...NotificationActionCreators,
     ...CompilationActionCreators,
     ...AdministrationActionCreators,
-    ...WidgetActionCreators
+    ...WidgetActionCreators,
+    ...PartnerActionCreators
 }

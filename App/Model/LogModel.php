@@ -151,6 +151,7 @@ class LogModel extends Model
             case 'notify':
             case 'compile':
             case 'widget':
+            case 'partner':
                 $content .= $data['name'];
                 break;
             case 'feed':

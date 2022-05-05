@@ -11,7 +11,7 @@ const AdvertisingMaterialsPagePanel: React.FC = () => {
     const menu = [
         {href: RouteNames.ADVERTISING_PARTNER, title: 'Спонсоры и партнеры', disabled: false},
         {href: RouteNames.ADVERTISING_BANNER, title: 'Баннеры', disabled: false},
-        {href: RouteNames.ADVERTISING_NINTH_MAY, title: '9 Мая', disabled: false}
+        {href: RouteNames.ADVERTISING_WIDGET, title: 'Виджеты', disabled: false}
     ]
 
     return (

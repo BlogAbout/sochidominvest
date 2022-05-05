@@ -1,0 +1,38 @@
+.PopupPartnerCreate {
+    width: 650px;
+    height: 450px;
+}
+
+.content {
+    height: 343px;
+    overflow: auto;
+
+    .info {
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        padding: 15px 15px 0;
+        width: 100%;
+    }
+}
+
+.tabContent {
+
+}
+
+.field {
+    width: 49%;
+    margin-bottom: 10px;
+    position: relative;
+
+    &.full {
+        width: 100%;
+    }
+}
+
+.field_label {
+    font-size: 14px;
+    color: black;
+    margin-bottom: 3px;
+    display: flex;
+}

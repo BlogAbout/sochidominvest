@@ -13,6 +13,7 @@ import {
 } from '../../../../helpers/buildingHelper'
 import BuildingService from '../../../../api/BuildingService'
 import FavoriteService from '../../../../api/FavoriteService'
+import CompilationService from '../../../../api/CompilationService'
 import {IBuilding} from '../../../../@types/IBuilding'
 import {ISelector} from '../../../../@types/ISelector'
 import {ITag} from '../../../../@types/ITag'
@@ -22,7 +23,6 @@ import openPopupAlert from '../../../PopupAlert/PopupAlert'
 import Preloader from '../../../Preloader/Preloader'
 import {useTypedSelector} from '../../../../hooks/useTypedSelector'
 import classes from './BuildingItem.module.scss'
-import CompilationService from "../../../../api/CompilationService";
 
 interface Props {
     building: IBuilding

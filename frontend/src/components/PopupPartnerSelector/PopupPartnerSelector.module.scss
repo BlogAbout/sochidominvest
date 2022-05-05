@@ -1,0 +1,108 @@
+.popup {
+    height: 450px;
+}
+
+.content {
+    display: flex;
+    flex-grow: 1;
+    justify-content: space-between;
+    box-sizing: border-box;
+    width: 420px;
+}
+
+.content_multi {
+    composes: content;
+    width: 840px;
+}
+
+.search_and_button {
+    display: flex;
+}
+
+.box {
+    display: flex;
+    flex-direction: column;
+    width: 420px;
+    height: 430px;
+}
+
+.box_no_menu {
+    composes: box;
+    height: 440px;
+}
+
+.box_border {
+    display: flex;
+    flex-grow: 1;
+    border: 1px solid #e8e8e8;
+    border-radius: 2px;
+    box-sizing: border-box;
+    overflow-y: hidden;
+    height: 100%;
+}
+
+.box_content_wrapper {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.box_content {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    overflow-y: auto;
+    height: 100%;
+}
+
+.row {
+    height: 40px;
+    border-bottom: 1px solid #e8e8e8;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.row:hover {
+    background-color: #f5f8fa;
+}
+
+.row:last-child {
+    margin-bottom: -1px;
+}
+
+.footer_spacer {
+    height: 15px;
+    width: 100%;
+}
+
+.selected_icon {
+    background: url('./img/selected.png') no-repeat center;
+    width: 22px;
+    height: 22px;
+    margin-right: 8px;
+}
+
+.delete_icon {
+    visibility: hidden;
+    background-image: url('./img/delete.png');
+    width: 15px;
+    height: 15px;
+    margin-right: 5px;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.row:hover .delete_icon {
+    visibility: visible;
+}
+
+.item_name {
+    font-size: 14px;
+    white-space: nowrap;
+    overflow: hidden;
+    height: 16px;
+    line-height: 16px;
+    margin-left: 10px;
+}

@@ -11,7 +11,6 @@ import {IFilterContent} from '../../../@types/IFilter'
 import {useTypedSelector} from '../../../hooks/useTypedSelector'
 import {useActions} from '../../../hooks/useActions'
 import classes from './ArticlePagePanel.module.scss'
-import {IUser} from "../../../@types/IUser";
 
 const ArticlePagePanel: React.FC = () => {
     const [isUpdate, setIsUpdate] = useState(false)

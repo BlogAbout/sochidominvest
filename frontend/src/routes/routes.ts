@@ -20,7 +20,7 @@ export enum RouteNames {
     ADVERTISING = '/panel/advertising',
     ADVERTISING_PARTNER = '/panel/advertising/partner',
     ADVERTISING_BANNER = '/panel/advertising/banner',
-    ADVERTISING_NINTH_MAY = '/panel/advertising/ninth-may',
+    ADVERTISING_WIDGET = '/panel/advertising/widget',
     PUBLIC_BUILDING = '/building',
     PUBLIC_BUILDING_ITEM = '/building/:id',
     PUBLIC_ARTICLE = '/article',

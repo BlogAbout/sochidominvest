@@ -38,6 +38,7 @@ import {
     faFileLines,
     faFlag,
     faGear,
+    faHandshakeAngle,
     faHeading,
     faHeadset,
     faHeart,
@@ -49,6 +50,7 @@ import {
     faLock,
     faMagnifyingGlass,
     faMessage,
+    faMoneyBill1Wave,
     faNewspaper,
     faPaintRoller,
     faPaperclip,
@@ -157,7 +159,9 @@ library.add(
     faDatabase,
     faEnvelope,
     faCalendar,
-    faRectangleAd
+    faRectangleAd,
+    faHandshakeAngle,
+    faMoneyBill1Wave
 )
 
 function App() {

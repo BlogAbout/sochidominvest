@@ -270,7 +270,7 @@ class UserModel extends Model
             'active' => (int)$data['active'],
             'block' => (int)$data['block'],
             'role' => $data['role'],
-            'settings' => $data['settings'] ? json_decode($data['settings']) : null,
+            'settings' => $data['settings'] ? json_decode($data['settings']) : null
         ];
     }
 }

@@ -72,7 +72,7 @@ const AppRouter: React.FC = () => {
                                 <Route path={RouteNames.ADVERTISING} element={<AdvertisingMaterialsPagePanel/>}/>
                                 <Route path={RouteNames.ADVERTISING_PARTNER} element={<PartnerPanel/>}/>
                                 <Route path={RouteNames.ADVERTISING_BANNER} element={<BannerPanel/>}/>
-                                <Route path={RouteNames.ADVERTISING_NINTH_MAY} element={<WidgetPanel/>}/>
+                                <Route path={RouteNames.ADVERTISING_WIDGET} element={<WidgetPanel/>}/>
                             </>
                             }
 
