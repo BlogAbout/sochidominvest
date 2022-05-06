@@ -5,11 +5,15 @@ import {IFilter} from '../@types/IFilter'
 
 export default class WidgetService {
     static async fetchWidgetById(widgetId: number): Promise<AxiosResponse> {
-        return API.get(`/widget/${widgetId}`)
+        return API.get(`/widget/${widgetId}/info`)
     }
 
     static async fetchWidgets(filter: IFilter): Promise<AxiosResponse> {
         return API.get('/widget', {params: filter})
+    }
+
+    static async fetchWidgetsContent(filter: IFilter): Promise<AxiosResponse> {
+        return API.get('/widget/content', {params: filter})
     }
 
     static async saveWidget(widget: IWidget): Promise<AxiosResponse> {

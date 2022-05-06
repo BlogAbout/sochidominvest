@@ -5,6 +5,7 @@ import {useTypedSelector} from '../../../hooks/useTypedSelector'
 import MainPage from '../../../views/public/MainPage/MainPage'
 import PolicyPage from '../../../views/public/PolicyPage/PolicyPage'
 import AboutPage from '../../../views/public/AboutPage/AboutPage'
+import PartnerItemPage from '../../../views/public/PartnerItemPage/PartnerItemPage'
 import DesktopPagePanel from '../../../views/private/DesktopPagePanel/DesktopPagePanel'
 import UserItemPagePanel from '../../../views/private/UserItemPagePanel/UserItemPagePanel'
 import UserPagePanel from '../../../views/private/UserPagePanel/UserPagePanel'
@@ -53,6 +54,7 @@ const AppRouter: React.FC = () => {
                         <Route path={RouteNames.PUBLIC_ARTICLE_ITEM} element={<ArticleItemPagePanel public/>}/>
                         <Route path={RouteNames.PUBLIC_ARTICLE} element={<ArticlePage/>}/>
                         <Route path={RouteNames.PUBLIC_ABOUT} element={<AboutPage/>}/>
+                        <Route path={RouteNames.PUBLIC_PARTNER_ITEM} element={<PartnerItemPage/>}/>
                     </Routes>
 
                     <FooterDefault/>

@@ -19,6 +19,7 @@ export enum RouteNames {
     ADMINISTRATION = '/panel/administration',
     ADVERTISING = '/panel/advertising',
     ADVERTISING_PARTNER = '/panel/advertising/partner',
+    ADVERTISING_PARTNER_ITEM = '/panel/advertising/partner/:id',
     ADVERTISING_BANNER = '/panel/advertising/banner',
     ADVERTISING_WIDGET = '/panel/advertising/widget',
     PUBLIC_BUILDING = '/building',
@@ -26,5 +27,6 @@ export enum RouteNames {
     PUBLIC_ARTICLE = '/article',
     PUBLIC_ARTICLE_ITEM = '/article/:id',
     PUBLIC_POLICY = '/policy',
-    PUBLIC_ABOUT = '/about'
+    PUBLIC_ABOUT = '/about',
+    PUBLIC_PARTNER_ITEM = '/partner/:id'
 }

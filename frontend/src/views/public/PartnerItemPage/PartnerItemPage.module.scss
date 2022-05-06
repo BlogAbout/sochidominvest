@@ -1,0 +1,115 @@
+.PartnerItemPage {
+    position: relative;
+    height: 100%;
+    overflow: auto;
+}
+
+.Content {
+    padding: 40px 0 0;
+    color: #000;
+    height: 100%;
+
+    h1 {
+        margin: 0 0 30px 0;
+        text-align: left;
+
+        span {
+            display: block;
+        }
+    }
+
+    .subtitle {
+        font-style: italic;
+        margin-top: 40px;
+    }
+
+    .information {
+        display: flex;
+        align-items: center;
+
+        .icon {
+            margin-right: 20px;
+            color: #999;
+
+
+            svg {
+                height: 15px;
+                vertical-align: middle;
+            }
+
+            span {
+                font-size: 12px;
+                line-height: 15px;
+                vertical-align: middle;
+                margin-left: 5px;
+            }
+        }
+    }
+
+    .container {
+        width: 100%;
+        height: 100%;
+        margin: 0 auto 60px;
+        max-width: 1024px;
+        position: relative;
+
+        .block {
+            width: 100%;
+            position: relative;
+            box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.4);
+            background: #fff;
+            padding: 30px;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+
+            .col {
+                width: 48%;
+
+                img {
+                    width: 100%;
+                    height: auto;
+                    display: block;
+                }
+            }
+
+            .colFull {
+                width: 100%;
+            }
+        }
+
+        .description {
+            width: 100%;
+            white-space: pre-wrap;
+            line-height: 20px;
+            font-size: 16px;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #075ea5;
+        }
+    }
+}
+
+@media (max-width: 1024px) {
+    .Content {
+        .container {
+            padding: 0 10px;
+        }
+    }
+}
+
+@media (max-width: 480px) {
+    .Content {
+        .container {
+            .block {
+                .col {
+                    width: 100%;
+
+                    + .col {
+                        margin-top: 20px;
+                    }
+                }
+            }
+        }
+    }
+}

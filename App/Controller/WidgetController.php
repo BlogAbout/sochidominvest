@@ -286,6 +286,30 @@ class WidgetController extends Controller
     }
 
     /**
+     * Вернет содержимое элементов для каждого виджета
+     *
+     * @param mixed $request Содержит объект запроса
+     * @param mixed $response Содержит объект ответа от маршрутизатора
+     * @return void
+     */
+    public function fetchWidgetsContent($request, $response)
+    {
+        $filter = parent::getFilterParams($request->paramsGet()->all());
+
+        try {
+            $list = $this->widgetModel->fetchWidgetsContent($filter);
+            $response->code(200)->json($list);
+
+            return;
+        } catch (Exception $e) {
+            LogModel::error($e->getMessage());
+            $response->code(500)->json($e->getMessage());
+
+            return;
+        }
+    }
+
+    /**
      * Удаление элемента по id
      *
      * @param mixed $request Содержит объект запроса

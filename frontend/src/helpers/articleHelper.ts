@@ -5,3 +5,8 @@ export const articleTypes: ISelector[] = [
     {key: 'action', text: 'Акция'},
     {key: 'news', text: 'Новость'}
 ]
+
+export const getArticleTypeText = (key: string) => {
+    const find = articleTypes.find((item: ISelector) => item.key === key)
+    return find ? find.text : ''
+}

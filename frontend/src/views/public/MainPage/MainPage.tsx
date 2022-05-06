@@ -3,6 +3,7 @@ import Helmet from 'react-helmet'
 import HeadPanel from './components/HeadPanel/HeadPanel'
 import SectionInfo from './components/SectionInfo/SectionInfo'
 import SectionAdvanced from './components/SectionAdvanced/SectionAdvanced'
+import NinthMay from './components/NinthMay/NinthMay'
 import classes from './MainPage.module.scss'
 
 const MainPage: React.FC = () => {
@@ -19,6 +20,8 @@ const MainPage: React.FC = () => {
 
             <main className={classes.Content}>
                 <HeadPanel/>
+
+                <NinthMay/>
 
                 <SectionAdvanced/>
 

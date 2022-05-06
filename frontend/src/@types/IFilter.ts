@@ -11,6 +11,7 @@ export interface IFilter {
     userId?: number[]
     type?: string
     text?: string
+    page?: string
 }
 
 export interface IFilterContent {

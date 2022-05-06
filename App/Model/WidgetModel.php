@@ -68,6 +68,41 @@ class WidgetModel extends Model
     }
 
     /**
+     * Вернет содержимое элементов для каждого виджета
+     *
+     * @param array $filter Массив параметров фильтрации
+     * @return array
+     */
+    public static function fetchWidgetsContent(array $filter): array
+    {
+        $widgets = self::fetchList($filter);
+        $resultList = [];
+
+        if ($widgets) {
+            foreach ($widgets as $widget) {
+                if ($widget['data'] && count($widget['data'])) {
+                    $ids = [];
+
+                    foreach ($widget['data'] as $item) {
+                        array_push($ids, $item['objectId']);
+                    }
+
+                    switch ($widget['type']) {
+                        case 'article':
+                            $resultList[$widget['id']] = ArticleModel::fetchList(['active' => [1], 'id' => $ids]);
+                            break;
+                        case 'partner':
+                            $resultList[$widget['id']] = PartnerModel::fetchList(['active' => [1], 'id' => $ids]);
+                            break;
+                    }
+                }
+            }
+        }
+
+        return $resultList;
+    }
+
+    /**
      * Создание элемента
      *
      * @param array $payload Содержит все поля, которые будут созданы

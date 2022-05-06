@@ -112,7 +112,8 @@ $Klein->respond('DELETE', '/api/v1/partner/[:id]', [new PartnerController(), 'de
 $Klein->respond('POST', '/api/v1/widget/ordering', [new WidgetController(), 'updateWidgetOrdering']);
 $Klein->respond('POST', '/api/v1/widget', [new WidgetController(), 'createItem']);
 $Klein->respond('PUT', '/api/v1/widget/[:id]', [new WidgetController(), 'updateItem']);
-$Klein->respond('GET', '/api/v1/widget/[:id]', [new WidgetController(), 'fetchItemById']);
+$Klein->respond('GET', '/api/v1/widget/content', [new WidgetController(), 'fetchWidgetsContent']);
+$Klein->respond('GET', '/api/v1/widget/[:id]/info', [new WidgetController(), 'fetchItemById']);
 $Klein->respond('GET', '/api/v1/widget', [new WidgetController(), 'fetchList']);
 $Klein->respond('DELETE', '/api/v1/widget/[:id]', [new WidgetController(), 'deleteItem']);
 

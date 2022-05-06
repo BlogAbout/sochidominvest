@@ -1,7 +1,7 @@
 import {AxiosResponse} from 'axios'
 import API from '../axios.init'
 
-export default class ArticleService {
+export default class FavoriteService {
     static async fetchFavorites(): Promise<AxiosResponse> {
         return API.get('/favorite')
     }
