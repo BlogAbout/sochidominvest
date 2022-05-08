@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from 'react'
 import {PopupDisplayOptions, PopupProps} from '../../@types/IPopup'
 import {getPopupContainer, openPopup, removePopup} from '../../helpers/popupHelper'
-import Button from '../Button/Button'
-import showBackgroundBlock from '../BackgroundBlock/BackgroundBlock'
-import {Content} from '../Popup/Popup'
+import Button from '../form/Button/Button'
+import showBackgroundBlock from '../ui/BackgroundBlock/BackgroundBlock'
+import {Content} from '../popup/Popup/Popup'
 import classes from './PopupAlert.module.scss'
 
 interface ButtonProps {

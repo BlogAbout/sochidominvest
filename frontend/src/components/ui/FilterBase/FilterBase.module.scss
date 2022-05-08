@@ -1,0 +1,49 @@
+.FilterBase {
+    display: flex;
+    justify-content: center;
+    height: 70px;
+
+    > div {
+        margin-right: 10px;
+
+        &:last-child {
+            margin-right: 0;
+        }
+    }
+
+    .search {
+        margin-right: 0;
+    }
+}
+
+@media (max-width: 768px) {
+    .FilterBase {
+        flex-wrap: wrap;
+        height: auto;
+
+        > div {
+            margin-right: 10px;
+            margin-bottom: 10px;
+
+            &:last-child {
+                width: 100%;
+                margin-right: 0;
+            }
+        }
+    }
+}
+
+@media (max-width: 480px) {
+    .FilterBase {
+        flex-wrap: wrap;
+        height: auto;
+
+        > div {
+            display: none;
+        }
+
+        .search {
+            display: block;
+        }
+    }
+}

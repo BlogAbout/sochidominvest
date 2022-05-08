@@ -8,7 +8,7 @@ import {IArticle} from '../../../@types/IArticle'
 import {ISelector} from '../../../@types/ISelector'
 import {articleTypes} from '../../../helpers/articleHelper'
 import ArticleService from '../../../api/ArticleService'
-import BlockingElement from '../../../components/BlockingElement/BlockingElement'
+import BlockingElement from '../../../components/ui/BlockingElement/BlockingElement'
 import Empty from '../../../components/Empty/Empty'
 import classes from './ArticlePage.module.scss'
 

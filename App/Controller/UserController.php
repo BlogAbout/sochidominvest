@@ -253,6 +253,7 @@ class UserController extends Controller
             'lastActive' => date('Y-m-d H:i:s'),
             'active' => (int)htmlentities(stripcslashes(strip_tags($data->active))),
             'role' => htmlspecialchars(stripcslashes(strip_tags($data->role))),
+            'avatarId' => $data->avatarId ? (int)htmlentities(stripcslashes(strip_tags($data->avatarId))) : null,
             'settings' => $data->settings ? json_encode($data->settings) : ''
         );
 
@@ -346,6 +347,7 @@ class UserController extends Controller
             'active' => (int)htmlentities(stripcslashes(strip_tags($data->active))),
             'block' => (int)htmlentities(stripcslashes(strip_tags($data->block))),
             'role' => htmlspecialchars(stripcslashes(strip_tags($data->role))),
+            'avatarId' => $data->avatarId ? (int)htmlentities(stripcslashes(strip_tags($data->avatarId))) : null,
             'settings' => $data->settings ? json_encode($data->settings) : ''
         );
 

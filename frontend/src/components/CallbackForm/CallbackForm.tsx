@@ -3,8 +3,8 @@ import {IBuilding} from '../../@types/IBuilding'
 import {IFeed} from '../../@types/IFeed'
 import FeedService from '../../api/FeedService'
 import Preloader from '../Preloader/Preloader'
-import TextBox from '../TextBox/TextBox'
-import Button from '../Button/Button'
+import TextBox from '../form/TextBox/TextBox'
+import Button from '../form/Button/Button'
 import classes from './CallbackForm.module.scss'
 
 interface Props {

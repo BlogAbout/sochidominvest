@@ -1,7 +1,7 @@
 import React, {useEffect, useRef, useState} from 'react'
 import AttachmentService from '../../api/AttachmentService'
 import {IAttachment} from '../../@types/IAttachment'
-import Button from '../Button/Button'
+import Button from '../form/Button/Button'
 import openPopupAlert from '../PopupAlert/PopupAlert'
 import classes from './FileUploader.module.scss'
 

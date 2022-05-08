@@ -9,7 +9,7 @@ import openContextMenu from '../ContextMenu/ContextMenu'
 import openPopupAttachmentCreate from '../PopupAttachmentCreate/PopupAttachmentCreate'
 import openPopupAlert from '../PopupAlert/PopupAlert'
 import Empty from '../Empty/Empty'
-import BlockingElement from '../BlockingElement/BlockingElement'
+import BlockingElement from '../ui/BlockingElement/BlockingElement'
 import classes from './FileList.module.scss'
 
 interface Props {

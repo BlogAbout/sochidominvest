@@ -1,12 +1,18 @@
 .FileList {
     margin: 15px 0 0 0;
+    width: 100%;
     height: calc(100% - 50px);
+
+    &.overflowX {
+        overflow-x: auto;
+    }
 
     .content {
         display: flex;
         flex-wrap: wrap;
-        width: 100%;
+        width: auto;
         background: #fff;
+        overflow-x: auto;
 
         .dnd {
             display: flex;

@@ -2,10 +2,10 @@ import React, {useState} from 'react'
 import {PopupDisplayOptions, PopupProps} from '../../@types/IPopup'
 import {IBuildingPassed} from '../../@types/IBuilding'
 import {openPopup, removePopup} from '../../helpers/popupHelper'
-import CheckBox from '../CheckBox/CheckBox'
+import CheckBox from '../form/CheckBox/CheckBox'
 import NumberBox from '../NumberBox/NumberBox'
-import {Content, Footer, Popup} from '../Popup/Popup'
-import Button from '../Button/Button'
+import {Content, Footer, Popup} from '../popup/Popup/Popup'
+import Button from '../form/Button/Button'
 import classes from './PopupPassedSelector.module.scss'
 
 interface Props extends PopupProps {

@@ -6,8 +6,8 @@ import Empty from '../Empty/Empty'
 import ComboBox from '../ComboBox/ComboBox'
 import SelectorBox from '../SelectorBox/SelectorBox'
 import {ISelector} from '../../@types/ISelector'
-import CheckBox from '../CheckBox/CheckBox'
-import BlockingElement from '../BlockingElement/BlockingElement'
+import CheckBox from '../form/CheckBox/CheckBox'
+import BlockingElement from '../ui/BlockingElement/BlockingElement'
 import classes from './SidebarLeft.module.scss'
 
 const cx = classNames.bind(classes)

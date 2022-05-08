@@ -3,7 +3,7 @@ import {ITag} from '../../@types/ITag'
 import openPopupTagSelector from '../PopupTagSelector/PopupTagSelector'
 import {useTypedSelector} from '../../hooks/useTypedSelector'
 import {useActions} from '../../hooks/useActions'
-import Box from '../Box/Box'
+import Box from '../form/Box/Box'
 
 interface Props {
     tags?: number[]

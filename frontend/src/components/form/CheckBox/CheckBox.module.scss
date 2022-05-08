@@ -1,0 +1,98 @@
+.checkbox {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    max-width: 100%;
+    color: #000;
+}
+
+.box_classic {
+    display: flex;
+    align-items: center;
+    width: 15px;
+    height: 15px;
+}
+
+.box_modern {
+    composes: box_classic;
+    width: 30px;
+}
+
+.check_on {
+    width: 15px;
+    height: 15px;
+    border-radius: 1px;
+    border: 1px solid #075ea5;
+    font-size: 13px;
+    line-height: 13px;
+    text-align: center;
+}
+
+.check_off {
+    composes: check_on;
+}
+
+.ellipse {
+    display: flex;
+    width: 30px;
+    height: 7px;
+    border-radius: 3px;
+    position: relative;
+
+    transition: background-color .2s ease-in-out;
+}
+
+.ellipse_on {
+    composes: ellipse;
+    background-color: #bee17e;
+}
+
+.ellipse_off {
+    composes: ellipse;
+    background-color: #e1e3df;
+}
+
+.circle {
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    margin-top: -4px;
+    box-sizing: border-box;
+    position: absolute;
+    box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.3);
+
+    transition: background-color .2s ease-in-out, border .2s ease-in-out, left .2s ease-in-out;
+}
+
+.circle_on {
+    composes: circle;
+    background-color: #74b65f;
+    border: 1px solid #74b65f;
+    left: 15px;
+
+}
+
+.circle_off {
+    composes: circle;
+    background-color: #ffffff;
+    border: 1px solid #075ea5;
+    left: 0;
+}
+
+.label {
+    font-size: 14px;
+    user-select: none;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.label_left {
+    composes: label;
+    padding-right: 10px;
+}
+
+.label_right {
+    composes: label;
+    padding-left: 10px;
+}

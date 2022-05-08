@@ -1,7 +1,7 @@
 import React from 'react'
 import Empty from '../Empty/Empty'
 import PartnerItem from './components/PartnerItem/PartnerItem'
-import BlockingElement from '../BlockingElement/BlockingElement'
+import BlockingElement from '../ui/BlockingElement/BlockingElement'
 import {IPartner} from '../../@types/IPartner'
 import classes from './PartnerList.module.scss'
 

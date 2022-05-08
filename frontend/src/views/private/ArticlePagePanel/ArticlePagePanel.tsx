@@ -1,28 +1,35 @@
 import React, {useEffect, useState} from 'react'
-import Helmet from 'react-helmet'
-import {compareText} from '../../../helpers/filterHelper'
-import Button from '../../../components/Button/Button'
-import openPopupArticleCreate from '../../../components/PopupArticleCreate/PopupArticleCreate'
-import ArticleList from '../../../components/ArticleList/ArticleList'
-import SearchBox from '../../../components/SearchBox/SearchBox'
-import SidebarLeft from '../../../components/SidebarLeft/SidebarLeft'
-import {IArticle} from '../../../@types/IArticle'
-import {IFilterContent} from '../../../@types/IFilter'
+import {useNavigate} from 'react-router-dom'
 import {useTypedSelector} from '../../../hooks/useTypedSelector'
 import {useActions} from '../../../hooks/useActions'
+import {IArticle} from '../../../@types/IArticle'
+import {IFilterBase, IFilterContent} from '../../../@types/IFilter'
+import ArticleService from '../../../api/ArticleService'
+import {compareText} from '../../../helpers/filterHelper'
+import {changeLayout, getLayout} from '../../../helpers/utilHelper'
+import Title from '../../../components/ui/Title/Title'
+import FilterBase from '../../../components/ui/FilterBase/FilterBase'
+import PageInfo from '../../../components/ui/PageInfo/PageInfo'
+import ArticleListContainer from '../../../components/ui/ArticleListContainer/ArticleListContainer'
+import SidebarLeft from '../../../components/SidebarLeft/SidebarLeft'
+import openPopupArticleCreate from '../../../components/popup/PopupArticleCreate/PopupArticleCreate'
+import openPopupAlert from '../../../components/PopupAlert/PopupAlert'
+import openContextMenu from '../../../components/ContextMenu/ContextMenu'
 import classes from './ArticlePagePanel.module.scss'
 
 const ArticlePagePanel: React.FC = () => {
+    const navigate = useNavigate()
+
     const [isUpdate, setIsUpdate] = useState(false)
     const [searchText, setSearchText] = useState('')
     const [filterArticle, setFilterArticle] = useState<IArticle[]>([])
     const [selectedType, setSelectedType] = useState<string[]>([])
-    const [filters, setFilters] = useState({
-
-    })
+    const [filters, setFilters] = useState({})
+    const [layout, setLayout] = useState<'list' | 'till'>(getLayout('articles'))
+    const [fetching, setFetching] = useState(false)
 
     const {role} = useTypedSelector(state => state.userReducer)
-    const {articles, fetching} = useTypedSelector(state => state.articleReducer)
+    const {articles, fetching: fetchingArticle} = useTypedSelector(state => state.articleReducer)
     const {fetchArticleList} = useActions()
 
     useEffect(() => {
@@ -38,7 +45,7 @@ const ArticlePagePanel: React.FC = () => {
     }, [articles, selectedType, filters])
 
     // Обработчик изменений
-    const onSave = () => {
+    const onSaveHandler = () => {
         setIsUpdate(true)
     }
 
@@ -59,10 +66,76 @@ const ArticlePagePanel: React.FC = () => {
         }
     }
 
-    const addHandler = () => {
+    const onChangeLayoutHandler = (value: 'list' | 'till') => {
+        setLayout(value)
+        changeLayout('articles', value)
+    }
+
+    const onClickHandler = (article: IArticle) => {
+        navigate('/panel/article/' + article.id)
+    }
+
+    const onAddHandler = () => {
         openPopupArticleCreate(document.body, {
-            onSave: () => onSave()
+            onSave: () => onSaveHandler()
         })
+    }
+
+    // Редактирование
+    const onEditHandler = (article: IArticle) => {
+        openPopupArticleCreate(document.body, {
+            article: article,
+            onSave: () => {
+                onSaveHandler()
+            }
+        })
+    }
+
+    // Удаление
+    const onRemoveHandler = (article: IArticle) => {
+        openPopupAlert(document.body, {
+            text: `Вы действительно хотите удалить ${article.name}?`,
+            buttons: [
+                {
+                    text: 'Удалить',
+                    onClick: () => {
+                        if (article.id) {
+                            setFetching(true)
+
+                            ArticleService.removeArticle(article.id)
+                                .then(() => {
+                                    onSaveHandler()
+                                })
+                                .catch((error: any) => {
+                                    openPopupAlert(document.body, {
+                                        title: 'Ошибка!',
+                                        text: error.data
+                                    })
+                                })
+                                .finally(() => {
+                                    setFetching(false)
+                                })
+                        }
+                    }
+                },
+                {text: 'Отмена'}
+            ]
+        })
+    }
+
+    // Открытие контекстного меню на элементе
+    const onContextMenu = (e: React.MouseEvent, article: IArticle) => {
+        e.preventDefault()
+
+        if (['director', 'administrator', 'manager'].includes(role)) {
+            const menuItems = [{text: 'Редактировать', onClick: () => onEditHandler(article)}]
+
+            if (['director', 'administrator'].includes(role)) {
+                menuItems.push({text: 'Удалить', onClick: () => onRemoveHandler(article)})
+            }
+
+            openContextMenu(e, menuItems)
+        }
     }
 
     // Кнопки базовой фильтрации
@@ -87,51 +160,57 @@ const ArticlePagePanel: React.FC = () => {
         // })
     }
 
-    const filtersContent: IFilterContent[] = [
+    const filtersContent: IFilterContent[] = []
 
+    const filterBaseButtons: IFilterBase[] = [
+        {
+            key: 'news',
+            title: 'Новости',
+            icon: 'bolt',
+            active: selectedType.includes('news'),
+            onClick: onClickFilterButtonHandler.bind(this)
+        },
+        {
+            key: 'action',
+            title: 'Акции',
+            icon: 'percent',
+            active: selectedType.includes('action'),
+            onClick: onClickFilterButtonHandler.bind(this)
+        },
+        {
+            key: 'article',
+            title: 'Статьи',
+            icon: 'star',
+            active: selectedType.includes('article'),
+            onClick: onClickFilterButtonHandler.bind(this)
+        }
     ]
 
     return (
         <main className={classes.ArticlePagePanel}>
-            <Helmet>
-                <meta charSet='utf-8'/>
-                <title>Статьи - СочиДомИнвест</title>
-                <meta name='description' content=''/>
-                <link rel='canonical' href={`${window.location.href}`}/>
-            </Helmet>
+            <PageInfo title='Статьи'/>
 
             <SidebarLeft filters={filtersContent}/>
 
-            <div className={classes.filter}>
-                <Button type={selectedType.includes('news') ? 'regular' : 'save'}
-                        icon='bolt'
-                        onClick={() => onClickFilterButtonHandler('news')}
-                >Новости</Button>
-
-                <Button type={selectedType.includes('action') ? 'regular' : 'save'}
-                        icon='percent'
-                        onClick={() => onClickFilterButtonHandler('action')}
-                >Акции</Button>
-
-                <Button type={selectedType.includes('article') ? 'regular' : 'save'}
-                        icon='star'
-                        onClick={() => onClickFilterButtonHandler('article')}
-                >Статьи</Button>
-
-                <SearchBox value={searchText} onChange={search.bind(this)}/>
-            </div>
+            <FilterBase buttons={filterBaseButtons} valueSearch={searchText} onSearch={search.bind(this)} showSearch/>
 
             <div className={classes.Content}>
-                <h1>
-                    <span>Статьи</span>
+                <Title type={1}
+                       layout={layout}
+                       showAdd={['director', 'administrator', 'manager'].includes(role)}
+                       onAdd={onAddHandler.bind(this)}
+                       onChangeLayout={onChangeLayoutHandler.bind(this)}
+                       showChangeLayout
+                >Статьи</Title>
 
-                    {['director', 'administrator', 'manager'].includes(role) ?
-                        <Button type='apply' icon='plus' onClick={addHandler.bind(this)}>Добавить</Button>
-                        : null
-                    }
-                </h1>
-
-                <ArticleList articles={filterArticle} fetching={fetching} onSave={onSave.bind(this)}/>
+                <ArticleListContainer articles={filterArticle}
+                                      fetching={fetching || fetchingArticle}
+                                      layout={layout}
+                                      onClick={onClickHandler.bind(this)}
+                                      onEdit={onEditHandler.bind(this)}
+                                      onRemove={onRemoveHandler.bind(this)}
+                                      onContextMenu={onContextMenu.bind(this)}
+                />
             </div>
         </main>
     )

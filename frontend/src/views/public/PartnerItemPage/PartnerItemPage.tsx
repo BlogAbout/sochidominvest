@@ -7,7 +7,7 @@ import {getFormatDate} from '../../../helpers/dateHelper'
 import {IPartner} from '../../../@types/IPartner'
 import {useTypedSelector} from '../../../hooks/useTypedSelector'
 import {useActions} from '../../../hooks/useActions'
-import BlockingElement from '../../../components/BlockingElement/BlockingElement'
+import BlockingElement from '../../../components/ui/BlockingElement/BlockingElement'
 import classes from './PartnerItemPage.module.scss'
 
 type PartnerItemPageParams = {

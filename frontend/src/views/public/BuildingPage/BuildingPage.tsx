@@ -9,7 +9,7 @@ import {IBuilding} from '../../../@types/IBuilding'
 import {ISelector} from '../../../@types/ISelector'
 import {buildingTypes, getDistrictText, getPassedText} from '../../../helpers/buildingHelper'
 import BuildingService from '../../../api/BuildingService'
-import BlockingElement from '../../../components/BlockingElement/BlockingElement'
+import BlockingElement from '../../../components/ui/BlockingElement/BlockingElement'
 import Empty from '../../../components/Empty/Empty'
 import classes from './BuildingPage.module.scss'
 

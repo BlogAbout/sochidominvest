@@ -1,18 +1,25 @@
 import React, {useEffect, useState} from 'react'
-import Helmet from 'react-helmet'
-import {compareText} from '../../../helpers/filterHelper'
-import openPopupUserCreate from '../../../components/PopupUserCreate/PopupUserCreate'
-import Button from '../../../components/Button/Button'
-import UserList from '../../../components/UserList/UserList'
-import SearchBox from '../../../components/SearchBox/SearchBox'
-import SidebarLeft from '../../../components/SidebarLeft/SidebarLeft'
-import {IUser} from '../../../@types/IUser'
-import {IFilterContent} from '../../../@types/IFilter'
+import {useNavigate} from 'react-router-dom'
 import {useTypedSelector} from '../../../hooks/useTypedSelector'
 import {useActions} from '../../../hooks/useActions'
+import {IUser} from '../../../@types/IUser'
+import {IFilterBase, IFilterContent} from '../../../@types/IFilter'
+import UserService from '../../../api/UserService'
+import {compareText} from '../../../helpers/filterHelper'
+import {changeLayout, getLayout} from '../../../helpers/utilHelper'
+import Title from '../../../components/ui/Title/Title'
+import FilterBase from '../../../components/ui/FilterBase/FilterBase'
+import PageInfo from '../../../components/ui/PageInfo/PageInfo'
+import UserListContainer from '../../../components/ui/UserListContainer/UserListContainer'
+import SidebarLeft from '../../../components/SidebarLeft/SidebarLeft'
+import openPopupUserCreate from '../../../components/popup/PopupUserCreate/PopupUserCreate'
+import openPopupAlert from '../../../components/PopupAlert/PopupAlert'
+import openContextMenu from '../../../components/ContextMenu/ContextMenu'
 import classes from './UserPagePanel.module.scss'
 
 const UserPagePanel: React.FC = () => {
+    const navigate = useNavigate()
+
     const [isUpdate, setIsUpdate] = useState(false)
     const [searchText, setSearchText] = useState('')
     const [filterUser, setFilterUser] = useState<IUser[]>([])
@@ -20,8 +27,10 @@ const UserPagePanel: React.FC = () => {
     const [filters, setFilters] = useState({
         block: ['0']
     })
+    const [layout, setLayout] = useState<'list' | 'till'>(getLayout('users'))
+    const [fetching, setFetching] = useState(false)
 
-    const {users, fetching, role} = useTypedSelector(state => state.userReducer)
+    const {users, fetching: fetchingUser, role} = useTypedSelector(state => state.userReducer)
     const {fetchUserList} = useActions()
 
     useEffect(() => {
@@ -37,7 +46,7 @@ const UserPagePanel: React.FC = () => {
     }, [users, selectedType, filters])
 
     // Обработчик изменений
-    const onSave = () => {
+    const onSaveHandler = () => {
         setIsUpdate(true)
     }
 
@@ -83,13 +92,113 @@ const UserPagePanel: React.FC = () => {
         }
     }
 
+    const onChangeLayoutHandler = (value: 'list' | 'till') => {
+        setLayout(value)
+        changeLayout('users', value)
+    }
+
+    const onClickHandler = (user: IUser) => {
+        navigate('/panel/user/' + user.id)
+    }
+
     // Добавление нового пользователя
-    const onClickAddHandler = () => {
+    const onAddHandler = () => {
         openPopupUserCreate(document.body, {
+            role: role,
             onSave: () => {
-                onSave()
+                onSaveHandler()
             }
         })
+    }
+
+    // Редактирование пользователя
+    const onEditHandler = (user: IUser) => {
+        openPopupUserCreate(document.body, {
+            user: user,
+            role: role,
+            onSave: () => {
+                onSaveHandler()
+            }
+        })
+    }
+
+    // Удаление пользователя
+    const onRemoveHandler = (user: IUser) => {
+        openPopupAlert(document.body, {
+            text: `Вы действительно хотите удалить ${user.firstName}?`,
+            buttons: [
+                {
+                    text: 'Удалить',
+                    onClick: () => {
+                        if (user.id) {
+                            setFetching(true)
+
+                            UserService.removeUser(user.id)
+                                .then(() => {
+                                    onSaveHandler()
+                                })
+                                .catch((error: any) => {
+                                    openPopupAlert(document.body, {
+                                        title: 'Ошибка!',
+                                        text: error.data
+                                    })
+                                })
+                                .finally(() => {
+                                    setFetching(false)
+                                })
+                        }
+                    }
+                },
+                {text: 'Отмена'}
+            ]
+        })
+    }
+
+    // Блокировка пользователя
+    const onBlockingHandler = (user: IUser) => {
+        const userInfo: IUser = {...user}
+        userInfo.block = user.block ? 0 : 1
+
+        UserService.saveUser(userInfo)
+            .then(() => {
+                onSaveHandler()
+            })
+            .catch((error: any) => {
+                openPopupAlert(document.body, {
+                    title: 'Ошибка!',
+                    text: error.data
+                })
+            })
+            .finally(() => {
+                setFetching(false)
+            })
+    }
+
+    // Открытие контекстного меню на элементе
+    const onContextMenu = (e: React.MouseEvent, user: IUser) => {
+        e.preventDefault()
+
+        if (['director', 'administrator', 'manager'].includes(role)) {
+            const menuItems = [{
+                text: 'Редактировать',
+                onClick: () => onEditHandler(user)
+            }]
+
+            if (user.role !== 'director') {
+                if (['director', 'administrator'].includes(role)) {
+                    menuItems.push({
+                        text: user.block ? 'Разблокировать' : 'Заблокировать',
+                        onClick: () => onBlockingHandler(user)
+                    })
+                    menuItems.push({
+                        text: 'Удалить',
+                        onClick: () => onRemoveHandler(user)
+                    })
+                }
+            }
+
+            openContextMenu(e, menuItems)
+        }
     }
 
     // Кнопки базовой фильтрации
@@ -128,47 +237,56 @@ const UserPagePanel: React.FC = () => {
         }
     ]
 
+    const filterBaseButtons: IFilterBase[] = [
+        {
+            key: 'employee',
+            title: 'Сотрудники',
+            icon: 'headset',
+            active: selectedType.includes('employee'),
+            onClick: onClickFilterButtonHandler.bind(this)
+        },
+        {
+            key: 'partner',
+            title: 'Партнёры',
+            icon: 'user-tie',
+            active: selectedType.includes('partner'),
+            onClick: onClickFilterButtonHandler.bind(this)
+        },
+        {
+            key: 'client',
+            title: 'Клиенты',
+            icon: 'user',
+            active: selectedType.includes('client'),
+            onClick: onClickFilterButtonHandler.bind(this)
+        }
+    ]
+
     return (
         <main className={classes.UserPagePanel}>
-            <Helmet>
-                <meta charSet='utf-8'/>
-                <title>Пользователи - СочиДомИнвест</title>
-                <meta name='description' content=''/>
-                <link rel='canonical' href={`${window.location.href}`}/>
-            </Helmet>
+            <PageInfo title='Пользователи'/>
 
             <SidebarLeft filters={filtersContent}/>
 
-            <div className={classes.filter}>
-                <Button type={selectedType.includes('employee') ? 'regular' : 'save'}
-                        icon='headset'
-                        onClick={() => onClickFilterButtonHandler('employee')}
-                >Сотрудники</Button>
-
-                <Button type={selectedType.includes('partner') ? 'regular' : 'save'}
-                        icon='user-tie'
-                        onClick={() => onClickFilterButtonHandler('partner')}
-                >Партнёры</Button>
-
-                <Button type={selectedType.includes('client') ? 'regular' : 'save'}
-                        icon='user'
-                        onClick={() => onClickFilterButtonHandler('client')}
-                >Клиенты</Button>
-
-                <SearchBox value={searchText} onChange={search.bind(this)}/>
-            </div>
+            <FilterBase buttons={filterBaseButtons} valueSearch={searchText} onSearch={search.bind(this)} showSearch/>
 
             <div className={classes.Content}>
-                <h1>
-                    <span>Пользователи</span>
+                <Title type={1}
+                       layout={layout}
+                       showAdd={['director', 'administrator', 'manager'].includes(role)}
+                       onAdd={onAddHandler.bind(this)}
+                       onChangeLayout={onChangeLayoutHandler.bind(this)}
+                       showChangeLayout
+                >Пользователи</Title>
 
-                    {['director', 'administrator', 'manager'].includes(role) ?
-                        <Button type='apply' icon='plus' onClick={onClickAddHandler.bind(this)}>Добавить</Button>
-                        : null
-                    }
-                </h1>
-
-                <UserList users={filterUser} fetching={fetching} onSave={onSave.bind(this)}/>
+                <UserListContainer users={filterUser}
+                                   fetching={fetching || fetchingUser}
+                                   layout={layout}
+                                   onClick={onClickHandler.bind(this)}
+                                   onEdit={onEditHandler.bind(this)}
+                                   onRemove={onRemoveHandler.bind(this)}
+                                   onBlocking={onBlockingHandler.bind(this)}
+                                   onContextMenu={onContextMenu.bind(this)}
+                />
             </div>
         </main>
     )

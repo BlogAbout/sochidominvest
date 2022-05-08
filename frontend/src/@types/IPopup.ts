@@ -8,6 +8,7 @@ export interface PopupProps extends React.Attributes {
 export interface PopupDisplayOptions {
     fullScreen?: boolean
     rightPanel?: boolean
+    leftPanel?: boolean
     alwaysTop?: boolean
     offsetLeft?: number
     offsetTop?: number

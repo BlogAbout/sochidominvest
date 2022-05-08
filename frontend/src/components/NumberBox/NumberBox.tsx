@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
 import {round} from '../../helpers/numberHelper'
 import {sliceLastSymbol} from '../../helpers/stringHelper'
-import Box from '../Box/Box'
+import Box from '../form/Box/Box'
 
 interface Props extends React.PropsWithChildren<any> {
     value?: string | number

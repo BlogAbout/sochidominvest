@@ -4,16 +4,16 @@ import {PopupProps} from '../../@types/IPopup'
 import {IUser} from '../../@types/IUser'
 import UserService from '../../api/UserService'
 import {getPopupContainer, openPopup, removePopup} from '../../helpers/popupHelper'
-import {Content, Footer, Header, Popup} from '../Popup/Popup'
-import BlockingElement from '../BlockingElement/BlockingElement'
+import {Content, Footer, Header, Popup} from '../popup/Popup/Popup'
+import BlockingElement from '../ui/BlockingElement/BlockingElement'
 import Empty from '../Empty/Empty'
 import openContextMenu from '../ContextMenu/ContextMenu'
-import openPopupUserCreate from '../PopupUserCreate/PopupUserCreate'
-import showBackgroundBlock from '../BackgroundBlock/BackgroundBlock'
+import openPopupUserCreate from '../popup/PopupUserCreate/PopupUserCreate'
+import showBackgroundBlock from '../ui/BackgroundBlock/BackgroundBlock'
 import ButtonAdd from '../ButtonAdd/ButtonAdd'
 import SearchBox from '../SearchBox/SearchBox'
-import CheckBox from '../CheckBox/CheckBox'
-import Button from '../Button/Button'
+import CheckBox from '../form/CheckBox/CheckBox'
+import Button from '../form/Button/Button'
 import openPopupAlert from '../PopupAlert/PopupAlert'
 import {useTypedSelector} from '../../hooks/useTypedSelector'
 import {useActions} from '../../hooks/useActions'
@@ -119,6 +119,7 @@ const PopupUserSelector: React.FC<Props> = (props) => {
     // Добавление нового элемента
     const onClickAdd = (e: React.MouseEvent) => {
         openPopupUserCreate(e.currentTarget, {
+            role: role,
             onSave: () => {
                 setIsUpdate(true)
             }
@@ -129,6 +130,7 @@ const PopupUserSelector: React.FC<Props> = (props) => {
     const onClickEdit = (e: React.MouseEvent, user: IUser) => {
         openPopupUserCreate(e.currentTarget, {
             user: user,
+            role: role,
             onSave: () => {
                 setIsUpdate(true)
             }

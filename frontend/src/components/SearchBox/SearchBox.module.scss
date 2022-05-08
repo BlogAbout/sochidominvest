@@ -1,11 +1,11 @@
 .search_wrapper {
-    composes: box from '../Box/Box.module.scss';
+    composes: box from '../form/Box/Box.module.scss';
     transition: all 0.3s ease-in;
     flex-shrink: 0;
 }
 
 .input_search {
-    composes: input from '../Box/Box.module.scss';
+    composes: input from '../form/Box/Box.module.scss';
     transition: background-color .3s;
 }
 
@@ -22,7 +22,7 @@
 }
 
 .cross {
-    composes: cross from '../Box/Box.module.scss';
+    composes: cross from '../form/Box/Box.module.scss';
     display: block;
     border-color: transparent;
 }

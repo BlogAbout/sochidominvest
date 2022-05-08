@@ -10,6 +10,8 @@ export interface IUser {
     lastActive?: string | null
     settings?: IUserSetting | null
     token?: string
+    avatarId?: number | null
+    avatar?: string | null
 }
 
 export interface IUserSetting {

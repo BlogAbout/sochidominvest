@@ -1,7 +1,7 @@
 import React from 'react'
 import Empty from '../Empty/Empty'
 import DocumentItem from './components/DocumentItem/DocumentItem'
-import BlockingElement from '../BlockingElement/BlockingElement'
+import BlockingElement from '../ui/BlockingElement/BlockingElement'
 import {IDocument} from '../../@types/IDocument'
 import classes from './DocumentList.module.scss'
 

@@ -44,7 +44,16 @@ class UserModel extends Model
      */
     public static function fetchUserById(int $id): array
     {
-        $sql = "SELECT * FROM `sdi_user` WHERE id = :id";
+        $sql = "
+            SELECT sdi.*,
+                   (
+                       SELECT a.`content`
+                       FROM `sdi_attachment` AS a
+                       WHERE a.`id` = sdi.`id_avatar` AND a.`active` IN (0, 1)
+                   ) AS avatar
+            FROM `sdi_user` sdi
+            WHERE sdi.id = :id
+        ";
 
         parent::query($sql);
         parent::bindParams('id', $id);
@@ -70,7 +79,12 @@ class UserModel extends Model
         $sqlWhere = [];
 
         $sql = "
-            SELECT sdi.*
+            SELECT sdi.*,
+                   (
+                       SELECT a.`content`
+                       FROM `sdi_attachment` AS a
+                       WHERE a.`id` = sdi.`id_avatar` AND a.`active` IN (0, 1)
+                   ) AS avatar
             FROM `sdi_user` sdi
         ";
 
@@ -132,9 +146,9 @@ class UserModel extends Model
     {
         $sql = "
             INSERT INTO `sdi_user`
-                (first_name, email, phone, password, date_created, date_update, last_active, active, role, settings)
+                (first_name, email, phone, password, date_created, date_update, last_active, active, role, id_avatar, settings)
             VALUES
-                (:firstName, :email, :phone, :password, :dateCreated, :dateUpdate, :lastActive, :active, :role, :settings)
+                (:firstName, :email, :phone, :password, :dateCreated, :dateUpdate, :lastActive, :active, :role, :avatarId, :settings)
         ";
 
         parent::query($sql);
@@ -148,6 +162,7 @@ class UserModel extends Model
         parent::bindParams('lastActive', $payload['lastActive']);
         parent::bindParams('active', $payload['active']);
         parent::bindParams('role', $payload['role']);
+        parent::bindParams('avatarId', $payload['avatarId']);
         parent::bindParams('settings', $payload['settings']);
 
         $user = parent::execute();
@@ -187,6 +202,7 @@ class UserModel extends Model
                     active = :active,
                     block = :block,
                     role = :role,
+                    id_avatar = :avatarId,
                     settings = :settings
                 WHERE id = :id
             ";
@@ -201,6 +217,7 @@ class UserModel extends Model
                     active = :active,
                     block = :block,
                     role = :role,
+                    id_avatar = :avatarId,
                     settings = :settings
                 WHERE id = :id
             ";
@@ -216,6 +233,7 @@ class UserModel extends Model
         parent::bindParams('active', $payload['active']);
         parent::bindParams('block', $payload['block']);
         parent::bindParams('role', $payload['role']);
+        parent::bindParams('avatarId', $payload['avatarId']);
         parent::bindParams('settings', $payload['settings']);
 
         if ($payload['password'] && $payload['password'] !== '') {
@@ -270,6 +288,8 @@ class UserModel extends Model
             'active' => (int)$data['active'],
             'block' => (int)$data['block'],
             'role' => $data['role'],
+            'avatarId' => (int)$data['id_avatar'],
+            'avatar' => $data['avatar'],
             'settings' => $data['settings'] ? json_decode($data['settings']) : null
         ];
     }

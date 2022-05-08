@@ -3,7 +3,7 @@ import {useTypedSelector} from '../../hooks/useTypedSelector'
 import {IFeed} from '../../@types/IFeed'
 import Empty from '../Empty/Empty'
 import SupportItem from './components/SupportItem/SupportItem'
-import BlockingElement from '../BlockingElement/BlockingElement'
+import BlockingElement from '../ui/BlockingElement/BlockingElement'
 import classes from './SupportList.module.scss'
 
 interface Props {

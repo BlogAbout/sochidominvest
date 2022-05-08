@@ -3,7 +3,7 @@ import Helmet from 'react-helmet'
 import {useTypedSelector} from '../../../../../hooks/useTypedSelector'
 import {useActions} from '../../../../../hooks/useActions'
 import WidgetList from '../../../../../components/WidgetList/WidgetList'
-import Button from '../../../../../components/Button/Button'
+import Button from '../../../../../components/form/Button/Button'
 import classes from './WidgetPanel.module.scss'
 
 const WidgetPanel: React.FC = () => {

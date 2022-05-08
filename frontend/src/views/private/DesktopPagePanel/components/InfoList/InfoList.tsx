@@ -4,7 +4,7 @@ import {IBuilding} from '../../../../../@types/IBuilding'
 import {ILog} from '../../../../../@types/ILog'
 import Empty from '../../../../../components/Empty/Empty'
 import InfoItem from '../InfoItem/InfoItem'
-import BlockingElement from '../../../../../components/BlockingElement/BlockingElement'
+import BlockingElement from '../../../../../components/ui/BlockingElement/BlockingElement'
 import classes from './InfoList.module.scss'
 
 interface Props {

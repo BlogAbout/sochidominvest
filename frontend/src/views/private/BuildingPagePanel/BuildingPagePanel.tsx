@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react'
 import Helmet from 'react-helmet'
 import {compareText} from '../../../helpers/filterHelper'
-import Button from '../../../components/Button/Button'
+import Button from '../../../components/form/Button/Button'
 import openPopupBuildingCreate from '../../../components/PopupBuildingCreate/PopupBuildingCreate'
 import openContextMenu from '../../../components/ContextMenu/ContextMenu'
 import BuildingList from '../../../components/BuildingList/BuildingList'

@@ -14,3 +14,8 @@ export const rolesList: ISelector[] = [
     {key: 'administrator', text: 'Администратор', isRegistration: false},
     {key: 'director', text: 'Директор', isRegistration: false, readOnly: true, hidden: true}
 ]
+
+export const getRoleUserText = (key: string) => {
+    const find = rolesList.find((item: ISelector) => item.key === key)
+    return find ? find.text : ''
+}

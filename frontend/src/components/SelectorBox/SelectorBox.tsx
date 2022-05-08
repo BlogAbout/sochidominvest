@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react'
 import {IconProp} from '@fortawesome/fontawesome-svg-core'
 import {ISelector} from '../../@types/ISelector'
 import openPopupSelector from '../PopupSelector/PopupSelector'
-import Box from '../Box/Box'
+import Box from '../form/Box/Box'
 
 interface Props {
     selected: string[]

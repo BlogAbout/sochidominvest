@@ -19,6 +19,7 @@ body {
     color: #075ea5;
     scroll-behavior: smooth;
     font-family: 'PT Serif', serif;
+    overflow-x: hidden;
 }
 
 ::-webkit-scrollbar {
@@ -148,4 +149,63 @@ p {
     left: 50% !important;
     top: 50% !important;
     transform: translate(-50%, -50%);
+}
+
+.center-article-div {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-flex: 1;
+    -webkit-flex: 1 1 auto;
+    -ms-flex: 1 1 auto;
+    flex: 1 1 auto;
+    height: -webkit-calc(100% - 66px);
+    height: calc(100% - 66px);
+}
+
+.center-article-content-div {
+    padding: 12px;
+    -webkit-box-flex: 1;
+    -webkit-flex: 1;
+    -ms-flex: 1;
+    flex: 1;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.full-screen-popup-right {
+    top: 0;
+    right: -100%;
+    bottom: 0;
+    flex: 1 1 auto;
+    -webkit-transition: right .3s;
+    transition: right .3s;
+}
+
+.full-screen-popup-left {
+    top: 0;
+    left: -100%;
+    bottom: 0;
+    flex: 1 1 auto;
+    -webkit-transition: all .3s;
+    transition: left .3s;
+}
+
+.show-popup {
+    right: 0;
+}
+
+.show-popup-right-panel {
+    top: 0;
+    right: 0;
+}
+
+.show-popup-left-panel {
+    top: 0;
+    left: 0;
 }

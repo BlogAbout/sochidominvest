@@ -54,3 +54,9 @@
     padding: 20px 50px 20px 90px;
     overflow: hidden;
 }
+
+@media (max-width: 480px) {
+    .serviceContent {
+        padding: 10px 10px 10px 10px;
+    }
+}

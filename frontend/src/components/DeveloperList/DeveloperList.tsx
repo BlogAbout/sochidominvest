@@ -1,7 +1,7 @@
 import React from 'react'
 import Empty from '../Empty/Empty'
 import DeveloperItem from './components/DeveloperItem/DeveloperItem'
-import BlockingElement from '../BlockingElement/BlockingElement'
+import BlockingElement from '../ui/BlockingElement/BlockingElement'
 import {IDeveloper} from '../../@types/IDeveloper'
 import classes from './DeveloperList.module.scss'
 

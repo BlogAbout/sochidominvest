@@ -11,12 +11,12 @@ import {IUser} from '../../../@types/IUser'
 import {IBuilding} from '../../../@types/IBuilding'
 import {IArticle} from '../../../@types/IArticle'
 import {ILog} from '../../../@types/ILog'
-import Button from '../../../components/Button/Button'
+import Button from '../../../components/form/Button/Button'
 import Empty from '../../../components/Empty/Empty'
 import Preloader from '../../../components/Preloader/Preloader'
-import BlockingElement from '../../../components/BlockingElement/BlockingElement'
+import BlockingElement from '../../../components/ui/BlockingElement/BlockingElement'
 import InfoList from '../DesktopPagePanel/components/InfoList/InfoList'
-import openPopupUserCreate from '../../../components/PopupUserCreate/PopupUserCreate'
+import openPopupUserCreate from '../../../components/popup/PopupUserCreate/PopupUserCreate'
 import classes from './UserItemPagePanel.module.scss'
 
 type UserItemPageParams = {
@@ -118,6 +118,7 @@ const UserItemPagePanel: React.FC = () => {
     const onClickEditHandler = () => {
         openPopupUserCreate(document.body, {
             user: user,
+            role: role,
             onSave: () => {
                 setIsUpdate(true)
             }

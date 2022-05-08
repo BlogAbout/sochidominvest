@@ -38,14 +38,18 @@ import {
     faFileLines,
     faFlag,
     faGear,
+    faGrip,
     faHandshakeAngle,
     faHeading,
     faHeadset,
     faHeart,
     faHouse,
     faHouseUser,
+    faIdCard,
     faImage,
+    faKey,
     faLink,
+    faList,
     faLocationDot,
     faLock,
     faMagnifyingGlass,
@@ -163,7 +167,11 @@ library.add(
     faRectangleAd,
     faHandshakeAngle,
     faMoneyBill1Wave,
-    faS
+    faS,
+    faKey,
+    faList,
+    faGrip,
+    faIdCard
 )
 
 function App() {

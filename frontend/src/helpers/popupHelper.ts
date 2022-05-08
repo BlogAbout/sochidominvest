@@ -54,12 +54,25 @@ export function openPopup(
     }
 
     if (displayOptions.fullScreen && centerDiv) {
-        reactPopupContainer.classList.add('full-screen-popup')
+        if (displayOptions.rightPanel) {
+            reactPopupContainer.classList.add('full-screen-popup-right')
+        }
+
+        if (displayOptions.leftPanel) {
+            reactPopupContainer.classList.add('full-screen-popup-left')
+        }
+
         centerDiv.appendChild(reactPopupContainer)
         reactPopupContainer.getBoundingClientRect()
 
         if (displayOptions.rightPanel) {
             reactPopupContainer.classList.add('show-popup-right-panel')
+        } else {
+            reactPopupContainer.classList.add('show-popup')
+        }
+
+        if (displayOptions.leftPanel) {
+            reactPopupContainer.classList.add('show-popup-left-panel')
         } else {
             reactPopupContainer.classList.add('show-popup')
         }
@@ -269,7 +282,7 @@ export function removePopup(id: string) {
     if (!Object.prototype.hasOwnProperty.call(window, 'externalID')) { // Для внешнего пользователя отдаем .center-article-right-panel-div
         centerDiv = document.querySelector('.center-div')
     } else {
-        centerDiv = document.querySelector('.center-article-right-panel-div')
+        centerDiv = document.querySelector('.center-article-right-panel-div') || document.querySelector('.center-article-left-panel-div')
     }
 
     _removeAutoCloseEvent(id)
@@ -283,6 +296,8 @@ export function removePopup(id: string) {
 
     if (centerDiv && centerDiv.contains(reactPopupContainer)) {
         reactPopupContainer.classList.toggle('show-popup')
+        reactPopupContainer.classList.remove('show-popup-right-panel')
+        reactPopupContainer.classList.remove('show-popup-left-panel')
 
         setTimeout(() => {
             if (reactPopupContainer) {
