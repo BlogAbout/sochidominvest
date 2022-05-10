@@ -78,7 +78,8 @@ class DeveloperController extends Controller
             'active' => (int)htmlentities(stripcslashes(strip_tags($data->active))),
             'dateCreated' => date('Y-m-d H:i:s'),
             'dateUpdate' => date('Y-m-d H:i:s'),
-            'author' => JwtMiddleware::getUserId()
+            'author' => JwtMiddleware::getUserId(),
+            'avatarId' => $data->avatarId ? (int)htmlentities(stripcslashes(strip_tags($data->avatarId))) : null
         );
 
         try {
@@ -169,7 +170,8 @@ class DeveloperController extends Controller
             'phone' => htmlentities(stripcslashes(strip_tags($data->phone))),
             'type' => htmlentities(stripcslashes(strip_tags($data->type))),
             'dateUpdate' => date('Y-m-d H:i:s'),
-            'active' => (int)htmlentities(stripcslashes(strip_tags($data->active)))
+            'active' => (int)htmlentities(stripcslashes(strip_tags($data->active))),
+            'avatarId' => $data->avatarId ? (int)htmlentities(stripcslashes(strip_tags($data->avatarId))) : null
         );
 
         try {

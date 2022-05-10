@@ -1,5 +1,4 @@
 .PartnerList {
-    margin-top: 20px;
     overflow: auto;
     height: 100%;
 
@@ -29,6 +28,18 @@
     }
 
     .list {
-        max-height: calc(100% - 110px);
+        max-height: calc(100% - 51px);
+    }
+}
+
+@media (max-width: 768px) {
+    .PartnerList {
+        .head {
+            display: none;
+        }
+
+        .list {
+            max-height: 100%;
+        }
     }
 }

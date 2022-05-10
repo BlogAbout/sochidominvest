@@ -1,26 +1,35 @@
 import React, {useEffect, useState} from 'react'
-import Helmet from 'react-helmet'
-import {compareText} from '../../../helpers/filterHelper'
-import openPopupDeveloperCreate from '../../../components/PopupDeveloperCreate/PopupDeveloperCreate'
-import Button from '../../../components/form/Button/Button'
-import DeveloperList from '../../../components/DeveloperList/DeveloperList'
-import SearchBox from '../../../components/SearchBox/SearchBox'
-import SidebarLeft from '../../../components/SidebarLeft/SidebarLeft'
-import {IDeveloper} from '../../../@types/IDeveloper'
-import {IFilterContent} from '../../../@types/IFilter'
+import {useNavigate} from 'react-router-dom'
 import {useTypedSelector} from '../../../hooks/useTypedSelector'
 import {useActions} from '../../../hooks/useActions'
+import {IDeveloper} from '../../../@types/IDeveloper'
+import {IFilterBase, IFilterContent} from '../../../@types/IFilter'
+import DeveloperService from '../../../api/DeveloperService'
+import {compareText} from '../../../helpers/filterHelper'
+import {changeLayout, getLayout} from '../../../helpers/utilHelper'
+import Title from '../../../components/ui/Title/Title'
+import FilterBase from '../../../components/ui/FilterBase/FilterBase'
+import PageInfo from '../../../components/ui/PageInfo/PageInfo'
+import DeveloperListContainer from '../../../components/ui/DeveloperListContainer/DeveloperListContainer'
+import SidebarLeft from '../../../components/SidebarLeft/SidebarLeft'
+import openPopupDeveloperCreate from '../../../components/popup/PopupDeveloperCreate/PopupDeveloperCreate'
+import openPopupAlert from '../../../components/PopupAlert/PopupAlert'
+import openContextMenu from '../../../components/ContextMenu/ContextMenu'
 import classes from './DeveloperPagePanel.module.scss'
 
 const DeveloperPagePanel: React.FC = () => {
+    const navigate = useNavigate()
+
     const [isUpdate, setIsUpdate] = useState(false)
     const [searchText, setSearchText] = useState('')
     const [filterDeveloper, setFilterDeveloper] = useState<IDeveloper[]>([])
     const [selectedType, setSelectedType] = useState<string[]>([])
     const [filters, setFilters] = useState({})
+    const [layout, setLayout] = useState<'list' | 'till'>(getLayout('developers'))
+    const [fetching, setFetching] = useState(false)
 
     const {role} = useTypedSelector(state => state.userReducer)
-    const {developers, fetching} = useTypedSelector(state => state.developerReducer)
+    const {developers, fetching: fetchingDeveloper} = useTypedSelector(state => state.developerReducer)
     const {fetchDeveloperList} = useActions()
 
     useEffect(() => {
@@ -36,7 +45,7 @@ const DeveloperPagePanel: React.FC = () => {
     }, [developers, selectedType, filters])
 
     // Обработчик изменений
-    const onSave = () => {
+    const onSaveHandler = () => {
         setIsUpdate(true)
     }
 
@@ -58,13 +67,81 @@ const DeveloperPagePanel: React.FC = () => {
         }
     }
 
+    const onChangeLayoutHandler = (value: 'list' | 'till') => {
+        setLayout(value)
+        changeLayout('developers', value)
+    }
+
+    const onClickHandler = (developer: IDeveloper) => {
+        navigate('/panel/developer/' + developer.id)
+    }
+
     // Добавление нового застройщика
-    const onClickAddHandler = () => {
+    const onAddHandler = () => {
         openPopupDeveloperCreate(document.body, {
             onSave: () => {
-                onSave()
+                onSaveHandler()
             }
         })
+    }
+
+    // Редактирование
+    const onEditHandler = (developer: IDeveloper) => {
+        openPopupDeveloperCreate(document.body, {
+            developer: developer,
+            onSave: () => {
+                onSaveHandler()
+            }
+        })
+    }
+
+    // Удаление
+    const onRemoveHandler = (developer: IDeveloper) => {
+        openPopupAlert(document.body, {
+            text: `Вы действительно хотите удалить ${developer.name}?`,
+            buttons: [
+                {
+                    text: 'Удалить',
+                    onClick: () => {
+                        if (developer.id) {
+                            setFetching(true)
+
+                            DeveloperService.removeDeveloper(developer.id)
+                                .then(() => {
+                                    onSaveHandler()
+                                })
+                                .catch((error: any) => {
+                                    openPopupAlert(document.body, {
+                                        title: 'Ошибка!',
+                                        text: error.data
+                                    })
+                                })
+                                .finally(() => {
+                                    setFetching(false)
+                                })
+                        }
+                    }
+                },
+                {text: 'Отмена'}
+            ]
+        })
+    }
+
+    // Открытие контекстного меню на элементе
+    const onContextMenu = (e: React.MouseEvent, developer: IDeveloper) => {
+        e.preventDefault()
+
+        const menuItems = [{text: 'Открыть', onClick: () => navigate('/panel/developer/' + developer.id)}]
+
+        if (['director', 'administrator', 'manager'].includes(role)) {
+            menuItems.push({text: 'Редактировать', onClick: () => onEditHandler(developer)})
+
+            if (['director', 'administrator'].includes(role)) {
+                menuItems.push({text: 'Удалить', onClick: () => onRemoveHandler(developer)})
+            }
+
+            openContextMenu(e, menuItems)
+        }
     }
 
     // Кнопки базовой фильтрации
@@ -91,37 +168,41 @@ const DeveloperPagePanel: React.FC = () => {
 
     const filtersContent: IFilterContent[] = []
 
+    const filterBaseButtons: IFilterBase[] = [
+        {
+            key: 'constructionCompany',
+            title: 'Строительные компании',
+            icon: 'building-columns',
+            active: selectedType.includes('constructionCompany'),
+            onClick: onClickFilterButtonHandler.bind(this)
+        }
+    ]
+
     return (
         <main className={classes.DeveloperPagePanel}>
-            <Helmet>
-                <meta charSet='utf-8'/>
-                <title>Застройщики - СочиДомИнвест</title>
-                <meta name='description' content=''/>
-                <link rel='canonical' href={`${window.location.href}`}/>
-            </Helmet>
+            <PageInfo title='Застройщики'/>
 
             <SidebarLeft filters={filtersContent}/>
 
-            <div className={classes.filter}>
-                <Button type={selectedType.includes('constructionCompany') ? 'regular' : 'save'}
-                        icon='building-columns'
-                        onClick={() => onClickFilterButtonHandler('constructionCompany')}
-                >Строительные компании</Button>
-
-                <SearchBox value={searchText} onChange={search.bind(this)}/>
-            </div>
+            <FilterBase buttons={filterBaseButtons} valueSearch={searchText} onSearch={search.bind(this)} showSearch/>
 
             <div className={classes.Content}>
-                <h1>
-                    <span>Застройщики</span>
+                <Title type={1}
+                       layout={layout}
+                       showAdd={['director', 'administrator', 'manager'].includes(role)}
+                       onAdd={onAddHandler.bind(this)}
+                       onChangeLayout={onChangeLayoutHandler.bind(this)}
+                       showChangeLayout
+                >Застройщики</Title>
 
-                    {['director', 'administrator', 'manager'].includes(role) ?
-                        <Button type='apply' icon='plus' onClick={onClickAddHandler.bind(this)}>Добавить</Button>
-                        : null
-                    }
-                </h1>
-
-                <DeveloperList developers={filterDeveloper} fetching={fetching} onSave={onSave.bind(this)}/>
+                <DeveloperListContainer developers={filterDeveloper}
+                                        fetching={fetching || fetchingDeveloper}
+                                        layout={layout}
+                                        onClick={onClickHandler.bind(this)}
+                                        onEdit={onEditHandler.bind(this)}
+                                        onRemove={onRemoveHandler.bind(this)}
+                                        onContextMenu={onContextMenu.bind(this)}
+                />
             </div>
         </main>
     )

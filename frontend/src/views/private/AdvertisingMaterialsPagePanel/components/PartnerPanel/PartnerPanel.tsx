@@ -1,23 +1,33 @@
 import React, {useEffect, useState} from 'react'
-import Helmet from 'react-helmet'
+import {useNavigate} from 'react-router-dom'
 import {useTypedSelector} from '../../../../../hooks/useTypedSelector'
 import {useActions} from '../../../../../hooks/useActions'
 import {IPartner} from '../../../../../@types/IPartner'
+import {IFilterBase} from '../../../../../@types/IFilter'
+import PartnerService from '../../../../../api/PartnerService'
 import {compareText} from '../../../../../helpers/filterHelper'
-import Button from '../../../../../components/form/Button/Button'
-import SearchBox from '../../../../../components/SearchBox/SearchBox'
-import PartnerList from '../../../../../components/PartnerList/PartnerList'
-import openPopupPartnerCreate from '../../../../../components/PopupPartnerCreate/PopupPartnerCreate'
+import {changeLayout, getLayout} from '../../../../../helpers/utilHelper'
+import Title from '../../../../../components/ui/Title/Title'
+import FilterBase from '../../../../../components/ui/FilterBase/FilterBase'
+import PageInfo from '../../../../../components/ui/PageInfo/PageInfo'
+import PartnerListContainer from '../../../../../components/ui/PartnerListContainer/PartnerListContainer'
+import openPopupPartnerCreate from '../../../../../components/popup/PopupPartnerCreate/PopupPartnerCreate'
+import openPopupAlert from '../../../../../components/PopupAlert/PopupAlert'
+import openContextMenu from '../../../../../components/ContextMenu/ContextMenu'
 import classes from './PartnerPanel.module.scss'
 
 const PartnerPanel: React.FC = () => {
+    const navigate = useNavigate()
+
     const [isUpdate, setIsUpdate] = useState(false)
     const [searchText, setSearchText] = useState('')
     const [filterPartner, setFilterPartner] = useState<IPartner[]>([])
     const [selectedType, setSelectedType] = useState<string[]>([])
+    const [layout, setLayout] = useState<'list' | 'till'>(getLayout('partners'))
+    const [fetching, setFetching] = useState(false)
 
     const {role} = useTypedSelector(state => state.userReducer)
-    const {partners, fetching} = useTypedSelector(state => state.partnerReducer)
+    const {partners, fetching: fetchingPartner} = useTypedSelector(state => state.partnerReducer)
     const {fetchPartnerList} = useActions()
 
     useEffect(() => {
@@ -33,7 +43,7 @@ const PartnerPanel: React.FC = () => {
     }, [partners, selectedType])
 
     // Обработчик изменений
-    const onSave = () => {
+    const onSaveHandler = () => {
         setIsUpdate(true)
     }
 
@@ -54,10 +64,76 @@ const PartnerPanel: React.FC = () => {
         }
     }
 
-    const addHandler = () => {
+    const onChangeLayoutHandler = (value: 'list' | 'till') => {
+        setLayout(value)
+        changeLayout('partners', value)
+    }
+
+    const onClickHandler = (partner: IPartner) => {
+        navigate('/panel/partner/' + partner.id)
+    }
+
+    const onAddHandler = () => {
         openPopupPartnerCreate(document.body, {
-            onSave: () => onSave()
+            onSave: () => onSaveHandler()
         })
+    }
+
+    // Редактирование
+    const onEditHandler = (partner: IPartner) => {
+        openPopupPartnerCreate(document.body, {
+            partner: partner,
+            onSave: () => {
+                onSaveHandler()
+            }
+        })
+    }
+
+    // Удаление
+    const onRemoveHandler = (partner: IPartner) => {
+        openPopupAlert(document.body, {
+            text: `Вы действительно хотите удалить ${partner.name}?`,
+            buttons: [
+                {
+                    text: 'Удалить',
+                    onClick: () => {
+                        if (partner.id) {
+                            setFetching(true)
+
+                            PartnerService.removePartner(partner.id)
+                                .then(() => {
+                                    onSaveHandler()
+                                })
+                                .catch((error: any) => {
+                                    openPopupAlert(document.body, {
+                                        title: 'Ошибка!',
+                                        text: error.data
+                                    })
+                                })
+                                .finally(() => {
+                                    setFetching(false)
+                                })
+                        }
+                    }
+                },
+                {text: 'Отмена'}
+            ]
+        })
+    }
+
+    // Открытие контекстного меню на элементе
+    const onContextMenu = (e: React.MouseEvent, partner: IPartner) => {
+        e.preventDefault()
+
+        if (['director', 'administrator', 'manager'].includes(role)) {
+            const menuItems = [{text: 'Редактировать', onClick: () => onEditHandler(partner)}]
+
+            if (['director', 'administrator'].includes(role)) {
+                menuItems.push({text: 'Удалить', onClick: () => onRemoveHandler(partner)})
+            }
+
+            openContextMenu(e, menuItems)
+        }
     }
 
     // Кнопки базовой фильтрации
@@ -69,40 +145,46 @@ const PartnerPanel: React.FC = () => {
         }
     }
 
+    const filterBaseButtons: IFilterBase[] = [
+        {
+            key: 'partner',
+            title: 'Партнеры',
+            icon: 'handshake-angle',
+            active: selectedType.includes('partner'),
+            onClick: onClickFilterButtonHandler.bind(this)
+        },
+        {
+            key: 'sponsor',
+            title: 'Спонсоры',
+            icon: 'money-bill-1-wave',
+            active: selectedType.includes('sponsor'),
+            onClick: onClickFilterButtonHandler.bind(this)
+        }
+    ]
+
     return (
         <main className={classes.PartnerPanel}>
-            <Helmet>
-                <meta charSet='utf-8'/>
-                <title>Спонсоры и партнеры - СочиДомИнвест</title>
-                <meta name='description' content=''/>
-                <link rel='canonical' href={`${window.location.href}`}/>
-            </Helmet>
+            <PageInfo title='Спонсоры и партнеры'/>
 
-            <div className={classes.filter}>
-                <Button type={selectedType.includes('partner') ? 'regular' : 'save'}
-                        icon='handshake-angle'
-                        onClick={() => onClickFilterButtonHandler('partner')}
-                >Партнеры</Button>
-
-                <Button type={selectedType.includes('sponsor') ? 'regular' : 'save'}
-                        icon='money-bill-1-wave'
-                        onClick={() => onClickFilterButtonHandler('sponsor')}
-                >Спонсоры</Button>
-
-                <SearchBox value={searchText} onChange={search.bind(this)}/>
-            </div>
+            <FilterBase buttons={filterBaseButtons} valueSearch={searchText} onSearch={search.bind(this)} showSearch/>
 
             <div className={classes.Content}>
-                <h1>
-                    <span>Спонсоры и партнеры</span>
+                <Title type={1}
+                       layout={layout}
+                       showAdd={['director', 'administrator', 'manager'].includes(role)}
+                       onAdd={onAddHandler.bind(this)}
+                       onChangeLayout={onChangeLayoutHandler.bind(this)}
+                       showChangeLayout
+                >Спонсоры и партнеры</Title>
 
-                    {['director', 'administrator', 'manager'].includes(role) ?
-                        <Button type='apply' icon='plus' onClick={addHandler.bind(this)}>Добавить</Button>
-                        : null
-                    }
-                </h1>
-
-                <PartnerList partners={filterPartner} fetching={fetching} onSave={onSave.bind(this)}/>
+                <PartnerListContainer partners={filterPartner}
+                                      fetching={fetching || fetchingPartner}
+                                      layout={layout}
+                                      onClick={onClickHandler.bind(this)}
+                                      onEdit={onEditHandler.bind(this)}
+                                      onRemove={onRemoveHandler.bind(this)}
+                                      onContextMenu={onContextMenu.bind(this)}
+                />
             </div>
         </main>
     )

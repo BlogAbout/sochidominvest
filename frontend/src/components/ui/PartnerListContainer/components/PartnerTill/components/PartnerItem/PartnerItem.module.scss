@@ -1,4 +1,4 @@
-.ArticleItem {
+.PartnerItem {
     padding: 8px 10px;
     background-color: #fff;
     margin-bottom: 15px;
@@ -52,13 +52,13 @@
 }
 
 @media (max-width: 1024px) {
-    .ArticleItem {
+    .PartnerItem {
         width: 100%;
     }
 }
 
 @media (max-width: 480px) {
-    .ArticleItem {
+    .PartnerItem {
         .itemContent {
             padding: 5px;
 

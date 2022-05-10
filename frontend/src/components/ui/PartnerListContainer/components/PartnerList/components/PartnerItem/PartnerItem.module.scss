@@ -17,6 +17,10 @@
         box-shadow: 6px 6px 8px rgba(0, 0, 0, 0.7);
     }
 
+    &.disabled {
+        filter: grayscale(1);
+    }
+
     .name {
         flex-grow: 1;
     }

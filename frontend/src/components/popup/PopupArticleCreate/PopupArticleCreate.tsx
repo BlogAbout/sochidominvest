@@ -5,27 +5,25 @@ import ArticleService from '../../../api/ArticleService'
 import AttachmentService from '../../../api/AttachmentService'
 import {PopupDisplayOptions, PopupProps} from '../../../@types/IPopup'
 import {IArticle} from '../../../@types/IArticle'
-import {ITab} from '../../../@types/ITab'
 import {IAttachment} from '../../../@types/IAttachment'
 import {articleTypes} from '../../../helpers/articleHelper'
 import {getPopupContainer, openPopup, removePopup} from '../../../helpers/popupHelper'
 import showBackgroundBlock from '../../ui/BackgroundBlock/BackgroundBlock'
 import openPopupAlert from '../../PopupAlert/PopupAlert'
-import {Content, Footer, Header, Popup} from '../Popup/Popup'
+import {Footer, Popup} from '../Popup/Popup'
 import BlockingElement from '../../ui/BlockingElement/BlockingElement'
 import TextBox from '../../form/TextBox/TextBox'
 import Button from '../../form/Button/Button'
 import CheckBox from '../../form/CheckBox/CheckBox'
 import TextAreaBox from '../../TextAreaBox/TextAreaBox'
 import ComboBox from '../../ComboBox/ComboBox'
-import Tabs from '../../Tabs/Tabs'
 import BuildingBox from '../../form/BuildingBox/BuildingBox'
 import FileList from '../../FileList/FileList'
+import Title from '../../ui/Title/Title'
+import Label from '../../form/Label/Label'
 import openPopupFileManager from '../../PopupFileManager/PopupFileManager'
 import {sortAttachments} from '../../../helpers/attachmentHelper'
 import classes from './PopupArticleCreate.module.scss'
-import Title from "../../ui/Title/Title";
-import Label from "../../form/Label/Label";
 
 interface Props extends PopupProps {
     article?: IArticle | null
@@ -195,7 +193,6 @@ const PopupArticleCreate: React.FC<Props> = (props) => {
                                      description: value
                                  })}
                                  placeHolder='Введите текст статьи'
-                                 icon='paragraph'
                                  isVisual={true}
                     />
                 </div>

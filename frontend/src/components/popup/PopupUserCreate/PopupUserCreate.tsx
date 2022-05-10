@@ -17,7 +17,7 @@ import CheckBox from '../../form/CheckBox/CheckBox'
 import ComboBox from '../../ComboBox/ComboBox'
 import Label from '../../form/Label/Label'
 import Title from '../../ui/Title/Title'
-import openPopupFileManager from '../../PopupFileManager/PopupFileManager'
+import AvatarBox from '../../form/AvatarBox/AvatarBox'
 import {generatePassword} from '../../../helpers/generatePasswordHelper'
 import classes from './PopupUserCreate.module.scss'
 
@@ -183,20 +183,15 @@ const PopupUserCreate: React.FC<Props> = (props) => {
                     <div className={classes.field}>
                         <Label text='Аватар'/>
 
-                        <Button type='save'
-                                icon='arrow-pointer'
-                                onClick={() => openPopupFileManager(document.body, {
-                                    type: 'image',
-                                    selected: user.avatarId ? [user.avatarId] : [],
-                                    onSelect: (selected: number[]) => {
-                                        setUser({
-                                            ...user,
-                                            avatarId: selected.length ? selected[0] : null
-                                        })
-                                    }
-                                })}
-                                disabled={fetching}
-                        >{user.avatarId ? 'Заменить' : 'Выбрать / Загрузить'}</Button>
+                        <AvatarBox avatarId={user.avatarId || null}
+                                   fetching={fetching}
+                                   onSelect={(attachmentId: number | null) => {
+                                       setUser({
+                                           ...user,
+                                           avatarId: attachmentId
+                                       })
+                                   }}
+                        />
                     </div>
                     : null
                 }

@@ -9,5 +9,7 @@ export interface IDeveloper {
     author: number | null
     dateCreated?: string | null
     dateUpdate?: string | null
+    avatarId?: number | null
+    avatar?: string | null
     buildings?: number[]
 }

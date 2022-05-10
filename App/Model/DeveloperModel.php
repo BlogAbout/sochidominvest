@@ -16,14 +16,19 @@ class DeveloperModel extends Model
     public static function fetchDeveloperById(int $id): array
     {
         $sql = "
-            SELECT *,
+            SELECT sdi.*,
                    (
                        SELECT GROUP_CONCAT(DISTINCT(bd.`id_building`))
                        FROM `sdi_building_developer` AS bd
-                       WHERE bd.`id_developer` = `id`
-                   ) AS buildings
-            FROM `sdi_developer`
-            WHERE `id` = :id
+                       WHERE bd.`id_developer` = sdi.`id`
+                   ) AS buildings,
+                   (
+                       SELECT a.`content`
+                       FROM `sdi_attachment` AS a
+                       WHERE a.`id` = sdi.`id_avatar` AND a.`active` IN (0, 1)
+                   ) AS avatar
+            FROM `sdi_developer` sdi
+            WHERE sdi.`id` = :id
         ";
 
         parent::query($sql);
@@ -50,21 +55,26 @@ class DeveloperModel extends Model
         $where = [];
 
         $sql = "
-            SELECT *,
+            SELECT sdi.*,
                    (
                        SELECT GROUP_CONCAT(DISTINCT(bd.`id_building`))
                        FROM `sdi_building_developer` AS bd
-                       WHERE bd.`id_developer` = `id`
-                   ) AS buildings
-            FROM `sdi_developer`
+                       WHERE bd.`id_developer` = sdi.`id`
+                   ) AS buildings,
+                   (
+                       SELECT a.`content`
+                       FROM `sdi_attachment` AS a
+                       WHERE a.`id` = sdi.`id_avatar` AND a.`active` IN (0, 1)
+                   ) AS avatar
+            FROM `sdi_developer` sdi
         ";
 
         if (!empty($params['active'])) {
-            array_push($where, '`active` IN (' . implode(',', $params['active']) . ')');
+            array_push($where, 'sdi.`active` IN (' . implode(',', $params['active']) . ')');
         }
 
         if (!empty($params['text'])) {
-            array_push($where, '(`name` LIKE "%' . $params['text'] . '%")');
+            array_push($where, '(sdi.`name` LIKE "%' . $params['text'] . '%")');
         }
 
         if (count($where)) {
@@ -93,9 +103,9 @@ class DeveloperModel extends Model
     {
         $sql = "
             INSERT INTO `sdi_developer`
-                (name, description, address, phone, author, type, date_created, date_update, active)
+                (name, description, address, phone, author, type, date_created, date_update, active, id_avatar)
             VALUES
-                (:name, :description, :address, :phone, :author, :type, :dateCreated, :dateUpdate, :active)
+                (:name, :description, :address, :phone, :author, :type, :dateCreated, :dateUpdate, :active, :avatarId)
         ";
 
         parent::query($sql);
@@ -108,6 +118,7 @@ class DeveloperModel extends Model
         parent::bindParams('dateCreated', $payload['dateCreated']);
         parent::bindParams('dateUpdate', $payload['dateUpdate']);
         parent::bindParams('active', $payload['active']);
+        parent::bindParams('avatarId', $payload['avatarId']);
 
         $developer = parent::execute();
 
@@ -143,7 +154,8 @@ class DeveloperModel extends Model
                 phone = :phone,
                 type = :type,
                 date_update = :dateUpdate,
-                active = :active
+                active = :active,
+                id_avatar = :avatarId
             WHERE id = :id
         ";
 
@@ -156,6 +168,7 @@ class DeveloperModel extends Model
         parent::bindParams('type', $payload['type']);
         parent::bindParams('dateUpdate', $payload['dateUpdate']);
         parent::bindParams('active', $payload['active']);
+        parent::bindParams('avatarId', $payload['avatarId']);
 
         if (parent::execute()) {
             return array(
@@ -204,6 +217,8 @@ class DeveloperModel extends Model
             'dateCreated' => $data['date_created'],
             'dateUpdate' => $data['date_update'],
             'active' => (int)$data['active'],
+            'avatarId' => (int)$data['id_avatar'],
+            'avatar' => $data['avatar'],
             'buildings' => array_map('intval', $data['buildings'] ? explode(',', $data['buildings']) : [])
         ];
     }

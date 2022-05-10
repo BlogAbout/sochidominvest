@@ -31,6 +31,16 @@ export const getLayout = (type: string) => {
                 return listLayoutsItems.articles
             }
             return 'list'
+        case 'developers':
+            if (listLayoutsItems && 'developers' in listLayoutsItems) {
+                return listLayoutsItems.developers
+            }
+            return 'list'
+        case 'partners':
+            if (listLayoutsItems && 'partners' in listLayoutsItems) {
+                return listLayoutsItems.partners
+            }
+            return 'list'
         default:
             return 'list'
     }

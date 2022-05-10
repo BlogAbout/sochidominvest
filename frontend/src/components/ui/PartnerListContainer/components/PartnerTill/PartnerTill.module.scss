@@ -1,0 +1,11 @@
+.PartnerList {
+    overflow: auto;
+    height: 100%;
+
+    .list {
+        max-height: 100%;
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+    }
+}

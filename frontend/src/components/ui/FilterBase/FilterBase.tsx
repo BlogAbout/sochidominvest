@@ -27,7 +27,8 @@ const FilterBase: React.FC<Props> = (props) => {
         <div className={classes.FilterBase}>
             {props.buttons.map((button: IFilterBase) => {
                 return (
-                    <Button type={button.active ? 'regular' : 'save'}
+                    <Button key={button.key}
+                            type={button.active ? 'regular' : 'save'}
                             icon={button.icon}
                             onClick={() => button.onClick(button.key)}
                     >{button.title}</Button>
