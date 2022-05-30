@@ -20,7 +20,7 @@ const HeadPanel: React.FC = () => {
                     </div>
 
                     <div className={classes.contacts}>
-                        <a href='tel:+79186053427' className={classes.phone}>+7 (918) 605-34-27</a>
+                        <a href='tel:+79180417510' className={classes.phone}>+7 (918) 041-75-10</a>
                         <a href='mailto:info@sochidominvest.ru' className={classes.email}>info@sochidominvest.ru</a>
                     </div>
                 </div>

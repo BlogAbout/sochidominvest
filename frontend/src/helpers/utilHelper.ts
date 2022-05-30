@@ -41,6 +41,11 @@ export const getLayout = (type: string) => {
                 return listLayoutsItems.partners
             }
             return 'list'
+        case 'documents':
+            if (listLayoutsItems && 'documents' in listLayoutsItems) {
+                return listLayoutsItems.documents
+            }
+            return 'list'
         default:
             return 'list'
     }

@@ -6,6 +6,8 @@ export interface IDocument {
     objectType: string | null
     type: 'file' | 'link' | 'constructor'
     content?: string
-    active: number,
+    active: number
     url?: string
+    avatarId?: number | null
+    avatar?: string | null
 }

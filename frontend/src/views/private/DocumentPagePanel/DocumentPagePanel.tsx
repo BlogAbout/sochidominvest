@@ -1,16 +1,19 @@
 import React, {useEffect, useState} from 'react'
-import Helmet from 'react-helmet'
-import {compareText} from '../../../helpers/filterHelper'
-import openPopupDocumentCreate from '../../../components/PopupDocumentCreate/PopupDocumentCreate'
-import openContextMenu from '../../../components/ContextMenu/ContextMenu'
-import Button from '../../../components/form/Button/Button'
-import DocumentList from '../../../components/DocumentList/DocumentList'
-import SearchBox from '../../../components/SearchBox/SearchBox'
-import SidebarLeft from '../../../components/SidebarLeft/SidebarLeft'
-import {IDocument} from '../../../@types/IDocument'
-import {IFilterContent} from '../../../@types/IFilter'
 import {useTypedSelector} from '../../../hooks/useTypedSelector'
 import {useActions} from '../../../hooks/useActions'
+import {IDocument} from '../../../@types/IDocument'
+import {IFilterBase, IFilterContent} from '../../../@types/IFilter'
+import DocumentService from '../../../api/DocumentService'
+import {compareText} from '../../../helpers/filterHelper'
+import {changeLayout, getLayout} from '../../../helpers/utilHelper'
+import Title from '../../../components/ui/Title/Title'
+import FilterBase from '../../../components/ui/FilterBase/FilterBase'
+import PageInfo from '../../../components/ui/PageInfo/PageInfo'
+import DocumentListContainer from '../../../components/container/DocumentListContainer/DocumentListContainer'
+import SidebarLeft from '../../../components/SidebarLeft/SidebarLeft'
+import openPopupDocumentCreate from '../../../components/PopupDocumentCreate/PopupDocumentCreate'
+import openContextMenu from '../../../components/ContextMenu/ContextMenu'
+import openPopupAlert from '../../../components/PopupAlert/PopupAlert'
 import classes from './DocumentPagePanel.module.scss'
 
 const DocumentPagePanel: React.FC = () => {
@@ -19,9 +22,11 @@ const DocumentPagePanel: React.FC = () => {
     const [filterDocument, setFilterDocument] = useState<IDocument[]>([])
     const [selectedType, setSelectedType] = useState<string[]>([])
     const [filters, setFilters] = useState({})
+    const [layout, setLayout] = useState<'list' | 'till'>(getLayout('documents'))
+    const [fetching, setFetching] = useState(false)
 
     const {role} = useTypedSelector(state => state.userReducer)
-    const {documents, fetching} = useTypedSelector(state => state.documentReducer)
+    const {documents, fetching: fetchingDocument} = useTypedSelector(state => state.documentReducer)
     const {fetchDocumentList} = useActions()
 
     useEffect(() => {
@@ -37,7 +42,7 @@ const DocumentPagePanel: React.FC = () => {
     }, [documents, selectedType, filters])
 
     // Обработчик изменений
-    const onSave = () => {
+    const onSaveHandler = () => {
         setIsUpdate(true)
     }
 
@@ -58,6 +63,11 @@ const DocumentPagePanel: React.FC = () => {
         }
     }
 
+    const onChangeLayoutHandler = (value: 'list' | 'till') => {
+        setLayout(value)
+        changeLayout('documents', value)
+    }
+
     // Меню выбора создания объекта
     const onContextMenu = (e: React.MouseEvent) => {
         e.preventDefault()
@@ -68,7 +78,7 @@ const DocumentPagePanel: React.FC = () => {
                 onClick: () => openPopupDocumentCreate(document.body, {
                     type: 'file',
                     onSave: () => {
-                        onSave()
+                        onSaveHandler()
                     }
                 })
             },
@@ -77,7 +87,7 @@ const DocumentPagePanel: React.FC = () => {
                 onClick: () => openPopupDocumentCreate(document.body, {
                     type: 'link',
                     onSave: () => {
-                        onSave()
+                        onSaveHandler()
                     }
                 })
             },
@@ -90,6 +100,85 @@ const DocumentPagePanel: React.FC = () => {
         ]
 
         openContextMenu(e.currentTarget, menuItems)
+    }
+
+    // Редактирование
+    const onEditHandler = (documentInfo: IDocument) => {
+        openPopupDocumentCreate(document.body, {
+            document: documentInfo,
+            onSave: () => {
+                onSaveHandler()
+            }
+        })
+    }
+
+    // Удаление
+    const onRemoveHandler = (documentInfo: IDocument) => {
+        openPopupAlert(document.body, {
+            text: `Вы действительно хотите удалить ${documentInfo.name}?`,
+            buttons: [
+                {
+                    text: 'Удалить',
+                    onClick: () => {
+                        if (documentInfo.id) {
+                            setFetching(true)
+
+                            DocumentService.removeDocument(documentInfo.id)
+                                .then(() => {
+                                    onSaveHandler()
+                                })
+                                .catch((error: any) => {
+                                    openPopupAlert(document.body, {
+                                        title: 'Ошибка!',
+                                        text: error.data
+                                    })
+                                })
+                                .finally(() => {
+                                    setFetching(false)
+                                })
+                        }
+                    }
+                },
+                {text: 'Отмена'}
+            ]
+        })
+    }
+
+    // Открытие контекстного меню на элементе
+    const onContextMenuItem = (e: React.MouseEvent, documentInfo: IDocument) => {
+        e.preventDefault()
+
+        const menuItems = [
+            {
+                text: 'Открыть',
+                onClick: () => {
+                    switch (documentInfo.type) {
+                        case 'file':
+                            window.open(
+                                `https://api.sochidominvest.ru/uploads/${documentInfo.type}/${documentInfo.content}`,
+                                '_blank'
+                            )
+                            break
+                        case 'link':
+                            window.open(documentInfo.content, '_blank')
+                            break
+                        case 'constructor':
+                            // Todo
+                            break
+                    }
+                }
+            }
+        ]
+
+        if (['director', 'administrator', 'manager'].includes(role)) {
+            menuItems.push({text: 'Редактировать', onClick: () => onEditHandler(documentInfo)})
+
+            if (['director', 'administrator'].includes(role)) {
+                menuItems.push({text: 'Удалить', onClick: () => onRemoveHandler(documentInfo)})
+            }
+        }
+
+        openContextMenu(e, menuItems)
     }
 
     // Кнопки базовой фильтрации
@@ -116,47 +205,56 @@ const DocumentPagePanel: React.FC = () => {
 
     const filtersContent: IFilterContent[] = []
 
+    const filterBaseButtons: IFilterBase[] = [
+        {
+            key: 'file',
+            title: 'Файлы',
+            icon: 'file-lines',
+            active: selectedType.includes('file'),
+            onClick: onClickFilterButtonHandler.bind(this)
+        },
+        {
+            key: 'link',
+            title: 'Ссылки',
+            icon: 'link',
+            active: selectedType.includes('link'),
+            onClick: onClickFilterButtonHandler.bind(this)
+        },
+        {
+            key: 'constructor',
+            title: 'Конструктор',
+            icon: 'file-invoice',
+            active: selectedType.includes('constructor'),
+            onClick: onClickFilterButtonHandler.bind(this)
+        }
+    ]
+
     return (
         <main className={classes.DocumentPagePanel}>
-            <Helmet>
-                <meta charSet='utf-8'/>
-                <title>Документы - СочиДомИнвест</title>
-                <meta name='description' content=''/>
-                <link rel='canonical' href={`${window.location.href}`}/>
-            </Helmet>
+            <PageInfo title='Документы'/>
 
             <SidebarLeft filters={filtersContent}/>
 
-            <div className={classes.filter}>
-                <Button type={selectedType.includes('file') ? 'regular' : 'save'}
-                        icon='file-lines'
-                        onClick={() => onClickFilterButtonHandler('file')}
-                >Файлы</Button>
-
-                <Button type={selectedType.includes('link') ? 'regular' : 'save'}
-                        icon='link'
-                        onClick={() => onClickFilterButtonHandler('link')}
-                >Ссылки</Button>
-
-                <Button type={selectedType.includes('constructor') ? 'regular' : 'save'}
-                        icon='file-invoice'
-                        onClick={() => onClickFilterButtonHandler('constructor')}
-                >Конструктор</Button>
-
-                <SearchBox value={searchText} onChange={search.bind(this)}/>
-            </div>
+            <FilterBase buttons={filterBaseButtons} valueSearch={searchText} onSearch={search.bind(this)} showSearch/>
 
             <div className={classes.Content}>
-                <h1>
-                    <span>Документы</span>
+                <Title type={1}
+                       layout={layout}
+                       showAdd={['director', 'administrator', 'manager'].includes(role)}
+                       onAdd={onContextMenu.bind(this)}
+                       onChangeLayout={onChangeLayoutHandler.bind(this)}
+                       showChangeLayout
+                >Статьи</Title>
 
-                    {['director', 'administrator', 'manager'].includes(role) ?
-                        <Button type='apply' icon='plus' onClick={onContextMenu.bind(this)}>Добавить</Button>
-                        : null
-                    }
-                </h1>
-
-                <DocumentList documents={filterDocument} fetching={fetching} onSave={onSave.bind(this)}/>
+                <DocumentListContainer documents={filterDocument}
+                                       fetching={fetching || fetchingDocument}
+                                       layout={layout}
+                                       onClick={() => {
+                                       }}
+                                       onEdit={onEditHandler.bind(this)}
+                                       onRemove={onRemoveHandler.bind(this)}
+                                       onContextMenu={onContextMenuItem.bind(this)}
+                />
             </div>
         </main>
     )

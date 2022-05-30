@@ -7,8 +7,8 @@ const FooterDefault: React.FC = () => {
     return (
         <footer className={classes.Footer}>
             <div className={classes.container}>
-                <p>ИНН 123456789</p>
-                <p>ОГРН 123456789</p>
+                <p>ИНН 344800846072</p>
+                <p/>
                 <p><Link to={RouteNames.PUBLIC_POLICY}>Политика конфиденциальности</Link></p>
                 <p>2022. Все права защищены</p>
             </div>
