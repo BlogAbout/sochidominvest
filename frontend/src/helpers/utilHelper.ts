@@ -1,6 +1,6 @@
 export const apiPath = 'https://api.sochidominvest.ru/'
 
-export const siteTitle = 'СочиДомИнвест'
+export const siteTitle = 'СОЧИДОМИНВЕСТ'
 
 /**
  * Получение типа отображения
@@ -44,6 +44,11 @@ export const getLayout = (type: string) => {
         case 'documents':
             if (listLayoutsItems && 'documents' in listLayoutsItems) {
                 return listLayoutsItems.documents
+            }
+            return 'list'
+        case 'buildings':
+            if (listLayoutsItems && 'buildings' in listLayoutsItems) {
+                return listLayoutsItems.buildings
             }
             return 'list'
         default:

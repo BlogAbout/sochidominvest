@@ -11,6 +11,7 @@ import {
     faArrowUpFromBracket,
     faArrowUpRightFromSquare,
     faAt,
+    faBars,
     faBed,
     faBell,
     faBolt,
@@ -171,7 +172,8 @@ library.add(
     faKey,
     faList,
     faGrip,
-    faIdCard
+    faIdCard,
+    faBars
 )
 
 function App() {

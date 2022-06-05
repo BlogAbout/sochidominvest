@@ -31,7 +31,7 @@ import AdvertisingMaterialsPagePanel from '../../../views/private/AdvertisingMat
 import PartnerPanel from '../../../views/private/AdvertisingMaterialsPagePanel/components/PartnerPanel/PartnerPanel'
 import BannerPanel from '../../../views/private/AdvertisingMaterialsPagePanel/components/BannerPanel/BannerPanel'
 import WidgetPanel from '../../../views/private/AdvertisingMaterialsPagePanel/components/WidgetPanel/WidgetPanel'
-import Navigation from '../../../components/Navigation/Navigation'
+import Navigation from '../../../components/ui/Navigation/Navigation'
 import SidebarRight from '../../../components/SidebarRight/SidebarRight'
 import HeaderDefault from '../../../components/HeaderDefault/HeaderDefault'
 import FooterDefault from '../../../components/FooterDefault/FooterDefault'

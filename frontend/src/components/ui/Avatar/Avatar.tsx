@@ -14,7 +14,7 @@ const defaultProps: Props = {
     href: null,
     alt: '',
     width: 200,
-    height: 200
+    height: 'auto'
 }
 
 const cx = classNames.bind(classes)

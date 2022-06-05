@@ -1,0 +1,254 @@
+.BuildingItem {
+    padding: 8px 10px;
+    background-color: #fff;
+    margin-bottom: 15px;
+    display: flex;
+    width: 49%;
+    position: relative;
+    box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.4);
+    transition: all 0.3s ease-in;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    cursor: pointer;
+
+    &:hover {
+        box-shadow: 6px 6px 8px rgba(0, 0, 0, 0.7);
+    }
+
+    &.disabled {
+        filter: grayscale(1);
+    }
+
+    > div:first-child {
+        width: 200px !important;
+    }
+
+    .tags {
+        width: 200px;
+        position: absolute;
+        left: 10px;
+        top: 8px;
+        z-index: 3;
+
+        > div {
+            margin-right: 5px;
+            background: #ffcc01;
+            font-size: 14px;
+            padding: 2px 5px;
+            display: inline-block;
+        }
+    }
+
+    .passed {
+        position: absolute;
+        left: 10px;
+        bottom: 8px;
+        width: 200px;
+        font-size: 14px;
+        line-height: 14px;
+        padding: 5px 0;
+        text-align: center;
+        background: #075ea5;
+        color: #fff;
+        z-index: 3;
+
+        &.is {
+            background: #ffcc01;
+            color: #000;
+        }
+    }
+
+    .itemContent {
+        flex-grow: 1;
+        padding: 0 20px;
+        display: flex;
+        flex-direction: column;
+
+        .information {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+
+            .icon {
+                margin-right: 20px;
+                color: #999;
+
+                svg {
+                    height: 15px;
+                    vertical-align: middle;
+                }
+
+                span {
+                    font-size: 12px;
+                    line-height: 15px;
+                    vertical-align: middle;
+                    margin-left: 5px;
+                }
+            }
+        }
+
+        h2 {
+            font-size: 22px;
+            margin-bottom: 40px;
+            line-height: 24px;
+            position: relative;
+        }
+
+        .address {
+            flex-grow: 1;
+
+            span {
+                display: block;
+            }
+        }
+
+        .payments,
+        .formalization {
+            width: 100%;
+            margin-top: 10px;
+
+            > div {
+                background-color: #ffcc01;
+                margin-right: 10px;
+                padding: 3px 6px;
+                display: inline-block;
+                font-size: 14px;
+            }
+        }
+    }
+
+    .itemInfo {
+        width: 250px;
+        flex-shrink: 0;
+        padding: 0 20px;
+        border-left: 1px solid #075ea5;
+
+        .type {
+            background: #075ea5;
+            padding: 3px 6px;
+            display: inline-block;
+            font-size: 14px;
+            margin-bottom: 10px;
+            color: #fff;
+        }
+
+        .counter {
+            font-weight: 700;
+            font-size: 16px;
+            margin-bottom: 25px;
+        }
+
+        .cost {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .costPer {
+            margin-bottom: 25px;
+        }
+
+        .area {
+
+        }
+    }
+}
+
+@media (max-width: 1500px) {
+    .BuildingItem {
+        width: 100%;
+    }
+}
+
+@media (max-width: 1024px) {
+    .BuildingItem {
+        flex-direction: column;
+        flex-wrap: wrap;
+
+        > div:first-child {
+            height: 100% !important;
+        }
+
+        .itemContent {
+            width: calc(100% - 200px);
+            margin-bottom: 10px;
+        }
+
+        .itemInfo {
+            border-left: none;
+        }
+    }
+}
+
+@media (max-width: 480px) {
+    .BuildingItem {
+        > div:first-child {
+            width: 150px !important;
+        }
+
+        .tags {
+            width: 150px;
+        }
+
+        .passed {
+            width: 150px;
+        }
+
+        .itemContent {
+            width: calc(100% - 150px);
+            padding: 5px;
+
+            h2 {
+                margin-bottom: 5px;
+            }
+
+            .row {
+                svg {
+                    margin-right: 5px;
+                }
+            }
+
+            .information {
+                flex-wrap: wrap;
+
+                .icon {
+                    margin-right: 10px;
+
+                    svg {
+                        height: 12px;
+                    }
+
+                    span {
+                        font-size: 10px;
+                    }
+                }
+            }
+        }
+
+        .itemInfo {
+            padding: 0 5px 5px;
+        }
+    }
+}
+
+@media (max-width: 400px) {
+    .BuildingItem {
+        > div:first-child {
+            width: 120px !important;
+        }
+
+        .tags {
+            width: 120px;
+        }
+
+        .passed {
+            width: 120px;
+        }
+
+        .itemContent {
+            width: calc(100% - 120px);
+        }
+    }
+}

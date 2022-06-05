@@ -353,7 +353,7 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
                             <NumberBox value={building.area || ''}
                                        min={0}
                                        step={0.01}
-                                       max={999}
+                                       max={999999999}
                                        countAfterComma={2}
                                        onChange={(e: React.ChangeEvent<HTMLInputElement>, value: number) => setBuilding({
                                            ...building,

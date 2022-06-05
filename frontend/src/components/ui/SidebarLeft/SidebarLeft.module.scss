@@ -85,3 +85,13 @@
         }
     }
 }
+
+@media (max-width: 480px) {
+    .SidebarLeft {
+        left: -250px;
+
+        &.show {
+            left: 0px;
+        }
+    }
+}

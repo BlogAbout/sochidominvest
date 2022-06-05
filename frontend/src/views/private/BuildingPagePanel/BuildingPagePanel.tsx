@@ -1,17 +1,23 @@
 import React, {useEffect, useState} from 'react'
-import Helmet from 'react-helmet'
-import {compareText} from '../../../helpers/filterHelper'
-import Button from '../../../components/form/Button/Button'
-import openPopupBuildingCreate from '../../../components/PopupBuildingCreate/PopupBuildingCreate'
-import openContextMenu from '../../../components/ContextMenu/ContextMenu'
-import BuildingList from '../../../components/BuildingList/BuildingList'
-import SearchBox from '../../../components/SearchBox/SearchBox'
-import SidebarLeft from '../../../components/SidebarLeft/SidebarLeft'
-import {IBuilding} from '../../../@types/IBuilding'
-import {IFilterContent} from '../../../@types/IFilter'
-import {ISelector} from '../../../@types/ISelector'
+import {useNavigate} from 'react-router-dom'
 import {useTypedSelector} from '../../../hooks/useTypedSelector'
 import {useActions} from '../../../hooks/useActions'
+import {compareText} from '../../../helpers/filterHelper'
+import openPopupBuildingCreate from '../../../components/PopupBuildingCreate/PopupBuildingCreate'
+import openContextMenu from '../../../components/ContextMenu/ContextMenu'
+import SidebarLeft from '../../../components/ui/SidebarLeft/SidebarLeft'
+import openPopupAlert from '../../../components/PopupAlert/PopupAlert'
+import BuildingService from '../../../api/BuildingService'
+import FavoriteService from '../../../api/FavoriteService'
+import CompilationService from '../../../api/CompilationService'
+import {changeLayout, getLayout} from '../../../helpers/utilHelper'
+import PageInfo from '../../../components/ui/PageInfo/PageInfo'
+import FilterBase from '../../../components/ui/FilterBase/FilterBase'
+import Title from '../../../components/ui/Title/Title'
+import BuildingListContainer from '../../../components/container/BuildingListContainer/BuildingListContainer'
+import {IBuilding} from '../../../@types/IBuilding'
+import {IFilterBase, IFilterContent} from '../../../@types/IFilter'
+import {ISelector} from '../../../@types/ISelector'
 import {
     buildingClasses,
     buildingElectricity,
@@ -28,6 +34,8 @@ import {
 import classes from './BuildingPagePanel.module.scss'
 
 const BuildingPagePanel: React.FC = () => {
+    const navigate = useNavigate()
+
     const [isUpdate, setIsUpdate] = useState(false)
     const [searchText, setSearchText] = useState('')
     const [filterBuilding, setFilterBuilding] = useState<IBuilding[]>([])
@@ -45,9 +53,11 @@ const BuildingPagePanel: React.FC = () => {
         sewerage: buildingSewerage.map((item: ISelector) => item.key),
         waterSupply: buildingWaterSupply.map((item: ISelector) => item.key)
     })
+    const [layout, setLayout] = useState<'list' | 'till'>(getLayout('buildings'))
+    const [fetching, setFetching] = useState(false)
 
     const {role} = useTypedSelector(state => state.userReducer)
-    const {buildings, fetching} = useTypedSelector(state => state.buildingReducer)
+    const {buildings, fetching: fetchingBuilding} = useTypedSelector(state => state.buildingReducer)
     const {fetchBuildingList} = useActions()
 
     useEffect(() => {
@@ -63,7 +73,7 @@ const BuildingPagePanel: React.FC = () => {
     }, [buildings, selectedType, filters])
 
     // Обработчик изменений
-    const onSave = () => {
+    const onSaveHandler = () => {
         setIsUpdate(true)
     }
 
@@ -85,11 +95,126 @@ const BuildingPagePanel: React.FC = () => {
         }
     }
 
-    const addHandler = (type: 'building' | 'apartment' | 'house' | 'land' | 'commerce' | 'garage') => {
+    const onChangeLayoutHandler = (value: 'list' | 'till') => {
+        setLayout(value)
+        changeLayout('buildings', value)
+    }
+
+    const onClickHandler = (building: IBuilding) => {
+        navigate('/panel/building/' + building.id)
+    }
+
+    const onAddHandler = (type: 'building' | 'apartment' | 'house' | 'land' | 'commerce' | 'garage') => {
         openPopupBuildingCreate(document.body, {
             type: type,
-            onSave: () => onSave()
+            onSave: () => onSaveHandler()
         })
+    }
+
+    // Редактирование объекта
+    const onEditHandler = (building: IBuilding) => {
+        openPopupBuildingCreate(document.body, {
+            building: building,
+            onSave: () => {
+                onSaveHandler()
+            }
+        })
+    }
+
+    // Удаление объекта
+    const onRemoveHandler = (building: IBuilding) => {
+        openPopupAlert(document.body, {
+            text: `Вы действительно хотите удалить ${building.name}?`,
+            buttons: [
+                {
+                    text: 'Удалить',
+                    onClick: () => {
+                        if (building.id) {
+                            setFetching(true)
+
+                            BuildingService.removeBuilding(building.id)
+                                .then(() => {
+                                    onSaveHandler()
+                                })
+                                .catch((error: any) => {
+                                    openPopupAlert(document.body, {
+                                        title: 'Ошибка!',
+                                        text: error.data
+                                    })
+                                })
+                                .finally(() => {
+                                    setFetching(false)
+                                })
+                        }
+                    }
+                },
+                {text: 'Отмена'}
+            ]
+        })
+    }
+
+    // Удаление объекта из избранного
+    const onRemoveBuildingFromFavoriteHandler = (building: IBuilding) => {
+        if (building.id) {
+            FavoriteService.removeFavorite(building.id)
+                .then(() => {
+                    onSaveHandler()
+                })
+                .catch((error: any) => {
+                    console.error('Ошибка удаления из избранного', error)
+
+                    openPopupAlert(document.body, {
+                        title: 'Ошибка!',
+                        text: error.data
+                    })
+                })
+        }
+    }
+
+    // Удаление объекта из подборки
+    const onRemoveBuildingFromCompilationHandler = (building: IBuilding, compilationId?: number) => {
+        if (compilationId && building.id) {
+            CompilationService.removeBuildingFromCompilation(compilationId, building.id)
+                .then(() => {
+                    onSaveHandler()
+                })
+                .catch((error: any) => {
+                    console.error('Ошибка удаления из подборки', error)
+
+                    openPopupAlert(document.body, {
+                        title: 'Ошибка!',
+                        text: error.data
+                    })
+                })
+        }
+    }
+
+    // Открытие контекстного меню на элементе
+    const onContextMenuItem = (e: React.MouseEvent, building: IBuilding) => {
+        e.preventDefault()
+
+        const menuItems = []
+
+        // Todo
+        // if (props.isFavorite) {
+        //     menuItems.push({text: 'Удалить из избранного', onClick: () => removeBuildingFromFavorite()})
+        // }
+        //
+        // if (props.compilationId && props.building.id) {
+        //     menuItems.push({text: 'Удалить из подборки', onClick: () => removeBuildingFromCompilation()})
+        // }
+
+        if (['director', 'administrator', 'manager'].includes(role)) {
+            menuItems.push({text: 'Редактировать', onClick: () => onEditHandler(building)})
+
+            if (['director', 'administrator'].includes(role)) {
+                menuItems.push({text: 'Удалить', onClick: () => onRemoveHandler(building)})
+            }
+        }
+
+        if (menuItems.length) {
+            openContextMenu(e, menuItems)
+        }
     }
 
     // Меню выбора создания объекта
@@ -97,12 +222,12 @@ const BuildingPagePanel: React.FC = () => {
         e.preventDefault()
 
         const menuItems = [
-            {text: 'Жилой комплекс', onClick: () => addHandler('building')},
-            {text: 'Квартиру', onClick: () => addHandler('apartment')},
-            {text: 'Дом', onClick: () => addHandler('house')},
-            {text: 'Земельный участок', onClick: () => addHandler('land')},
-            {text: 'Коммерцию', onClick: () => addHandler('commerce')},
-            {text: 'Гараж, машиноместо', onClick: () => addHandler('garage')}
+            {text: 'Жилой комплекс', onClick: () => onAddHandler('building')},
+            {text: 'Квартиру', onClick: () => onAddHandler('apartment')},
+            {text: 'Дом', onClick: () => onAddHandler('house')},
+            {text: 'Земельный участок', onClick: () => onAddHandler('land')},
+            {text: 'Коммерцию', onClick: () => onAddHandler('commerce')},
+            {text: 'Гараж, машиноместо', onClick: () => onAddHandler('garage')}
         ]
 
         openContextMenu(e.currentTarget, menuItems)
@@ -250,62 +375,78 @@ const BuildingPagePanel: React.FC = () => {
         }
     ]
 
+    const filterBaseButtons: IFilterBase[] = [
+        {
+            key: 'building',
+            title: 'ЖК',
+            icon: 'building',
+            active: selectedType.includes('building'),
+            onClick: onClickFilterButtonHandler.bind(this)
+        },
+        {
+            key: 'apartment',
+            title: 'Квартиры',
+            icon: 'house-user',
+            active: selectedType.includes('apartment'),
+            onClick: onClickFilterButtonHandler.bind(this)
+        },
+        {
+            key: 'house',
+            title: 'Дома',
+            icon: 'house',
+            active: selectedType.includes('house'),
+            onClick: onClickFilterButtonHandler.bind(this)
+        },
+        {
+            key: 'land',
+            title: 'Участки',
+            icon: 'tree',
+            active: selectedType.includes('land'),
+            onClick: onClickFilterButtonHandler.bind(this)
+        },
+        {
+            key: 'commerce',
+            title: 'Коммерция',
+            icon: 'cash-register',
+            active: selectedType.includes('commerce'),
+            onClick: onClickFilterButtonHandler.bind(this)
+        },
+        {
+            key: 'garage',
+            title: 'Гаражи',
+            icon: 'car',
+            active: selectedType.includes('garage'),
+            onClick: onClickFilterButtonHandler.bind(this)
+        }
+    ]
+
     return (
         <main className={classes.BuildingPagePanel}>
-            <Helmet>
-                <meta charSet='utf-8'/>
-                <title>Недвижимость - СочиДомИнвест</title>
-                <meta name='description' content=''/>
-                <link rel='canonical' href={`${window.location.href}`}/>
-            </Helmet>
+            <PageInfo title='Недвижимость'/>
 
             <SidebarLeft filters={filtersContent}/>
 
-            <div className={classes.filter}>
-                <Button type={selectedType.includes('building') ? 'regular' : 'save'}
-                        icon='building'
-                        onClick={() => onClickFilterButtonHandler('building')}
-                >ЖК</Button>
-
-                <Button type={selectedType.includes('apartment') ? 'regular' : 'save'}
-                        icon='house-user'
-                        onClick={() => onClickFilterButtonHandler('apartment')}
-                >Квартиры</Button>
-
-                <Button type={selectedType.includes('house') ? 'regular' : 'save'}
-                        icon='house'
-                        onClick={() => onClickFilterButtonHandler('house')}
-                >Дома</Button>
-
-                <Button type={selectedType.includes('land') ? 'regular' : 'save'}
-                        icon='tree'
-                        onClick={() => onClickFilterButtonHandler('land')}
-                >Участки</Button>
-
-                <Button type={selectedType.includes('commerce') ? 'regular' : 'save'}
-                        icon='cash-register'
-                        onClick={() => onClickFilterButtonHandler('commerce')}
-                >Коммерция</Button>
-
-                <Button type={selectedType.includes('garage') ? 'regular' : 'save'}
-                        icon='car'
-                        onClick={() => onClickFilterButtonHandler('garage')}
-                >Гаражи</Button>
-
-                <SearchBox value={searchText} onChange={search.bind(this)}/>
-            </div>
+            <FilterBase buttons={filterBaseButtons} valueSearch={searchText} onSearch={search.bind(this)} showSearch/>
 
             <div className={classes.Content}>
-                <h1>
-                    <span>Недвижимость</span>
+                <Title type={1}
+                       layout={layout}
+                       showAdd={['director', 'administrator', 'manager'].includes(role)}
+                       onAdd={onContextMenu.bind(this)}
+                       onChangeLayout={onChangeLayoutHandler.bind(this)}
+                       showChangeLayout
+                >Недвижимость</Title>
 
-                    {['director', 'administrator', 'manager'].includes(role) ?
-                        <Button type='apply' icon='plus' onClick={onContextMenu.bind(this)}>Добавить</Button>
-                        : null
-                    }
-                </h1>
-
-                <BuildingList buildings={filterBuilding} fetching={fetching} onSave={onSave.bind(this)}/>
+                <BuildingListContainer buildings={filterBuilding}
+                                       fetching={fetching || fetchingBuilding}
+                                       layout={layout}
+                                       onClick={onClickHandler.bind(this)}
+                                       onEdit={onEditHandler.bind(this)}
+                                       onRemove={onRemoveHandler.bind(this)}
+                                       onContextMenu={onContextMenuItem.bind(this)}
+                                       onRemoveFromFavorite={onRemoveBuildingFromFavoriteHandler.bind(this)}
+                                       onRemoveFromCompilation={onRemoveBuildingFromCompilationHandler.bind(this)}
+                />
             </div>
         </main>
     )

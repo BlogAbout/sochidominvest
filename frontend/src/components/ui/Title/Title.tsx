@@ -28,17 +28,21 @@ const Title: React.FC<Props> = (props) => {
                     <h1>
                         <span>{props.children}</span>
 
-                        <Button type={props.layout === 'till' ? 'regular' : 'save'}
-                                icon='grip'
-                                onClick={() => props.onChangeLayout ? props.onChangeLayout('till') : null}
-                                title='Подробное отображение'
-                        />
+                        {props.showChangeLayout ?
+                            <>
+                                <Button type={props.layout === 'till' ? 'regular' : 'save'}
+                                        icon='grip'
+                                        onClick={() => props.onChangeLayout ? props.onChangeLayout('till') : null}
+                                        title='Подробное отображение'
+                                />
 
-                        <Button type={props.layout === 'list' ? 'regular' : 'save'}
-                                icon='list'
-                                onClick={() => props.onChangeLayout ? props.onChangeLayout('list') : null}
-                                title='Списочное отображение'
-                        />
+                                <Button type={props.layout === 'list' ? 'regular' : 'save'}
+                                        icon='list'
+                                        onClick={() => props.onChangeLayout ? props.onChangeLayout('list') : null}
+                                        title='Списочное отображение'
+                                />
+                            </>
+                        : null}
 
                         {props.showAdd ?
                             <Button type='apply'

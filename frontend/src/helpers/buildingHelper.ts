@@ -349,3 +349,28 @@ export const getAboutBlockTitle = (type: 'building' | 'apartment' | 'house' | 'l
 
     return titleAbout
 }
+
+export const getBuildingStatusesText = (key: string) => {
+    const find = buildingStatuses.find((item: ISelector) => item.key === key)
+    return find ? find.text : ''
+}
+
+export const getBuildingTypesText = (key: string) => {
+    const find = buildingTypes.find((item: ISelector) => item.key === key)
+    return find ? find.text : ''
+}
+
+export const getBuildingClassesText = (key: string) => {
+    const find = buildingClasses.find((item: ISelector) => item.key === key)
+    return find ? find.text : ''
+}
+
+export const getBuildingMaterialsText = (key: string) => {
+    const find = buildingMaterials.find((item: ISelector) => item.key === key)
+    return find ? find.text : ''
+}
+
+export const getBuildingFormatText = (key: string) => {
+    const find = buildingFormat.find((item: ISelector) => item.key === key)
+    return find ? find.text : ''
+}
