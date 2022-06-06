@@ -10,7 +10,7 @@ import SearchBox from '../../../components/SearchBox/SearchBox'
 import SidebarLeft from '../../../components/ui/SidebarLeft/SidebarLeft'
 import Button from '../../../components/form/Button/Button'
 import SupportList from '../../../components/SupportList/SupportList'
-import openPopupSupportCreate from '../../../components/PopupSupportCreate/PopupSupportCreate'
+import openPopupSupportCreate from '../../../components/popup/PopupSupportCreate/PopupSupportCreate'
 import classes from './SupportPagePanel.module.scss'
 
 const SupportPagePanel: React.FC = () => {

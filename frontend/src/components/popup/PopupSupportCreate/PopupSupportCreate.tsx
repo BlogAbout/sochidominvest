@@ -1,15 +1,18 @@
 import React, {useEffect, useState} from 'react'
-import FeedService from '../../api/FeedService'
-import {PopupProps} from '../../@types/IPopup'
-import {IFeed, IFeedMessage} from '../../@types/IFeed'
-import {getPopupContainer, openPopup, removePopup} from '../../helpers/popupHelper'
-import showBackgroundBlock from '../ui/BackgroundBlock/BackgroundBlock'
-import openPopupAlert from '../PopupAlert/PopupAlert'
-import {Content, Footer, Header, Popup} from '../popup/Popup/Popup'
-import BlockingElement from '../ui/BlockingElement/BlockingElement'
-import TextBox from '../form/TextBox/TextBox'
-import Button from '../form/Button/Button'
-import TextAreaBox from '../TextAreaBox/TextAreaBox'
+import classNames from 'classnames/bind'
+import FeedService from '../../../api/FeedService'
+import {PopupDisplayOptions, PopupProps} from '../../../@types/IPopup'
+import {IFeed, IFeedMessage} from '../../../@types/IFeed'
+import {getPopupContainer, openPopup, removePopup} from '../../../helpers/popupHelper'
+import showBackgroundBlock from '../../ui/BackgroundBlock/BackgroundBlock'
+import openPopupAlert from '../../PopupAlert/PopupAlert'
+import {Footer, Popup} from '../Popup/Popup'
+import BlockingElement from '../../ui/BlockingElement/BlockingElement'
+import TextBox from '../../form/TextBox/TextBox'
+import Button from '../../form/Button/Button'
+import TextAreaBox from '../../TextAreaBox/TextAreaBox'
+import Title from '../../ui/Title/Title'
+import Label from '../../form/Label/Label'
 import classes from './PopupSupportCreate.module.scss'
 
 interface Props extends PopupProps {
@@ -26,6 +29,8 @@ const defaultProps: Props = {
         console.info('PopupSupportCreate onSave')
     }
 }
+
+const cx = classNames.bind(classes)
 
 const PopupSupportCreate: React.FC<Props> = (props) => {
     const [feed, setFeed] = useState<IFeed>({
@@ -93,54 +98,54 @@ const PopupSupportCreate: React.FC<Props> = (props) => {
 
     return (
         <Popup className={classes.PopupSupportCreate}>
-            <Header title='Создать обращение' popupId={props.id || ''}/>
+            <BlockingElement fetching={fetching} className={classes.content}>
+                <div className={classes.blockContent}>
+                    <Title type={2}>Новое обращение</Title>
 
-            <Content className={classes['popup-content']}>
-                <BlockingElement fetching={fetching} className={classes.content}>
-                    <div className={classes.info}>
-                        <div className={classes.field}>
-                            <div className={classes.field_label}>Название</div>
+                    <div className={classes.field}>
+                        <Label text='Тема'/>
 
-                            <TextBox value={feed.title}
-                                     onChange={(e: React.MouseEvent, value: string) => setFeed({
-                                         ...feed,
-                                         title: value
-                                     })}
-                                     placeHolder='Введите тему'
-                                     error={feed.title.trim() === ''}
-                                     showRequired
-                                     errorText='Поле обязательно для заполнения'
-                                     icon='heading'
-                            />
-                        </div>
-
-                        <div className={classes.field}>
-                            <div className={classes.field_label}>Сообщение</div>
-
-                            <TextAreaBox value={message.content}
-                                         onChange={(value: string) => setMessage({
-                                             ...message,
-                                             content: value
-                                         })}
-                                         placeHolder='Введите текст сообщения'
-                                         icon='paragraph'
-                            />
-                        </div>
+                        <TextBox value={feed.title}
+                                 onChange={(e: React.MouseEvent, value: string) => setFeed({
+                                     ...feed,
+                                     title: value
+                                 })}
+                                 placeHolder='Введите тему'
+                                 error={feed.title.trim() === ''}
+                                 showRequired
+                                 errorText='Поле обязательно для заполнения'
+                                 styleType='minimal'
+                        />
                     </div>
-                </BlockingElement>
-            </Content>
+
+                    <div className={cx({'field': true, 'fieldWrap': true})}>
+                        <Label text='Сообщение'/>
+
+                        <TextAreaBox value={message.content}
+                                     onChange={(value: string) => setMessage({
+                                         ...message,
+                                         content: value
+                                     })}
+                                     placeHolder='Введите текст сообщения'
+                                     width='100%'
+                        />
+                    </div>
+                </div>
+            </BlockingElement>
 
             <Footer>
                 <Button type='apply'
                         icon='check'
                         onClick={() => saveHandler()}
                         disabled={fetching || feed.title.trim() === '' || message.content.trim() === ''}
+                        title='Отправить'
                 >Отправить</Button>
 
                 <Button type='regular'
                         icon='arrow-rotate-left'
                         onClick={close.bind(this)}
                         className='marginLeft'
+                        title='Отменить'
                 >Отменить</Button>
             </Footer>
         </Popup>
@@ -151,9 +156,10 @@ PopupSupportCreate.defaultProps = defaultProps
 PopupSupportCreate.displayName = 'PopupSupportCreate'
 
 export default function openPopupSupportCreate(target: any, popupProps = {} as Props) {
-    const displayOptions = {
+    const displayOptions: PopupDisplayOptions = {
         autoClose: false,
-        center: true
+        rightPanel: true,
+        fullScreen: true
     }
     const blockId = showBackgroundBlock(target, {animate: true}, displayOptions)
     let block = getPopupContainer(blockId)

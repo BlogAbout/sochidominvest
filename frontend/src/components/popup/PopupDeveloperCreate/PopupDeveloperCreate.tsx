@@ -56,7 +56,7 @@ const PopupDeveloperCreate: React.FC<Props> = (props) => {
 
     // Закрытие popup
     const close = () => {
-        removePopup(props.id ? props.id : '')
+        removePopup(props.id || '')
     }
 
     // Сохранение изменений

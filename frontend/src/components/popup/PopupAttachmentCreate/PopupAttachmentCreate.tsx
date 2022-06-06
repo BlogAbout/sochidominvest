@@ -1,17 +1,20 @@
 import React, {useEffect, useState} from 'react'
-import {PopupProps} from '../../@types/IPopup'
-import {IAttachment} from '../../@types/IAttachment'
-import AttachmentService from '../../api/AttachmentService'
-import {getPopupContainer, openPopup, removePopup} from '../../helpers/popupHelper'
-import showBackgroundBlock from '../ui/BackgroundBlock/BackgroundBlock'
-import openPopupAlert from '../PopupAlert/PopupAlert'
-import openPopupFileManager from '../PopupFileManager/PopupFileManager'
-import {Content, Footer, Header, Popup} from '../popup/Popup/Popup'
-import BlockingElement from '../ui/BlockingElement/BlockingElement'
-import TextBox from '../form/TextBox/TextBox'
-import TextAreaBox from '../TextAreaBox/TextAreaBox'
-import Button from '../form/Button/Button'
-import CheckBox from '../form/CheckBox/CheckBox'
+import classNames from 'classnames/bind'
+import {PopupDisplayOptions, PopupProps} from '../../../@types/IPopup'
+import {IAttachment} from '../../../@types/IAttachment'
+import AttachmentService from '../../../api/AttachmentService'
+import {getPopupContainer, openPopup, removePopup} from '../../../helpers/popupHelper'
+import showBackgroundBlock from '../../ui/BackgroundBlock/BackgroundBlock'
+import openPopupAlert from '../../PopupAlert/PopupAlert'
+import openPopupFileManager from '../../PopupFileManager/PopupFileManager'
+import {Footer, Popup} from '../Popup/Popup'
+import BlockingElement from '../../ui/BlockingElement/BlockingElement'
+import TextBox from '../../form/TextBox/TextBox'
+import TextAreaBox from '../../TextAreaBox/TextAreaBox'
+import Button from '../../form/Button/Button'
+import CheckBox from '../../form/CheckBox/CheckBox'
+import Title from '../../ui/Title/Title'
+import Label from '../../form/Label/Label'
 import classes from './PopupAttachmentCreate.module.scss'
 
 interface Props extends PopupProps {
@@ -26,6 +29,8 @@ const defaultProps: Props = {
         console.info('PopupAttachmentCreate onSave', attachment)
     }
 }
+
+const cx = classNames.bind(classes)
 
 const PopupAttachmentCreate: React.FC<Props> = (props) => {
     const [attachment, setAttachment] = useState<IAttachment>(props.attachment)
@@ -69,12 +74,12 @@ const PopupAttachmentCreate: React.FC<Props> = (props) => {
 
     return (
         <Popup className={classes.PopupAttachmentCreate}>
-            <Header title='Редактировать вложение' popupId={props.id || ''}/>
+            <BlockingElement fetching={fetching} className={classes.content}>
+                <div className={classes.blockContent}>
+                    <Title type={2}>Информация о вложении</Title>
 
-            <Content className={classes['popup-content']}>
-                <BlockingElement fetching={fetching} className={classes.content}>
                     <div className={classes.field}>
-                        <div className={classes.field_label}>Название</div>
+                        <Label text='Название'/>
 
                         <TextBox value={attachment.name || ''}
                                  onChange={(e: React.MouseEvent, value: string) => setAttachment({
@@ -82,12 +87,12 @@ const PopupAttachmentCreate: React.FC<Props> = (props) => {
                                      name: value
                                  })}
                                  placeHolder='Введите название'
-                                 icon='heading'
+                                 styleType='minimal'
                         />
                     </div>
 
-                    <div className={classes.field}>
-                        <div className={classes.field_label}>Описание</div>
+                    <div className={cx({'field': true, 'fieldWrap': true})}>
+                        <Label text='Описание'/>
 
                         <TextAreaBox value={attachment.description || ''}
                                      onChange={(value: string) => setAttachment({
@@ -95,13 +100,13 @@ const PopupAttachmentCreate: React.FC<Props> = (props) => {
                                          description: value
                                      })}
                                      placeHolder='Введите описание'
-                                     icon='paragraph'
+                                     width='100%'
                         />
                     </div>
 
                     {attachment.type === 'video' ?
                         <div className={classes.field}>
-                            <div className={classes.field_label}>Постер</div>
+                            <Label text='Постер'/>
 
                             <Button type='save'
                                     icon='arrow-pointer'
@@ -124,6 +129,7 @@ const PopupAttachmentCreate: React.FC<Props> = (props) => {
                     <div className={classes.field}>
                         <CheckBox label='Активен'
                                   type='modern'
+                                  width={110}
                                   checked={!!attachment.active}
                                   onChange={(e: React.MouseEvent, value: boolean) => setAttachment({
                                       ...attachment,
@@ -131,27 +137,30 @@ const PopupAttachmentCreate: React.FC<Props> = (props) => {
                                   })}
                         />
                     </div>
-                </BlockingElement>
-            </Content>
+                </div>
+            </BlockingElement>
 
             <Footer>
                 <Button type='save'
                         icon='check-double'
                         onClick={() => saveHandler(true)}
                         disabled={fetching}
-                >Сохранить и закрыть</Button>
+                        title='Сохранить и закрыть'
+                />
 
                 <Button type='apply'
                         icon='check'
                         onClick={() => saveHandler()}
                         disabled={fetching}
                         className='marginLeft'
+                        title='Сохранить'
                 >Сохранить</Button>
 
                 <Button type='regular'
                         icon='arrow-rotate-left'
                         onClick={close.bind(this)}
                         className='marginLeft'
+                        title='Отменить'
                 >Отменить</Button>
             </Footer>
         </Popup>
@@ -162,9 +171,10 @@ PopupAttachmentCreate.defaultProps = defaultProps
 PopupAttachmentCreate.displayName = 'PopupAttachmentCreate'
 
 export default function openPopupAttachmentCreate(target: any, popupProps = {} as Props) {
-    const displayOptions = {
+    const displayOptions: PopupDisplayOptions = {
         autoClose: false,
-        center: true
+        rightPanel: true,
+        fullScreen: true
     }
     const blockId = showBackgroundBlock(target, {animate: true}, displayOptions)
     let block = getPopupContainer(blockId)

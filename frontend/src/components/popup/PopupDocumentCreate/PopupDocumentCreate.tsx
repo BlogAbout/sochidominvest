@@ -1,17 +1,18 @@
 import React, {useEffect, useState} from 'react'
-import DocumentService from '../../api/DocumentService'
-import {PopupProps} from '../../@types/IPopup'
-import {IDocument} from '../../@types/IDocument'
-import {IAttachment} from '../../@types/IAttachment'
-import {getPopupContainer, openPopup, removePopup} from '../../helpers/popupHelper'
-import showBackgroundBlock from '../ui/BackgroundBlock/BackgroundBlock'
-import openPopupAlert from '../PopupAlert/PopupAlert'
-import openPopupFileManager from '../PopupFileManager/PopupFileManager'
-import {Content, Footer, Header, Popup} from '../popup/Popup/Popup'
-import BlockingElement from '../ui/BlockingElement/BlockingElement'
-import TextBox from '../form/TextBox/TextBox'
-import Button from '../form/Button/Button'
-import CheckBox from '../form/CheckBox/CheckBox'
+import DocumentService from '../../../api/DocumentService'
+import {PopupDisplayOptions, PopupProps} from '../../../@types/IPopup'
+import {IDocument} from '../../../@types/IDocument'
+import {getPopupContainer, openPopup, removePopup} from '../../../helpers/popupHelper'
+import showBackgroundBlock from '../../ui/BackgroundBlock/BackgroundBlock'
+import openPopupAlert from '../../PopupAlert/PopupAlert'
+import openPopupFileManager from '../../PopupFileManager/PopupFileManager'
+import {Footer, Popup} from '../Popup/Popup'
+import BlockingElement from '../../ui/BlockingElement/BlockingElement'
+import TextBox from '../../form/TextBox/TextBox'
+import Button from '../../form/Button/Button'
+import CheckBox from '../../form/CheckBox/CheckBox'
+import Title from '../../ui/Title/Title'
+import Label from '../../form/Label/Label'
 import classes from './PopupDocumentCreate.module.scss'
 
 interface Props extends PopupProps {
@@ -52,11 +53,11 @@ const PopupDocumentCreate: React.FC<Props> = (props) => {
 
     // Закрытие popup
     const close = () => {
-        removePopup(props.id ? props.id : '')
+        removePopup(props.id || '')
     }
 
     // Сохранение изменений
-    const saveHandler = () => {
+    const saveHandler = (isClose?: boolean) => {
         setFetching(true)
 
         DocumentService.saveDocument(documentInfo)
@@ -65,7 +66,10 @@ const PopupDocumentCreate: React.FC<Props> = (props) => {
                 setDocumentInfo(response.data)
 
                 props.onSave(response.data)
-                close()
+
+                if (isClose) {
+                    close()
+                }
             })
             .catch((error: any) => {
                 openPopupAlert(document.body, {
@@ -87,14 +91,12 @@ const PopupDocumentCreate: React.FC<Props> = (props) => {
 
     return (
         <Popup className={classes.PopupDocumentCreate}>
-            <Header title={documentInfo.id ? 'Редактировать документ' : 'Добавить документ'}
-                    popupId={props.id ? props.id : ''}
-            />
+            <BlockingElement fetching={fetching} className={classes.content}>
+                <div className={classes.blockContent}>
+                    <Title type={2}>Информация о документе</Title>
 
-            <Content className={classes['popup-content']}>
-                <BlockingElement fetching={fetching} className={classes.content}>
                     <div className={classes.field}>
-                        <div className={classes.field_label}>Название</div>
+                        <Label text='Название'/>
 
                         <TextBox value={documentInfo.name}
                                  onChange={(e: React.MouseEvent, value: string) => setDocumentInfo({
@@ -105,20 +107,20 @@ const PopupDocumentCreate: React.FC<Props> = (props) => {
                                  error={documentInfo.name.trim() === ''}
                                  showRequired
                                  errorText='Поле обязательно для заполнения'
-                                 icon='heading'
+                                 styleType='minimal'
                         />
                     </div>
 
                     {documentInfo.type === 'file' ?
                         <div className={classes.field}>
-                            <div className={classes.field_label}>Файл</div>
+                            <Label text='Файл'/>
 
                             <Button type='save'
                                     icon='arrow-pointer'
                                     onClick={() => openPopupFileManager(document.body, {
                                         type: 'document',
                                         selected: documentInfo.attachmentId ? [documentInfo.attachmentId] : [],
-                                        onSelect: (selected: number[], attachments: IAttachment[]) => {
+                                        onSelect: (selected: number[]) => {
                                             setDocumentInfo({
                                                 ...documentInfo,
                                                 attachmentId: selected.length ? selected[0] : null
@@ -133,7 +135,7 @@ const PopupDocumentCreate: React.FC<Props> = (props) => {
 
                     {documentInfo.type === 'link' ?
                         <div className={classes.field}>
-                            <div className={classes.field_label}>Ссылка</div>
+                            <Label text='Ссылка'/>
 
                             <TextBox value={documentInfo.content}
                                      onChange={(e: React.MouseEvent, value: string) => setDocumentInfo({
@@ -144,7 +146,7 @@ const PopupDocumentCreate: React.FC<Props> = (props) => {
                                      error={!documentInfo.content || documentInfo.content.trim() === ''}
                                      showRequired
                                      errorText='Поле обязательно для заполнения'
-                                     icon='link'
+                                     styleType='minimal'
                             />
                         </div>
                         : null
@@ -153,6 +155,7 @@ const PopupDocumentCreate: React.FC<Props> = (props) => {
                     <div className={classes.field}>
                         <CheckBox label='Активен'
                                   type='modern'
+                                  width={110}
                                   checked={!!documentInfo.active}
                                   onChange={(e: React.MouseEvent, value: boolean) => setDocumentInfo({
                                       ...documentInfo,
@@ -160,20 +163,30 @@ const PopupDocumentCreate: React.FC<Props> = (props) => {
                                   })}
                         />
                     </div>
-                </BlockingElement>
-            </Content>
+                </div>
+            </BlockingElement>
 
             <Footer>
+                <Button type='save'
+                        icon='check-double'
+                        onClick={() => saveHandler(true)}
+                        disabled={checkDisabledButton()}
+                        title='Сохранить и закрыть'
+                />
+
                 <Button type='apply'
                         icon='check'
                         onClick={() => saveHandler()}
                         disabled={checkDisabledButton()}
+                        className='marginLeft'
+                        title='Сохранить'
                 >Сохранить</Button>
 
                 <Button type='regular'
                         icon='arrow-rotate-left'
                         onClick={close.bind(this)}
                         className='marginLeft'
+                        title='Отменить'
                 >Отменить</Button>
             </Footer>
         </Popup>
@@ -184,9 +197,10 @@ PopupDocumentCreate.defaultProps = defaultProps
 PopupDocumentCreate.displayName = 'PopupDocumentCreate'
 
 export default function openPopupDocumentCreate(target: any, popupProps = {} as Props) {
-    const displayOptions = {
+    const displayOptions: PopupDisplayOptions = {
         autoClose: false,
-        center: true
+        rightPanel: true,
+        fullScreen: true
     }
     const blockId = showBackgroundBlock(target, {animate: true}, displayOptions)
     let block = getPopupContainer(blockId)

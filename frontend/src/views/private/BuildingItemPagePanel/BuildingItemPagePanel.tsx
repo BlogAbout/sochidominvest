@@ -29,7 +29,7 @@ import BlockingElement from '../../../components/ui/BlockingElement/BlockingElem
 import Gallery from '../../../components/Gallery/Gallery'
 import openPopupBuildingCreate from '../../../components/PopupBuildingCreate/PopupBuildingCreate'
 import openPopupAlert from '../../../components/PopupAlert/PopupAlert'
-import openPopupSupportCreate from '../../../components/PopupSupportCreate/PopupSupportCreate'
+import openPopupSupportCreate from '../../../components/popup/PopupSupportCreate/PopupSupportCreate'
 import openPopupCheckerInfo from '../../../components/PopupCheckerInfo/PopupCheckerInfo'
 import openPopupCompilationSelector from '../../../components/PopupCompilationSelector/PopupCompilationSelector'
 import PdfDocumentGenerator from '../../../components/PdfDocumentGenerator/PdfDocumentGenerator'

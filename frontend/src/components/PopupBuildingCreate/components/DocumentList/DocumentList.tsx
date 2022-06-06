@@ -7,7 +7,7 @@ import BlockingElement from '../../../ui/BlockingElement/BlockingElement'
 import Empty from '../../../Empty/Empty'
 import openPopupAlert from '../../../PopupAlert/PopupAlert'
 import openContextMenu from '../../../ContextMenu/ContextMenu'
-import openPopupDocumentCreate from '../../../PopupDocumentCreate/PopupDocumentCreate'
+import openPopupDocumentCreate from '../../../popup/PopupDocumentCreate/PopupDocumentCreate'
 import Preloader from '../../../Preloader/Preloader'
 import classes from './DocumentList.module.scss'
 
