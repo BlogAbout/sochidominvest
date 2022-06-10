@@ -21,11 +21,10 @@
 .tabs {
     display: flex;
     flex: none;
-    height: 35px;
+    flex-wrap: wrap;
 }
 
 .top .tabs {
-    align-items: flex-end;
     border-bottom: 1px solid #075ea5;
 }
 
@@ -58,12 +57,13 @@
     height: 23px;
     border: 1px solid #075ea5;
     padding: 0 5px;
-    margin-left: 6px;
+    margin-right: 5px;
+    margin-bottom: 5px;
     font-size: 13px;
     line-height: 23px;
-    color: #585858;
+    color: #075ea5;
     cursor: pointer;
-    background-color: #f4f8fb;
+    background-color: #fff;
     white-space: nowrap;
     transition: background-color 0.1s;
     user-select: none;
@@ -79,31 +79,22 @@
     line-height: inherit;
 }
 
-.top .tab {
-    border-bottom: none;
-}
-
-.bottom .tab {
-    border-top: none;
-}
-
 .tab:not(.active):hover {
     background-color: #e7f3f5;
 }
 
 .active {
     composes: tab;
-    background-color: white;
+    background-color: #075ea5;
+    color: #fff;
     position: relative;
 }
 
 .top .active {
-    margin-bottom: -1px;
     border-bottom: 1px solid transparent;
 }
 
 .bottom .active {
-    margin-top: -1px;
     border-top: 1px solid transparent;
 }
 

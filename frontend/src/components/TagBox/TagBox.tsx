@@ -19,6 +19,7 @@ interface Props {
     showRequired?: boolean
     showClear?: boolean
     disableTitle?: boolean
+    styleType: 'standard' | 'minimal'
 
     onSelect(value: number[], e: React.MouseEvent): void
 }
@@ -26,6 +27,7 @@ interface Props {
 const defaultProps: Props = {
     tags: [],
     multi: false,
+    styleType: 'standard',
     onSelect: (value: number[], e: React.MouseEvent) => {
         console.info('TagBox onSelect', value, e)
     }
@@ -119,6 +121,7 @@ const TagBox: React.FC<Props> = (props) => {
              onChange={clickHandler.bind(this)}
              onClear={resetHandler.bind(this)}
              showSelect
+             styleType={props.styleType}
         />
     )
 }

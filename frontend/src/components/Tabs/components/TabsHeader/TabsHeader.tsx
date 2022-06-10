@@ -43,15 +43,16 @@ const TabsHeader: React.FC<Props> = (props) => {
 
         let marginLeft = 6
 
-        if (index === 0) {
-            if (props.paddingFirstTab === 'none') {
-                marginLeft = 0
-            }
-
-            if (props.paddingFirstTab === 'popup') {
-                marginLeft = 15
-            }
-        }
+        // Todo
+        // if (index === 0) {
+        //     if (props.paddingFirstTab === 'none') {
+        //         marginLeft = 0
+        //     }
+        //
+        //     if (props.paddingFirstTab === 'popup') {
+        //         marginLeft = 15
+        //     }
+        // }
 
         return (
             <div key={tabKey}
@@ -59,7 +60,6 @@ const TabsHeader: React.FC<Props> = (props) => {
                  onClick={() => props.activeTab(tabKey)}
                  title={tab.title}
                  placeholder={tab.icon ? '' : tab.title}
-                 style={{marginLeft}}
             >
                 {!tab.icon ? <span>{tab.title}</span> : <span className={styles['title-empty']}/>}
 

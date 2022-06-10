@@ -40,6 +40,7 @@ const SidebarLeft: React.FC<Props> = (props) => {
                              onSelect={(value: string[]) => filter.onSelect(value)}
                              placeHolder='Выберите'
                              multi
+                             styleType='standard'
                 />
             )
         }

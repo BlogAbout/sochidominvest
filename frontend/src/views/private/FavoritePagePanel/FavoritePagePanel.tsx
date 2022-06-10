@@ -5,7 +5,7 @@ import BuildingTill from '../../../components/container/BuildingListContainer/co
 import {IBuilding} from '../../../@types/IBuilding'
 import {useTypedSelector} from '../../../hooks/useTypedSelector'
 import {useActions} from '../../../hooks/useActions'
-import openPopupBuildingCreate from '../../../components/PopupBuildingCreate/PopupBuildingCreate'
+import openPopupBuildingCreate from '../../../components/popup/PopupBuildingCreate/PopupBuildingCreate'
 import openPopupAlert from '../../../components/PopupAlert/PopupAlert'
 import BuildingService from '../../../api/BuildingService'
 import CompilationService from '../../../api/CompilationService'

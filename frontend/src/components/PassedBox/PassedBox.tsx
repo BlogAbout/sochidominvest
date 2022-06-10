@@ -19,12 +19,14 @@ interface Props {
     showClear?: boolean
     disableTitle?: boolean
     icon?: IconProp
+    styleType: 'standard' | 'minimal'
 
     onChange(value: IBuildingPassed | null): void
 }
 
 const defaultProps: Props = {
     selected: null,
+    styleType: 'standard',
     onChange: (value: IBuildingPassed) => {
         console.info('PassedBox onSelect', value)
     }
@@ -79,6 +81,7 @@ const PassedBox: React.FC<Props> = (props) => {
              onChange={clickHandler.bind(this)}
              onClear={resetHandler.bind(this)}
              showSelect
+             styleType={props.styleType}
         />
     )
 }

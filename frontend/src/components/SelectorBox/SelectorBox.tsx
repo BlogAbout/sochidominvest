@@ -21,6 +21,7 @@ interface Props {
     showClear?: boolean
     disableTitle?: boolean
     icon?: IconProp
+    styleType: 'standard' | 'minimal'
 
     onSelect(value: string[]): void
 }
@@ -28,6 +29,7 @@ interface Props {
 const defaultProps: Props = {
     selected: [],
     items: [],
+    styleType: 'standard',
     onSelect: (value: string[]) => {
         console.info('SelectorBox onSelect', value)
     }
@@ -103,6 +105,7 @@ const SelectorBox: React.FC<Props> = (props) => {
              onChange={clickHandler.bind(this)}
              onClear={resetHandler.bind(this)}
              showSelect
+             styleType={props.styleType}
         />
     )
 }

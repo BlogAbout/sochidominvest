@@ -1,35 +1,35 @@
 import React, {useEffect, useState} from 'react'
-import withStore from '../../hoc/withStore'
+import withStore from '../../../hoc/withStore'
 import classNames from 'classnames/bind'
-import BuildingService from '../../api/BuildingService'
-import AttachmentService from '../../api/AttachmentService'
-import {PopupProps} from '../../@types/IPopup'
-import {IBuilding, IBuildingPassed} from '../../@types/IBuilding'
-import {ITab} from '../../@types/ITab'
-import {ISelector} from '../../@types/ISelector'
-import {IAttachment} from '../../@types/IAttachment'
-import {getPopupContainer, openPopup, removePopup} from '../../helpers/popupHelper'
-import showBackgroundBlock from '../ui/BackgroundBlock/BackgroundBlock'
-import {Content, Footer, Header, Popup} from '../popup/Popup/Popup'
-import BlockingElement from '../ui/BlockingElement/BlockingElement'
-import TextBox from '../form/TextBox/TextBox'
-import NumberBox from '../NumberBox/NumberBox'
-import Button from '../form/Button/Button'
-import CheckBox from '../form/CheckBox/CheckBox'
-import ComboBox from '../ComboBox/ComboBox'
-import Tabs from '../Tabs/Tabs'
-import TagBox from '../TagBox/TagBox'
-import Empty from '../Empty/Empty'
+import BuildingService from '../../../api/BuildingService'
+import AttachmentService from '../../../api/AttachmentService'
+import {PopupDisplayOptions, PopupProps} from '../../../@types/IPopup'
+import {IBuilding, IBuildingPassed} from '../../../@types/IBuilding'
+import {ITab} from '../../../@types/ITab'
+import {ISelector} from '../../../@types/ISelector'
+import {IAttachment} from '../../../@types/IAttachment'
+import {getPopupContainer, openPopup, removePopup} from '../../../helpers/popupHelper'
+import showBackgroundBlock from '../../ui/BackgroundBlock/BackgroundBlock'
+import {Content, Footer, Header, Popup} from '../Popup/Popup'
+import BlockingElement from '../../ui/BlockingElement/BlockingElement'
+import TextBox from '../../form/TextBox/TextBox'
+import NumberBox from '../../NumberBox/NumberBox'
+import Button from '../../form/Button/Button'
+import CheckBox from '../../form/CheckBox/CheckBox'
+import ComboBox from '../../ComboBox/ComboBox'
+import Tabs from '../../Tabs/Tabs'
+import TagBox from '../../TagBox/TagBox'
+import Empty from '../../Empty/Empty'
 import CheckerList from './components/CheckerList/CheckerList'
 import DeveloperList from './components/DeveloperList/DeveloperList'
 import DocumentList from './components/DocumentList/DocumentList'
 import UserList from './components/UserList/UserList'
-import SelectorBox from '../SelectorBox/SelectorBox'
-import TextAreaBox from '../TextAreaBox/TextAreaBox'
-import PassedBox from '../PassedBox/PassedBox'
-import FileList from '../FileList/FileList'
-import openPopupAlert from '../PopupAlert/PopupAlert'
-import openPopupFileManager from '../PopupFileManager/PopupFileManager'
+import SelectorBox from '../../SelectorBox/SelectorBox'
+import TextAreaBox from '../../TextAreaBox/TextAreaBox'
+import PassedBox from '../../PassedBox/PassedBox'
+import FileList from '../../FileList/FileList'
+import openPopupAlert from '../../PopupAlert/PopupAlert'
+import openPopupFileManager from '../../PopupFileManager/PopupFileManager'
 import {
     amountContract,
     buildingAdvantages,
@@ -48,9 +48,11 @@ import {
     districtList,
     formalizationList,
     paymentsList
-} from '../../helpers/buildingHelper'
-import {sortAttachments} from '../../helpers/attachmentHelper'
+} from '../../../helpers/buildingHelper'
+import {sortAttachments} from '../../../helpers/attachmentHelper'
 import classes from './PopupBuildingCreate.module.scss'
+import Title from "../../ui/Title/Title";
+import Label from "../../form/Label/Label";
 
 interface Props extends PopupProps {
     building?: IBuilding | null
@@ -233,48 +235,97 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
         return (
             <div key='state' className={classes.tabContent}>
                 <div className={classes.field}>
-                    <div className={classes.field_label}>Статус</div>
+                    <Label text='Название'/>
+
+                    <TextBox value={building.name}
+                             onChange={(e: React.MouseEvent, value: string) => setBuilding({
+                                 ...building,
+                                 name: value
+                             })}
+                             placeHolder='Введите название'
+                             error={building.name.trim() === ''}
+                             showRequired
+                             errorText='Поле обязательно для заполнения'
+                             styleType='minimal'
+                    />
+                </div>
+
+                <div className={classes.field}>
+                    <Label text='Адрес'/>
+
+                    <TextBox value={building.address}
+                             onChange={(e: React.MouseEvent, value: string) => setBuilding({
+                                 ...building,
+                                 address: value
+                             })}
+                             placeHolder='Введите адрес'
+                             error={!building.address || building.address.trim() === ''}
+                             showRequired
+                             errorText='Поле обязательно для заполнения'
+                             styleType='minimal'
+                    />
+                </div>
+
+                <div className={cx({'field': true, 'fieldWrap': true})}>
+                    <Label text='Описание'/>
+
+                    <TextAreaBox value={building.description}
+                                 onChange={(value: string) => setBuilding({
+                                     ...building,
+                                     description: value
+                                 })}
+                                 placeHolder='Введите описание об объекте'
+                                 icon='paragraph'
+                                 isVisual={true}
+                                 width='100%'
+                    />
+                </div>
+
+                <div className={classes.field}>
+                    <Label text='Статус'/>
 
                     <ComboBox selected={building.status}
                               items={Object.values(buildingStatuses)}
                               onSelect={(value: string) => setBuilding({...building, status: value})}
                               placeHolder='Выберите статус'
-                              styleType='standard'
+                              styleType='minimal'
                     />
                 </div>
 
                 <div className={classes.field}>
-                    <div className={classes.field_label}>Дата сдачи</div>
+                    <Label text='Дата сдачи'/>
 
                     <PassedBox selected={building.passed || null}
                                onChange={(value: IBuildingPassed) => setBuilding({...building, passed: value})}
                                placeHolder='Укажите дату сдачи'
+                               styleType='minimal'
                     />
                 </div>
 
                 <div className={classes.field}>
-                    <div className={classes.field_label}>Теги</div>
+                    <Label text='Теги'/>
 
                     <TagBox tags={building.tags}
                             onSelect={(value: number[]) => setBuilding({...building, tags: value})}
                             placeHolder='Выберите теги'
                             multi
+                            styleType='minimal'
                     />
                 </div>
 
                 <div className={classes.field}>
-                    <div className={classes.field_label}>Сумма в договоре</div>
+                    <Label text='Сумма в договоре'/>
 
                     <ComboBox selected={building.amountContract || null}
                               items={Object.values(amountContract)}
                               onSelect={(value: string) => setBuilding({...building, amountContract: value})}
                               placeHolder='Выберите сумму в договоре'
-                              styleType='standard'
+                              styleType='minimal'
                     />
                 </div>
 
                 <div className={classes.field}>
-                    <div className={classes.field_label}>Доплата за документы, руб.</div>
+                    <Label text='Доплата за документы, руб.'/>
 
                     <NumberBox value={building.surchargeDoc || ''}
                                min={0}
@@ -285,11 +336,12 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
                                    surchargeDoc: value
                                })}
                                placeHolder='Введите размер доплаты за документы'
+                               styleType='minimal'
                     />
                 </div>
 
                 <div className={classes.field}>
-                    <div className={classes.field_label}>Доплата за газ, руб.</div>
+                    <Label text='Доплата за газ, руб.'/>
 
                     <NumberBox value={building.surchargeGas || ''}
                                min={0}
@@ -300,12 +352,14 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
                                    surchargeGas: value
                                })}
                                placeHolder='Введите размер доплаты за газ'
+                               styleType='minimal'
                     />
                 </div>
 
                 <div className={classes.field}>
                     <CheckBox label='Продажа для нерезидентов'
                               type='modern'
+                              width={110}
                               checked={!!building.saleNoResident}
                               onChange={(e: React.MouseEvent, value: boolean) => setBuilding({
                                   ...building,
@@ -317,6 +371,7 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
                 <div className={classes.field}>
                     <CheckBox label='Публичный'
                               type='modern'
+                              width={110}
                               checked={!!building.publish}
                               onChange={(e: React.MouseEvent, value: boolean) => setBuilding({
                                   ...building,
@@ -328,6 +383,7 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
                 <div className={classes.field}>
                     <CheckBox label='Активен'
                               type='modern'
+                              width={110}
                               checked={!!building.active}
                               onChange={(e: React.MouseEvent, value: boolean) => setBuilding({
                                   ...building,
@@ -348,7 +404,7 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
                 {building.type !== 'building' ?
                     <>
                         <div className={classes.field}>
-                            <div className={classes.field_label}>Площадь, м<sup>2</sup></div>
+                            <Label text='Площадь, м<sup>2</sup>'/>
 
                             <NumberBox value={building.area || ''}
                                        min={0}
@@ -360,11 +416,12 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
                                            area: value
                                        })}
                                        placeHolder='Введите площадь'
+                                       styleType='minimal'
                             />
                         </div>
 
                         <div className={classes.field}>
-                            <div className={classes.field_label}>Стоимость, руб.</div>
+                            <Label text='Стоимость, руб.'/>
 
                             <NumberBox value={building.cost || ''}
                                        min={0}
@@ -375,6 +432,7 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
                                            cost: value
                                        })}
                                        placeHolder='Введите стоимость'
+                                       styleType='minimal'
                             />
                         </div>
                     </>
@@ -382,29 +440,29 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
                 }
 
                 <div className={classes.field}>
-                    <div className={classes.field_label}>Район</div>
+                    <Label text='Район'/>
 
                     <ComboBox selected={building.district || null}
                               items={Object.values(districtList)}
                               onSelect={(value: string) => setBuilding({...building, district: value})}
                               placeHolder='Выберите район'
-                              styleType='standard'
+                              styleType='minimal'
                     />
                 </div>
 
                 <div className={classes.field}>
-                    <div className={classes.field_label}>Микрорайон</div>
+                    <Label text='Микрорайон'/>
 
                     <ComboBox selected={building.districtZone || null}
                               items={districtZones && districtZones.children ? Object.values(districtZones.children) : []}
                               onSelect={(value: string) => setBuilding({...building, districtZone: value})}
                               placeHolder='Выберите микрорайон'
-                              styleType='standard'
+                              styleType='minimal'
                     />
                 </div>
 
                 <div className={classes.field}>
-                    <div className={classes.field_label}>Особенности</div>
+                    <Label text='Особенности'/>
 
                     <SelectorBox selected={building.advantages || []}
                                  items={Object.values(buildingAdvantages)}
@@ -415,11 +473,12 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
                                  title='Выберите особенности'
                                  placeHolder='Выберите особенности'
                                  multi
+                                 styleType='minimal'
                     />
                 </div>
 
                 <div className={classes.field}>
-                    <div className={classes.field_label}>Варианты оплаты</div>
+                    <Label text='Варианты оплаты'/>
 
                     <SelectorBox selected={building.payments || []}
                                  items={Object.values(paymentsList)}
@@ -430,11 +489,12 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
                                  title='Выберите варианты оплаты'
                                  placeHolder='Выберите варианты оплаты'
                                  multi
+                                 styleType='minimal'
                     />
                 </div>
 
                 <div className={classes.field}>
-                    <div className={classes.field_label}>Варианты оформления покупки</div>
+                    <Label text='Варианты оформления покупки'/>
 
                     <SelectorBox selected={building.formalization || []}
                                  items={Object.values(formalizationList)}
@@ -445,132 +505,133 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
                                  title='Выберите варианты оформления покупки'
                                  placeHolder='Выберите варианты оформления покупки'
                                  multi
+                                 styleType='minimal'
                     />
                 </div>
 
                 <div className={classes.field}>
-                    <div className={classes.field_label}>Класс дома</div>
+                    <Label text='Класс дома'/>
 
                     <ComboBox selected={building.houseClass || ''}
                               items={Object.values(buildingClasses)}
                               onSelect={(value: string) => setBuilding({...building, houseClass: value})}
                               placeHolder='Выберите класс дома'
-                              styleType='standard'
+                              styleType='minimal'
                     />
                 </div>
 
                 <div className={classes.field}>
-                    <div className={classes.field_label}>Материал здания</div>
+                    <Label text='Материал здания'/>
 
                     <ComboBox selected={building.material || ''}
                               items={Object.values(buildingMaterials)}
                               onSelect={(value: string) => setBuilding({...building, material: value})}
                               placeHolder='Выберите тип материала здания'
-                              styleType='standard'
+                              styleType='minimal'
                     />
                 </div>
 
                 <div className={classes.field}>
-                    <div className={classes.field_label}>Тип дома</div>
+                    <Label text='Тип дома'/>
 
                     <ComboBox selected={building.houseType || ''}
                               items={Object.values(buildingFormat)}
                               onSelect={(value: string) => setBuilding({...building, houseType: value})}
                               placeHolder='Выберите тип дома'
-                              styleType='standard'
+                              styleType='minimal'
                     />
                 </div>
 
                 <div className={classes.field}>
-                    <div className={classes.field_label}>Паркинг</div>
+                    <Label text='Паркинг'/>
 
                     <ComboBox selected={building.parking || ''}
                               items={Object.values(buildingParking)}
                               onSelect={(value: string) => setBuilding({...building, parking: value})}
                               placeHolder='Выберите тип паркинга'
-                              styleType='standard'
+                              styleType='minimal'
                     />
                 </div>
 
                 <div className={classes.field}>
-                    <div className={classes.field_label}>Территория</div>
+                    <Label text='Территория'/>
 
                     <ComboBox selected={building.territory || ''}
                               items={Object.values(buildingTerritory)}
                               onSelect={(value: string) => setBuilding({...building, territory: value})}
                               placeHolder='Выберите тип территории'
-                              styleType='standard'
+                              styleType='minimal'
                     />
                 </div>
 
                 <div className={classes.field}>
-                    <div className={classes.field_label}>Подъезд к дому</div>
+                    <Label text='Подъезд к дому'/>
 
                     <ComboBox selected={building.entranceHouse || ''}
                               items={Object.values(buildingEntrance)}
                               onSelect={(value: string) => setBuilding({...building, entranceHouse: value})}
                               placeHolder='Выберите тип подъезда к дому'
-                              styleType='standard'
+                              styleType='minimal'
                     />
                 </div>
 
                 <div className={classes.field}>
-                    <div className={classes.field_label}>Газ</div>
+                    <Label text='Газ'/>
 
                     <ComboBox selected={building.gas || ''}
                               items={Object.values(buildingGas)}
                               onSelect={(value: string) => setBuilding({...building, gas: value})}
                               placeHolder='Выберите подключение газа'
-                              styleType='standard'
+                              styleType='minimal'
                     />
                 </div>
 
                 <div className={classes.field}>
-                    <div className={classes.field_label}>Отопление</div>
+                    <Label text='Отопление'/>
 
                     <ComboBox selected={building.heating || ''}
                               items={Object.values(buildingHeating)}
                               onSelect={(value: string) => setBuilding({...building, heating: value})}
                               placeHolder='Выберите тип отопления'
-                              styleType='standard'
+                              styleType='minimal'
                     />
                 </div>
 
                 <div className={classes.field}>
-                    <div className={classes.field_label}>Электричество</div>
+                    <Label text='Электричество'/>
 
                     <ComboBox selected={building.electricity || ''}
                               items={Object.values(buildingElectricity)}
                               onSelect={(value: string) => setBuilding({...building, electricity: value})}
                               placeHolder='Выберите тип электричества'
-                              styleType='standard'
+                              styleType='minimal'
                     />
                 </div>
 
                 <div className={classes.field}>
-                    <div className={classes.field_label}>Канализация</div>
+                    <Label text='Канализация'/>
 
                     <ComboBox selected={building.sewerage || ''}
                               items={Object.values(buildingSewerage)}
                               onSelect={(value: string) => setBuilding({...building, sewerage: value})}
                               placeHolder='Выберите тип канализации'
-                              styleType='standard'
+                              styleType='minimal'
                     />
                 </div>
 
                 <div className={classes.field}>
-                    <div className={classes.field_label}>Водоснабжение</div>
+                    <Label text='Водоснабжение'/>
 
                     <ComboBox selected={building.waterSupply || ''}
                               items={Object.values(buildingWaterSupply)}
                               onSelect={(value: string) => setBuilding({...building, waterSupply: value})}
                               placeHolder='Выберите тип водоснабжения'
-                              styleType='standard'
+                              styleType='minimal'
                     />
                 </div>
 
                 <div className={classes.field}>
-                    <div className={classes.field_label}>Расстояние до моря, м.</div>
+                    <Label text='Расстояние до моря, м.'/>
 
                     <NumberBox value={building.distanceSea || ''}
                                min={0}
@@ -581,11 +642,12 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
                                    distanceSea: value
                                })}
                                placeHolder='Укажите расстояние до моря'
+                               styleType='minimal'
                     />
                 </div>
 
                 <div className={classes.field}>
-                    <div className={classes.field_label}>Высота потолков, м.</div>
+                    <Label text='Высота потолков, м.'/>
 
                     <NumberBox value={building.ceilingHeight || ''}
                                min={0}
@@ -597,6 +659,7 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
                                    ceilingHeight: value
                                })}
                                placeHolder='Укажите высоту потолков'
+                               styleType='minimal'
                     />
                 </div>
             </div>
@@ -619,8 +682,8 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
     const renderMediaTab = () => {
         return (
             <div key='media' className={classes.tabContent}>
-                <div className={cx({'field': true, 'full': true})}>
-                    <div className={classes.field_label}>Фотогалерея</div>
+                <div className={classes.field}>
+                    <Label text='Фотогалерея'/>
 
                     <Button type='save'
                             icon='arrow-pointer'
@@ -647,8 +710,8 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
                     />
                 </div>
 
-                <div className={cx({'field': true, 'full': true})}>
-                    <div className={classes.field_label}>Видео</div>
+                <div className={classes.field}>
+                    <Label text='Видео'/>
 
                     <Button type='save'
                             icon='arrow-pointer'
@@ -715,8 +778,8 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
         return (
             <div key='seo' className={classes.tabContent}>
                 <div className={classes.info}>
-                    <div className={cx({'field': true, 'full': true})}>
-                        <div className={classes.field_label}>Meta Title</div>
+                    <div className={classes.field}>
+                        <Label text='Meta Title'/>
 
                         <TextBox value={building.metaTitle}
                                  onChange={(e: React.MouseEvent, value: string) => setBuilding({
@@ -724,12 +787,12 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
                                      metaTitle: value
                                  })}
                                  placeHolder='Введите Meta Title'
-                                 icon='heading'
+                                 styleType='minimal'
                         />
                     </div>
 
-                    <div className={cx({'field': true, 'full': true})}>
-                        <div className={classes.field_label}>Meta Description</div>
+                    <div className={cx({'field': true, 'fieldWrap': true})}>
+                        <Label text='Meta Description'/>
 
                         <TextAreaBox value={building.metaDescription || ''}
                                      onChange={(value: string) => setBuilding({
@@ -737,7 +800,7 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
                                          metaDescription: value
                                      })}
                                      placeHolder='Введите Meta Description'
-                                     icon='paragraph'
+                                     width='100%'
                         />
                     </div>
                 </div>
@@ -762,84 +825,35 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
 
     return (
         <Popup className={classes.PopupBuildingCreate}>
-            <Header title={building.id ? 'Редактировать недвижимость' : 'Добавить недвижимость'}
-                    popupId={props.id ? props.id : ''}
-            />
+            <BlockingElement fetching={fetchingBuilding} className={classes.content}>
+                <div className={classes.blockContent}>
+                    <Title type={2}>{building.id ? 'Редактировать недвижимость' : 'Добавить недвижимость'}</Title>
 
-            <Content className={classes['popup-content']}>
-                <BlockingElement fetching={fetchingBuilding} className={classes.content}>
-                    <div className={classes.info}>
-                        <div className={classes.field}>
-                            <div className={classes.field_label}>Название</div>
-
-                            <TextBox value={building.name}
-                                     onChange={(e: React.MouseEvent, value: string) => setBuilding({
-                                         ...building,
-                                         name: value
-                                     })}
-                                     placeHolder='Введите название'
-                                     error={building.name.trim() === ''}
-                                     showRequired
-                                     errorText='Поле обязательно для заполнения'
-                                     icon='heading'
-                            />
-                        </div>
-
-                        <div className={classes.field}>
-                            <div className={classes.field_label}>Адрес</div>
-
-                            <TextBox value={building.address}
-                                     onChange={(e: React.MouseEvent, value: string) => setBuilding({
-                                         ...building,
-                                         address: value
-                                     })}
-                                     placeHolder='Введите адрес'
-                                     error={!building.address || building.address.trim() === ''}
-                                     showRequired
-                                     errorText='Поле обязательно для заполнения'
-                                     icon='location-dot'
-                            />
-                        </div>
-
-                        <div className={cx({'field': true, 'full': true})}>
-                            <div className={classes.field_label}>Описание</div>
-
-                            <TextAreaBox value={building.description}
-                                         onChange={(value: string) => setBuilding({
-                                             ...building,
-                                             description: value
-                                         })}
-                                         placeHolder='Введите описание об объекте'
-                                         icon='paragraph'
-                                         isVisual={true}
-                            />
-                        </div>
-                    </div>
-
-                    <div className={classes['tabs']}>
-                        <Tabs tabs={tabs} paddingFirstTab='popup'/>
-                    </div>
-                </BlockingElement>
-            </Content>
+                    <Tabs tabs={tabs} paddingFirstTab='popup'/>
+                </div>
+            </BlockingElement>
 
             <Footer>
                 <Button type='save'
                         icon='check-double'
                         onClick={() => saveHandler(true)}
                         disabled={isDisableButton()}
-                >Сохранить и закрыть</Button>
+                        title='Сохранить и закрыть'
+                />
 
                 <Button type='apply'
                         icon='check'
                         onClick={() => saveHandler()}
                         disabled={isDisableButton()}
                         className='marginLeft'
+                        title='Сохранить'
                 >Сохранить</Button>
 
                 <Button type='regular'
                         icon='arrow-rotate-left'
                         onClick={close.bind(this)}
                         className='marginLeft'
+                        title='Отменить'
                 >Отменить</Button>
             </Footer>
         </Popup>
@@ -850,9 +864,10 @@ PopupBuildingCreate.defaultProps = defaultProps
 PopupBuildingCreate.displayName = 'PopupBuildingCreate'
 
 export default function openPopupBuildingCreate(target: any, popupProps = {} as Props) {
-    const displayOptions = {
+    const displayOptions: PopupDisplayOptions = {
         autoClose: false,
-        center: true
+        rightPanel: true,
+        fullScreen: true
     }
     const blockId = showBackgroundBlock(target, {animate: true}, displayOptions)
     let block = getPopupContainer(blockId)

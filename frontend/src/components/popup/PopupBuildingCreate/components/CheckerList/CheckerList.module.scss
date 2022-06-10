@@ -1,6 +1,6 @@
-.UserList {
+.CheckerList {
     width: 100%;
-    height: 214px;
+    height: 100%;
     display: flex;
     flex-direction: column;
     border-left: 1px solid #e6e6e6;
@@ -25,7 +25,7 @@
         }
     }
 
-    .addUser {
+    .addChecker {
         flex: none;
         display: flex;
         align-items: center;
@@ -52,6 +52,8 @@
     }
 
     .list {
+        height: 100%;
+
         .row {
             display: flex;
             height: 30px;
@@ -72,9 +74,25 @@
         width: 100%;
     }
 
-    .phone {
+    .housing,
+    .stage {
         flex-shrink: 0;
-        width: 150px;
+        width: 50px;
+    }
+
+    .status {
+        flex-shrink: 0;
+        width: 110px;
+    }
+
+    .area {
+        flex-shrink: 0;
+        width: 80px;
+    }
+
+    .cost {
+        flex-shrink: 0;
+        width: 100px;
         border-right: none !important;
     }
 }
