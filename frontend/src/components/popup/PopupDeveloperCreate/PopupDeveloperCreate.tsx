@@ -12,7 +12,7 @@ import BlockingElement from '../../ui/BlockingElement/BlockingElement'
 import TextBox from '../../form/TextBox/TextBox'
 import Button from '../../form/Button/Button'
 import CheckBox from '../../form/CheckBox/CheckBox'
-import TextAreaBox from '../../TextAreaBox/TextAreaBox'
+import TextAreaBox from '../../form/TextAreaBox/TextAreaBox'
 import ComboBox from '../../ComboBox/ComboBox'
 import Title from '../../ui/Title/Title'
 import Label from '../../form/Label/Label'
@@ -173,6 +173,7 @@ const PopupDeveloperCreate: React.FC<Props> = (props) => {
                                      })}
                                      placeHolder='Введите описание о застройщике'
                                      isVisual={true}
+                                     width='100%'
                         />
                     </div>
 

@@ -13,6 +13,11 @@
         padding: 0;
         display: block;
         height: auto;
+        min-height: 250px;
+
+        textarea {
+            height: 205px !important;
+        }
     }
 
     .icon {

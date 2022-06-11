@@ -25,7 +25,7 @@ import DeveloperList from './components/DeveloperList/DeveloperList'
 import DocumentList from './components/DocumentList/DocumentList'
 import UserList from './components/UserList/UserList'
 import SelectorBox from '../../SelectorBox/SelectorBox'
-import TextAreaBox from '../../TextAreaBox/TextAreaBox'
+import TextAreaBox from '../../form/TextAreaBox/TextAreaBox'
 import PassedBox from '../../PassedBox/PassedBox'
 import FileList from '../../FileList/FileList'
 import openPopupAlert from '../../PopupAlert/PopupAlert'
@@ -358,6 +358,7 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
 
                 <div className={classes.field}>
                     <CheckBox label='Продажа для нерезидентов'
+                              title='Продажа для нерезидентов'
                               type='modern'
                               width={110}
                               checked={!!building.saleNoResident}

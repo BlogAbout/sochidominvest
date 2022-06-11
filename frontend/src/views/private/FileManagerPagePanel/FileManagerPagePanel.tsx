@@ -95,7 +95,7 @@ const FileManagerPagePanel: React.FC = () => {
             {text: 'Документы', onClick: () => uploadHandler('document')}
         ]
 
-        openContextMenu(e, menuItems)
+        openContextMenu(e.currentTarget, menuItems)
     }
 
     const renderUploader = () => {

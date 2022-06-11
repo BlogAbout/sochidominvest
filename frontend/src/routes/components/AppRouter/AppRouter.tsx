@@ -32,7 +32,7 @@ import PartnerPanel from '../../../views/private/AdvertisingMaterialsPagePanel/c
 import BannerPanel from '../../../views/private/AdvertisingMaterialsPagePanel/components/BannerPanel/BannerPanel'
 import WidgetPanel from '../../../views/private/AdvertisingMaterialsPagePanel/components/WidgetPanel/WidgetPanel'
 import Navigation from '../../../components/ui/Navigation/Navigation'
-import SidebarRight from '../../../components/SidebarRight/SidebarRight'
+import SidebarRight from '../../../components/ui/SidebarRight/SidebarRight'
 import HeaderDefault from '../../../components/HeaderDefault/HeaderDefault'
 import FooterDefault from '../../../components/FooterDefault/FooterDefault'
 import classes from './AppRouter.module.scss'

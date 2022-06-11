@@ -1,21 +1,22 @@
 import React, {useEffect, useState} from 'react'
-import {Link} from 'react-router-dom'
-import NotificationService from '../../api/NotificationService'
+import {Link, useNavigate} from 'react-router-dom'
+import NotificationService from '../../../api/NotificationService'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {useActions} from '../../hooks/useActions'
-import {useTypedSelector} from '../../hooks/useTypedSelector'
-import {RouteNames} from '../../routes/routes'
-import openPopupUserCreate from '../popup/PopupUserCreate/PopupUserCreate'
-import NotificationPanel from '../NotificationPanel/NotificationPanel'
-import SearchPanel from '../SearchPanel/SearchPanel'
+import {useActions} from '../../../hooks/useActions'
+import {useTypedSelector} from '../../../hooks/useTypedSelector'
+import {RouteNames} from '../../../routes/routes'
+import openPopupUserCreate from '../../popup/PopupUserCreate/PopupUserCreate'
+import openPopupSearchPanel from '../../popup/PopupSearchPanel/PopupSearchPanel'
+import NotificationPanel from '../../NotificationPanel/NotificationPanel'
 import classes from './SidebarRight.module.scss'
 
 const SidebarRight: React.FC = () => {
+    const navigate = useNavigate()
+
     const [isShowNotification, setIsShowNotification] = useState(false)
-    const [isShowSearch, setIsShowSearch] = useState(false)
     const [countNewNotification, setCountNewNotification] = useState(0)
 
-    const {userId} = useTypedSelector(state => state.userReducer)
+    const {userId, role} = useTypedSelector(state => state.userReducer)
     const {logout} = useActions()
 
     let intervalTimer: any = null
@@ -43,7 +44,12 @@ const SidebarRight: React.FC = () => {
             <aside className={classes.SidebarRight}>
                 <div className={classes.icon}
                      title='Глобальный поиск'
-                     onClick={() => setIsShowSearch(!isShowSearch)}
+                     onClick={() => {
+                         openPopupSearchPanel(document.body, {
+                             role: role,
+                             navigate: navigate
+                         })
+                     }}
                 >
                     <FontAwesomeIcon icon='magnifying-glass'/>
                 </div>
@@ -99,9 +105,6 @@ const SidebarRight: React.FC = () => {
 
             {isShowNotification &&
             <NotificationPanel isShow={isShowNotification} onShow={() => setIsShowNotification(false)}/>}
-
-            {isShowSearch &&
-            <SearchPanel isShow={isShowSearch} onShow={() => setIsShowSearch(false)}/>}
         </>
     )
 }

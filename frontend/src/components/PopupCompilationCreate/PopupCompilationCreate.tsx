@@ -9,7 +9,7 @@ import {Content, Footer, Header, Popup} from '../popup/Popup/Popup'
 import BlockingElement from '../ui/BlockingElement/BlockingElement'
 import TextBox from '../form/TextBox/TextBox'
 import Button from '../form/Button/Button'
-import TextAreaBox from '../TextAreaBox/TextAreaBox'
+import TextAreaBox from '../form/TextAreaBox/TextAreaBox'
 import classes from './PopupCompilationCreate.module.scss'
 
 interface Props extends PopupProps {

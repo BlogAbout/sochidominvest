@@ -9,7 +9,7 @@ import BlockingElement from '../ui/BlockingElement/BlockingElement'
 import openPopupAlert from '../PopupAlert/PopupAlert'
 import TextBox from '../form/TextBox/TextBox'
 import Button from '../form/Button/Button'
-import TextAreaBox from '../TextAreaBox/TextAreaBox'
+import TextAreaBox from '../form/TextAreaBox/TextAreaBox'
 import classes from './PopupNotificationCreate.module.scss'
 
 interface Props extends PopupProps {

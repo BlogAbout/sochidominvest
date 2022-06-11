@@ -1,5 +1,5 @@
 .PopupArticleCreate {
-    width: 500px;
+    width: 700px;
     height: 100%;
 
     .content {
@@ -36,6 +36,12 @@
         &.fieldWrap {
             flex-wrap: wrap;
         }
+    }
+}
+
+@media (max-width: 768px) {
+    .PopupArticleCreate {
+        width: 500px;
     }
 }
 

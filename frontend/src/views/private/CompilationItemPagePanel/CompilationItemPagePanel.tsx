@@ -13,6 +13,7 @@ import FavoriteService from '../../../api/FavoriteService'
 import CompilationService from '../../../api/CompilationService'
 import Title from '../../../components/ui/Title/Title'
 import openContextMenu from '../../../components/ContextMenu/ContextMenu'
+import Spacer from '../../../components/ui/Spacer/Spacer'
 import classes from './CompilationItemPagePanel.module.scss'
 
 type CompilationItemPagePanelParams = {
@@ -158,14 +159,14 @@ const CompilationItemPagePanel: React.FC = () => {
 
         const menuItems = []
 
-        // Todo
-        // if (props.isFavorite) {
-        //     menuItems.push({text: 'Удалить из избранного', onClick: () => removeBuildingFromFavorite()})
-        // }
-        //
-        // if (props.compilationId && props.building.id) {
-        //     menuItems.push({text: 'Удалить из подборки', onClick: () => removeBuildingFromCompilation()})
-        // }
+        if (params.id) {
+            const compilationId = parseInt(params.id)
+
+            menuItems.push({
+                text: 'Удалить из подборки',
+                onClick: () => onRemoveBuildingFromCompilationHandler(building, compilationId)
+            })
+        }
 
         if (['director', 'administrator', 'manager'].includes(role)) {
             menuItems.push({text: 'Редактировать', onClick: () => onEditHandler(building)})
@@ -193,6 +194,8 @@ const CompilationItemPagePanel: React.FC = () => {
 
             <div className={classes.Content}>
                 <Title type={1}>{compilation.name}</Title>
+
+                <Spacer/>
 
                 <BuildingTill buildings={filterBuilding}
                               fetching={fetching || fetchingBuilding || fetchingCompilation}

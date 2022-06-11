@@ -15,7 +15,7 @@ import BlockingElement from '../../ui/BlockingElement/BlockingElement'
 import TextBox from '../../form/TextBox/TextBox'
 import Button from '../../form/Button/Button'
 import CheckBox from '../../form/CheckBox/CheckBox'
-import TextAreaBox from '../../TextAreaBox/TextAreaBox'
+import TextAreaBox from '../../form/TextAreaBox/TextAreaBox'
 import ComboBox from '../../ComboBox/ComboBox'
 import BuildingBox from '../../form/BuildingBox/BuildingBox'
 import FileList from '../../FileList/FileList'
@@ -194,6 +194,7 @@ const PopupArticleCreate: React.FC<Props> = (props) => {
                                  })}
                                  placeHolder='Введите текст статьи'
                                  isVisual={true}
+                                 width='100%'
                     />
                 </div>
 

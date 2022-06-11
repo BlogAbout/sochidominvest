@@ -17,7 +17,7 @@ const defaultProps: Props = {
 const Label: React.FC<Props> = (props) => {
     return (
         <div className={classes.Label}>
-            {props.text}
+            <span dangerouslySetInnerHTML={{__html: props.text}}/>
             {props.showGeneratePassword &&
             <span className={classes.generatePassword}
                   onClick={() => props.onGeneratePassword ? props.onGeneratePassword() : undefined}

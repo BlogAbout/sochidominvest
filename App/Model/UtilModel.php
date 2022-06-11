@@ -47,7 +47,8 @@ class UtilModel extends Model
             'articles' => ArticleModel::fetchList($filter),
             'documents' => DocumentModel::fetchDocuments($filter),
             'developers' => DeveloperModel::fetchDevelopers($filter),
-            'attachments' => AttachmentModel::fetchList($filter)
+            'attachments' => AttachmentModel::fetchList($filter),
+            'partners' => PartnerModel::fetchList($filter)
         ];
     }
 }

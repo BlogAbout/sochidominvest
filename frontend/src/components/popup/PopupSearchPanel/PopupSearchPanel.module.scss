@@ -1,4 +1,4 @@
-.PopupDocumentCreate {
+.PopupSearchPanel {
     width: 700px;
     height: 100%;
 
@@ -13,6 +13,16 @@
         justify-content: space-between;
         flex-wrap: wrap;
         overflow-x: hidden;
+
+        .search {
+            display: flex;
+            width: 100%;
+            margin-bottom: 10px;
+
+            .searchField {
+                flex-grow: 1;
+            }
+        }
     }
 
     .field {
@@ -37,16 +47,20 @@
             flex-wrap: wrap;
         }
     }
+
+    .tabContent {
+        padding: 20px 0;
+    }
 }
 
 @media (max-width: 768px) {
-    .PopupDocumentCreate {
+    .PopupSearchPanel {
         width: 500px;
     }
 }
 
 @media (max-width: 480px) {
-    .PopupDocumentCreate {
+    .PopupSearchPanel {
         width: 350px;
 
         .field {

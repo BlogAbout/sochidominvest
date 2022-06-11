@@ -131,6 +131,10 @@ const NinthMay: React.FC = () => {
     }
 
     const renderWidgetContainer = (widget: IWidget) => {
+        if (!widget.id || !widget.data || !widget.data.length || !items[widget.id] || !items[widget.id].length) {
+            return null
+        }
+
         return (
             <div key={widget.id} className={classes.widget}>
                 <div className={classes.widgetName}>{widget.name}</div>
@@ -138,6 +142,17 @@ const NinthMay: React.FC = () => {
                 {renderWidgetContent(widget)}
             </div>
         )
+    }
+
+    let showBlock = false
+    widgets.forEach((widget: IWidget) => {
+        if (widget.id && widget.data && widget.data.length && items[widget.id] && items[widget.id].length) {
+            showBlock = true
+        }
+    })
+
+    if (!showBlock) {
+        return null
     }
 
     return (

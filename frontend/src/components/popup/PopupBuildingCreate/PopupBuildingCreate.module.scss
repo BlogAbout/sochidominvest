@@ -1,5 +1,5 @@
 .PopupBuildingCreate {
-    width: 500px;
+    width: 700px;
     height: 100%;
 
     .content {
@@ -41,6 +41,12 @@
 
     .tabContent {
         padding: 20px 0;
+    }
+}
+
+@media (max-width: 768px) {
+    .PopupBuildingCreate {
+        width: 500px;
     }
 }
 

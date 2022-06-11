@@ -12,6 +12,7 @@ import CompilationService from '../../../api/CompilationService'
 import openContextMenu from '../../../components/ContextMenu/ContextMenu'
 import PageInfo from '../../../components/ui/PageInfo/PageInfo'
 import Title from '../../../components/ui/Title/Title'
+import Spacer from '../../../components/ui/Spacer/Spacer'
 import classes from './FavoritePagePanel.module.scss'
 
 const FavoritePagePanel: React.FC = () => {
@@ -151,14 +152,9 @@ const FavoritePagePanel: React.FC = () => {
 
         const menuItems = []
 
-        // Todo
-        // if (props.isFavorite) {
-        //     menuItems.push({text: 'Удалить из избранного', onClick: () => removeBuildingFromFavorite()})
-        // }
-        //
-        // if (props.compilationId && props.building.id) {
-        //     menuItems.push({text: 'Удалить из подборки', onClick: () => removeBuildingFromCompilation()})
-        // }
+        if (favorites && favorites.length && building.id && favorites.includes(building.id)) {
+            menuItems.push({text: 'Удалить из избранного', onClick: () => onRemoveBuildingFromFavoriteHandler(building)})
+        }
 
         if (['director', 'administrator', 'manager'].includes(role)) {
             menuItems.push({text: 'Редактировать', onClick: () => onEditHandler(building)})
@@ -179,6 +175,8 @@ const FavoritePagePanel: React.FC = () => {
 
             <div className={classes.Content}>
                 <Title type={1}>Избранное</Title>
+
+                <Spacer/>
 
                 <BuildingTill buildings={filterBuilding}
                               fetching={fetching || fetchingBuilding || fetchingFavorite}

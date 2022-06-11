@@ -244,7 +244,7 @@ const DocumentPagePanel: React.FC = () => {
                        onAdd={onContextMenu.bind(this)}
                        onChangeLayout={onChangeLayoutHandler.bind(this)}
                        showChangeLayout
-                >Статьи</Title>
+                >Документы</Title>
 
                 <DocumentListContainer documents={filterDocument}
                                        fetching={fetching || fetchingDocument}
