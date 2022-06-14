@@ -47,7 +47,7 @@ const FaqPage: React.FC = () => {
     }
 
     return (
-        <main className={classes.AboutPage}>
+        <main className={classes.FaqPage}>
             <PageInfo title='F.A.Q.'/>
 
             <FilterBase valueSearch={searchText} onSearch={search.bind(this)} showSearch/>

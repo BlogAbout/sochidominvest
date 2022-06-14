@@ -4,6 +4,7 @@ import {useActions} from '../../../../../hooks/useActions'
 import {IQuestion} from '../../../../../@types/IQuestion'
 import QuestionService from '../../../../../api/QuestionService'
 import {compareText} from '../../../../../helpers/filterHelper'
+import QuestionListContainer from '../../../../../components/container/QuestionListContainer/QuestionListContainer'
 import Title from '../../../../../components/ui/Title/Title'
 import FilterBase from '../../../../../components/ui/FilterBase/FilterBase'
 import PageInfo from '../../../../../components/ui/PageInfo/PageInfo'
@@ -116,7 +117,7 @@ const FaqPanel: React.FC = () => {
     }
 
     return (
-        <main className={classes.PartnerPanel}>
+        <main className={classes.FaqPanel}>
             <PageInfo title='Вопросы и ответы'/>
 
             <FilterBase valueSearch={searchText} onSearch={search.bind(this)} showSearch/>
@@ -127,7 +128,13 @@ const FaqPanel: React.FC = () => {
                        onAdd={onAddHandler.bind(this)}
                 >Вопросы и ответы</Title>
 
-
+                <QuestionListContainer questions={filterQuestion}
+                                       fetching={fetching || fetchingQuestion}
+                                       onClick={onClickHandler.bind(this)}
+                                       onEdit={onEditHandler.bind(this)}
+                                       onRemove={onRemoveHandler.bind(this)}
+                                       onContextMenu={onContextMenu.bind(this)}
+                />
             </div>
         </main>
     )

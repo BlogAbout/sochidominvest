@@ -3,7 +3,7 @@ export interface IQuestion {
     name: string
     description: string
     author: number | null
-    type: string
+    type: string | null
     dateCreated?: string | null
     dateUpdate?: string | null
     active: number
