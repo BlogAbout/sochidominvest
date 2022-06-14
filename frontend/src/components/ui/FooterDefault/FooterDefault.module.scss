@@ -6,20 +6,41 @@
     box-shadow: 0 -3px 8px rgba(0, 0, 0, 0.4);
 
     .container {
-        display: flex;
-        flex: 1 1 auto;
         width: 100%;
         max-width: 1024px;
         margin: 0 auto;
 
-        p {
-            width: 25%;
-            text-align: center;
-            color: #fff;
-            margin: 0;
+        .menu {
+            width: 100%;
+            list-style: none;
+            margin: 0 0 20px;
+            padding: 0;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
 
-            a {
-                color: #ffcc01;
+            li {
+                margin: 0 20px;
+                display: block;
+
+                a {
+                    color: #ffcc01;
+                }
+            }
+        }
+
+        .info {
+            display: flex;
+            flex: 1 1 auto;
+
+            p {
+                width: 25%;
+                color: #fff;
+                margin: 0;
+
+                &:last-child {
+                    text-align: right;
+                }
             }
         }
     }

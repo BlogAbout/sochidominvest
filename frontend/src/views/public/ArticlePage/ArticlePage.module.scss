@@ -4,19 +4,7 @@
 }
 
 .Content {
-    padding: 40px 0 0;
     color: #000;
-
-    h1 {
-        margin-bottom: 40px;
-        text-align: center;
-
-        span {
-            display: block;
-            margin-right: auto;
-            color: #fff;
-        }
-    }
 
     .container {
         width: 100%;
@@ -27,6 +15,7 @@
     }
 
     .list {
+        margin-top: 20px;
         width: 100%;
 
         .item {

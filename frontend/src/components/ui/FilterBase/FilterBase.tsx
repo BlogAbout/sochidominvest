@@ -5,8 +5,8 @@ import SearchBox from '../../SearchBox/SearchBox'
 import classes from './FilterBase.module.scss'
 
 interface Props {
-    buttons: IFilterBase[]
-    showSearch: boolean
+    buttons?: IFilterBase[]
+    showSearch?: boolean
     valueSearch?: string
 
     onSearch?(value: string): void

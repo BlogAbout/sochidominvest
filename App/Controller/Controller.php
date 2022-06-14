@@ -205,6 +205,15 @@ class Controller
                 } catch (Exception $e) {
                 }
             }
+
+            if ($payload->validator == 'questionExists') {
+                try {
+                    if (!Model::isExistsItem('sdi_question', (int)$payload->data)) {
+                        array_push($response, "Вопрос с таким идентификатором не найден в базе данных.");
+                    }
+                } catch (Exception $e) {
+                }
+            }
         }
 
         $validationErrors = new \stdClass();

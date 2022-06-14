@@ -34,7 +34,9 @@ import WidgetPanel from '../../../views/private/AdvertisingMaterialsPagePanel/co
 import Navigation from '../../../components/ui/Navigation/Navigation'
 import SidebarRight from '../../../components/ui/SidebarRight/SidebarRight'
 import HeaderDefault from '../../../components/HeaderDefault/HeaderDefault'
-import FooterDefault from '../../../components/FooterDefault/FooterDefault'
+import FooterDefault from '../../../components/ui/FooterDefault/FooterDefault'
+import FaqPage from '../../../views/public/FaqPage/FaqPage'
+import FaqPanel from '../../../views/private/AdvertisingMaterialsPagePanel/components/FaqPanel/FaqPanel'
 import classes from './AppRouter.module.scss'
 
 const AppRouter: React.FC = () => {
@@ -54,6 +56,7 @@ const AppRouter: React.FC = () => {
                         <Route path={RouteNames.PUBLIC_ARTICLE_ITEM} element={<ArticleItemPagePanel public/>}/>
                         <Route path={RouteNames.PUBLIC_ARTICLE} element={<ArticlePage/>}/>
                         <Route path={RouteNames.PUBLIC_ABOUT} element={<AboutPage/>}/>
+                        <Route path={RouteNames.PUBLIC_FAQ} element={<FaqPage/>}/>
                         <Route path={RouteNames.PUBLIC_PARTNER_ITEM} element={<PartnerItemPage/>}/>
                     </Routes>
 
@@ -75,6 +78,7 @@ const AppRouter: React.FC = () => {
                                 <Route path={RouteNames.ADVERTISING_PARTNER} element={<PartnerPanel/>}/>
                                 <Route path={RouteNames.ADVERTISING_BANNER} element={<BannerPanel/>}/>
                                 <Route path={RouteNames.ADVERTISING_WIDGET} element={<WidgetPanel/>}/>
+                                <Route path={RouteNames.ADVERTISING_FAQ} element={<FaqPanel/>}/>
                             </>
                             }
 

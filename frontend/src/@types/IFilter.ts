@@ -31,3 +31,17 @@ export interface IFilterBase {
     active: boolean
     onClick(value: string): void
 }
+
+export interface IFilterParams {
+    houseClass?: string[]
+    material?: string[]
+    houseType?: string[]
+    entranceHouse?: string[]
+    parking?: string[]
+    territory?: string[]
+    gas?: string[]
+    heating?: string[]
+    electricity?: string[]
+    sewerage?: string[]
+    waterSupply?: string[]
+}

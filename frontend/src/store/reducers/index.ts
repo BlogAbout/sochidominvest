@@ -11,6 +11,7 @@ import CompilationReducer from './compilationReducer'
 import AdministrationReducer from './administrationReducer'
 import WidgetReducer from './widgetReducer'
 import PartnerReducer from './partnerReducer'
+import QuestionReducer from './questionReducer'
 
 const rootReducer = combineReducers({
     userReducer: UserReducer,
@@ -23,7 +24,8 @@ const rootReducer = combineReducers({
     compilationReducer: CompilationReducer,
     administrationReducer: AdministrationReducer,
     widgetReducer: WidgetReducer,
-    partnerReducer: PartnerReducer
+    partnerReducer: PartnerReducer,
+    questionReducer: QuestionReducer
 })
 
 export const store = createStore(rootReducer, applyMiddleware(thunk))

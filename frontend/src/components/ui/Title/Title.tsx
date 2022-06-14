@@ -6,15 +6,21 @@ interface Props extends React.PropsWithChildren<any> {
     type: 0 | 1 | 2 | 3 | 4 | 5 | 6
     showAdd?: boolean
     showChangeLayout?: boolean
+    showButtonFilter?: boolean
     layout?: 'list' | 'till'
+
     onAdd?(e: React.MouseEvent): void
+
     onChangeLayout?(value: 'list' | 'till'): void
+
+    onFilter?(): void
 }
 
 const defaultProps: Props = {
     type: 0,
     showAdd: false,
     showChangeLayout: false,
+    showButtonFilter: false,
     layout: 'list'
 }
 
@@ -27,6 +33,18 @@ const Title: React.FC<Props> = (props) => {
                 return (
                     <h1>
                         <span>{props.children}</span>
+
+                        {props.showButtonFilter ?
+                            <Button type='regular'
+                                    icon='sliders'
+                                    title='Фильтр'
+                                    onClick={() => {
+                                        if (props.onFilter) {
+                                            props.onFilter()
+                                        }
+                                    }}
+                            />
+                            : null}
 
                         {props.showChangeLayout ?
                             <>
@@ -42,7 +60,7 @@ const Title: React.FC<Props> = (props) => {
                                         title='Списочное отображение'
                                 />
                             </>
-                        : null}
+                            : null}
 
                         {props.showAdd ?
                             <Button type='apply'

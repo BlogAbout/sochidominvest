@@ -1,15 +1,18 @@
 import React, {useEffect, useState} from 'react'
-import Helmet from 'react-helmet'
 import * as Showdown from 'showdown'
 import classNames from 'classnames/bind'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {useNavigate} from 'react-router-dom'
 import {IArticle} from '../../../@types/IArticle'
 import {ISelector} from '../../../@types/ISelector'
+import {IFilterBase} from '../../../@types/IFilter'
 import {articleTypes} from '../../../helpers/articleHelper'
 import ArticleService from '../../../api/ArticleService'
 import BlockingElement from '../../../components/ui/BlockingElement/BlockingElement'
 import Empty from '../../../components/Empty/Empty'
+import PageInfo from '../../../components/ui/PageInfo/PageInfo'
+import FilterBase from '../../../components/ui/FilterBase/FilterBase'
+import Title from '../../../components/ui/Title/Title'
 import classes from './ArticlePage.module.scss'
 
 const cx = classNames.bind(classes)
@@ -18,6 +21,8 @@ const ArticlePage: React.FC = () => {
     const navigate = useNavigate()
     const [isUpdate, setIsUpdate] = useState(true)
     const [articles, setArticles] = useState<IArticle[]>()
+    const [filterArticle, setFilterArticle] = useState<IArticle[]>([])
+    const [selectedType, setSelectedType] = useState<string>('all')
     const [fetching, setFetching] = useState(false)
 
     useEffect(() => {
@@ -38,12 +43,57 @@ const ArticlePage: React.FC = () => {
         }
     }, [isUpdate])
 
+    useEffect(() => {
+        onFiltrationArticles()
+    }, [articles, selectedType])
+
+    const onFiltrationArticles = () => {
+        if (!articles || !articles.length) {
+            setFilterArticle([])
+        } else if (!selectedType || selectedType === 'all') {
+            setFilterArticle(articles)
+        } else {
+            setFilterArticle(articles.filter((article: IArticle) => article.type === selectedType))
+        }
+    }
+
     const converter = new Showdown.Converter({
         tables: true,
         simplifiedAutoLink: true,
         strikethrough: true,
         tasklists: true
     })
+
+    const filterBaseButtons: IFilterBase[] = [
+        {
+            key: 'all',
+            title: 'Все',
+            icon: 'bookmark',
+            active: selectedType.includes('all'),
+            onClick: () => setSelectedType('all')
+        },
+        {
+            key: 'news',
+            title: 'Новости',
+            icon: 'bolt',
+            active: selectedType.includes('news'),
+            onClick: () => setSelectedType('news')
+        },
+        {
+            key: 'action',
+            title: 'Акции',
+            icon: 'percent',
+            active: selectedType.includes('action'),
+            onClick: () => setSelectedType('action')
+        },
+        {
+            key: 'article',
+            title: 'Статьи',
+            icon: 'star',
+            active: selectedType.includes('article'),
+            onClick: () => setSelectedType('article')
+        }
+    ]
 
     const renderItem = (article: IArticle) => {
         const articleType = articleTypes.find((item: ISelector) => item.key === article.type)
@@ -52,7 +102,8 @@ const ArticlePage: React.FC = () => {
             <div key={article.id} className={classes.item} onClick={() => navigate('/article/' + article.id)}>
                 <div className={cx({'itemImage': true, 'noImage': !article.images || !article.images.length})}>
                     {article.avatar ?
-                        <img src={'https://api.sochidominvest.ru/uploads/image/thumb/' + article.avatar} alt={article.name}/>
+                        <img src={'https://api.sochidominvest.ru/uploads/image/thumb/' + article.avatar}
+                             alt={article.name}/>
                         : null
                     }
                 </div>
@@ -94,20 +145,17 @@ const ArticlePage: React.FC = () => {
 
     return (
         <main className={classes.ArticlePage}>
-            <Helmet>
-                <meta charSet='utf-8'/>
-                <title>Статьи - СочиДомИнвест</title>
-                <meta name='description' content=''/>
-                <link rel='canonical' href={`${window.location.href}`}/>
-            </Helmet>
+            <PageInfo title='Статьи'/>
+
+            <FilterBase buttons={filterBaseButtons}/>
 
             <div className={classes.Content}>
                 <div className={classes.container}>
-                    <h1><span>Статьи</span></h1>
+                    <Title type={1}>Статьи</Title>
 
                     <BlockingElement fetching={fetching} className={classes.list}>
-                        {articles && articles.length ?
-                            articles.map((article: IArticle) => renderItem(article))
+                        {filterArticle && filterArticle.length ?
+                            filterArticle.map((article: IArticle) => renderItem(article))
                             : <Empty message='Нет статей'/>
                         }
                     </BlockingElement>

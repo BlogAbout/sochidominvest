@@ -16,6 +16,7 @@ import {
     faBell,
     faBolt,
     faBook,
+    faBookmark,
     faBorderAll,
     faBuilding,
     faBuildingColumns,
@@ -74,6 +75,7 @@ import {
     faRubleSign,
     faS,
     faScrewdriverWrench,
+    faSliders,
     faStar,
     faTableList,
     faTrash,
@@ -173,7 +175,9 @@ library.add(
     faList,
     faGrip,
     faIdCard,
-    faBars
+    faBars,
+    faSliders,
+    faBookmark
 )
 
 function App() {

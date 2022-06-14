@@ -9,6 +9,7 @@ import {CompilationActionCreators} from './compilationActionCreators'
 import {AdministrationActionCreators} from './administrationActionCreators'
 import {WidgetActionCreators} from './widgetActionCreators'
 import {PartnerActionCreators} from './partnerActionCreators'
+import {QuestionActionCreators} from './questionActionCreators'
 
 export default {
     ...UserActionCreators,
@@ -21,5 +22,6 @@ export default {
     ...CompilationActionCreators,
     ...AdministrationActionCreators,
     ...WidgetActionCreators,
-    ...PartnerActionCreators
+    ...PartnerActionCreators,
+    ...QuestionActionCreators
 }

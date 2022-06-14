@@ -22,11 +22,13 @@ export enum RouteNames {
     ADVERTISING_PARTNER_ITEM = '/panel/advertising/partner/:id',
     ADVERTISING_BANNER = '/panel/advertising/banner',
     ADVERTISING_WIDGET = '/panel/advertising/widget',
+    ADVERTISING_FAQ = '/panel/advertising/faq',
     PUBLIC_BUILDING = '/building',
     PUBLIC_BUILDING_ITEM = '/building/:id',
     PUBLIC_ARTICLE = '/article',
     PUBLIC_ARTICLE_ITEM = '/article/:id',
     PUBLIC_POLICY = '/policy',
     PUBLIC_ABOUT = '/about',
+    PUBLIC_FAQ = '/faq',
     PUBLIC_PARTNER_ITEM = '/partner/:id'
 }

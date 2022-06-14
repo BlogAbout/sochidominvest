@@ -108,6 +108,13 @@ $Klein->respond('GET', '/api/v1/partner/[:id]', [new PartnerController(), 'fetch
 $Klein->respond('GET', '/api/v1/partner', [new PartnerController(), 'fetchList']);
 $Klein->respond('DELETE', '/api/v1/partner/[:id]', [new PartnerController(), 'deleteItem']);
 
+// Question Routes
+$Klein->respond('POST', '/api/v1/question', [new QuestionController(), 'createItem']);
+$Klein->respond('PUT', '/api/v1/question/[:id]', [new QuestionController(), 'updateItem']);
+$Klein->respond('GET', '/api/v1/question/[:id]', [new QuestionController(), 'fetchItemById']);
+$Klein->respond('GET', '/api/v1/question', [new QuestionController(), 'fetchList']);
+$Klein->respond('DELETE', '/api/v1/question/[:id]', [new QuestionController(), 'deleteItem']);
+
 // Widget Routes
 $Klein->respond('POST', '/api/v1/widget/ordering', [new WidgetController(), 'updateWidgetOrdering']);
 $Klein->respond('POST', '/api/v1/widget', [new WidgetController(), 'createItem']);
