@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react'
 import withStore from '../../../hoc/withStore'
 import classNames from 'classnames/bind'
+import {questionTypes} from '../../../helpers/questionHelper'
 import QuestionService from '../../../api/QuestionService'
 import {PopupDisplayOptions, PopupProps} from '../../../@types/IPopup'
 import {IQuestion} from '../../../@types/IQuestion'
@@ -15,6 +16,7 @@ import CheckBox from '../../form/CheckBox/CheckBox'
 import TextAreaBox from '../../form/TextAreaBox/TextAreaBox'
 import Title from '../../ui/Title/Title'
 import Label from '../../form/Label/Label'
+import ComboBox from '../../ComboBox/ComboBox'
 import classes from './PopupQuestionCreate.module.scss'
 
 interface Props extends PopupProps {
@@ -33,12 +35,12 @@ const defaultProps: Props = {
 const cx = classNames.bind(classes)
 
 const PopupQuestionCreate: React.FC<Props> = (props) => {
-    const [question, setArticle] = useState<IQuestion>(props.question || {
+    const [question, setQuestion] = useState<IQuestion>(props.question || {
         id: null,
         name: '',
         description: '',
         author: null,
-        type: null,
+        type: 'common',
         active: 1
     })
 
@@ -62,7 +64,7 @@ const PopupQuestionCreate: React.FC<Props> = (props) => {
         QuestionService.saveQuestion(question)
             .then((response: any) => {
                 setFetching(false)
-                setArticle(response.data)
+                setQuestion(response.data)
 
                 props.onSave()
 
@@ -90,7 +92,7 @@ const PopupQuestionCreate: React.FC<Props> = (props) => {
                         <Label text='Вопрос'/>
 
                         <TextBox value={question.name}
-                                 onChange={(e: React.MouseEvent, value: string) => setArticle({
+                                 onChange={(e: React.MouseEvent, value: string) => setQuestion({
                                      ...question,
                                      name: value
                                  })}
@@ -102,15 +104,27 @@ const PopupQuestionCreate: React.FC<Props> = (props) => {
                         />
                     </div>
 
+                    <div className={classes.field}>
+                        <Label text='Тип'/>
+
+                        <ComboBox selected={question.type}
+                                  items={Object.values(questionTypes)}
+                                  onSelect={(value: string) => setQuestion({...question, type: value})}
+                                  placeHolder='Выберите тип'
+                                  styleType='minimal'
+                        />
+                    </div>
+
                     <div className={cx({'field': true, 'fieldWrap': true})}>
                         <Label text='Ответ'/>
 
                         <TextAreaBox value={question.description || ''}
-                                     onChange={(value: string) => setArticle({
+                                     onChange={(value: string) => setQuestion({
                                          ...question,
                                          description: value
                                      })}
                                      placeHolder='Введите ответ'
+                                     isVisual={true}
                                      width='100%'
                         />
                     </div>
@@ -120,7 +134,7 @@ const PopupQuestionCreate: React.FC<Props> = (props) => {
                                   type='modern'
                                   width={110}
                                   checked={!!question.active}
-                                  onChange={(e: React.MouseEvent, value: boolean) => setArticle({
+                                  onChange={(e: React.MouseEvent, value: boolean) => setQuestion({
                                       ...question,
                                       active: value ? 1 : 0
                                   })}

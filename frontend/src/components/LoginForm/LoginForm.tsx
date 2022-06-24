@@ -15,7 +15,7 @@ interface Props {
 
 const defaultProps: Props = {
     onChangeType: (value: string) => {
-        console.info('RegistrationForm onChangeType', value)
+        console.info('LoginForm onChangeType', value)
     }
 }
 

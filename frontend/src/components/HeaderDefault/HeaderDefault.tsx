@@ -2,6 +2,7 @@ import React, {useState} from 'react'
 import classNames from 'classnames/bind'
 import {Link, NavLink} from 'react-router-dom'
 import {RouteNames} from '../../routes/routes'
+import {configuration} from '../../helpers/utilHelper'
 import classes from './HeaderDefault.module.scss'
 
 const cx = classNames.bind(classes)
@@ -54,8 +55,8 @@ const HeaderDefault: React.FC = () => {
 
                 <div className={classes.contacts}>
                     <div className={classes.inner}>
-                        <a href='tel:+79180417510' className={classes.phone}>+7 (918) 041-75-10</a>
-                        <a href='mailto:info@sochidominvest.ru' className={classes.email}>info@sochidominvest.ru</a>
+                        <a href={configuration.sitePhoneUrl} className={classes.phone}>{configuration.sitePhone}</a>
+                        <a href={configuration.siteEmailUrl} className={classes.email}>{configuration.siteEmail}</a>
                     </div>
                 </div>
 

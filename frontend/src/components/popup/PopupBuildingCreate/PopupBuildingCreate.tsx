@@ -30,6 +30,8 @@ import PassedBox from '../../PassedBox/PassedBox'
 import FileList from '../../FileList/FileList'
 import openPopupAlert from '../../PopupAlert/PopupAlert'
 import openPopupFileManager from '../../PopupFileManager/PopupFileManager'
+import Title from '../../ui/Title/Title'
+import Label from '../../form/Label/Label'
 import {
     amountContract,
     buildingAdvantages,
@@ -51,8 +53,6 @@ import {
 } from '../../../helpers/buildingHelper'
 import {sortAttachments} from '../../../helpers/attachmentHelper'
 import classes from './PopupBuildingCreate.module.scss'
-import Title from "../../ui/Title/Title";
-import Label from "../../form/Label/Label";
 
 interface Props extends PopupProps {
     building?: IBuilding | null

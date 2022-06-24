@@ -8,6 +8,14 @@ namespace App;
 class BuildingModel extends Model
 {
     /**
+     * BuildingModel constructor.
+     */
+    public function __construct($settings)
+    {
+        parent::__construct($settings);
+    }
+
+    /**
      * Вернет объект недвижимости по id
      *
      * @param int $id Идентификатор недвижимости

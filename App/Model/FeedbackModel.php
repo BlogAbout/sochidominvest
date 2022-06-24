@@ -8,6 +8,14 @@ namespace App;
 class FeedbackModel extends Model
 {
     /**
+     * FeedbackModel constructor.
+     */
+    public function __construct($settings)
+    {
+        parent::__construct($settings);
+    }
+
+    /**
      * Вернет заявку по id
      *
      * @param int $id Идентификатор заявки
@@ -71,7 +79,7 @@ class FeedbackModel extends Model
      * @param array $payload Содержит все поля, которые будут созданы
      * @return array
      */
-    public static function createFeed(array $payload): array
+    public function createFeed(array $payload): array
     {
         $sql = "
             INSERT INTO `sdi_feedback`
@@ -111,6 +119,12 @@ class FeedbackModel extends Model
                     'active' => 1
                 ]);
             }
+
+            $params = [
+                'message' => $payload['title']
+            ];
+            $mailModel = new MailModel($this->settings, $this->settings->get('smtp_email'), 'feed', $params);
+            $mailModel->send();
 
             return array(
                 'status' => true,

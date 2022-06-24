@@ -19,7 +19,7 @@ class UserController extends Controller
     {
         parent::__construct();
 
-        $this->userModel = new UserModel();
+        $this->userModel = new UserModel($this->settings);
     }
 
     /**
@@ -74,6 +74,7 @@ class UserController extends Controller
             'email' => stripcslashes(strip_tags($data->email)),
             'phone' => htmlspecialchars(stripcslashes(strip_tags($data->phone))),
             'password' => password_hash($data->password, PASSWORD_BCRYPT),
+            'passwordDefault' => $data->password,
             'dateCreated' => date('Y-m-d H:i:s'),
             'dateUpdate' => date('Y-m-d H:i:s'),
             'lastActive' => date('Y-m-d H:i:s'),
@@ -180,6 +181,139 @@ class UserController extends Controller
 
             LogModel::error('Непредвиденная ошибка.', $payload);
             $response->code(500)->json('Непредвиденная ошибка. Ваше действие не может быть выполнено. Повторите попытку позже.');
+
+            return;
+        } catch (Exception $e) {
+            LogModel::error($e->getMessage());
+            $response->code(500)->json($e->getMessage());
+
+            return;
+        }
+    }
+
+    /**
+     * Восстановление пароля
+     *
+     * @param mixed $request Содержит объект запроса
+     * @param mixed $response Содержит объект ответа от маршрутизатора
+     * @return void
+     */
+    public function forgotPassword($request, $response)
+    {
+        if (!$this->requestMiddleware->acceptsJson()) {
+            $response->code(400)->json('Доступ к конечной точке разрешен только содержимому JSON.');
+
+            return;
+        }
+
+        $data = json_decode($request->body());
+
+        $validationObject = array(
+            (object)[
+                'validator' => 'required',
+                'data' => $data->email ?? '',
+                'key' => 'Email'
+            ]
+        );
+
+        $validationBag = parent::validation($validationObject);
+        if ($validationBag->status) {
+            $response->code(400)->json($validationBag->errors);
+
+            return;
+        }
+
+        try {
+            $email = stripcslashes(strip_tags($data->email));
+
+            $userByEmail = UserModel::checkEmail($email);
+
+            if ($userByEmail['status']) {
+                $code = $this->userModel->forgotPassword($email);
+
+                $response->code(201)->json($code);
+            } else {
+                $response->code(500)->json('Пользователь с таким E-mail не существует.');
+            }
+        } catch (Exception $e) {
+            $response->code(500)->json($e->getMessage());
+
+            return;
+        }
+    }
+
+    /**
+     * Смена пароля
+     *
+     * @param mixed $request Содержит объект запроса
+     * @param mixed $response Содержит объект ответа от маршрутизатора
+     * @return void
+     */
+    public function resetPassword($request, $response)
+    {
+        if (!$this->requestMiddleware->acceptsJson()) {
+            $response->code(400)->json('Доступ к конечной точке разрешен только содержимому JSON.');
+
+            return;
+        }
+
+        $data = json_decode($request->body());
+
+        $validationObject = array(
+            (object)[
+                'validator' => 'required',
+                'data' => $data->email ?? '',
+                'key' => 'E-mail'
+            ],
+            (object)[
+                'validator' => 'required',
+                'data' => $data->password ?? '',
+                'key' => 'Пароль'
+            ]
+        );
+
+        $validationBag = parent::validation($validationObject);
+        if ($validationBag->status) {
+            $response->code(400)->json($validationBag->errors);
+
+            return;
+        }
+
+        try {
+            $payload = array(
+                'password' => password_hash($data->password, PASSWORD_BCRYPT),
+                'email' => stripcslashes(strip_tags($data->email))
+            );
+
+            if ($this->userModel->resetPassword($payload)) {
+                $userData = $this->userModel->checkEmail($payload['email']);
+
+                if ($userData['status']) {
+                    if ($userData['data']['block'] === 1) {
+                        $response->code(400)->json('Аккаунт заблокирован. За подробностями обратитесь к администрации системы.');
+
+                        return;
+                    }
+
+                    if (password_verify($data->password, $userData['data']['password'])) {
+                        $userData['data']['token'] = $this->createUserToken($userData['data']['id']);
+                        unset($userData['data']['password']);
+
+                        $response->code(201)->json($userData['data']);
+
+                        return;
+                    }
+
+                    $response->code(400)->json('Неверные Email или пароль.');
+
+                    return;
+                }
+
+                LogModel::error('Непредвиденная ошибка.', $payload);
+                $response->code(500)->json('Непредвиденная ошибка. Ваше действие не может быть выполнено. Повторите попытку позже.');
+            } else {
+                $response->code(201)->json('Ошибка назначения нового пароля. Попробуйте пройти процедуру восстановления снова.');
+            }
 
             return;
         } catch (Exception $e) {

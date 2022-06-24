@@ -18,7 +18,7 @@ class BuildingController extends Controller
     {
         parent::__construct();
 
-        $this->buildingModel = new BuildingModel();
+        $this->buildingModel = new BuildingModel($this->settings);
     }
 
     /**

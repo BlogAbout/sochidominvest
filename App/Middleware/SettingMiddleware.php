@@ -17,7 +17,7 @@ class SettingMiddleware
         'smtp_host' => '',
         'smtp_login' => '',
         'smtp_password' => '',
-        'smtp_email' => '',
+        'smtp_email' => 'info@sochidominvest.ru',
         'sms_enable' => '0',
         'sms_address' => '',
         'sms_api_key' => '',
@@ -41,7 +41,7 @@ class SettingMiddleware
         $this->load();
     }
 
-    public static function create(): SettingMiddleware
+    public static function init(): SettingMiddleware
     {
         if (!self::$instance) {
             self::$instance = new SettingMiddleware();

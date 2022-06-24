@@ -1,6 +1,12 @@
 export const apiPath = 'https://api.sochidominvest.ru/'
-
 export const siteTitle = 'СОЧИДОМИНВЕСТ'
+export const configuration = {
+    siteTitle: 'СОЧИДОМИНВЕСТ',
+    sitePhone: '+7 (918) 605-34-27',
+    sitePhoneUrl: 'tel:+79186053427',
+    siteEmail: 'info@sochidominvest.ru',
+    siteEmailUrl: 'mailto:info@sochidominvest.ru'
+}
 
 /**
  * Получение типа отображения

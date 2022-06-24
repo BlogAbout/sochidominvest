@@ -9,6 +9,8 @@ $Klein = new Klein();
 // Authentication Routes
 $Klein->respond('POST', '/api/v1/registration', [new UserController(), 'signUp']);
 $Klein->respond('POST', '/api/v1/auth', [new UserController(), 'signIn']);
+$Klein->respond('POST', '/api/v1/forgot', [new UserController(), 'forgotPassword']);
+$Klein->respond('POST', '/api/v1/reset', [new UserController(), 'resetPassword']);
 
 // User Routes
 $Klein->respond('POST', '/api/v1/user', [new UserController(), 'createUser']);

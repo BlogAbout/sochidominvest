@@ -45,7 +45,7 @@ const QuestionListContainer: React.FC<Props> = (props) => {
                               onRemove={props.onRemove}
                               onContextMenu={props.onContextMenu}
                 />
-                : <Empty message='Нет статей'/>
+                : <Empty message='Нет вопросов'/>
             }
         </div>
     )

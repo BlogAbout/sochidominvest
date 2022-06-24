@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react'
 import {useTypedSelector} from '../../../../../hooks/useTypedSelector'
 import {useActions} from '../../../../../hooks/useActions'
 import {IQuestion} from '../../../../../@types/IQuestion'
+import {IFilterBase} from '../../../../../@types/IFilter'
 import QuestionService from '../../../../../api/QuestionService'
 import {compareText} from '../../../../../helpers/filterHelper'
 import QuestionListContainer from '../../../../../components/container/QuestionListContainer/QuestionListContainer'
@@ -10,6 +11,8 @@ import FilterBase from '../../../../../components/ui/FilterBase/FilterBase'
 import PageInfo from '../../../../../components/ui/PageInfo/PageInfo'
 import openPopupAlert from '../../../../../components/PopupAlert/PopupAlert'
 import openContextMenu from '../../../../../components/ContextMenu/ContextMenu'
+import openPopupQuestionInfo from '../../../../../components/popup/PopupQuestionInfo/PopupQuestionInfo'
+import openPopupQuestionCreate from '../../../../../components/popup/PopupQuestionCreate/PopupQuestionCreate'
 import classes from './FaqPanel.module.scss'
 
 const FaqPanel: React.FC = () => {
@@ -17,6 +20,7 @@ const FaqPanel: React.FC = () => {
     const [searchText, setSearchText] = useState('')
     const [filterQuestion, setFilterQuestion] = useState<IQuestion[]>([])
     const [fetching, setFetching] = useState(false)
+    const [selectedType, setSelectedType] = useState<string[]>([])
 
     const {role} = useTypedSelector(state => state.userReducer)
     const {questions, fetching: fetchingQuestion} = useTypedSelector(state => state.questionReducer)
@@ -24,7 +28,7 @@ const FaqPanel: React.FC = () => {
 
     useEffect(() => {
         if (isUpdate || !questions.length) {
-            fetchQuestionList({active: [1]})
+            fetchQuestionList({active: [0, 1]})
 
             setIsUpdate(false)
         }
@@ -32,7 +36,7 @@ const FaqPanel: React.FC = () => {
 
     useEffect(() => {
         search(searchText)
-    }, [questions])
+    }, [questions, selectedType])
 
     // Обработчик изменений
     const onSaveHandler = () => {
@@ -49,24 +53,31 @@ const FaqPanel: React.FC = () => {
 
         if (value !== '') {
             setFilterQuestion(questions.filter((question: IQuestion) => {
-                return compareText(question.name, value) || compareText(question.description, value)
+                return (!selectedType.length || selectedType.includes(question.type)) && (compareText(question.name, value) || compareText(question.description, value))
             }))
         } else {
-            setFilterQuestion(questions)
+            setFilterQuestion(!selectedType.length ? questions : questions.filter((question: IQuestion) => selectedType.includes(question.type)))
         }
     }
 
     const onClickHandler = (question: IQuestion) => {
-        // Todo
+        openPopupQuestionInfo(document.body, {
+            question: question
+        })
     }
 
     const onAddHandler = () => {
-        // Todo
+        openPopupQuestionCreate(document.body, {
+            onSave: () => onSaveHandler()
+        })
     }
 
     // Редактирование
     const onEditHandler = (question: IQuestion) => {
-
+        openPopupQuestionCreate(document.body, {
+            question: question,
+            onSave: () => onSaveHandler()
+        })
     }
 
     // Удаление
@@ -116,11 +127,51 @@ const FaqPanel: React.FC = () => {
         }
     }
 
+    // Кнопки базовой фильтрации
+    const onClickFilterButtonHandler = (type: string) => {
+        if (selectedType.includes(type)) {
+            setSelectedType(selectedType.filter((item: string) => item !== type))
+        } else {
+            setSelectedType([type, ...selectedType])
+        }
+    }
+
+    const filterBaseButtons: IFilterBase[] = [
+        {
+            key: 'common',
+            title: 'Общие',
+            icon: 'bolt',
+            active: selectedType.includes('common'),
+            onClick: onClickFilterButtonHandler.bind(this)
+        },
+        {
+            key: 'payment',
+            title: 'Оплата',
+            icon: 'money-bill-1-wave',
+            active: selectedType.includes('payment'),
+            onClick: onClickFilterButtonHandler.bind(this)
+        },
+        {
+            key: 'tariffs',
+            title: 'Тарифы',
+            icon: 'money-check',
+            active: selectedType.includes('tariffs'),
+            onClick: onClickFilterButtonHandler.bind(this)
+        },
+        {
+            key: 'other',
+            title: 'Другое',
+            icon: 'star',
+            active: selectedType.includes('other'),
+            onClick: onClickFilterButtonHandler.bind(this)
+        }
+    ]
+
     return (
         <main className={classes.FaqPanel}>
             <PageInfo title='Вопросы и ответы'/>
 
-            <FilterBase valueSearch={searchText} onSearch={search.bind(this)} showSearch/>
+            <FilterBase buttons={filterBaseButtons} valueSearch={searchText} onSearch={search.bind(this)} showSearch/>
 
             <div className={classes.Content}>
                 <Title type={1}

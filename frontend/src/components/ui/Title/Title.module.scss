@@ -9,7 +9,8 @@
         }
     }
 
-    h2 {
+    h2,
+    h3 {
         text-transform: uppercase;
         color: #777;
         font-size: 20px;
@@ -28,6 +29,11 @@
             height: 1px;
             background: #ffcc01;
         }
+    }
+
+    h3 {
+        font-size: 18px;
+        text-transform: unset;
     }
 }
 

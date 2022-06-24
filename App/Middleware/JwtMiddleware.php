@@ -118,7 +118,7 @@ class JwtMiddleware
     public function getUser(): array
     {
         try {
-            $userModel = new UserModel();
+            $userModel = new UserModel(null);
             return $userModel::fetchUserById(self::$userId);
         } catch (Exception $e) {
             return [];

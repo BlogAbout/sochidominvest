@@ -1,5 +1,6 @@
 import React from 'react'
 import {Document, Font, Image, Page, StyleSheet, Text, View} from '@react-pdf/renderer'
+import {configuration} from '../../helpers/utilHelper'
 import {IBuilding} from '../../@types/IBuilding'
 import DocumentBuilding from './components/DocumentBuilding/DocumentBuilding'
 
@@ -98,8 +99,8 @@ const PdfDocumentGenerator: React.FC<Props> = (props) => {
                         <Image style={styles.logoImage} src='/img/logo-full.jpg'/>
                     </View>
                     <View style={styles.containerContact}>
-                        <Text style={styles.textMiddle}>+7 (918) 605-34-27</Text>
-                        <Text style={styles.textDefault}>info@sochidominvest.ru</Text>
+                        <Text style={styles.textMiddle}>{configuration.sitePhone}</Text>
+                        <Text style={styles.textDefault}>{configuration.siteEmail}</Text>
                     </View>
                 </View>
 

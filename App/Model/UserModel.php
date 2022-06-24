@@ -8,6 +8,14 @@ namespace App;
 class UserModel extends Model
 {
     /**
+     * UserModel constructor.
+     */
+    public function __construct($settings)
+    {
+        parent::__construct($settings);
+    }
+
+    /**
      * Извлекает пользователя по Email
      *
      * @param string $email Email пользователя
@@ -34,6 +42,47 @@ class UserModel extends Model
             'status' => true,
             'data' => UserModel::formatDataToJson($emailData)
         );
+    }
+
+    public function forgotPassword($email): string
+    {
+        $code = rand(11111, 99999);
+
+        $sql = "UPDATE `sdi_user` SET `forgot` = :forgot WHERE `email` = :email";
+
+        parent::query($sql);
+        parent::bindParams('email', $email);
+        parent::bindParams('forgot', $code);
+        parent::execute();
+
+        $mailModel = new MailModel($this->settings, $email, 'forgot', ['code' => $code]);
+        $mailModel->send();
+
+        return $code;
+    }
+
+    /**
+     * Смена пароля пользователя
+     *
+     * @param array $payload Содержит все поля, которые будут обновлены
+     * @return bool
+     */
+    public static function resetPassword(array $payload): bool
+    {
+        $sql = "
+            UPDATE `sdi_user`
+            SET
+                password = :password,
+                forgot = null
+            WHERE email = :email
+        ";
+
+        parent::query($sql);
+
+        parent::bindParams('password', $payload['password']);
+        parent::bindParams('email', $payload['email']);
+
+        return parent::execute();
     }
 
     /**
@@ -142,7 +191,7 @@ class UserModel extends Model
      * @param array $payload Содержит все поля, которые будут созданы
      * @return array
      */
-    public static function createUser(array $payload): array
+    public function createUser(array $payload): array
     {
         $sql = "
             INSERT INTO `sdi_user`
@@ -169,6 +218,13 @@ class UserModel extends Model
 
         if ($user) {
             $payload['id'] = (int)parent::lastInsertedId();
+
+            $params = [
+                'login' => $payload['email'],
+                'password' => $payload['passwordDefault']
+            ];
+            $mailModel = new MailModel($this->settings, $payload['email'], 'registration', $params);
+            $mailModel->send();
 
             return array(
                 'status' => true,

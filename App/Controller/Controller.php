@@ -18,7 +18,7 @@ class Controller
     public function __construct()
     {
         $this->requestMiddleware = new RequestMiddleware();
-        $this->settings = SettingMiddleware::create();
+        $this->settings = SettingMiddleware::init();
     }
 
     /**

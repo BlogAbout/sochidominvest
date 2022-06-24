@@ -57,6 +57,7 @@ import {
     faMagnifyingGlass,
     faMessage,
     faMoneyBill1Wave,
+    faMoneyCheck,
     faNewspaper,
     faPaintRoller,
     faPaperclip,
@@ -177,7 +178,8 @@ library.add(
     faIdCard,
     faBars,
     faSliders,
-    faBookmark
+    faBookmark,
+    faMoneyCheck
 )
 
 function App() {

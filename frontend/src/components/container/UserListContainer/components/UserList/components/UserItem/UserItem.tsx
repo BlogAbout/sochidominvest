@@ -41,7 +41,7 @@ const cx = classNames.bind(classes)
 
 const UserItem: React.FC<Props> = (props) => {
     return (
-        <div className={cx({'UserItem': true, 'block': props.user.block})}
+        <div className={cx({'UserItem': true, 'block': props.user.block, 'disabled': !props.user.active})}
              onClick={() => props.onClick(props.user)}
              onContextMenu={(e: React.MouseEvent) => props.onContextMenu(e, props.user)}
         >

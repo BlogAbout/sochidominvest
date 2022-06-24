@@ -18,7 +18,7 @@ class FeedbackController extends Controller
     {
         parent::__construct();
 
-        $this->feedbackModel = new FeedbackModel();
+        $this->feedbackModel = new FeedbackModel($this->settings);
     }
 
     /**

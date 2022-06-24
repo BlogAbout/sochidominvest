@@ -21,13 +21,15 @@ class Model
     protected static $stmt;
     protected static $logLevel = 'error';
 
+    protected $settings;
+
     /**
      * Создание нового подключения к базе данных
      *
      * @param void
      * @return array
      */
-    public function __construct()
+    public function __construct($settings = null)
     {
         $Dsn = "mysql:host=" . self::$dbHost . ";dbname=" . self::$dbName;
         $options = array(
@@ -38,6 +40,8 @@ class Model
         try {
             self::$dbConn = new PDO($Dsn, self::$dbUser, self::$dbPass, $options);
             self::$dbConn->exec('set names utf8');
+
+            $this->settings = $settings;
         } catch (Exception $e) {
             $Response = array(
                 status => 500,

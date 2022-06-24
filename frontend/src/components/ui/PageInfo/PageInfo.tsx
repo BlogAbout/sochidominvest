@@ -1,6 +1,6 @@
 import React from 'react'
 import Helmet from 'react-helmet'
-import {siteTitle} from '../../../helpers/utilHelper'
+import {configuration} from '../../../helpers/utilHelper'
 
 interface Props {
     title: string
@@ -11,7 +11,7 @@ const PageInfo: React.FC<Props> = (props) => {
     return (
         <Helmet>
             <meta charSet='utf-8'/>
-            <title>{props.title} - {siteTitle}</title>
+            <title>{props.title} - {configuration.siteTitle}</title>
             <meta name='description' content={props.description || ''}/>
             <link rel='canonical' href={`${window.location.href}`}/>
         </Helmet>

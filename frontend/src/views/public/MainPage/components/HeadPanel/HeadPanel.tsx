@@ -1,4 +1,5 @@
 import React, {useState} from 'react'
+import {configuration} from '../../../../../helpers/utilHelper'
 import LoginForm from '../../../../../components/LoginForm/LoginForm'
 import RegistrationForm from '../../../../../components/RegistrationForm/RegistrationForm'
 import ForgotForm from '../../../../../components/ForgotForm/ForgotForm'
@@ -20,8 +21,8 @@ const HeadPanel: React.FC = () => {
                     </div>
 
                     <div className={classes.contacts}>
-                        <a href='tel:+79180417510' className={classes.phone}>+7 (918) 041-75-10</a>
-                        <a href='mailto:info@sochidominvest.ru' className={classes.email}>info@sochidominvest.ru</a>
+                        <a href={configuration.sitePhoneUrl} className={classes.phone}>{configuration.sitePhone}</a>
+                        <a href={configuration.siteEmailUrl} className={classes.email}>{configuration.siteEmail}</a>
                     </div>
                 </div>
 

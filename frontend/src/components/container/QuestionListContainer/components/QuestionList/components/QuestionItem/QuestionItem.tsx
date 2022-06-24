@@ -1,6 +1,7 @@
 import React from 'react'
 import classNames from 'classnames/bind'
 import {IQuestion} from '../../../../../../../@types/IQuestion'
+import {getQuestionTypeText} from '../../../../../../../helpers/questionHelper'
 import classes from './QuestionItem.module.scss'
 
 interface Props {
@@ -41,7 +42,7 @@ const QuestionItem: React.FC<Props> = (props) => {
         >
             <div className={classes.name}>{props.question.name}</div>
             <div className={classes.author}>{props.question.authorName || ''}</div>
-            <div className={classes.type}>-</div>
+            <div className={classes.type}>{getQuestionTypeText(props.question.type)}</div>
         </div>
     )
 }
