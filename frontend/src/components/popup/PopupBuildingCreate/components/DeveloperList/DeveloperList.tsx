@@ -20,7 +20,7 @@ interface Props {
 const defaultProps: Props = {
     selected: [],
     onSelect: (value: number[]) => {
-        console.info('DeveloperTill onSelect', value)
+        console.info('DeveloperList onSelect', value)
     }
 }
 

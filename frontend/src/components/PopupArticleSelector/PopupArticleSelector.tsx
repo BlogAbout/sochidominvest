@@ -2,9 +2,10 @@ import React, {useEffect, useState} from 'react'
 import withStore from '../../hoc/withStore'
 import ArticleService from '../../api/ArticleService'
 import {IArticle} from '../../@types/IArticle'
-import {PopupDisplayOptions, PopupProps} from '../../@types/IPopup'
+import {PopupProps} from '../../@types/IPopup'
+import showBackgroundBlock from '../ui/BackgroundBlock/BackgroundBlock'
 import openPopupArticleCreate from '../popup/PopupArticleCreate/PopupArticleCreate'
-import {openPopup, removePopup} from '../../helpers/popupHelper'
+import {getPopupContainer, openPopup, removePopup} from '../../helpers/popupHelper'
 import {Content, Footer, Header, Popup} from '../popup/Popup/Popup'
 import BlockingElement from '../ui/BlockingElement/BlockingElement'
 import Empty from '../Empty/Empty'
@@ -56,6 +57,10 @@ const PopupArticleSelector: React.FC<Props> = (props) => {
             fetchArticleList({active: [0, 1]})
 
             setIsUpdate(false)
+        }
+
+        return () => {
+            removePopup(props.blockId ? props.blockId : '')
         }
     }, [isUpdate])
 
@@ -313,6 +318,15 @@ const PopupArticleSelector: React.FC<Props> = (props) => {
 PopupArticleSelector.defaultProps = defaultProps
 PopupArticleSelector.displayName = 'PopupArticleSelector'
 
-export default function openPopupArticleSelector(target: any, popupProps = {} as Props, displayOptions: PopupDisplayOptions = {} as PopupDisplayOptions) {
-    return openPopup(withStore(PopupArticleSelector), popupProps, undefined, target, displayOptions)
+export default function openPopupArticleSelector(target: any, popupProps = {} as Props) {
+    const displayOptions = {
+        autoClose: false,
+        center: true
+    }
+    const blockId = showBackgroundBlock(target, {animate: true}, displayOptions)
+    let block = getPopupContainer(blockId)
+
+    popupProps = {...popupProps, blockId: blockId}
+
+    return openPopup(withStore(PopupArticleSelector), popupProps, undefined, block, displayOptions)
 }

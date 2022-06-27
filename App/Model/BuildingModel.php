@@ -430,6 +430,7 @@ class BuildingModel extends Model
         BuildingModel::updateRelationsTags($payload['id'], $payload['tags']);
         BuildingModel::updateRelationsDevelopers($payload['id'], $payload['developers']);
         BuildingModel::updateRelationsContacts($payload['id'], $payload['contacts']);
+        BuildingModel::updateRelationsArticles($payload['id'], $payload['articles']);
         parent::updateRelationsImages($payload['images'], $payload['id'], 'building');
         parent::updateRelationsVideos($payload['videos'], $payload['id'], 'building');
     }
@@ -527,6 +528,38 @@ class BuildingModel extends Model
 
             parent::query($sql);
             parent::bindParams('id', $buildingId);
+            parent::execute();
+        }
+    }
+
+    /**
+     * Обновление связей между недвижимостью и статьями
+     *
+     * @param int $buildingId Идентификатор объекта недвижимости
+     * @param array $articles Массив идентификаторов статей
+     */
+    private static function updateRelationsArticles(int $buildingId, array $articles)
+    {
+        $sql = "DELETE FROM `sdi_building_article` WHERE `id_building` = :id";
+
+        parent::query($sql);
+        parent::bindParams('id', $buildingId);
+        parent::execute();
+
+        if (count($articles)) {
+            $insertSql = [];
+
+            foreach ($articles as $article) {
+                array_push($insertSql, "($buildingId, $article)");
+            }
+
+            $sql = "
+                INSERT INTO `sdi_building_article`
+                    (`id_building`, `id_article`)
+                VALUES
+            " . implode(',', $insertSql);
+
+            parent::query($sql);
             parent::execute();
         }
     }

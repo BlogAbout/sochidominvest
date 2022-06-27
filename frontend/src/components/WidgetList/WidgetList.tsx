@@ -69,8 +69,6 @@ const WidgetList: React.FC<Props> = (props) => {
                     buttonAdd: true,
                     multi: false,
                     onSelect: (selected: number[]) => addElementToWidget(widget, selected[0])
-                }, {
-                    center: true
                 })
                 break
             case 'partner':

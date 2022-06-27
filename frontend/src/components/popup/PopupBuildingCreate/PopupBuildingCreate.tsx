@@ -53,6 +53,7 @@ import {
 } from '../../../helpers/buildingHelper'
 import {sortAttachments} from '../../../helpers/attachmentHelper'
 import classes from './PopupBuildingCreate.module.scss'
+import ArticleList from "./components/ArticleList/ArticleList";
 
 interface Props extends PopupProps {
     building?: IBuilding | null
@@ -775,6 +776,17 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
         )
     }
 
+    // Вкладка статей объекта
+    const renderArticleTab = () => {
+        return (
+            <div key='article' className={classes.tabContent}>
+                <ArticleList selected={building.articles || []}
+                             onSelect={(value: number[]) => setBuilding({...building, articles: value})}
+                />
+            </div>
+        )
+    }
+
     const renderSeoTab = () => {
         return (
             <div key='seo' className={classes.tabContent}>
@@ -817,6 +829,7 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
         developer: {title: 'Застройщик', render: renderDeveloperTab()},
         contact: {title: 'Контакты', render: renderContactTab()},
         documents: {title: 'Документы', render: renderDocumentTab()},
+        articles: {title: 'Статьи', render: renderArticleTab()},
         seo: {title: 'СЕО', render: renderSeoTab()}
     }
 
