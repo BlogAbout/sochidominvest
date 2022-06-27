@@ -214,6 +214,15 @@ class Controller
                 } catch (Exception $e) {
                 }
             }
+
+            if ($payload->validator == 'postExists') {
+                try {
+                    if (!Model::isExistsItem('sdi_post', (int)$payload->data)) {
+                        array_push($response, "Должность с таким идентификатором не найдена в базе данных.");
+                    }
+                } catch (Exception $e) {
+                }
+            }
         }
 
         $validationErrors = new \stdClass();

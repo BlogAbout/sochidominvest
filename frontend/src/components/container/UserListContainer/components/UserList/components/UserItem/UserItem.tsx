@@ -46,7 +46,7 @@ const UserItem: React.FC<Props> = (props) => {
              onContextMenu={(e: React.MouseEvent) => props.onContextMenu(e, props.user)}
         >
             <div className={classes.name}>{props.user.firstName}</div>
-            <div className={classes.post}>-</div>
+            <div className={classes.post}>{props.user.postName || '-'}</div>
             <div className={classes.email}>{props.user.email}</div>
             <div className={classes.phone}>{props.user.phone}</div>
             <div className={classes.role}>{getRoleUserText(props.user.role)}</div>

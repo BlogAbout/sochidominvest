@@ -89,13 +89,13 @@ const Navigation: React.FC = () => {
                         </li>
 
                         <li>
-                            <NavLink to={RouteNames.DEVELOPER}
+                            <NavLink to={RouteNames.CRM}
                                      className={({isActive}) => isActive ? classes.active : ''}
-                                     title='Застройщики'
+                                     title='CRM'
                                      onClick={() => onHideMenuHandler()}
                             >
-                                <span className={classes.icon}><FontAwesomeIcon icon='city'/></span>
-                                <span className={classes.title}>Застройщики</span>
+                                <span className={classes.icon}><FontAwesomeIcon icon='folder-tree'/></span>
+                                <span className={classes.title}>CRM</span>
                             </NavLink>
                         </li>
 

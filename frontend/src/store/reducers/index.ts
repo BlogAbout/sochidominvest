@@ -12,6 +12,7 @@ import AdministrationReducer from './administrationReducer'
 import WidgetReducer from './widgetReducer'
 import PartnerReducer from './partnerReducer'
 import QuestionReducer from './questionReducer'
+import PostReducer from './postReducer'
 
 const rootReducer = combineReducers({
     userReducer: UserReducer,
@@ -25,7 +26,8 @@ const rootReducer = combineReducers({
     administrationReducer: AdministrationReducer,
     widgetReducer: WidgetReducer,
     partnerReducer: PartnerReducer,
-    questionReducer: QuestionReducer
+    questionReducer: QuestionReducer,
+    postReducer: PostReducer
 })
 
 export const store = createStore(rootReducer, applyMiddleware(thunk))

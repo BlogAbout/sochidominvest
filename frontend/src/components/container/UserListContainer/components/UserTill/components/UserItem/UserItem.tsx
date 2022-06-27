@@ -59,7 +59,7 @@ const UserItem: React.FC<Props> = (props) => {
 
                 <div className={classes.row} title='Должность'>
                     <FontAwesomeIcon icon='id-card'/>
-                    <span>-</span>
+                    <span>{props.user.postName || '-'}</span>
                 </div>
 
                 <div className={classes.row} title='E-mail'>

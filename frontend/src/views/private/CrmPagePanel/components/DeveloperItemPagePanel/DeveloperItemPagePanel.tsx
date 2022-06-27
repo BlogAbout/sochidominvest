@@ -3,21 +3,21 @@ import {useNavigate} from 'react-router-dom'
 import Helmet from 'react-helmet'
 import * as Showdown from 'showdown'
 import {useParams} from 'react-router-dom'
-import {developerTypes} from '../../../helpers/developerHelper'
-import {ISelector} from '../../../@types/ISelector'
-import {IDeveloper} from '../../../@types/IDeveloper'
-import {IBuilding} from '../../../@types/IBuilding'
-import {useTypedSelector} from '../../../hooks/useTypedSelector'
-import {useActions} from '../../../hooks/useActions'
-import BuildingTill from '../../../components/container/BuildingListContainer/components/BuildingTill/BuildingTill'
-import Preloader from '../../../components/Preloader/Preloader'
+import {developerTypes} from '../../../../../helpers/developerHelper'
+import {ISelector} from '../../../../../@types/ISelector'
+import {IDeveloper} from '../../../../../@types/IDeveloper'
+import {IBuilding} from '../../../../../@types/IBuilding'
+import {useTypedSelector} from '../../../../../hooks/useTypedSelector'
+import {useActions} from '../../../../../hooks/useActions'
+import BuildingTill from '../../../../../components/container/BuildingListContainer/components/BuildingTill/BuildingTill'
+import Preloader from '../../../../../components/Preloader/Preloader'
 import classes from './DeveloperItemPagePanel.module.scss'
-import openPopupBuildingCreate from "../../../components/popup/PopupBuildingCreate/PopupBuildingCreate";
-import openPopupAlert from "../../../components/PopupAlert/PopupAlert";
-import BuildingService from "../../../api/BuildingService";
-import FavoriteService from "../../../api/FavoriteService";
-import CompilationService from "../../../api/CompilationService";
-import openContextMenu from "../../../components/ContextMenu/ContextMenu";
+import openPopupBuildingCreate from "../../../../../components/popup/PopupBuildingCreate/PopupBuildingCreate";
+import openPopupAlert from "../../../../../components/PopupAlert/PopupAlert";
+import BuildingService from "../../../../../api/BuildingService";
+import FavoriteService from "../../../../../api/FavoriteService";
+import CompilationService from "../../../../../api/CompilationService";
+import openContextMenu from "../../../../../components/ContextMenu/ContextMenu";
 
 type DeveloperItemPagePanelParams = {
     id: string

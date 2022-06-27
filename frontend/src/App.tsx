@@ -39,6 +39,7 @@ import {
     faFileInvoice,
     faFileLines,
     faFlag,
+    faFolderTree,
     faGear,
     faGrip,
     faHandshakeAngle,
@@ -85,6 +86,7 @@ import {
     faUpRightAndDownLeftFromCenter,
     faUser,
     faUserCheck,
+    faUserGear,
     faUserTie,
     faVideo,
     faVolumeHigh,
@@ -179,7 +181,9 @@ library.add(
     faBars,
     faSliders,
     faBookmark,
-    faMoneyCheck
+    faMoneyCheck,
+    faFolderTree,
+    faUserGear
 )
 
 function App() {

@@ -1,0 +1,96 @@
+.PostItem {
+    padding: 8px 10px;
+    background-color: #fff;
+    margin-bottom: 15px;
+    display: flex;
+    width: 100%;
+    position: relative;
+    box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.4);
+    transition: all 0.3s ease-in;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    cursor: pointer;
+
+    &:hover {
+        box-shadow: 6px 6px 8px rgba(0, 0, 0, 0.7);
+    }
+
+    &.disabled {
+        opacity: 0.8;
+    }
+
+    .name {
+        flex-grow: 1;
+    }
+
+    .author {
+        width: 200px;
+        flex-shrink: 0;
+    }
+
+    .type {
+        width: 100px;
+        flex-shrink: 0;
+    }
+}
+
+@media (max-width: 768px) {
+    .PostItem {
+        display: block;
+        padding: 0;
+        margin-bottom: 0;
+
+        + .PostItem {
+            margin-top: 15px;
+        }
+
+        .name,
+        .author,
+        .type {
+            position: relative;
+            display: block;
+            width: 100%;
+            padding-right: 8px;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+
+            &::before {
+                display: inline-block;
+                width: 100px;
+                padding: 8px 10px;
+                background-color: #075ea5;
+                color: #fff;
+                margin-right: 10px;
+                border-bottom: 1px solid #fff;
+            }
+        }
+
+        .name::before {
+            content: 'Вопрос';
+        }
+
+        .author::before {
+            content: 'Автор';
+        }
+
+        .type::before {
+            content: 'Тип';
+        }
+    }
+}
+
+@media (max-width: 480px) {
+    .PostItem {
+        font-size: 13px;
+
+        .name,
+        .author,
+        .type {
+            &::before {
+                width: 80px;
+            }
+        }
+    }
+}

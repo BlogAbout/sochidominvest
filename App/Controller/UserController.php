@@ -388,7 +388,8 @@ class UserController extends Controller
             'active' => (int)htmlentities(stripcslashes(strip_tags($data->active))),
             'role' => htmlspecialchars(stripcslashes(strip_tags($data->role))),
             'avatarId' => $data->avatarId ? (int)htmlentities(stripcslashes(strip_tags($data->avatarId))) : null,
-            'settings' => $data->settings ? json_encode($data->settings) : ''
+            'settings' => $data->settings ? json_encode($data->settings) : '',
+            'post' => $data->post ? (int)htmlentities(stripcslashes(strip_tags($data->post))) : null
         );
 
         try {
@@ -482,7 +483,8 @@ class UserController extends Controller
             'block' => (int)htmlentities(stripcslashes(strip_tags($data->block))),
             'role' => htmlspecialchars(stripcslashes(strip_tags($data->role))),
             'avatarId' => $data->avatarId ? (int)htmlentities(stripcslashes(strip_tags($data->avatarId))) : null,
-            'settings' => $data->settings ? json_encode($data->settings) : ''
+            'settings' => $data->settings ? json_encode($data->settings) : '',
+            'post' => $data->post ? (int)htmlentities(stripcslashes(strip_tags($data->post))) : null
         );
 
         if ($data->password) {

@@ -99,7 +99,12 @@ class UserModel extends Model
                        SELECT a.`content`
                        FROM `sdi_attachment` AS a
                        WHERE a.`id` = sdi.`id_avatar` AND a.`active` IN (0, 1)
-                   ) AS avatar
+                   ) AS avatar,
+                   (
+                       SELECT p.`name`
+                       FROM `sdi_post` AS p
+                       WHERE p.`id` = sdi.`post` AND p.`active` IN (0, 1)
+                   ) AS postName
             FROM `sdi_user` sdi
             WHERE sdi.id = :id
         ";
@@ -133,7 +138,12 @@ class UserModel extends Model
                        SELECT a.`content`
                        FROM `sdi_attachment` AS a
                        WHERE a.`id` = sdi.`id_avatar` AND a.`active` IN (0, 1)
-                   ) AS avatar
+                   ) AS avatar,
+                   (
+                       SELECT p.`name`
+                       FROM `sdi_post` AS p
+                       WHERE p.`id` = sdi.`post` AND p.`active` IN (0, 1)
+                   ) AS postName
             FROM `sdi_user` sdi
         ";
 
@@ -195,9 +205,11 @@ class UserModel extends Model
     {
         $sql = "
             INSERT INTO `sdi_user`
-                (first_name, email, phone, password, date_created, date_update, last_active, active, role, id_avatar, settings)
+                (first_name, email, phone, password, date_created, date_update, last_active, active, role, id_avatar,
+                    settings, post)
             VALUES
-                (:firstName, :email, :phone, :password, :dateCreated, :dateUpdate, :lastActive, :active, :role, :avatarId, :settings)
+                (:firstName, :email, :phone, :password, :dateCreated, :dateUpdate, :lastActive, :active, :role, :avatarId,
+                    :settings, :post)
         ";
 
         parent::query($sql);
@@ -213,6 +225,7 @@ class UserModel extends Model
         parent::bindParams('role', $payload['role']);
         parent::bindParams('avatarId', $payload['avatarId']);
         parent::bindParams('settings', $payload['settings']);
+        parent::bindParams('post', $payload['post']);
 
         $user = parent::execute();
 
@@ -259,7 +272,8 @@ class UserModel extends Model
                     block = :block,
                     role = :role,
                     id_avatar = :avatarId,
-                    settings = :settings
+                    settings = :settings,
+                    post = :post
                 WHERE id = :id
             ";
         } else {
@@ -274,7 +288,8 @@ class UserModel extends Model
                     block = :block,
                     role = :role,
                     id_avatar = :avatarId,
-                    settings = :settings
+                    settings = :settings,
+                    post = :post
                 WHERE id = :id
             ";
         }
@@ -291,6 +306,7 @@ class UserModel extends Model
         parent::bindParams('role', $payload['role']);
         parent::bindParams('avatarId', $payload['avatarId']);
         parent::bindParams('settings', $payload['settings']);
+        parent::bindParams('post', $payload['post']);
 
         if ($payload['password'] && $payload['password'] !== '') {
             parent::bindParams('password', $payload['password']);
@@ -338,15 +354,17 @@ class UserModel extends Model
             'email' => $data['email'],
             'phone' => $data['phone'],
             'password' => $data['password'],
-            'dateCreated' => $data['dateCreated'],
-            'dateUpdate' => $data['dateUpdate'],
+            'dateCreated' => $data['date_created'],
+            'dateUpdate' => $data['date_update'],
             'lastActive' => $data['last_active'],
             'active' => (int)$data['active'],
             'block' => (int)$data['block'],
             'role' => $data['role'],
             'avatarId' => (int)$data['id_avatar'],
             'avatar' => $data['avatar'],
-            'settings' => $data['settings'] ? json_decode($data['settings']) : null
+            'settings' => $data['settings'] ? json_decode($data['settings']) : null,
+            'post' => (int)$data['post'],
+            'postName' => $data['postName']
         ];
     }
 }

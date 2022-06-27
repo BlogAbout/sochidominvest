@@ -16,8 +16,9 @@ import BuildingPage from '../../../views/public/BuildingPage/BuildingPage'
 import ArticleItemPagePanel from '../../../views/private/ArticleItemPagePanel/ArticleItemPagePanel'
 import ArticlePagePanel from '../../../views/private/ArticlePagePanel/ArticlePagePanel'
 import ArticlePage from '../../../views/public/ArticlePage/ArticlePage'
-import DeveloperItemPagePanel from '../../../views/private/DeveloperItemPagePanel/DeveloperItemPagePanel'
-import DeveloperPagePanel from '../../../views/private/DeveloperPagePanel/DeveloperPagePanel'
+import CrmPagePanel from '../../../views/private/CrmPagePanel/CrmPagePanel'
+import DeveloperItemPagePanel from '../../../views/private/CrmPagePanel/components/DeveloperItemPagePanel/DeveloperItemPagePanel'
+import DeveloperPagePanel from '../../../views/private/CrmPagePanel/components/DeveloperPagePanel/DeveloperPagePanel'
 import DocumentPagePanel from '../../../views/private/DocumentPagePanel/DocumentPagePanel'
 import ReportPanel from '../../../views/private/ReportPanel/ReportPanel'
 import ToolPanel from '../../../views/private/ToolPanel/ToolPanel'
@@ -37,6 +38,7 @@ import HeaderDefault from '../../../components/HeaderDefault/HeaderDefault'
 import FooterDefault from '../../../components/ui/FooterDefault/FooterDefault'
 import FaqPage from '../../../views/public/FaqPage/FaqPage'
 import FaqPanel from '../../../views/private/AdvertisingMaterialsPagePanel/components/FaqPanel/FaqPanel'
+import PostPagePanel from '../../../views/private/CrmPagePanel/components/PostPagePanel/PostPagePanel'
 import classes from './AppRouter.module.scss'
 
 const AppRouter: React.FC = () => {
@@ -84,8 +86,10 @@ const AppRouter: React.FC = () => {
 
                             {['director', 'administrator', 'manager'].includes(role) &&
                             <>
-                                <Route path={RouteNames.DEVELOPER_ITEM} element={<DeveloperItemPagePanel/>}/>
-                                <Route path={RouteNames.DEVELOPER} element={<DeveloperPagePanel/>}/>
+                                <Route path={RouteNames.CRM} element={<CrmPagePanel/>}/>
+                                <Route path={RouteNames.CRM_DEVELOPER_ITEM} element={<DeveloperItemPagePanel/>}/>
+                                <Route path={RouteNames.CRM_DEVELOPER} element={<DeveloperPagePanel/>}/>
+                                <Route path={RouteNames.CRM_POST} element={<PostPagePanel/>}/>
                                 <Route path={RouteNames.DOCUMENT} element={<DocumentPagePanel/>}/>
                                 <Route path={RouteNames.REPORT} element={<ReportPanel/>}/>
                                 <Route path={RouteNames.FILE_MANAGER} element={<FileManagerPagePanel/>}/>

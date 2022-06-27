@@ -1,20 +1,20 @@
 import React, {useEffect, useState} from 'react'
 import {useNavigate} from 'react-router-dom'
-import {useTypedSelector} from '../../../hooks/useTypedSelector'
-import {useActions} from '../../../hooks/useActions'
-import {IDeveloper} from '../../../@types/IDeveloper'
-import {IFilterBase, IFilterContent} from '../../../@types/IFilter'
-import DeveloperService from '../../../api/DeveloperService'
-import {compareText} from '../../../helpers/filterHelper'
-import {changeLayout, getLayout} from '../../../helpers/utilHelper'
-import Title from '../../../components/ui/Title/Title'
-import FilterBase from '../../../components/ui/FilterBase/FilterBase'
-import PageInfo from '../../../components/ui/PageInfo/PageInfo'
-import DeveloperListContainer from '../../../components/container/DeveloperListContainer/DeveloperListContainer'
-import SidebarLeft from '../../../components/ui/SidebarLeft/SidebarLeft'
-import openPopupDeveloperCreate from '../../../components/popup/PopupDeveloperCreate/PopupDeveloperCreate'
-import openPopupAlert from '../../../components/PopupAlert/PopupAlert'
-import openContextMenu from '../../../components/ContextMenu/ContextMenu'
+import {useTypedSelector} from '../../../../../hooks/useTypedSelector'
+import {useActions} from '../../../../../hooks/useActions'
+import {IDeveloper} from '../../../../../@types/IDeveloper'
+import {IFilterBase, IFilterContent} from '../../../../../@types/IFilter'
+import DeveloperService from '../../../../../api/DeveloperService'
+import {compareText} from '../../../../../helpers/filterHelper'
+import {changeLayout, getLayout} from '../../../../../helpers/utilHelper'
+import Title from '../../../../../components/ui/Title/Title'
+import FilterBase from '../../../../../components/ui/FilterBase/FilterBase'
+import PageInfo from '../../../../../components/ui/PageInfo/PageInfo'
+import DeveloperListContainer from '../../../../../components/container/DeveloperListContainer/DeveloperListContainer'
+import SidebarLeft from '../../../../../components/ui/SidebarLeft/SidebarLeft'
+import openPopupDeveloperCreate from '../../../../../components/popup/PopupDeveloperCreate/PopupDeveloperCreate'
+import openPopupAlert from '../../../../../components/PopupAlert/PopupAlert'
+import openContextMenu from '../../../../../components/ContextMenu/ContextMenu'
 import classes from './DeveloperPagePanel.module.scss'
 
 const DeveloperPagePanel: React.FC = () => {
@@ -73,7 +73,7 @@ const DeveloperPagePanel: React.FC = () => {
     }
 
     const onClickHandler = (developer: IDeveloper) => {
-        navigate('/panel/developer/' + developer.id)
+        navigate('/panel/crm/developer/' + developer.id)
     }
 
     // Добавление нового застройщика
@@ -131,7 +131,7 @@ const DeveloperPagePanel: React.FC = () => {
     const onContextMenu = (e: React.MouseEvent, developer: IDeveloper) => {
         e.preventDefault()
 
-        const menuItems = [{text: 'Открыть', onClick: () => navigate('/panel/developer/' + developer.id)}]
+        const menuItems = [{text: 'Открыть', onClick: () => navigate('/panel/crm/developer/' + developer.id)}]
 
         if (['director', 'administrator', 'manager'].includes(role)) {
             menuItems.push({text: 'Редактировать', onClick: () => onEditHandler(developer)})

@@ -18,6 +18,7 @@ import ComboBox from '../../ComboBox/ComboBox'
 import Label from '../../form/Label/Label'
 import Title from '../../ui/Title/Title'
 import AvatarBox from '../../form/AvatarBox/AvatarBox'
+import PostBox from '../../form/PostBox/PostBox'
 import {generatePassword} from '../../../helpers/generatePasswordHelper'
 import classes from './PopupUserCreate.module.scss'
 
@@ -178,6 +179,19 @@ const PopupUserCreate: React.FC<Props> = (props) => {
                              styleType='minimal'
                     />
                 </div>
+
+                {props.role && ['director', 'administrator'].includes(props.role) ?
+                    <div className={classes.field}>
+                        <Label text='Должность'/>
+
+                        <PostBox posts={user.post ? [user.post] : []}
+                                 onSelect={(value: number[]) => setUser({...user, post: value[0]})}
+                                 placeHolder='Выберите должность'
+                                 styleType='minimal'
+                        />
+                    </div>
+                    : null
+                }
 
                 {props.role && ['director', 'administrator', 'manager'].includes(props.role) ?
                     <div className={classes.field}>

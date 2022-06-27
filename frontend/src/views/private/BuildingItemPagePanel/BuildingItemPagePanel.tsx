@@ -765,7 +765,8 @@ const BuildingItemPagePanel: React.FC = (props) => {
                             return userInfo ? (
                                 <div key={id}>
                                     <span>{userInfo.firstName}</span>
-                                    <span>{userInfo.phone}</span>
+                                    {userInfo.postName && <span className={classes.post}>{userInfo.postName}</span>}
+                                    <span><a href={`tel:${userInfo.phone}`}>{userInfo.phone}</a></span>
                                 </div>
                             ) : null
                         })}

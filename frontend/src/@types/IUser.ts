@@ -12,6 +12,8 @@ export interface IUser {
     token?: string
     avatarId?: number | null
     avatar?: string | null
+    post?: number | null
+    postName?: string | null
 }
 
 export interface IUserSetting {
