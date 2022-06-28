@@ -182,6 +182,12 @@ const UserItemPagePanel: React.FC = () => {
                         <div className={classes.label}>Имя:</div>
                         <div className={classes.param}>{user.firstName}</div>
                     </div>
+                    {user.post ?
+                        <div className={classes.row}>
+                            <div className={classes.label}>Должность:</div>
+                            <div className={classes.param}>{user.postName}</div>
+                        </div>
+                        : null}
                     <div className={classes.row}>
                         <div className={classes.label}>Email:</div>
                         <div className={classes.param}>{user.email}</div>
