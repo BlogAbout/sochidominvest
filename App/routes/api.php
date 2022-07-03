@@ -137,6 +137,7 @@ $Klein->respond('DELETE', '/api/v1/post/[:id]', [new PostController(), 'deleteIt
 $Klein->respond('GET', '/api/v1/views/[:objectType]/[:objectId]', [new UtilController(), 'updateCountViews']);
 $Klein->respond('GET', '/api/v1/log', [new UtilController(), 'fetchLogs']);
 $Klein->respond('GET', '/api/v1/search', [new UtilController(), 'fetchSearchGlobal']);
+$Klein->respond('POST', '/api/v1/drop', [new Controller(), 'dropAllOlderFiles']);
 
 // Dispatch all routes
 $Klein->dispatch();

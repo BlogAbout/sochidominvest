@@ -10,28 +10,6 @@ class SettingMiddleware
     protected static $instance;
     protected static $administrationModel;
     protected static $settings;
-    protected static $defaultSettings = [
-        'article_show_date' => 'date_created',
-        'smtp_enable' => '0',
-        'smtp_ssl' => '0',
-        'smtp_host' => '',
-        'smtp_login' => '',
-        'smtp_password' => '',
-        'smtp_email' => 'info@sochidominvest.ru',
-        'sms_enable' => '0',
-        'sms_address' => '',
-        'sms_api_key' => '',
-        'telegram_enable' => '0',
-        'telegram_bot_id' => '',
-        'telegram_bot_api_key' => '',
-        'mail_enable' => '0',
-        'websocket_messenger' => '0',
-        'websocket_notification' => '0',
-        'image_thumb_width' => '400',
-        'image_thumb_height' => '400',
-        'image_full_width' => '2000',
-        'image_full_height' => '2000'
-    ];
 
     /**
      * Инициализация SettingMiddleware
@@ -71,8 +49,8 @@ class SettingMiddleware
         if (!self::$settings) {
             if ($defaultValue) {
                 return $defaultValue;
-            } else if (self::$defaultSettings[$settingName]) {
-                return self::$defaultSettings[$settingName];
+            } else if (AdministrationModel::$defaultSettings[$settingName]) {
+                return AdministrationModel::$defaultSettings[$settingName];
             } else {
                 return '';
             }
@@ -81,8 +59,8 @@ class SettingMiddleware
                 return self::$settings[$settingName];
             } else if ($defaultValue) {
                 return $defaultValue;
-            } else if (self::$defaultSettings[$settingName]) {
-                return self::$defaultSettings[$settingName];
+            } else if (AdministrationModel::$defaultSettings[$settingName]) {
+                return AdministrationModel::$defaultSettings[$settingName];
             } else {
                 return '';
             }

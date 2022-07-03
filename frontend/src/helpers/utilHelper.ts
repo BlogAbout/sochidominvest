@@ -1,11 +1,12 @@
-export const apiPath = 'https://api.sochidominvest.ru/'
-export const siteTitle = 'СОЧИДОМИНВЕСТ'
+import {ISetting} from '../@types/ISetting'
+
 export const configuration = {
+    apiPath: 'https://api.sochidominvest.ru/',
     siteTitle: 'СОЧИДОМИНВЕСТ',
     sitePhone: '+7 (918) 605-34-27',
     sitePhoneUrl: 'tel:+79186053427',
     siteEmail: 'info@sochidominvest.ru',
-    siteEmailUrl: 'mailto:info@sochidominvest.ru'
+    siteEmailUrl: 'mailto:info@sochidominvest.ru',
 }
 
 /**
@@ -73,4 +74,16 @@ export const changeLayout = (type: string, layout: string) => {
     listLayoutsItems[type] = layout
 
     localStorage.setItem('listLayouts', JSON.stringify(listLayoutsItems))
+}
+
+export const getSetting = (key: string, settings: ISetting): string => {
+    if (!key || key.trim() === '') {
+        return ''
+    }
+
+    if (settings && key in settings) {
+        return settings[key]
+    } else {
+        return ''
+    }
 }

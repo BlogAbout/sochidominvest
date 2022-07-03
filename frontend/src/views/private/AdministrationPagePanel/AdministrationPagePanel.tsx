@@ -5,6 +5,7 @@ import {ISetting} from '../../../@types/ISetting'
 import {ISelector} from '../../../@types/ISelector'
 import {useTypedSelector} from '../../../hooks/useTypedSelector'
 import {useActions} from '../../../hooks/useActions'
+import {mapIconColors} from '../../../helpers/administrationHelper'
 import BlockingElement from '../../../components/ui/BlockingElement/BlockingElement'
 import Tabs from '../../../components/Tabs/Tabs'
 import Button from '../../../components/form/Button/Button'
@@ -75,6 +76,30 @@ const AdministrationPagePanel: React.FC = () => {
                                           ] as ISelector[])}
                                           onSelect={(value: string) => setSettingValue('article_show_date', value)}
                                           placeHolder='Выберите дату для отображения'
+                                          styleType='standard'
+                                />
+                            </div>
+                        </div>
+
+                        <div className={classes.col}>
+                            <h2>Карта (Yandex.Maps)</h2>
+
+                            <div className={classes.field}>
+                                <div className={classes.field_label}>API ключ</div>
+
+                                <TextBox value={getSettingValue('map_api_key') || ''}
+                                         onChange={(e: React.MouseEvent, value: string) => setSettingValue('map_api_key', value)}
+                                         placeHolder='Укажите API ключ для Yandex.Maps'
+                                />
+                            </div>
+
+                            <div className={classes.field}>
+                                <div className={classes.field_label}>Цвет метки</div>
+
+                                <ComboBox selected={getSettingValue('map_icon_color') || 'islands#blueIcon'}
+                                          items={Object.values(mapIconColors)}
+                                          onSelect={(value: string) => setSettingValue('map_icon_color', value)}
+                                          placeHolder='Выберите цвет метки'
                                           styleType='standard'
                                 />
                             </div>

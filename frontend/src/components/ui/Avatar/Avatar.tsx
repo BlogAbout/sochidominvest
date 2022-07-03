@@ -1,6 +1,6 @@
 import React from 'react'
 import classNames from 'classnames/bind'
-import {apiPath} from '../../../helpers/utilHelper'
+import {configuration} from '../../../helpers/utilHelper'
 import classes from './Avatar.module.scss'
 
 interface Props extends React.PropsWithChildren<any> {
@@ -24,7 +24,10 @@ const Avatar: React.FC<Props> = (props) => {
         <div className={cx({'Avatar': true, 'noImage': !props.href})}
              style={{width: props.width, height: props.height}}
         >
-            {props.href ? <img src={`${apiPath}uploads/image/thumb/${props.href}`} alt={props.alt}/> : null}
+            {props.href ?
+                <img src={`${configuration.apiPath}uploads/image/thumb/${props.href}`} alt={props.alt}/>
+                : null
+            }
 
             {props.children ? props.children : null}
         </div>

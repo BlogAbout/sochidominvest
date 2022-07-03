@@ -1,7 +1,8 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import {Route, Routes} from 'react-router-dom'
 import {RouteNames} from '../../routes'
 import {useTypedSelector} from '../../../hooks/useTypedSelector'
+import {useActions} from '../../../hooks/useActions'
 import MainPage from '../../../views/public/MainPage/MainPage'
 import PolicyPage from '../../../views/public/PolicyPage/PolicyPage'
 import AboutPage from '../../../views/public/AboutPage/AboutPage'
@@ -43,6 +44,14 @@ import classes from './AppRouter.module.scss'
 
 const AppRouter: React.FC = () => {
     const {isAuth, role} = useTypedSelector(state => state.userReducer)
+
+    const {fetchSettings} = useActions()
+
+    useEffect(() => {
+        if (isAuth) {
+            fetchSettings()
+        }
+    }, [isAuth])
 
     return (
         <div className={classes.AppRouter}>

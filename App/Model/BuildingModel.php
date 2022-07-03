@@ -190,10 +190,10 @@ class BuildingModel extends Model
     {
         $sql = "
             INSERT INTO `sdi_building`
-                (`name`, `description`, `address`, `author`, `date_created`, `date_update`, `active`, `publish`,
+                (`name`, `description`, `address`, `coordinates`, `author`, `date_created`, `date_update`, `active`, `publish`,
                  `status`, `type`, `area`, `cost`, `meta_title`, `meta_description`)
             VALUES
-                (:name, :description, :address, :author, :dateCreated, :dateUpdate, :active, :publish,
+                (:name, :description, :address, :coordinates, :author, :dateCreated, :dateUpdate, :active, :publish,
                  :status, :type, :area, :cost, :metaTitle, :metaDescription)
         ";
 
@@ -201,6 +201,7 @@ class BuildingModel extends Model
         parent::bindParams('name', $payload['name']);
         parent::bindParams('description', $payload['description']);
         parent::bindParams('address', $payload['address']);
+        parent::bindParams('coordinates', $payload['coordinates']);
         parent::bindParams('author', $payload['author']);
         parent::bindParams('dateCreated', $payload['dateCreated']);
         parent::bindParams('dateUpdate', $payload['dateUpdate']);
@@ -246,6 +247,7 @@ class BuildingModel extends Model
                 `name` = :name,
                 `description` = :description,
                 `address` = :address,
+                `coordinates` = :coordinates,
                 `date_update` = :dateUpdate,
                 `active` = :active,
                 `publish` = :publish,
@@ -263,6 +265,7 @@ class BuildingModel extends Model
         parent::bindParams('name', $payload['name']);
         parent::bindParams('description', $payload['description']);
         parent::bindParams('address', $payload['address']);
+        parent::bindParams('coordinates', $payload['coordinates']);
         parent::bindParams('dateUpdate', $payload['dateUpdate']);
         parent::bindParams('active', $payload['active']);
         parent::bindParams('publish', $payload['publish']);
@@ -577,6 +580,7 @@ class BuildingModel extends Model
             'name' => html_entity_decode($data['name']),
             'description' => html_entity_decode($data['description']),
             'address' => html_entity_decode($data['address']),
+            'coordinates' => html_entity_decode($data['coordinates']),
             'active' => (int)$data['active'],
             'publish' => (int)$data['publish'],
             'status' => $data['status'],

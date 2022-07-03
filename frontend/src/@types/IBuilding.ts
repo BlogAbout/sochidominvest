@@ -3,6 +3,7 @@ export interface IBuilding {
     name: string
     description?: string
     address: string | null
+    coordinates: string | null
     type: 'building' | 'apartment' | 'house' | 'land' | 'commerce' | 'garage'
     status: string | null
     active: number

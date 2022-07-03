@@ -10,7 +10,7 @@ import {ISelector} from '../../../@types/ISelector'
 import {IAttachment} from '../../../@types/IAttachment'
 import {getPopupContainer, openPopup, removePopup} from '../../../helpers/popupHelper'
 import showBackgroundBlock from '../../ui/BackgroundBlock/BackgroundBlock'
-import {Content, Footer, Header, Popup} from '../Popup/Popup'
+import {Footer, Popup} from '../Popup/Popup'
 import BlockingElement from '../../ui/BlockingElement/BlockingElement'
 import TextBox from '../../form/TextBox/TextBox'
 import NumberBox from '../../NumberBox/NumberBox'
@@ -32,6 +32,8 @@ import openPopupAlert from '../../PopupAlert/PopupAlert'
 import openPopupFileManager from '../../PopupFileManager/PopupFileManager'
 import Title from '../../ui/Title/Title'
 import Label from '../../form/Label/Label'
+import ArticleList from './components/ArticleList/ArticleList'
+import AddressBox from '../../form/AddressBox/AddressBox'
 import {
     amountContract,
     buildingAdvantages,
@@ -53,7 +55,6 @@ import {
 } from '../../../helpers/buildingHelper'
 import {sortAttachments} from '../../../helpers/attachmentHelper'
 import classes from './PopupBuildingCreate.module.scss'
-import ArticleList from "./components/ArticleList/ArticleList";
 
 interface Props extends PopupProps {
     building?: IBuilding | null
@@ -77,6 +78,7 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
         id: null,
         name: '',
         address: '',
+        coordinates: '',
         type: props.type || 'building',
         status: 'sold',
         active: 1,
@@ -254,16 +256,30 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
                 <div className={classes.field}>
                     <Label text='Адрес'/>
 
-                    <TextBox value={building.address}
-                             onChange={(e: React.MouseEvent, value: string) => setBuilding({
-                                 ...building,
-                                 address: value
-                             })}
-                             placeHolder='Введите адрес'
-                             error={!building.address || building.address.trim() === ''}
-                             showRequired
-                             errorText='Поле обязательно для заполнения'
-                             styleType='minimal'
+                    {/*<TextBox value={building.address}*/}
+                    {/*         onChange={(e: React.MouseEvent, value: string) => setBuilding({*/}
+                    {/*             ...building,*/}
+                    {/*             address: value*/}
+                    {/*         })}*/}
+                    {/*         placeHolder='Введите адрес'*/}
+                    {/*         error={!building.address || building.address.trim() === ''}*/}
+                    {/*         showRequired*/}
+                    {/*         errorText='Поле обязательно для заполнения'*/}
+                    {/*         styleType='minimal'*/}
+                    {/*/>*/}
+
+                    <AddressBox address={building.address || ''}
+                                coordinates={building.coordinates || ''}
+                                onSelect={(address: string, coordinates: string) => setBuilding({
+                                    ...building,
+                                    address: address,
+                                    coordinates: coordinates
+                                })}
+                                placeHolder='Укажите адрес'
+                                error={!building.address || building.address.trim() === ''}
+                                showRequired
+                                errorText='Поле обязательно для заполнения'
+                                styleType='minimal'
                     />
                 </div>
 

