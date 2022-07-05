@@ -44,6 +44,31 @@ const PostPagePanel: React.FC = () => {
         setIsUpdate(true)
     }
 
+    // Рекурсия для древовидного списка
+    const recursiveThree = (sortingArray: IPost[], parentId: number | null, items: IPost[], level: number): IPost[] => {
+        for (const item of sortingArray) {
+            if (item.postId == null) {
+                item.postId = 0
+            }
+
+            if (item.postId == parentId) {
+                item.spaces = level
+                items.push(item)
+                recursiveThree(sortingArray, item.id, items, level + 1)
+            }
+        }
+
+        return items
+    }
+
+    // Построение древовидного списка
+    const sortingTreePosts = (): IPost[] => {
+        const items: IPost[] = []
+        recursiveThree(JSON.parse(JSON.stringify(posts)), 0, items, 0)
+
+        return items
+    }
+
     // Поиск
     const search = (value: string) => {
         setSearchText(value)
@@ -53,17 +78,19 @@ const PostPagePanel: React.FC = () => {
         }
 
         if (value !== '') {
+            console.log('net',posts)
             setFilterPost(filterItemsHandler(posts.filter((post: IPost) => {
                 return (!selectedType.length || selectedType.includes(post.type)) &&
                     (compareText(post.name, value) || compareText(post.description, value))
             })))
         } else {
-            setFilterPost(filterItemsHandler(!selectedType.length ? posts : posts.filter((post: IPost) => selectedType.includes(post.type))))
+            console.log('da')
+            setFilterPost(filterItemsHandler(!selectedType.length ? sortingTreePosts() : posts.filter((post: IPost) => selectedType.includes(post.type))))
         }
     }
 
     const onClickHandler = (post: IPost) => {
-        // Todo
+        // Todo: Должен раскрываться список дочерних
     }
 
     // Добавление нового застройщика

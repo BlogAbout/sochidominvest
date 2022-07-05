@@ -23,6 +23,11 @@
 
     .name {
         flex-grow: 1;
+
+        .arrow {
+            display: inline-block;
+            margin-right: 10px;
+        }
     }
 
     .author {

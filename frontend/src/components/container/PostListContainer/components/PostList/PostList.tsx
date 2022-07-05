@@ -47,11 +47,11 @@ const PostList: React.FC<Props> = (props) => {
                 {props.posts.map((post: IPost) => {
                     return (
                         <PostItem key={post.id}
-                                      post={post}
-                                      onClick={props.onClick}
-                                      onEdit={props.onEdit}
-                                      onRemove={props.onRemove}
-                                      onContextMenu={props.onContextMenu}
+                                  post={post}
+                                  onClick={props.onClick}
+                                  onEdit={props.onEdit}
+                                  onRemove={props.onRemove}
+                                  onContextMenu={props.onContextMenu}
                         />
                     )
                 })}

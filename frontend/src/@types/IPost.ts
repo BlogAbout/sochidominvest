@@ -9,4 +9,7 @@ export interface IPost {
     dateUpdate?: string | null
     active: number
     authorName?: string | null
+    hasChild?: boolean
+    isOpen?: boolean
+    spaces?: number
 }

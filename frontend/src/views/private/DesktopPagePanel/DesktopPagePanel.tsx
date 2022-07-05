@@ -239,13 +239,13 @@ const DesktopPagePanel: React.FC = () => {
             <div className={classes.Content}>
                 <Title type={1}>Рабочий стол</Title>
 
-                <div className={classes.columns}>
+                <BlockingElement fetching={false} className={classes.columns}>
                     {renderUserInfo()}
                     {renderTariffsInfo()}
                     {renderArticlesInfo()}
                     {renderDealsInfo()}
                     {renderTicketsInfo()}
-                </div>
+                </BlockingElement>
             </div>
         </div>
     )
