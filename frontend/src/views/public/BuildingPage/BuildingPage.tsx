@@ -7,11 +7,16 @@ import {numberWithSpaces, round} from '../../../helpers/numberHelper'
 import {IBuilding} from '../../../@types/IBuilding'
 import {ISelector} from '../../../@types/ISelector'
 import {IFilterParams} from '../../../@types/IFilter'
-import {buildingTypes, getDistrictText, getPassedText} from '../../../helpers/buildingHelper'
+import {
+    buildingTypes,
+    checkBuildingByRangeArea,
+    checkBuildingByRangeCost,
+    getDistrictText,
+    getPassedText
+} from '../../../helpers/buildingHelper'
 import BuildingService from '../../../api/BuildingService'
 import BlockingElement from '../../../components/ui/BlockingElement/BlockingElement'
 import Empty from '../../../components/Empty/Empty'
-import Button from '../../../components/form/Button/Button'
 import openPopupBuildingFilter from '../../../components/popup/PopupBuildingFilter/PopupBuildingFilter'
 import PageInfo from '../../../components/ui/PageInfo/PageInfo'
 import Title from '../../../components/ui/Title/Title'
@@ -64,14 +69,16 @@ const BuildingPage: React.FC = () => {
         onFilterBuildingHandler(filters)
     }, [buildings])
 
-    const onFilterBuildingHandler = (filtersParams: IFilterParams) => {
+    const onFilterBuildingHandler = (filtersParams: any) => {
         setFilters(filtersParams)
 
         if (!buildings || !buildings.length) {
             setFilterBuilding([])
         } else {
             const prepareBuildings: IBuilding[] = buildings.filter((item: IBuilding) => {
-                return ((!filtersParams.houseClass || !filtersParams.houseClass.length) || (filtersParams.houseClass && item.houseClass && filtersParams.houseClass.includes(item.houseClass))) &&
+                return checkBuildingByRangeCost(item, filtersParams) && checkBuildingByRangeArea(item, filtersParams) &&
+                    ((!filtersParams.buildingType || !filtersParams.buildingType.length) || (filtersParams.buildingType && item.type && filtersParams.buildingType.includes(item.type))) &&
+                    ((!filtersParams.houseClass || !filtersParams.houseClass.length) || (filtersParams.houseClass && item.houseClass && filtersParams.houseClass.includes(item.houseClass))) &&
                     ((!filtersParams.material || !filtersParams.material.length) || (filtersParams.material && item.material && filtersParams.material.includes(item.material))) &&
                     ((!filtersParams.houseType || !filtersParams.houseType.length) || (filtersParams.houseType && item.houseType && filtersParams.houseType.includes(item.houseType))) &&
                     ((!filtersParams.entranceHouse || !filtersParams.entranceHouse.length) || (filtersParams.entranceHouse && item.entranceHouse && filtersParams.entranceHouse.includes(item.entranceHouse))) &&
@@ -169,7 +176,7 @@ const BuildingPage: React.FC = () => {
             <div className={classes.Content}>
                 <div className={classes.container}>
                     <Title type={1}
-                           showButtonFilter={true}
+                           showFilter={true}
                            onFilter={() => {
                                openPopupBuildingFilter(document.body, {
                                    filters: filters,

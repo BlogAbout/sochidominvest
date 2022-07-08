@@ -315,7 +315,7 @@ class BuildingModel extends Model
     public static function updateValuesBuilding(int $buildingId)
     {
         $sql = "
-            SELECT MIN(`area`) as areaMin, MAX(`area`) as areaMax, MIN(`cost`) as costMin, MIN(`cost` / `area`) as costMinUnit
+            SELECT MIN(`area`) as areaMin, MAX(`area`) as areaMax, MIN(`cost`) as costMin, MAX(`cost`) as costMax, MIN(`cost` / `area`) as costMinUnit
             FROM `sdi_building_checker`
             WHERE `id_building` = :buildingId
         ";
@@ -330,6 +330,7 @@ class BuildingModel extends Model
                 `area_min` = :areaMin,
                 `area_max` = :areaMax,
                 `cost_min` = :costMin,
+                `cost_max` = :costMax,
                 `cost_min_unit` = :costMinUnit
             WHERE `id` = :id
         ";
@@ -339,6 +340,7 @@ class BuildingModel extends Model
         parent::bindParams('areaMin', $values['areaMin']);
         parent::bindParams('areaMax', $values['areaMax']);
         parent::bindParams('costMin', $values['costMin']);
+        parent::bindParams('costMax', $values['costMax']);
         parent::bindParams('costMinUnit', $values['costMinUnit']);
         parent::execute();
     }
@@ -591,6 +593,7 @@ class BuildingModel extends Model
             'areaMin' => $data['area_min'],
             'areaMax' => $data['area_max'],
             'costMin' => $data['cost_min'],
+            'costMax' => $data['cost_max'],
             'costMinUnit' => $data['cost_min_unit'],
             'countCheckers' => $data['countCheckers'],
             'district' => $data['district'],

@@ -2,10 +2,35 @@
     h1 {
         display: flex;
 
+        &.headTop {
+            flex-wrap: wrap;
+
+            > span {
+                width: 100%;
+                flex-grow: 1;
+                margin-bottom: 20px;
+            }
+
+            .interface {
+                width: 100%;
+                flex-grow: 1;
+            }
+        }
+
         > span {
             display: block;
             margin-right: auto;
             color: #fff;
+        }
+
+        .interface {
+            display: flex;
+            justify-content: center;
+
+            .search {
+                width: 100%;
+                flex-grow: 1;
+            }
         }
     }
 

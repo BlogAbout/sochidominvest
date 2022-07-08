@@ -9,6 +9,8 @@ import CheckBox from '../../form/CheckBox/CheckBox'
 import ComboBox from '../../ComboBox/ComboBox'
 import Title from '../../ui/Title/Title'
 import SelectorBox from '../../SelectorBox/SelectorBox'
+import Label from '../../form/Label/Label'
+import NumberBox from '../../NumberBox/NumberBox'
 import {
     buildingClasses,
     buildingElectricity,
@@ -20,9 +22,10 @@ import {
     buildingParking,
     buildingSewerage,
     buildingTerritory,
+    buildingTypes,
     buildingWaterSupply
 } from '../../../helpers/buildingHelper'
-import {IFilterParams, IFilterContent} from '../../../@types/IFilter'
+import {IFilterContent, IFilterParams} from '../../../@types/IFilter'
 import {ISelector} from '../../../@types/ISelector'
 import classes from './PopupBuildingFilter.module.scss'
 
@@ -40,7 +43,10 @@ const defaultProps: Props = {
 }
 
 const PopupBuildingFilter: React.FC<Props> = (props) => {
-    const initState: IFilterParams = {
+    const initState: any = {
+        buildingCost: {min: 0, max: 0},
+        buildingArea: {min: 0, max: 0},
+        buildingType: [],
         houseClass: [],
         material: [],
         houseType: [],
@@ -54,7 +60,7 @@ const PopupBuildingFilter: React.FC<Props> = (props) => {
         waterSupply: []
     }
 
-    const [filters, setFilters] = useState<IFilterParams>(props.filters || initState)
+    const [filters, setFilters] = useState<any>(props.filters || initState)
 
     useEffect(() => {
         return () => {
@@ -73,6 +79,46 @@ const PopupBuildingFilter: React.FC<Props> = (props) => {
     }
 
     const filtersContent: IFilterContent[] = [
+        {
+            title: 'Стоимость',
+            type: 'ranger',
+            rangerParams: {
+                suffix: 'руб.',
+                step: 1,
+                max: 999999999,
+                afterComma: 0
+            },
+            multi: false,
+            selected: filters.buildingCost,
+            onSelect: (values: string[]) => {
+                setFilters({...filters, buildingCost: values})
+            }
+        },
+        {
+            title: 'Площадь',
+            type: 'ranger',
+            rangerParams: {
+                suffix: 'м2.',
+                step: 0.01,
+                max: 999,
+                afterComma: 2
+            },
+            multi: false,
+            selected: filters.buildingArea,
+            onSelect: (values: string[]) => {
+                setFilters({...filters, buildingArea: values})
+            }
+        },
+        {
+            title: 'Тип недвижимости',
+            type: 'checker',
+            multi: true,
+            items: buildingTypes,
+            selected: filters.buildingType || [],
+            onSelect: (values: string[]) => {
+                setFilters({...filters, buildingType: values})
+            }
+        },
         {
             title: 'Класс дома',
             type: 'checker',
@@ -189,7 +235,7 @@ const PopupBuildingFilter: React.FC<Props> = (props) => {
         if (filter.multi) {
             return (
                 <ComboBox selected={filter.selected.length ? filter.selected[0] : null}
-                          items={Object.values(filter.items)}
+                          items={filter.items ? Object.values(filter.items) : []}
                           onSelect={(value: string) => filter.onSelect([value])}
                           placeHolder='Выберите'
                           styleType='standard'
@@ -198,7 +244,7 @@ const PopupBuildingFilter: React.FC<Props> = (props) => {
         } else {
             return (
                 <SelectorBox selected={filter.selected}
-                             items={Object.values(filter.items)}
+                             items={filter.items ? Object.values(filter.items) : []}
                              onSelect={(value: string[]) => filter.onSelect(value)}
                              placeHolder='Выберите'
                              multi
@@ -209,7 +255,6 @@ const PopupBuildingFilter: React.FC<Props> = (props) => {
     }
 
     const renderCheckerItem = (filter: IFilterContent) => {
-        console.log('filter', filter)
         const selectItemHandler = (value: string) => {
             if (filter.selected.includes(value)) {
                 return filter.selected.filter((item: string) => item !== value)
@@ -220,18 +265,70 @@ const PopupBuildingFilter: React.FC<Props> = (props) => {
 
         return (
             <div className={classes.checkItems}>
-                {filter.items.map((item: ISelector, index: number) => {
-                    return (
-                        <CheckBox key={index}
-                                  label={item.text}
-                                  type='classic'
-                                  checked={filter.selected.includes(item.key)}
-                                  onChange={() => filter.onSelect(selectItemHandler(item.key))}
-                        />
-                    )
-                })}
+                {filter.items ?
+                    filter.items.map((item: ISelector, index: number) => {
+                        return (
+                            <CheckBox key={index}
+                                      label={item.text}
+                                      type='classic'
+                                      checked={filter.selected.includes(item.key)}
+                                      onChange={() => filter.onSelect(selectItemHandler(item.key))}
+                            />
+                        )
+                    })
+                    : null
+                }
             </div>
         )
+    }
+
+    const renderRangerItem = (filter: IFilterContent) => {
+        return (
+            <div className={classes.rangeItem}>
+                <div className={classes.col}>
+                    <Label
+                        text={filter.rangerParams && filter.rangerParams.suffix ? `От, ${filter.rangerParams.suffix}` : 'От'}
+                    />
+                    <NumberBox value={filter.selected && filter.selected.min ? filter.selected.min : ''}
+                               min={0}
+                               step={filter.rangerParams ? filter.rangerParams.step : undefined}
+                               max={filter.rangerParams ? filter.rangerParams.max : undefined}
+                               countAfterComma={filter.rangerParams ? filter.rangerParams.afterComma : undefined}
+                               onChange={(e: React.ChangeEvent<HTMLInputElement>, value: number) => {
+                                   filter.onSelect({...filter.selected, min: value})
+                               }}
+                               placeHolder={filter.rangerParams && filter.rangerParams.suffix ? `От, ${filter.rangerParams.suffix}` : 'От'}
+                    />
+                </div>
+
+                <div className={classes.col}>
+                    <Label
+                        text={filter.rangerParams && filter.rangerParams.suffix ? `До, ${filter.rangerParams.suffix}` : 'До'}
+                    />
+                    <NumberBox value={filter.selected && filter.selected.max ? filter.selected.max : ''}
+                               min={0}
+                               step={filter.rangerParams ? filter.rangerParams.step : undefined}
+                               max={filter.rangerParams ? filter.rangerParams.max : undefined}
+                               countAfterComma={filter.rangerParams ? filter.rangerParams.afterComma : undefined}
+                               onChange={(e: React.ChangeEvent<HTMLInputElement>, value: number) => {
+                                   filter.onSelect({...filter.selected, max: value})
+                               }}
+                               placeHolder={filter.rangerParams && filter.rangerParams.suffix ? `До, ${filter.rangerParams.suffix}` : 'До'}
+                    />
+                </div>
+            </div>
+        )
+    }
+
+    const renderFilterItemByType = (filter: IFilterContent) => {
+        switch (filter.type) {
+            case 'selector':
+                return renderSelectorItem(filter)
+            case 'checker':
+                return renderCheckerItem(filter)
+            case 'ranger':
+                return renderRangerItem(filter)
+        }
     }
 
     const renderFilterItem = (filter: IFilterContent, index: number) => {
@@ -239,7 +336,7 @@ const PopupBuildingFilter: React.FC<Props> = (props) => {
             <div key={index} className={classes.field}>
                 <h3>{filter.title}</h3>
 
-                {filter.type === 'selector' ? renderSelectorItem(filter) : renderCheckerItem(filter)}
+                {renderFilterItemByType(filter)}
             </div>
         )
     }

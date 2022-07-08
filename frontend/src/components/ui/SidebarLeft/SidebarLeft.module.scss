@@ -1,11 +1,11 @@
 .SidebarLeft {
     position: fixed;
-    left: -204px;
+    left: -254px;
     top: 100px;
     bottom: 100px;
     background-color: #fff;
     z-index: 5;
-    width: 250px;
+    width: 300px;
     transition: all 0.3s ease-in;
 
     &.show {
@@ -57,6 +57,8 @@
     }
 
     .item {
+        overflow: hidden;
+
         + .item {
             margin-top: 10px;
             padding-top: 10px;
@@ -83,15 +85,25 @@
                 background: #ffcc01;
             }
         }
+
+        .rangeItem {
+            display: flex;
+            width: 100%;
+            justify-content: space-between;
+
+            .col {
+                width: 49%;
+            }
+        }
     }
 }
 
 @media (max-width: 480px) {
     .SidebarLeft {
-        left: -250px;
+        left: -300px;
 
         &.show {
-            left: 0px;
+            left: 0;
         }
     }
 }

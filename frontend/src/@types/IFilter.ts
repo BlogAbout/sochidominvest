@@ -17,11 +17,17 @@ export interface IFilter {
 
 export interface IFilterContent {
     title: string
-    type: 'selector' | 'checker'
+    type: 'selector' | 'checker' | 'ranger'
+    rangerParams?: {
+        suffix?: string
+        step?: number,
+        max?: number,
+        afterComma?: number
+    }
     multi: boolean
-    items: ISelector[]
-    selected: string[]
-    onSelect(values: string[]): void
+    items?: ISelector[]
+    selected: string[] | any
+    onSelect(values: string[] | any): void
 }
 
 export interface IFilterBase {

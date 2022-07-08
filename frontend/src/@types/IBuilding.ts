@@ -14,6 +14,7 @@ export interface IBuilding {
     areaMin?: number | null
     areaMax?: number | null
     costMin?: number | null
+    costMax?: number | null
     costMinUnit?: number | null
     area?: number | null
     cost?: number | null

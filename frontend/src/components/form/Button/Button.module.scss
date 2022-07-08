@@ -17,6 +17,7 @@
     border: 1px solid #075ea5;
     display: flex;
     justify-content: center;
+    flex-shrink: 0;
 
     &.marginLeft {
         margin-left: 10px;

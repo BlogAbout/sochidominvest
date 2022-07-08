@@ -12,12 +12,10 @@ import FavoriteService from '../../../api/FavoriteService'
 import CompilationService from '../../../api/CompilationService'
 import {changeLayout, getLayout} from '../../../helpers/utilHelper'
 import PageInfo from '../../../components/ui/PageInfo/PageInfo'
-import FilterBase from '../../../components/ui/FilterBase/FilterBase'
 import Title from '../../../components/ui/Title/Title'
 import BuildingListContainer from '../../../components/container/BuildingListContainer/BuildingListContainer'
 import {IBuilding} from '../../../@types/IBuilding'
-import {IFilterBase, IFilterContent} from '../../../@types/IFilter'
-import {ISelector} from '../../../@types/ISelector'
+import {IFilterContent} from '../../../@types/IFilter'
 import {
     buildingClasses,
     buildingElectricity,
@@ -29,7 +27,10 @@ import {
     buildingParking,
     buildingSewerage,
     buildingTerritory,
-    buildingWaterSupply
+    buildingTypes,
+    buildingWaterSupply,
+    checkBuildingByRangeArea,
+    checkBuildingByRangeCost
 } from '../../../helpers/buildingHelper'
 import classes from './BuildingPagePanel.module.scss'
 
@@ -39,19 +40,22 @@ const BuildingPagePanel: React.FC = () => {
     const [isUpdate, setIsUpdate] = useState(false)
     const [searchText, setSearchText] = useState('')
     const [filterBuilding, setFilterBuilding] = useState<IBuilding[]>([])
-    const [selectedType, setSelectedType] = useState<string[]>([])
-    const [filters, setFilters] = useState({
-        houseClass: buildingClasses.map((item: ISelector) => item.key),
-        material: buildingMaterials.map((item: ISelector) => item.key),
-        houseType: buildingFormat.map((item: ISelector) => item.key),
-        entranceHouse: buildingEntrance.map((item: ISelector) => item.key),
-        parking: buildingParking.map((item: ISelector) => item.key),
-        territory: buildingTerritory.map((item: ISelector) => item.key),
-        gas: buildingGas.map((item: ISelector) => item.key),
-        heating: buildingHeating.map((item: ISelector) => item.key),
-        electricity: buildingElectricity.map((item: ISelector) => item.key),
-        sewerage: buildingSewerage.map((item: ISelector) => item.key),
-        waterSupply: buildingWaterSupply.map((item: ISelector) => item.key)
+    const [isShowFilter, setIsShowFilter] = useState(false)
+    const [filters, setFilters] = useState<any>({
+        buildingCost: {min: 0, max: 0},
+        buildingArea: {min: 0, max: 0},
+        buildingType: [],
+        houseClass: [],
+        material: [],
+        houseType: [],
+        entranceHouse: [],
+        parking: [],
+        territory: [],
+        gas: [],
+        heating: [],
+        electricity: [],
+        sewerage: [],
+        waterSupply: []
     })
     const [layout, setLayout] = useState<'list' | 'till'>(getLayout('buildings'))
     const [fetching, setFetching] = useState(false)
@@ -70,7 +74,7 @@ const BuildingPagePanel: React.FC = () => {
 
     useEffect(() => {
         search(searchText)
-    }, [buildings, selectedType, filters])
+    }, [buildings, filters])
 
     // Обработчик изменений
     const onSaveHandler = () => {
@@ -87,11 +91,10 @@ const BuildingPagePanel: React.FC = () => {
 
         if (value !== '') {
             setFilterBuilding(filterItemsHandler(buildings.filter((building: IBuilding) => {
-                return (!selectedType.length || selectedType.includes(building.type)) &&
-                    (compareText(building.name, value) || (building.address && compareText(building.address, value)))
+                return compareText(building.name, value) || (building.address && compareText(building.address, value))
             })))
         } else {
-            setFilterBuilding(filterItemsHandler(!selectedType.length ? buildings : buildings.filter((building: IBuilding) => selectedType.includes(building.type))))
+            setFilterBuilding(filterItemsHandler(buildings))
         }
     }
 
@@ -233,15 +236,6 @@ const BuildingPagePanel: React.FC = () => {
         openContextMenu(e.currentTarget, menuItems)
     }
 
-    // Кнопки базовой фильтрации
-    const onClickFilterButtonHandler = (type: string) => {
-        if (selectedType.includes(type)) {
-            setSelectedType(selectedType.filter((item: string) => item !== type))
-        } else {
-            setSelectedType([type, ...selectedType])
-        }
-    }
-
     // Фильтрация элементов на основе установленных фильтров
     const filterItemsHandler = (list: IBuilding[]) => {
         if (!list || !list.length) {
@@ -249,20 +243,62 @@ const BuildingPagePanel: React.FC = () => {
         }
 
         return list.filter((item: IBuilding) => {
-            return (!item.houseClass || filters.houseClass.includes(item.houseClass)) &&
-                (!item.material || filters.material.includes(item.material)) &&
-                (!item.houseType || filters.houseType.includes(item.houseType)) &&
-                (!item.entranceHouse || filters.entranceHouse.includes(item.entranceHouse)) &&
-                (!item.parking || filters.parking.includes(item.parking)) &&
-                (!item.territory || filters.territory.includes(item.territory)) &&
-                (!item.gas || filters.gas.includes(item.gas)) &&
-                (!item.electricity || filters.electricity.includes(item.electricity)) &&
-                (!item.sewerage || filters.sewerage.includes(item.sewerage)) &&
-                (!item.waterSupply || filters.heating.includes(item.waterSupply))
+            return checkBuildingByRangeCost(item, filters) && checkBuildingByRangeArea(item, filters) &&
+                ((!filters.buildingType || !filters.buildingType.length) || (filters.buildingType && item.type && filters.buildingType.includes(item.type))) &&
+                ((!filters.houseClass || !filters.houseClass.length) || (filters.houseClass && item.houseClass && filters.houseClass.includes(item.houseClass))) &&
+                ((!filters.material || !filters.material.length) || (filters.material && item.material && filters.material.includes(item.material))) &&
+                ((!filters.houseType || !filters.houseType.length) || (filters.houseType && item.houseType && filters.houseType.includes(item.houseType))) &&
+                ((!filters.entranceHouse || !filters.entranceHouse.length) || (filters.entranceHouse && item.entranceHouse && filters.entranceHouse.includes(item.entranceHouse))) &&
+                ((!filters.parking || !filters.parking.length) || (filters.parking && item.parking && filters.parking.includes(item.parking))) &&
+                ((!filters.territory || !filters.territory.length) || (filters.territory && item.territory && filters.territory.includes(item.territory))) &&
+                ((!filters.gas || !filters.gas.length) || (filters.gas && item.gas && filters.gas.includes(item.gas))) &&
+                ((!filters.electricity || !filters.electricity.length) || (filters.electricity && item.electricity && filters.electricity.includes(item.electricity))) &&
+                ((!filters.sewerage || !filters.sewerage.length) || (filters.sewerage && item.sewerage && filters.sewerage.includes(item.sewerage))) &&
+                ((!filters.waterSupply || !filters.waterSupply.length) || (filters.waterSupply && item.waterSupply && filters.waterSupply.includes(item.waterSupply)))
         })
     }
 
     const filtersContent: IFilterContent[] = [
+        {
+            title: 'Стоимость',
+            type: 'ranger',
+            rangerParams: {
+                suffix: 'руб.',
+                step: 1,
+                max: 999999999,
+                afterComma: 0
+            },
+            multi: false,
+            selected: filters.buildingCost,
+            onSelect: (values: string[]) => {
+                setFilters({...filters, buildingCost: values})
+            }
+        },
+        {
+            title: 'Площадь',
+            type: 'ranger',
+            rangerParams: {
+                suffix: 'м2.',
+                step: 0.01,
+                max: 999,
+                afterComma: 2
+            },
+            multi: false,
+            selected: filters.buildingArea,
+            onSelect: (values: string[]) => {
+                setFilters({...filters, buildingArea: values})
+            }
+        },
+        {
+            title: 'Тип недвижимости',
+            type: 'checker',
+            multi: true,
+            items: buildingTypes,
+            selected: filters.buildingType,
+            onSelect: (values: string[]) => {
+                setFilters({...filters, buildingType: values})
+            }
+        },
         {
             title: 'Класс дома',
             type: 'checker',
@@ -375,66 +411,27 @@ const BuildingPagePanel: React.FC = () => {
         }
     ]
 
-    const filterBaseButtons: IFilterBase[] = [
-        {
-            key: 'building',
-            title: 'ЖК',
-            icon: 'building',
-            active: selectedType.includes('building'),
-            onClick: onClickFilterButtonHandler.bind(this)
-        },
-        {
-            key: 'apartment',
-            title: 'Квартиры',
-            icon: 'house-user',
-            active: selectedType.includes('apartment'),
-            onClick: onClickFilterButtonHandler.bind(this)
-        },
-        {
-            key: 'house',
-            title: 'Дома',
-            icon: 'house',
-            active: selectedType.includes('house'),
-            onClick: onClickFilterButtonHandler.bind(this)
-        },
-        {
-            key: 'land',
-            title: 'Участки',
-            icon: 'tree',
-            active: selectedType.includes('land'),
-            onClick: onClickFilterButtonHandler.bind(this)
-        },
-        {
-            key: 'commerce',
-            title: 'Коммерция',
-            icon: 'cash-register',
-            active: selectedType.includes('commerce'),
-            onClick: onClickFilterButtonHandler.bind(this)
-        },
-        {
-            key: 'garage',
-            title: 'Гаражи',
-            icon: 'car',
-            active: selectedType.includes('garage'),
-            onClick: onClickFilterButtonHandler.bind(this)
-        }
-    ]
-
     return (
         <main className={classes.BuildingPagePanel}>
             <PageInfo title='Недвижимость'/>
 
-            <SidebarLeft filters={filtersContent}/>
-
-            <FilterBase buttons={filterBaseButtons} valueSearch={searchText} onSearch={search.bind(this)} showSearch/>
+            <SidebarLeft filters={filtersContent}
+                         isShow={isShowFilter}
+                         onChangeShow={(isShow: boolean) => setIsShowFilter(isShow)}
+            />
 
             <div className={classes.Content}>
                 <Title type={1}
                        layout={layout}
                        showAdd={['director', 'administrator', 'manager'].includes(role)}
                        onAdd={onContextMenu.bind(this)}
-                       onChangeLayout={onChangeLayoutHandler.bind(this)}
                        showChangeLayout
+                       onChangeLayout={onChangeLayoutHandler.bind(this)}
+                       showFilter
+                       onFilter={() => setIsShowFilter(!isShowFilter)}
+                       showSearch
+                       valueSearch={searchText}
+                       onSearch={search.bind(this)}
                 >Недвижимость</Title>
 
                 <BuildingListContainer buildings={filterBuilding}

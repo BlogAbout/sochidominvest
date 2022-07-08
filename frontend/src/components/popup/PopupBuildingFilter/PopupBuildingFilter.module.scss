@@ -39,6 +39,16 @@
                 margin-right: 0.5%
             }
         }
+
+        .rangeItem {
+            display: flex;
+            width: 100%;
+            justify-content: space-between;
+
+            .col {
+                width: 49%;
+            }
+        }
     }
 }
 
