@@ -44,6 +44,12 @@
         line-height: 20px;
         font-size: 16px;
         margin-bottom: 20px;
+        text-align: justify;
+
+        ol,
+        ul {
+            padding-left: 20px;
+        }
     }
 
     .information {
@@ -180,6 +186,28 @@
     .Content {
         .container {
             padding: 0 10px;
+        }
+    }
+}
+
+@media (max-width: 400px) {
+    .Content {
+        .information {
+            right: auto;
+            left: 0;
+            top: -25px;
+
+            .icon {
+                margin-right: 5px;
+
+                svg {
+                    height: 12px;
+                }
+
+                span {
+                    font-size: 11px;
+                }
+            }
         }
     }
 }

@@ -26,6 +26,15 @@
                     border-top: 1px solid #075ea5;
                 }
 
+                .text {
+                    text-align: justify;
+
+                    ol,
+                    ul {
+                        padding-left: 20px;
+                    }
+                }
+
                 .advantage {
                     margin-right: 20px;
                     width: auto;
@@ -132,7 +141,6 @@
                             .icon {
                                 margin-right: 20px;
                                 color: #999;
-
 
                                 svg {
                                     height: 15px;
@@ -271,12 +279,52 @@
     }
 }
 
+@media (max-width: 480px) {
+    .BuildingItemPage {
+        .Content {
+            .information {
+                .block {
+                    .mainInfo {
+                        h1 {
+                            .information {
+                                right: auto;
+                                left: 0;
+                                top: -25px;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
 @media (max-width: 400px) {
     .BuildingItemPage {
         .Content {
             .information {
                 .block {
                     .mainInfo {
+                        h1 {
+                            .information {
+                                right: auto;
+                                left: 0;
+                                top: -25px;
+
+                                .icon {
+                                    margin-right: 5px;
+
+                                    svg {
+                                        height: 12px;
+                                    }
+
+                                    span {
+                                        font-size: 11px;
+                                    }
+                                }
+                            }
+                        }
+
                         .row {
                             width: 100%;
                             display: flex;
