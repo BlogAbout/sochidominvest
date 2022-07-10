@@ -17,7 +17,7 @@ export interface IFilter {
 
 export interface IFilterContent {
     title: string
-    type: 'selector' | 'checker' | 'ranger'
+    type: 'selector' | 'checker' | 'ranger' | 'district'
     rangerParams?: {
         suffix?: string
         step?: number,

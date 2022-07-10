@@ -11,6 +11,7 @@ import Title from '../../ui/Title/Title'
 import SelectorBox from '../../SelectorBox/SelectorBox'
 import Label from '../../form/Label/Label'
 import NumberBox from '../../NumberBox/NumberBox'
+import DistrictBox from '../../form/DistrictBox/DistrictBox'
 import {
     buildingClasses,
     buildingElectricity,
@@ -46,6 +47,7 @@ const PopupBuildingFilter: React.FC<Props> = (props) => {
     const initState: any = {
         buildingCost: {min: 0, max: 0},
         buildingArea: {min: 0, max: 0},
+        buildingDistrictZone: [],
         buildingType: [],
         houseClass: [],
         material: [],
@@ -107,6 +109,15 @@ const PopupBuildingFilter: React.FC<Props> = (props) => {
             selected: filters.buildingArea,
             onSelect: (values: string[]) => {
                 setFilters({...filters, buildingArea: values})
+            }
+        },
+        {
+            title: 'Район',
+            type: 'district',
+            multi: true,
+            selected: filters.buildingDistrictZone,
+            onSelect: (values: string[]) => {
+                setFilters({...filters, buildingDistrictZone: values})
             }
         },
         {
@@ -320,6 +331,20 @@ const PopupBuildingFilter: React.FC<Props> = (props) => {
         )
     }
 
+    const renderDistrictItem = (filter: IFilterContent) => {
+        return (
+            <div className={classes.fieldItem}>
+                <DistrictBox selected={filter.selected}
+                             onSelect={(selected: string[]) => {
+                                 filter.onSelect(selected)
+                             }}
+                             placeHolder={filter.title}
+                             showClear
+                />
+            </div>
+        )
+    }
+
     const renderFilterItemByType = (filter: IFilterContent) => {
         switch (filter.type) {
             case 'selector':
@@ -328,6 +353,8 @@ const PopupBuildingFilter: React.FC<Props> = (props) => {
                 return renderCheckerItem(filter)
             case 'ranger':
                 return renderRangerItem(filter)
+            case 'district':
+                return renderDistrictItem(filter)
         }
     }
 

@@ -49,6 +49,10 @@
                 width: 49%;
             }
         }
+
+        .fieldItem {
+            width: 50%;
+        }
     }
 }
 
@@ -81,6 +85,18 @@
                     width: 100%;
                     margin-right: 0;
                 }
+            }
+
+            .rangeItem {
+                flex-wrap: wrap;
+
+                .col {
+                    width: 100%;
+                }
+            }
+
+            .fieldItem {
+                width: 100%;
             }
         }
     }

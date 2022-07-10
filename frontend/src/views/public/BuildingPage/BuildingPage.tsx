@@ -9,6 +9,7 @@ import {ISelector} from '../../../@types/ISelector'
 import {IFilterParams} from '../../../@types/IFilter'
 import {
     buildingTypes,
+    checkBuildingByDistrict,
     checkBuildingByRangeArea,
     checkBuildingByRangeCost,
     getDistrictText,
@@ -27,7 +28,11 @@ const cx = classNames.bind(classes)
 const BuildingPage: React.FC = () => {
     const navigate = useNavigate()
 
-    const initState: IFilterParams = {
+    const initState: any = {
+        buildingCost: {min: 0, max: 0},
+        buildingArea: {min: 0, max: 0},
+        buildingDistrictZone: [],
+        buildingType: [],
         houseClass: [],
         material: [],
         houseType: [],
@@ -45,7 +50,7 @@ const BuildingPage: React.FC = () => {
     const [buildings, setBuildings] = useState<IBuilding[]>()
     const [filterBuilding, setFilterBuilding] = useState<IBuilding[]>([])
     const [fetching, setFetching] = useState(false)
-    const [filters, setFilters] = useState<IFilterParams>(initState)
+    const [filters, setFilters] = useState<any>(initState)
 
     useEffect(() => {
         if (isUpdate) {
@@ -76,7 +81,9 @@ const BuildingPage: React.FC = () => {
             setFilterBuilding([])
         } else {
             const prepareBuildings: IBuilding[] = buildings.filter((item: IBuilding) => {
-                return checkBuildingByRangeCost(item, filtersParams) && checkBuildingByRangeArea(item, filtersParams) &&
+                return checkBuildingByRangeCost(item, filtersParams) &&
+                    checkBuildingByRangeArea(item, filtersParams) &&
+                    checkBuildingByDistrict(item, filtersParams) &&
                     ((!filtersParams.buildingType || !filtersParams.buildingType.length) || (filtersParams.buildingType && item.type && filtersParams.buildingType.includes(item.type))) &&
                     ((!filtersParams.houseClass || !filtersParams.houseClass.length) || (filtersParams.houseClass && item.houseClass && filtersParams.houseClass.includes(item.houseClass))) &&
                     ((!filtersParams.material || !filtersParams.material.length) || (filtersParams.material && item.material && filtersParams.material.includes(item.material))) &&

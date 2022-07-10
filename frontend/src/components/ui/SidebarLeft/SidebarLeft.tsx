@@ -10,6 +10,7 @@ import CheckBox from '../../form/CheckBox/CheckBox'
 import BlockingElement from '../BlockingElement/BlockingElement'
 import Label from '../../form/Label/Label'
 import NumberBox from '../../NumberBox/NumberBox'
+import DistrictBox from '../../form/DistrictBox/DistrictBox'
 import classes from './SidebarLeft.module.scss'
 
 const cx = classNames.bind(classes)
@@ -125,6 +126,20 @@ const SidebarLeft: React.FC<Props> = (props) => {
         )
     }
 
+    const renderDistrictItem = (filter: IFilterContent) => {
+        return (
+            <div className={classes.fieldItem}>
+                <DistrictBox selected={filter.selected}
+                             onSelect={(selected: string[]) => {
+                                 filter.onSelect(selected)
+                             }}
+                             placeHolder={filter.title}
+                             showClear
+                />
+            </div>
+        )
+    }
+
     const renderFilterItemByType = (filter: IFilterContent) => {
         switch (filter.type) {
             case 'selector':
@@ -133,6 +148,8 @@ const SidebarLeft: React.FC<Props> = (props) => {
                 return renderCheckerItem(filter)
             case 'ranger':
                 return renderRangerItem(filter)
+            case 'district':
+                return renderDistrictItem(filter)
         }
     }
 

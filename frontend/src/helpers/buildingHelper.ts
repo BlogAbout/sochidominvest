@@ -434,3 +434,11 @@ export const checkBuildingByRangeArea = (building: IBuilding, filters: any) => {
 
     return false
 }
+
+export const checkBuildingByDistrict = (building: IBuilding, filters: any) => {
+    if (!filters.buildingDistrictZone || !filters.buildingDistrictZone.length) {
+        return true
+    }
+
+    return !!(building.districtZone && filters.buildingDistrictZone.includes(building.districtZone))
+}

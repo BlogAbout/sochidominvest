@@ -29,6 +29,7 @@ import {
     buildingTerritory,
     buildingTypes,
     buildingWaterSupply,
+    checkBuildingByDistrict,
     checkBuildingByRangeArea,
     checkBuildingByRangeCost
 } from '../../../helpers/buildingHelper'
@@ -44,6 +45,7 @@ const BuildingPagePanel: React.FC = () => {
     const [filters, setFilters] = useState<any>({
         buildingCost: {min: 0, max: 0},
         buildingArea: {min: 0, max: 0},
+        buildingDistrictZone: [],
         buildingType: [],
         houseClass: [],
         material: [],
@@ -243,7 +245,9 @@ const BuildingPagePanel: React.FC = () => {
         }
 
         return list.filter((item: IBuilding) => {
-            return checkBuildingByRangeCost(item, filters) && checkBuildingByRangeArea(item, filters) &&
+            return checkBuildingByRangeCost(item, filters) &&
+                checkBuildingByRangeArea(item, filters) &&
+                checkBuildingByDistrict(item, filters) &&
                 ((!filters.buildingType || !filters.buildingType.length) || (filters.buildingType && item.type && filters.buildingType.includes(item.type))) &&
                 ((!filters.houseClass || !filters.houseClass.length) || (filters.houseClass && item.houseClass && filters.houseClass.includes(item.houseClass))) &&
                 ((!filters.material || !filters.material.length) || (filters.material && item.material && filters.material.includes(item.material))) &&
@@ -287,6 +291,15 @@ const BuildingPagePanel: React.FC = () => {
             selected: filters.buildingArea,
             onSelect: (values: string[]) => {
                 setFilters({...filters, buildingArea: values})
+            }
+        },
+        {
+            title: 'Район',
+            type: 'district',
+            multi: true,
+            selected: filters.buildingDistrictZone,
+            onSelect: (values: string[]) => {
+                setFilters({...filters, buildingDistrictZone: values})
             }
         },
         {

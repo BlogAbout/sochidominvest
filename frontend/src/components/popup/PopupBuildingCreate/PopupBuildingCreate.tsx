@@ -256,18 +256,6 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
                 <div className={classes.field}>
                     <Label text='Адрес'/>
 
-                    {/*<TextBox value={building.address}*/}
-                    {/*         onChange={(e: React.MouseEvent, value: string) => setBuilding({*/}
-                    {/*             ...building,*/}
-                    {/*             address: value*/}
-                    {/*         })}*/}
-                    {/*         placeHolder='Введите адрес'*/}
-                    {/*         error={!building.address || building.address.trim() === ''}*/}
-                    {/*         showRequired*/}
-                    {/*         errorText='Поле обязательно для заполнения'*/}
-                    {/*         styleType='minimal'*/}
-                    {/*/>*/}
-
                     <AddressBox address={building.address || ''}
                                 coordinates={building.coordinates || ''}
                                 onSelect={(address: string, coordinates: string) => setBuilding({
