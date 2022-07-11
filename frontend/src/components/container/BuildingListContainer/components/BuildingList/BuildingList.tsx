@@ -1,18 +1,19 @@
 import React, {useEffect} from 'react'
 import {IBuilding} from '../../../../../@types/IBuilding'
 import {useActions} from '../../../../../hooks/useActions'
-import Empty from '../../../../Empty/Empty'
 import BuildingItem from './components/BuildingItem/BuildingItem'
+import BlockingElement from '../../../../ui/BlockingElement/BlockingElement'
 import classes from './BuildingList.module.scss'
-import BlockingElement from "../../../../ui/BlockingElement/BlockingElement";
-import {IArticle} from "../../../../../@types/IArticle";
-import ArticleItem from "../../../ArticleListContainer/components/ArticleList/components/ArticleItem/ArticleItem";
 
 interface Props {
     buildings: IBuilding[]
     fetching: boolean
     isFavorite?: boolean
     compilationId?: number | null
+    refScrollerContainer?: React.MutableRefObject<any>
+    refContainerMore?: React.MutableRefObject<any>
+    currentPage?: number
+    countPerPage?: number
 
     onClick(building: IBuilding): void
 
@@ -32,6 +33,8 @@ const defaultProps: Props = {
     fetching: false,
     isFavorite: false,
     compilationId: null,
+    currentPage: 1,
+    countPerPage: 20,
     onClick: (building: IBuilding) => {
         console.info('BuildingTill onClick', building)
     },
@@ -60,7 +63,7 @@ const BuildingList: React.FC<Props> = (props) => {
     }, [])
 
     return (
-        <div className={classes.BuildingList}>
+        <div className={classes.BuildingList} ref={props.refScrollerContainer}>
             <div className={classes.head}>
                 <div className={classes.name}>Название</div>
                 <div className={classes.author}>Автор</div>
@@ -69,21 +72,27 @@ const BuildingList: React.FC<Props> = (props) => {
             </div>
 
             <BlockingElement fetching={props.fetching} className={classes.list}>
-                {props.buildings.map((building: IBuilding) => {
+                {props.buildings.map((building: IBuilding, index: number) => {
+                    if (props.currentPage && props.countPerPage && index >= props.currentPage * props.countPerPage) {
+                        return null
+                    }
+
                     return (
                         <BuildingItem key={building.id}
-                                     building={building}
-                                     isFavorite={props.isFavorite}
-                                     compilationId={props.compilationId}
-                                     onClick={props.onClick}
-                                     onEdit={props.onEdit}
-                                     onRemove={props.onRemove}
-                                     onContextMenu={props.onContextMenu}
-                                     onRemoveFromFavorite={props.onRemoveFromFavorite}
-                                     onRemoveFromCompilation={props.onRemoveFromCompilation}
+                                      building={building}
+                                      isFavorite={props.isFavorite}
+                                      compilationId={props.compilationId}
+                                      onClick={props.onClick}
+                                      onEdit={props.onEdit}
+                                      onRemove={props.onRemove}
+                                      onContextMenu={props.onContextMenu}
+                                      onRemoveFromFavorite={props.onRemoveFromFavorite}
+                                      onRemoveFromCompilation={props.onRemoveFromCompilation}
                         />
                     )
                 })}
+
+                {props.buildings.length && props.refContainerMore ? <div ref={props.refContainerMore}/> : null}
             </BlockingElement>
         </div>
     )

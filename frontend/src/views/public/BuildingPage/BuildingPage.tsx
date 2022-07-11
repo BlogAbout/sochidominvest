@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react'
+import React, {useEffect, useRef, useState} from 'react'
 import classNames from 'classnames/bind'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {useNavigate} from 'react-router-dom'
@@ -6,7 +6,6 @@ import {declension} from '../../../helpers/stringHelper'
 import {numberWithSpaces, round} from '../../../helpers/numberHelper'
 import {IBuilding} from '../../../@types/IBuilding'
 import {ISelector} from '../../../@types/ISelector'
-import {IFilterParams} from '../../../@types/IFilter'
 import {
     buildingTypes,
     checkBuildingByDistrict,
@@ -22,11 +21,14 @@ import openPopupBuildingFilter from '../../../components/popup/PopupBuildingFilt
 import PageInfo from '../../../components/ui/PageInfo/PageInfo'
 import Title from '../../../components/ui/Title/Title'
 import classes from './BuildingPage.module.scss'
+import useInfiniteScroll from "../../../hooks/useInfiniteScroll";
 
 const cx = classNames.bind(classes)
 
 const BuildingPage: React.FC = () => {
     const navigate = useNavigate()
+
+    const refScrollerContainer = useRef(null)
 
     const initState: any = {
         buildingCost: {min: 0, max: 0},
@@ -47,10 +49,19 @@ const BuildingPage: React.FC = () => {
     }
 
     const [isUpdate, setIsUpdate] = useState(true)
-    const [buildings, setBuildings] = useState<IBuilding[]>()
+    const [buildings, setBuildings] = useState<IBuilding[]>([])
     const [filterBuilding, setFilterBuilding] = useState<IBuilding[]>([])
     const [fetching, setFetching] = useState(false)
     const [filters, setFilters] = useState<any>(initState)
+    const [currentPage, setCurrentPage] = useState(1)
+    const [countPerPage, setCountPerPage] = useState(18)
+
+    const [readMoreElementRef] = useInfiniteScroll(
+        currentPage * countPerPage < buildings.length
+            ? () => setCurrentPage(currentPage + 1)
+            : () => {},
+        fetching
+    )
 
     useEffect(() => {
         if (isUpdate) {
@@ -73,6 +84,17 @@ const BuildingPage: React.FC = () => {
     useEffect(() => {
         onFilterBuildingHandler(filters)
     }, [buildings])
+
+    useEffect(() => {
+        onScrollContainerTopHandler(refScrollerContainer)
+    }, [countPerPage, filterBuilding])
+
+    const onScrollContainerTopHandler = (refElement: React.MutableRefObject<any>) => {
+        if (refElement && currentPage > 1) {
+            refElement.current.scrollTop = 0
+            setCurrentPage(1)
+        }
+    }
 
     const onFilterBuildingHandler = (filtersParams: any) => {
         setFilters(filtersParams)
@@ -101,7 +123,11 @@ const BuildingPage: React.FC = () => {
         }
     }
 
-    const renderBuildingItem = (building: IBuilding) => {
+    const renderBuildingItem = (building: IBuilding, index: number) => {
+        if (index >= currentPage * countPerPage) {
+            return null
+        }
+
         const buildingType = buildingTypes.find((item: ISelector) => item.key === building.type)
         const passedInfo = getPassedText(building.passed)
         const districtText = getDistrictText(building.district, building.districtZone)
@@ -192,11 +218,13 @@ const BuildingPage: React.FC = () => {
                            }}
                     >Недвижимость</Title>
 
-                    <BlockingElement fetching={fetching} className={classes.list}>
+                    <BlockingElement fetching={fetching} className={classes.list} innerRef={refScrollerContainer}>
                         {filterBuilding && filterBuilding.length ?
-                            filterBuilding.map((building: IBuilding) => renderBuildingItem(building))
+                            filterBuilding.map((building: IBuilding, index: number) => renderBuildingItem(building, index))
                             : <Empty message='Нет объектов недвижимости'/>
                         }
+
+                        {buildings.length && readMoreElementRef ? <div ref={readMoreElementRef}/> : null}
                     </BlockingElement>
                 </div>
             </div>

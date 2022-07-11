@@ -9,6 +9,7 @@ class AdministrationModel extends Model
 {
     public static $defaultSettings = [
         'article_show_date' => 'date_created',
+        'count_items_admin' => '20',
         'smtp_enable' => '0',
         'smtp_ssl' => '0',
         'smtp_host' => '',

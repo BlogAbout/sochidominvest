@@ -10,6 +10,10 @@ interface Props {
     buildings: IBuilding[]
     fetching: boolean
     layout: 'list' | 'till'
+    refScrollerContainer?: React.MutableRefObject<any>
+    refContainerMore?: any
+    currentPage?: number
+    countPerPage?: number
 
     onClick(building: IBuilding): void
 
@@ -28,6 +32,7 @@ const defaultProps: Props = {
     buildings: [],
     fetching: false,
     layout: 'list',
+    currentPage: 1,
     onClick: (building: IBuilding) => {
         console.info('BuildingListContainer onClick', building)
     },
@@ -67,6 +72,10 @@ const BuildingListContainer: React.FC<Props> = (props) => {
                                   onContextMenu={props.onContextMenu}
                                   onRemoveFromFavorite={props.onRemoveFromFavorite}
                                   onRemoveFromCompilation={props.onRemoveFromCompilation}
+                                  refScrollerContainer={props.refScrollerContainer}
+                                  refContainerMore={props.refContainerMore}
+                                  currentPage={props.currentPage}
+                                  countPerPage={props.countPerPage}
                     />
                 )
             case 'till':
@@ -79,6 +88,10 @@ const BuildingListContainer: React.FC<Props> = (props) => {
                                   onContextMenu={props.onContextMenu}
                                   onRemoveFromFavorite={props.onRemoveFromFavorite}
                                   onRemoveFromCompilation={props.onRemoveFromCompilation}
+                                  refScrollerContainer={props.refScrollerContainer}
+                                  refContainerMore={props.refContainerMore}
+                                  currentPage={props.currentPage}
+                                  countPerPage={props.countPerPage}
                     />
                 )
         }

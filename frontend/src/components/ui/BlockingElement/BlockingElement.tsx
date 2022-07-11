@@ -6,6 +6,7 @@ import classes from './BlockingElement.module.scss'
 interface Props {
     fetching: boolean
     className?: string | null
+    innerRef?: React.MutableRefObject<any>
 }
 
 const defaultProps: Props = {
@@ -23,7 +24,7 @@ const BlockingElement: React.FC<Props> = (props) => {
     })
 
     return (
-        <div className={blockingElementStyle} style={{position: 'relative'}}>
+        <div className={blockingElementStyle} style={{position: 'relative'}} ref={props.innerRef}>
             {props.children}
 
             {props.fetching && <Preloader/>}

@@ -79,6 +79,18 @@ const AdministrationPagePanel: React.FC = () => {
                                           styleType='standard'
                                 />
                             </div>
+
+                            <div className={classes.field}>
+                                <div className={classes.field_label}>Количество записей на странице в панели</div>
+
+                                <NumberBox value={getSettingValue('count_items_admin') || 20}
+                                           min={1}
+                                           step={1}
+                                           max={999}
+                                           onChange={(e: React.ChangeEvent<HTMLInputElement>, value: number) => setSettingValue('count_items_admin', value.toString())}
+                                           placeHolder='Укажите количество записей, отображаемых на одной странице в административной панели'
+                                />
+                            </div>
                         </div>
 
                         <div className={classes.col}>

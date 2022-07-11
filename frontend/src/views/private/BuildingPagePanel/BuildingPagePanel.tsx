@@ -1,7 +1,8 @@
-import React, {useEffect, useState} from 'react'
+import React, {useEffect, useRef, useState} from 'react'
 import {useNavigate} from 'react-router-dom'
 import {useTypedSelector} from '../../../hooks/useTypedSelector'
 import {useActions} from '../../../hooks/useActions'
+import useInfiniteScroll from '../../../hooks/useInfiniteScroll'
 import {compareText} from '../../../helpers/filterHelper'
 import openPopupBuildingCreate from '../../../components/popup/PopupBuildingCreate/PopupBuildingCreate'
 import openContextMenu from '../../../components/ContextMenu/ContextMenu'
@@ -10,7 +11,7 @@ import openPopupAlert from '../../../components/PopupAlert/PopupAlert'
 import BuildingService from '../../../api/BuildingService'
 import FavoriteService from '../../../api/FavoriteService'
 import CompilationService from '../../../api/CompilationService'
-import {changeLayout, getLayout} from '../../../helpers/utilHelper'
+import {changeLayout, getLayout, getSetting} from '../../../helpers/utilHelper'
 import PageInfo from '../../../components/ui/PageInfo/PageInfo'
 import Title from '../../../components/ui/Title/Title'
 import BuildingListContainer from '../../../components/container/BuildingListContainer/BuildingListContainer'
@@ -38,6 +39,8 @@ import classes from './BuildingPagePanel.module.scss'
 const BuildingPagePanel: React.FC = () => {
     const navigate = useNavigate()
 
+    const refScrollerContainer = useRef(null)
+
     const [isUpdate, setIsUpdate] = useState(false)
     const [searchText, setSearchText] = useState('')
     const [filterBuilding, setFilterBuilding] = useState<IBuilding[]>([])
@@ -61,10 +64,20 @@ const BuildingPagePanel: React.FC = () => {
     })
     const [layout, setLayout] = useState<'list' | 'till'>(getLayout('buildings'))
     const [fetching, setFetching] = useState(false)
+    const [currentPage, setCurrentPage] = useState(1)
+    const [countPerPage, setCountPerPage] = useState(20)
 
     const {role} = useTypedSelector(state => state.userReducer)
     const {buildings, fetching: fetchingBuilding} = useTypedSelector(state => state.buildingReducer)
+    const {settings} = useTypedSelector(state => state.administrationReducer)
     const {fetchBuildingList} = useActions()
+
+    const [readMoreElementRef] = useInfiniteScroll(
+        currentPage * countPerPage < buildings.length
+            ? () => setCurrentPage(currentPage + 1)
+            : () => {},
+        fetching
+    )
 
     useEffect(() => {
         if (isUpdate || !buildings.length) {
@@ -77,6 +90,21 @@ const BuildingPagePanel: React.FC = () => {
     useEffect(() => {
         search(searchText)
     }, [buildings, filters])
+
+    useEffect(() => {
+        setCountPerPage(parseInt(getSetting('count_items_admin', settings)))
+    }, [settings])
+
+    useEffect(() => {
+        onScrollContainerTopHandler(refScrollerContainer)
+    }, [countPerPage, filterBuilding])
+
+    const onScrollContainerTopHandler = (refElement: React.MutableRefObject<any>) => {
+        if (refElement && currentPage > 1) {
+            refElement.current.scrollTop = 0
+            setCurrentPage(1)
+        }
+    }
 
     // Обработчик изменений
     const onSaveHandler = () => {
@@ -456,6 +484,10 @@ const BuildingPagePanel: React.FC = () => {
                                        onContextMenu={onContextMenuItem.bind(this)}
                                        onRemoveFromFavorite={onRemoveBuildingFromFavoriteHandler.bind(this)}
                                        onRemoveFromCompilation={onRemoveBuildingFromCompilationHandler.bind(this)}
+                                       refScrollerContainer={refScrollerContainer}
+                                       refContainerMore={readMoreElementRef}
+                                       currentPage={currentPage}
+                                       countPerPage={countPerPage}
                 />
             </div>
         </main>
