@@ -239,11 +239,11 @@ const DocumentPagePanel: React.FC = () => {
 
             <div className={classes.Content}>
                 <Title type={1}
-                       layout={layout}
+                       activeLayout={layout}
+                       layouts={['list', 'till']}
                        showAdd={['director', 'administrator', 'manager'].includes(role)}
                        onAdd={onContextMenu.bind(this)}
                        onChangeLayout={onChangeLayoutHandler.bind(this)}
-                       showChangeLayout
                 >Документы</Title>
 
                 <DocumentListContainer documents={filterDocument}

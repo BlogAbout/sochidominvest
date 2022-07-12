@@ -28,39 +28,21 @@ import classes from './PopupBuildingInfo.module.scss'
 interface Props extends PopupProps {
     building: IBuilding
 
-    onClick(building: IBuilding): void
+    onClick?(building: IBuilding): void
 
-    onEdit(building: IBuilding): void
+    onEdit?(building: IBuilding): void
 
-    onRemove(building: IBuilding): void
+    onRemove?(building: IBuilding): void
 
-    onContextMenu(e: React.MouseEvent, building: IBuilding): void
+    onContextMenu?(e: React.MouseEvent, building: IBuilding): void
 
-    onRemoveFromFavorite(building: IBuilding): void
+    onRemoveFromFavorite?(building: IBuilding): void
 
-    onRemoveFromCompilation(building: IBuilding): void
+    onRemoveFromCompilation?(building: IBuilding): void
 }
 
 const defaultProps: Props = {
-    building: {} as IBuilding,
-    onClick: (building: IBuilding) => {
-        console.info('PopupBuildingInfo onClick', building)
-    },
-    onEdit: (building: IBuilding) => {
-        console.info('PopupBuildingInfo onEdit', building)
-    },
-    onRemove: (building: IBuilding) => {
-        console.info('PopupBuildingInfo onRemove', building)
-    },
-    onContextMenu: (e: React.MouseEvent, building: IBuilding) => {
-        console.info('PopupBuildingInfo onContextMenu', e, building)
-    },
-    onRemoveFromFavorite: (building: IBuilding) => {
-        console.info('PopupBuildingInfo onRemoveFromFavorite', building)
-    },
-    onRemoveFromCompilation: (building: IBuilding, compilationId?: number) => {
-        console.info('PopupBuildingInfo onRemoveFromCompilation', building, compilationId)
-    }
+    building: {} as IBuilding
 }
 
 const cx = classNames.bind(classes)
@@ -84,7 +66,10 @@ const PopupBuildingInfo: React.FC<Props> = (props) => {
     }
 
     const showHandler = () => {
-        props.onClick(props.building)
+        if (props.onClick) {
+            props.onClick(props.building)
+        }
+
         close()
     }
 

@@ -135,7 +135,7 @@ const BuildingPagePanel: React.FC = () => {
         }
     }
 
-    const onChangeLayoutHandler = (value: 'list' | 'till') => {
+    const onChangeLayoutHandler = (value: 'list' | 'till' | 'map') => {
         setLayout(value)
         changeLayout('buildings', value)
     }
@@ -472,11 +472,10 @@ const BuildingPagePanel: React.FC = () => {
 
             <div className={classes.Content} style={{height: layout === 'map' ? '100%' : undefined}}>
                 <Title type={1}
-                       layout={layout}
+                       activeLayout={layout}
+                       layouts={['list', 'till', 'map']}
                        showAdd={['director', 'administrator', 'manager'].includes(role)}
                        onAdd={onContextMenu.bind(this)}
-                       showChangeLayout
-                       showLayoutMap={apiKey !== ''}
                        onChangeLayout={onChangeLayoutHandler.bind(this)}
                        showFilter
                        onFilter={() => setIsShowFilter(!isShowFilter)}

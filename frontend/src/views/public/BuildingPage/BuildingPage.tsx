@@ -1,9 +1,12 @@
 import React, {useEffect, useRef, useState} from 'react'
 import classNames from 'classnames/bind'
+import {Map, MapState, Placemark, YMaps, ZoomControl} from 'react-yandex-maps'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {useNavigate} from 'react-router-dom'
 import {declension} from '../../../helpers/stringHelper'
 import {numberWithSpaces, round} from '../../../helpers/numberHelper'
+import {changeLayout, getLayout} from '../../../helpers/utilHelper'
+import useInfiniteScroll from '../../../hooks/useInfiniteScroll'
 import {IBuilding} from '../../../@types/IBuilding'
 import {ISelector} from '../../../@types/ISelector'
 import {
@@ -18,10 +21,10 @@ import BuildingService from '../../../api/BuildingService'
 import BlockingElement from '../../../components/ui/BlockingElement/BlockingElement'
 import Empty from '../../../components/Empty/Empty'
 import openPopupBuildingFilter from '../../../components/popup/PopupBuildingFilter/PopupBuildingFilter'
+import openPopupBuildingInfo from '../../../components/popup/PopupBuildingInfo/PopupBuildingInfo'
 import PageInfo from '../../../components/ui/PageInfo/PageInfo'
 import Title from '../../../components/ui/Title/Title'
 import classes from './BuildingPage.module.scss'
-import useInfiniteScroll from "../../../hooks/useInfiniteScroll";
 
 const cx = classNames.bind(classes)
 
@@ -55,11 +58,15 @@ const BuildingPage: React.FC = () => {
     const [filters, setFilters] = useState<any>(initState)
     const [currentPage, setCurrentPage] = useState(1)
     const [countPerPage, setCountPerPage] = useState(18)
+    const [layout, setLayout] = useState<'list' | 'till' | 'map'>(getLayout('buildings') === 'list' ? 'till' : getLayout('buildings'))
+    const [apiKey, setApiKey] = useState('3ed788dc-edd5-4bce-8720-6cd8464b45bd')
+    const [presetIcon, setPresetIcon] = useState('islands#blueIcon')
 
     const [readMoreElementRef] = useInfiniteScroll(
         currentPage * countPerPage < buildings.length
             ? () => setCurrentPage(currentPage + 1)
-            : () => {},
+            : () => {
+            },
         fetching
     )
 
@@ -89,11 +96,23 @@ const BuildingPage: React.FC = () => {
         onScrollContainerTopHandler(refScrollerContainer)
     }, [countPerPage, filterBuilding])
 
+    const mapState: MapState = {
+        center: [55.76, 37.64],
+        zoom: 10,
+        controls: [],
+        type: 'yandex#map'
+    }
+
     const onScrollContainerTopHandler = (refElement: React.MutableRefObject<any>) => {
         if (refElement && currentPage > 1) {
             refElement.current.scrollTop = 0
             setCurrentPage(1)
         }
+    }
+
+    const onChangeLayoutHandler = (value: 'list' | 'till' | 'map') => {
+        setLayout(value)
+        changeLayout('buildings', value)
     }
 
     const onFilterBuildingHandler = (filtersParams: any) => {
@@ -121,6 +140,32 @@ const BuildingPage: React.FC = () => {
 
             setFilterBuilding(prepareBuildings)
         }
+    }
+
+    const renderBuildingPlaceMark = (building: IBuilding) => {
+        if (!building.coordinates) {
+            return null
+        }
+
+        const coordinates = building.coordinates.split(',').map(Number)
+        if (!coordinates || !coordinates.length || coordinates.length !== 2) {
+            return null
+        }
+
+        return (
+            <Placemark key={building.id}
+                       geometry={coordinates}
+                       options={{
+                           preset: presetIcon
+                       }}
+                       onClick={() => {
+                           openPopupBuildingInfo(document.body, {
+                               building: building,
+                               onClick: () => navigate('/building/' + building.id)
+                           })
+                       }}
+            />
+        )
     }
 
     const renderBuildingItem = (building: IBuilding, index: number) => {
@@ -202,13 +247,42 @@ const BuildingPage: React.FC = () => {
         )
     }
 
-    return (
-        <main className={classes.BuildingPage}>
-            <PageInfo title='Недвижимость'/>
+    const renderTillContainer = () => {
+        return (
+            <div className={classes.container}>
+                <Title type={1}
+                       activeLayout={layout}
+                       layouts={['till', 'map']}
+                       onChangeLayout={onChangeLayoutHandler.bind(this)}
+                       showFilter={true}
+                       onFilter={() => {
+                           openPopupBuildingFilter(document.body, {
+                               filters: filters,
+                               onChange: onFilterBuildingHandler.bind(this)
+                           })
+                       }}
+                >Недвижимость</Title>
 
-            <div className={classes.Content}>
-                <div className={classes.container}>
+                <BlockingElement fetching={fetching} className={classes.list} innerRef={refScrollerContainer}>
+                    {filterBuilding && filterBuilding.length ?
+                        filterBuilding.map((building: IBuilding, index: number) => renderBuildingItem(building, index))
+                        : <Empty message='Нет объектов недвижимости'/>
+                    }
+
+                    {buildings.length && readMoreElementRef ? <div ref={readMoreElementRef}/> : null}
+                </BlockingElement>
+            </div>
+        )
+    }
+
+    const renderMapContainer = () => {
+        return (
+            <div className={classes.containerMap}>
+                <div className={classes.title}>
                     <Title type={1}
+                           activeLayout={layout}
+                           layouts={['till', 'map']}
+                           onChangeLayout={onChangeLayoutHandler.bind(this)}
                            showFilter={true}
                            onFilter={() => {
                                openPopupBuildingFilter(document.body, {
@@ -217,16 +291,41 @@ const BuildingPage: React.FC = () => {
                                })
                            }}
                     >Недвижимость</Title>
-
-                    <BlockingElement fetching={fetching} className={classes.list} innerRef={refScrollerContainer}>
-                        {filterBuilding && filterBuilding.length ?
-                            filterBuilding.map((building: IBuilding, index: number) => renderBuildingItem(building, index))
-                            : <Empty message='Нет объектов недвижимости'/>
-                        }
-
-                        {buildings.length && readMoreElementRef ? <div ref={readMoreElementRef}/> : null}
-                    </BlockingElement>
                 </div>
+
+                <div className={classes.map}>
+                    {apiKey ?
+                        <YMaps enterprise
+                               query={{
+                                   apikey: apiKey
+                               }}
+                        >
+                            <Map state={mapState}
+                                 width='100%'
+                                 height='100%'
+                                 modules={['ObjectManager', 'Placemark']}
+                            >
+                                <ZoomControl/>
+
+                                {filterBuilding && filterBuilding.length ?
+                                    filterBuilding.map((building: IBuilding) => renderBuildingPlaceMark(building))
+                                    : null
+                                }
+                            </Map>
+                        </YMaps>
+                        : <Empty message='API ключ для Yandex.Maps не указан. Карта не доступна!'/>
+                    }
+                </div>
+            </div>
+        )
+    }
+
+    return (
+        <main className={classes.BuildingPage}>
+            <PageInfo title='Недвижимость'/>
+
+            <div className={classes.Content}>
+                {layout === 'till' ? renderTillContainer() : renderMapContainer()}
             </div>
         </main>
     )

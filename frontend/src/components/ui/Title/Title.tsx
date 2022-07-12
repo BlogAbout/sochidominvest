@@ -6,11 +6,10 @@ import classes from './Title.module.scss'
 
 interface Props extends React.PropsWithChildren<any> {
     type: 0 | 1 | 2 | 3 | 4 | 5 | 6
-    layout?: 'list' | 'till' | 'map'
+    activeLayout?: 'list' | 'till' | 'map'
+    layouts?: ('list' | 'till' | 'map')[]
     valueSearch?: string
     showAdd?: boolean
-    showChangeLayout?: boolean
-    showLayoutMap?: boolean
     showFilter?: boolean
     showSearch?: boolean
 
@@ -25,11 +24,10 @@ interface Props extends React.PropsWithChildren<any> {
 
 const defaultProps: Props = {
     type: 0,
-    layout: 'list',
+    activeLayout: 'list',
+    layouts: [],
     valueSearch: '',
     showAdd: false,
-    showChangeLayout: false,
-    showLayoutMap: false,
     showFilter: false,
     showSearch: false
 }
@@ -69,10 +67,10 @@ const Title: React.FC<Props> = (props) => {
                                 />
                                 : null}
 
-                            {props.showChangeLayout ?
+                            {props.layouts && props.layouts.length ?
                                 <>
-                                    {props.showLayoutMap ?
-                                        <Button type={props.layout === 'map' ? 'regular' : 'save'}
+                                    {props.layouts.includes('map') ?
+                                        <Button type={props.activeLayout === 'map' ? 'regular' : 'save'}
                                                 icon='earth-asia'
                                                 onClick={() => props.onChangeLayout ? props.onChangeLayout('map') : null}
                                                 title='Карта местности'
@@ -81,18 +79,24 @@ const Title: React.FC<Props> = (props) => {
                                         : null
                                     }
 
-                                    <Button type={props.layout === 'till' ? 'regular' : 'save'}
-                                            icon='grip'
-                                            onClick={() => props.onChangeLayout ? props.onChangeLayout('till') : null}
-                                            title='Подробное отображение'
-                                            className={!props.showLayoutMap ? 'marginLeft' : undefined}
-                                    />
+                                    {props.layouts.includes('till') ?
+                                        <Button type={props.activeLayout === 'till' ? 'regular' : 'save'}
+                                                icon='grip'
+                                                onClick={() => props.onChangeLayout ? props.onChangeLayout('till') : null}
+                                                title='Подробное отображение'
+                                                className={!props.layouts.includes('map') ? 'marginLeft' : undefined}
+                                        />
+                                        : null
+                                    }
 
-                                    <Button type={props.layout === 'list' ? 'regular' : 'save'}
-                                            icon='list'
-                                            onClick={() => props.onChangeLayout ? props.onChangeLayout('list') : null}
-                                            title='Списочное отображение'
-                                    />
+                                    {props.layouts.includes('list') ?
+                                        <Button type={props.activeLayout === 'list' ? 'regular' : 'save'}
+                                                icon='list'
+                                                onClick={() => props.onChangeLayout ? props.onChangeLayout('list') : null}
+                                                title='Списочное отображение'
+                                        />
+                                        : null
+                                    }
                                 </>
                                 : null}
 
