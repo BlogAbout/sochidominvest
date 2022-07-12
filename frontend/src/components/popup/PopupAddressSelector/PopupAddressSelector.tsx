@@ -33,7 +33,7 @@ const PopupAddressSelector: React.FC<Props> = (props) => {
     const [yMaps, setYMaps] = useState<any>(null)
     const [address, setAddress] = useState(props.address || '')
     const [coordinates, setCoordinates] = useState<number[]>(props.coordinates ? props.coordinates.split(',').map(Number) : [])
-        const [apiKey, setApiKey] = useState('3ed788dc-edd5-4bce-8720-6cd8464b45bd')
+    const [apiKey, setApiKey] = useState('3ed788dc-edd5-4bce-8720-6cd8464b45bd')
     const [presetIcon, setPresetIcon] = useState('islands#blueIcon')
 
     const {settings} = useTypedSelector(state => state.administrationReducer)
@@ -96,7 +96,6 @@ const PopupAddressSelector: React.FC<Props> = (props) => {
     }
 
     const renderContentBlock = () => {
-        console.log('settings', settings)
         return (
             <div key='content' className={classes.blockContent}>
                 <Title type={2}>Выбор адреса</Title>

@@ -6,16 +6,17 @@ import classes from './Title.module.scss'
 
 interface Props extends React.PropsWithChildren<any> {
     type: 0 | 1 | 2 | 3 | 4 | 5 | 6
-    layout?: 'list' | 'till'
+    layout?: 'list' | 'till' | 'map'
     valueSearch?: string
     showAdd?: boolean
     showChangeLayout?: boolean
+    showLayoutMap?: boolean
     showFilter?: boolean
     showSearch?: boolean
 
     onAdd?(e: React.MouseEvent): void
 
-    onChangeLayout?(value: 'list' | 'till'): void
+    onChangeLayout?(value: 'list' | 'till' | 'map'): void
 
     onFilter?(): void
 
@@ -28,6 +29,7 @@ const defaultProps: Props = {
     valueSearch: '',
     showAdd: false,
     showChangeLayout: false,
+    showLayoutMap: false,
     showFilter: false,
     showSearch: false
 }
@@ -69,11 +71,21 @@ const Title: React.FC<Props> = (props) => {
 
                             {props.showChangeLayout ?
                                 <>
+                                    {props.showLayoutMap ?
+                                        <Button type={props.layout === 'map' ? 'regular' : 'save'}
+                                                icon='earth-asia'
+                                                onClick={() => props.onChangeLayout ? props.onChangeLayout('map') : null}
+                                                title='Карта местности'
+                                                className='marginLeft'
+                                        />
+                                        : null
+                                    }
+
                                     <Button type={props.layout === 'till' ? 'regular' : 'save'}
                                             icon='grip'
                                             onClick={() => props.onChangeLayout ? props.onChangeLayout('till') : null}
                                             title='Подробное отображение'
-                                            className='marginLeft'
+                                            className={!props.showLayoutMap ? 'marginLeft' : undefined}
                                     />
 
                                     <Button type={props.layout === 'list' ? 'regular' : 'save'}

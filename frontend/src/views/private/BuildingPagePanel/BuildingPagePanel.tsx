@@ -62,10 +62,12 @@ const BuildingPagePanel: React.FC = () => {
         sewerage: [],
         waterSupply: []
     })
-    const [layout, setLayout] = useState<'list' | 'till'>(getLayout('buildings'))
+    const [layout, setLayout] = useState<'list' | 'till' | 'map'>(getLayout('buildings'))
     const [fetching, setFetching] = useState(false)
     const [currentPage, setCurrentPage] = useState(1)
     const [countPerPage, setCountPerPage] = useState(20)
+    const [apiKey, setApiKey] = useState('3ed788dc-edd5-4bce-8720-6cd8464b45bd')
+    const [presetIcon, setPresetIcon] = useState('islands#blueIcon')
 
     const {role} = useTypedSelector(state => state.userReducer)
     const {buildings, fetching: fetchingBuilding} = useTypedSelector(state => state.buildingReducer)
@@ -75,7 +77,8 @@ const BuildingPagePanel: React.FC = () => {
     const [readMoreElementRef] = useInfiniteScroll(
         currentPage * countPerPage < buildings.length
             ? () => setCurrentPage(currentPage + 1)
-            : () => {},
+            : () => {
+            },
         fetching
     )
 
@@ -92,7 +95,11 @@ const BuildingPagePanel: React.FC = () => {
     }, [buildings, filters])
 
     useEffect(() => {
-        setCountPerPage(parseInt(getSetting('count_items_admin', settings)))
+        if (settings) {
+            setCountPerPage(parseInt(getSetting('count_items_admin', settings)))
+            setApiKey(getSetting('map_api_key', settings))
+            setPresetIcon(getSetting('map_icon_color', settings))
+        }
     }, [settings])
 
     useEffect(() => {
@@ -453,7 +460,9 @@ const BuildingPagePanel: React.FC = () => {
     ]
 
     return (
-        <main className={classes.BuildingPagePanel}>
+        <main className={classes.BuildingPagePanel}
+              style={{height: layout === 'map' ? '100%' : undefined}}
+        >
             <PageInfo title='Недвижимость'/>
 
             <SidebarLeft filters={filtersContent}
@@ -461,12 +470,13 @@ const BuildingPagePanel: React.FC = () => {
                          onChangeShow={(isShow: boolean) => setIsShowFilter(isShow)}
             />
 
-            <div className={classes.Content}>
+            <div className={classes.Content} style={{height: layout === 'map' ? '100%' : undefined}}>
                 <Title type={1}
                        layout={layout}
                        showAdd={['director', 'administrator', 'manager'].includes(role)}
                        onAdd={onContextMenu.bind(this)}
                        showChangeLayout
+                       showLayoutMap={apiKey !== ''}
                        onChangeLayout={onChangeLayoutHandler.bind(this)}
                        showFilter
                        onFilter={() => setIsShowFilter(!isShowFilter)}
@@ -488,6 +498,8 @@ const BuildingPagePanel: React.FC = () => {
                                        refContainerMore={readMoreElementRef}
                                        currentPage={currentPage}
                                        countPerPage={countPerPage}
+                                       mapApiKey={apiKey}
+                                       mapPresetIcon={presetIcon}
                 />
             </div>
         </main>

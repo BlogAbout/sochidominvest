@@ -4,16 +4,19 @@ import {IBuilding} from '../../../@types/IBuilding'
 import Empty from '../../Empty/Empty'
 import BuildingList from './components/BuildingList/BuildingList'
 import BuildingTill from './components/BuildingTill/BuildingTill'
+import BuildingMap from './components/BuildingMap/BuildingMap'
 import classes from './BuildingListContainer.module.scss'
 
 interface Props {
     buildings: IBuilding[]
     fetching: boolean
-    layout: 'list' | 'till'
+    layout: 'list' | 'till' | 'map'
     refScrollerContainer?: React.MutableRefObject<any>
     refContainerMore?: any
     currentPage?: number
     countPerPage?: number
+    mapApiKey?: string
+    mapPresetIcon?: string
 
     onClick(building: IBuilding): void
 
@@ -92,6 +95,20 @@ const BuildingListContainer: React.FC<Props> = (props) => {
                                   refContainerMore={props.refContainerMore}
                                   currentPage={props.currentPage}
                                   countPerPage={props.countPerPage}
+                    />
+                )
+            case 'map':
+                return (
+                    <BuildingMap buildings={props.buildings}
+                                 fetching={props.fetching}
+                                 onClick={props.onClick}
+                                 onEdit={props.onEdit}
+                                 onRemove={props.onRemove}
+                                 onContextMenu={props.onContextMenu}
+                                 onRemoveFromFavorite={props.onRemoveFromFavorite}
+                                 onRemoveFromCompilation={props.onRemoveFromCompilation}
+                                 mapApiKey={props.mapApiKey}
+                                 mapPresetIcon={props.mapPresetIcon}
                     />
                 )
         }

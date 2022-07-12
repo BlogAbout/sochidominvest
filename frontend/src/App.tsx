@@ -30,6 +30,7 @@ import {
     faCircleQuestion,
     faCity,
     faDatabase,
+    faEarthAsia,
     faElevator,
     faEllipsis,
     faEnvelope,
@@ -183,7 +184,8 @@ library.add(
     faBookmark,
     faMoneyCheck,
     faFolderTree,
-    faUserGear
+    faUserGear,
+    faEarthAsia
 )
 
 function App() {
