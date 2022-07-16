@@ -11,13 +11,13 @@ import {useTypedSelector} from '../../../../../hooks/useTypedSelector'
 import {useActions} from '../../../../../hooks/useActions'
 import BuildingTill from '../../../../../components/container/BuildingListContainer/components/BuildingTill/BuildingTill'
 import Preloader from '../../../../../components/Preloader/Preloader'
+import openPopupBuildingCreate from '../../../../../components/popup/PopupBuildingCreate/PopupBuildingCreate'
+import openPopupAlert from '../../../../../components/PopupAlert/PopupAlert'
+import BuildingService from '../../../../../api/BuildingService'
+import FavoriteService from '../../../../../api/FavoriteService'
+import CompilationService from '../../../../../api/CompilationService'
+import openContextMenu from '../../../../../components/ContextMenu/ContextMenu'
 import classes from './DeveloperItemPagePanel.module.scss'
-import openPopupBuildingCreate from "../../../../../components/popup/PopupBuildingCreate/PopupBuildingCreate";
-import openPopupAlert from "../../../../../components/PopupAlert/PopupAlert";
-import BuildingService from "../../../../../api/BuildingService";
-import FavoriteService from "../../../../../api/FavoriteService";
-import CompilationService from "../../../../../api/CompilationService";
-import openContextMenu from "../../../../../components/ContextMenu/ContextMenu";
 
 type DeveloperItemPagePanelParams = {
     id: string

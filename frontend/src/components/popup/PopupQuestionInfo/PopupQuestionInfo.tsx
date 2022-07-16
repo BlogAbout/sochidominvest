@@ -11,7 +11,7 @@ import classes from './PopupQuestionInfo.module.scss'
 import {getQuestionTypeText} from '../../../helpers/questionHelper'
 import {getFormatDate} from '../../../helpers/dateHelper'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import Showdown from "showdown";
+import Showdown from 'showdown'
 
 interface Props extends PopupProps {
     question: IQuestion

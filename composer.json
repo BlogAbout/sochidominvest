@@ -3,7 +3,8 @@
         "klein/klein": "^2.1",
         "firebase/php-jwt": "^5.2",
         "gumlet/php-image-resize": "2.0.*",
-        "phpmailer/phpmailer": "^6.5"
+        "phpmailer/phpmailer": "^6.5",
+        "cboden/ratchet": "^0.4.4"
     },
     "autoload": {
         "psr-4": {
