@@ -7,13 +7,12 @@ namespace App;
  */
 class MessageModel extends Model
 {
-    private int $id;       // Идентификатор сообщения
+    private int $id;            // Идентификатор сообщения
     private string $type;       // Тип сообщения: welcome, notification, message
     private int $authorId;      // Автор сообщения
     private array $attendees;   // Получатели сообщения (если пусто, получают все, кроме автора)
-    private int $chatId;   // Идентификатор чата (только для личной переписки)
-    private int $groupId;  // Идентификатор группы (только для группового чата)
-    private int $parentId; // Идентификатор родительского сообщения (если цитата)
+    private int $chatId;        // Идентификатор чата (только для личной переписки)
+    private int $parentId;      // Идентификатор родительского сообщения (если цитата)
     private string $text;       // Текст сообщения
     private array $files;       // Массив файлов (вложений)
 
@@ -29,7 +28,6 @@ class MessageModel extends Model
         $this->authorId = $message['authorId'] ?: 0;
         $this->attendees = $message['attendees'] ?: [];
         $this->chatId = $message['chatId'] ?: 0;
-        $this->groupId = $message['groupId'] ?: 0;
         $this->parentId = $message['parentId'] ?: 0;
         $this->text = $message['text'] ?: '';
         $this->files = $message['files'] ?: [];
@@ -42,12 +40,96 @@ class MessageModel extends Model
             'type' => $this->type,
             'authorId' => $this->authorId,
             'chatId' => $this->chatId,
-            'groupId' => $this->groupId,
             'parentId' => $this->parentId,
             'text' => $this->text
         ];
 
         return json_encode($data);
+    }
+
+    /**
+     * Сохранение сообщения в базе данных
+     */
+    public function save()
+    {
+        if (!$this->chatId) {
+            $this->createChat();
+        }
+
+        $this->createMessage();
+    }
+
+    /**
+     * Создание нового чата, если это новое сообщение без chatId
+     */
+    private function createChat()
+    {
+        $sql = "
+            INSERT INTO `sdi_messenger`
+                (`name`, `author`, `type`, `date_created`)
+            VALUES
+                (:name, :author, :type, :dateCreated)
+        ";
+
+        parent::query($sql);
+        parent::bindParams('name', '');
+        parent::bindParams('author', $this->authorId);
+        parent::bindParams('type', 'private');
+        parent::bindParams('dateCreated', date('Y-m-d H:i:s'));
+
+        $item = parent::execute();
+
+        if (!$item) {
+            return;
+        }
+
+        $this->setChatId(parent::lastInsertedId());
+
+        if (!count($this->attendees)) {
+            return;
+        }
+
+        $attendeesSql = [];
+
+        foreach ($this->attendees as $attendee) {
+            array_push($attendeesSql, "($this->chatId, $attendee)");
+        }
+
+        $sql = "
+            INSERT INTO `sdi_messenger_member`
+                (`id_messenger`, `id_user`)
+            VALUES
+        " . implode(',', $attendeesSql);
+
+        self::query($sql);
+        self::execute();
+    }
+
+    private function createMessage()
+    {
+        $sql = "
+            INSERT INTO `sdi_messenger_messages`
+                (`id_messenger`, `active`, `type`, `text`, `author`, `id_user`, `date_created`, `id_message_parent`)
+            VALUES
+                (:messengerId, :active, :type, :text, :author, :userId, :dateCreated, :parentMessageId)
+        ";
+
+        parent::query($sql);
+        parent::bindParams('messengerId', $this->chatId);
+        parent::bindParams('type', 'text');
+        parent::bindParams('text', $this->text);
+        parent::bindParams('author', $this->authorId);
+        parent::bindParams('userId', count($this->attendees) ? $this->attendees[0] : 0);
+        parent::bindParams('dateCreated', date('Y-m-d H:i:s'));
+        parent::bindParams('parentMessageId', $this->parentId);
+
+        $item = parent::execute();
+
+        if (!$item) {
+            return;
+        }
+
+        $this->setId(parent::lastInsertedId());
     }
 
     /**
@@ -128,22 +210,6 @@ class MessageModel extends Model
     public function setChatId(int $chatId): void
     {
         $this->chatId = $chatId;
-    }
-
-    /**
-     * @return int
-     */
-    public function getGroupId(): int
-    {
-        return $this->groupId;
-    }
-
-    /**
-     * @param int $groupId
-     */
-    public function setGroupId(int $groupId): void
-    {
-        $this->groupId = $groupId;
     }
 
     /**

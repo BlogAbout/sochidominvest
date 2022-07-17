@@ -44,9 +44,13 @@ class MessengerMiddleware implements MessageComponentInterface
         switch ($message->getType()) {
             case 'welcome':
                 $this->setConnectionInfo($from, $message);
+                $this->notifyAllOfOnlineUsers();
                 break;
             case 'notification':
+                $this->sendMessage($from, $message);
+                break;
             case 'message':
+                $message->save();
                 $this->sendMessage($from, $message);
                 break;
         }
@@ -59,8 +63,12 @@ class MessengerMiddleware implements MessageComponentInterface
      */
     public function onClose(ConnectionInterface $conn)
     {
-        unset($this->clientsInfo[$conn->resourceId]);
         $this->clients->detach($conn);
+
+        if (!empty($this->clientsInfo[$conn->resourceId])) {
+            unset($this->clientsInfo[$conn->resourceId]);
+            $this->notifyAllOfOnlineUsers();
+        }
     }
 
     /**
@@ -114,5 +122,20 @@ class MessengerMiddleware implements MessageComponentInterface
                 $client->send($message->__toString());
             }
         }
+    }
+
+    /**
+     * Уведомление всех пользователей о списке пользователей онлайн
+     */
+    private function notifyAllOfOnlineUsers()
+    {
+        $dataMessage = [
+            'type' => 'notification',
+            'text' => json_encode(array_values($this->clientsInfo))
+        ];
+
+        $message = new MessageModel($dataMessage);
+
+        $this->sendMessage(null, $message);
     }
 }
