@@ -49,6 +49,10 @@ export class WS {
                 window.events.emit('messengerCreateMessenger', message)
             }
 
+            if (message.type === 'read' && this.hasEvent('messengerReadMessage')) {
+                window.events.emit('messengerReadMessage', message)
+            }
+
             // Добавление нового сообщения
             if (message.type === 'message' && this.hasEvent('messengerNewMessage')) {
                 window.events.emit('messengerNewMessage', message)
@@ -60,7 +64,9 @@ export class WS {
         this.webSocket.onclose = function (event: CloseEvent) {
             if (event.wasClean) {
                 // Todo: Соединение закрыто корректно
+                console.log('correct close')
             } else {
+                console.log('error close')
                 // Todo: Сервер убил процесс или сеть недоступна, пробуем переподключиться
             }
         }
@@ -81,10 +87,32 @@ export class WS {
     }
 }
 
+/**
+ * Получение идентификаторов участников чата
+ *
+ * @param members Массив участников чата
+ */
 export const findMembersIds = (members?: IMessengerMember[]): number[] => {
     if (!members) {
         return []
     }
 
     return Object.keys(members).map(Number)
+}
+
+/**
+ * Проверка новое сообщение или уже прочитанное
+ *
+ * @param userId Идентификатор пользователя, для которого идет проверка
+ * @param members Массив участников чата
+ * @param message Объект сообщения
+ */
+export const isNewMessage = (userId: number, members?: IMessengerMember[], message?: IMessage): boolean => {
+    if (!members || !members[userId] || !message || !message.id) {
+        return false
+    }
+
+    const readed: number = members[userId].readed || 0
+
+    return readed < message.id
 }

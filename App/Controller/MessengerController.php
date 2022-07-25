@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Messenger\Messenger;
 use Exception;
 
 /**

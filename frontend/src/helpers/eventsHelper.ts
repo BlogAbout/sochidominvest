@@ -1,5 +1,5 @@
 import EventEmitter from 'events'
-import {WS} from "./messengerHelper";
+import {WS} from './messengerHelper'
 
 /**
  * <p>Обновляет path, генерируя путь от документа до target-node в виде массива</p>
@@ -21,5 +21,14 @@ export function registerEventsEmitter() {
 }
 
 export function registerWebsocket(userId: number) {
+    let timeout = 5000
+
     window.WS = new WS(userId)
+
+    if (window.WS === undefined || (window.WS && window.WS.readyState === 3)) {
+        setTimeout(function() {
+            registerWebsocket(userId)
+            timeout *= 2
+        }, timeout)
+    }
 }

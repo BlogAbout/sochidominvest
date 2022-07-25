@@ -1,8 +1,12 @@
 <?php
 
-namespace App;
+namespace App\Messenger;
 
-class Message extends Model {
+use App\Model;
+use App\UtilModel;
+
+class Message extends Model
+{
     public int $id;
     public int $messengerId;
     public int $active;
@@ -24,11 +28,11 @@ class Message extends Model {
 
         $this->id = $data['id'] ?: 0;
         $this->messengerId = $data['messengerId'] ?: 0;
-        $this->active = $data['active'] ? (int)$data['active']: 1;
+        $this->active = $data['active'] ? (int)$data['active'] : 1;
         $this->type = $data['type'] ?: 'message';
         $this->text = $data['text'] ?: '';
         $this->author = $data['author'] ?: 0;
-        $this->userId = $data['userId'] ? (int)$data['userId']: 0;
+        $this->userId = $data['userId'] ? (int)$data['userId'] : 0;
         $this->dateCreated = $data['dateCreated'] ?: '';
         $this->dateUpdate = $data['dateUpdate'] ?: '';
         $this->parentMessageId = $data['parentMessageId'] ?: 0;
@@ -51,18 +55,18 @@ class Message extends Model {
 
         if (count($filter)) {
             if (!empty($filter['messagesIds']) && count($filter['messagesIds'])) {
-                array_push($whereArray, 'sdi.`id` IN (' . implode($filter['messagesIds']) .')');
+                array_push($whereArray, 'sdi.`id` IN (' . implode($filter['messagesIds']) . ')');
             }
 
             // Todo
             if (!empty($filter['messengerIds']) && count($filter['messengerIds'])) {
-                array_push($whereArray, 'sdi.`id_messenger` IN (' . implode($filter['messengerIds']) .')');
+                array_push($whereArray, 'sdi.`id_messenger` IN (' . implode($filter['messengerIds']) . ')');
             }
         }
 
         if (count($sort)) {
             // Todo
-            foreach($sort as $key => $val) {
+            foreach ($sort as $key => $val) {
                 array_push($sortArray, $key . ' ' . $val);
             }
         }
@@ -99,7 +103,7 @@ class Message extends Model {
                 $membersData = [];
 
                 if ($this->getAttendees() && count($this->getAttendees())) {
-                    foreach($this->getAttendees() as $attendee) {
+                    foreach ($this->getAttendees() as $attendee) {
                         $membersData[$attendee] = [
                             'userId' => $attendee,
                             'readed' => 0,

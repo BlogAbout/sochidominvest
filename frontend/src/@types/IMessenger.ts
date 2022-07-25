@@ -13,7 +13,7 @@ export interface IMessage {
     id: number | null
     messengerId: number | null
     active: number
-    type: 'welcome' | 'online' | 'notification' | 'message' | 'create'
+    type: 'welcome' | 'online' | 'notification' | 'message' | 'create' | 'read'
     text: string
     author: number | null
     userId?: number | null

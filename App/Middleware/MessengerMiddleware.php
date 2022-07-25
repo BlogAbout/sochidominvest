@@ -2,6 +2,12 @@
 
 namespace App;
 
+//ini_set('error_reporting', E_ALL);
+//ini_set('display_errors', 1);
+//ini_set('display_startup_errors', 1);
+
+use App\Messenger\Message;
+use App\Messenger\Messenger;
 use Ratchet\ConnectionInterface;
 use Ratchet\MessageComponentInterface;
 
@@ -52,6 +58,10 @@ class MessengerMiddleware implements MessageComponentInterface
             case 'notification':
                 $this->sendMessage($from, $message);
                 break;
+            case 'read':
+                Messenger::read($message);
+                $this->sendMessage($from, $message);
+                break;
             case 'message':
                 $message->save();
                 $this->sendMessage($from, $message);
@@ -87,7 +97,7 @@ class MessengerMiddleware implements MessageComponentInterface
      * Установка дополнительной информации для подключения
      *
      * @param \Ratchet\ConnectionInterface $connection
-     * @param \App\Message $message
+     * @param \App\Messenger\Message $message
      */
     private function setConnectionInfo(ConnectionInterface $connection, Message $message)
     {
@@ -109,7 +119,7 @@ class MessengerMiddleware implements MessageComponentInterface
      * Отправка сообщений по списку подключений
      *
      * @param \Ratchet\ConnectionInterface $from Подключение, от кого отправлено
-     * @param \App\Message $message Объект отправляемого сообщения
+     * @param \App\Messenger\Message $message Объект отправляемого сообщения
      */
     private function sendMessage(ConnectionInterface $from, Message $message)
     {

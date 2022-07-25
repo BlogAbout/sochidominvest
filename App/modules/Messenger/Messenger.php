@@ -1,8 +1,12 @@
 <?php
 
-namespace App;
+namespace App\Messenger;
 
-class Messenger extends Model {
+use App\Model;
+use App\UtilModel;
+
+class Messenger extends Model
+{
     public int $id;
     public int $author;
     public int $avatarId;
@@ -21,7 +25,7 @@ class Messenger extends Model {
 
         $this->id = $data['id'] ?: 0;
         $this->author = $data['author'] ?: 0;
-        $this->avatarId = $data['avatarId'] ? (int)$data['avatarId']: 0;
+        $this->avatarId = $data['avatarId'] ? (int)$data['avatarId'] : 0;
         $this->name = $data['name'] ?: '';
         $this->type = $data['type'] ?: 'message';
         $this->dateCreated = $data['dateCreated'] ?: '';
@@ -123,7 +127,7 @@ class Messenger extends Model {
         $list = parent::fetchAll();
 
         if (!empty($list)) {
-            foreach($list as $item) {
+            foreach ($list as $item) {
                 $members[$item['id_user']] = [
                     'userId' => $item['id_user'],
                     'readed' => (int)$item['id_message_readed'],
@@ -136,6 +140,30 @@ class Messenger extends Model {
         $this->setMembers($members);
     }
 
+    /**
+     * Обновление информации о прочитанных сообщениях
+     *
+     * @param \App\Messenger\Message $message Объект сообщения
+     */
+    public static function read(Message $message): void
+    {
+        $sql = "
+            UPDATE `sdi_messenger_member`
+            SET `id_message_readed` = :readed
+            WHERE `id_messenger` = :messengerId AND `id_user` = :userId
+        ";
+
+        parent::query($sql);
+        parent::bindParams('readed', (int)$message->getText());
+        parent::bindParams('messengerId', $message->getMessengerId());
+        parent::bindParams('userId', $message->getAuthor());
+
+        parent::execute();
+    }
+
+    /**
+     * Сохранение информации о чате
+     */
     public function save(): void
     {
         if (!$this->getId()) {

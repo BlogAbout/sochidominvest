@@ -1,8 +1,7 @@
 import React from 'react'
-import classNames from 'classnames/bind'
 import {getFormatDate} from '../../../../../helpers/dateHelper'
-import {getUserName} from '../../../../../helpers/userHelper'
-import {findMembersIds} from '../../../../../helpers/messengerHelper'
+import {getUserAvatar, getUserName} from '../../../../../helpers/userHelper'
+import {findMembersIds, isNewMessage} from '../../../../../helpers/messengerHelper'
 import {IMessenger} from '../../../../../@types/IMessenger'
 import {IUser} from '../../../../../@types/IUser'
 import Avatar from '../../../../ui/Avatar/Avatar'
@@ -25,18 +24,17 @@ const defaultProps: Props = {
     }
 }
 
-const cx = classNames.bind(classes)
-
 const MessengerItem: React.FC<Props> = (props) => {
-    const avatarUrl = '' // Todo
     const memberId: number = findMembersIds(props.messenger.members).find((id: number) => id !== props.userId) || 0
+    const avatarUrl = getUserAvatar(props.users, memberId)
     const memberName = getUserName(props.users, props.userId === props.messenger.author ? memberId : props.messenger.author)
+    const isNew = isNewMessage(props.userId, props.messenger.members, props.messenger.messages[0])
 
     return (
-        <div className={cx({'MessengerItem': true, 'new': false})}
+        <div className={classes.MessengerItem}
              onClick={props.onClick}
              onContextMenu={() => {
-                 // Todo
+                 // Todo: Доделать контекстное меню на мессенджер (передать другому, удалить, выйти (для группового))
              }}
         >
             <Avatar href={avatarUrl}
@@ -55,7 +53,9 @@ const MessengerItem: React.FC<Props> = (props) => {
             </div>
 
             <div className={classes.meta}>
-                {getFormatDate(props.messenger.messages[0].dateCreated)}
+                <span>{getFormatDate(props.messenger.messages[0].dateCreated)}</span>
+
+                {isNew && <div className={classes.indicator}/>}
             </div>
         </div>
     )

@@ -34,3 +34,17 @@ export const getUserName = (users: IUser[], userId?: number | null) => {
 
     return findUser.firstName
 }
+
+export const getUserAvatar = (users: IUser[], userId?: number | null) => {
+    if (!userId || !users || !users.length) {
+        return ''
+    }
+
+    const findUser = users.find((user: IUser) => user.id === userId)
+
+    if (!findUser) {
+        return ''
+    }
+
+    return findUser.avatar
+}
