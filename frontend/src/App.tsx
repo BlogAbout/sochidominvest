@@ -6,6 +6,7 @@ import {
     fa1,
     faAngleDown,
     faAngleLeft,
+    faArrowLeftLong,
     faArrowPointer,
     faArrowRotateLeft,
     faArrowUpFromBracket,
@@ -94,6 +95,7 @@ import {
     faVolumeXmark,
     faXmark
 } from '@fortawesome/free-solid-svg-icons'
+import {registerEventsEmitter, registerWebsocket} from './helpers/eventsHelper'
 
 library.add(
     faUser,
@@ -185,13 +187,16 @@ library.add(
     faMoneyCheck,
     faFolderTree,
     faUserGear,
-    faEarthAsia
+    faEarthAsia,
+    faArrowLeftLong
 )
 
 function App() {
     const {setIsAuth, setUserRole, setUserId} = useActions()
 
     useEffect(() => {
+        registerEventsEmitter()
+
         if (localStorage.getItem('auth')) {
             setIsAuth(true)
 
@@ -204,9 +209,10 @@ function App() {
 
             if (userId) {
                 setUserId(parseInt(userId))
+                registerWebsocket(parseInt(userId))
             }
         }
-    })
+    }, [])
 
     return (
         <AppRouter/>

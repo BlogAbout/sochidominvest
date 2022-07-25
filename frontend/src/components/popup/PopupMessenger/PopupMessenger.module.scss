@@ -1,0 +1,133 @@
+.PopupMessenger {
+    width: 700px;
+    height: 100%;
+
+    .content {
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+    }
+
+    .blockContent {
+        padding: 15px;
+        overflow-x: hidden;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        width: 100%;
+    }
+
+    .messenger {
+        flex-grow: 1;
+        overflow: hidden;
+
+        .list {
+            max-height: 100%;
+        }
+    }
+
+    .users {
+        flex-grow: 1;
+        overflow: hidden;
+
+        .list {
+            max-height: 100%;
+            display: flex;
+            flex-wrap: wrap;
+        }
+    }
+
+    .messages {
+        padding: 10px 0;
+        flex-grow: 1;
+        overflow: hidden;
+
+        .list {
+            max-height: 100%;
+        }
+    }
+
+    .messengerInfo {
+        flex-shrink: 0;
+        padding: 0 0 5px;
+        border-bottom: 1px solid #999;
+        display: flex;
+        align-items: center;
+
+        .link {
+            margin-right: 10px;
+            flex-shrink: 0;
+            height: auto;
+            border-top: none;
+        }
+
+        .name {
+            margin-left: 10px;
+        }
+
+        .indicator {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background-color: #a90707;
+            margin-left: 10px;
+
+            &.online {
+                background-color: #7bad17;
+            }
+        }
+    }
+
+    .field {
+        width: 100%;
+        height: 50px;
+        flex-shrink: 0;
+        display: flex;
+
+        > div {
+            &:first-child {
+                width: 100%;
+                flex-grow: 1;
+            }
+
+            &:last-child {
+                flex-shrink: 0;
+            }
+        }
+    }
+
+    .link {
+        padding: 5px 0;
+        border-top: 1px solid #999;
+        text-align: center;
+        height: 20px;
+        flex-shrink: 0;
+        font-size: 12px;
+
+        &.back {
+            text-align: left;
+        }
+
+        svg {
+            display: inline-block;
+            margin-right: 5px;
+        }
+
+        span {
+            cursor: pointer;
+            color: #999;
+        }
+    }
+}
+
+@media (max-width: 768px) {
+    .PopupMessenger {
+        width: 500px;
+    }
+}
+
+@media (max-width: 480px) {
+    .PopupMessenger {
+        width: 350px;
+    }
+}

@@ -39,11 +39,14 @@ class MessengerMiddleware implements MessageComponentInterface
             return;
         }
 
-        $message = new MessageModel(json_decode($msg, true));
+        $message = new Message(json_decode($msg, true));
 
         switch ($message->getType()) {
             case 'welcome':
                 $this->setConnectionInfo($from, $message);
+                $this->notifyAllOfOnlineUsers();
+                break;
+            case 'online':
                 $this->notifyAllOfOnlineUsers();
                 break;
             case 'notification':
@@ -84,11 +87,11 @@ class MessengerMiddleware implements MessageComponentInterface
      * Установка дополнительной информации для подключения
      *
      * @param \Ratchet\ConnectionInterface $connection
-     * @param \App\MessageModel $message
+     * @param \App\Message $message
      */
-    private function setConnectionInfo(ConnectionInterface $connection, MessageModel $message)
+    private function setConnectionInfo(ConnectionInterface $connection, Message $message)
     {
-        $this->clientsInfo[$connection->resourceId] = $message->getAuthorId();
+        $this->clientsInfo[$connection->resourceId] = $message->getAuthor();
     }
 
     /**
@@ -106,15 +109,15 @@ class MessengerMiddleware implements MessageComponentInterface
      * Отправка сообщений по списку подключений
      *
      * @param \Ratchet\ConnectionInterface $from Подключение, от кого отправлено
-     * @param \App\MessageModel $message Объект отправляемого сообщения
+     * @param \App\Message $message Объект отправляемого сообщения
      */
-    private function sendMessage(ConnectionInterface $from, MessageModel $message)
+    private function sendMessage(ConnectionInterface $from, Message $message)
     {
         $attendees = $message->getAttendees();
         $sendAll = is_array($attendees) && count($attendees) > 0;
 
         foreach ($this->clients as $client) {
-            if ($from === $client) {
+            if (!$sendAll && $from === $client) {
                 continue;
             }
 
@@ -130,12 +133,14 @@ class MessengerMiddleware implements MessageComponentInterface
     private function notifyAllOfOnlineUsers()
     {
         $dataMessage = [
-            'type' => 'notification',
+            'type' => 'online',
             'text' => json_encode(array_values($this->clientsInfo))
         ];
 
-        $message = new MessageModel($dataMessage);
+        $message = new Message($dataMessage);
 
-        $this->sendMessage(null, $message);
+        foreach ($this->clients as $client) {
+            $client->send($message->__toString());
+        }
     }
 }

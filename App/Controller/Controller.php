@@ -223,6 +223,15 @@ class Controller
                 } catch (Exception $e) {
                 }
             }
+
+            if ($payload->validator == 'messengerExists') {
+                try {
+                    if (!Model::isExistsItem('sdi_messenger', (int)$payload->data)) {
+                        array_push($response, "Чат с таким идентификатором не найден в базе данных.");
+                    }
+                } catch (Exception $e) {
+                }
+            }
         }
 
         $validationErrors = new \stdClass();

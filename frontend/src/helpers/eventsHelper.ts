@@ -1,3 +1,6 @@
+import EventEmitter from 'events'
+import {WS} from "./messengerHelper";
+
 /**
  * <p>Обновляет path, генерируя путь от документа до target-node в виде массива</p>
  * @param path текущий node
@@ -11,4 +14,12 @@ export function updateNodePath(path: Node[], target: Node) {
             updateNodePath(path, target.parentNode)
         }
     }
+}
+
+export function registerEventsEmitter() {
+    window.events = new EventEmitter()
+}
+
+export function registerWebsocket(userId: number) {
+    window.WS = new WS(userId)
 }

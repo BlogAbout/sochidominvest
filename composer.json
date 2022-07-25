@@ -13,7 +13,8 @@
         "classmap": [
             "App/Controller",
             "App/Middleware",
-            "App/Model"
+            "App/Model",
+            "App/modules/Messenger"
         ]
     }
 }

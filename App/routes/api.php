@@ -139,5 +139,9 @@ $Klein->respond('GET', '/api/v1/log', [new UtilController(), 'fetchLogs']);
 $Klein->respond('GET', '/api/v1/search', [new UtilController(), 'fetchSearchGlobal']);
 $Klein->respond('POST', '/api/v1/drop', [new Controller(), 'dropAllOlderFiles']);
 
+// Messenger Routes
+$Klein->respond('GET', '/api/v1/messenger/[:id]', [new MessengerController(), 'fetchItemById']);
+$Klein->respond('GET', '/api/v1/messenger', [new MessengerController(), 'fetchList']);
+
 // Dispatch all routes
 $Klein->dispatch();

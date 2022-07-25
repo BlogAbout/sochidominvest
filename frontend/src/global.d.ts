@@ -31,6 +31,8 @@ interface Window {
     HTMLElement?: any
     StyleMedia?: any
     ym?: any
+    events?: EventEmitter
+    WS?: WS
 }
 
 declare module 'react-lightgallery'

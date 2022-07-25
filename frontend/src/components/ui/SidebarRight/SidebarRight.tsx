@@ -5,9 +5,10 @@ import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {useActions} from '../../../hooks/useActions'
 import {useTypedSelector} from '../../../hooks/useTypedSelector'
 import {RouteNames} from '../../../routes/routes'
+import NotificationPanel from '../../NotificationPanel/NotificationPanel'
 import openPopupUserCreate from '../../popup/PopupUserCreate/PopupUserCreate'
 import openPopupSearchPanel from '../../popup/PopupSearchPanel/PopupSearchPanel'
-import NotificationPanel from '../../NotificationPanel/NotificationPanel'
+import openPopupMessenger from '../../popup/PopupMessenger/PopupMessenger'
 import classes from './SidebarRight.module.scss'
 
 const SidebarRight: React.FC = () => {
@@ -82,7 +83,10 @@ const SidebarRight: React.FC = () => {
                     </Link>
                 </div>
 
-                <div className={classes.icon} title='Мессенджер'>
+                <div className={classes.icon}
+                     title='Мессенджер'
+                     onClick={() => openPopupMessenger(document.body, {})}
+                >
                     <FontAwesomeIcon icon='message'/>
                 </div>
 

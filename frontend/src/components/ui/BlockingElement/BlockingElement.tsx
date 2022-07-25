@@ -6,7 +6,7 @@ import classes from './BlockingElement.module.scss'
 interface Props {
     fetching: boolean
     className?: string | null
-    innerRef?: React.MutableRefObject<any>
+    innerRef?: React.MutableRefObject<any> | null
 }
 
 const defaultProps: Props = {

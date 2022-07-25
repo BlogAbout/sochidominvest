@@ -8,20 +8,22 @@ interface Props extends React.PropsWithChildren<any> {
     alt: string
     width?: number | string
     height?: number | string
+    isRound?: boolean
 }
 
 const defaultProps: Props = {
     href: null,
     alt: '',
     width: 200,
-    height: 'auto'
+    height: 'auto',
+    isRound: false
 }
 
 const cx = classNames.bind(classes)
 
 const Avatar: React.FC<Props> = (props) => {
     return (
-        <div className={cx({'Avatar': true, 'noImage': !props.href})}
+        <div className={cx({'Avatar': true, 'noImage': !props.href, 'round': props.isRound})}
              style={{width: props.width, height: props.height}}
         >
             {props.href ?

@@ -51,4 +51,9 @@ class UtilModel extends Model
             'partners' => PartnerModel::fetchList($filter)
         ];
     }
+
+    public static function getDateNow(): string
+    {
+        return date('Y-m-d H:i:s');
+    }
 }

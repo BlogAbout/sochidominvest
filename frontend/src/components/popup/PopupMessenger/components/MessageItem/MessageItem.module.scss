@@ -1,0 +1,66 @@
+.MessageItem {
+    display: flex;
+    width: 100%;
+    padding: 5px 0;
+
+    + .MessageItem {
+        margin-top: 20px;
+    }
+
+    &.right {
+        padding-right: 10px;
+        justify-content: flex-end;
+
+        > div {
+            &:first-child {
+                order: 2;
+            }
+        }
+
+        .text {
+            background: #075ea5;
+            color: #fff;
+            order: 1;
+            margin-left: 40px;
+            margin-right: 15px;
+
+            &::before {
+                left: auto;
+                right: -16px;
+                border: 8px solid transparent;
+                border-left: 8px solid #075ea5;
+            }
+
+            .date {
+                text-align: left;
+                color: #ccc;
+            }
+        }
+    }
+
+    .text {
+        background: #eee;
+        padding: 5px 10px;
+        border-radius: 5px;
+        margin-left: 15px;
+        margin-right: 40px;
+        position: relative;
+        white-space: pre-wrap;
+
+        &::before {
+            content: '';
+            display: block;
+            position: absolute;
+            left: -16px;
+            top: 10px;
+            border: 8px solid transparent;
+            border-right: 8px solid #eee;
+        }
+
+        .date {
+            font-size: 10px;
+            color: #999;
+            text-align: right;
+        }
+    }
+}
