@@ -1,8 +1,10 @@
 import {ISetting} from '../@types/ISetting'
 
 export const configuration = {
-    apiPath: 'https://api.sochidominvest.ru/',
+    apiPath: 'http://sochidominvest/api/v1',
+    // apiPath: 'https://api.sochidominvest.ru/',
     webSocketPath: 'ws://127.0.0.1:8081',
+    // webSocketPath: 'wss://api.sochidominvest.ru:8081',
     siteTitle: 'СОЧИДОМИНВЕСТ',
     sitePhone: '+7 (918) 605-34-27',
     sitePhoneUrl: 'tel:+79186053427',

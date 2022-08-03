@@ -65,9 +65,8 @@ class Message extends Model
         }
 
         if (count($sort)) {
-            // Todo
             foreach ($sort as $key => $val) {
-                array_push($sortArray, $key . ' ' . $val);
+                array_push($sortArray, "sdi.`$key` $val");
             }
         }
 

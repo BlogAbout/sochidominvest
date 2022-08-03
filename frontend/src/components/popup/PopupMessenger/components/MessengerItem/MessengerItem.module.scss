@@ -19,6 +19,23 @@
             font-size: 14px;
             font-weight: 700;
             color: #075ea5;
+
+            span {
+                display: inline-block;
+                vertical-align: middle;
+            }
+
+            .indicator {
+                width: 8px;
+                height: 8px;
+                border-radius: 50%;
+                background-color: #a90707;
+                margin-left: 10px;
+
+                &.online {
+                    background-color: #7bad17;
+                }
+            }
         }
 
         .text {

@@ -6,6 +6,7 @@ const initialState: UserState = {
     role: '',
     userId: 0,
     userSetting: {} as IUserSetting,
+    usersOnline: [],
     users: [],
     fetching: false,
     error: ''
@@ -21,6 +22,8 @@ export default function UserReducer(state: UserState = initialState, action: Use
             return {...state, userId: action.payload}
         case UserActionTypes.USER_SETTING:
             return {...state, userSetting: action.payload}
+        case UserActionTypes.USER_ONLINE:
+            return {...state, usersOnline: action.payload}
         case UserActionTypes.USER_FETCH_LIST:
             return {...state, users: action.payload, fetching: false}
         case UserActionTypes.USER_IS_FETCHING:

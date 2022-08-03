@@ -1,0 +1,15 @@
+.ToastMessage {
+    display: flex;
+    align-items: center;
+
+    .content {
+        flex-grow: 1;
+        width: 100%;
+        padding-left: 10px;
+
+        .name {
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+    }
+}

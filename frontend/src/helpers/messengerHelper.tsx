@@ -1,12 +1,19 @@
+import React from 'react'
+import {toast} from 'react-toastify'
 import {configuration} from './utilHelper'
 import {IMessage, IMessengerMember} from '../@types/IMessenger'
+import openPopupMessenger from '../components/popup/PopupMessenger/PopupMessenger'
+import ToastMessage from '../components/popup/PopupMessenger/components/ToastMessage/ToastMessage'
 
 export class WS {
     private webSocket
-    private userId
+    private readonly userId
+    private readonly timeout
+    private restartTimer: any = null
 
-    constructor(userId: number) {
+    constructor(userId: number, timeout: number = 10000) {
         this.userId = userId
+        this.timeout = timeout
         this.webSocket = new WebSocket(configuration.webSocketPath)
 
         this.webSocket.onopen = (event: Event) => {
@@ -57,25 +64,31 @@ export class WS {
             if (message.type === 'message' && this.hasEvent('messengerNewMessage')) {
                 window.events.emit('messengerNewMessage', message)
             } else if (message.type === 'message' && this.hasEvent('messengerNewToastMessage')) {
-                window.events.emit('messengerNewToastMessage', message)
+                window.events.emit('messengerNewToastMessage', this.userId, message)
             }
         }
 
         this.webSocket.onclose = function (event: CloseEvent) {
             if (event.wasClean) {
-                // Todo: Соединение закрыто корректно
+                // Соединение закрыто корректно
                 console.log('correct close')
             } else {
-                console.log('error close')
-                // Todo: Сервер убил процесс или сеть недоступна, пробуем переподключиться
+                // Сервер убил процесс или сеть недоступна, пробуем переподключиться
+                window.WS.restart()
             }
         }
 
         this.webSocket.onerror = function (error: any) {
             console.error(`Произошла ошибка в работе сокета: ${error.message}`)
+            window.WS.restart()
         }
 
-        window.events.on('messengerSendMessage', this.sendMessage)
+        if (this.isRun()) {
+            window.events.on('messengerSendMessage', this.sendMessage)
+            window.events.on('messengerNewToastMessage', newToastMessage)
+            window.events.on('messengerCountMessagesIncrease', countMessagesIncrease)
+            window.events.on('messengerCountNotificationsIncrease', countNotificationsIncrease)
+        }
     }
 
     public sendMessage = (message: IMessage) => {
@@ -84,6 +97,25 @@ export class WS {
 
     public hasEvent = (event: string): boolean => {
         return window.events.listenerCount(event) > 0
+    }
+
+    public isRun = (): boolean => {
+        return window.WS === undefined || (window.WS && window.WS.readyState === 3)
+    }
+
+    public restart = (): void => {
+        if (!this.isRun()) {
+            const userId = this.userId
+            const timeout = this.timeout
+
+            if (this.restartTimer) {
+                clearTimeout(this.restartTimer)
+            }
+
+            this.restartTimer = setTimeout(function () {
+                window.WS = new WS(userId, timeout * 2)
+            }, this.timeout)
+        }
     }
 }
 
@@ -112,7 +144,39 @@ export const isNewMessage = (userId: number, members?: IMessengerMember[], messa
         return false
     }
 
-    const readed: number = members[userId].readed || 0
+    const lastReadMessageId: number = members[userId].readed || 0
 
-    return readed < message.id
+    return lastReadMessageId < message.id
+}
+
+/**
+ * Вызов toast для входящего сообщения, если чат закрыт
+ *
+ * @param userId Идентификатор текущего пользователя
+ * @param message Объект сообщения
+ */
+export const newToastMessage = (userId: number, message: IMessage): void => {
+    if (message.author !== userId) {
+        toast(<ToastMessage message={message}/>, {
+            onClick: () => {
+                openPopupMessenger(document.body, {
+                    currentMessengerId: message.messengerId || 0
+                })
+            }
+        })
+    }
+}
+
+/**
+ * Увеличение счетчика новых сообщений
+ */
+export const countMessagesIncrease = (): void => {
+    // Todo
+}
+
+/**
+ * Увеличение счетчика новых уведомлений
+ */
+export const countNotificationsIncrease = (): void => {
+    // Todo
 }

@@ -1,5 +1,6 @@
 import axios, {AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse} from 'axios'
 import {RouteNames} from './routes/routes'
+import {configuration} from './helpers/utilHelper'
 
 /**
  * <p>Обобщенная обработка запроса перед отправкой.</p>
@@ -67,8 +68,7 @@ function setupInterceptorsTo(axiosInstance: AxiosInstance): AxiosInstance {
  * <p>Подключаем interceptor из функции на экспортируемый Axios.</p>
  */
 const API = setupInterceptorsTo(axios.create({
-    // baseURL: 'https://api.sochidominvest.ru/api/v1'
-    baseURL: 'http://sochidominvest/api/v1'
+    baseURL: configuration.apiPath
 }))
 
 export default API

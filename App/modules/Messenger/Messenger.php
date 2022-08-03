@@ -53,7 +53,12 @@ class Messenger extends Model
 
         if (!empty($item)) {
             $messenger = new Messenger(self::formatData($item));
-            $messenger->setMessages(Message::fetchMessages(['messengerIds' => [$messenger->getId()]], [], 100));
+
+            $filter = [
+                'messengerIds' => [$messenger->getId()]
+            ];
+
+            $messenger->setMessages(Message::fetchMessages($filter, [], 100));
             $messenger->fetchMembers();
 
             return $messenger;
@@ -88,7 +93,15 @@ class Messenger extends Model
         if (!empty($list)) {
             foreach ($list as $item) {
                 $messenger = new Messenger(self::formatData($item));
-                $messenger->setMessages(Message::fetchMessages(['messengerIds' => [$messenger->getId()]], [], 1));
+
+                $filter = [
+                    'messengerIds' => [$messenger->getId()]
+                ];
+                $sort = [
+                    'id' => 'DESC'
+                ];
+
+                $messenger->setMessages(Message::fetchMessages($filter, $sort, 1));
                 $messenger->fetchMembers();
 
                 array_push($messengers, $messenger);

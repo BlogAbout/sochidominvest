@@ -21,6 +21,10 @@ export const UserActionCreators = {
         type: UserActionTypes.USER_SETTING,
         payload: setting
     }),
+    setUsersOnline: (users: number[]): UserAction => ({
+        type: UserActionTypes.USER_ONLINE,
+        payload: users
+    }),
     setUsers: (users: IUser[]): UserAction => ({
         type: UserActionTypes.USER_FETCH_LIST,
         payload: users

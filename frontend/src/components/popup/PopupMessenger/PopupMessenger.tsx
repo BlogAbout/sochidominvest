@@ -17,14 +17,14 @@ import Button from '../../form/Button/Button'
 import Empty from '../../Empty/Empty'
 import UserItem from './components/UserItem/UserItem'
 import BlockingElement from '../../ui/BlockingElement/BlockingElement'
-import Avatar from '../../ui/Avatar/Avatar'
 import TextBox from '../../form/TextBox/TextBox'
 import MessengerItem from './components/MessengerItem/MessengerItem'
 import MessageItem from './components/MessageItem/MessageItem'
+import MessengerInfo from './components/MessengerInfo/MessengerInfo'
 import classes from './PopupMessenger.module.scss'
 
 interface Props extends PopupProps {
-
+    currentMessengerId?: number
 }
 
 interface State {
@@ -45,7 +45,7 @@ class PopupMessenger extends React.Component<Props, State> {
     refMessenger: React.MutableRefObject<any> | null = null
 
     state: State = {
-        currentMessengerId: 0,
+        currentMessengerId: this.props.currentMessengerId || 0,
         currentMessengerInfo: null,
         textMessage: '',
         messengers: [],
@@ -65,6 +65,10 @@ class PopupMessenger extends React.Component<Props, State> {
 
         this.fetchUserList()
         this.fetchMessengerList()
+
+        if (this.state.currentMessengerId > 0) {
+            this.fetchMessagesList(this.state.currentMessengerId)
+        }
     }
 
     componentWillUnmount() {
@@ -338,7 +342,7 @@ class PopupMessenger extends React.Component<Props, State> {
                     <BlockingElement fetching={this.state.fetchingUsers} className={classes.list}>
                         {this.state.users && this.state.users.length ?
                             this.state.users.map((user: IUser) => {
-                                if (user.id === this.state.userId) {
+                                if (user.block || user.active !== 1 || user.id === this.state.userId) {
                                     return null
                                 }
 
@@ -376,28 +380,14 @@ class PopupMessenger extends React.Component<Props, State> {
         const memberId: number = findMembersIds(this.state.currentMessengerInfo.members).find((id: number) => id !== this.state.userId) || 0
         const avatarUrl = getUserAvatar(this.state.users, memberId)
         const memberName = getUserName(this.state.users, this.state.userId === this.state.currentMessengerInfo.author ? memberId : this.state.currentMessengerInfo.author)
-        const online = false // Todo: Доделать онлайн статус пользователя
 
         return (
             <>
-                <div className={classes.messengerInfo}>
-                    <div className={cx({'link': true, 'back': true})}>
-                        <span onClick={() => this.setState({currentMessengerId: 0})}>
-                            <FontAwesomeIcon icon='arrow-left-long'/>
-                            <span>Назад</span>
-                        </span>
-                    </div>
-
-                    <Avatar href={avatarUrl}
-                            alt={memberName}
-                            width={35}
-                            height={35}
-                    />
-
-                    <div className={classes.name}>{memberName}</div>
-
-                    <div className={cx({'indicator': true, 'online': online})}/>
-                </div>
+                <MessengerInfo memberId={memberId}
+                               avatarUrl={avatarUrl}
+                               memberName={memberName}
+                               onClickBack={() => this.setState({currentMessengerId: 0})}
+                />
 
                 <div className={classes.messages}>
                     <BlockingElement fetching={this.state.fetchingMessages || this.state.fetchingUsers}

@@ -13,11 +13,21 @@
         }
     }
 
+    .status {
+        margin-top: 2px;
+        font-size: 10px;
+        color: #a90707;
+
+        &.online {
+            color: #7bad17;
+        }
+    }
+
     .name {
-        margin-top: 5px;
+        margin-top: 2px;
         text-align: center;
         color: #075ea5;
-        font-size: 14px;
+        font-size: 13px;
     }
 }
 

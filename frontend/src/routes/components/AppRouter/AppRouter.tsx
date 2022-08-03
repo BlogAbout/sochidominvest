@@ -1,6 +1,7 @@
 import React, {useEffect} from 'react'
 import {Route, Routes} from 'react-router-dom'
 import {RouteNames} from '../../routes'
+import {ToastContainer} from 'react-toastify'
 import {useTypedSelector} from '../../../hooks/useTypedSelector'
 import {useActions} from '../../../hooks/useActions'
 import MainPage from '../../../views/public/MainPage/MainPage'
@@ -18,7 +19,8 @@ import ArticleItemPagePanel from '../../../views/private/ArticleItemPagePanel/Ar
 import ArticlePagePanel from '../../../views/private/ArticlePagePanel/ArticlePagePanel'
 import ArticlePage from '../../../views/public/ArticlePage/ArticlePage'
 import CrmPagePanel from '../../../views/private/CrmPagePanel/CrmPagePanel'
-import DeveloperItemPagePanel from '../../../views/private/CrmPagePanel/components/DeveloperItemPagePanel/DeveloperItemPagePanel'
+import DeveloperItemPagePanel
+    from '../../../views/private/CrmPagePanel/components/DeveloperItemPagePanel/DeveloperItemPagePanel'
 import DeveloperPagePanel from '../../../views/private/CrmPagePanel/components/DeveloperPagePanel/DeveloperPagePanel'
 import DocumentPagePanel from '../../../views/private/DocumentPagePanel/DocumentPagePanel'
 import ReportPanel from '../../../views/private/ReportPanel/ReportPanel'
@@ -29,7 +31,8 @@ import FavoritePagePanel from '../../../views/private/FavoritePagePanel/Favorite
 import CompilationPagePanel from '../../../views/private/CompilationPagePanel/CompilationPagePanel'
 import CompilationItemPagePanel from '../../../views/private/CompilationItemPagePanel/CompilationItemPagePanel'
 import AdministrationPagePanel from '../../../views/private/AdministrationPagePanel/AdministrationPagePanel'
-import AdvertisingMaterialsPagePanel from '../../../views/private/AdvertisingMaterialsPagePanel/AdvertisingMaterialsPagePanel'
+import AdvertisingMaterialsPagePanel
+    from '../../../views/private/AdvertisingMaterialsPagePanel/AdvertisingMaterialsPagePanel'
 import PartnerPanel from '../../../views/private/AdvertisingMaterialsPagePanel/components/PartnerPanel/PartnerPanel'
 import BannerPanel from '../../../views/private/AdvertisingMaterialsPagePanel/components/BannerPanel/BannerPanel'
 import WidgetPanel from '../../../views/private/AdvertisingMaterialsPagePanel/components/WidgetPanel/WidgetPanel'
@@ -41,6 +44,7 @@ import FaqPage from '../../../views/public/FaqPage/FaqPage'
 import FaqPanel from '../../../views/private/AdvertisingMaterialsPagePanel/components/FaqPanel/FaqPanel'
 import PostPagePanel from '../../../views/private/CrmPagePanel/components/PostPagePanel/PostPagePanel'
 import classes from './AppRouter.module.scss'
+import 'react-toastify/dist/ReactToastify.css'
 
 const AppRouter: React.FC = () => {
     const {isAuth, role} = useTypedSelector(state => state.userReducer)
@@ -120,6 +124,15 @@ const AppRouter: React.FC = () => {
                     <SidebarRight/>
                 </div>
             }
+
+            <ToastContainer position={'bottom-right'}
+                            autoClose={5000}
+                            draggablePercent={60}
+                            pauseOnHover={true}
+                            closeOnClick={true}
+                            hideProgressBar={true}
+                            draggable={true}
+            />
         </div>
     )
 }

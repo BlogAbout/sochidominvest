@@ -1,0 +1,52 @@
+.MessengerInfo {
+    flex-shrink: 0;
+    padding: 0 0 5px;
+    border-bottom: 1px solid #999;
+    display: flex;
+    align-items: center;
+
+    .link {
+        margin-right: 10px;
+        flex-shrink: 0;
+        height: auto;
+        border-top: none;
+    }
+
+    .name {
+        margin-left: 10px;
+    }
+
+    .indicator {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background-color: #a90707;
+        margin-left: 10px;
+
+        &.online {
+            background-color: #7bad17;
+        }
+    }
+
+    .link {
+        padding: 5px 0;
+        text-align: center;
+        height: 20px;
+        flex-shrink: 0;
+        font-size: 12px;
+
+        &.back {
+            text-align: left;
+        }
+
+        svg {
+            display: inline-block;
+            margin-right: 5px;
+        }
+
+        span {
+            cursor: pointer;
+            color: #999;
+        }
+    }
+}

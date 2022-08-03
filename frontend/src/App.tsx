@@ -192,7 +192,7 @@ library.add(
 )
 
 function App() {
-    const {setIsAuth, setUserRole, setUserId} = useActions()
+    const {setIsAuth, setUserRole, setUserId, setUsersOnline} = useActions()
 
     useEffect(() => {
         registerEventsEmitter()
@@ -212,7 +212,22 @@ function App() {
                 registerWebsocket(parseInt(userId))
             }
         }
+
+        window.events.on('messengerUpdateOnlineUsers', updateOnlineUsers)
+
+        return () => {
+            window.events.removeListener('messengerUpdateOnlineUsers', updateOnlineUsers)
+        }
     }, [])
+
+    // Обновление списка пользователей онлайн
+    const updateOnlineUsers = (usersString: string): void => {
+        if (usersString.trim() !== '') {
+            const listUsersIds: number[] = usersString.split(',').map(Number)
+
+            setUsersOnline(listUsersIds)
+        }
+    }
 
     return (
         <AppRouter/>

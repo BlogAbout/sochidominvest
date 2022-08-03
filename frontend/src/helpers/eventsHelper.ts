@@ -16,19 +16,18 @@ export function updateNodePath(path: Node[], target: Node) {
     }
 }
 
+/**
+ * Регистрация эмиттера событий
+ */
 export function registerEventsEmitter() {
     window.events = new EventEmitter()
 }
 
+/**
+ * Регистрация веб сокета
+ *
+ * @param userId Идентификатор пользователя
+ */
 export function registerWebsocket(userId: number) {
-    let timeout = 5000
-
     window.WS = new WS(userId)
-
-    if (window.WS === undefined || (window.WS && window.WS.readyState === 3)) {
-        setTimeout(function() {
-            registerWebsocket(userId)
-            timeout *= 2
-        }, timeout)
-    }
 }
