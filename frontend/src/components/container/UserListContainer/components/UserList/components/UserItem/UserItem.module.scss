@@ -27,6 +27,11 @@
 
     .name {
         flex-grow: 1;
+
+        span {
+            vertical-align: middle;
+            margin-left: 5px;
+        }
     }
 
     .post,

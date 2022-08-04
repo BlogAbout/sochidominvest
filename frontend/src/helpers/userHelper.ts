@@ -21,6 +21,16 @@ export const getRoleUserText = (key: string) => {
     return find ? find.text : ''
 }
 
+export const findUser = (users: IUser[], userId?: number | null) => {
+    if (!userId || !users || !users.length) {
+        return null
+    }
+
+    const user =  users.find((user: IUser) => user.id === userId)
+
+    return user || null
+}
+
 export const getUserName = (users: IUser[], userId?: number | null) => {
     if (!userId || !users || !users.length) {
         return 'Пользователь не найден'

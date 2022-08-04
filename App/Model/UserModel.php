@@ -326,6 +326,27 @@ class UserModel extends Model
     }
 
     /**
+     * Обновление времени последнего пребывания на сайте
+     *
+     * @param int $userId Идентификатор пользователя
+     */
+    public static function updateLastActive(int $userId)
+    {
+        $sql = "
+            UPDATE `sdi_user`
+            SET last_active = :lastActive
+            WHERE id = :id
+        ";
+
+        parent::query($sql);
+
+        parent::bindParams('id', $userId);
+        parent::bindParams('lastActive', UtilModel::getDateNow());
+
+        parent::execute();
+    }
+
+    /**
      * Удаляет пользователя по id (меняет статус активности)
      *
      * @param int $id Идентификатор пользователя

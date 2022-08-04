@@ -9,7 +9,7 @@ import {IFilter} from '../../../@types/IFilter'
 import {IUser} from '../../../@types/IUser'
 import {IMessage, IMessenger, IMessengerMember} from '../../../@types/IMessenger'
 import {getPopupContainer, openPopup, removePopup} from '../../../helpers/popupHelper'
-import {getUserAvatar, getUserName} from '../../../helpers/userHelper'
+import {findUser, getUserAvatar, getUserName} from '../../../helpers/userHelper'
 import {findMembersIds} from '../../../helpers/messengerHelper'
 import showBackgroundBlock from '../../ui/BackgroundBlock/BackgroundBlock'
 import {Footer, Popup} from '../Popup/Popup'
@@ -378,12 +378,14 @@ class PopupMessenger extends React.Component<Props, State> {
         }
 
         const memberId: number = findMembersIds(this.state.currentMessengerInfo.members).find((id: number) => id !== this.state.userId) || 0
+        const member = findUser(this.state.users, memberId)
         const avatarUrl = getUserAvatar(this.state.users, memberId)
         const memberName = getUserName(this.state.users, this.state.userId === this.state.currentMessengerInfo.author ? memberId : this.state.currentMessengerInfo.author)
 
         return (
             <>
                 <MessengerInfo memberId={memberId}
+                               member={member}
                                avatarUrl={avatarUrl}
                                memberName={memberName}
                                onClickBack={() => this.setState({currentMessengerId: 0})}

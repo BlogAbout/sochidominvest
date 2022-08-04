@@ -2,18 +2,23 @@ import React from 'react'
 import classNames from 'classnames/bind'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {useTypedSelector} from '../../../../../hooks/useTypedSelector'
+import {getFormatDate} from '../../../../../helpers/dateHelper'
 import Avatar from '../../../../ui/Avatar/Avatar'
+import {IUser} from '../../../../../@types/IUser'
 import classes from './MessengerInfo.module.scss'
 
 interface Props {
     memberId: number
+    member: IUser | null
     avatarUrl?: string | null
     memberName: string
+
     onClickBack(): void
 }
 
 const defaultProps: Props = {
     memberId: 0,
+    member: null,
     avatarUrl: '',
     memberName: '',
     onClickBack: () => {
@@ -29,10 +34,10 @@ const MessengerInfo: React.FC<Props> = (props) => {
     return (
         <div className={classes.MessengerInfo}>
             <div className={cx({'link': true, 'back': true})}>
-                        <span onClick={() => props.onClickBack()}>
-                            <FontAwesomeIcon icon='arrow-left-long'/>
-                            <span>Назад</span>
-                        </span>
+                <span onClick={() => props.onClickBack()}>
+                    <FontAwesomeIcon icon='arrow-left-long'/>
+                    <span>Назад</span>
+                </span>
             </div>
 
             <Avatar href={props.avatarUrl}
@@ -44,7 +49,7 @@ const MessengerInfo: React.FC<Props> = (props) => {
             <div className={classes.name}>{props.memberName}</div>
 
             <div className={cx({'indicator': true, 'online': usersOnline.includes(props.memberId)})}
-                 title={usersOnline.includes(props.memberId) ? 'Online' : 'Offline'}
+                 title={usersOnline.includes(props.memberId) ? 'Online' : `Был в сети: ${getFormatDate(props.member?.lastActive)}`}
             />
         </div>
     )

@@ -4,6 +4,7 @@ import {useTypedSelector} from '../../../../../hooks/useTypedSelector'
 import {IUser} from '../../../../../@types/IUser'
 import Avatar from '../../../../ui/Avatar/Avatar'
 import classes from './UserItem.module.scss'
+import {getFormatDate} from '../../../../../helpers/dateHelper'
 
 interface Props {
     user: IUser
@@ -28,8 +29,16 @@ const UserItem: React.FC<Props> = (props) => {
 
             <div className={classes.name}>{props.user.firstName}</div>
 
-            <div className={cx({'status': true, 'online': props.user.id && usersOnline.includes(props.user.id)})}>
-                {props.user.id && usersOnline.includes(props.user.id) ? 'Online' : 'Offline'}
+            <div className={cx({'status': true, 'online': props.user.id && usersOnline.includes(props.user.id)})}
+                 title={props.user.id && usersOnline.includes(props.user.id)
+                     ? 'Online'
+                     : `Был в сети: ${getFormatDate(props.user.lastActive)}`
+                 }
+            >
+                {props.user.id && usersOnline.includes(props.user.id)
+                    ? 'Online'
+                    : 'Offline'
+                }
             </div>
         </div>
     )

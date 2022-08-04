@@ -75,6 +75,8 @@ class MessengerMiddleware implements MessageComponentInterface
         $this->clients->detach($conn);
 
         if (!empty($this->clientsInfo[$conn->resourceId])) {
+            UserModel::updateLastActive($this->clientsInfo[$conn->resourceId]);
+
             unset($this->clientsInfo[$conn->resourceId]);
             $this->notifyAllOfOnlineUsers();
         }

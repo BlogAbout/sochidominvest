@@ -1,0 +1,21 @@
+.Indicator {
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 2px;
+    font-size: 10px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+
+    &.red {
+        background-color: #a90707;
+    }
+
+    &.blue {
+        background-color: #075ea5;
+    }
+
+    &.green {
+        background-color: #7bad17;
+    }
+}
