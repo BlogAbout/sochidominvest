@@ -27,11 +27,13 @@ import Button from '../../../components/form/Button/Button'
 import Empty from '../../../components/Empty/Empty'
 import BlockingElement from '../../../components/ui/BlockingElement/BlockingElement'
 import Gallery from '../../../components/Gallery/Gallery'
+import Indicator from '../../../components/ui/Indicator/Indicator'
 import openPopupBuildingCreate from '../../../components/popup/PopupBuildingCreate/PopupBuildingCreate'
 import openPopupAlert from '../../../components/PopupAlert/PopupAlert'
 import openPopupSupportCreate from '../../../components/popup/PopupSupportCreate/PopupSupportCreate'
 import openPopupCheckerInfo from '../../../components/PopupCheckerInfo/PopupCheckerInfo'
 import openPopupCompilationSelector from '../../../components/PopupCompilationSelector/PopupCompilationSelector'
+import openPopupMessenger from '../../../components/popup/PopupMessenger/PopupMessenger'
 import PdfDocumentGenerator from '../../../components/PdfDocumentGenerator/PdfDocumentGenerator'
 import {
     amountContract,
@@ -55,6 +57,7 @@ import {
     paymentsList
 } from '../../../helpers/buildingHelper'
 import {sortAttachments} from '../../../helpers/attachmentHelper'
+import {getFormatDate} from '../../../helpers/dateHelper'
 import classes from './BuildingItemPagePanel.module.scss'
 
 type BuildingItemPageParams = {
@@ -82,7 +85,7 @@ const BuildingItemPagePanel: React.FC = (props) => {
 
     const {buildings, fetching} = useTypedSelector(state => state.buildingReducer)
     const {developers, fetching: fetchingDeveloperList} = useTypedSelector(state => state.developerReducer)
-    const {users, fetching: fetchingUserList, role} = useTypedSelector(state => state.userReducer)
+    const {users, fetching: fetchingUserList, role, usersOnline} = useTypedSelector(state => state.userReducer)
     const {tags} = useTypedSelector(state => state.tagReducer)
     const {articles} = useTypedSelector(state => state.articleReducer)
     const {fetchBuildingList, fetchTagList, fetchDeveloperList, fetchUserList, fetchArticleList} = useActions()
@@ -764,8 +767,27 @@ const BuildingItemPagePanel: React.FC = (props) => {
 
                             return userInfo ? (
                                 <div key={id}>
-                                    <span>{userInfo.firstName}</span>
+                                    <span>
+                                        <Indicator color={userInfo.id && usersOnline.includes(userInfo.id) ? 'green' : 'red'}
+                                                   text={userInfo.id && usersOnline.includes(userInfo.id) ? 'Online' : `Был в сети: ${getFormatDate(userInfo.lastActive)}`}
+                                        />
+
+                                        <span>{userInfo.firstName}</span>
+
+                                        <span className={classes.icon}
+                                              title='Написать в чат'
+                                              onClick={() => {
+                                                  openPopupMessenger(document.body, {
+                                                      currentMemberId: userInfo.id
+                                                  })
+                                              }}
+                                        >
+                                            <FontAwesomeIcon icon='message'/>
+                                        </span>
+                                    </span>
+
                                     {userInfo.postName && <span className={classes.post}>{userInfo.postName}</span>}
+
                                     <span><a href={`tel:${userInfo.phone}`}>{userInfo.phone}</a></span>
                                 </div>
                             ) : null

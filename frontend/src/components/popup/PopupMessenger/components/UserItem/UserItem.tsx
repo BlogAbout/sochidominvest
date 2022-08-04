@@ -29,6 +29,8 @@ const UserItem: React.FC<Props> = (props) => {
 
             <div className={classes.name}>{props.user.firstName}</div>
 
+            <div className={classes.post}>{props.user.postName}</div>
+
             <div className={cx({'status': true, 'online': props.user.id && usersOnline.includes(props.user.id)})}
                  title={props.user.id && usersOnline.includes(props.user.id)
                      ? 'Online'

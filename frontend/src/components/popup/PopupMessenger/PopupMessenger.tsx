@@ -25,10 +25,12 @@ import classes from './PopupMessenger.module.scss'
 
 interface Props extends PopupProps {
     currentMessengerId?: number
+    currentMemberId?: number | null
 }
 
 interface State {
     currentMessengerId: number
+    currentMemberId: number | null
     currentMessengerInfo: IMessenger | null
     textMessage: string
     messengers: IMessenger[]
@@ -46,6 +48,7 @@ class PopupMessenger extends React.Component<Props, State> {
 
     state: State = {
         currentMessengerId: this.props.currentMessengerId || 0,
+        currentMemberId: this.props.currentMemberId || null,
         currentMessengerInfo: null,
         textMessage: '',
         messengers: [],
@@ -68,6 +71,13 @@ class PopupMessenger extends React.Component<Props, State> {
 
         if (this.state.currentMessengerId > 0) {
             this.fetchMessagesList(this.state.currentMessengerId)
+        } else if (this.state.currentMemberId) {
+            const user = findUser(this.state.users, this.state.currentMemberId)
+
+            if (user) {
+                this.findMessengerByUser(user)
+                this.setState({currentMemberId: null})
+            }
         }
     }
 
@@ -105,6 +115,15 @@ class PopupMessenger extends React.Component<Props, State> {
         MessengerService.fetchMessengers({} as IFilter)
             .then((response: any) => {
                 this.setState({messengers: response.data})
+
+                if (this.state.currentMemberId) {
+                    const user = findUser(this.state.users, this.state.currentMemberId)
+
+                    if (user) {
+                        this.findMessengerByUser(user)
+                        this.setState({currentMemberId: null})
+                    }
+                }
             })
             .catch((error: any) => {
                 console.error('Произошла ошибка загрузки данных', error)
@@ -141,6 +160,7 @@ class PopupMessenger extends React.Component<Props, State> {
             if (findMessenger && findMessenger.id) {
                 this.setState({currentMessengerInfo: findMessenger, currentMessengerId: findMessenger.id})
                 this.fetchMessagesList(findMessenger.id)
+
                 return
             }
         }

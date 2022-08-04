@@ -252,6 +252,28 @@
                                 font-weight: 700;
                                 font-size: 18px;
                                 display: block;
+
+                                > :first-child {
+                                    margin-bottom: 0;
+                                    margin-right: 5px;
+                                }
+
+                                span {
+                                    vertical-align: middle;
+                                }
+
+                                .icon {
+                                    display: inline-block;
+                                    margin-left: 5px;
+                                    cursor: pointer;
+                                    color: #075ea5;
+
+                                    svg {
+                                        width: 16px;
+                                        height: 16px;
+                                    }
+                                }
+
                             }
 
                             span:last-child {
