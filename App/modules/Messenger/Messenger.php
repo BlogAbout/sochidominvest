@@ -16,9 +16,6 @@ class Messenger extends Model
     public array $members;
     public array $messages;
 
-    /**
-     * Messenger constructor.
-     */
     public function __construct(array $data = [])
     {
         parent::__construct();

@@ -19,9 +19,6 @@ class Message extends Model
     public int $parentMessageId;
     public array $attendees;
 
-    /**
-     * Message constructor.
-     */
     public function __construct(array $data = [])
     {
         parent::__construct();

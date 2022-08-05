@@ -15,7 +15,7 @@ import Title from '../../../components/ui/Title/Title'
 import BlockingElement from '../../../components/ui/BlockingElement/BlockingElement'
 import Empty from '../../../components/Empty/Empty'
 import Avatar from '../../../components/ui/Avatar/Avatar'
-import openPopupSupportInfo from '../../../components/PopupSupportInfo/PopupSupportInfo'
+import openPopupSupportInfo from '../../../components/popup/PopupSupportInfo/PopupSupportInfo'
 import classes from './DesktopPagePanel.module.scss'
 
 const cx = classNames.bind(classes)

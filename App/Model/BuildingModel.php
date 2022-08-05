@@ -31,9 +31,9 @@ class BuildingModel extends Model
                        WHERE bt.`id_building` = bu.`id`
                    ) AS tags,
                    (
-                       SELECT GROUP_CONCAT(DISTINCT(bu.`id_user`))
-                       FROM `sdi_building_contact` AS bu
-                       WHERE bu.`id_building` = bu.`id`
+                       SELECT GROUP_CONCAT(DISTINCT(bc.`id_user`))
+                       FROM `sdi_building_contact` AS bc
+                       WHERE bc.`id_building` = bu.`id`
                    ) AS contacts,
                    (
                        SELECT GROUP_CONCAT(DISTINCT(bd.`id_developer`))
@@ -106,9 +106,9 @@ class BuildingModel extends Model
                        WHERE bt.`id_building` = bu.`id`
                    ) AS tags,
                    (
-                       SELECT GROUP_CONCAT(DISTINCT(bu.`id_user`))
-                       FROM `sdi_building_contact` AS bu
-                       WHERE bu.`id_building` = bu.`id`
+                       SELECT GROUP_CONCAT(DISTINCT(bc.`id_user`))
+                       FROM `sdi_building_contact` AS bc
+                       WHERE bc.`id_building` = bu.`id`
                    ) AS contacts,
                    (
                        SELECT GROUP_CONCAT(DISTINCT(bd.`id_developer`))

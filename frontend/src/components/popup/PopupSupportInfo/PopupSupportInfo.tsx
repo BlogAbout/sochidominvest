@@ -1,21 +1,24 @@
 import React, {useEffect, useState} from 'react'
-import {PopupProps} from '../../@types/IPopup'
-import {IFeed, IFeedMessage} from '../../@types/IFeed'
-import {ISelector} from '../../@types/ISelector'
-import {feedStatuses, feedTypes, objectTypes} from '../../helpers/supportHelper'
-import {useTypedSelector} from '../../hooks/useTypedSelector'
-import FeedService from '../../api/FeedService'
-import BuildingService from '../../api/BuildingService'
-import {getPopupContainer, openPopup, removePopup} from '../../helpers/popupHelper'
-import showBackgroundBlock from '../ui/BackgroundBlock/BackgroundBlock'
-import openPopupAlert from '../PopupAlert/PopupAlert'
-import {Content, Footer, Header, Popup} from '../popup/Popup/Popup'
-import BlockingElement from '../ui/BlockingElement/BlockingElement'
-import Button from '../form/Button/Button'
-import Empty from '../Empty/Empty'
-import TextAreaBox from '../form/TextAreaBox/TextAreaBox'
-import withStore from '../../hoc/withStore'
-import StatusBox from '../StatusBox/StatusBox'
+import {PopupDisplayOptions, PopupProps} from '../../../@types/IPopup'
+import {IFeed, IFeedMessage} from '../../../@types/IFeed'
+import {ISelector} from '../../../@types/ISelector'
+import {feedStatuses, feedTypes, objectTypes} from '../../../helpers/supportHelper'
+import {useTypedSelector} from '../../../hooks/useTypedSelector'
+import FeedService from '../../../api/FeedService'
+import BuildingService from '../../../api/BuildingService'
+import {getPopupContainer, openPopup, removePopup} from '../../../helpers/popupHelper'
+import showBackgroundBlock from '../../ui/BackgroundBlock/BackgroundBlock'
+import openPopupAlert from '../../PopupAlert/PopupAlert'
+import {Footer, Popup} from '../Popup/Popup'
+import BlockingElement from '../../ui/BlockingElement/BlockingElement'
+import Button from '../../form/Button/Button'
+import Empty from '../../Empty/Empty'
+import TextAreaBox from '../../form/TextAreaBox/TextAreaBox'
+import withStore from '../../../hoc/withStore'
+import StatusBox from '../../StatusBox/StatusBox'
+import Title from '../../ui/Title/Title'
+import Label from '../../form/Label/Label'
+import TextBox from '../../form/TextBox/TextBox'
 import classes from './PopupSupportInfo.module.scss'
 
 interface Props extends PopupProps {
@@ -142,6 +145,12 @@ const PopupSupportInfo: React.FC<Props> = (props) => {
 
         const updateFeed = {...feed, messages: [message]}
 
+        if (['director', 'administrator', 'manager'].includes(role)) {
+            updateFeed.status = 'close'
+        } else {
+            updateFeed.status = 'new'
+        }
+
         setFetching(true)
 
         FeedService.saveFeed(updateFeed)
@@ -203,6 +212,8 @@ const PopupSupportInfo: React.FC<Props> = (props) => {
 
         return (
             <div className={classes.blockMessages}>
+                <Title type={2}>Сообщения</Title>
+
                 <BlockingElement fetching={fetching} className={classes.messageList}>
                     {feed.messages.map((message: IFeedMessage) => renderMessage(message))}
                 </BlockingElement>
@@ -228,68 +239,122 @@ const PopupSupportInfo: React.FC<Props> = (props) => {
     const renderFeedInformation = () => {
         return (
             <>
-                <h2>{feed.title}</h2>
+                <Title type={2}>{`Тикет #${feed.id}`}</Title>
+
+                <div className={classes.field}>
+                    <Label text='Тема'/>
+
+                    <TextBox value={feed.title}
+                             onChange={() => {
+                             }}
+                             styleType='minimal'
+                             readOnly
+                    />
+                </div>
 
                 {['director', 'administrator', 'manager'].includes(role) ?
-                    <div className={classes.information}>
-                        <div className={classes.col}>
-                            {feed.author ?
-                                <div className={classes.row}>
-                                    <span>Автор</span>
-                                    <span>{feed.author}</span>
-                                </div>
-                                : null
-                            }
+                    <>
+                        {feed.author ?
+                            <div className={classes.field}>
+                                <Label text='Автор'/>
 
-                            {feed.phone ?
-                                <div className={classes.row}>
-                                    <span>Телефон</span>
-                                    <span>{feed.phone}</span>
-                                </div>
-                                : null
-                            }
+                                <TextBox value={feed.author}
+                                         onChange={() => {
+                                         }}
+                                         styleType='minimal'
+                                         readOnly
+                                />
+                            </div>
+                            : null
+                        }
 
-                            {feed.name ?
-                                <div className={classes.row}>
-                                    <span>Имя</span>
-                                    <span>{feed.name}</span>
-                                </div>
-                                : null
-                            }
+                        {feed.phone ?
+                            <div className={classes.field}>
+                                <Label text='Телефон'/>
 
-                            {feed.objectId && objectType ?
-                                <div className={classes.row}>
-                                    <span>{objectType.text}</span>
-                                    <span>{info.objectName}</span>
-                                </div>
-                                : null
-                            }
+                                <TextBox value={feed.phone}
+                                         onChange={() => {
+                                         }}
+                                         styleType='minimal'
+                                         readOnly
+                                />
+                            </div>
+                            : null
+                        }
+
+                        {feed.name ?
+                            <div className={classes.field}>
+                                <Label text='Имя'/>
+
+                                <TextBox value={feed.name}
+                                         onChange={() => {
+                                         }}
+                                         styleType='minimal'
+                                         readOnly
+                                />
+                            </div>
+                            : null
+                        }
+
+                        {feed.objectId && objectType ?
+                            <div className={classes.field}>
+                                <Label text={objectType.text}/>
+
+                                <TextBox value={info.objectName}
+                                         onChange={() => {
+                                         }}
+                                         styleType='minimal'
+                                         readOnly
+                                />
+                            </div>
+                            : null
+                        }
+
+                        {feedType ?
+                            <div className={classes.field}>
+                                <Label text='Тип'/>
+
+                                <TextBox value={feedType.text}
+                                         onChange={() => {
+                                         }}
+                                         styleType='minimal'
+                                         readOnly
+                                />
+                            </div>
+                            : null
+                        }
+
+                        <div className={classes.field}>
+                            <Label text='Создано'/>
+
+                            <TextBox value={feed.dateCreated}
+                                     onChange={() => {
+                                     }}
+                                     styleType='minimal'
+                                     readOnly
+                            />
                         </div>
 
-                        <div className={classes.col}>
-                            {feedType ?
-                                <div className={classes.row}>
-                                    <span>Тип</span>
-                                    <span>{feedType.text}</span>
-                                </div>
-                                : null
-                            }
+                        <div className={classes.field}>
+                            <Label text='Обновлено'/>
 
-                            <div className={classes.row}>
-                                <span>Создано</span>
-                                <span>{feed.dateCreated}</span>
-                            </div>
-
-                            <div className={classes.row}>
-                                <span>Обновлено</span>
-                                <span>{feed.dateUpdate}</span>
-                            </div>
-
-                            <div className={classes.row}>
-                                <StatusBox value={feed.status} items={items} onChange={saveHandler.bind(this)}/>
-                            </div>
+                            <TextBox value={feed.dateUpdate}
+                                     onChange={() => {
+                                     }}
+                                     styleType='minimal'
+                                     readOnly
+                            />
                         </div>
-                    </div>
+
+                        <div className={classes.field}>
+                            <Label text='Статус'/>
+
+                            <StatusBox value={feed.status}
+                                       items={items}
+                                       onChange={saveHandler.bind(this)}
+                            />
+                        </div>
+                    </>
                     : null
                 }
 
@@ -300,15 +365,11 @@ const PopupSupportInfo: React.FC<Props> = (props) => {
 
     return (
         <Popup className={classes.PopupSupportInfo}>
-            <Header title={`Тикет #${feed.id}`}
-                    popupId={props.id ? props.id : ''}
-            />
-
-            <Content className={classes['popup-content']}>
-                <BlockingElement fetching={fetching} className={classes.content}>
+            <BlockingElement fetching={fetching} className={classes.content}>
+                <div className={classes.blockContent}>
                     {!feed.id ? <Empty message='Заявка не найдена'/> : renderFeedInformation()}
-                </BlockingElement>
-            </Content>
+                </div>
+            </BlockingElement>
 
             <Footer>
                 <Button type='regular'
@@ -324,9 +385,10 @@ PopupSupportInfo.defaultProps = defaultProps
 PopupSupportInfo.displayName = 'PopupSupportInfo'
 
 export default function openPopupSupportInfo(target: any, popupProps = {} as Props) {
-    const displayOptions = {
+    const displayOptions: PopupDisplayOptions = {
         autoClose: false,
-        center: true
+        rightPanel: true,
+        fullScreen: true
     }
     const blockId = showBackgroundBlock(target, {animate: true}, displayOptions)
     let block = getPopupContainer(blockId)

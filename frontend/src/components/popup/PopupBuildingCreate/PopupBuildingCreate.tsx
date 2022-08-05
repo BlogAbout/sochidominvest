@@ -688,7 +688,7 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
     const renderMediaTab = () => {
         return (
             <div key='media' className={classes.tabContent}>
-                <div className={classes.field}>
+                <div className={cx({'field': true, 'fieldWrap': true})}>
                     <Label text='Фотогалерея'/>
 
                     <Button type='save'
@@ -716,7 +716,7 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
                     />
                 </div>
 
-                <div className={classes.field}>
+                <div className={cx({'field': true, 'fieldWrap': true})}>
                     <Label text='Видео'/>
 
                     <Button type='save'

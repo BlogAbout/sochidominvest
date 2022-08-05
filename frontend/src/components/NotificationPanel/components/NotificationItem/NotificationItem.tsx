@@ -1,6 +1,7 @@
 import React, {useState} from 'react'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {INotification} from '../../../../@types/INotification'
+import openPopupSupportInfo from '../../../popup/PopupSupportInfo/PopupSupportInfo'
 import classes from './NotificationItem.module.scss'
 
 interface Props {
@@ -23,6 +24,27 @@ const defaultProps: Props = {
 
 const NotificationItem: React.FC<Props> = (props) => {
     const [showFull, setShowFull] = useState(false)
+
+    const getTitle = () => {
+        let onClick = undefined
+
+        switch (props.notification.objectType) {
+            case 'feed':
+                onClick = () => {
+                    openPopupSupportInfo(document.body, {
+                        feedId: props.notification.objectId || 0,
+                        onSave: () => {}
+                    })
+                }
+                break
+        }
+
+        if (onClick) {
+            return <span onClick={onClick}>{props.notification.name}</span>
+        } else {
+            return props.notification.name
+        }
+    }
 
     return (
         <div className={classes.NotificationItem}>
@@ -48,7 +70,7 @@ const NotificationItem: React.FC<Props> = (props) => {
                     </div>
                 </div>
 
-                <div className={classes.title}>{props.notification.name}</div>
+                <div className={classes.title}>{getTitle()}</div>
 
                 {props.notification.description ?
                     <div className={classes.description}>
