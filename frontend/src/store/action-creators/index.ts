@@ -11,6 +11,7 @@ import {WidgetActionCreators} from './widgetActionCreators'
 import {PartnerActionCreators} from './partnerActionCreators'
 import {QuestionActionCreators} from './questionActionCreators'
 import {PostActionCreators} from './postActionCreators'
+import {BusinessProcessActionCreators} from './businessProcessCreators'
 
 export default {
     ...UserActionCreators,
@@ -25,5 +26,6 @@ export default {
     ...WidgetActionCreators,
     ...PartnerActionCreators,
     ...QuestionActionCreators,
-    ...PostActionCreators
+    ...PostActionCreators,
+    ...BusinessProcessActionCreators
 }

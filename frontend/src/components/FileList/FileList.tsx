@@ -25,6 +25,8 @@ interface Props {
     onUpdateOrdering?(attachments: IAttachment[]): void
 
     onRemove?(attachment: IAttachment): void
+
+    onFullRemove?(attachment: IAttachment): void
 }
 
 const defaultProps: Props = {
@@ -82,7 +84,9 @@ const FileList: React.FC<Props> = (props) => {
 
                                 AttachmentService.removeAttachment(file.id)
                                     .then(() => {
-                                        props.onSave(file)
+                                        if (props.onFullRemove) {
+                                            props.onFullRemove(file)
+                                        }
                                     })
                                     .catch((error: any) => {
                                         openPopupAlert(document.body, {

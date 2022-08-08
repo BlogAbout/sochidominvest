@@ -27,7 +27,7 @@ const Avatar: React.FC<Props> = (props) => {
              style={{width: props.width, height: props.height}}
         >
             {props.href ?
-                <img src={`${configuration.apiPath}uploads/image/thumb/${props.href}`} alt={props.alt}/>
+                <img src={`${configuration.siteUrl}uploads/image/thumb/${props.href}`} alt={props.alt}/>
                 : null
             }
 

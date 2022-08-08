@@ -12,7 +12,9 @@ class BusinessProcess extends Model
     public int $author;
     public int $responsible;
     public int $active;
+    public int $ordering;
     public string $type;
+    public string $step;
     public string $comment;
     public string $dateCreated;
     public string $dateUpdate;
@@ -27,7 +29,10 @@ class BusinessProcess extends Model
         $this->ticketId = $data['ticketId'] ?: 0;
         $this->author = $data['author'] ?: 0;
         $this->responsible = $data['responsible'] ?: 0;
+        $this->active = $data['active'] ?: 0;
+        $this->ordering = $data['ordering'] ?: 0;
         $this->type = $data['type'] ?: '';
+        $this->step = $data['step'] ?: '';
         $this->comment = $data['comment'] ?: '';
         $this->dateCreated = $data['dateCreated'] ?: '';
         $this->dateUpdate = $data['dateUpdate'] ?: '';
@@ -413,6 +418,24 @@ class BusinessProcess extends Model
     }
 
     /**
+     * @return int
+     */
+    public function getOrdering(): int
+    {
+        return $this->ordering;
+    }
+
+    /**
+     * @param int $ordering
+     */
+    public function setOrdering(int $ordering): void
+    {
+        $this->ordering = $ordering;
+    }
+
+
+
+    /**
      * @return string
      */
     public function getType(): string
@@ -427,6 +450,24 @@ class BusinessProcess extends Model
     {
         $this->type = $type;
     }
+
+    /**
+     * @return string
+     */
+    public function getStep(): string
+    {
+        return $this->step;
+    }
+
+    /**
+     * @param string $step
+     */
+    public function setStep(string $step): void
+    {
+        $this->step = $step;
+    }
+
+
 
     /**
      * @return string

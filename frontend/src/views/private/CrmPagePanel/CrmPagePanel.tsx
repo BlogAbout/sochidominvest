@@ -11,7 +11,8 @@ const cx = classNames.bind(classes)
 const CrmPagePanel: React.FC = () => {
     const menu = [
         {href: RouteNames.CRM_DEVELOPER, title: 'Застройщики', disabled: false},
-        {href: RouteNames.CRM_POST, title: 'Должности', disabled: false}
+        {href: RouteNames.CRM_POST, title: 'Должности', disabled: false},
+        {href: RouteNames.CRM_BP, title: 'Бизнес-процессы', disabled: false}
     ]
 
     return (

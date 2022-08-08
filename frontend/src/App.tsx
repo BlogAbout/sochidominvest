@@ -223,7 +223,7 @@ function App() {
     // Обновление списка пользователей онлайн
     const updateOnlineUsers = (usersString: string): void => {
         if (usersString.trim() !== '') {
-            const listUsersIds: number[] = usersString.split(',').map(Number)
+            const listUsersIds: number[] = JSON.parse(usersString)
 
             setUsersOnline(listUsersIds)
         }

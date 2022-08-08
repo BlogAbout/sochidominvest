@@ -120,6 +120,14 @@ const PopupFileManager: React.FC<Props> = (props) => {
         }
     }
 
+    const onFullRemove = (attachment: IAttachment) => {
+        if (attachments && attachments.length) {
+            const findIndex = attachments.findIndex((file: IAttachment) => file.id === attachment.id)
+
+            setAttachments([...attachments.slice(0, findIndex), ...attachments.slice(findIndex + 1)])
+        }
+    }
+
     return (
         <Popup className={classes.PopupFileManager}>
             <Header title='Файловый менеджер' popupId={props.id || ''}/>
@@ -141,6 +149,7 @@ const PopupFileManager: React.FC<Props> = (props) => {
                           onSave={() => {
                           }}
                           onSelect={onSelectHandler.bind(this)}
+                          onFullRemove={onFullRemove.bind(this)}
                 />
             </Content>
 

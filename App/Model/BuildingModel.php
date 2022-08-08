@@ -532,7 +532,6 @@ class BuildingModel extends Model
             " . implode(',', $developersSql);
 
             parent::query($sql);
-            parent::bindParams('id', $buildingId);
             parent::execute();
         }
     }

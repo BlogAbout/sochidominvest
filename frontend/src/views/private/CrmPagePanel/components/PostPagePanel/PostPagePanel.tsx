@@ -78,13 +78,11 @@ const PostPagePanel: React.FC = () => {
         }
 
         if (value !== '') {
-            console.log('net',posts)
             setFilterPost(filterItemsHandler(posts.filter((post: IPost) => {
                 return (!selectedType.length || selectedType.includes(post.type)) &&
                     (compareText(post.name, value) || compareText(post.description, value))
             })))
         } else {
-            console.log('da')
             setFilterPost(filterItemsHandler(!selectedType.length ? sortingTreePosts() : posts.filter((post: IPost) => selectedType.includes(post.type))))
         }
     }

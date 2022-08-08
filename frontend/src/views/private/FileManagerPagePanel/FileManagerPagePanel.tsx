@@ -56,6 +56,14 @@ const FileManagerPagePanel: React.FC = () => {
         }
     }
 
+    const onFullRemove = (attachment: IAttachment) => {
+        if (files && files.length) {
+            const findIndex = files.findIndex((file: IAttachment) => file.id === attachment.id)
+
+            setFiles([...files.slice(0, findIndex), ...files.slice(findIndex + 1)])
+        }
+    }
+
     // Загрузка файла
     const onUploadFile = (updateAttachments: IAttachment[]) => {
         setFiles([...updateAttachments, ...files])
@@ -157,7 +165,11 @@ const FileManagerPagePanel: React.FC = () => {
 
                 {showUploader && renderUploader()}
 
-                <FileList files={filterFiles} fetching={fetching} onSave={onSave.bind(this)}/>
+                <FileList files={filterFiles}
+                          fetching={fetching}
+                          onSave={onSave.bind(this)}
+                          onFullRemove={onFullRemove.bind(this)}
+                />
             </div>
         </main>
     )
