@@ -1,18 +1,20 @@
 import React, {useEffect, useState} from 'react'
-import {IBuildingChecker} from '../../@types/IBuilding'
-import {PopupProps} from '../../@types/IPopup'
-import showBackgroundBlock from '../ui/BackgroundBlock/BackgroundBlock'
-import {getPopupContainer, openPopup, removePopup} from '../../helpers/popupHelper'
-import {Content, Footer, Header, Popup} from '../popup/Popup/Popup'
-import BlockingElement from '../ui/BlockingElement/BlockingElement'
-import openPopupAlert from '../PopupAlert/PopupAlert'
-import CheckerService from '../../api/CheckerService'
-import Button from '../form/Button/Button'
-import TextBox from '../form/TextBox/TextBox'
-import NumberBox from '../NumberBox/NumberBox'
-import CheckBox from '../form/CheckBox/CheckBox'
-import ComboBox from '../ComboBox/ComboBox'
-import {checkerFurnish, checkerStatuses} from '../../helpers/buildingHelper'
+import {IBuildingChecker} from '../../../@types/IBuilding'
+import {PopupDisplayOptions, PopupProps} from '../../../@types/IPopup'
+import showBackgroundBlock from '../../ui/BackgroundBlock/BackgroundBlock'
+import {getPopupContainer, openPopup, removePopup} from '../../../helpers/popupHelper'
+import {Footer, Popup} from '../Popup/Popup'
+import BlockingElement from '../../ui/BlockingElement/BlockingElement'
+import openPopupAlert from '../../PopupAlert/PopupAlert'
+import CheckerService from '../../../api/CheckerService'
+import Button from '../../form/Button/Button'
+import TextBox from '../../form/TextBox/TextBox'
+import NumberBox from '../../NumberBox/NumberBox'
+import CheckBox from '../../form/CheckBox/CheckBox'
+import ComboBox from '../../ComboBox/ComboBox'
+import Title from '../../ui/Title/Title'
+import Label from '../../form/Label/Label'
+import {checkerFurnish, checkerStatuses} from '../../../helpers/buildingHelper'
 import classes from './PopupCheckerCreate.module.scss'
 
 interface Props extends PopupProps {
@@ -88,14 +90,11 @@ const PopupCheckerCreate: React.FC<Props> = (props) => {
 
     return (
         <Popup className={classes.PopupCheckerCreate}>
-            <Header title={checker.id ? 'Редактировать картиру' : 'Добавить квартиру'}
-                    popupId={props.id ? props.id : ''}
-            />
-
-            <Content className={classes['popup-content']}>
-                <BlockingElement fetching={fetching} className={classes.content}>
+            <BlockingElement fetching={fetching} className={classes.content}>
+                <div className={classes.blockContent}>
+                    <Title type={2}>Информация о квартире</Title>
                     <div className={classes.field}>
-                        <div className={classes.field_label}>Название</div>
+                        <Label text='Название'/>
 
                         <TextBox value={checker.name}
                                  onChange={(e: React.MouseEvent, value: string) => setChecker({
@@ -106,12 +105,12 @@ const PopupCheckerCreate: React.FC<Props> = (props) => {
                                  error={!checker.name || checker.name.trim() === ''}
                                  showRequired
                                  errorText='Поле обязательно для заполнения'
-                                 icon='heading'
+                                 styleType='minimal'
                         />
                     </div>
 
                     <div className={classes.field}>
-                        <div className={classes.field_label}>Корпус</div>
+                        <Label text='Корпус'/>
 
                         <NumberBox value={checker.housing || ''}
                                    min={0}
@@ -125,12 +124,12 @@ const PopupCheckerCreate: React.FC<Props> = (props) => {
                                    error={!checker.housing}
                                    showRequired
                                    errorText='Поле обязательно для заполнения'
-                                   icon='1'
+                                   styleType='minimal'
                         />
                     </div>
 
                     <div className={classes.field}>
-                        <div className={classes.field_label}>Площадь, кв.м.</div>
+                        <Label text='Площадь, кв.м.'/>
 
                         <NumberBox value={checker.area || ''}
                                    min={0}
@@ -142,12 +141,12 @@ const PopupCheckerCreate: React.FC<Props> = (props) => {
                                        area: value
                                    })}
                                    placeHolder='Укажите площадь в квадратных метрах'
-                                   icon='up-right-and-down-left-from-center'
+                                   styleType='minimal'
                         />
                     </div>
 
                     <div className={classes.field}>
-                        <div className={classes.field_label}>Цена, руб.</div>
+                        <Label text='Цена, руб.'/>
 
                         <NumberBox value={checker.cost || ''}
                                    min={0}
@@ -158,24 +157,23 @@ const PopupCheckerCreate: React.FC<Props> = (props) => {
                                        cost: value
                                    })}
                                    placeHolder='Укажите полную стоимость'
-                                   icon='ruble-sign'
+                                   styleType='minimal'
                         />
                     </div>
 
                     <div className={classes.field}>
-                        <div className={classes.field_label}>Вид отделки</div>
+                        <Label text='Вид отделки'/>
 
                         <ComboBox selected={checker.furnish}
                                   items={Object.values(checkerFurnish)}
                                   onSelect={(value: string) => setChecker({...checker, furnish: value})}
                                   placeHolder='Выберите вид отделки'
-                                  styleType='standard'
-                                  icon='paint-roller'
+                                  styleType='minimal'
                         />
                     </div>
 
                     <div className={classes.field}>
-                        <div className={classes.field_label}>Этаж</div>
+                        <Label text='Этаж'/>
 
                         <TextBox value={checker.stage}
                                  onChange={(e: React.MouseEvent, value: string) => setChecker({
@@ -183,12 +181,12 @@ const PopupCheckerCreate: React.FC<Props> = (props) => {
                                      stage: value
                                  })}
                                  placeHolder='Укажите этаж'
-                                 icon='elevator'
+                                 styleType='minimal'
                         />
                     </div>
 
                     <div className={classes.field}>
-                        <div className={classes.field_label}>Количество комнат</div>
+                        <Label text='Количество комнат'/>
 
                         <NumberBox value={checker.rooms || ''}
                                    min={0}
@@ -199,18 +197,18 @@ const PopupCheckerCreate: React.FC<Props> = (props) => {
                                        rooms: value
                                    })}
                                    placeHolder='Укажите количество комнат'
-                                   icon='bed'
+                                   styleType='minimal'
                         />
                     </div>
 
                     <div className={classes.field}>
-                        <div className={classes.field_label}>Статус</div>
+                        <Label text='Статус'/>
 
                         <ComboBox selected={checker.status || 'free'}
                                   items={Object.values(checkerStatuses)}
                                   onSelect={(value: string) => setChecker({...checker, status: value})}
                                   placeHolder='Выберите статус'
-                                  styleType='standard'
+                                  styleType='minimal'
                         />
                     </div>
 
@@ -224,27 +222,30 @@ const PopupCheckerCreate: React.FC<Props> = (props) => {
                                   })}
                         />
                     </div>
-                </BlockingElement>
-            </Content>
+                </div>
+            </BlockingElement>
 
             <Footer>
                 <Button type='save'
                         icon='check-double'
                         onClick={() => saveHandler(true)}
                         disabled={fetching || !checker.buildingId || checker.name.trim() === '' || !checker.area || !checker.cost}
-                >Сохранить и закрыть</Button>
+                        title='Сохранить и закрыть'
+                />
 
                 <Button type='apply'
                         icon='check'
                         onClick={() => saveHandler()}
                         disabled={fetching || !checker.buildingId || checker.name.trim() === '' || !checker.area || !checker.cost}
                         className='marginLeft'
+                        title='Сохранить'
                 >Сохранить</Button>
 
                 <Button type='regular'
                         icon='arrow-rotate-left'
                         onClick={close.bind(this)}
                         className='marginLeft'
+                        title='Отменить'
                 >Отменить</Button>
             </Footer>
         </Popup>
@@ -255,9 +256,10 @@ PopupCheckerCreate.defaultProps = defaultProps
 PopupCheckerCreate.displayName = 'PopupCheckerCreate'
 
 export default function openPopupCheckerCreate(target: any, popupProps = {} as Props) {
-    const displayOptions = {
+    const displayOptions: PopupDisplayOptions = {
         autoClose: false,
-        center: true
+        rightPanel: true,
+        fullScreen: true
     }
     const blockId = showBackgroundBlock(target, {animate: true}, displayOptions)
     let block = getPopupContainer(blockId)

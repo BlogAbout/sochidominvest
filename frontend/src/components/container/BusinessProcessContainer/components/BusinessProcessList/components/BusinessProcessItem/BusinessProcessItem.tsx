@@ -1,7 +1,7 @@
 import React from 'react'
 import {IBusinessProcess} from '../../../../../../../@types/IBusinessProcess'
+import {getFormatDate} from '../../../../../../../helpers/dateHelper'
 import classes from './BusinessProcessItem.module.scss'
-import {getFormatDate} from "../../../../../../../helpers/dateHelper";
 
 interface Props {
     businessProcess: IBusinessProcess

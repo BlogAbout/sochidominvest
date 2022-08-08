@@ -10,12 +10,6 @@
 
     .board {
         width: 250px;
-        //background: rgb(248, 248, 216);
-        //background: rgb(244, 229, 255);
-        //background: rgb(229, 247, 255);
-        //background: rgb(233, 245, 213);
-        //background: rgb(255, 236, 222);
-        background: rgb(240, 224, 214);
         flex-shrink: 0;
         padding: 10px 5px;
         min-height: 300px;
@@ -25,6 +19,34 @@
 
         + .board {
             margin-left: 20px;
+        }
+
+        &.default {
+            background: #9cd2ff;
+        }
+
+        &.process {
+            background: #f8f8d8;
+        }
+
+        &.discussion {
+            background: #f4e5ff;
+        }
+
+        &.complete {
+            background: #e5f7ff;
+        }
+
+        &.rejected {
+            background: #e9f5d5;
+        }
+
+        &.waitingResponse {
+            background: #ffecde;
+        }
+
+        &.final {
+            background: #f0e0d6;
         }
 
         .boardList {

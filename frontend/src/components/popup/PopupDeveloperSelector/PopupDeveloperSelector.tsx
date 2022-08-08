@@ -1,22 +1,24 @@
 import React, {useEffect, useState} from 'react'
-import withStore from '../../hoc/withStore'
-import {PopupProps} from '../../@types/IPopup'
-import {IDeveloper} from '../../@types/IDeveloper'
-import DeveloperService from '../../api/DeveloperService'
-import {getPopupContainer, openPopup, removePopup} from '../../helpers/popupHelper'
-import {Content, Footer, Header, Popup} from '../popup/Popup/Popup'
-import BlockingElement from '../ui/BlockingElement/BlockingElement'
-import Empty from '../Empty/Empty'
-import openContextMenu from '../ContextMenu/ContextMenu'
-import openPopupDeveloperCreate from '../popup/PopupDeveloperCreate/PopupDeveloperCreate'
-import showBackgroundBlock from '../ui/BackgroundBlock/BackgroundBlock'
-import ButtonAdd from '../ButtonAdd/ButtonAdd'
-import SearchBox from '../SearchBox/SearchBox'
-import CheckBox from '../form/CheckBox/CheckBox'
-import Button from '../form/Button/Button'
-import openPopupAlert from '../PopupAlert/PopupAlert'
-import {useTypedSelector} from '../../hooks/useTypedSelector'
-import {useActions} from '../../hooks/useActions'
+import withStore from '../../../hoc/withStore'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {PopupDisplayOptions, PopupProps} from '../../../@types/IPopup'
+import {IDeveloper} from '../../../@types/IDeveloper'
+import DeveloperService from '../../../api/DeveloperService'
+import {getPopupContainer, openPopup, removePopup} from '../../../helpers/popupHelper'
+import {Footer, Popup} from '../Popup/Popup'
+import BlockingElement from '../../ui/BlockingElement/BlockingElement'
+import Empty from '../../Empty/Empty'
+import openContextMenu from '../../ContextMenu/ContextMenu'
+import openPopupDeveloperCreate from '../PopupDeveloperCreate/PopupDeveloperCreate'
+import showBackgroundBlock from '../../ui/BackgroundBlock/BackgroundBlock'
+import ButtonAdd from '../../ButtonAdd/ButtonAdd'
+import SearchBox from '../../SearchBox/SearchBox'
+import CheckBox from '../../form/CheckBox/CheckBox'
+import Button from '../../form/Button/Button'
+import Title from '../../ui/Title/Title'
+import openPopupAlert from '../../PopupAlert/PopupAlert'
+import {useTypedSelector} from '../../../hooks/useTypedSelector'
+import {useActions} from '../../../hooks/useActions'
 import classes from './PopupDeveloperSelector.module.scss'
 
 interface Props extends PopupProps {
@@ -50,6 +52,7 @@ const PopupDeveloperSelector: React.FC<Props> = (props) => {
 
     const {role} = useTypedSelector(state => state.userReducer)
     const {fetching: fetchingDeveloperList, developers} = useTypedSelector(state => state.developerReducer)
+
     const {fetchDeveloperList} = useActions()
 
     useEffect(() => {
@@ -117,8 +120,8 @@ const PopupDeveloperSelector: React.FC<Props> = (props) => {
     }
 
     // Добавление нового элемента
-    const onClickAdd = (e: React.MouseEvent) => {
-        openPopupDeveloperCreate(e.currentTarget, {
+    const onClickAdd = () => {
+        openPopupDeveloperCreate(document.body, {
             onSave: () => {
                 setIsUpdate(true)
             }
@@ -127,7 +130,7 @@ const PopupDeveloperSelector: React.FC<Props> = (props) => {
 
     // Редактирование элемента
     const onClickEdit = (e: React.MouseEvent, developer: IDeveloper) => {
-        openPopupDeveloperCreate(e.currentTarget, {
+        openPopupDeveloperCreate(document.body, {
             developer: developer,
             onSave: () => {
                 setIsUpdate(true)
@@ -189,26 +192,9 @@ const PopupDeveloperSelector: React.FC<Props> = (props) => {
         }
     }
 
-    const renderLeftBox = () => {
-        return (
-            <div className={classes['box']}>
-                <div style={{height: 38}}>
-                    {renderSearch()}
-                </div>
-                <div className={classes['box_border']} style={{height: 300}}>
-                    {!props.multi ? renderLeftTab() :
-                        <div className={classes['box_content_wrapper']}>
-                            {renderLeftTab()}
-                        </div>
-                    }
-                </div>
-            </div>
-        )
-    }
-
     const renderSearch = () => {
         return (
-            <div className={classes['search_and_button']}>
+            <div className={classes.search}>
                 <SearchBox value={searchText}
                            onChange={(value: string) => search(value)}
                            countFind={filterDevelopers ? filterDevelopers.length : 0}
@@ -219,53 +205,50 @@ const PopupDeveloperSelector: React.FC<Props> = (props) => {
 
                 {props.buttonAdd && ['director', 'administrator', 'manager'].includes(role) ?
                     <ButtonAdd onClick={onClickAdd.bind(this)}/>
-                    : null}
-            </div>
-        )
-    }
-
-    const renderLeftTab = () => {
-        return (
-            <div className={classes['box_content']}>
-                {filterDevelopers.length ?
-                    filterDevelopers.map((developer: IDeveloper) => renderRow(developer, 'left', checkSelected(developer.id)))
-                    :
-                    <Empty message={!developers.length ? 'Нет застройщиков' : 'Застройщики не найдены'}/>
+                    : null
                 }
             </div>
         )
     }
 
-    const renderRightBox = () => {
+    const renderListBox = () => {
         return (
-            <div className={classes['box']}>
-                <div style={{height: 38, flex: 'none'}}/>
-                <div className={classes['box_border']} style={{height: 400}}>
-                    {renderRightTab()}
+            <BlockingElement fetching={false} className={classes.list}>
+                <div className={classes.listContent}>
+                    {filterDevelopers.length ?
+                        filterDevelopers.map((developer: IDeveloper) => renderRow(developer, 'left', checkSelected(developer.id)))
+                        : <Empty message={!developers.length ? 'Нет застройщиков' : 'Застройщики не найдены'}/>
+                    }
                 </div>
-            </div>
+            </BlockingElement>
         )
     }
 
-    const renderRightTab = () => {
+    const renderSelectedListBox = () => {
         const rows = filterDevelopers.filter((developer: IDeveloper) => checkSelected(developer.id))
 
         return (
-            <div className={classes['box_content']}>
-                {rows.length ? rows.map((developer: IDeveloper) => renderRow(developer, 'right', checkSelected(developer.id))) : ''}
-            </div>
+            <BlockingElement fetching={false} className={classes.list}>
+                <div className={classes.listContent}>
+                    {rows.length ?
+                        rows.map((developer: IDeveloper) => renderRow(developer, 'right', checkSelected(developer.id)))
+                        : <Empty message='Застройщики не выбраны'/>
+                    }
+                </div>
+            </BlockingElement>
         )
     }
 
     const renderRow = (developer: IDeveloper, side: string, checked: boolean) => {
         return (
-            <div className={classes['row']}
+            <div className={classes.row}
                  key={developer.id}
                  onClick={() => selectRow(developer)}
                  onContextMenu={(e: React.MouseEvent) => onContextMenu(e, developer)}
             >
                 {props.multi && side === 'left' ?
-                    <CheckBox type='classic' onChange={e => e}
+                    <CheckBox type='classic'
+                              onChange={e => e}
                               checked={checked}
                               margin='0px 0px 0px 10px'
                               label=''
@@ -273,44 +256,57 @@ const PopupDeveloperSelector: React.FC<Props> = (props) => {
                     : null
                 }
 
-                <div className={classes['item_name']}>{developer.name}</div>
+                {!checked || props.multi ? null :
+                    <div className={classes.selected}>
+                        <FontAwesomeIcon icon='check'/>
+                    </div>
+                }
 
-                {!checked || props.multi ? null : <div className={classes['selected_icon']}/>}
+                <div className={classes.name}>{developer.name}</div>
 
-                {props.multi && side === 'right' ? <div className={classes['delete_icon']} title='Удалить'/> : null}
+                {props.multi && side === 'right' ?
+                    <div className={classes.delete} title='Удалить'>
+                        <FontAwesomeIcon icon='xmark'/>
+                    </div>
+                    : null
+                }
             </div>
         )
     }
 
     return (
-        <Popup className={classes.popup}>
-            <Header title='Выбрать застройщика' popupId={props.id ? props.id : ''} onClose={() => close()}/>
+        <Popup className={classes.PopupDeveloperSelector}>
+            <BlockingElement fetching={fetching} className={classes.content}>
+                <div className={classes.blockContent}>
+                    <Title type={2}>Выбрать застройщика</Title>
 
-            <BlockingElement fetching={fetching}>
-                <Content className={props.multi ? classes['content_multi'] : classes['content']}>
-                    {renderLeftBox()}
+                    {renderSearch()}
 
-                    {!props.multi ? null : renderRightBox()}
-                </Content>
+                    {renderListBox()}
 
-                {props.multi ?
-                    <Footer>
-                        <Button type='apply'
-                                icon='check'
-                                onClick={() => onClickSave()}
-                                className='marginLeft'
-                        >Сохранить</Button>
-
-                        <Button type='regular'
-                                icon='arrow-rotate-left'
-                                onClick={close.bind(this)}
-                                className='marginLeft'
-                        >Отменить</Button>
-                    </Footer>
-                    :
-                    <div className={classes['footer_spacer']}/>
-                }
+                    {props.multi ? renderSelectedListBox() : null}
+                </div>
             </BlockingElement>
+
+            {props.multi ?
+                <Footer>
+                    <Button type='apply'
+                            icon='check'
+                            onClick={() => onClickSave()}
+                            className='marginLeft'
+                            title='Сохранить'
+                    >Сохранить</Button>
+
+                    <Button type='regular'
+                            icon='arrow-rotate-left'
+                            onClick={close.bind(this)}
+                            className='marginLeft'
+                            title='Отменить'
+                    >Отменить</Button>
+                </Footer>
+                :
+                null
+            }
         </Popup>
     )
 }
@@ -319,9 +315,10 @@ PopupDeveloperSelector.defaultProps = defaultProps
 PopupDeveloperSelector.displayName = 'PopupDeveloperSelector'
 
 export default function openPopupDeveloperSelector(target: any, popupProps = {} as Props) {
-    const displayOptions = {
+    const displayOptions: PopupDisplayOptions = {
         autoClose: false,
-        center: true
+        rightPanel: true,
+        fullScreen: true
     }
     const blockId = showBackgroundBlock(target, {animate: true}, displayOptions)
     let block = getPopupContainer(blockId)

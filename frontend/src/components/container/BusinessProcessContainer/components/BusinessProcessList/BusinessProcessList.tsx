@@ -1,5 +1,6 @@
 import React, {CSSProperties} from 'react'
 import {DragDropContext, Draggable, Droppable} from 'react-beautiful-dnd'
+import classNames from 'classnames/bind'
 import {IBusinessProcess} from '../../../../../@types/IBusinessProcess'
 import BusinessProcessItem from './components/BusinessProcessItem/BusinessProcessItem'
 import Title from '../../../../ui/Title/Title'
@@ -34,6 +35,8 @@ const defaultProps: Props = {
         console.info('BusinessProcessList onContextMenu', e, businessProcess)
     }
 }
+
+const cx = classNames.bind(classes)
 
 const BusinessProcessList: React.FC<Props> = (props) => {
     // Стили для перемещаемого элемента
@@ -89,7 +92,7 @@ const BusinessProcessList: React.FC<Props> = (props) => {
                         return (
                             <Droppable key={step} droppableId={step} direction='vertical'>
                                 {(provided, snapshot) => (
-                                    <div className={classes.board}
+                                    <div className={cx({'board': true, [step]: true})}
                                          ref={provided.innerRef}
                                          style={getDragListStyle(snapshot.isDraggingOver)}
                                     >
