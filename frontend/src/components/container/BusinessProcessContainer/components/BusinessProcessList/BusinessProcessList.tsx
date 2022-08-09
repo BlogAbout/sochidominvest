@@ -5,6 +5,7 @@ import {IBusinessProcess} from '../../../../../@types/IBusinessProcess'
 import BusinessProcessItem from './components/BusinessProcessItem/BusinessProcessItem'
 import Title from '../../../../ui/Title/Title'
 import classes from './BusinessProcessList.module.scss'
+import {bpSteps} from '../../../../../helpers/businessProcessHelper'
 
 interface Props {
     businessProcesses: IBusinessProcess[]
@@ -74,21 +75,11 @@ const BusinessProcessList: React.FC<Props> = (props) => {
         // }
     }
 
-    const steps: { [key: string]: string } = {
-        default: 'Общие',
-        process: 'В работе',
-        discussion: 'На обсуждении',
-        complete: 'Завершены',
-        rejected: 'Отклонены',
-        waitingResponse: 'Ожидают ответа',
-        final: 'Итог'
-    }
-
     return (
         <div className={classes.BusinessProcessList}>
             <DragDropContext onDragEnd={onDragEnd}>
                 <div className={classes.list}>
-                    {Object.keys(steps).map((step: string) => {
+                    {Object.keys(bpSteps).map((step: string) => {
                         return (
                             <Droppable key={step} droppableId={step} direction='vertical'>
                                 {(provided, snapshot) => (
@@ -96,7 +87,7 @@ const BusinessProcessList: React.FC<Props> = (props) => {
                                          ref={provided.innerRef}
                                          style={getDragListStyle(snapshot.isDraggingOver)}
                                     >
-                                        <Title type={2}>{steps[step]}</Title>
+                                        <Title type={2}>{bpSteps[step]}</Title>
 
                                         <div className={classes.boardList}>
                                             {props.businessProcesses.map((businessProcess: IBusinessProcess, index: number) => {

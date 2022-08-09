@@ -232,6 +232,15 @@ class Controller
                 } catch (Exception $e) {
                 }
             }
+
+            if ($payload->validator == 'businessProcessExists') {
+                try {
+                    if (!Model::isExistsItem('sdi_business_process', (int)$payload->data)) {
+                        array_push($response, "Бизнес-процесс с таким идентификатором не найден в базе данных.");
+                    }
+                } catch (Exception $e) {
+                }
+            }
         }
 
         $validationErrors = new \stdClass();

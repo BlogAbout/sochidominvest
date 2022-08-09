@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\BusinessProcess\BusinessProcessController;
 use Klein\Klein;
 
 $Klein = new Klein();
@@ -142,6 +143,13 @@ $Klein->respond('POST', '/api/v1/drop', [new Controller(), 'dropAllOlderFiles'])
 // Messenger Routes
 $Klein->respond('GET', '/api/v1/messenger/[:id]', [new MessengerController(), 'fetchItemById']);
 $Klein->respond('GET', '/api/v1/messenger', [new MessengerController(), 'fetchList']);
+
+// BusinessProcess Routes
+$Klein->respond('POST', '/api/v1/article', [new BusinessProcessController(), 'createItem']);
+$Klein->respond('PUT', '/api/v1/article/[:id]', [new BusinessProcessController(), 'updateItem']);
+$Klein->respond('GET', '/api/v1/article/[:id]', [new BusinessProcessController(), 'fetchItemById']);
+$Klein->respond('GET', '/api/v1/article', [new BusinessProcessController(), 'fetchList']);
+$Klein->respond('DELETE', '/api/v1/article/[:id]', [new BusinessProcessController(), 'deleteItem']);
 
 // Dispatch all routes
 $Klein->dispatch();

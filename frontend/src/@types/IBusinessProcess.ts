@@ -18,3 +18,7 @@ export interface IBusinessProcessRelation {
     objectId: number
     objectType: string
 }
+
+export interface IBusinessProcessStep {
+    [key: string]: string
+}
