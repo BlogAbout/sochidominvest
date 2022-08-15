@@ -1,6 +1,8 @@
 import React, {useState} from 'react'
+import {useNavigate} from 'react-router-dom'
 import classNames from 'classnames/bind'
 import {useTypedSelector} from '../../../../hooks/useTypedSelector'
+import {IBusinessProcess} from '../../../../@types/IBusinessProcess'
 import {IFeed} from '../../../../@types/IFeed'
 import {ISelector} from '../../../../@types/ISelector'
 import {feedStatuses, feedTypes} from '../../../../helpers/supportHelper'
@@ -10,6 +12,7 @@ import openContextMenu from '../../../ContextMenu/ContextMenu'
 import Preloader from '../../../Preloader/Preloader'
 import openPopupSupportInfo from '../../../popup/PopupSupportInfo/PopupSupportInfo'
 import classes from './SupportItem.module.scss'
+import openPopupBusinessProcessCreate from "../../../popup/PopupBusinessProcessCreate/PopupBusinessProcessCreate";
 
 interface Props {
     feed: IFeed
@@ -27,9 +30,11 @@ const defaultProps: Props = {
 const cx = classNames.bind(classes)
 
 const SupportItem: React.FC<Props> = (props) => {
+    const navigate = useNavigate()
+
     const [fetching, setFetching] = useState(false)
 
-    const {role} = useTypedSelector(state => state.userReducer)
+    const {role, userId} = useTypedSelector(state => state.userReducer)
 
     // Удаление заявки
     const removeHandler = () => {
@@ -65,28 +70,57 @@ const SupportItem: React.FC<Props> = (props) => {
 
     // Отправка заявки в обработку
     const processHandler = () => {
+        if (!props.feed.id) {
+            return
+        }
 
+        const businessProcess: IBusinessProcess = {
+            id: null,
+            ticketId: props.feed.id,
+            author: userId,
+            responsible: userId,
+            active: 1,
+            type: 'feed',
+            step: 'default',
+            ordering: 0,
+            name: props.feed.title,
+            description: '',
+            relations: [
+                {objectId: props.feed.id, objectType: 'feed'}
+            ]
+        }
+
+        openPopupBusinessProcessCreate(document.body, {
+            businessProcess: businessProcess,
+            onSave: () => {
+                navigate('/panel/crm/bp/')
+            }
+        })
     }
 
     // Закрытие заявки
     const closeHandler = () => {
-        // const user: IUser = {...props.user}
-        // user.block = user.block ? 0 : 1
-        //
-        // UserService.saveUser(user)
-        //     .then(() => {
-        //         setFetching(false)
-        //
-        //         props.onSave()
-        //     })
-        //     .catch((error: any) => {
-        //         openPopupAlert(document.body, {
-        //             title: 'Ошибка!',
-        //             text: error.data
-        //         })
-        //
-        //         setFetching(false)
-        //     })
+        const updateFeed = {...props.feed}
+
+        updateFeed.status = 'close'
+
+        setFetching(true)
+
+        FeedService.saveFeed(updateFeed)
+            .then(() => {
+                props.onSave()
+            })
+            .catch((error: any) => {
+                openPopupAlert(document.body, {
+                    title: 'Ошибка!',
+                    text: error.data
+                })
+
+                setFetching(false)
+            })
+            .finally(() => {
+                setFetching(false)
+            })
     }
 
     // Открытие контекстного меню на элементе

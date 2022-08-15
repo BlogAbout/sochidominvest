@@ -7,7 +7,8 @@ export interface IBusinessProcess {
     type: string
     step: string
     ordering: number
-    comment: string
+    name: string
+    description: string
     dateCreated?: string | null
     dateUpdate?: string | null
     relations?: IBusinessProcessRelation[]
@@ -21,4 +22,8 @@ export interface IBusinessProcessRelation {
 
 export interface IBusinessProcessStep {
     [key: string]: string
+}
+
+export interface IBusinessProcessesBySteps {
+    [key: string]: IBusinessProcess[]
 }

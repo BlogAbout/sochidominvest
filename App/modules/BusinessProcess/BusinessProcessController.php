@@ -44,7 +44,8 @@ class BusinessProcessController extends Controller
             'type' => htmlentities(stripcslashes(strip_tags($data->type))),
             'step' => htmlentities(stripcslashes(strip_tags($data->step))),
             'ordering' => (int)htmlentities(stripcslashes(strip_tags($data->ordering))),
-            'comment' => htmlentities(stripcslashes(strip_tags($data->description))),
+            'name' => htmlentities(stripcslashes(strip_tags($data->name))),
+            'description' => htmlentities(stripcslashes(strip_tags($data->description))),
             'dateCreated' => UtilModel::getDateNow(),
             'dateUpdate' => UtilModel::getDateNow(),
             'relations' => $data->relations,
@@ -126,7 +127,8 @@ class BusinessProcessController extends Controller
             'type' => htmlentities(stripcslashes(strip_tags($data->type))),
             'step' => htmlentities(stripcslashes(strip_tags($data->step))),
             'ordering' => (int)htmlentities(stripcslashes(strip_tags($data->ordering))),
-            'comment' => htmlentities(stripcslashes(strip_tags($data->description))),
+            'name' => htmlentities(stripcslashes(strip_tags($data->name))),
+            'description' => htmlentities(stripcslashes(strip_tags($data->description))),
             'dateCreated' => htmlentities(stripcslashes(strip_tags($data->dateCreated))),
             'dateUpdate' => UtilModel::getDateNow(),
             'relations' => $data->relations,
@@ -266,6 +268,36 @@ class BusinessProcessController extends Controller
 
             LogModel::error('Ошибка удаления бизнес-процесса.', ['id' => $request->id]);
             $response->code(400)->json('Ошибка удаления бизнес-процесса. Повторите попытку позже.');
+
+            return;
+        } catch (Exception $e) {
+            LogModel::error($e->getMessage());
+            $response->code(500)->json($e->getMessage());
+
+            return;
+        }
+    }
+
+    /**
+     * Обновление сортировки и уровней бизнес-процессов
+     *
+     * @param mixed $request Содержит объект запроса
+     * @param mixed $response Содержит объект ответа от маршрутизатора
+     * @return void
+     */
+    public function updateBusinessProcessesOrdering($request, $response)
+    {
+        if (!JwtMiddleware::getAndDecodeToken()) {
+            $response->code(401)->json('Вы не авторизованы.');
+
+            return;
+        }
+
+        $data = json_decode($request->body());
+
+        try {
+            BusinessProcess::updateBusinessProcessesOrdering($data);
+            $response->code(200)->json('');
 
             return;
         } catch (Exception $e) {

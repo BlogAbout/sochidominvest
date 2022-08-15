@@ -1,10 +1,12 @@
 import React from 'react'
 import {IBusinessProcess} from '../../../@types/IBusinessProcess'
+import {IUser} from '../../../@types/IUser'
 import BusinessProcessList from './components/BusinessProcessList/BusinessProcessList'
 import classes from './BusinessProcessContainer.module.scss'
 
 interface Props {
     businessProcesses: IBusinessProcess[]
+    users: IUser[]
     fetching: boolean
 
     onClick(businessProcess: IBusinessProcess): void
@@ -14,10 +16,13 @@ interface Props {
     onRemove(businessProcess: IBusinessProcess): void
 
     onContextMenu(e: React.MouseEvent, businessProcess: IBusinessProcess): void
+
+    onSaveOrder(orderings: { [key: string]: number[] }): void
 }
 
 const defaultProps: Props = {
     businessProcesses: [],
+    users: [],
     fetching: false,
     onClick: (businessProcess: IBusinessProcess) => {
         console.info('BusinessProcessContainer onClick', businessProcess)
@@ -30,6 +35,9 @@ const defaultProps: Props = {
     },
     onContextMenu: (e: React.MouseEvent, businessProcess: IBusinessProcess) => {
         console.info('BusinessProcessContainer onContextMenu', e, businessProcess)
+    },
+    onSaveOrder: (orderings: { [key: string]: number[] }) => {
+        console.info('BusinessProcessContainer onSaveOrder', orderings)
     }
 }
 
@@ -37,11 +45,13 @@ const BusinessProcessContainer: React.FC<Props> = (props) => {
     return (
         <div className={classes.BusinessProcessContainer}>
             <BusinessProcessList businessProcesses={props.businessProcesses}
+                                 users={props.users}
                                  fetching={props.fetching}
                                  onClick={props.onClick}
                                  onEdit={props.onEdit}
                                  onRemove={props.onRemove}
                                  onContextMenu={props.onContextMenu}
+                                 onSaveOrder={props.onSaveOrder}
             />
         </div>
     )

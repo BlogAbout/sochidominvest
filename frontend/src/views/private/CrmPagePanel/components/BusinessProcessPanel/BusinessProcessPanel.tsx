@@ -3,31 +3,42 @@ import {useTypedSelector} from '../../../../../hooks/useTypedSelector'
 import {useActions} from '../../../../../hooks/useActions'
 import {IBusinessProcess} from '../../../../../@types/IBusinessProcess'
 import PageInfo from '../../../../../components/ui/PageInfo/PageInfo'
-import FilterBase from '../../../../../components/ui/FilterBase/FilterBase'
 import Title from '../../../../../components/ui/Title/Title'
 import BusinessProcessListContainer
     from '../../../../../components/container/BusinessProcessContainer/BusinessProcessContainer'
+import openPopupBusinessProcessCreate
+    from '../../../../../components/popup/PopupBusinessProcessCreate/PopupBusinessProcessCreate'
+import openPopupAlert from '../../../../../components/PopupAlert/PopupAlert'
+import BusinessProcessService from '../../../../../api/BusinessProcessService'
+import openContextMenu from '../../../../../components/ContextMenu/ContextMenu'
 import classes from './BusinessProcessPanel.module.scss'
 
 const BusinessProcessPanel: React.FC = () => {
     const [isUpdate, setIsUpdate] = useState(false)
-    const [searchText, setSearchText] = useState('')
     const [filterBusinessProcesses, setFilterBusinessProcesses] = useState<IBusinessProcess[]>([])
+    const [fetching, setFetching] = useState(false)
 
-    const {role} = useTypedSelector(state => state.userReducer)
-    const {businessProcesses, fetching} = useTypedSelector(state => state.businessProcessReducer)
-    const {fetchBusinessProcessList} = useActions()
+    const {users, role, fetching: fetchingUsers} = useTypedSelector(state => state.userReducer)
+    const {
+        businessProcesses,
+        fetching: fetchingBusinessProcess
+    } = useTypedSelector(state => state.businessProcessReducer)
+    const {fetchUserList, fetchBusinessProcessList} = useActions()
 
     useEffect(() => {
-        if (isUpdate || !businessProcesses.length) {
+        if (isUpdate || !businessProcesses || !businessProcesses.length) {
             fetchBusinessProcessList({active: [0, 1]})
-
-            setIsUpdate(false)
         }
+
+        if (isUpdate || !users || !users.length) {
+            fetchUserList({active: [0, 1]})
+        }
+
+        setIsUpdate(false)
     }, [isUpdate])
 
     useEffect(() => {
-        search(searchText)
+        setFilterBusinessProcesses(businessProcesses)
     }, [businessProcesses])
 
     // Обработчик изменений
@@ -35,23 +46,12 @@ const BusinessProcessPanel: React.FC = () => {
         setIsUpdate(true)
     }
 
-    // Поиск
-    const search = (value: string) => {
-        setSearchText(value)
-
-        if (!businessProcesses || !businessProcesses.length) {
-            setFilterBusinessProcesses([])
-        }
-
-        if (value !== '') {
-            // Todo
-        } else {
-            // Todo
-        }
-    }
-
     const onAddHandler = () => {
-        // Todo
+        openPopupBusinessProcessCreate(document.body, {
+            onSave: () => {
+                onSaveHandler()
+            }
+        })
     }
 
     const onClickHandler = (businessProcess: IBusinessProcess) => {
@@ -59,22 +59,80 @@ const BusinessProcessPanel: React.FC = () => {
     }
 
     const onEditHandler = (businessProcess: IBusinessProcess) => {
-
+        openPopupBusinessProcessCreate(document.body, {
+            businessProcess: businessProcess,
+            onSave: () => {
+                onSaveHandler()
+            }
+        })
     }
 
     const onRemoveHandler = (businessProcess: IBusinessProcess) => {
+        openPopupAlert(document.body, {
+            text: `Вы действительно хотите удалить ${businessProcess.name}?`,
+            buttons: [
+                {
+                    text: 'Удалить',
+                    onClick: () => {
+                        if (businessProcess.id) {
+                            setFetching(true)
 
+                            BusinessProcessService.removeBusinessProcess(businessProcess.id)
+                                .then(() => {
+                                    onSaveHandler()
+                                })
+                                .catch((error: any) => {
+                                    openPopupAlert(document.body, {
+                                        title: 'Ошибка!',
+                                        text: error.data
+                                    })
+                                })
+                                .finally(() => {
+                                    setFetching(false)
+                                })
+                        }
+                    }
+                },
+                {text: 'Отмена'}
+            ]
+        })
     }
 
     const onContextMenu = (e: React.MouseEvent, businessProcess: IBusinessProcess) => {
+        e.preventDefault()
 
+        if (['director', 'administrator', 'manager'].includes(role)) {
+            const menuItems = [{text: 'Редактировать', onClick: () => onEditHandler(businessProcess)}]
+
+            if (['director', 'administrator'].includes(role)) {
+                menuItems.push({text: 'Удалить', onClick: () => onRemoveHandler(businessProcess)})
+            }
+
+            openContextMenu(e, menuItems)
+        }
+    }
+
+    const onSaveOrder = (orderings: { [key: string]: number[] }) => {
+        setFetching(true)
+
+        BusinessProcessService.saveBusinessProcessOrdering(orderings)
+            .then(() => {
+
+            })
+            .catch((error: any) => {
+                openPopupAlert(document.body, {
+                    title: 'Ошибка!',
+                    text: error.data
+                })
+            })
+            .finally(() => {
+                setFetching(false)
+            })
     }
 
     return (
         <main className={classes.BusinessProcessPanel}>
             <PageInfo title='Бизнес-процессы'/>
-
-            <FilterBase valueSearch={searchText} onSearch={search.bind(this)} showSearch/>
 
             <div className={classes.Content}>
                 <Title type={1}
@@ -83,11 +141,13 @@ const BusinessProcessPanel: React.FC = () => {
                 >Бизнес-процессы</Title>
 
                 <BusinessProcessListContainer businessProcesses={filterBusinessProcesses}
-                                              fetching={fetching}
+                                              users={users}
+                                              fetching={fetching || fetchingBusinessProcess || fetchingUsers}
                                               onClick={onClickHandler.bind(this)}
                                               onEdit={onEditHandler.bind(this)}
                                               onRemove={onRemoveHandler.bind(this)}
                                               onContextMenu={onContextMenu.bind(this)}
+                                              onSaveOrder={onSaveOrder.bind(this)}
                 />
             </div>
         </main>

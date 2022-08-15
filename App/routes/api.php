@@ -145,11 +145,12 @@ $Klein->respond('GET', '/api/v1/messenger/[:id]', [new MessengerController(), 'f
 $Klein->respond('GET', '/api/v1/messenger', [new MessengerController(), 'fetchList']);
 
 // BusinessProcess Routes
-$Klein->respond('POST', '/api/v1/article', [new BusinessProcessController(), 'createItem']);
-$Klein->respond('PUT', '/api/v1/article/[:id]', [new BusinessProcessController(), 'updateItem']);
-$Klein->respond('GET', '/api/v1/article/[:id]', [new BusinessProcessController(), 'fetchItemById']);
-$Klein->respond('GET', '/api/v1/article', [new BusinessProcessController(), 'fetchList']);
-$Klein->respond('DELETE', '/api/v1/article/[:id]', [new BusinessProcessController(), 'deleteItem']);
+$Klein->respond('POST', '/api/v1/business-process/ordering', [new BusinessProcessController(), 'updateBusinessProcessesOrdering']);
+$Klein->respond('POST', '/api/v1/business-process', [new BusinessProcessController(), 'createItem']);
+$Klein->respond('PUT', '/api/v1/business-process/[:id]', [new BusinessProcessController(), 'updateItem']);
+$Klein->respond('GET', '/api/v1/business-process/[:id]', [new BusinessProcessController(), 'fetchItemById']);
+$Klein->respond('GET', '/api/v1/business-process', [new BusinessProcessController(), 'fetchList']);
+$Klein->respond('DELETE', '/api/v1/business-process/[:id]', [new BusinessProcessController(), 'deleteItem']);
 
 // Dispatch all routes
 $Klein->dispatch();

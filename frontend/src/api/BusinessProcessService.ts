@@ -23,4 +23,8 @@ export default class BusinessProcessService {
     static async removeBusinessProcess(businessProcessId: number): Promise<AxiosResponse> {
         return API.delete(`/business-process/${businessProcessId}`)
     }
+
+    static async saveBusinessProcessOrdering(orderings: { [key: string]: number[] }): Promise<AxiosResponse> {
+        return API.post(`/business-process/ordering`, orderings)
+    }
 }

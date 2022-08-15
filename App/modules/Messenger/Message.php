@@ -167,6 +167,9 @@ class Message extends Model
      */
     private function updateToDb(): void
     {
+        $dateNow = UtilModel::getDateNow();
+        $this->setDateUpdate($dateNow);
+
         $sql = "
             UPDATE `sdi_messenger_messages`
             SET
@@ -185,7 +188,7 @@ class Message extends Model
         parent::bindParams('type', $this->getType());
         parent::bindParams('text', $this->getText());
         parent::bindParams('userId', $this->getUserId());
-        parent::bindParams('dateUpdate', UtilModel::getDateNow());
+        parent::bindParams('dateUpdate', $this->getDateUpdate());
         parent::bindParams('parentMessageId', $this->getParentMessageId());
 
         parent::execute();

@@ -15,7 +15,8 @@ class BusinessProcess extends Model
     public int $ordering;
     public string $type;
     public string $step;
-    public string $comment;
+    public string $name;
+    public string $description;
     public string $dateCreated;
     public string $dateUpdate;
     public array $relations;
@@ -33,7 +34,8 @@ class BusinessProcess extends Model
         $this->ordering = $data['ordering'] ?: 0;
         $this->type = $data['type'] ?: '';
         $this->step = $data['step'] ?: '';
-        $this->comment = $data['comment'] ?: '';
+        $this->name = $data['name'] ?: '';
+        $this->description = $data['description'] ?: '';
         $this->dateCreated = $data['dateCreated'] ?: '';
         $this->dateUpdate = $data['dateUpdate'] ?: '';
         $this->relations = $data['relations'] ?: [];
@@ -94,7 +96,7 @@ class BusinessProcess extends Model
                    ) AS attendees
             FROM `sdi_business_process` sdi
             $sqlWhere
-            ORDER BY sdi.`id` DESC
+            ORDER BY sdi.`ordering` ASC
         ";
 
         parent::query($sql);
@@ -129,6 +131,37 @@ class BusinessProcess extends Model
     }
 
     /**
+     * Обновление сортировки и уровней бизнес-процессов
+     *
+     * @param object $orderings Массив уровней и порядка сортировки
+     */
+    public static function updateBusinessProcessesOrdering(object $orderings): void
+    {
+        $sql = '';
+
+        foreach ($orderings as $key => $value) {
+            $index = 0;
+
+            if (count($value)) {
+                foreach ($value as $val) {
+                    $index++;
+
+                    $sql .= "
+                        UPDATE `sdi_business_process`
+                        SET
+                            `ordering` = $index,
+                            `step` = '$key'
+                        WHERE `id` = $val;
+                    ";
+                }
+            }
+        }
+
+        self::query($sql);
+        self::execute();
+    }
+
+    /**
      * Сохранение информации о бизнес-процессе
      */
     public function save(): void
@@ -145,11 +178,15 @@ class BusinessProcess extends Model
      */
     private function insertToDb(): void
     {
+        $dateNow = UtilModel::getDateNow();
+        $this->setDateCreated($dateNow);
+        $this->setDateUpdate($dateNow);
+
         $sql = "
             INSERT INTO `sdi_business_process`
-                (`id_ticket`, `author`, `responsible`, `active`, `type`, `comment`, `date_created`, `date_update`)
+                (`id_ticket`, `author`, `responsible`, `active`, `type`, `step`, `name`, `description`, `date_created`, `date_update`)
             VALUES
-                (:ticketId, :author, :responsible, :active, :type, :comment, :dateCreated, :dateUpdate)
+                (:ticketId, :author, :responsible, :active, :type, :step, :name, :description, :dateCreated, :dateUpdate)
         ";
 
         parent::query($sql);
@@ -158,9 +195,11 @@ class BusinessProcess extends Model
         parent::bindParams('responsible', $this->getResponsible());
         parent::bindParams('active', $this->getActive());
         parent::bindParams('type', $this->getType());
-        parent::bindParams('comment', $this->getComment());
-        parent::bindParams('dateCreated', UtilModel::getDateNow());
-        parent::bindParams('dateUpdate', UtilModel::getDateNow());
+        parent::bindParams('step', $this->getStep());
+        parent::bindParams('name', $this->getName());
+        parent::bindParams('description', $this->getDescription());
+        parent::bindParams('dateCreated', $this->getDateCreated());
+        parent::bindParams('dateUpdate', $this->getDateUpdate());
 
         $item = parent::execute();
 
@@ -176,6 +215,9 @@ class BusinessProcess extends Model
      */
     private function updateToDb(): void
     {
+        $dateNow = UtilModel::getDateNow();
+        $this->setDateUpdate($dateNow);
+
         $sql = "
             UPDATE `sdi_business_process`
             SET
@@ -183,7 +225,9 @@ class BusinessProcess extends Model
                 `responsible` = :responsible,
                 `active` = :active,
                 `type` = :type,
-                `comment` = :comment,
+                `step` = :step,
+                `name` = :name,
+                `description` = :description,
                 `date_update` = :dateUpdate
             WHERE `id` = :id
         ";
@@ -194,8 +238,10 @@ class BusinessProcess extends Model
         parent::bindParams('responsible', $this->getResponsible());
         parent::bindParams('active', $this->getActive());
         parent::bindParams('type', $this->getType());
-        parent::bindParams('comment', $this->getComment());
-        parent::bindParams('dateUpdate', UtilModel::getDateNow());
+        parent::bindParams('step', $this->getStep());
+        parent::bindParams('name', $this->getName());
+        parent::bindParams('description', $this->getDescription());
+        parent::bindParams('dateUpdate', $this->getDateUpdate());
 
         parent::execute();
 
@@ -255,7 +301,7 @@ class BusinessProcess extends Model
             $relationsSql = [];
 
             foreach ($this->relations as $relation) {
-                array_push($relationsSql, "($this->id, $relation->objectId, $relation->objectType)");
+                array_push($relationsSql, "($this->id, $relation->objectId, '$relation->objectType')");
             }
 
             $sql = "
@@ -329,9 +375,11 @@ class BusinessProcess extends Model
             'responsible' => (int)$data['responsible'],
             'active' => (int)$data['active'],
             'type' => $data['type'],
-            'comment' => $data['comment'],
+            'step' => $data['step'],
+            'name' => $data['name'],
+            'description' => $data['description'],
             'dateCreated' => $data['date_created'],
-            'dateUpdate' => $data['dateUpdate'],
+            'dateUpdate' => $data['date_update'],
             'relations' => $data['relations'] ?: [],
             'attendees' => array_map('intval', $data['attendees'] ? explode(',', $data['attendees']) : []),
         ];
@@ -433,8 +481,6 @@ class BusinessProcess extends Model
         $this->ordering = $ordering;
     }
 
-
-
     /**
      * @return string
      */
@@ -467,22 +513,36 @@ class BusinessProcess extends Model
         $this->step = $step;
     }
 
+    /**
+     * @return string
+     */
+    public function getName(): string
+    {
+        return $this->name;
+    }
 
+    /**
+     * @param string $name
+     */
+    public function setName(string $name): void
+    {
+        $this->name = $name;
+    }
 
     /**
      * @return string
      */
-    public function getComment(): string
+    public function getDescription(): string
     {
-        return $this->comment;
+        return $this->description;
     }
 
     /**
-     * @param string $comment
+     * @param string $description
      */
-    public function setComment(string $comment): void
+    public function setDescription(string $description): void
     {
-        $this->comment = $comment;
+        $this->description = $description;
     }
 
     /**
