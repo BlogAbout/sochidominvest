@@ -12,7 +12,6 @@ class BusinessProcess extends Model
     public int $author;
     public int $responsible;
     public int $active;
-    public int $ordering;
     public string $type;
     public string $step;
     public string $name;
@@ -31,7 +30,6 @@ class BusinessProcess extends Model
         $this->author = $data['author'] ?: 0;
         $this->responsible = $data['responsible'] ?: 0;
         $this->active = $data['active'] ?: 0;
-        $this->ordering = $data['ordering'] ?: 0;
         $this->type = $data['type'] ?: '';
         $this->step = $data['step'] ?: '';
         $this->name = $data['name'] ?: '';
@@ -96,7 +94,7 @@ class BusinessProcess extends Model
                    ) AS attendees
             FROM `sdi_business_process` sdi
             $sqlWhere
-            ORDER BY sdi.`ordering` ASC
+            ORDER BY sdi.`id` ASC
         ";
 
         parent::query($sql);
@@ -130,34 +128,47 @@ class BusinessProcess extends Model
         return parent::execute();
     }
 
-    /**
-     * Обновление сортировки и уровней бизнес-процессов
-     *
-     * @param object $orderings Массив уровней и порядка сортировки
-     */
-    public static function updateBusinessProcessesOrdering(object $orderings): void
+    public static function fetchOrdering(int $userId): array
     {
-        $sql = '';
+        $sql = "
+            SELECT *
+            FROM `sdi_business_process_sorting`
+            WHERE `id_user` = :userId
+        ";
 
-        foreach ($orderings as $key => $value) {
-            $index = 0;
+        parent::query($sql);
+        parent::bindParams('userId', $userId);
+        $item = parent::fetch();
 
-            if (count($value)) {
-                foreach ($value as $val) {
-                    $index++;
-
-                    $sql .= "
-                        UPDATE `sdi_business_process`
-                        SET
-                            `ordering` = $index,
-                            `step` = '$key'
-                        WHERE `id` = $val;
-                    ";
-                }
+        if (!empty($item)) {
+            if ($item['sorting'] !== '') {
+                return json_decode($item['sorting']);
+            } else {
+                return [];
             }
         }
 
+        return [];
+    }
+
+    /**
+     * Обновление сортировки бизнес-процессов для пользователя
+     *
+     * @param array $bpIds
+     * @param int $userId
+     */
+    public static function updateOrdering(array $bpIds, int $userId): void
+    {
+        $sql = "
+            INSERT INTO `sdi_business_process_sorting` (`id_user`, `sorting`)
+            VALUES (:userId, :sorting)
+            ON DUPLICATE KEY
+            UPDATE `sorting` = :sorting
+        ";
+
         self::query($sql);
+        self::bindParams('userId', $userId);
+        self::bindParams('sorting', json_encode($bpIds));
         self::execute();
     }
 
@@ -463,22 +474,6 @@ class BusinessProcess extends Model
     public function setActive(int $active): void
     {
         $this->active = $active;
-    }
-
-    /**
-     * @return int
-     */
-    public function getOrdering(): int
-    {
-        return $this->ordering;
-    }
-
-    /**
-     * @param int $ordering
-     */
-    public function setOrdering(int $ordering): void
-    {
-        $this->ordering = $ordering;
     }
 
     /**

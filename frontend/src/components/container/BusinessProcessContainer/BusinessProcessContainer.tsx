@@ -17,7 +17,7 @@ interface Props {
 
     onContextMenu(e: React.MouseEvent, businessProcess: IBusinessProcess): void
 
-    onSaveOrder(orderings: { [key: string]: number[] }): void
+    onSaveOrder(businessProcess: IBusinessProcess, ids: number[]): void
 }
 
 const defaultProps: Props = {
@@ -36,8 +36,8 @@ const defaultProps: Props = {
     onContextMenu: (e: React.MouseEvent, businessProcess: IBusinessProcess) => {
         console.info('BusinessProcessContainer onContextMenu', e, businessProcess)
     },
-    onSaveOrder: (orderings: { [key: string]: number[] }) => {
-        console.info('BusinessProcessContainer onSaveOrder', orderings)
+    onSaveOrder: (businessProcess: IBusinessProcess, ids: number[]) => {
+        console.info('BusinessProcessContainer onSaveOrder', businessProcess, ids)
     }
 }
 

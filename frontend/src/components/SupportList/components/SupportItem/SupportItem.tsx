@@ -82,7 +82,6 @@ const SupportItem: React.FC<Props> = (props) => {
             active: 1,
             type: 'feed',
             step: 'default',
-            ordering: 0,
             name: props.feed.title,
             description: '',
             relations: [

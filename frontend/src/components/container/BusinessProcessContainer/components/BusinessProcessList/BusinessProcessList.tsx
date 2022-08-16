@@ -1,6 +1,7 @@
 import React, {CSSProperties, useEffect, useState} from 'react'
 import {DragDropContext, Draggable, Droppable} from 'react-beautiful-dnd'
 import classNames from 'classnames/bind'
+import {useTypedSelector} from '../../../../../hooks/useTypedSelector'
 import {bpSteps} from '../../../../../helpers/businessProcessHelper'
 import {IUser} from '../../../../../@types/IUser'
 import {IBusinessProcess, IBusinessProcessesBySteps} from '../../../../../@types/IBusinessProcess'
@@ -21,7 +22,7 @@ interface Props {
 
     onContextMenu(e: React.MouseEvent, businessProcess: IBusinessProcess): void
 
-    onSaveOrder(orderings: { [key: string]: number[] }): void
+    onSaveOrder(businessProcess: IBusinessProcess, ids: number[]): void
 }
 
 const defaultProps: Props = {
@@ -40,8 +41,8 @@ const defaultProps: Props = {
     onContextMenu: (e: React.MouseEvent, businessProcess: IBusinessProcess) => {
         console.info('BusinessProcessList onContextMenu', e, businessProcess)
     },
-    onSaveOrder: (orderings: { [key: string]: number[] }) => {
-        console.info('BusinessProcessList onSaveOrder', orderings)
+    onSaveOrder: (businessProcess: IBusinessProcess, ids: number[]) => {
+        console.info('BusinessProcessList onSaveOrder', businessProcess, ids)
     }
 }
 
@@ -50,11 +51,20 @@ const cx = classNames.bind(classes)
 const BusinessProcessList: React.FC<Props> = (props) => {
     const [businessProcesses, setBusinessProcesses] = useState<IBusinessProcessesBySteps>({} as IBusinessProcessesBySteps)
 
+    const {ordering} = useTypedSelector(state => state.businessProcessReducer)
+    const {userId} = useTypedSelector(state => state.userReducer)
+
     useEffect(() => {
         const prepareBusinessProcesses: IBusinessProcessesBySteps = {} as IBusinessProcessesBySteps
 
         if (props.businessProcesses) {
-            const sortBp = props.businessProcesses.sort((bpA: IBusinessProcess, bpB: IBusinessProcess) => bpA.ordering - bpB.ordering)
+            const sortBp = props.businessProcesses.sort((a: IBusinessProcess, b: IBusinessProcess) => {
+                if (!a.id || !b.id) {
+                    return -1
+                }
+
+                return ordering.indexOf(a.id) - ordering.indexOf(b.id)
+            })
 
             Object.keys(bpSteps).forEach((step: string) => {
                 prepareBusinessProcesses[`${step}`] = sortBp.filter((bp: IBusinessProcess) => bp.step === step)
@@ -106,11 +116,7 @@ const BusinessProcessList: React.FC<Props> = (props) => {
                 ...prepareBusinessProcess.slice(0, destination.index),
                 updateBusinessProcess,
                 ...prepareBusinessProcess.slice(destination.index)
-            ].map((businessProcess: IBusinessProcess, index: number) => {
-                businessProcess.ordering = index
-
-                return businessProcess
-            })
+            ]
 
             updatedListBusinessProcesses = {
                 ...businessProcesses,
@@ -128,11 +134,7 @@ const BusinessProcessList: React.FC<Props> = (props) => {
                 ...businessProcesses[destination.droppableId].slice(0, destination.index),
                 updateBusinessProcess,
                 ...businessProcesses[destination.droppableId].slice(destination.index)
-            ].map((businessProcess: IBusinessProcess, index: number) => {
-                businessProcess.ordering = index
-
-                return businessProcess
-            })
+            ]
 
             updatedListBusinessProcesses = {
                 ...businessProcesses,
@@ -143,16 +145,16 @@ const BusinessProcessList: React.FC<Props> = (props) => {
 
         setBusinessProcesses(updatedListBusinessProcesses)
 
-        const orderings: { [key: string]: number[] } = {}
-        Object.keys(updatedListBusinessProcesses).forEach((step: string) => {
-            if (updatedListBusinessProcesses[step] && updatedListBusinessProcesses[step].length) {
-                orderings[step] = updatedListBusinessProcesses[step].map((bp: IBusinessProcess) => bp.id ? bp.id : 0)
-            } else {
-                orderings[step] = []
-            }
+        const ids: number[] = []
+        Object.values(updatedListBusinessProcesses).forEach((businessProcesses: IBusinessProcess[]) => {
+            businessProcesses.forEach((bp: IBusinessProcess) => {
+                if (bp.id) {
+                    ids.push(bp.id)
+                }
+            })
         })
 
-        props.onSaveOrder(orderings)
+        props.onSaveOrder(updateBusinessProcess, ids)
     }
 
     return (
@@ -173,6 +175,10 @@ const BusinessProcessList: React.FC<Props> = (props) => {
                                             <div className={classes.boardList}>
                                                 {businessProcesses[step] && businessProcesses[step].length ?
                                                     businessProcesses[step].map((businessProcess: IBusinessProcess, index: number) => {
+                                                        if (businessProcess.author !== userId && businessProcess.responsible !== userId) {
+                                                            return null
+                                                        }
+
                                                         return (
                                                             <Draggable
                                                                 key={businessProcess.id}

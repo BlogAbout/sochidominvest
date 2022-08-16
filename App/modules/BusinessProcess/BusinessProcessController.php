@@ -208,11 +208,21 @@ class BusinessProcessController extends Controller
      */
     public function fetchList($request, $response)
     {
+        if (!JwtMiddleware::getAndDecodeToken()) {
+            $response->code(401)->json('Вы не авторизованы.');
+
+            return;
+        }
+
         $filter = parent::getFilterParams($request->paramsGet()->all());
 
         try {
             $list = BusinessProcess::fetchList($filter);
-            $response->code(200)->json($list);
+            $ordering = BusinessProcess::fetchOrdering(JwtMiddleware::getUserId());
+            $response->code(200)->json([
+                'list' => $list,
+                'ordering' => $ordering
+            ]);
 
             return;
         } catch (Exception $e) {
@@ -295,9 +305,30 @@ class BusinessProcessController extends Controller
 
         $data = json_decode($request->body());
 
+        $payload = array(
+            'id' => (int)htmlentities(stripcslashes(strip_tags($data->bp->id))),
+            'ticketId' => (int)htmlentities(stripcslashes(strip_tags($data->bp->ticketId))),
+            'author' => (int)htmlentities(stripcslashes(strip_tags($data->bp->author))),
+            'responsible' => (int)htmlentities(stripcslashes(strip_tags($data->bp->responsible))),
+            'active' => (int)htmlentities(stripcslashes(strip_tags($data->bp->active))),
+            'type' => htmlentities(stripcslashes(strip_tags($data->bp->type))),
+            'step' => htmlentities(stripcslashes(strip_tags($data->bp->step))),
+            'ordering' => (int)htmlentities(stripcslashes(strip_tags($data->bp->ordering))),
+            'name' => htmlentities(stripcslashes(strip_tags($data->bp->name))),
+            'description' => htmlentities(stripcslashes(strip_tags($data->bp->description))),
+            'dateCreated' => htmlentities(stripcslashes(strip_tags($data->bp->dateCreated))),
+            'dateUpdate' => UtilModel::getDateNow(),
+            'relations' => $data->bp->relations,
+            'attendees' => $data->bp->attendees
+        );
+
         try {
-            BusinessProcess::updateBusinessProcessesOrdering($data);
-            $response->code(200)->json('');
+            $businessProcess = new BusinessProcess($payload);
+            $businessProcess->save();
+
+            BusinessProcess::updateOrdering($data->ids, JwtMiddleware::getUserId());
+
+            $response->code(200)->json(BusinessProcess::fetchOrdering(JwtMiddleware::getUserId()));
 
             return;
         } catch (Exception $e) {

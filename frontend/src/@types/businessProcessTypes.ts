@@ -2,6 +2,7 @@ import {IBusinessProcess} from './IBusinessProcess'
 
 export interface BusinessProcessState {
     businessProcesses: IBusinessProcess[]
+    ordering: number[]
     fetching: boolean
     error: string
 }
@@ -14,7 +15,7 @@ export enum BusinessProcessActionTypes {
 
 interface BusinessProcessFetchListAction {
     type: BusinessProcessActionTypes.BUSINESS_PROCESS_FETCH_LIST
-    payload: IBusinessProcess[]
+    payload: { list: IBusinessProcess[], ordering: number[] }
 }
 
 export interface BusinessProcessIsFetchingAction {
@@ -27,4 +28,7 @@ export interface BusinessProcessErrorAction {
     payload: string
 }
 
-export type BusinessProcessAction = BusinessProcessFetchListAction | BusinessProcessIsFetchingAction | BusinessProcessErrorAction
+export type BusinessProcessAction =
+    BusinessProcessFetchListAction
+    | BusinessProcessIsFetchingAction
+    | BusinessProcessErrorAction

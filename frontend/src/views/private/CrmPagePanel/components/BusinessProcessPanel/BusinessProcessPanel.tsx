@@ -28,6 +28,7 @@ const BusinessProcessPanel: React.FC = () => {
     useEffect(() => {
         if (isUpdate || !businessProcesses || !businessProcesses.length) {
             fetchBusinessProcessList({active: [0, 1]})
+
         }
 
         if (isUpdate || !users || !users.length) {
@@ -112,10 +113,10 @@ const BusinessProcessPanel: React.FC = () => {
         }
     }
 
-    const onSaveOrder = (orderings: { [key: string]: number[] }) => {
+    const onSaveOrder = (businessProcess: IBusinessProcess, ids: number[]) => {
         setFetching(true)
 
-        BusinessProcessService.saveBusinessProcessOrdering(orderings)
+        BusinessProcessService.saveBusinessProcessOrdering(businessProcess, ids)
             .then(() => {
 
             })

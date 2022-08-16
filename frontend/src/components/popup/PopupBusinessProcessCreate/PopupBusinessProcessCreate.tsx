@@ -44,7 +44,6 @@ const PopupBusinessProcessCreate: React.FC<Props> = (props) => {
         active: 1,
         type: 'feed',
         step: 'default',
-        ordering: 0,
         name: '',
         description: ''
     })

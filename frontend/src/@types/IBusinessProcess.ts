@@ -6,7 +6,6 @@ export interface IBusinessProcess {
     active: number
     type: string
     step: string
-    ordering: number
     name: string
     description: string
     dateCreated?: string | null

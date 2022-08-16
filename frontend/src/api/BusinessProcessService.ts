@@ -24,7 +24,7 @@ export default class BusinessProcessService {
         return API.delete(`/business-process/${businessProcessId}`)
     }
 
-    static async saveBusinessProcessOrdering(orderings: { [key: string]: number[] }): Promise<AxiosResponse> {
-        return API.post(`/business-process/ordering`, orderings)
+    static async saveBusinessProcessOrdering(businessProcess: IBusinessProcess, ids: number[]): Promise<AxiosResponse> {
+        return API.post(`/business-process/ordering`, {bp: businessProcess, ids: ids})
     }
 }

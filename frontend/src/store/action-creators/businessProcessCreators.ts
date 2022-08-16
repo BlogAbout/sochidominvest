@@ -5,9 +5,9 @@ import {AppDispatch} from '../reducers'
 import BusinessProcessService from '../../api/BusinessProcessService'
 
 export const BusinessProcessActionCreators = {
-    setBusinessProcesses: (businessProcesses: IBusinessProcess[]): BusinessProcessAction => ({
+    setBusinessProcesses: (data: { list: IBusinessProcess[], ordering: number[] }): BusinessProcessAction => ({
         type: BusinessProcessActionTypes.BUSINESS_PROCESS_FETCH_LIST,
-        payload: businessProcesses
+        payload: data
     }),
     setFetching: (payload: boolean): BusinessProcessAction => ({
         type: BusinessProcessActionTypes.BUSINESS_PROCESS_IS_FETCHING,
