@@ -11,8 +11,8 @@ import openPopupAlert from '../../../PopupAlert/PopupAlert'
 import openContextMenu from '../../../ContextMenu/ContextMenu'
 import Preloader from '../../../Preloader/Preloader'
 import openPopupSupportInfo from '../../../popup/PopupSupportInfo/PopupSupportInfo'
+import openPopupBusinessProcessCreate from '../../../popup/PopupBusinessProcessCreate/PopupBusinessProcessCreate'
 import classes from './SupportItem.module.scss'
-import openPopupBusinessProcessCreate from "../../../popup/PopupBusinessProcessCreate/PopupBusinessProcessCreate";
 
 interface Props {
     feed: IFeed

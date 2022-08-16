@@ -17,8 +17,8 @@ import Label from '../../form/Label/Label'
 import BusinessProcessService from '../../../api/BusinessProcessService'
 import SelectorBox from '../../SelectorBox/SelectorBox'
 import UserBox from '../../form/UserBox/UserBox'
+import TextBox from '../../form/TextBox/TextBox'
 import classes from './PopupBusinessProcessCreate.module.scss'
-import TextBox from "../../form/TextBox/TextBox";
 
 interface Props extends PopupProps {
     businessProcess?: IBusinessProcess | null

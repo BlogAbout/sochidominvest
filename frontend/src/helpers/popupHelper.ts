@@ -23,7 +23,7 @@ export function openPopup(
     popupProps.id = id
 
     // Создание контейнера для попапа
-    const reactPopupContainer = document.createElement("div")
+    const reactPopupContainer = document.createElement('div')
     const centerDiv = document.querySelector('.center-div')
 
     reactPopupContainer.id = 'reactPopupContainer-' + id

@@ -30,7 +30,7 @@ export class WS {
                 attendees: []
             }
 
-            this.webSocket.send(JSON.stringify(message));
+            this.webSocket.send(JSON.stringify(message))
         }
 
         this.webSocket.onmessage = (response: MessageEvent) => {
