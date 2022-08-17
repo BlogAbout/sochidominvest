@@ -43,7 +43,6 @@ class BusinessProcessController extends Controller
             'active' => (int)htmlentities(stripcslashes(strip_tags($data->active))),
             'type' => htmlentities(stripcslashes(strip_tags($data->type))),
             'step' => htmlentities(stripcslashes(strip_tags($data->step))),
-            'ordering' => (int)htmlentities(stripcslashes(strip_tags($data->ordering))),
             'name' => htmlentities(stripcslashes(strip_tags($data->name))),
             'description' => htmlentities(stripcslashes(strip_tags($data->description))),
             'dateCreated' => UtilModel::getDateNow(),
@@ -126,7 +125,6 @@ class BusinessProcessController extends Controller
             'active' => (int)htmlentities(stripcslashes(strip_tags($data->active))),
             'type' => htmlentities(stripcslashes(strip_tags($data->type))),
             'step' => htmlentities(stripcslashes(strip_tags($data->step))),
-            'ordering' => (int)htmlentities(stripcslashes(strip_tags($data->ordering))),
             'name' => htmlentities(stripcslashes(strip_tags($data->name))),
             'description' => htmlentities(stripcslashes(strip_tags($data->description))),
             'dateCreated' => htmlentities(stripcslashes(strip_tags($data->dateCreated))),
@@ -219,6 +217,7 @@ class BusinessProcessController extends Controller
         try {
             $list = BusinessProcess::fetchList($filter);
             $ordering = BusinessProcess::fetchOrdering(JwtMiddleware::getUserId());
+
             $response->code(200)->json([
                 'list' => $list,
                 'ordering' => $ordering
@@ -313,7 +312,6 @@ class BusinessProcessController extends Controller
             'active' => (int)htmlentities(stripcslashes(strip_tags($data->bp->active))),
             'type' => htmlentities(stripcslashes(strip_tags($data->bp->type))),
             'step' => htmlentities(stripcslashes(strip_tags($data->bp->step))),
-            'ordering' => (int)htmlentities(stripcslashes(strip_tags($data->bp->ordering))),
             'name' => htmlentities(stripcslashes(strip_tags($data->bp->name))),
             'description' => htmlentities(stripcslashes(strip_tags($data->bp->description))),
             'dateCreated' => htmlentities(stripcslashes(strip_tags($data->bp->dateCreated))),

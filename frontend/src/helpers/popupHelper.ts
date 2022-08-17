@@ -29,6 +29,9 @@ export function openPopup(
     reactPopupContainer.id = 'reactPopupContainer-' + id
     reactPopupContainer.style.zIndex = displayOptions.alwaysTop ? '999' : '9' // Todo: or MSP.getMaxZIndex()
     reactPopupContainer.style.position = displayOptions.fullScreen ? 'absolute' : 'fixed'
+    if (displayOptions.isFixed) {
+        reactPopupContainer.style.position = 'fixed'
+    }
     reactPopupContainer.setAttribute('popupType', popupType.name)
 
     // Установка позиции контейнера для попапа
@@ -58,21 +61,11 @@ export function openPopup(
             reactPopupContainer.classList.add('full-screen-popup-right')
         }
 
-        if (displayOptions.leftPanel) {
-            reactPopupContainer.classList.add('full-screen-popup-left')
-        }
-
         centerDiv.appendChild(reactPopupContainer)
         reactPopupContainer.getBoundingClientRect()
 
         if (displayOptions.rightPanel) {
             reactPopupContainer.classList.add('show-popup-right-panel')
-        } else {
-            reactPopupContainer.classList.add('show-popup')
-        }
-
-        if (displayOptions.leftPanel) {
-            reactPopupContainer.classList.add('show-popup-left-panel')
         } else {
             reactPopupContainer.classList.add('show-popup')
         }

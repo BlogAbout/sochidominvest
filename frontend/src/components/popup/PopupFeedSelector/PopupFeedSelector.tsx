@@ -1,15 +1,15 @@
 import React, {useEffect, useState} from 'react'
-import withStore from '../../../hoc/withStore'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import withStore from '../../../hoc/withStore'
 import {PopupDisplayOptions, PopupProps} from '../../../@types/IPopup'
-import {IDeveloper} from '../../../@types/IDeveloper'
-import DeveloperService from '../../../api/DeveloperService'
+import {IFeed} from '../../../@types/IFeed'
+import FeedService from '../../../api/FeedService'
 import {getPopupContainer, openPopup, removePopup} from '../../../helpers/popupHelper'
 import {Footer, Popup} from '../Popup/Popup'
 import BlockingElement from '../../ui/BlockingElement/BlockingElement'
 import Empty from '../../Empty/Empty'
 import openContextMenu from '../../ContextMenu/ContextMenu'
-import openPopupDeveloperCreate from '../PopupDeveloperCreate/PopupDeveloperCreate'
+import openPopupSupportCreate from '../PopupSupportCreate/PopupSupportCreate'
 import showBackgroundBlock from '../../ui/BackgroundBlock/BackgroundBlock'
 import ButtonAdd from '../../ButtonAdd/ButtonAdd'
 import SearchBox from '../../SearchBox/SearchBox'
@@ -18,8 +18,7 @@ import Button from '../../form/Button/Button'
 import Title from '../../ui/Title/Title'
 import openPopupAlert from '../../PopupAlert/PopupAlert'
 import {useTypedSelector} from '../../../hooks/useTypedSelector'
-import {useActions} from '../../../hooks/useActions'
-import classes from './PopupDeveloperSelector.module.scss'
+import classes from './PopupFeedSelector.module.scss'
 
 interface Props extends PopupProps {
     selected?: number[]
@@ -36,44 +35,53 @@ const defaultProps: Props = {
     buttonAdd: true,
     multi: false,
     onAdd: () => {
-        console.info('PopupDeveloperSelector onAdd')
+        console.info('PopupFeedSelector onAdd')
     },
     onSelect: (value: number[]) => {
-        console.info('PopupDeveloperSelector onSelect', value)
+        console.info('PopupFeedSelector onSelect', value)
     }
 }
 
-const PopupDeveloperSelector: React.FC<Props> = (props) => {
-    const [isUpdate, setIsUpdate] = useState(false)
+const PopupFeedSelector: React.FC<Props> = (props) => {
+    const [isUpdate, setIsUpdate] = useState(true)
     const [searchText, setSearchText] = useState('')
-    const [filterDevelopers, setFilterDevelopers] = useState<IDeveloper[]>([])
-    const [selectedDevelopers, setSelectedDevelopers] = useState<number[]>(props.selected || [])
+    const [feeds, setFeeds] = useState<IFeed[]>([])
+    const [filterFeeds, setFilterFeeds] = useState<IFeed[]>([])
+    const [selectedFeeds, setSelectedFeeds] = useState<number[]>(props.selected || [])
     const [fetching, setFetching] = useState(false)
 
     const {role} = useTypedSelector(state => state.userReducer)
-    const {fetching: fetchingDeveloperList, developers} = useTypedSelector(state => state.developerReducer)
-
-    const {fetchDeveloperList} = useActions()
 
     useEffect(() => {
-        if (!developers.length || isUpdate) {
-            fetchDeveloperList({active: [0, 1]})
-
-            setIsUpdate(false)
-        }
-
         return () => {
             removePopup(props.blockId ? props.blockId : '')
+        }
+    }, [])
+
+    useEffect(() => {
+        if (isUpdate) {
+            setFetching(true)
+
+            FeedService.fetchFeeds({active: [0, 1]})
+                .then((response: any) => {
+                    setFeeds(response.data)
+                })
+                .catch((error: any) => {
+                    openPopupAlert(document.body, {
+                        title: 'Ошибка!',
+                        text: error.data,
+                        onOk: close.bind(this)
+                    })
+                })
+                .finally(() => {
+                    setFetching(false)
+                })
         }
     }, [isUpdate])
 
     useEffect(() => {
         search(searchText)
-    }, [developers])
-
-    useEffect(() => {
-        setFetching(fetchingDeveloperList)
-    }, [fetchingDeveloperList])
+    }, [feeds])
 
     // Закрытие Popup
     const close = () => {
@@ -81,29 +89,29 @@ const PopupDeveloperSelector: React.FC<Props> = (props) => {
     }
 
     // Клик на строку
-    const selectRow = (developer: IDeveloper) => {
+    const selectRow = (feed: IFeed) => {
         if (props.multi) {
-            selectRowMulti(developer)
+            selectRowMulti(feed)
         } else if (props.onSelect !== null) {
-            props.onSelect(developer.id ? [developer.id] : [0])
+            props.onSelect(feed.id ? [feed.id] : [0])
             close()
         }
     }
 
     // Клик на строку в мульти режиме
-    const selectRowMulti = (developer: IDeveloper) => {
-        if (developer.id) {
-            if (checkSelected(developer.id)) {
-                setSelectedDevelopers(selectedDevelopers.filter((key: number) => key !== developer.id))
+    const selectRowMulti = (feed: IFeed) => {
+        if (feed.id) {
+            if (checkSelected(feed.id)) {
+                setSelectedFeeds(selectedFeeds.filter((key: number) => key !== feed.id))
             } else {
-                setSelectedDevelopers([...selectedDevelopers, developer.id])
+                setSelectedFeeds([...selectedFeeds, feed.id])
             }
         }
     }
 
     // Проверка наличия элемента среди выбранных
     const checkSelected = (id: number | null) => {
-        return id !== null && selectedDevelopers.includes(id)
+        return id !== null && selectedFeeds.includes(id)
     }
 
     // Поиск
@@ -111,27 +119,17 @@ const PopupDeveloperSelector: React.FC<Props> = (props) => {
         setSearchText(value)
 
         if (value.trim() !== '') {
-            setFilterDevelopers(developers.filter((developer: IDeveloper) => {
-                return developer.name.toLocaleLowerCase().indexOf(value.toLocaleLowerCase()) !== -1
+            setFilterFeeds(feeds.filter((feed: IFeed) => {
+                return feed.title.toLocaleLowerCase().indexOf(value.toLocaleLowerCase()) !== -1
             }))
         } else {
-            setFilterDevelopers(developers)
+            setFilterFeeds(feeds)
         }
     }
 
     // Добавление нового элемента
     const onClickAdd = () => {
-        openPopupDeveloperCreate(document.body, {
-            onSave: () => {
-                setIsUpdate(true)
-            }
-        })
-    }
-
-    // Редактирование элемента
-    const onClickEdit = (e: React.MouseEvent, developer: IDeveloper) => {
-        openPopupDeveloperCreate(document.body, {
-            developer: developer,
+        openPopupSupportCreate(document.body, {
             onSave: () => {
                 setIsUpdate(true)
             }
@@ -140,22 +138,22 @@ const PopupDeveloperSelector: React.FC<Props> = (props) => {
 
     // Сохранение выбора
     const onClickSave = () => {
-        props.onSelect(selectedDevelopers)
+        props.onSelect(selectedFeeds)
         close()
     }
 
     // Удаление элемента справочника
-    const onClickDelete = (e: React.MouseEvent, developer: IDeveloper) => {
+    const onClickDelete = (e: React.MouseEvent, feed: IFeed) => {
         openPopupAlert(e, {
-            text: `Вы действительно хотите удалить ${developer.name}?`,
+            text: `Вы действительно хотите удалить ${feed.title}?`,
             buttons: [
                 {
                     text: 'Удалить',
                     onClick: () => {
                         setFetching(true)
 
-                        if (developer.id) {
-                            DeveloperService.removeDeveloper(developer.id)
+                        if (feed.id) {
+                            FeedService.removeFeed(feed.id)
                                 .then(() => {
                                     setFetching(false)
                                     setIsUpdate(true)
@@ -178,14 +176,14 @@ const PopupDeveloperSelector: React.FC<Props> = (props) => {
     }
 
     // Открытие контекстного меню на элементе справочника
-    const onContextMenu = (e: React.MouseEvent, developer: IDeveloper) => {
+    const onContextMenu = (e: React.MouseEvent, feed: IFeed) => {
         e.preventDefault()
 
         if (['director', 'administrator', 'manager'].includes(role)) {
-            const menuItems = [{text: 'Редактировать', onClick: (e: React.MouseEvent) => onClickEdit(e, developer)}]
+            const menuItems = []
 
             if (['director', 'administrator'].includes(role)) {
-                menuItems.push({text: 'Удалить', onClick: (e: React.MouseEvent) => onClickDelete(e, developer)})
+                menuItems.push({text: 'Удалить', onClick: (e: React.MouseEvent) => onClickDelete(e, feed)})
             }
 
             openContextMenu(e, menuItems)
@@ -197,7 +195,7 @@ const PopupDeveloperSelector: React.FC<Props> = (props) => {
             <div className={classes.search}>
                 <SearchBox value={searchText}
                            onChange={(value: string) => search(value)}
-                           countFind={filterDevelopers ? filterDevelopers.length : 0}
+                           countFind={filterFeeds ? filterFeeds.length : 0}
                            showClear
                            flexGrow
                            autoFocus
@@ -215,9 +213,9 @@ const PopupDeveloperSelector: React.FC<Props> = (props) => {
         return (
             <BlockingElement fetching={false} className={classes.list}>
                 <div className={classes.listContent}>
-                    {filterDevelopers.length ?
-                        filterDevelopers.map((developer: IDeveloper) => renderRow(developer, 'left', checkSelected(developer.id)))
-                        : <Empty message={!developers.length ? 'Нет застройщиков' : 'Застройщики не найдены'}/>
+                    {filterFeeds.length ?
+                        filterFeeds.map((feed: IFeed) => renderRow(feed, 'left', checkSelected(feed.id)))
+                        : <Empty message={!feeds.length ? 'Нет тикетов' : 'Тикеты не найдены'}/>
                     }
                 </div>
             </BlockingElement>
@@ -225,26 +223,26 @@ const PopupDeveloperSelector: React.FC<Props> = (props) => {
     }
 
     const renderSelectedListBox = () => {
-        const rows = filterDevelopers.filter((developer: IDeveloper) => checkSelected(developer.id))
+        const rows = filterFeeds.filter((feed: IFeed) => checkSelected(feed.id))
 
         return (
             <BlockingElement fetching={false} className={classes.list}>
                 <div className={classes.listContent}>
                     {rows.length ?
-                        rows.map((developer: IDeveloper) => renderRow(developer, 'right', checkSelected(developer.id)))
-                        : <Empty message='Застройщики не выбраны'/>
+                        rows.map((feed: IFeed) => renderRow(feed, 'right', checkSelected(feed.id)))
+                        : <Empty message='Тикеты не выбраны'/>
                     }
                 </div>
             </BlockingElement>
         )
     }
 
-    const renderRow = (developer: IDeveloper, side: string, checked: boolean) => {
+    const renderRow = (feed: IFeed, side: string, checked: boolean) => {
         return (
             <div className={classes.row}
-                 key={developer.id}
-                 onClick={() => selectRow(developer)}
-                 onContextMenu={(e: React.MouseEvent) => onContextMenu(e, developer)}
+                 key={feed.id}
+                 onClick={() => selectRow(feed)}
+                 onContextMenu={(e: React.MouseEvent) => onContextMenu(e, feed)}
             >
                 {props.multi && side === 'left' ?
                     <CheckBox type='classic'
@@ -262,7 +260,7 @@ const PopupDeveloperSelector: React.FC<Props> = (props) => {
                     </div>
                 }
 
-                <div className={classes.name}>{developer.name}</div>
+                <div className={classes.name}>{feed.title}</div>
 
                 {props.multi && side === 'right' ?
                     <div className={classes.delete} title='Удалить'>
@@ -275,10 +273,10 @@ const PopupDeveloperSelector: React.FC<Props> = (props) => {
     }
 
     return (
-        <Popup className={classes.PopupDeveloperSelector}>
+        <Popup className={classes.PopupFeedSelector}>
             <BlockingElement fetching={fetching} className={classes.content}>
                 <div className={classes.blockContent}>
-                    <Title type={2}>Выбрать застройщика</Title>
+                    <Title type={2}>Выбрать тикет</Title>
 
                     {renderSearch()}
 
@@ -311,10 +309,10 @@ const PopupDeveloperSelector: React.FC<Props> = (props) => {
     )
 }
 
-PopupDeveloperSelector.defaultProps = defaultProps
-PopupDeveloperSelector.displayName = 'PopupDeveloperSelector'
+PopupFeedSelector.defaultProps = defaultProps
+PopupFeedSelector.displayName = 'PopupFeedSelector'
 
-export default function openPopupDeveloperSelector(target: any, popupProps = {} as Props) {
+export default function openPopupFeedSelector(target: any, popupProps = {} as Props) {
     const displayOptions: PopupDisplayOptions = {
         autoClose: false,
         rightPanel: true,
@@ -326,5 +324,5 @@ export default function openPopupDeveloperSelector(target: any, popupProps = {} 
 
     popupProps = {...popupProps, blockId: blockId}
 
-    return openPopup(withStore(PopupDeveloperSelector), popupProps, undefined, block, displayOptions)
+    return openPopup(withStore(PopupFeedSelector), popupProps, undefined, block, displayOptions)
 }

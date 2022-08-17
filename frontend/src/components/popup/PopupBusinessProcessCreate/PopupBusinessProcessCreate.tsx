@@ -2,7 +2,8 @@ import React, {useEffect, useState} from 'react'
 import {useTypedSelector} from '../../../hooks/useTypedSelector'
 import withStore from '../../../hoc/withStore'
 import {PopupDisplayOptions, PopupProps} from '../../../@types/IPopup'
-import {IBusinessProcess} from '../../../@types/IBusinessProcess'
+import {IBusinessProcess, IBusinessProcessRelation} from '../../../@types/IBusinessProcess'
+import {ITab} from '../../../@types/ITab'
 import {getPopupContainer, openPopup, removePopup} from '../../../helpers/popupHelper'
 import {bpTypes, getBpStepsList} from '../../../helpers/businessProcessHelper'
 import showBackgroundBlock from '../../ui/BackgroundBlock/BackgroundBlock'
@@ -18,6 +19,9 @@ import BusinessProcessService from '../../../api/BusinessProcessService'
 import SelectorBox from '../../SelectorBox/SelectorBox'
 import UserBox from '../../form/UserBox/UserBox'
 import TextBox from '../../form/TextBox/TextBox'
+import Tabs from '../../Tabs/Tabs'
+import UserList from '../PopupBuildingCreate/components/UserList/UserList'
+import RelationList from './components/RelationList/RelationList'
 import classes from './PopupBusinessProcessCreate.module.scss'
 
 interface Props extends PopupProps {
@@ -86,103 +90,140 @@ const PopupBusinessProcessCreate: React.FC<Props> = (props) => {
             })
     }
 
+    const renderStateTab = () => {
+        return (
+            <div key='state' className={classes.tabContent}>
+                <div className={classes.field}>
+                    <Label text='Название'/>
+
+                    <TextBox value={businessProcess.name}
+                             onChange={(e: React.MouseEvent, value: string) => setBusinessProcess({
+                                 ...businessProcess,
+                                 name: value
+                             })}
+                             placeHolder='Введите название'
+                             error={!businessProcess.name || businessProcess.name.trim() === ''}
+                             showRequired
+                             errorText='Поле обязательно для заполнения'
+                             styleType='minimal'
+                    />
+                </div>
+
+                <div className={classes.field}>
+                    <Label text='Ответственный'/>
+
+                    <UserBox users={businessProcess.responsible ? [businessProcess.responsible] : []}
+                             onSelect={(value: number[]) => {
+                                 setBusinessProcess({
+                                     ...businessProcess,
+                                     responsible: value.length ? value[0] : null
+                                 })
+                             }}
+                             placeHolder='Выберите ответственного'
+                             styleType='minimal'
+                    />
+                </div>
+
+                <div className={classes.field}>
+                    <Label text='Тип процесса'/>
+
+                    <SelectorBox selected={[businessProcess.type]}
+                                 items={bpTypes}
+                                 onSelect={(value: string[]) => {
+                                     setBusinessProcess({
+                                         ...businessProcess,
+                                         type: value[0]
+                                     })
+                                 }}
+                                 placeHolder='Выберите тип процесса'
+                                 styleType='minimal'
+                    />
+                </div>
+
+                <div className={classes.field}>
+                    <Label text='Этап'/>
+
+                    <SelectorBox selected={[businessProcess.step]}
+                                 items={getBpStepsList()}
+                                 onSelect={(value: string[]) => {
+                                     setBusinessProcess({
+                                         ...businessProcess,
+                                         step: value[0]
+                                     })
+                                 }}
+                                 placeHolder='Выберите этап'
+                                 styleType='minimal'
+                    />
+                </div>
+
+                <div className={classes.field}>
+                    <Label text='Комментарий'/>
+
+                    <TextAreaBox value={businessProcess.description}
+                                 onChange={(value: string) => {
+                                     setBusinessProcess({
+                                         ...businessProcess,
+                                         description: value
+                                     })
+                                 }}
+                                 placeHolder='Введите комментарий'
+                                 width='100%'
+                    />
+                </div>
+
+                <div className={classes.field}>
+                    <CheckBox label='Активен'
+                              type='modern'
+                              width={110}
+                              checked={!!businessProcess.active}
+                              onChange={(e: React.MouseEvent, value: boolean) => {
+                                  setBusinessProcess({
+                                      ...businessProcess,
+                                      active: value ? 1 : 0
+                                  })
+                              }}
+                    />
+                </div>
+            </div>
+        )
+    }
+
+    const renderRelationsTab = () => {
+        return (
+            <div key='relations' className={classes.tabContent}>
+                <RelationList selected={businessProcess.relations || []}
+                              fetching={fetching}
+                              onSelect={(value: IBusinessProcessRelation[]) => {
+                                  setBusinessProcess({...businessProcess, relations: value})
+                              }}
+                />
+            </div>
+        )
+    }
+
+    const renderAttendeesTab = () => {
+        return (
+            <div key='attendees' className={classes.tabContent}>
+                <UserList selected={businessProcess.attendees || []}
+                          onSelect={(value: number[]) => setBusinessProcess({...businessProcess, attendees: value})}
+                />
+            </div>
+        )
+    }
+
+    const tabs: ITab = {
+        state: {title: 'Состояние', render: renderStateTab()},
+        info: {title: 'Связи', render: renderRelationsTab()},
+        checker: {title: 'Участники', render: renderAttendeesTab()}
+    }
+
     return (
         <Popup className={classes.PopupBusinessProcessCreate}>
             <BlockingElement fetching={fetching} className={classes.content}>
                 <div className={classes.blockContent}>
                     <Title type={2}>Информация о бизнес-процессе</Title>
 
-                    <div className={classes.field}>
-                        <Label text='Название'/>
-
-                        <TextBox value={businessProcess.name}
-                                 onChange={(e: React.MouseEvent, value: string) => setBusinessProcess({
-                                     ...businessProcess,
-                                     name: value
-                                 })}
-                                 placeHolder='Введите название'
-                                 error={!businessProcess.name || businessProcess.name.trim() === ''}
-                                 showRequired
-                                 errorText='Поле обязательно для заполнения'
-                                 styleType='minimal'
-                        />
-                    </div>
-
-                    <div className={classes.field}>
-                        <Label text='Ответственный'/>
-
-                        <UserBox users={businessProcess.responsible ? [businessProcess.responsible] : []}
-                                 onSelect={(value: number[]) => {
-                                     setBusinessProcess({
-                                         ...businessProcess,
-                                         responsible: value.length ? value[0] : null
-                                     })
-                                 }}
-                                 placeHolder='Выберите ответственного'
-                                 styleType='minimal'
-                        />
-                    </div>
-
-                    <div className={classes.field}>
-                        <Label text='Тип процесса'/>
-
-                        <SelectorBox selected={[businessProcess.type]}
-                                     items={bpTypes}
-                                     onSelect={(value: string[]) => {
-                                         setBusinessProcess({
-                                             ...businessProcess,
-                                             type: value[0]
-                                         })
-                                     }}
-                                     placeHolder='Выберите тип процесса'
-                                     styleType='minimal'
-                        />
-                    </div>
-
-                    <div className={classes.field}>
-                        <Label text='Этап'/>
-
-                        <SelectorBox selected={[businessProcess.step]}
-                                     items={getBpStepsList()}
-                                     onSelect={(value: string[]) => {
-                                         setBusinessProcess({
-                                             ...businessProcess,
-                                             step: value[0]
-                                         })
-                                     }}
-                                     placeHolder='Выберите этап'
-                                     styleType='minimal'
-                        />
-                    </div>
-
-                    <div className={classes.field}>
-                        <Label text='Комментарий'/>
-
-                        <TextAreaBox value={businessProcess.description}
-                                     onChange={(value: string) => {
-                                         setBusinessProcess({
-                                             ...businessProcess,
-                                             description: value
-                                         })
-                                     }}
-                                     placeHolder='Введите комментарий'
-                                     width='100%'
-                        />
-                    </div>
-
-                    <div className={classes.field}>
-                        <CheckBox label='Активен'
-                                  type='modern'
-                                  width={110}
-                                  checked={!!businessProcess.active}
-                                  onChange={(e: React.MouseEvent, value: boolean) => {
-                                      setBusinessProcess({
-                                          ...businessProcess,
-                                          active: value ? 1 : 0
-                                      })
-                                  }}
-                        />
-                    </div>
+                    <Tabs tabs={tabs} paddingFirstTab='popup'/>
                 </div>
             </BlockingElement>
 
