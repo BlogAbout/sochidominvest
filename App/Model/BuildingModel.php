@@ -2,6 +2,8 @@
 
 namespace App;
 
+use DateTime;
+
 /**
  * BuildingModel - Эта модель используется в основном BuildingController, а также другими контроллерами
  */
@@ -432,12 +434,42 @@ class BuildingModel extends Model
         parent::bindParams('avatar', $payload['avatar']);
         parent::execute();
 
+        BuildingModel::updatePrices($payload['id'], 'building', $payload['cost']);
         BuildingModel::updateRelationsTags($payload['id'], $payload['tags']);
         BuildingModel::updateRelationsDevelopers($payload['id'], $payload['developers']);
         BuildingModel::updateRelationsContacts($payload['id'], $payload['contacts']);
         BuildingModel::updateRelationsArticles($payload['id'], $payload['articles']);
         parent::updateRelationsImages($payload['images'], $payload['id'], 'building');
         parent::updateRelationsVideos($payload['videos'], $payload['id'], 'building');
+    }
+
+    /**
+     * Сохранение изменения цены
+     *
+     * @param int $objectId Идентификатор объекта
+     * @param string $objectType Тип объекта
+     * @param float $cost Цена
+     */
+    public static function updatePrices(int $objectId, string $objectType, float $cost)
+    {
+        if ($objectId && $objectType && $cost) {
+            $dateUpdate = new DateTime();
+            $dateUpdate->setTime(0, 0);
+
+            $sql = "
+                INSERT INTO `sdi_building_price` (`id_object`, `type_object`, `date_update`, `cost`)
+                VALUES (:objectId, :objectType, :dateUpdate, :cost)
+                ON DUPLICATE KEY
+                UPDATE `cost` = :cost
+            ";
+
+            self::query($sql);
+            self::bindParams('objectId', $objectId);
+            self::bindParams('objectType', $objectType);
+            self::bindParams('dateUpdate', $dateUpdate->format('Y-m-d H:i:s'));
+            self::bindParams('cost', $cost);
+            self::execute();
+        }
     }
 
     /**

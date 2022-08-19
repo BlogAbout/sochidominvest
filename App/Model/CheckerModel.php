@@ -2,6 +2,8 @@
 
 namespace App;
 
+use DateTime;
+
 /**
  * CheckerModel - Эта модель используется в основном CheckerController, а также другими контроллерами
  */
@@ -111,6 +113,7 @@ class CheckerModel extends Model
             $payload['id'] = parent::lastInsertedId();
 
             BuildingModel::updateValuesBuilding($payload['buildingId']);
+            BuildingModel::updatePrices($payload['id'], 'checker', $payload['cost']);
 
             return array(
                 'status' => true,
@@ -167,6 +170,7 @@ class CheckerModel extends Model
 
         if (parent::execute()) {
             BuildingModel::updateValuesBuilding($payload['buildingId']);
+            BuildingModel::updatePrices($payload['id'], 'checker', $payload['cost']);
 
             return array(
                 'status' => true,
