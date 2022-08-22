@@ -1,11 +1,15 @@
-import React, {useState} from 'react'
-import {PopupDisplayOptions, PopupProps} from '../../@types/IPopup'
-import {IBuildingPassed} from '../../@types/IBuilding'
-import {openPopup, removePopup} from '../../helpers/popupHelper'
-import CheckBox from '../form/CheckBox/CheckBox'
-import NumberBox from '../NumberBox/NumberBox'
-import {Content, Footer, Popup} from '../popup/Popup/Popup'
-import Button from '../form/Button/Button'
+import React, {useEffect, useState} from 'react'
+import {PopupDisplayOptions, PopupProps} from '../../../@types/IPopup'
+import {IBuildingPassed} from '../../../@types/IBuilding'
+import {getPopupContainer, openPopup, removePopup} from '../../../helpers/popupHelper'
+import CheckBox from '../../form/CheckBox/CheckBox'
+import NumberBox from '../../NumberBox/NumberBox'
+import {Footer, Popup} from '../Popup/Popup'
+import Button from '../../form/Button/Button'
+import showBackgroundBlock from '../../ui/BackgroundBlock/BackgroundBlock'
+import BlockingElement from '../../ui/BlockingElement/BlockingElement'
+import Title from '../../ui/Title/Title'
+import Label from '../../form/Label/Label'
 import classes from './PopupPassedSelector.module.scss'
 
 interface Props extends PopupProps {
@@ -28,6 +32,12 @@ const PopupPassedSelector: React.FC<Props> = (props) => {
         year: 2020
     })
 
+    useEffect(() => {
+        return () => {
+            removePopup(props.blockId ? props.blockId : '')
+        }
+    }, [props.blockId])
+
     const close = () => {
         removePopup(props.id || '')
     }
@@ -36,10 +46,24 @@ const PopupPassedSelector: React.FC<Props> = (props) => {
 
     return (
         <Popup className={classes.PopupPassedSelector}>
-            <Content className={classes['popup-content']}>
-                <div className={classes.content}>
+            <BlockingElement fetching={false} className={classes.content}>
+                <div className={classes.blockContent}>
+                    <Title type={2}>Информация о сдаче объекта</Title>
+
                     <div className={classes.field}>
-                        <div className={classes.field_label}>Квартал</div>
+                        <CheckBox label='Сдан'
+                                  type='modern'
+                                  width={110}
+                                  checked={!!passed.is}
+                                  onChange={(e: React.MouseEvent, value: boolean) => setPassed({
+                                      ...passed,
+                                      is: value ? 1 : 0
+                                  })}
+                        />
+                    </div>
+
+                    <div className={classes.field}>
+                        <Label text='Квартал'/>
 
                         <div className={classes.radio}>
                             {quarters.map(item => {
@@ -57,7 +81,7 @@ const PopupPassedSelector: React.FC<Props> = (props) => {
                     </div>
 
                     <div className={classes.field}>
-                        <div className={classes.field_label}>Год</div>
+                        <Label text='Год'/>
 
                         <NumberBox value={passed.year || ''}
                                    min={1}
@@ -68,21 +92,12 @@ const PopupPassedSelector: React.FC<Props> = (props) => {
                                        year: value
                                    })}
                                    placeHolder='Введите год сдачи'
-                        />
-                    </div>
-
-                    <div className={classes.field}>
-                        <CheckBox label='Сдан'
-                                  type='modern'
-                                  checked={!!passed.is}
-                                  onChange={(e: React.MouseEvent, value: boolean) => setPassed({
-                                      ...passed,
-                                      is: value ? 1 : 0
-                                  })}
+                                   styleType='minimal'
                         />
                     </div>
                 </div>
-            </Content>
+            </BlockingElement>
+
             <Footer>
                 <Button type='apply'
                         icon='check'
@@ -90,12 +105,14 @@ const PopupPassedSelector: React.FC<Props> = (props) => {
                             props.onChange(passed)
                             close()
                         }}
+                        title='Сохранить'
                 >Сохранить</Button>
 
                 <Button type='regular'
                         icon='arrow-rotate-left'
                         onClick={close.bind(this)}
                         className='marginLeft'
+                        title='Отменить'
                 >Отменить</Button>
             </Footer>
         </Popup>
@@ -105,6 +122,16 @@ const PopupPassedSelector: React.FC<Props> = (props) => {
 PopupPassedSelector.defaultProps = defaultProps
 PopupPassedSelector.displayName = 'PopupPassedSelector'
 
-export default function openPopupPassedSelector(e: any, popupProps = {} as Props, displayOptions: PopupDisplayOptions = {} as PopupDisplayOptions) {
-    return openPopup(PopupPassedSelector, popupProps, undefined, e, displayOptions)
+export default function openPopupPassedSelector(target: any, popupProps = {} as Props) {
+    const displayOptions: PopupDisplayOptions = {
+        autoClose: false,
+        rightPanel: true,
+        fullScreen: true
+    }
+    const blockId = showBackgroundBlock(target, {animate: true}, displayOptions)
+    let block = getPopupContainer(blockId)
+
+    popupProps = {...popupProps, blockId: blockId}
+
+    return openPopup(PopupPassedSelector, popupProps, undefined, block, displayOptions)
 }

@@ -71,6 +71,7 @@ class BuildingController extends Controller
             'coordinates' => htmlentities(stripcslashes(strip_tags($data->coordinates))),
             'active' => (int)htmlentities(stripcslashes(strip_tags($data->active))),
             'publish' => (int)htmlentities(stripcslashes(strip_tags($data->publish))),
+            'rent' => (int)htmlentities(stripcslashes(strip_tags($data->rent))),
             'status' => htmlentities(stripcslashes(strip_tags($data->status))),
             'type' => htmlentities(stripcslashes(strip_tags($data->type))),
             'district' => htmlentities(stripcslashes(strip_tags($data->district))),
@@ -109,6 +110,7 @@ class BuildingController extends Controller
             'metaTitle' => htmlentities(stripcslashes(strip_tags($data->metaTitle))),
             'metaDescription' => htmlentities(stripcslashes(strip_tags($data->metaDescription))),
             'passed' => $data->passed ? json_encode($data->passed) : '',
+            'rentData' => $data->rentData,
             'dateCreated' => date('Y-m-d H:i:s'),
             'dateUpdate' => date('Y-m-d H:i:s'),
             'author' => JwtMiddleware::getUserId()
@@ -197,6 +199,7 @@ class BuildingController extends Controller
             'coordinates' => htmlentities(stripcslashes(strip_tags($data->coordinates))),
             'active' => (int)htmlentities(stripcslashes(strip_tags($data->active))),
             'publish' => (int)htmlentities(stripcslashes(strip_tags($data->publish))),
+            'rent' => (int)htmlentities(stripcslashes(strip_tags($data->rent))),
             'status' => htmlentities(stripcslashes(strip_tags($data->status))),
             'type' => htmlentities(stripcslashes(strip_tags($data->type))),
             'district' => htmlentities(stripcslashes(strip_tags($data->district))),
@@ -236,6 +239,7 @@ class BuildingController extends Controller
             'metaTitle' => htmlentities(stripcslashes(strip_tags($data->metaTitle))),
             'metaDescription' => htmlentities(stripcslashes(strip_tags($data->metaDescription))),
             'passed' => $data->passed ? json_encode($data->passed) : '',
+            'rentData' => $data->rentData,
             'video' => htmlentities(stripcslashes(strip_tags($data->video)))
         );
 

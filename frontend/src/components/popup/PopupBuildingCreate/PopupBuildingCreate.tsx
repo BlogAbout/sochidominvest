@@ -4,7 +4,7 @@ import classNames from 'classnames/bind'
 import BuildingService from '../../../api/BuildingService'
 import AttachmentService from '../../../api/AttachmentService'
 import {PopupDisplayOptions, PopupProps} from '../../../@types/IPopup'
-import {IBuilding, IBuildingPassed} from '../../../@types/IBuilding'
+import {IBuilding, IBuildingPassed, IBuildingRent} from '../../../@types/IBuilding'
 import {ITab} from '../../../@types/ITab'
 import {ISelector} from '../../../@types/ISelector'
 import {IAttachment} from '../../../@types/IAttachment'
@@ -30,6 +30,7 @@ import PassedBox from '../../PassedBox/PassedBox'
 import FileList from '../../FileList/FileList'
 import openPopupAlert from '../../PopupAlert/PopupAlert'
 import openPopupFileManager from '../../PopupFileManager/PopupFileManager'
+import openPopupBuildingRent from '../PopupBuildingRent/PopupBuildingRent'
 import Title from '../../ui/Title/Title'
 import Label from '../../form/Label/Label'
 import ArticleList from './components/ArticleList/ArticleList'
@@ -87,12 +88,13 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
         contacts: [],
         developers: [],
         advantages: [],
+        articles: [],
         images: [],
         videos: [],
         surchargeDoc: 0,
         surchargeGas: 0,
         area: 0,
-        cost: 0,
+        cost: 0
     })
 
     const [fetchingBuilding, setFetchingBuilding] = useState(false)
@@ -360,6 +362,30 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
                                styleType='minimal'
                     />
                 </div>
+
+                {building.type !== 'building' ?
+                    <div className={classes.field}>
+                        <CheckBox label='Сдается в аренду'
+                                  title='Сдается в аренду'
+                                  type='modern'
+                                  width={110}
+                                  checked={!!building.rent}
+                                  onChange={(n) => {
+                                      openPopupBuildingRent(document.body, {
+                                          building: building,
+                                          onSave: (active: number, rentData: IBuildingRent) => {
+                                              setBuilding({
+                                                  ...building,
+                                                  rent: active,
+                                                  rentData: rentData
+                                              })
+                                          }
+                                      })
+                                  }}
+                        />
+                    </div>
+                    : null
+                }
 
                 <div className={classes.field}>
                     <CheckBox label='Продажа для нерезидентов'

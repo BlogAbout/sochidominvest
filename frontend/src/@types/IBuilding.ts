@@ -8,6 +8,7 @@ export interface IBuilding {
     status: string | null
     active: number
     publish: number
+    rent: number
     author: number | null
     dateCreated?: string | null
     dateUpdate?: string | null
@@ -22,7 +23,7 @@ export interface IBuilding {
     tags: number[]
     contacts: number[]
     developers: number[]
-    articles?: number[]
+    articles: number[]
     district?: string | null
     districtZone?: string | null
     houseClass?: string | null
@@ -55,6 +56,7 @@ export interface IBuilding {
     avatarId?: number | null
     avatar?: string | null,
     authorName?: string | null
+    rentData?: IBuildingRent
 }
 
 export interface IBuildingPassed {
@@ -81,4 +83,14 @@ export interface IBuildingChecker {
 
 export interface IBuildingHousing {
     [key: number]: IBuildingChecker[]
+}
+
+export interface IBuildingRent {
+    description: string
+    type: string
+    deposit: number
+    commission: number
+    cost?: number | null
+    costDeposit?: number | null
+    costCommission?: number | null
 }

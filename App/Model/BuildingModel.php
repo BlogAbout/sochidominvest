@@ -83,6 +83,8 @@ class BuildingModel extends Model
         $building = parent::fetch();
 
         if (!empty($building)) {
+            $building['rentData'] = BuildingModel::fetchRentData($building['id']);
+
             return BuildingModel::formatDataToJson($building);
         }
 
@@ -174,12 +176,36 @@ class BuildingModel extends Model
             $ids = [];
 
             foreach ($buildingList as $buildingData) {
+                $buildingData['rentData'] = BuildingModel::fetchRentData($buildingData['id']);
+
                 array_push($resultList, BuildingModel::formatDataToJson($buildingData));
                 array_push($ids, (int)$buildingData['id']);
             }
         }
 
         return $resultList;
+    }
+
+    /**
+     * Получение данных об аренде
+     *
+     * @param int $buildingId
+     * @return array
+     */
+    private static function fetchRentData(int $buildingId): array
+    {
+        $sql = "SELECT * FROM `sdi_building_rent` WHERE `id_building` = :buildingId";
+
+        parent::query($sql);
+        parent::bindParams('buildingId', $buildingId);
+
+        $rentData = parent::fetch();
+
+        if (!empty($rentData)) {
+            return BuildingModel::formatDataRentToJson($rentData);
+        }
+
+        return $rentData;
     }
 
     /**
@@ -193,10 +219,10 @@ class BuildingModel extends Model
         $sql = "
             INSERT INTO `sdi_building`
                 (`name`, `description`, `address`, `coordinates`, `author`, `date_created`, `date_update`, `active`, `publish`,
-                 `status`, `type`, `area`, `cost`, `meta_title`, `meta_description`)
+                 `rent`, `status`, `type`, `area`, `cost`, `meta_title`, `meta_description`)
             VALUES
                 (:name, :description, :address, :coordinates, :author, :dateCreated, :dateUpdate, :active, :publish,
-                 :status, :type, :area, :cost, :metaTitle, :metaDescription)
+                 :rent, :status, :type, :area, :cost, :metaTitle, :metaDescription)
         ";
 
         parent::query($sql);
@@ -209,6 +235,7 @@ class BuildingModel extends Model
         parent::bindParams('dateUpdate', $payload['dateUpdate']);
         parent::bindParams('active', $payload['active']);
         parent::bindParams('publish', $payload['publish']);
+        parent::bindParams('rent', $payload['rent']);
         parent::bindParams('status', $payload['status']);
         parent::bindParams('type', $payload['type']);
         parent::bindParams('area', $payload['area']);
@@ -253,6 +280,7 @@ class BuildingModel extends Model
                 `date_update` = :dateUpdate,
                 `active` = :active,
                 `publish` = :publish,
+                `rent` = :rent,
                 `status` = :status,
                 `type` = :type,
                 `area` = :area,
@@ -271,6 +299,7 @@ class BuildingModel extends Model
         parent::bindParams('dateUpdate', $payload['dateUpdate']);
         parent::bindParams('active', $payload['active']);
         parent::bindParams('publish', $payload['publish']);
+        parent::bindParams('rent', $payload['rent']);
         parent::bindParams('status', $payload['status']);
         parent::bindParams('type', $payload['type']);
         parent::bindParams('area', $payload['area']);
@@ -435,6 +464,7 @@ class BuildingModel extends Model
         parent::execute();
 
         BuildingModel::updatePrices($payload['id'], 'building', $payload['cost']);
+        BuildingModel::updateRent($payload);
         BuildingModel::updateRelationsTags($payload['id'], $payload['tags']);
         BuildingModel::updateRelationsDevelopers($payload['id'], $payload['developers']);
         BuildingModel::updateRelationsContacts($payload['id'], $payload['contacts']);
@@ -473,12 +503,48 @@ class BuildingModel extends Model
     }
 
     /**
+     * Обновление информации об аренде
+     *
+     * @param array $payload Массив данных объекта недвижимости
+     */
+    private static function updateRent(array $payload)
+    {
+        $sql = "DELETE FROM `sdi_building_rent` WHERE `id_building` = :buildingId";
+
+        parent::query($sql);
+        parent::bindParams('buildingId', $payload['id']);
+        parent::execute();
+
+        if ($payload['rent'] === 1 && $payload['rentData']) {
+            $rentData = $payload['rentData'];
+
+            $sql = "
+                INSERT INTO `sdi_building_rent`
+                    (`id_building`, `description`, `type`, `deposit`, `commission`, `cost`, `cost_deposit`, `cost_comission`)
+                VALUES
+                    (:buildingId, :description, :type, :deposit, :commission, :cost, :costDeposit, :costCommission)
+            ";
+
+            parent::query($sql);
+            parent::bindParams('buildingId', $payload['id']);
+            parent::bindParams('description', $rentData->description);
+            parent::bindParams('type', $rentData->type);
+            parent::bindParams('deposit', $rentData->deposit);
+            parent::bindParams('commission', $rentData->commission);
+            parent::bindParams('cost', $rentData->cost);
+            parent::bindParams('costDeposit', $rentData->costDeposit);
+            parent::bindParams('costCommission', $rentData->costCommission);
+            parent::execute();
+        }
+    }
+
+    /**
      * Обновление связей между объектами недвижимости и метками
      *
      * @param int $buildingId Идентификатор объекта недвижимости
      * @param array $tags Массив идентификаторов меток
      */
-    private static function updateRelationsTags(int $buildingId, array $tags)
+    private static function updateRelationsTags(int $buildingId, array $tags = array())
     {
         $sql = "DELETE FROM `sdi_building_tag` WHERE `id_building` = :id";
 
@@ -510,7 +576,7 @@ class BuildingModel extends Model
      * @param int $buildingId Идентификатор объекта недвижимости
      * @param array $users Массив идентификаторов пользователей
      */
-    private static function updateRelationsContacts(int $buildingId, array $users)
+    private static function updateRelationsContacts(int $buildingId, array $users = array())
     {
         $sql = "DELETE FROM `sdi_building_contact` WHERE `id_building` = :id";
 
@@ -542,7 +608,7 @@ class BuildingModel extends Model
      * @param int $buildingId Идентификатор объекта недвижимости
      * @param array $developers Массив идентификаторов застройщиков
      */
-    private static function updateRelationsDevelopers(int $buildingId, array $developers)
+    private static function updateRelationsDevelopers(int $buildingId, array $developers = array())
     {
         $sql = "DELETE FROM `sdi_building_developer` WHERE `id_building` = :id";
 
@@ -574,7 +640,7 @@ class BuildingModel extends Model
      * @param int $buildingId Идентификатор объекта недвижимости
      * @param array $articles Массив идентификаторов статей
      */
-    private static function updateRelationsArticles(int $buildingId, array $articles)
+    private static function updateRelationsArticles(int $buildingId, array $articles = array())
     {
         $sql = "DELETE FROM `sdi_building_article` WHERE `id_building` = :id";
 
@@ -616,6 +682,7 @@ class BuildingModel extends Model
             'coordinates' => html_entity_decode($data['coordinates']),
             'active' => (int)$data['active'],
             'publish' => (int)$data['publish'],
+            'rent' => (int)$data['rent'],
             'status' => $data['status'],
             'author' => (int)$data['author'],
             'type' => $data['type'],
@@ -664,7 +731,27 @@ class BuildingModel extends Model
             'views' => $data['views'] ? (int)$data['views'] : 0,
             'avatarId' => (int)$data['id_avatar'],
             'avatar' => $data['avatar'],
-            'authorName' => $data['authorName']
+            'authorName' => $data['authorName'],
+            'rentData' => $data['rentData'] ?: null
+        ];
+    }
+
+    /**
+     * Преобразование выходящих данных аренды в формат для frontend
+     *
+     * @param array $data Массив из базы данных
+     * @return array
+     */
+    private static function formatDataRentToJson(array $data): array
+    {
+        return [
+            'description' => html_entity_decode($data['description']),
+            'type' => $data['type'],
+            'deposit' => (int)$data['deposit'],
+            'commission' => (int)$data['commission'],
+            'cost' => (float)$data['cost'],
+            'costDeposit' => (float)$data['cost_deposit'],
+            'costCommission' => (float)$data['cost_comission'],
         ];
     }
 }

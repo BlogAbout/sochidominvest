@@ -271,6 +271,14 @@ export const districtList: ISelector[] = [
     }
 ]
 
+/**
+ *  Список типов аренды
+ */
+export const rentTypes: ISelector[] = [
+    {key: 'long', text: 'Долгосрочная'},
+    {key: 'short', text: 'Посуточно'}
+]
+
 export const getDistrictText = (district?: string | null, districtZone?: string | null) => {
     let districtText = ''
 
@@ -441,4 +449,9 @@ export const checkBuildingByDistrict = (building: IBuilding, filters: any) => {
     }
 
     return !!(building.districtZone && filters.buildingDistrictZone.includes(building.districtZone))
+}
+
+export const getRentTypesText = (key: string) => {
+    const find = rentTypes.find((item: ISelector) => item.key === key)
+    return find ? find.text : ''
 }

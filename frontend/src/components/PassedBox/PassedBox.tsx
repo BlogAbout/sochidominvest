@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react'
 import {IconProp} from '@fortawesome/fontawesome-svg-core'
 import {IBuildingPassed} from '../../@types/IBuilding'
-import openPopupPassedSelector from '../PopupPassedSelector/PopupPassedSelector'
+import openPopupPassedSelector from '../popup/PopupPassedSelector/PopupPassedSelector'
 import Box from '../form/Box/Box'
 
 interface Props {
@@ -46,8 +46,6 @@ const PassedBox: React.FC<Props> = (props) => {
             onChange: (value: IBuildingPassed) => {
                 props.onChange(value)
             }
-        }, {
-            center: true
         })
     }
 

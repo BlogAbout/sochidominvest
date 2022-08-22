@@ -28,7 +28,7 @@ interface Props extends PopupProps {
 const defaultProps: Props = {
     developer: null,
     onSave: () => {
-        console.info('PopupTagCreate onSave')
+        console.info('PopupDeveloperCreate onSave')
     }
 }
 
