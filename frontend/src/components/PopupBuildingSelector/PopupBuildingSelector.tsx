@@ -22,6 +22,7 @@ interface Props extends PopupProps {
     selected?: number[]
     buttonAdd?: boolean
     multi?: boolean
+    onlyRent?: boolean
 
     onSelect(value: number[]): void
 
@@ -32,6 +33,7 @@ const defaultProps: Props = {
     selected: [],
     buttonAdd: true,
     multi: false,
+    onlyRent: false,
     onAdd: () => {
         console.info('PopupBuildingSelector onAdd')
     },
@@ -102,12 +104,14 @@ const PopupBuildingSelector: React.FC<Props> = (props) => {
     const search = (value: string) => {
         setSearchText(value)
 
+        const prepareBuildings = props.onlyRent ? buildings.filter((building: IBuilding) => building.rent === 1) : buildings
+
         if (value.trim() !== '') {
-            setFilterBuilding(buildings.filter((building: IBuilding) => {
+            setFilterBuilding(prepareBuildings.filter((building: IBuilding) => {
                 return building.name.toLocaleLowerCase().indexOf(value.toLocaleLowerCase()) !== -1
             }))
         } else {
-            setFilterBuilding(buildings)
+            setFilterBuilding(prepareBuildings)
         }
     }
 

@@ -1,0 +1,204 @@
+.normal {
+    width: 206px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.popup {
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 0 15px -5px #000000;
+    background: #fff;
+    height: 238px;
+}
+
+.arrow {
+    cursor: pointer;
+    width: 27px;
+    height: 13px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.arrowLeft {
+    composes: arrow;
+    background: url('./img/left_arrow_calendar.png') no-repeat center;
+}
+
+.arrowRight {
+    composes: arrow;
+    background: url('./img/right_arrow_calendar.png') no-repeat center;
+}
+
+.header {
+    flex: 0 0 40px;
+    display: flex;
+    border-bottom: 1px solid #D3D2D2;
+    box-sizing: border-box;
+}
+
+.headerWrap {
+    display: flex;
+    align-items: center;
+}
+
+.headerWrapFlex {
+    composes: headerWrap;
+    flex-grow: 1;
+}
+
+.selectorMonth {
+    flex-grow: 1;
+    text-align: center;
+    cursor: pointer;
+    text-decoration: underline;
+    color: #585858;
+    font-size: 14px;
+}
+
+.cellSize {
+    flex: none;
+    width: 25px;
+    height: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    flex-grow: 1;
+}
+
+.cell {
+    border: 1px solid transparent;
+    height: 19px;
+    width: 19px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #585858;
+    font-size: 12px;
+    position: relative;
+}
+
+.cellHeader {
+    text-align: center;
+    border: 1px solid transparent;
+    font-size: 10px;
+    color: #585858;
+    width: 25px;
+    flex: 1 1 25px;
+    box-sizing: border-box;
+}
+
+.cellActive {
+    composes: cell;
+    cursor: pointer;
+
+    &:hover {
+        background-color: #f4f8fb;
+        border-radius: 50%;
+    }
+}
+
+.cellActiveGrey {
+    composes: cellActive;
+    color: #e8e8e8;
+}
+
+.cellSelected {
+    composes: cellActive;
+    border-radius: 50%;
+    border-color: #4dc8d6;
+}
+
+.cellSelectedCurrentDay {
+    composes: cell;
+    cursor: pointer;
+    border-radius: 50%;
+    border-color: #4dc8d6;
+    background: #dbfbff !important;
+}
+
+.cellSelectedCurrentDay:hover {
+    background: #dbfbff !important;
+}
+
+.cellSelected:hover {
+    background: #f4f8fb !important;
+}
+
+.existingDate {
+    position: absolute;
+    width: 7px;
+    height: 7px;
+    background-color: #4dc8d6;
+    border-radius: 50%;
+    left: 14px;
+    bottom: -1px;
+}
+
+.weekContent {
+    display: flex;
+    margin: 0 10px;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.weekContentLine {
+    display: flex;
+    flex-direction: column;
+    height: 156px;
+    border: 1px solid #e8e8e8;
+    flex: 0 0 156px;
+    box-sizing: border-box;
+}
+
+.weekLine {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.weekHeader {
+    composes: weekLine;
+    flex: 0 0 20px;
+}
+
+.weekCellWrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-grow: 1;
+    width: 50px;
+    height: 50px;
+}
+
+.weekCell {
+    composes: cellActive;
+    width: 40px;
+    height: 40px;
+}
+
+.weekCellSelected {
+    composes: weekCell;
+    border-radius: 50%;
+    border-color: #08a7b9;
+}
+
+.weekCellSelected:hover {
+    background: #dbfbff !important;
+}
+
+.icon {
+    background: url('./img/calendar.png') no-repeat 1px center;
+    width: 25px;
+    height: 25px;
+    border-left: 1px solid transparent;
+    flex-shrink: 0;
+}
+
+.popup_year_wrap {
+    display: flex;
+    height: 164px;
+}

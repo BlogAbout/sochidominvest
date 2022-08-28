@@ -12,7 +12,8 @@ const CrmPagePanel: React.FC = () => {
     const menu = [
         {href: RouteNames.CRM_DEVELOPER, title: 'Застройщики', disabled: false},
         {href: RouteNames.CRM_POST, title: 'Должности', disabled: false},
-        {href: RouteNames.CRM_BP, title: 'Бизнес-процессы', disabled: false}
+        {href: RouteNames.CRM_BP, title: 'Бизнес-процессы', disabled: false},
+        {href: RouteNames.CRM_BOOKING, title: 'Бронирование', disabled: false}
     ]
 
     return (

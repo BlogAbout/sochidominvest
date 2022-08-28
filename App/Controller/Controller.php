@@ -315,6 +315,18 @@ class Controller
             if (!empty($params['text'])) {
                 $filter['text'] = $params['text'];
             }
+
+            if (!empty($params['buildingId'])) {
+                $filter['buildingId'] = $params['buildingId'];
+            }
+
+            if (!empty($params['dateStart'])) {
+                $filter['dateStart'] = $params['dateStart'];
+            }
+
+            if (!empty($params['dateFinish'])) {
+                $filter['dateFinish'] = $params['dateFinish'];
+            }
         }
 
         return $filter;

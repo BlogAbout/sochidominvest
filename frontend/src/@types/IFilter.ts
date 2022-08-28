@@ -5,7 +5,7 @@ export interface IFilter {
     id?: number[]
     active?: number[]
     publish?: number
-    buildingId?: number
+    buildingId?: number[]
     objectId?: number[]
     objectType?: string
     author?: number[]
@@ -13,6 +13,8 @@ export interface IFilter {
     type?: string
     text?: string
     page?: string
+    dateStart?: string
+    dateFinish?: string
 }
 
 export interface IFilterContent {

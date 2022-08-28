@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Booking\BookingController;
 use App\BusinessProcess\BusinessProcessController;
 use Klein\Klein;
 
@@ -151,6 +152,10 @@ $Klein->respond('PUT', '/api/v1/business-process/[:id]', [new BusinessProcessCon
 $Klein->respond('GET', '/api/v1/business-process/[:id]', [new BusinessProcessController(), 'fetchItemById']);
 $Klein->respond('GET', '/api/v1/business-process', [new BusinessProcessController(), 'fetchList']);
 $Klein->respond('DELETE', '/api/v1/business-process/[:id]', [new BusinessProcessController(), 'deleteItem']);
+
+// Booking Routes
+$Klein->respond('POST', '/api/v1/booking', [new BookingController(), 'createOrUpdateItem']);
+$Klein->respond('GET', '/api/v1/booking', [new BookingController(), 'fetchList']);
 
 // Dispatch all routes
 $Klein->dispatch();

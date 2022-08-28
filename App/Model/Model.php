@@ -305,6 +305,14 @@ class Model
             array_push($where, "(sdi.`name` LIKE '%" . $filter['text'] . "%')");
         }
 
+//        if (!empty($filter['dateStart'])) {
+//            array_push($where, "sdi.`date_start` >= '" . $filter['dateStart'] . "'");
+//        }
+//
+//        if (!empty($filter['dateFinish'])) {
+//            array_push($where, "sdi.`date_finish` <= '" . $filter['dateFinish'] . "'");
+//        }
+
         if (count($where)) {
             $sqlWhere = " WHERE " . implode(' AND ', $where);
         }

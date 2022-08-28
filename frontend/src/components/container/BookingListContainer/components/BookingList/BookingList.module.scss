@@ -1,0 +1,45 @@
+.BookingList {
+    overflow: auto;
+    height: 100%;
+
+    .head {
+        padding: 8px 10px;
+        background-color: #075ea5;
+        color: #fff;
+        margin-bottom: 15px;
+        display: flex;
+        width: 100%;
+        font-weight: 700;
+        box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.4);
+
+        .name {
+            flex-grow: 1;
+        }
+
+        .status {
+            width: 200px;
+            flex-shrink: 0;
+        }
+
+        .date {
+            width: 150px;
+            flex-shrink: 0;
+        }
+    }
+
+    .list {
+        max-height: calc(100% - 51px);
+    }
+}
+
+@media (max-width: 768px) {
+    .BookingList {
+        .head {
+            display: none;
+        }
+
+        .list {
+            max-height: 100%;
+        }
+    }
+}

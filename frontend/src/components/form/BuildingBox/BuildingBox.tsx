@@ -20,6 +20,7 @@ interface Props {
     showClear?: boolean
     disableTitle?: boolean
     styleType?: 'standard' | 'minimal' | 'borderDisabled'
+    onlyRent?: boolean
 
     onSelect(value: number[], e: React.MouseEvent): void
 }
@@ -27,6 +28,7 @@ interface Props {
 const defaultProps: Props = {
     buildings: [],
     multi: false,
+    onlyRent: false,
     onSelect: (value: number[], e: React.MouseEvent) => {
         console.info('BuildingBox onSelect', value, e)
     }
@@ -66,6 +68,7 @@ const BuildingBox: React.FC<Props> = (props) => {
         openPopupBuildingSelector(document.body, {
             multi: props.multi,
             selected: props.buildings,
+            onlyRent: props.onlyRent,
             onSelect: (value: number[]) => {
                 props.onSelect(value, e)
             }

@@ -455,3 +455,23 @@ export const getRentTypesText = (key: string) => {
     const find = rentTypes.find((item: ISelector) => item.key === key)
     return find ? find.text : ''
 }
+
+export const getBuildingById = (buildings: IBuilding[], id: number | null) => {
+    if (!buildings.length) {
+        return null
+    }
+
+    const findBuilding = buildings.find((building: IBuilding) => building.id === id)
+
+    return findBuilding ? findBuilding : null
+}
+
+export const getBuildingNameById = (buildings: IBuilding[], id: number | null) => {
+    if (!id) {
+        return ''
+    }
+
+    const building = getBuildingById(buildings, id)
+
+    return building ? building.name : 'Объект недвижимости не найден'
+}

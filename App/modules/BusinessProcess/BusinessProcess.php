@@ -381,7 +381,7 @@ class BusinessProcess extends Model
     {
         return [
             'id' => (int)$data['id'],
-            'ticketId' => (int)$data['ticketId'],
+            'ticketId' => (int)$data['id_ticket'],
             'author' => (int)$data['author'],
             'responsible' => (int)$data['responsible'],
             'active' => (int)$data['active'],

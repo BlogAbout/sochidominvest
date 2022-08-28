@@ -302,14 +302,15 @@ const Box = React.forwardRef<HTMLInputElement, Props>((props, ref) => {
     }
 
     const renderDate = () => {
-        if (props.showDate) {
-            return (
-                <div className={classes['date']}
-                     onMouseOver={() => setDateActive(true)}
-                     onMouseOut={() => setDateActive(false)}
-                />
-            )
-        }
+        return null
+        // if (props.showDate) {
+        //     return (
+        //         <div className={classes['date']}
+        //              onMouseOver={() => setDateActive(true)}
+        //              onMouseOut={() => setDateActive(false)}
+        //         />
+        //     )
+        // }
     }
 
     const renderValidate = () => {
