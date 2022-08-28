@@ -7,6 +7,7 @@ use App\Model;
 
 class Booking extends Model
 {
+    public int $id;
     public string $dateStart;
     public string $dateFinish;
     public string $status;
@@ -18,6 +19,7 @@ class Booking extends Model
     {
         parent::__construct();
 
+        $this->id = $data['id'] ?: 0;
         $this->dateStart = $data['dateStart'] ?: '';
         $this->dateFinish = $data['dateFinish'] ?: '';
         $this->status = $data['status'] ?: 'new';
@@ -35,26 +37,32 @@ class Booking extends Model
     public static function fetchList(array $filter): array
     {
         $resultList = [];
-        $sqlWhere = parent::generateFilterQuery($filter);
+        $sqlWhere = '';
+        $where = [];
 
-        $appendWhere = '';
+        if (!empty($filter['id'])) {
+            array_push($where, "sdi.`id` NOT IN (" . implode(',', $filter['id']) . ")");
+        }
+
+        if (!empty($filter['buildingId'])) {
+            array_push($where, "sdi.`id_building` IN (" . implode(',', $filter['buildingId']) . ")");
+        }
+
         if (!empty($filter['dateStart']) && !empty($filter['dateFinish'])) {
-            $appendWhere = "
+            array_push($where, "
                 (
                     (sdi.`date_start` BETWEEN '" . $filter['dateStart'] . "' AND '" . $filter['dateFinish'] . "') OR
                     (sdi.`date_finish` BETWEEN '" . $filter['dateStart'] . "' AND '" . $filter['dateFinish'] . "')
                 )
-            ";
+            ");
         } else if (!empty($filter['dateStart'])) {
-            $appendWhere = "sdi.`date_start` >= '" . $filter['dateStart'] . "'";
+            array_push($where, "sdi.`date_start` >= '" . $filter['dateStart'] . "'");
         } else if (!empty($filter['dateFinish'])) {
-            $appendWhere = "sdi.`date_finish` <= '" . $filter['dateFinish'] . "'";
+            array_push($where, "sdi.`date_finish` <= '" . $filter['dateFinish'] . "'");
         }
 
-        if ($sqlWhere !== '' && $appendWhere !== '') {
-            $sqlWhere .= ' AND ' . $appendWhere;
-        } else if ($appendWhere !== '') {
-            $sqlWhere = 'WHERE ' . $appendWhere;
+        if (count($where)) {
+            $sqlWhere = " WHERE " . implode(' AND ', $where);
         }
 
         $sql = "
@@ -100,10 +108,11 @@ class Booking extends Model
             INSERT INTO `sdi_booking` (`date_start`, `date_finish`, `status`, `id_building`, `id_user`)
             VALUES (:dateStart, :dateFinish, :status, :buildingId, :userId)
             ON DUPLICATE KEY
-            UPDATE `status` = :status, `id_user` = :userId
+            UPDATE `date_start` = :dateStart, `date_finish` = :dateFinish, `status` = :status, `id_building` = :buildingId, `id_user` = :userId
         ";
 
         self::query($sql);
+        self::bindParams('id', $this->getId() ?: 'null');
         self::bindParams('dateStart', $this->getDateStart());
         self::bindParams('dateFinish', $this->getDateFinish());
         self::bindParams('status', $this->getStatus());
@@ -126,6 +135,7 @@ class Booking extends Model
     private static function formatData(array $data): array
     {
         return [
+            'id' => (int)$data['id'],
             'dateStart' => $data['date_start'],
             'dateFinish' => $data['date_finish'],
             'status' => $data['status'],
@@ -133,6 +143,22 @@ class Booking extends Model
             'buildingName' => $data['name_building'],
             'userId' => (int)$data['id_user']
         ];
+    }
+
+    /**
+     * @return int
+     */
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param int $id
+     */
+    public function setId(int $id): void
+    {
+        $this->id = $id;
     }
 
     /**

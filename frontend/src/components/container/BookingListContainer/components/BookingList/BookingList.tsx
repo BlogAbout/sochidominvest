@@ -45,9 +45,9 @@ const BookingList: React.FC<Props> = (props) => {
             </div>
 
             <BlockingElement fetching={props.fetching} className={classes.list}>
-                {props.bookings.map((booking: IBooking, index: number) => {
+                {props.bookings.map((booking: IBooking) => {
                     return (
-                        <BookingItem key={index}
+                        <BookingItem key={booking.id}
                                      booking={booking}
                                      onClick={props.onClick}
                                      onEdit={props.onEdit}

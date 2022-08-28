@@ -6,6 +6,7 @@ import {bookingStatuses} from '../../../helpers/bookingHelper'
 import BookingService from '../../../api/BookingService'
 import {PopupDisplayOptions, PopupProps} from '../../../@types/IPopup'
 import {IBooking} from '../../../@types/IBooking'
+import {IFilter} from '../../../@types/IFilter'
 import {getFormatDate} from '../../../helpers/dateHelper'
 import {getPopupContainer, openPopup, removePopup} from '../../../helpers/popupHelper'
 import showBackgroundBlock from '../../ui/BackgroundBlock/BackgroundBlock'
@@ -37,6 +38,7 @@ const PopupBookingCreate: React.FC<Props> = (props) => {
     const {userId} = useTypedSelector(state => state.userReducer)
 
     const [booking, setBooking] = useState<IBooking>(props.booking || {
+        id: null,
         dateStart: moment().format('L'),
         dateFinish: moment().format('L'),
         status: 'new',
@@ -58,11 +60,17 @@ const PopupBookingCreate: React.FC<Props> = (props) => {
         if (booking.dateStart && booking.dateFinish && booking.buildingId && booking.dateStart != booking.dateFinish) {
             setFetching(true)
 
-            BookingService.fetchBookings({
+            const filter: IFilter = {
                 dateStart: moment(booking.dateStart).format('YYYY-MM-DD 00:00:00'),
                 dateFinish: moment(booking.dateFinish).format('YYYY-MM-DD 00:00:00'),
                 buildingId: [booking.buildingId]
-            })
+            }
+
+            if (booking.id) {
+                filter.id = [booking.id]
+            }
+
+            BookingService.fetchBookings(filter)
                 .then((response: any) => {
                     setBusyBooking(response.data)
                 })
@@ -78,7 +86,7 @@ const PopupBookingCreate: React.FC<Props> = (props) => {
                     setFetching(false)
                 })
         }
-    }, [booking.dateStart, booking.dateFinish, booking.buildingId])
+    }, [booking.id, booking.dateStart, booking.dateFinish, booking.buildingId])
 
     // Закрытие popup
     const close = () => {
@@ -90,6 +98,7 @@ const PopupBookingCreate: React.FC<Props> = (props) => {
         setFetching(true)
 
         const saveBooking = {
+            id: booking.id,
             dateStart: moment(booking.dateStart).format('YYYY-MM-DD 00:00:00'),
             dateFinish: moment(booking.dateFinish).format('YYYY-MM-DD 00:00:00'),
             status: booking.status,
@@ -140,9 +149,9 @@ const PopupBookingCreate: React.FC<Props> = (props) => {
                 <Title type={2}>Даты, занятые в выбранный период</Title>
 
                 <div className={classes.busyList}>
-                    {busyBooking.map((booking: IBooking, index: number) => {
+                    {busyBooking.map((booking: IBooking) => {
                         return (
-                            <div key={index} className={classes.item}>
+                            <div key={booking.id} className={classes.item}>
                                 {`${getFormatDate(booking.dateStart, 'date')} - ${getFormatDate(booking.dateFinish, 'date')}`}
                             </div>
                         )
