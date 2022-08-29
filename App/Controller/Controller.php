@@ -241,6 +241,15 @@ class Controller
                 } catch (Exception $e) {
                 }
             }
+
+            if ($payload->validator == 'bookingExists') {
+                try {
+                    if (!Model::isExistsItem('sdi_booking', (int)$payload->data)) {
+                        array_push($response, "Бронь с таким идентификатором не найдена в базе данных.");
+                    }
+                } catch (Exception $e) {
+                }
+            }
         }
 
         $validationErrors = new \stdClass();

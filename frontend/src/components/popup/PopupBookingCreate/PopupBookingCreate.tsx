@@ -37,7 +37,7 @@ const defaultProps: Props = {
 const PopupBookingCreate: React.FC<Props> = (props) => {
     const {userId} = useTypedSelector(state => state.userReducer)
 
-    const [booking, setBooking] = useState<IBooking>(props.booking || {
+    const [booking, setBooking] = useState<IBooking>({
         id: null,
         dateStart: moment().format('L'),
         dateFinish: moment().format('L'),
@@ -50,20 +50,38 @@ const PopupBookingCreate: React.FC<Props> = (props) => {
     const [busyBooking, setBusyBooking] = useState<IBooking[]>([])
     const [fetching, setFetching] = useState(false)
 
+    const today = moment().format('L')
+
     useEffect(() => {
+        if (props.booking) {
+            setBooking({
+                ...props.booking,
+                dateStart: moment(props.booking.dateStart).format('L'),
+                dateFinish: moment(props.booking.dateFinish).format('L')
+            })
+        }
+
         return () => {
             removePopup(props.blockId ? props.blockId : '')
         }
     }, [props.blockId])
 
     useEffect(() => {
-        if (booking.dateStart && booking.dateFinish && booking.buildingId && booking.dateStart != booking.dateFinish) {
+        if (
+            today <= booking.dateStart &&
+            today < booking.dateFinish &&
+            booking.dateStart &&
+            booking.dateFinish &&
+            booking.buildingId &&
+            booking.dateStart !== booking.dateFinish
+        ) {
             setFetching(true)
 
             const filter: IFilter = {
                 dateStart: moment(booking.dateStart).format('YYYY-MM-DD 00:00:00'),
                 dateFinish: moment(booking.dateFinish).format('YYYY-MM-DD 00:00:00'),
-                buildingId: [booking.buildingId]
+                buildingId: [booking.buildingId],
+                status: ['new', 'process', 'finish']
             }
 
             if (booking.id) {
@@ -132,7 +150,15 @@ const PopupBookingCreate: React.FC<Props> = (props) => {
 
     // Проверка доступности кнопок
     const checkDisabled = (): boolean => {
-        if (fetching || booking.dateStart.trim() === '' || booking.dateFinish.trim() === '' || booking.buildingId === 0 || booking.dateStart >= booking.dateFinish) {
+        if (fetching || booking.buildingId === 0) {
+            return true
+        }
+
+        if (booking.dateStart.trim() === '' || booking.dateFinish.trim() === '') {
+            return true
+        }
+
+        if (booking.dateStart >= booking.dateFinish || today > booking.dateStart || today >= booking.dateFinish) {
             return true
         }
 
@@ -177,8 +203,12 @@ const PopupBookingCreate: React.FC<Props> = (props) => {
                                        })}
                                        placeHolder='Выберите дату заезда'
                                        styleType='minimal'
-                                       error={booking.dateStart == booking.dateFinish}
-                                       errorText='Дата заезда и дата выезда не могут быть одинаковыми'
+                                       error={booking.dateStart === booking.dateFinish || today > booking.dateStart}
+                                       errorText={
+                                           booking.dateStart === booking.dateFinish
+                                               ? 'Дата заезда и дата выезда не могут быть одинаковыми'
+                                               : 'Дата заезда не может быть раньше сегодняшнего дня'
+                                       }
                         />
                     </div>
 
@@ -192,8 +222,14 @@ const PopupBookingCreate: React.FC<Props> = (props) => {
                                        })}
                                        placeHolder='Выберите дату выезда'
                                        styleType='minimal'
-                                       error={booking.dateStart >= booking.dateFinish}
-                                       errorText={booking.dateStart == booking.dateFinish ? 'Дата заезда и дата выезда не могут быть одинаковыми' : 'Дата выезда не может быть раньше даты заезда'}
+                                       error={booking.dateStart >= booking.dateFinish || today >= booking.dateFinish}
+                                       errorText={
+                                           booking.dateStart === booking.dateFinish
+                                               ? 'Дата заезда и дата выезда не могут быть одинаковыми'
+                                               : today >= booking.dateFinish
+                                               ? 'Дата выезда не может быть раньше сегодняшнего дня'
+                                               : 'Дата выезда не может быть раньше даты заезда'
+                                       }
                         />
                     </div>
 

@@ -15,6 +15,7 @@ export interface IFilter {
     page?: string
     dateStart?: string
     dateFinish?: string
+    status?: string[]
 }
 
 export interface IFilterContent {

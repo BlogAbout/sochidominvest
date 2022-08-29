@@ -9,6 +9,10 @@ export default class BookingService {
     }
 
     static async saveBooking(booking: IBooking): Promise<AxiosResponse> {
-        return API.post('/booking', booking)
+        if (booking.id) {
+            return API.put(`/booking/${booking.id}`, booking)
+        } else {
+            return API.post('/booking', booking)
+        }
     }
 }

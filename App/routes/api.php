@@ -154,7 +154,8 @@ $Klein->respond('GET', '/api/v1/business-process', [new BusinessProcessControlle
 $Klein->respond('DELETE', '/api/v1/business-process/[:id]', [new BusinessProcessController(), 'deleteItem']);
 
 // Booking Routes
-$Klein->respond('POST', '/api/v1/booking', [new BookingController(), 'createOrUpdateItem']);
+$Klein->respond('POST', '/api/v1/booking', [new BookingController(), 'createItem']);
+$Klein->respond('PUT', '/api/v1/booking/[:id]', [new BookingController(), 'updateItem']);
 $Klein->respond('GET', '/api/v1/booking', [new BookingController(), 'fetchList']);
 
 // Dispatch all routes

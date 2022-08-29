@@ -48,6 +48,10 @@ class Booking extends Model
             array_push($where, "sdi.`id_building` IN (" . implode(',', $filter['buildingId']) . ")");
         }
 
+        if (!empty($filter['status'])) {
+            array_push($where, "sdi.`status` IN ('" . implode("','", $filter['status']) . "')");
+        }
+
         if (!empty($filter['dateStart']) && !empty($filter['dateFinish'])) {
             array_push($where, "
                 (
@@ -96,29 +100,69 @@ class Booking extends Model
      */
     public function save(): void
     {
-        $this->insertOrUpdateToDb();
+        if (!$this->getId()) {
+            $this->insertToDb();
+        } else {
+            $this->updateToDb();
+        }
     }
 
     /**
-     * Добавление или обновление бронирования в базе данных
+     * ДДобавление нового бронирования в базу данных
      */
-    private function insertOrUpdateToDb(): void
+    private function insertToDb(): void
     {
         $sql = "
-            INSERT INTO `sdi_booking` (`date_start`, `date_finish`, `status`, `id_building`, `id_user`)
-            VALUES (:dateStart, :dateFinish, :status, :buildingId, :userId)
-            ON DUPLICATE KEY
-            UPDATE `date_start` = :dateStart, `date_finish` = :dateFinish, `status` = :status, `id_building` = :buildingId, `id_user` = :userId
+            INSERT INTO `sdi_booking`
+                (`date_start`, `date_finish`, `status`, `id_building`, `id_user`)
+            VALUES
+                (:dateStart, :dateFinish, :status, :buildingId, :userId)
         ";
 
-        self::query($sql);
-        self::bindParams('id', $this->getId() ?: 'null');
-        self::bindParams('dateStart', $this->getDateStart());
-        self::bindParams('dateFinish', $this->getDateFinish());
-        self::bindParams('status', $this->getStatus());
-        self::bindParams('buildingId', $this->getBuildingId());
-        self::bindParams('userId', $this->getUserId());
-        self::execute();
+        parent::query($sql);
+        parent::bindParams('dateStart', $this->getDateStart());
+        parent::bindParams('dateFinish', $this->getDateFinish());
+        parent::bindParams('status', $this->getStatus());
+        parent::bindParams('buildingId', $this->getBuildingId());
+        parent::bindParams('userId', $this->getUserId());
+
+        $item = parent::execute();
+
+        if ($item) {
+            $this->setId(parent::lastInsertedId());
+
+            $building = BuildingModel::fetchBuildingById($this->getBuildingId());
+            if ($building) {
+                $this->setBuildingName($building['name']);
+            }
+        }
+    }
+
+    /**
+     * Обновление бронирования в базе данных
+     */
+    private function updateToDb(): void
+    {
+        $sql = "
+            UPDATE `sdi_booking`
+            SET
+                `date_start` = :dateStart,
+                `date_finish` = :dateFinish,
+                `status` = :status,
+                `id_building` = :buildingId,
+                `id_user` = :userId
+            WHERE `id` = :id
+        ";
+
+        parent::query($sql);
+        parent::bindParams('id', $this->getId());
+        parent::bindParams('dateStart', $this->getDateStart());
+        parent::bindParams('dateFinish', $this->getDateFinish());
+        parent::bindParams('status', $this->getStatus());
+        parent::bindParams('buildingId', $this->getBuildingId());
+        parent::bindParams('userId', $this->getUserId());
+
+        parent::execute();
 
         $building = BuildingModel::fetchBuildingById($this->getBuildingId());
         if ($building) {
