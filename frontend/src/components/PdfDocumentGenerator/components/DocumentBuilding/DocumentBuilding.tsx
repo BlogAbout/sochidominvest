@@ -60,7 +60,7 @@ const DocumentBuilding: React.FC<Props> = ({building, styles}) => {
             <View style={styles.block}>
                 <Text style={styles.textBig}>{building.name}</Text>
                 <Text style={styles.textMiddle}>{passedInfo}</Text>
-                {districtText !== '' && <Text style={styles.textDefault}>{districtText}</Text>}
+                {districtText !== '' ? <Text style={styles.textDefault}>{districtText}</Text> : null}
                 <Text style={styles.textDefault}>{building.address}</Text>
             </View>
 
@@ -96,14 +96,15 @@ const DocumentBuilding: React.FC<Props> = ({building, styles}) => {
 
             <View style={styles.block}>
                 <Text style={{...styles.textMiddle, color: '#075ea5'}}>Общие характеристики</Text>
-                {houseClass && <Text style={styles.textDefault}>Класс дома: {houseClass.text}</Text>}
-                {material && <Text style={styles.textDefault}>Материал здания: {material.text}</Text>}
-                {houseType && <Text style={styles.textDefault}>Тип дома: {houseType.text}</Text>}
-                {parking && <Text style={styles.textDefault}>Паркинг: {parking.text}</Text>}
-                {territory && <Text style={styles.textDefault}>Территория: {territory.text}</Text>}
-                {entranceHouse && <Text style={styles.textDefault}>Подъезд к дому: {entranceHouse.text}</Text>}
-                {building.ceilingHeight &&
-                <Text style={styles.textDefault}>Высота потолков: {building.ceilingHeight} м.</Text>}
+                {houseClass ? <Text style={styles.textDefault}>Класс дома: {houseClass.text}</Text> : null}
+                {material ? <Text style={styles.textDefault}>Материал здания: {material.text}</Text> : null}
+                {houseType ? <Text style={styles.textDefault}>Тип дома: {houseType.text}</Text> : null}
+                {parking ? <Text style={styles.textDefault}>Паркинг: {parking.text}</Text> : null}
+                {territory ? <Text style={styles.textDefault}>Территория: {territory.text}</Text> : null}
+                {entranceHouse ? <Text style={styles.textDefault}>Подъезд к дому: {entranceHouse.text}</Text> : null}
+                {building.ceilingHeight ?
+                    <Text style={styles.textDefault}>Высота потолков: {building.ceilingHeight} м.</Text>
+                    : null}
                 {building.maintenanceCost && building.maintenanceCost > 0 ?
                     <Text style={styles.textDefault}>Стоимость
                         обслуживания: {building.maintenanceCost} руб./м&sup2;</Text>
@@ -117,11 +118,11 @@ const DocumentBuilding: React.FC<Props> = ({building, styles}) => {
 
             <View style={styles.block}>
                 <Text style={{...styles.textMiddle, color: '#075ea5'}}>Коммуникации</Text>
-                {gas && <Text style={styles.textDefault}>Газ: {gas.text}</Text>}
-                {heating && <Text style={styles.textDefault}>Отопление: {heating.text}</Text>}
-                {electricity && <Text style={styles.textDefault}>Электричество: {electricity.text}</Text>}
-                {sewerage && <Text style={styles.textDefault}>Канализация: {sewerage.text}</Text>}
-                {waterSupply && <Text style={styles.textDefault}>Водоснабжение: {waterSupply.text}</Text>}
+                {gas ? <Text style={styles.textDefault}>Газ: {gas.text}</Text> : null}
+                {heating ? <Text style={styles.textDefault}>Отопление: {heating.text}</Text> : null}
+                {electricity ? <Text style={styles.textDefault}>Электричество: {electricity.text}</Text> : null}
+                {sewerage ? <Text style={styles.textDefault}>Канализация: {sewerage.text}</Text> : null}
+                {waterSupply ? <Text style={styles.textDefault}>Водоснабжение: {waterSupply.text}</Text> : null}
             </View>
 
             <View style={styles.block}>
@@ -130,8 +131,8 @@ const DocumentBuilding: React.FC<Props> = ({building, styles}) => {
                     <Text style={styles.textDefault}>Варианты оформления: {formalizations.join(', ')}</Text>
                     : null
                 }
-                {type && <Text style={styles.textDefault}>Тип недвижимости: {type.text}</Text>}
-                {contract && <Text style={styles.textDefault}>Сумма в договоре: {contract.text}</Text>}
+                {type ? <Text style={styles.textDefault}>Тип недвижимости: {type.text}</Text> : null}
+                {contract ? <Text style={styles.textDefault}>Сумма в договоре: {contract.text}</Text> : null}
                 <Text style={styles.textDefault}>Продажа для нерезидентов
                     России: {!!building.saleNoResident ? 'Доступно' : 'Не доступно'}</Text>
             </View>
