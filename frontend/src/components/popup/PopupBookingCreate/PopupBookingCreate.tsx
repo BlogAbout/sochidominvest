@@ -23,6 +23,7 @@ import classes from './PopupBookingCreate.module.scss'
 
 interface Props extends PopupProps {
     booking?: IBooking | null
+    buildingId?: number
 
     onSave(): void
 }
@@ -42,7 +43,7 @@ const PopupBookingCreate: React.FC<Props> = (props) => {
         dateStart: moment().format('L'),
         dateFinish: moment().format('L'),
         status: 'new',
-        buildingId: 0,
+        buildingId: props.buildingId || 0,
         buildingName: '',
         userId: userId
     })
@@ -240,21 +241,25 @@ const PopupBookingCreate: React.FC<Props> = (props) => {
                                      onSelect={(value: number[]) => setBooking({...booking, buildingId: value[0]})}
                                      placeHolder='Выберите объект недвижимости'
                                      styleType='minimal'
+                                     readOnly={!!props.buildingId}
                                      onlyRent
                                      showRequired
                         />
                     </div>
 
-                    <div className={classes.field}>
-                        <Label text='Статус бронирования'/>
+                    {!props.buildingId ?
+                        <div className={classes.field}>
+                            <Label text='Статус бронирования'/>
 
-                        <ComboBox selected={booking.status}
-                                  items={Object.values(bookingStatuses)}
-                                  onSelect={(value: string) => setBooking({...booking, status: value})}
-                                  placeHolder='Выберите статус бронирования'
-                                  styleType='minimal'
-                        />
-                    </div>
+                            <ComboBox selected={booking.status}
+                                      items={Object.values(bookingStatuses)}
+                                      onSelect={(value: string) => setBooking({...booking, status: value})}
+                                      placeHolder='Выберите статус бронирования'
+                                      styleType='minimal'
+                            />
+                        </div>
+                        : null
+                    }
 
                     {renderBusyBooking()}
                 </div>

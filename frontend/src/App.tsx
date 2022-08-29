@@ -49,6 +49,7 @@ import {
     faHeadset,
     faHeart,
     faHouse,
+    faHouseLaptop,
     faHouseUser,
     faIdCard,
     faImage,
@@ -188,7 +189,8 @@ library.add(
     faFolderTree,
     faUserGear,
     faEarthAsia,
-    faArrowLeftLong
+    faArrowLeftLong,
+    faHouseLaptop
 )
 
 function App() {

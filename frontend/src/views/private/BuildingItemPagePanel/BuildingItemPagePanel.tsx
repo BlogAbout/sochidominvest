@@ -35,6 +35,7 @@ import openPopupCheckerInfo from '../../../components/PopupCheckerInfo/PopupChec
 import openPopupCompilationSelector from '../../../components/PopupCompilationSelector/PopupCompilationSelector'
 import openPopupMessenger from '../../../components/popup/PopupMessenger/PopupMessenger'
 import PdfDocumentGenerator from '../../../components/PdfDocumentGenerator/PdfDocumentGenerator'
+import openPopupBookingCreate from '../../../components/popup/PopupBookingCreate/PopupBookingCreate'
 import {
     amountContract,
     buildingAdvantages,
@@ -347,6 +348,24 @@ const BuildingItemPagePanel: React.FC = (props) => {
                                 onClick={onClickEditHandler.bind(this)}
                                 className='marginRight'
                                 title='Редактировать'
+                        />
+                        : null
+                    }
+
+                    {building.rent ?
+                        <Button type='regular'
+                                icon='house-laptop'
+                                onClick={() => {
+                                    if (building.id) {
+                                        openPopupBookingCreate(document.body, {
+                                            buildingId: building.id,
+                                            onSave: () => {
+                                            }
+                                        })
+                                    }
+                                }}
+                                className='marginRight'
+                                title='Арендовать'
                         />
                         : null
                     }
@@ -768,8 +787,9 @@ const BuildingItemPagePanel: React.FC = (props) => {
                             return userInfo ? (
                                 <div key={id}>
                                     <span>
-                                        <Indicator color={userInfo.id && usersOnline.includes(userInfo.id) ? 'green' : 'red'}
-                                                   text={userInfo.id && usersOnline.includes(userInfo.id) ? 'Online' : `Был в сети: ${getFormatDate(userInfo.lastActive)}`}
+                                        <Indicator
+                                            color={userInfo.id && usersOnline.includes(userInfo.id) ? 'green' : 'red'}
+                                            text={userInfo.id && usersOnline.includes(userInfo.id) ? 'Online' : `Был в сети: ${getFormatDate(userInfo.lastActive)}`}
                                         />
 
                                         <span>{userInfo.firstName}</span>
