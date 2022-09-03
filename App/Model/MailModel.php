@@ -71,6 +71,14 @@ class MailModel extends Model
                     <p>Тема: <strong>' . $this->params['message'] . '</strong></p>
                     <p>Пожалуйста, проверьте заявки и свяжитесь с клиентом! (в будущем здесь будет ссылка)</p>
                 ' . $info;
+            case 'booking':
+                return '
+                    <p>В сервисе СОЧИДОМИНВЕСТ зарегистрирована новая бронь.</p>
+                    <p>Объект недвижимости: <strong>' . $this->params['building'] . '</strong></p>
+                    <p>Дата заезда: <strong>' . $this->params['dateStart'] . '</strong></p>
+                    <p>Дата выезда: <strong>' . $this->params['dateFinish'] . '</strong></p>
+                    <p>Пожалуйста, проверьте заявки и свяжитесь с клиентом! (в будущем здесь будет ссылка)</p>
+                ' . $info;
             default:
                 return '';
         }
@@ -84,6 +92,8 @@ class MailModel extends Model
                 return 'Завершение регистрации';
             case 'feed':
                 return 'Заявка в техническую поддержку';
+            case 'booking':
+                return 'Новая бронь';
             default:
                 return 'Без темы';
         }

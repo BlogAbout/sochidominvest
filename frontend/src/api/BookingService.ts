@@ -4,6 +4,10 @@ import {IBooking} from '../@types/IBooking'
 import {IFilter} from '../@types/IFilter'
 
 export default class BookingService {
+    static async fetchBookingById(bookingId: number): Promise<AxiosResponse> {
+        return API.get(`/booking/${bookingId}`)
+    }
+
     static async fetchBookings(filter: IFilter): Promise<AxiosResponse> {
         return API.get('/booking', {params: filter})
     }

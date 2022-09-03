@@ -2,6 +2,7 @@ import React, {useState} from 'react'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {INotification} from '../../../../@types/INotification'
 import openPopupSupportInfo from '../../../popup/PopupSupportInfo/PopupSupportInfo'
+import openPopupBookingInfo from '../../../popup/PopupBookingInfo/PopupBookingInfo'
 import classes from './NotificationItem.module.scss'
 
 interface Props {
@@ -33,7 +34,15 @@ const NotificationItem: React.FC<Props> = (props) => {
                 onClick = () => {
                     openPopupSupportInfo(document.body, {
                         feedId: props.notification.objectId || 0,
-                        onSave: () => {}
+                        onSave: () => {
+                        }
+                    })
+                }
+                break
+            case 'booking':
+                onClick = () => {
+                    openPopupBookingInfo(document.body, {
+                        bookingId: props.notification.objectId || 0
                     })
                 }
                 break

@@ -1,5 +1,5 @@
-import moment from 'moment'
 import React, {useEffect, useState} from 'react'
+import moment from 'moment'
 import withStore from '../../../hoc/withStore'
 import {useTypedSelector} from '../../../hooks/useTypedSelector'
 import {bookingStatuses} from '../../../helpers/bookingHelper'
@@ -266,20 +266,31 @@ const PopupBookingCreate: React.FC<Props> = (props) => {
             </BlockingElement>
 
             <Footer>
-                <Button type='save'
-                        icon='check-double'
-                        onClick={() => saveHandler(true)}
-                        disabled={checkDisabled()}
-                        title='Сохранить и закрыть'
-                />
+                {!props.buildingId ?
+                    <>
+                        <Button type='save'
+                                icon='check-double'
+                                onClick={() => saveHandler(true)}
+                                disabled={checkDisabled()}
+                                title='Сохранить и закрыть'
+                        />
 
-                <Button type='apply'
-                        icon='check'
-                        onClick={() => saveHandler()}
-                        disabled={checkDisabled()}
-                        className='marginLeft'
-                        title='Сохранить'
-                >Сохранить</Button>
+                        <Button type='apply'
+                                icon='check'
+                                onClick={() => saveHandler()}
+                                disabled={checkDisabled()}
+                                className='marginLeft'
+                                title='Сохранить'
+                        >Сохранить</Button>
+                    </>
+                    :
+                    <Button type='save'
+                            icon='house-laptop'
+                            onClick={() => saveHandler(true)}
+                            disabled={checkDisabled()}
+                            title='Забронировать'
+                    >Забронировать</Button>
+                }
 
                 <Button type='regular'
                         icon='arrow-rotate-left'

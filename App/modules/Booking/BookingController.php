@@ -44,7 +44,7 @@ class BookingController extends Controller
         );
 
         try {
-            $booking = new Booking($payload);
+            $booking = new Booking($payload, $this->settings);
             $booking->save();
 
             if ($booking->getId()) {
@@ -118,7 +118,7 @@ class BookingController extends Controller
         );
 
         try {
-            $booking = new Booking($payload);
+            $booking = new Booking($payload, $this->settings);
             $booking->save();
 
             $response->code(200)->json($booking);
@@ -126,6 +126,54 @@ class BookingController extends Controller
             return;
         } catch (Exception $e) {
             LogModel::error($e->getMessage(), $payload);
+            $response->code(500)->json($e->getMessage());
+
+            return;
+        }
+    }
+
+    /**
+     * Получение данных брони по id
+     *
+     * @param mixed $request Содержит объект запроса
+     * @param mixed $response Содержит объект ответа от маршрутизатора
+     * @return void
+     */
+    public function fetchItemById($request, $response)
+    {
+        if (!JwtMiddleware::getAndDecodeToken()) {
+            $response->code(401)->json('Вы не авторизованы.');
+
+            return;
+        }
+
+        $validationObject = array(
+            (object)[
+                'validator' => 'required',
+                'data' => $request->id ?? '',
+                'key' => 'Идентификатор'
+            ],
+            (object)[
+                'validator' => 'bookingExists',
+                'data' => $request->id ?? '',
+                'key' => 'Идентификатор'
+            ]
+        );
+
+        $validationBag = parent::validation($validationObject);
+        if ($validationBag->status) {
+            $response->code(400)->json($validationBag->errors);
+
+            return;
+        }
+
+        try {
+            $item = Booking::fetchItem($request->id);
+            $response->code(200)->json($item);
+
+            return;
+        } catch (Exception $e) {
+            LogModel::error($e->getMessage());
             $response->code(500)->json($e->getMessage());
 
             return;

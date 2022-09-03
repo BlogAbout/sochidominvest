@@ -220,6 +220,7 @@ class NotificationModel extends Model
             case 'update':
                 // Todo
                 break;
+            case 'booking':
             case 'feed':
                 if (!count($usersIds)) {
                     $filter = [

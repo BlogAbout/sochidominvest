@@ -1,7 +1,9 @@
 import React, {useEffect, useState} from 'react'
+import {useNavigate} from 'react-router-dom'
 import {useTypedSelector} from '../../../../../hooks/useTypedSelector'
 import {IBooking} from '../../../../../@types/IBooking'
 import {IFilter} from '../../../../../@types/IFilter'
+import {IBusinessProcess} from '../../../../../@types/IBusinessProcess'
 import BookingService from '../../../../../api/BookingService'
 import {getFormatDate} from '../../../../../helpers/dateHelper'
 import Title from '../../../../../components/ui/Title/Title'
@@ -10,15 +12,20 @@ import BookingListContainer from '../../../../../components/container/BookingLis
 import openPopupAlert from '../../../../../components/PopupAlert/PopupAlert'
 import openContextMenu from '../../../../../components/ContextMenu/ContextMenu'
 import openPopupBookingCreate from '../../../../../components/popup/PopupBookingCreate/PopupBookingCreate'
+import openPopupBusinessProcessCreate
+    from '../../../../../components/popup/PopupBusinessProcessCreate/PopupBusinessProcessCreate'
+import openPopupBookingInfo from '../../../../../components/popup/PopupBookingInfo/PopupBookingInfo'
 import classes from './BookingPagePanel.module.scss'
 
 const BookingPagePanel: React.FC = () => {
+    const navigate = useNavigate()
+
     const [isUpdate, setIsUpdate] = useState(true)
     const [booking, setBooking] = useState<IBooking[]>([])
     const [filter, setFilter] = useState<IFilter>({})
     const [fetching, setFetching] = useState(false)
 
-    const {role} = useTypedSelector(state => state.userReducer)
+    const {userId, role} = useTypedSelector(state => state.userReducer)
 
     useEffect(() => {
         if (isUpdate) {
@@ -47,8 +54,40 @@ const BookingPagePanel: React.FC = () => {
         setIsUpdate(true)
     }
 
+    // Клик на строку
     const onClickHandler = (booking: IBooking) => {
-        // Todo: navigate('/panel/crm/developer/' + developer.id)
+        openPopupBookingInfo(document.body, {
+            booking: booking
+        })
+    }
+
+    // Отправка заявки в обработку
+    const onProcessHandler = (booking: IBooking) => {
+        if (!booking.id) {
+            return
+        }
+
+        const businessProcess: IBusinessProcess = {
+            id: null,
+            ticketId: null,
+            author: userId,
+            responsible: userId,
+            active: 1,
+            type: 'booking',
+            step: 'default',
+            name: `Бронь #${booking.id}: ${booking.buildingName}`,
+            description: `Бронь на аренду недвижимости ${booking.buildingName} с ${getFormatDate(booking.dateStart, 'date')} по ${getFormatDate(booking.dateFinish, 'date')}`,
+            relations: [
+                {objectId: booking.id, objectType: 'booking'}
+            ]
+        }
+
+        openPopupBusinessProcessCreate(document.body, {
+            businessProcess: businessProcess,
+            onSave: () => {
+                navigate('/panel/crm/bp/')
+            }
+        })
     }
 
     // Добавление нового бронирования
@@ -106,10 +145,11 @@ const BookingPagePanel: React.FC = () => {
     const onContextMenu = (e: React.MouseEvent, booking: IBooking) => {
         e.preventDefault()
 
-        const menuItems = []
-
         if (['director', 'administrator', 'manager'].includes(role)) {
-            menuItems.push({text: 'Редактировать', onClick: () => onEditHandler(booking)})
+            const menuItems = [
+                {text: 'Взять в обработку', onClick: () => onProcessHandler(booking)},
+                {text: 'Редактировать', onClick: () => onEditHandler(booking)}
+            ]
 
             if (['director', 'administrator'].includes(role)) {
                 menuItems.push({text: 'Удалить', onClick: () => onRemoveHandler(booking)})

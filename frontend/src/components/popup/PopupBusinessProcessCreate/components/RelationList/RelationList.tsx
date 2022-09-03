@@ -1,10 +1,13 @@
 import React, {useEffect, useState} from 'react'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {getFormatDate} from '../../../../../helpers/dateHelper'
 import {IFeed} from '../../../../../@types/IFeed'
 import {IBuilding} from '../../../../../@types/IBuilding'
 import {IBusinessProcessRelation} from '../../../../../@types/IBusinessProcess'
+import {IBooking} from '../../../../../@types/IBooking'
 import BuildingService from '../../../../../api/BuildingService'
 import FeedService from '../../../../../api/FeedService'
+import BookingService from '../../../../../api/BookingService'
 import BlockingElement from '../../../../ui/BlockingElement/BlockingElement'
 import Empty from '../../../../Empty/Empty'
 import openPopupAlert from '../../../../PopupAlert/PopupAlert'
@@ -31,8 +34,10 @@ const defaultProps: Props = {
 const RelationList: React.FC<Props> = (props) => {
     const [selectedBuildings, setSelectedBuildings] = useState<IBuilding[]>([])
     const [selectedFeeds, setSelectedFeeds] = useState<IFeed[]>([])
+    const [selectedBookings, setSelectedBookings] = useState<IBooking[]>([])
     const [fetchingBuildings, setFetchingBuildings] = useState(false)
     const [fetchingFeeds, setFetchingFeeds] = useState(false)
+    const [fetchingBookings, setFetchingBookings] = useState(false)
 
     useEffect(() => {
         if (props.selected.length) {
@@ -42,6 +47,10 @@ const RelationList: React.FC<Props> = (props) => {
 
             const feedsIds: number[] = props.selected
                 .filter((relation: IBusinessProcessRelation) => relation.objectType === 'feed')
+                .map((relation: IBusinessProcessRelation) => relation.objectId)
+
+            const bookingIds: number[] = props.selected
+                .filter((relation: IBusinessProcessRelation) => relation.objectType === 'booking')
                 .map((relation: IBusinessProcessRelation) => relation.objectId)
 
             if (buildingsIds.length) {
@@ -71,6 +80,21 @@ const RelationList: React.FC<Props> = (props) => {
                     })
                     .finally(() => {
                         setFetchingFeeds(false)
+                    })
+            }
+
+            if (bookingIds.length) {
+                setFetchingBookings(true)
+
+                BookingService.fetchBookings({active: [0, 1], id: bookingIds})
+                    .then((response: any) => {
+                        setSelectedBookings(response.data)
+                    })
+                    .catch((error: any) => {
+                        console.error('Ошибка', error)
+                    })
+                    .finally(() => {
+                        setFetchingBookings(false)
                     })
             }
         }
@@ -181,6 +205,8 @@ const RelationList: React.FC<Props> = (props) => {
                 return renderFeedItem(relation)
             case 'building':
                 return renderBuildingItem(relation)
+            case 'booking':
+                return renderBookingItem(relation)
         }
     }
 
@@ -220,6 +246,26 @@ const RelationList: React.FC<Props> = (props) => {
         )
     }
 
+    const renderBookingItem = (relation: IBusinessProcessRelation) => {
+        const findBooking = selectedBookings.find((booking: IBooking) => booking.id === relation.objectId)
+
+        if (!findBooking) {
+            return null
+        }
+
+        return (
+            <div key={`${relation.objectType}-${relation.objectId}`}
+                 className={classes.row}
+                 onContextMenu={(e: React.MouseEvent) => onContextMenu(e, relation)}
+            >
+                <div className={classes.name}>
+                    {findBooking.buildingName} с {getFormatDate(findBooking.dateStart, 'date')} по {getFormatDate(findBooking.dateFinish, 'date')}
+                </div>
+                <div className={classes.type}>Бронь</div>
+            </div>
+        )
+    }
+
     return (
         <div className={classes.RelationList}>
             <div className={classes.header}>
@@ -231,7 +277,8 @@ const RelationList: React.FC<Props> = (props) => {
                 <FontAwesomeIcon icon='plus'/> Добавить
             </div>
 
-            <BlockingElement fetching={props.fetching || fetchingBuildings || fetchingFeeds} className={classes.list}>
+            <BlockingElement fetching={props.fetching || fetchingBuildings || fetchingFeeds || fetchingBookings}
+                             className={classes.list}>
                 {props.selected && props.selected.length ?
                     props.selected.map((relation: IBusinessProcessRelation) => renderRelation(relation))
                     : <Empty message='Бизнес-процесс не имеет связей.'/>

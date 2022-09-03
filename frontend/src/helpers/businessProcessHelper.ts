@@ -13,6 +13,7 @@ export const bpSteps: IBusinessProcessStep = {
 
 export const bpTypes: ISelector[] = [
     {key: 'feed', text: 'Заявка'},
+    {key: 'booking', text: 'Аренда'},
     {key: 'deal', text: 'Сделка'}
 ]
 

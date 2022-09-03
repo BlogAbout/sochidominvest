@@ -3,7 +3,9 @@
 namespace App\Booking;
 
 use App\BuildingModel;
+use App\MailModel;
 use App\Model;
+use App\NotificationModel;
 
 class Booking extends Model
 {
@@ -15,9 +17,9 @@ class Booking extends Model
     public string $buildingName;
     public int $userId;
 
-    public function __construct(array $data = [])
+    public function __construct(array $data = [], $settings = null)
     {
-        parent::__construct();
+        parent::__construct($settings);
 
         $this->id = $data['id'] ?: 0;
         $this->dateStart = $data['dateStart'] ?: '';
@@ -26,6 +28,37 @@ class Booking extends Model
         $this->buildingId = $data['buildingId'] ?: 0;
         $this->buildingName = $data['buildingName'] ?: '';
         $this->userId = $data['userId'] ?: 0;
+    }
+
+    /**
+     * Получение данных бизнес-процесса по идентификатору
+     *
+     * @param int $bookingId Идентификатор брони
+     * @return \App\Booking\Booking
+     */
+    public static function fetchItem(int $bookingId): Booking
+    {
+        $sql = "
+            SELECT sdi.*,
+                   (
+                       SELECT b.`name`
+                       FROM `sdi_building` AS b
+                       WHERE b.`id` = sdi.`id_building` AND b.`active` IN (0, 1)
+                   ) AS name_building
+            FROM `sdi_booking` sdi
+            WHERE sdi.`id` = :bookingId
+        ";
+
+        parent::query($sql);
+        parent::bindParams('bookingId', $bookingId);
+        $item = parent::fetch();
+
+        if (!empty($item)) {
+            return new Booking(self::formatData($item));
+        }
+
+        // Fixme
+        return [];
     }
 
     /**
@@ -40,8 +73,10 @@ class Booking extends Model
         $sqlWhere = '';
         $where = [];
 
-        if (!empty($filter['id'])) {
+        if (!empty($filter['id']) && (!empty($filter['dateStart']) || !empty($filter['dateFinish']))) {
             array_push($where, "sdi.`id` NOT IN (" . implode(',', $filter['id']) . ")");
+        } else if (!empty($filter['id'])) {
+            array_push($where, "sdi.`id` IN (" . implode(',', $filter['id']) . ")");
         }
 
         if (!empty($filter['buildingId'])) {
@@ -135,6 +170,25 @@ class Booking extends Model
             if ($building) {
                 $this->setBuildingName($building['name']);
             }
+
+            NotificationModel::createItem([
+                'author' => $this->getUserId(),
+                'name' => 'Бронирование',
+                'description' => 'Новая заявка на бронь #' . $this->getId(),
+                'type' => 'booking',
+                'objectId' => $this->getId(),
+                'objectType' => 'booking',
+                'dateCreated' => date('Y-m-d H:i:s'),
+                'active' => 1
+            ], []);
+
+            $params = [
+                'building' => $this->getBuildingName(),
+                'dateStart' => $this->getDateStart(),
+                'dateFinish' => $this->getDateFinish()
+            ];
+            $mailModel = new MailModel($this->settings, $this->settings->get('smtp_email'), 'booking', $params);
+            $mailModel->send();
         }
     }
 
