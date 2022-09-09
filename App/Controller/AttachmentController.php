@@ -287,8 +287,49 @@ class AttachmentController extends Controller
             );
         }
 
-        // Todo: Проверка на тип файла
-        // Todo: Проверка на размер файла
+        $fileSize = $files['file']['size'];
+
+        if ($fileSize > 52428800) {
+            return array(
+                'status' => false,
+                'data' => 'Размер загружаемого файла превышает 50Мб. Попробуйте загрузить другой файл.'
+            );
+        }
+
+        $fileType = mb_strtolower($files['file']['type']);
+        $errorFileType = false;
+
+        switch($type) {
+            case 'image': {
+                if (!in_array($fileType, ['image/jpeg', 'image/png'])) {
+                    $errorFileType = true;
+                }
+                break;
+            }
+            case 'document': {
+                if (!in_array($fileType, [
+                    'image/jpeg', 'image/png', 'application/msword', 'application/pdf', 'application/vnd.ms-excel',
+                    'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/msword',
+                    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                ])) {
+                    $errorFileType = true;
+                }
+                break;
+            }
+            case 'video': {
+                if (!in_array($fileType, ['video/mp4'])) {
+                    $errorFileType = true;
+                }
+                break;
+            }
+        }
+
+        if ($errorFileType) {
+            return array(
+                'status' => false,
+                'data' => 'Загружаемый файл имеет неподдерживаемый формат. Попробуйте загрузить другой файл.'
+            );
+        }
 
         $nameArray = explode('.', $files['file']['name']);
         $extension = array_pop($nameArray);
