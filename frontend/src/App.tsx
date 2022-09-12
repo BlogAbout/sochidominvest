@@ -6,9 +6,11 @@ import {
     fa1,
     faAngleDown,
     faAngleLeft,
+    faArrowDown,
     faArrowLeftLong,
     faArrowPointer,
     faArrowRotateLeft,
+    faArrowUp,
     faArrowUpFromBracket,
     faArrowUpRightFromSquare,
     faAt,
@@ -190,7 +192,9 @@ library.add(
     faUserGear,
     faEarthAsia,
     faArrowLeftLong,
-    faHouseLaptop
+    faHouseLaptop,
+    faArrowUp,
+    faArrowDown
 )
 
 function App() {

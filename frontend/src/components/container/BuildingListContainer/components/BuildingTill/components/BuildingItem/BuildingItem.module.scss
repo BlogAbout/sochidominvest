@@ -144,6 +144,20 @@
             font-size: 20px;
             font-weight: 700;
             margin-bottom: 5px;
+
+            .costDown {
+                display: inline-block;
+                margin-left: 5px;
+                color: #7bad17;
+                font-size: 16px;
+            }
+
+            .costUp {
+                display: inline-block;
+                margin-left: 5px;
+                color: #a90707;
+                font-size: 16px;
+            }
         }
 
         .costPer {

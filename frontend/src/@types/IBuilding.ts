@@ -19,6 +19,7 @@ export interface IBuilding {
     costMinUnit?: number | null
     area?: number | null
     cost?: number | null
+    costOld?: number | null
     countCheckers?: number | null
     tags: number[]
     contacts: number[]
@@ -71,6 +72,7 @@ export interface IBuildingChecker {
     name: string
     area: number | null
     cost: number | null
+    costOld: number | null
     furnish: string | null
     housing: number
     stage: string | null

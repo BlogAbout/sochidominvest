@@ -71,7 +71,15 @@ class BuildingModel extends Model
                        SELECT u.`first_name`
                        FROM `sdi_user` AS u
                        WHERE u.`id` = bu.`author` AND u.`active` IN (0, 1)
-                   ) AS authorName
+                   ) AS authorName,
+                   (
+                       SELECT sbp.`cost`
+                       FROM `sdi_building_price` AS sbp
+                       WHERE sbp.`id_object` = bu.`id` AND sbp.`type_object` = 'building'
+                       ORDER BY sbp.`date_update` DESC
+                       LIMIT 1
+                       OFFSET 1
+                   ) AS costOld
             FROM `sdi_building` AS bu
             LEFT JOIN `sdi_building_data` bd on bu.`id` = bd.`id`
             WHERE bu.`id` = :id
@@ -148,7 +156,15 @@ class BuildingModel extends Model
                        SELECT u.`first_name`
                        FROM `sdi_user` AS u
                        WHERE u.`id` = bu.`author` AND u.`active` IN (0, 1)
-                   ) AS authorName
+                   ) AS authorName,
+                   (
+                       SELECT sbp.`cost`
+                       FROM `sdi_building_price` AS sbp
+                       WHERE sbp.`id_object` = bu.`id` AND sbp.`type_object` = 'building'
+                       ORDER BY sbp.`date_update` DESC
+                       LIMIT 1
+                       OFFSET 1
+                   ) AS costOld
             FROM `sdi_building` AS bu
             LEFT JOIN `sdi_building_data` bd on bu.`id` = bd.`id`
         ";
@@ -725,6 +741,7 @@ class BuildingModel extends Model
             'videos' => array_map('intval', $data['videos'] ? explode(',', $data['videos']) : []),
             'area' => (float)$data['area'],
             'cost' => (float)$data['cost'],
+            'costOld' => (float)$data['costOld'],
             'metaTitle' => html_entity_decode($data['meta_title']),
             'metaDescription' => html_entity_decode($data['meta_description']),
             'passed' => $data['passed'] ? json_decode($data['passed']) : null,

@@ -18,8 +18,16 @@ class CheckerModel extends Model
     public static function fetchCheckerById(int $id): array
     {
         $sql = "
-            SELECT *
-            FROM `sdi_building_checker`
+            SELECT sdi.*,
+                   (
+                       SELECT sbp.`cost`
+                       FROM `sdi_building_price` AS sbp
+                       WHERE sbp.`id_object` = sdi.`id` AND sbp.`type_object` = 'checker'
+                       ORDER BY sbp.`date_update` DESC
+                       LIMIT 1
+                       OFFSET 1
+                   ) AS costOld
+            FROM `sdi_building_checker` AS sdi
             WHERE `id` = :id
         ";
 
@@ -46,8 +54,16 @@ class CheckerModel extends Model
         $resultList = [];
 
         $sql = "
-            SELECT *
-            FROM `sdi_building_checker`
+            SELECT sdi.*,
+                   (
+                       SELECT sbp.`cost`
+                       FROM `sdi_building_price` AS sbp
+                       WHERE sbp.`id_object` = sdi.`id` AND sbp.`type_object` = 'checker'
+                       ORDER BY sbp.`date_update` DESC
+                       LIMIT 1
+                       OFFSET 1
+                   ) AS costOld
+            FROM `sdi_building_checker` AS sdi
         ";
 
         $where = [];
@@ -219,6 +235,7 @@ class CheckerModel extends Model
             'name' => html_entity_decode($data['name']),
             'area' => (float)$data['area'],
             'cost' => (float)$data['cost'],
+            'costOld' => (float)$data['costOld'],
             'furnish' => $data['furnish'],
             'housing' => (int)$data['housing'],
             'stage' => $data['stage'],

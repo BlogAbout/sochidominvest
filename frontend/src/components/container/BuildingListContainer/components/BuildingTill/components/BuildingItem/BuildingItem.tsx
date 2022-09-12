@@ -69,6 +69,34 @@ const BuildingItem: React.FC<Props> = (props) => {
     const passedInfo = getPassedText(props.building.passed)
     const districtText = getDistrictText(props.building.district, props.building.districtZone)
 
+    const renderOldPrice = () => {
+        if (!props.building.costOld || !props.building.cost) {
+            return null
+        }
+
+        if (props.building.costOld === props.building.cost) {
+            return null
+        }
+
+        if (props.building.costOld > props.building.cost) {
+            return (
+                <span className={classes.costDown}
+                      title={`Старая цена: ${numberWithSpaces(round(props.building.costOld || 0, 0))} руб.`}
+                >
+                    <FontAwesomeIcon icon='arrow-down'/>
+                </span>
+            )
+        } else {
+            return (
+                <span className={classes.costUp}
+                      title={`Старая цена: ${numberWithSpaces(round(props.building.costOld || 0, 0))} руб.`}
+                >
+                    <FontAwesomeIcon icon='arrow-up'/>
+                </span>
+            )
+        }
+    }
+
     return (
         <div className={cx({'BuildingItem': true, 'disabled': props.building.active === 0})}
              onClick={() => props.onClick(props.building)}
@@ -166,6 +194,8 @@ const BuildingItem: React.FC<Props> = (props) => {
                         ? `От ${numberWithSpaces(round(props.building.costMin || 0, 0))} руб.`
                         : `${numberWithSpaces(round(props.building.cost || 0, 0))} руб.`
                     }
+
+                    {renderOldPrice()}
                 </div>
 
                 <div className={classes.costPer}>

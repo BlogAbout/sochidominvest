@@ -240,6 +240,34 @@ const BuildingItemPagePanel: React.FC = (props) => {
         })
     }
 
+    const renderOldPrice = () => {
+        if (!building.costOld || !building.cost) {
+            return null
+        }
+
+        if (building.costOld === building.cost) {
+            return null
+        }
+
+        if (building.costOld > building.cost) {
+            return (
+                <div className={classes.costDown}
+                      title={`Старая цена: ${numberWithSpaces(round(building.costOld || 0, 0))} руб.`}
+                >
+                    <FontAwesomeIcon icon='arrow-down'/>
+                </div>
+            )
+        } else {
+            return (
+                <div className={classes.costUp}
+                      title={`Старая цена: ${numberWithSpaces(round(building.costOld || 0, 0))} руб.`}
+                >
+                    <FontAwesomeIcon icon='arrow-up'/>
+                </div>
+            )
+        }
+    }
+
     // Вывод базовой информации
     const renderInfo = () => {
         const passedInfo = getPassedText(building.passed)
@@ -320,7 +348,10 @@ const BuildingItemPagePanel: React.FC = (props) => {
                             </>
                             :
                             <>
-                                <span>{numberWithSpaces(round(building.cost || 0, 0))} руб.</span>
+                                <span>
+                                    {numberWithSpaces(round(building.cost || 0, 0))} руб.
+                                    {renderOldPrice()}
+                                </span>
                                 <span>Цена</span>
                             </>
                         }

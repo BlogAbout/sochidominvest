@@ -38,6 +38,7 @@ const PopupCheckerCreate: React.FC<Props> = (props) => {
         name: '',
         area: 0,
         cost: 0,
+        costOld: 0,
         furnish: 'draft',
         housing: 1,
         stage: 'Ц',

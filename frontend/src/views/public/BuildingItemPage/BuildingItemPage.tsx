@@ -159,6 +159,34 @@ const BuildingItemPage: React.FC = () => {
         })
     }
 
+    const renderOldPrice = () => {
+        if (!building.costOld || !building.cost) {
+            return null
+        }
+
+        if (building.costOld === building.cost) {
+            return null
+        }
+
+        if (building.costOld > building.cost) {
+            return (
+                <span className={classes.costDown}
+                      title={`Старая цена: ${numberWithSpaces(round(building.costOld || 0, 0))} руб.`}
+                >
+                    <FontAwesomeIcon icon='arrow-down'/>
+                </span>
+            )
+        } else {
+            return (
+                <span className={classes.costUp}
+                      title={`Старая цена: ${numberWithSpaces(round(building.costOld || 0, 0))} руб.`}
+                >
+                    <FontAwesomeIcon icon='arrow-up'/>
+                </span>
+            )
+        }
+    }
+
     // Вывод базовой информации
     const renderInfo = () => {
         const passedInfo = getPassedText(building.passed)
@@ -228,7 +256,10 @@ const BuildingItemPage: React.FC = () => {
                                 </>
                                 :
                                 <>
-                                    <span>{numberWithSpaces(round(building.area && building.cost ? building.cost / building.area : 0, 0))} руб.</span>
+                                    <span>
+                                        {numberWithSpaces(round(building.area && building.cost ? building.cost / building.area : 0, 0))} руб.
+                                        {renderOldPrice()}
+                                    </span>
                                     <span>Цена за м<sup>2</sup></span>
                                 </>
                             }
