@@ -18,7 +18,8 @@ class Payment extends Model
     public string $userName;
     public string $companyEmail;
     public float $cost;
-    public string $tariff;
+    public int $objectId;
+    public string $objectType;
 
     private TinkoffMerchantAPI $api;
     private string $apiUrl = 'https://task.masbook.pro/api/v2/paymentSuccess';
@@ -139,9 +140,9 @@ class Payment extends Model
 
         $sql = "
             INSERT INTO `sdi_transaction`
-                (`name`, `date_created`, `date_update`, `status`, `id_user`, `email`, `cost`, `tariff`)
+                (`name`, `date_created`, `date_update`, `status`, `id_user`, `email`, `cost`, `id_object`, `type_object`)
             VALUES
-                (:name, :dateCreated, :dateUpdate, :status, :userId, :userEmail, :cost, :tariff)
+                (:name, :dateCreated, :dateUpdate, :status, :userId, :userEmail, :cost, :objectId, :objectType)
         ";
 
         parent::query($sql);
@@ -152,7 +153,8 @@ class Payment extends Model
         parent::bindParams('userId', $this->getUserId());
         parent::bindParams('userEmail', $this->getUserEmail());
         parent::bindParams('cost', $this->getCost());
-        parent::bindParams('tariff', $this->getTariff());
+        parent::bindParams('objectId', $this->getObjectId());
+        parent::bindParams('objectType', $this->getObjectType());
 
         $item = parent::execute();
 
@@ -459,19 +461,35 @@ class Payment extends Model
     }
 
     /**
-     * @return string
+     * @return int
      */
-    public function getTariff(): string
+    public function getObjectId(): int
     {
-        return $this->tariff;
+        return $this->objectId;
     }
 
     /**
-     * @param string $tariff
+     * @param int $objectId
      */
-    public function setTariff(string $tariff): void
+    public function setObjectId(int $objectId): void
     {
-        $this->tariff = $tariff;
+        $this->objectId = $objectId;
+    }
+
+    /**
+     * @return string
+     */
+    public function getObjectType(): string
+    {
+        return $this->objectType;
+    }
+
+    /**
+     * @param string $objectType
+     */
+    public function setObjectType(string $objectType): void
+    {
+        $this->objectType = $objectType;
     }
 
     /**

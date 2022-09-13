@@ -41,7 +41,8 @@ class PaymentController extends Controller
             'status' => htmlentities(stripcslashes(strip_tags($data->status))),
             'userId' => JwtMiddleware::getUserId(),
             'cost' => (float)htmlentities(stripcslashes(strip_tags($data->cost))),
-            'tariff' => htmlentities(stripcslashes(strip_tags($data->tariff)))
+            'objectId' => (int)htmlentities(stripcslashes(strip_tags($data->objectId))),
+            'objectType' => htmlentities(stripcslashes(strip_tags($data->objectType)))
         );
 
         try {
@@ -117,7 +118,8 @@ class PaymentController extends Controller
             'userId' => (int)htmlentities(stripcslashes(strip_tags($data->userId))),
             'email' => htmlentities(stripcslashes(strip_tags($data->email))),
             'cost' => (float)htmlentities(stripcslashes(strip_tags($data->cost))),
-            'tariff' => htmlentities(stripcslashes(strip_tags($data->tariff)))
+            'objectId' => (int)htmlentities(stripcslashes(strip_tags($data->objectId))),
+            'objectType' => htmlentities(stripcslashes(strip_tags($data->objectType)))
         );
 
         try {
