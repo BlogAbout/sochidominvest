@@ -16,7 +16,8 @@
             "App/Model",
             "App/modules/Booking",
             "App/modules/BusinessProcess",
-            "App/modules/Messenger"
+            "App/modules/Messenger",
+            "App/modules/Payment"
         ]
     }
 }

@@ -46,6 +46,7 @@ import PostPagePanel from '../../../views/private/CrmPagePanel/components/PostPa
 import BusinessProcessPanel
     from '../../../views/private/CrmPagePanel/components/BusinessProcessPanel/BusinessProcessPanel'
 import BookingPagePanel from '../../../views/private/CrmPagePanel/components/BookingPagePanel/BookingPagePanel'
+import PaymentPagePanel from '../../../views/private/CrmPagePanel/components/PaymentPagePanel/PaymentPagePanel'
 import classes from './AppRouter.module.scss'
 import 'react-toastify/dist/ReactToastify.css'
 
@@ -108,6 +109,7 @@ const AppRouter: React.FC = () => {
                                 <Route path={RouteNames.CRM_POST} element={<PostPagePanel/>}/>
                                 <Route path={RouteNames.CRM_BP} element={<BusinessProcessPanel/>}/>
                                 <Route path={RouteNames.CRM_BOOKING} element={<BookingPagePanel/>}/>
+                                <Route path={RouteNames.CRM_PAYMENT} element={<PaymentPagePanel/>}/>
                                 <Route path={RouteNames.DOCUMENT} element={<DocumentPagePanel/>}/>
                                 <Route path={RouteNames.REPORT} element={<ReportPanel/>}/>
                                 <Route path={RouteNames.FILE_MANAGER} element={<FileManagerPagePanel/>}/>
