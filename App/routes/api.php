@@ -4,6 +4,7 @@ namespace App;
 
 use App\Booking\BookingController;
 use App\BusinessProcess\BusinessProcessController;
+use App\BusinessProcess\PaymentController;
 use Klein\Klein;
 
 $Klein = new Klein();
@@ -158,6 +159,12 @@ $Klein->respond('POST', '/api/v1/booking', [new BookingController(), 'createItem
 $Klein->respond('PUT', '/api/v1/booking/[:id]', [new BookingController(), 'updateItem']);
 $Klein->respond('GET', '/api/v1/booking/[:id]', [new BookingController(), 'fetchItemById']);
 $Klein->respond('GET', '/api/v1/booking', [new BookingController(), 'fetchList']);
+
+// Payment Routes
+$Klein->respond('POST', '/api/v1/payment', [new PaymentController(), 'createItem']);
+$Klein->respond('PUT', '/api/v1/payment/[:id]', [new PaymentController(), 'updateItem']);
+$Klein->respond('GET', '/api/v1/payment/[:id]', [new PaymentController(), 'fetchItemById']);
+$Klein->respond('GET', '/api/v1/payment', [new PaymentController(), 'fetchList']);
 
 // Dispatch all routes
 $Klein->dispatch();

@@ -13,7 +13,7 @@ const FooterDefault: React.FC = () => {
                     <li><Link to={RouteNames.PUBLIC_POLICY}>Политика конфиденциальности</Link></li>
                 </ul>
                 <div className={classes.info}>
-                    <p>ИНН 344800846072</p>
+                    <p>ИНН 540490031607</p>
                     <p/>
                     <p/>
                     <p className={classes.copyright}>2022. Все права защищены</p>

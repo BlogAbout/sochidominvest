@@ -250,6 +250,15 @@ class Controller
                 } catch (Exception $e) {
                 }
             }
+
+            if ($payload->validator == 'paymentExists') {
+                try {
+                    if (!Model::isExistsItem('sdi_transaction', (int)$payload->data)) {
+                        array_push($response, "Платёж с таким идентификатором не найден в базе данных.");
+                    }
+                } catch (Exception $e) {
+                }
+            }
         }
 
         $validationErrors = new \stdClass();
