@@ -40,7 +40,8 @@ class Payment extends Model
         $this->userName = $data['userName'] ?: '';
         $this->companyEmail = $data['companyEmail'] ?: '';
         $this->cost = $data['cost'] ?: 0;
-        $this->tariff = $data['tariff'] ?: '';
+        $this->objectId = $data['objectId'] ?: 0;
+        $this->objectType = $data['objectType'] ?: '';
 
         $this->api = new TinkoffMerchantAPI($this->getApiLogin(), $this->getApiKey());
     }
@@ -296,7 +297,8 @@ class Payment extends Model
             'userId' => (int)$data['id_user'],
             'userEmail' => $data['email'],
             'cost' => (float)$data['cost'],
-            'tariff' => $data['tariff']
+            'objectId' => (int)$data['id_object'],
+            'objectType' => $data['type_object']
         ];
     }
 
