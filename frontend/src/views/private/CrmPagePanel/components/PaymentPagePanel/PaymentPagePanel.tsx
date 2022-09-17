@@ -48,7 +48,7 @@ const PaymentPagePanel: React.FC = () => {
         setIsUpdate(true)
     }
 
-    const onAddHandler = () => {
+    const onAddHandler = (type: 'createOrder') => {
         // Todo
     }
 
@@ -60,7 +60,7 @@ const PaymentPagePanel: React.FC = () => {
         // Todo
     }
 
-    const onContextMenu = (e: React.MouseEvent, payment: IPayment) => {
+    const onContextMenuItem = (e: React.MouseEvent, payment: IPayment) => {
         e.preventDefault()
 
         if (['director', 'administrator', 'manager'].includes(role)) {
@@ -70,6 +70,17 @@ const PaymentPagePanel: React.FC = () => {
         }
     }
 
+    // Меню выбора создания платежа
+    const onContextMenu = (e: React.MouseEvent) => {
+        e.preventDefault()
+
+        const menuItems = [
+            {text: 'Выставить счёт (в разработке)', onClick: () => onAddHandler('createOrder')}
+        ]
+
+        openContextMenu(e.currentTarget, menuItems)
+    }
+
     return (
         <main className={classes.PaymentPagePanel}>
             <PageInfo title='Платежи и транзакции'/>
@@ -77,14 +88,14 @@ const PaymentPagePanel: React.FC = () => {
             <div className={classes.Content}>
                 <Title type={1}
                        showAdd={['director', 'administrator', 'manager'].includes(role)}
-                       onAdd={onAddHandler.bind(this)}
+                       onAdd={onContextMenu.bind(this)}
                 >Платежи и транзакции</Title>
 
                 <PaymentListContainer payments={filterPayments}
                                       fetching={fetching}
                                       onClick={onClickHandler.bind(this)}
                                       onEdit={onEditHandler.bind(this)}
-                                      onContextMenu={onContextMenu.bind(this)}
+                                      onContextMenu={onContextMenuItem.bind(this)}
                 />
             </div>
         </main>

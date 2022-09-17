@@ -16,10 +16,10 @@ class DocumentModel extends Model
     public static function fetchDocumentById(int $id): array
     {
         $sql = "
-            SELECT *, a.`content` AS url
-            FROM `sdi_document`
-            LEFT JOIN `sdi_attachment` a ON a.`id` = `id_attachment`
-            WHERE `id` = :id
+            SELECT sdi.*, a.`content` AS url
+            FROM `sdi_document` AS sdi
+            LEFT JOIN `sdi_attachment` a ON a.`id` = sdi.`id_attachment`
+            WHERE sdi.`id` = :id
         ";
 
         parent::query($sql);
@@ -121,7 +121,7 @@ class DocumentModel extends Model
             UPDATE `sdi_document`
             SET
                 `name` = :name,
-                `id_attachment` = :objectId,
+                `id_attachment` = :attachmentId,
                 `id_object` = :objectId,
                 `type_object` = :objectType,
                 `type` = :type,

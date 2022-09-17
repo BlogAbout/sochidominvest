@@ -143,7 +143,7 @@ class DocumentController extends Controller
         }
 
         $payload = array(
-            'id' => $request->id,
+            'id' => (int)$request->id,
             'name' => $data->name ? htmlentities(stripcslashes(strip_tags($data->name))) : '',
             'attachmentId' => (int)htmlentities(stripcslashes(strip_tags($data->attachmentId))),
             'objectId' => $data->objectId ? (int)htmlentities(stripcslashes(strip_tags($data->objectId))) : null,

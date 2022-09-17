@@ -490,6 +490,7 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
                               onSelect={(value: string) => setBuilding({...building, districtZone: value})}
                               placeHolder='Выберите микрорайон'
                               styleType='minimal'
+                              showEmpty
                     />
                 </div>
 

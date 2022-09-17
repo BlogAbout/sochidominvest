@@ -28,12 +28,13 @@ interface Props {
     showValidate?: boolean
     showRequired?: boolean
     showClear?: boolean
+    showEmpty?: boolean
     disableTitle?: boolean
     displayOptions?: PopupDisplayOptions
     styleType: 'standard' | 'minimal'
     icon?: IconProp
 
-    onSelect(value: number | string, e: React.MouseEvent<HTMLInputElement>): void
+    onSelect(value: number | string | null, e: React.MouseEvent<HTMLInputElement>): void
 }
 
 const defaultProps: Props = {
@@ -41,7 +42,7 @@ const defaultProps: Props = {
     items: [],
     placeHolder: 'Выберите значение',
     styleType: 'standard',
-    onSelect(value: number | string, e: React.MouseEvent<HTMLInputElement>): void {
+    onSelect(value: number | string | null, e: React.MouseEvent<HTMLInputElement>): void {
         console.info('ComboBox onSelect', value, e)
     }
 }
@@ -80,6 +81,19 @@ const ComboBox: React.FC<Props> = (props) => {
                 }
             }
         })
+
+        if (props.showEmpty) {
+            items.unshift({
+                text: 'Нет',
+                readOnly: false,
+                title: 'Нет',
+                hidden: false,
+                className: '',
+                onClick: (event: React.MouseEvent<HTMLInputElement>) => {
+                    props.onSelect(null, event)
+                }
+            })
+        }
 
         openContextMenu(e.currentTarget, items, {}, props.displayOptions)
     }

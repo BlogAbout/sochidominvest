@@ -17,6 +17,7 @@ import {
     getDistrictText,
     getPassedText
 } from '../../../helpers/buildingHelper'
+import {compareText} from '../../../helpers/filterHelper'
 import BuildingService from '../../../api/BuildingService'
 import BlockingElement from '../../../components/ui/BlockingElement/BlockingElement'
 import Empty from '../../../components/Empty/Empty'
@@ -52,6 +53,7 @@ const BuildingPage: React.FC = () => {
     }
 
     const [isUpdate, setIsUpdate] = useState(true)
+    const [searchText, setSearchText] = useState('')
     const [buildings, setBuildings] = useState<IBuilding[]>([])
     const [filterBuilding, setFilterBuilding] = useState<IBuilding[]>([])
     const [fetching, setFetching] = useState(false)
@@ -90,11 +92,11 @@ const BuildingPage: React.FC = () => {
 
     useEffect(() => {
         onFilterBuildingHandler(filters)
-    }, [buildings])
+    }, [buildings, searchText])
 
     useEffect(() => {
         onScrollContainerTopHandler(refScrollerContainer)
-    }, [countPerPage, filterBuilding])
+    }, [countPerPage, filterBuilding, searchText])
 
     const mapState: MapState = {
         center: [55.76, 37.64],
@@ -135,7 +137,8 @@ const BuildingPage: React.FC = () => {
                     ((!filtersParams.gas || !filtersParams.gas.length) || (filtersParams.gas && item.gas && filtersParams.gas.includes(item.gas))) &&
                     ((!filtersParams.electricity || !filtersParams.electricity.length) || (filtersParams.electricity && item.electricity && filtersParams.electricity.includes(item.electricity))) &&
                     ((!filtersParams.sewerage || !filtersParams.sewerage.length) || (filtersParams.sewerage && item.sewerage && filtersParams.sewerage.includes(item.sewerage))) &&
-                    ((!filtersParams.waterSupply || !filtersParams.waterSupply.length) || (filtersParams.waterSupply && item.waterSupply && filtersParams.waterSupply.includes(item.waterSupply)))
+                    ((!filtersParams.waterSupply || !filtersParams.waterSupply.length) || (filtersParams.waterSupply && item.waterSupply && filtersParams.waterSupply.includes(item.waterSupply))) &&
+                    (searchText.trim() === '' || compareText(item.name, searchText) || (item.address && compareText(item.address, searchText)))
             })
 
             setFilterBuilding(prepareBuildings)
@@ -255,6 +258,9 @@ const BuildingPage: React.FC = () => {
                        layouts={['till', 'map']}
                        onChangeLayout={onChangeLayoutHandler.bind(this)}
                        showFilter={true}
+                       showSearch={true}
+                       valueSearch={searchText}
+                       onSearch={(value: string) => setSearchText(value)}
                        onFilter={() => {
                            openPopupBuildingFilter(document.body, {
                                filters: filters,
@@ -269,7 +275,7 @@ const BuildingPage: React.FC = () => {
                         : <Empty message='Нет объектов недвижимости'/>
                     }
 
-                    {buildings.length && readMoreElementRef ? <div ref={readMoreElementRef}/> : null}
+                    {buildings.length && readMoreElementRef ? <div className={classes.readMoreElementRef} ref={readMoreElementRef}/> : null}
                 </BlockingElement>
             </div>
         )
@@ -284,6 +290,9 @@ const BuildingPage: React.FC = () => {
                            layouts={['till', 'map']}
                            onChangeLayout={onChangeLayoutHandler.bind(this)}
                            showFilter={true}
+                           showSearch={true}
+                           valueSearch={searchText}
+                           onSearch={(value: string) => setSearchText(value)}
                            onFilter={() => {
                                openPopupBuildingFilter(document.body, {
                                    filters: filters,

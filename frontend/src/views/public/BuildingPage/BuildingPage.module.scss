@@ -47,6 +47,10 @@
         justify-content: space-between;
         flex-wrap: wrap;
 
+        .readMoreElementRef {
+            width: 100%;
+        }
+
         .item {
             position: relative;
             margin-bottom: 40px;
