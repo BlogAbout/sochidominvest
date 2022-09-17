@@ -23,17 +23,17 @@ class Message extends Model
     {
         parent::__construct();
 
-        $this->id = $data['id'] ?: 0;
-        $this->messengerId = $data['messengerId'] ?: 0;
+        $this->id = $data['id'] ?? 0;
+        $this->messengerId = $data['messengerId'] ?? 0;
         $this->active = $data['active'] ? (int)$data['active'] : 1;
-        $this->type = $data['type'] ?: 'message';
-        $this->text = $data['text'] ?: '';
-        $this->author = $data['author'] ?: 0;
+        $this->type = $data['type'] ?? 'message';
+        $this->text = $data['text'] ?? '';
+        $this->author = $data['author'] ?? 0;
         $this->userId = $data['userId'] ? (int)$data['userId'] : 0;
-        $this->dateCreated = $data['dateCreated'] ?: '';
-        $this->dateUpdate = $data['dateUpdate'] ?: '';
-        $this->parentMessageId = $data['parentMessageId'] ?: 0;
-        $this->attendees = $data['attendees'] ?: [];
+        $this->dateCreated = $data['dateCreated'] ?? '';
+        $this->dateUpdate = $data['dateUpdate'] ?? '';
+        $this->parentMessageId = $data['parentMessageId'] ?? 0;
+        $this->attendees = $data['attendees'] ?? [];
     }
 
     /**

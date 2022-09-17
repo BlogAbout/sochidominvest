@@ -31,19 +31,19 @@ class Payment extends Model
     {
         parent::__construct($settings);
 
-        $this->id = $data['id'] ?: 0;
-        $this->name = $data['name'] ?: '';
-        $this->dateCreated = $data['dateCreated'] ?: '';
-        $this->dateUpdate = $data['dateUpdate'] ?: '';
-        $this->datePaid = $data['datePaid'] ?: '';
-        $this->status = $data['status'] ?: 'pending';
-        $this->userId = $data['userId'] ?: 0;
-        $this->userEmail = $data['userEmail'] ?: '';
-        $this->userName = $data['userName'] ?: '';
-        $this->companyEmail = $data['companyEmail'] ?: '';
-        $this->cost = $data['cost'] ?: 0;
-        $this->objectId = $data['objectId'] ?: 0;
-        $this->objectType = $data['objectType'] ?: '';
+        $this->id = $data['id'] ?? 0;
+        $this->name = $data['name'] ?? '';
+        $this->dateCreated = $data['dateCreated'] ?? '';
+        $this->dateUpdate = $data['dateUpdate'] ?? '';
+        $this->datePaid = $data['datePaid'] ?? '';
+        $this->status = $data['status'] ?? 'pending';
+        $this->userId = $data['userId'] ?? 0;
+        $this->userEmail = $data['userEmail'] ?? '';
+        $this->userName = $data['userName'] ?? '';
+        $this->companyEmail = $data['companyEmail'] ?? '';
+        $this->cost = $data['cost'] ?? 0;
+        $this->objectId = $data['objectId'] ?? 0;
+        $this->objectType = $data['objectType'] ?? '';
 
         $this->api = new TinkoffMerchantAPI($this->getApiLogin(), $this->getApiKey());
     }

@@ -21,13 +21,13 @@ class Booking extends Model
     {
         parent::__construct($settings);
 
-        $this->id = $data['id'] ?: 0;
-        $this->dateStart = $data['dateStart'] ?: '';
-        $this->dateFinish = $data['dateFinish'] ?: '';
-        $this->status = $data['status'] ?: 'new';
-        $this->buildingId = $data['buildingId'] ?: 0;
-        $this->buildingName = $data['buildingName'] ?: '';
-        $this->userId = $data['userId'] ?: 0;
+        $this->id = $data['id'] ?? 0;
+        $this->dateStart = $data['dateStart'] ?? '';
+        $this->dateFinish = $data['dateFinish'] ?? '';
+        $this->status = $data['status'] ?? 'new';
+        $this->buildingId = $data['buildingId'] ?? 0;
+        $this->buildingName = $data['buildingName'] ?? '';
+        $this->userId = $data['userId'] ?? 0;
     }
 
     /**

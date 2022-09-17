@@ -25,19 +25,19 @@ class BusinessProcess extends Model
     {
         parent::__construct();
 
-        $this->id = $data['id'] ?: 0;
-        $this->ticketId = $data['ticketId'] ?: 0;
-        $this->author = $data['author'] ?: 0;
-        $this->responsible = $data['responsible'] ?: 0;
-        $this->active = $data['active'] ?: 0;
-        $this->type = $data['type'] ?: '';
-        $this->step = $data['step'] ?: '';
-        $this->name = $data['name'] ?: '';
-        $this->description = $data['description'] ?: '';
-        $this->dateCreated = $data['dateCreated'] ?: '';
-        $this->dateUpdate = $data['dateUpdate'] ?: '';
-        $this->relations = $data['relations'] ?: [];
-        $this->attendees = $data['attendees'] ?: [];
+        $this->id = $data['id'] ?? 0;
+        $this->ticketId = $data['ticketId'] ?? 0;
+        $this->author = $data['author'] ?? 0;
+        $this->responsible = $data['responsible'] ?? 0;
+        $this->active = $data['active'] ?? 0;
+        $this->type = $data['type'] ?? '';
+        $this->step = $data['step'] ?? '';
+        $this->name = $data['name'] ?? '';
+        $this->description = $data['description'] ?? '';
+        $this->dateCreated = $data['dateCreated'] ?? '';
+        $this->dateUpdate = $data['dateUpdate'] ?? '';
+        $this->relations = $data['relations'] ?? [];
+        $this->attendees = $data['attendees'] ?? [];
     }
 
     /**
@@ -391,7 +391,7 @@ class BusinessProcess extends Model
             'description' => $data['description'],
             'dateCreated' => $data['date_created'],
             'dateUpdate' => $data['date_update'],
-            'relations' => $data['relations'] ?: [],
+            'relations' => $data['relations'] ?? [],
             'attendees' => array_map('intval', $data['attendees'] ? explode(',', $data['attendees']) : []),
         ];
     }

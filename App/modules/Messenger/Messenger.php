@@ -20,14 +20,14 @@ class Messenger extends Model
     {
         parent::__construct();
 
-        $this->id = $data['id'] ?: 0;
-        $this->author = $data['author'] ?: 0;
+        $this->id = $data['id'] ?? 0;
+        $this->author = $data['author'] ?? 0;
         $this->avatarId = $data['avatarId'] ? (int)$data['avatarId'] : 0;
-        $this->name = $data['name'] ?: '';
-        $this->type = $data['type'] ?: 'message';
-        $this->dateCreated = $data['dateCreated'] ?: '';
-        $this->members = $data['members'] ?: [];
-        $this->messages = $data['messages'] ?: [];
+        $this->name = $data['name'] ?? '';
+        $this->type = $data['type'] ?? 'message';
+        $this->dateCreated = $data['dateCreated'] ?? '';
+        $this->members = $data['members'] ?? [];
+        $this->messages = $data['messages'] ?? [];
     }
 
     /**
@@ -305,8 +305,8 @@ class Messenger extends Model
             'name' => $data['name'],
             'type' => $data['type'],
             'dateCreated' => $data['date_created'],
-            'members' => $data['members'] ?: [],
-            'messages' => $data['messages'] ?: []
+            'members' => $data['members'] ?? [],
+            'messages' => $data['messages'] ?? []
         ];
     }
 
