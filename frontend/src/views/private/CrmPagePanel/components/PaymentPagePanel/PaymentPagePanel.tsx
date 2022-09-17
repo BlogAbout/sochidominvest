@@ -1,9 +1,11 @@
 import React, {useEffect, useState} from 'react'
 import {useTypedSelector} from '../../../../../hooks/useTypedSelector'
+import {useActions} from '../../../../../hooks/useActions'
 import {IPayment} from '../../../../../@types/IPayment'
 import PageInfo from '../../../../../components/ui/PageInfo/PageInfo'
 import Title from '../../../../../components/ui/Title/Title'
 import PaymentListContainer from '../../../../../components/container/PaymentListContainer/PaymentListContainer'
+import openPopupPaymentCreate from '../../../../../components/popup/PopupPaymentCreate/PopupPaymentCreate'
 import openPopupAlert from '../../../../../components/PopupAlert/PopupAlert'
 import PaymentService from '../../../../../api/PaymentService'
 import openContextMenu from '../../../../../components/ContextMenu/ContextMenu'
@@ -15,9 +17,14 @@ const PaymentPagePanel: React.FC = () => {
     const [filterPayments, setFilterPayments] = useState<IPayment[]>([])
     const [fetching, setFetching] = useState(false)
 
-    const {role} = useTypedSelector(state => state.userReducer)
+    const {role, users, fetching: fetchingUsers} = useTypedSelector(state => state.userReducer)
+    const {fetchUserList} = useActions()
 
     useEffect(() => {
+        if (isUpdate || !users || !users.length) {
+            fetchUserList({active: [0, 1]})
+        }
+
         if (isUpdate || !payments || !payments.length) {
             setFetching(true)
 
@@ -49,7 +56,9 @@ const PaymentPagePanel: React.FC = () => {
     }
 
     const onAddHandler = (type: 'createOrder') => {
-        // Todo
+        openPopupPaymentCreate(document.body, {
+            onSave: onSaveHandler.bind(this)
+        })
     }
 
     const onClickHandler = (payment: IPayment) => {
@@ -57,6 +66,19 @@ const PaymentPagePanel: React.FC = () => {
     }
 
     const onEditHandler = (payment: IPayment) => {
+        openPopupPaymentCreate(document.body, {
+            payment: payment,
+            onSave: onSaveHandler.bind(this)
+        })
+    }
+
+    // Переход по ссылке на платежную форму
+    const onOpenLinkHandler = (payment: IPayment) => {
+        // Todo
+    }
+
+    // Отправка ссылки на платежную форму плательщику на почту
+    const onSendLinkHandler = (payment: IPayment) => {
         // Todo
     }
 
@@ -64,7 +86,14 @@ const PaymentPagePanel: React.FC = () => {
         e.preventDefault()
 
         if (['director', 'administrator', 'manager'].includes(role)) {
-            const menuItems = [{text: 'Редактировать', onClick: () => onEditHandler(payment)}]
+            const menuItems = []
+
+            if (!payment.datePaid) {
+                menuItems.push({text: 'Перейти к оплате (в разработке)', onClick: () => onOpenLinkHandler(payment)})
+                menuItems.push({text: 'Отправить ссылку (в разработке)', onClick: () => onSendLinkHandler(payment)})
+            }
+
+            menuItems.push({text: 'Редактировать', onClick: () => onEditHandler(payment)})
 
             openContextMenu(e, menuItems)
         }
@@ -75,7 +104,7 @@ const PaymentPagePanel: React.FC = () => {
         e.preventDefault()
 
         const menuItems = [
-            {text: 'Выставить счёт (в разработке)', onClick: () => onAddHandler('createOrder')}
+            {text: 'Выставить счёт', onClick: () => onAddHandler('createOrder')}
         ]
 
         openContextMenu(e.currentTarget, menuItems)
@@ -92,7 +121,7 @@ const PaymentPagePanel: React.FC = () => {
                 >Платежи и транзакции</Title>
 
                 <PaymentListContainer payments={filterPayments}
-                                      fetching={fetching}
+                                      fetching={fetching || fetchingUsers}
                                       onClick={onClickHandler.bind(this)}
                                       onEdit={onEditHandler.bind(this)}
                                       onContextMenu={onContextMenuItem.bind(this)}

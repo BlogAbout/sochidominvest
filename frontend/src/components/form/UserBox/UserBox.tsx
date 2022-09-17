@@ -20,6 +20,7 @@ interface Props {
     showClear?: boolean
     disableTitle?: boolean
     styleType?: 'standard' | 'minimal' | 'borderDisabled'
+    errorText?: string
 
     onSelect(value: number[], e: React.MouseEvent): void
 }

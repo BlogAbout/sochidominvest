@@ -12,11 +12,11 @@ export default class PaymentService {
         return API.get('/payment', {params: filter})
     }
 
-    static async savePayment(payment: IPayment): Promise<AxiosResponse> {
+    static async savePayment(payment: IPayment, sendLink: boolean): Promise<AxiosResponse> {
         if (payment.id) {
-            return API.put(`/payment/${payment.id}`, payment)
+            return API.put(`/payment/${payment.id}`, {payment: payment, sendLink: sendLink})
         } else {
-            return API.post('/payment', payment)
+            return API.post('/payment', {payment: payment, sendLink: sendLink})
         }
     }
 }

@@ -33,7 +33,7 @@ const PaymentList: React.FC<Props> = (props) => {
     return (
         <div className={classes.PaymentList}>
             <div className={classes.head}>
-                <div className={classes.id}>Номер #</div>
+                <div className={classes.id}>#</div>
                 <div className={classes.name}>Название</div>
                 <div className={classes.userName}>Имя пользователя</div>
                 <div className={classes.cost}>Сумма, руб.</div>

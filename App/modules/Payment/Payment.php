@@ -12,6 +12,7 @@ class Payment extends Model
     public string $name;
     public string $dateCreated;
     public string $dateUpdate;
+    public string $datePaid;
     public string $status;
     public int $userId;
     public string $userEmail;
@@ -34,6 +35,7 @@ class Payment extends Model
         $this->name = $data['name'] ?: '';
         $this->dateCreated = $data['dateCreated'] ?: '';
         $this->dateUpdate = $data['dateUpdate'] ?: '';
+        $this->datePaid = $data['datePaid'] ?: '';
         $this->status = $data['status'] ?: 'pending';
         $this->userId = $data['userId'] ?: 0;
         $this->userEmail = $data['userEmail'] ?: '';
@@ -114,13 +116,19 @@ class Payment extends Model
 
     /**
      * Сохранение транзакции
+     *
+     * @param bool $sendLink Отправлять ссылку плательщику на почту или нет
      */
-    public function save(): void
+    public function save(bool $sendLink = false): void
     {
         if (!$this->getId()) {
             $this->insertToDb();
         } else {
             $this->updateToDb();
+        }
+
+        if ($sendLink) {
+            // Todo: Доделать отправку ссылки на платежку плательщику
         }
     }
 
@@ -176,6 +184,7 @@ class Payment extends Model
             UPDATE `sdi_transaction`
             SET
                 `date_update` = :dateUpdate,
+                `date_paid` = :datePaid,
                 `status` = :status
             WHERE `id` = :id
         ";
@@ -183,6 +192,7 @@ class Payment extends Model
         parent::query($sql);
         parent::bindParams('id', $this->getId());
         parent::bindParams('dateUpdate', $this->getDateUpdate());
+        parent::bindParams('datePaid', $this->getDatePaid() ?: null);
         parent::bindParams('status', $this->getStatus());
 
         parent::execute();
@@ -290,7 +300,7 @@ class Payment extends Model
     {
         return [
             'id' => (int)$data['id'],
-            'name' => $data['date_start'],
+            'name' => $data['name'],
             'dateCreated' => $data['date_created'],
             'dateUpdate' => $data['date_update'],
             'status' => $data['status'],
@@ -364,6 +374,22 @@ class Payment extends Model
     public function setDateUpdate(string $dateUpdate): void
     {
         $this->dateUpdate = $dateUpdate;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDatePaid(): string
+    {
+        return $this->datePaid;
+    }
+
+    /**
+     * @param string $datePaid
+     */
+    public function setDatePaid(string $datePaid): void
+    {
+        $this->datePaid = $datePaid;
     }
 
     /**

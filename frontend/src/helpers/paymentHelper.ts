@@ -1,6 +1,7 @@
 import {ISelector} from '../@types/ISelector'
 
 export const paymentStatuses: ISelector[] = [
+    {key: 'new', text: 'Новый'},
     {key: 'pending', text: 'В ожидании'},
     {key: 'paid', text: 'Оплачен'},
     {key: 'cancel', text: 'Отменен'},

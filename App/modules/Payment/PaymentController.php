@@ -37,17 +37,19 @@ class PaymentController extends Controller
         $data = json_decode($request->body());
 
         $payload = array(
-            'name' => htmlentities(stripcslashes(strip_tags($data->name))),
-            'status' => htmlentities(stripcslashes(strip_tags($data->status))),
-            'userId' => JwtMiddleware::getUserId(),
-            'cost' => (float)htmlentities(stripcslashes(strip_tags($data->cost))),
-            'objectId' => (int)htmlentities(stripcslashes(strip_tags($data->objectId))),
-            'objectType' => htmlentities(stripcslashes(strip_tags($data->objectType)))
+            'name' => htmlentities(stripcslashes(strip_tags($data->payment->name))),
+            'status' => htmlentities(stripcslashes(strip_tags($data->payment->status))),
+            'userId' => $data->payment->userId ? (int)htmlentities(stripcslashes(strip_tags($data->payment->userId))) : JwtMiddleware::getUserId(),
+            'cost' => (float)htmlentities(stripcslashes(strip_tags($data->payment->cost))),
+            'objectId' => (int)htmlentities(stripcslashes(strip_tags($data->payment->objectId))),
+            'objectType' => htmlentities(stripcslashes(strip_tags($data->payment->objectType)))
         );
+
+        $sendLink = $data->sendLink;
 
         try {
             $payment = new Payment($payload);
-            $payment->save();
+            $payment->save($sendLink);
 
             if ($payment->getId()) {
                 $response->code(201)->json($payment);
@@ -112,19 +114,22 @@ class PaymentController extends Controller
 
         $payload = array(
             'id' => $request->id,
-            'name' => htmlentities(stripcslashes(strip_tags($data->name))),
-            'dateCreated' => htmlentities(stripcslashes(strip_tags($data->dateCreated))),
-            'status' => htmlentities(stripcslashes(strip_tags($data->status))),
-            'userId' => (int)htmlentities(stripcslashes(strip_tags($data->userId))),
-            'email' => htmlentities(stripcslashes(strip_tags($data->email))),
-            'cost' => (float)htmlentities(stripcslashes(strip_tags($data->cost))),
-            'objectId' => (int)htmlentities(stripcslashes(strip_tags($data->objectId))),
-            'objectType' => htmlentities(stripcslashes(strip_tags($data->objectType)))
+            'name' => htmlentities(stripcslashes(strip_tags($data->payment->name))),
+            'dateCreated' => htmlentities(stripcslashes(strip_tags($data->payment->dateCreated))),
+            'datePaid' => htmlentities(stripcslashes(strip_tags($data->payment->datePaid))),
+            'status' => htmlentities(stripcslashes(strip_tags($data->payment->status))),
+            'userId' => (int)htmlentities(stripcslashes(strip_tags($data->payment->userId))),
+            'email' => htmlentities(stripcslashes(strip_tags($data->payment->email))),
+            'cost' => (float)htmlentities(stripcslashes(strip_tags($data->payment->cost))),
+            'objectId' => (int)htmlentities(stripcslashes(strip_tags($data->payment->objectId))),
+            'objectType' => htmlentities(stripcslashes(strip_tags($data->payment->objectType)))
         );
+
+        $sendLink = $data->sendLink;
 
         try {
             $payment = new Payment($payload);
-            $payment->save();
+            $payment->save($sendLink);
 
             $response->code(200)->json($payment);
 

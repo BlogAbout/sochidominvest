@@ -3,6 +3,7 @@ export interface IPayment {
     name: string
     dateCreated?: string | null
     dateUpdate?: string | null
+    datePaid?: string | null
     status: string
     userId: number
     userEmail?: string
