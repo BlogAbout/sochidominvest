@@ -15,6 +15,7 @@ export enum RouteNames {
     COMPILATION_ITEM = '/panel/compilation/:id',
     FILE_MANAGER = '/panel/file-manager',
     ADMINISTRATION = '/panel/administration',
+    TARIFF = '/panel/tariff',
     ADVERTISING = '/panel/advertising',
     ADVERTISING_PARTNER = '/panel/advertising/partner',
     ADVERTISING_PARTNER_ITEM = '/panel/advertising/partner/:id',

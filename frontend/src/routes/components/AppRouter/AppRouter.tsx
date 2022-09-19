@@ -31,6 +31,7 @@ import FavoritePagePanel from '../../../views/private/FavoritePagePanel/Favorite
 import CompilationPagePanel from '../../../views/private/CompilationPagePanel/CompilationPagePanel'
 import CompilationItemPagePanel from '../../../views/private/CompilationItemPagePanel/CompilationItemPagePanel'
 import AdministrationPagePanel from '../../../views/private/AdministrationPagePanel/AdministrationPagePanel'
+import TariffPagePanel from '../../../views/private/TariffPagePanel/TariffPagePanel'
 import AdvertisingMaterialsPagePanel
     from '../../../views/private/AdvertisingMaterialsPagePanel/AdvertisingMaterialsPagePanel'
 import PartnerPanel from '../../../views/private/AdvertisingMaterialsPagePanel/components/PartnerPanel/PartnerPanel'
@@ -125,6 +126,7 @@ const AppRouter: React.FC = () => {
                             <Route path={RouteNames.FAVORITE} element={<FavoritePagePanel/>}/>
                             <Route path={RouteNames.COMPILATION_ITEM} element={<CompilationItemPagePanel/>}/>
                             <Route path={RouteNames.COMPILATION} element={<CompilationPagePanel/>}/>
+                            <Route path={RouteNames.TARIFF} element={<TariffPagePanel/>}/>
                         </Routes>
                     </div>
 

@@ -134,7 +134,11 @@ const DesktopPagePanel: React.FC = () => {
                 <BlockingElement fetching={fetchingTariffs} className={classes.list}>
                     <div className={classes.row}>
                         <div className={classes.label}>Текущий тариф:</div>
-                        <div className={classes.param}>Базовый</div>
+                        <div className={classes.param}>
+                            Базовый&nbsp;
+                            (<span className={classes.link}
+                                   onClick={() => navigate('/panel/tariff/')}>изменить</span>)
+                        </div>
                     </div>
                     <div className={classes.row}>
                         <div className={classes.label}>Дата окончания:</div>
