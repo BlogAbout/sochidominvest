@@ -479,7 +479,7 @@ class BuildingModel extends Model
         parent::bindParams('avatar', $payload['avatar']);
         parent::execute();
 
-        BuildingModel::updatePrices($payload['id'], 'building', $payload['cost']);
+        BuildingModel::updatePrices($payload['id'], 'building', $payload['cost'], $payload['costOld']);
         BuildingModel::updateRent($payload);
         BuildingModel::updateRelationsTags($payload['id'], $payload['tags']);
         BuildingModel::updateRelationsDevelopers($payload['id'], $payload['developers']);
@@ -498,24 +498,44 @@ class BuildingModel extends Model
      */
     public static function updatePrices(int $objectId, string $objectType, float $cost)
     {
-        if ($objectId && $objectType && $cost) {
-            $dateUpdate = new DateTime();
-            $dateUpdate->setTime(0, 0);
-
-            $sql = "
-                INSERT INTO `sdi_building_price` (`id_object`, `type_object`, `date_update`, `cost`)
-                VALUES (:objectId, :objectType, :dateUpdate, :cost)
-                ON DUPLICATE KEY
-                UPDATE `cost` = :cost
-            ";
-
-            self::query($sql);
-            self::bindParams('objectId', $objectId);
-            self::bindParams('objectType', $objectType);
-            self::bindParams('dateUpdate', $dateUpdate->format('Y-m-d H:i:s'));
-            self::bindParams('cost', $cost);
-            self::execute();
+        if (!$objectId || !$objectType || !$cost) {
+            return;
         }
+
+        $sql = "
+            SELECT `cost`
+            FROM `sdi_building_price`
+            WHERE `id_object` = :objectId AND `type_object` = :objectType
+            ORDER BY `date_update` DESC
+            LIMIT 1
+        ";
+
+        parent::query($sql);
+        parent::bindParams('objectId', $objectId);
+        parent::bindParams('objectType', $objectType);
+
+        $result = parent::fetch();
+
+        if (!empty($result) && (float)$result['cost'] === $cost) {
+            return;
+        }
+
+        $dateUpdate = new DateTime();
+        $dateUpdate->setTime(0, 0);
+
+        $sql = "
+            INSERT INTO `sdi_building_price` (`id_object`, `type_object`, `date_update`, `cost`)
+            VALUES (:objectId, :objectType, :dateUpdate, :cost)
+            ON DUPLICATE KEY
+            UPDATE `cost` = :cost
+        ";
+
+        self::query($sql);
+        self::bindParams('objectId', $objectId);
+        self::bindParams('objectType', $objectType);
+        self::bindParams('dateUpdate', $dateUpdate->format('Y-m-d H:i:s'));
+        self::bindParams('cost', $cost);
+        self::execute();
     }
 
     /**
