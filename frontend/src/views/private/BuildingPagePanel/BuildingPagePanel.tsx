@@ -108,7 +108,10 @@ const BuildingPagePanel: React.FC = () => {
 
     const onScrollContainerTopHandler = (refElement: React.MutableRefObject<any>) => {
         if (refElement && currentPage > 1) {
-            refElement.current.scrollTop = 0
+            if (refElement.current && refElement.current.scrollTop) {
+                refElement.current.scrollTop = 0
+            }
+
             setCurrentPage(1)
         }
     }

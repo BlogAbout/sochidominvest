@@ -474,12 +474,12 @@ class BuildingModel extends Model
         parent::bindParams('surchargeDoc', $payload['surchargeDoc']);
         parent::bindParams('surchargeGas', $payload['surchargeGas']);
         parent::bindParams('saleNoResident', $payload['saleNoResident']);
-        parent::bindParams('passed', $payload['passed']);
+        parent::bindParams('passed', $payload['passed'] ? json_encode($payload['passed']) : '');
         parent::bindParams('avatarId', $payload['avatarId']);
         parent::bindParams('avatar', $payload['avatar']);
         parent::execute();
 
-        BuildingModel::updatePrices($payload['id'], 'building', $payload['cost'], $payload['costOld']);
+        BuildingModel::updatePrices($payload['id'], 'building', $payload['cost']);
         BuildingModel::updateRent($payload);
         BuildingModel::updateRelationsTags($payload['id'], $payload['tags']);
         BuildingModel::updateRelationsDevelopers($payload['id'], $payload['developers']);

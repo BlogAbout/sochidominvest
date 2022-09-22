@@ -109,7 +109,7 @@ class BuildingController extends Controller
             'cost' => (float)htmlentities(stripcslashes(strip_tags($data->cost))),
             'metaTitle' => htmlentities(stripcslashes(strip_tags($data->metaTitle))),
             'metaDescription' => htmlentities(stripcslashes(strip_tags($data->metaDescription))),
-            'passed' => $data->passed ? json_encode($data->passed) : '',
+            'passed' => $data->passed ?? null,
             'rentData' => $data->rentData,
             'dateCreated' => date('Y-m-d H:i:s'),
             'dateUpdate' => date('Y-m-d H:i:s'),
@@ -238,7 +238,7 @@ class BuildingController extends Controller
             'cost' => (float)htmlentities(stripcslashes(strip_tags($data->cost))),
             'metaTitle' => htmlentities(stripcslashes(strip_tags($data->metaTitle))),
             'metaDescription' => htmlentities(stripcslashes(strip_tags($data->metaDescription))),
-            'passed' => $data->passed ? json_encode($data->passed) : '',
+            'passed' => $data->passed ?? null,
             'rentData' => $data->rentData,
             'video' => htmlentities(stripcslashes(strip_tags($data->video)))
         );
