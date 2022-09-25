@@ -38,6 +38,7 @@ interface State {
     fetchingMessages: boolean
     fetchingUsers: boolean
     userId: number
+    userRole: string
     users: IUser[]
 }
 
@@ -56,6 +57,7 @@ class PopupMessenger extends React.Component<Props, State> {
         fetchingMessages: false,
         fetchingUsers: false,
         userId: parseInt(localStorage.getItem('id') || '0'),
+        userRole: localStorage.getItem('role') || 'subscriber',
         users: []
     }
 
@@ -363,6 +365,30 @@ class PopupMessenger extends React.Component<Props, State> {
                         {this.state.users && this.state.users.length ?
                             this.state.users.map((user: IUser) => {
                                 if (user.block || user.active !== 1 || user.id === this.state.userId) {
+                                    return null
+                                }
+
+                                if (this.state.userRole === 'subscriber' && !['director', 'administrator', 'manager'].includes(user.role)) {
+                                    return null
+                                }
+
+                                if (this.state.userRole === 'buyer' && !['director', 'administrator', 'manager', 'agent'].includes(user.role)) {
+                                    return null
+                                }
+
+                                if (this.state.userRole === 'owner' && !['director', 'administrator', 'manager', 'agent'].includes(user.role)) {
+                                    return null
+                                }
+
+                                if (this.state.userRole === 'agent' && !['director', 'administrator', 'manager', 'developer', 'investor'].includes(user.role)) {
+                                    return null
+                                }
+
+                                if (this.state.userRole === 'investor' && !['director', 'administrator', 'manager', 'developer', 'agent'].includes(user.role)) {
+                                    return null
+                                }
+
+                                if (this.state.userRole === 'developer' && !['director', 'administrator', 'manager', 'investor', 'agent'].includes(user.role)) {
                                     return null
                                 }
 
