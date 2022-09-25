@@ -163,7 +163,8 @@ $Klein->respond('GET', '/api/v1/booking', [new BookingController(), 'fetchList']
 // Payment Routes
 $Klein->respond('POST', '/api/v1/payment', [new PaymentController(), 'createItem']);
 $Klein->respond('PUT', '/api/v1/payment/[:id]', [new PaymentController(), 'updateItem']);
-$Klein->respond('GET', '/api/v1/payment/[:id]', [new PaymentController(), 'fetchItemById']);
+$Klein->respond('GET', '/api/v1/payment/[:id]/info', [new PaymentController(), 'fetchItemById']);
+$Klein->respond('GET', '/api/v1/payment/[:id]/link', [new PaymentController(), 'fetchLinkById']);
 $Klein->respond('GET', '/api/v1/payment', [new PaymentController(), 'fetchList']);
 
 // Dispatch all routes

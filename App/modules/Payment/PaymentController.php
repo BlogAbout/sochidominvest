@@ -220,4 +220,52 @@ class PaymentController extends Controller
             return;
         }
     }
+
+    /**
+     * Получение ссылки на страницу оплаты по id транзакции
+     *
+     * @param mixed $request Содержит объект запроса
+     * @param mixed $response Содержит объект ответа от маршрутизатора
+     * @return void
+     */
+    public function fetchLinkById($request, $response)
+    {
+        if (!JwtMiddleware::getAndDecodeToken()) {
+            $response->code(401)->json('Вы не авторизованы.');
+
+            return;
+        }
+
+        $validationObject = array(
+            (object)[
+                'validator' => 'required',
+                'data' => $request->id ?? '',
+                'key' => 'Идентификатор'
+            ],
+            (object)[
+                'validator' => 'paymentExists',
+                'data' => $request->id ?? '',
+                'key' => 'Идентификатор'
+            ]
+        );
+
+        $validationBag = parent::validation($validationObject);
+        if ($validationBag->status) {
+            $response->code(400)->json($validationBag->errors);
+
+            return;
+        }
+
+        try {
+            $payment = Payment::fetchItem($request->id);
+            $response->code(200)->json($payment->createPay());
+
+            return;
+        } catch (Exception $e) {
+            LogModel::error($e->getMessage());
+            $response->code(500)->json($e->getMessage());
+
+            return;
+        }
+    }
 }

@@ -74,7 +74,30 @@ const PaymentPagePanel: React.FC = () => {
 
     // Переход по ссылке на платежную форму
     const onOpenLinkHandler = (payment: IPayment) => {
-        // Todo
+        if (payment.id) {
+            setFetching(true)
+
+            PaymentService.fetchLinkPayment(payment.id)
+                .then((response: any) => {
+                    if (response.data.status) {
+                        window.location.href = response.data.data
+                    } else {
+                        openPopupAlert(document.body, {
+                            title: 'Ошибка!',
+                            text: response.data.data
+                        })
+                    }
+                })
+                .catch((error: any) => {
+                    openPopupAlert(document.body, {
+                        title: 'Ошибка!',
+                        text: error.data.data
+                    })
+                })
+                .finally(() => {
+                    setFetching(false)
+                })
+        }
     }
 
     // Отправка ссылки на платежную форму плательщику на почту
@@ -89,7 +112,7 @@ const PaymentPagePanel: React.FC = () => {
             const menuItems = []
 
             if (!payment.datePaid) {
-                menuItems.push({text: 'Перейти к оплате (в разработке)', onClick: () => onOpenLinkHandler(payment)})
+                menuItems.push({text: 'Перейти к оплате', onClick: () => onOpenLinkHandler(payment)})
                 menuItems.push({text: 'Отправить ссылку (в разработке)', onClick: () => onSendLinkHandler(payment)})
             }
 

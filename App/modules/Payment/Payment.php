@@ -23,7 +23,7 @@ class Payment extends Model
     public string $objectType;
 
     private TinkoffMerchantAPI $api;
-    private string $apiUrl = 'https://task.masbook.pro/api/v2/paymentSuccess';
+    private string $apiUrl = 'https://api.sochidominvest.ru/paymentResult.php';
     private string $apiLogin = '1662393169438DEMO';
     private string $apiKey = 'v5eokhwod2a3whvk';
 
@@ -118,6 +118,7 @@ class Payment extends Model
      * Сохранение транзакции
      *
      * @param bool $sendLink Отправлять ссылку плательщику на почту или нет
+     * @throws \HttpException
      */
     public function save(bool $sendLink = false): void
     {
@@ -128,7 +129,11 @@ class Payment extends Model
         }
 
         if ($sendLink) {
-            // Todo: Доделать отправку ссылки на платежку плательщику
+            $result = $this->createPay();
+
+            if ($result['status']) {
+                // Todo: Доделать отправку ссылки на платежку плательщику $result['data']
+            }
         }
     }
 

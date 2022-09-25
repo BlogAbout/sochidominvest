@@ -5,7 +5,7 @@ import {IFilter} from '../@types/IFilter'
 
 export default class PaymentService {
     static async fetchPaymentById(paymentId: number): Promise<AxiosResponse> {
-        return API.get(`/payment/${paymentId}`)
+        return API.get(`/payment/${paymentId}/info`)
     }
 
     static async fetchPayments(filter: IFilter): Promise<AxiosResponse> {
@@ -18,5 +18,9 @@ export default class PaymentService {
         } else {
             return API.post('/payment', {payment: payment, sendLink: sendLink})
         }
+    }
+
+    static async fetchLinkPayment(paymentId: number): Promise<AxiosResponse> {
+        return API.get(`/payment/${paymentId}/link`)
     }
 }
