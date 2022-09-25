@@ -25,7 +25,7 @@
         }
 
         > div:first-child {
-            width: 110px;
+            width: 150px;
             flex-shrink: 0;
         }
 
@@ -38,16 +38,23 @@
         width: 100%;
         display: flex;
         flex-wrap: wrap;
-        justify-content: space-between;
 
         .item {
-            width: 31%;
-            margin-bottom: 5px;
-            background-color: #ddd;
+            width: 90px;
+            margin: 0 5px 5px 0;
+            color: #000;
             padding: 5px 10px;
             font-size: 14px;
-            color: #000;
             text-align: center;
+
+            &.free {
+                background-color: #075ea5;
+                color: #fff;
+            }
+
+            &.busy {
+                background-color: #ddd;
+            }
         }
     }
 }
@@ -55,12 +62,6 @@
 @media (max-width: 768px) {
     .PopupBookingCreate {
         width: 500px;
-
-        .busyList {
-            .item {
-                width: 49%;
-            }
-        }
     }
 }
 
@@ -71,12 +72,6 @@
         .field {
             + .field {
                 margin-top: 15px;
-            }
-        }
-
-        .busyList {
-            .item {
-                width: 100%;
             }
         }
     }

@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react'
-import moment from 'moment'
+import moment, {Moment} from 'moment'
+import classNames from 'classnames/bind'
 import withStore from '../../../hoc/withStore'
 import {useTypedSelector} from '../../../hooks/useTypedSelector'
 import {bookingStatuses} from '../../../helpers/bookingHelper'
@@ -35,6 +36,8 @@ const defaultProps: Props = {
     }
 }
 
+const cx = classNames.bind(classes)
+
 const PopupBookingCreate: React.FC<Props> = (props) => {
     const {userId} = useTypedSelector(state => state.userReducer)
 
@@ -48,7 +51,8 @@ const PopupBookingCreate: React.FC<Props> = (props) => {
         userId: userId
     })
 
-    const [busyBooking, setBusyBooking] = useState<IBooking[]>([])
+    const [isBusy, setIsBusy] = useState(false)
+    const [busyDays, setBusyDays] = useState<Moment[]>([])
     const [fetching, setFetching] = useState(false)
 
     const today = moment().format('L')
@@ -68,43 +72,7 @@ const PopupBookingCreate: React.FC<Props> = (props) => {
     }, [props.blockId])
 
     useEffect(() => {
-        if (
-            today <= booking.dateStart &&
-            today < booking.dateFinish &&
-            booking.dateStart &&
-            booking.dateFinish &&
-            booking.buildingId &&
-            booking.dateStart !== booking.dateFinish
-        ) {
-            setFetching(true)
-
-            const filter: IFilter = {
-                dateStart: moment(booking.dateStart).format('YYYY-MM-DD 00:00:00'),
-                dateFinish: moment(booking.dateFinish).format('YYYY-MM-DD 00:00:00'),
-                buildingId: [booking.buildingId],
-                status: ['new', 'process', 'finish']
-            }
-
-            if (booking.id) {
-                filter.id = [booking.id]
-            }
-
-            BookingService.fetchBookings(filter)
-                .then((response: any) => {
-                    setBusyBooking(response.data)
-                })
-                .catch((error: any) => {
-                    console.error('Ошибка!', error)
-
-                    openPopupAlert(document.body, {
-                        title: 'Ошибка!',
-                        text: error.data
-                    })
-                })
-                .finally(() => {
-                    setFetching(false)
-                })
-        }
+        checkFreeDates()
     }, [booking.id, booking.dateStart, booking.dateFinish, booking.buildingId])
 
     // Закрытие popup
@@ -149,6 +117,72 @@ const PopupBookingCreate: React.FC<Props> = (props) => {
             })
     }
 
+    const checkFreeDates = () => {
+        if (
+            today <= booking.dateStart &&
+            today < booking.dateFinish &&
+            booking.dateStart &&
+            booking.dateFinish &&
+            booking.buildingId &&
+            booking.dateStart !== booking.dateFinish
+        ) {
+            setIsBusy(false)
+            setFetching(true)
+
+            const dateStart = moment(booking.dateStart)
+            const dateFinish = moment(booking.dateFinish)
+            const findDateStart = moment(booking.dateStart).add(-3, 'days')
+            const findDateFinish = moment(booking.dateFinish).add(3, 'days')
+
+            const filter: IFilter = {
+                dateStart: findDateStart.format('YYYY-MM-DD 00:00:00'),
+                dateFinish: findDateFinish.format('YYYY-MM-DD 00:00:00'),
+                buildingId: [booking.buildingId],
+                status: ['new', 'process', 'finish']
+            }
+
+            if (booking.id) {
+                filter.id = [booking.id]
+            }
+
+            BookingService.fetchBookings(filter)
+                .then((response: any) => {
+                    const todayDate = moment()
+                    const bookingList: IBooking[] = response.data
+                    const dates: Moment[] = []
+
+                    if (bookingList && bookingList.length) {
+                        bookingList.forEach((item: IBooking) => {
+                            const start = moment(item.dateStart)
+                            const finish = moment(item.dateFinish)
+
+                            while ((start.isAfter(todayDate) || start.isSame(todayDate) || finish.isAfter(todayDate) || finish.isSame(todayDate)) && (start.isSame(finish) || start.isBefore(finish))) {
+                                if (start.isSame(dateStart) || start.isSame(dateFinish) || (start.isAfter(dateStart) && start.isBefore(dateFinish))) {
+                                    setIsBusy(true)
+                                }
+
+                                dates.push(start.clone())
+                                start.add(1, 'days')
+                            }
+                        })
+                    }
+
+                    setBusyDays(dates)
+                })
+                .catch((error: any) => {
+                    console.error('Ошибка!', error)
+
+                    openPopupAlert(document.body, {
+                        title: 'Ошибка!',
+                        text: error.data
+                    })
+                })
+                .finally(() => {
+                    setFetching(false)
+                })
+        }
+    }
+
     // Проверка доступности кнопок
     const checkDisabled = (): boolean => {
         if (fetching || booking.buildingId === 0) {
@@ -163,29 +197,131 @@ const PopupBookingCreate: React.FC<Props> = (props) => {
             return true
         }
 
-        return !!busyBooking.length;
+        return isBusy;
+    }
+
+    const checkCurrentDateWithBusy = (date: Moment): boolean => {
+        // Todo
+        return false
+    }
+
+    const renderDatesItems = () => {
+        const findDateStart = moment(booking.dateStart).add(-3, 'days')
+        const findDateFinish = moment(booking.dateFinish).add(3, 'days')
+        const todayDate = moment()
+        let index = 0
+
+        const items = []
+
+        while (findDateStart.isBefore(findDateFinish) || findDateStart.isSame(findDateFinish)) {
+            let style = 'free'
+            let title = 'Свободно'
+
+            if (findDateStart.isSame(todayDate) || findDateStart.isAfter(todayDate)) {
+                if (busyDays.length) {
+                    busyDays.forEach((day: Moment) => {
+                        if (findDateStart.isSame(day)) {
+                            style = 'busy'
+                            title = 'Занято'
+
+                            return
+                        }
+                    })
+                }
+
+                const item = (
+                    <div key={index} className={cx({item: true, [style]: true})} title={title}>
+                        {findDateStart.format('DD.MM.YYYY')}
+                    </div>
+                )
+
+                items.push(item)
+            }
+
+            findDateStart.add(1, 'days')
+            index++
+        }
+
+        return items
     }
 
     const renderBusyBooking = () => {
-        if (!busyBooking.length) {
+        if (!isBusy) {
             return null
         }
 
         return (
             <>
-                <Title type={2}>Даты, занятые в выбранный период</Title>
+                <Title type={2}>Таблица свободных дат</Title>
 
                 <div className={classes.busyList}>
-                    {busyBooking.map((booking: IBooking) => {
-                        return (
-                            <div key={booking.id} className={classes.item}>
-                                {`${getFormatDate(booking.dateStart, 'date')} - ${getFormatDate(booking.dateFinish, 'date')}`}
-                            </div>
-                        )
-                    })}
+                    {renderDatesItems()}
                 </div>
             </>
         )
+    }
+
+    const checkDateStartError = () => {
+        if (booking.dateStart === booking.dateFinish) {
+            return {
+                error: true,
+                text: 'Дата заезда и дата выезда не могут быть одинаковыми'
+            }
+        }
+
+        if (today > booking.dateStart) {
+            return {
+                error: true,
+                text: 'Дата заезда не может быть раньше сегодняшнего дня'
+            }
+        }
+
+        if (isBusy) {
+            return {
+                error: true,
+                text: 'На текущие даты объект недвижимости занят'
+            }
+        }
+
+        return {
+            error: false,
+            text: ''
+        }
+    }
+
+    const checkDateFinishError = () => {
+        if (booking.dateStart === booking.dateFinish) {
+            return {
+                error: true,
+                text: 'Дата заезда и дата выезда не могут быть одинаковыми'
+            }
+        }
+
+        if (booking.dateStart >= booking.dateFinish) {
+            return {
+                error: true,
+                text: 'Дата выезда не может быть раньше даты заезда'
+            }
+        }
+
+        if (today >= booking.dateFinish) {
+            return {
+                error: true,
+                text: 'Дата выезда не может быть раньше сегодняшнего дня'
+            }
+        }
+
+        if (isBusy) {
+            return {
+                error: true,
+                text: 'На текущие даты объект недвижимости занят'
+            }
+        }
+
+        return {
+            error: false,
+            text: ''
+        }
     }
 
     return (
@@ -204,12 +340,8 @@ const PopupBookingCreate: React.FC<Props> = (props) => {
                                        })}
                                        placeHolder='Выберите дату заезда'
                                        styleType='minimal'
-                                       error={booking.dateStart === booking.dateFinish || today > booking.dateStart}
-                                       errorText={
-                                           booking.dateStart === booking.dateFinish
-                                               ? 'Дата заезда и дата выезда не могут быть одинаковыми'
-                                               : 'Дата заезда не может быть раньше сегодняшнего дня'
-                                       }
+                                       error={checkDateStartError().error}
+                                       errorText={checkDateStartError().text}
                         />
                     </div>
 
@@ -223,14 +355,8 @@ const PopupBookingCreate: React.FC<Props> = (props) => {
                                        })}
                                        placeHolder='Выберите дату выезда'
                                        styleType='minimal'
-                                       error={booking.dateStart >= booking.dateFinish || today >= booking.dateFinish}
-                                       errorText={
-                                           booking.dateStart === booking.dateFinish
-                                               ? 'Дата заезда и дата выезда не могут быть одинаковыми'
-                                               : today >= booking.dateFinish
-                                               ? 'Дата выезда не может быть раньше сегодняшнего дня'
-                                               : 'Дата выезда не может быть раньше даты заезда'
-                                       }
+                                       error={checkDateFinishError().error}
+                                       errorText={checkDateFinishError().text}
                         />
                     </div>
 
