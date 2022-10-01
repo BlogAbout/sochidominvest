@@ -166,6 +166,7 @@ $Klein->respond('PUT', '/api/v1/payment/[:id]', [new PaymentController(), 'updat
 $Klein->respond('GET', '/api/v1/payment/[:id]/info', [new PaymentController(), 'fetchItemById']);
 $Klein->respond('GET', '/api/v1/payment/[:id]/link', [new PaymentController(), 'fetchLinkById']);
 $Klein->respond('GET', '/api/v1/payment', [new PaymentController(), 'fetchList']);
+$Klein->respond('POST', '/api/v1/paymentResult', [new PaymentController(), 'processResultResponse']);
 
 // Dispatch all routes
 $Klein->dispatch();

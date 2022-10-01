@@ -268,4 +268,28 @@ class PaymentController extends Controller
             return;
         }
     }
+
+    /**
+     * Проверка ответа от платежной системы
+     *
+     * @param mixed $request Содержит объект запроса
+     * @param mixed $response Содержит объект ответа от маршрутизатора
+     * @return void
+     */
+    public static function processResultResponse($request, $response)
+    {
+        $data = json_decode($request->body());
+        file_put_contents($_SERVER['DOCUMENT_ROOT'] . '/logs.txt', 'PaymentController $data: ' . json_encode($data) . PHP_EOL, FILE_APPEND);
+        try {
+            Payment::processResultResponse($data);
+            $response->code(200)->json();
+
+            return;
+        } catch (Exception $e) {
+            LogModel::error($e->getMessage());
+            $response->code(500)->json($e->getMessage());
+
+            return;
+        }
+    }
 }

@@ -6,6 +6,10 @@ use App\Model;
 use App\UserModel;
 use App\UtilModel;
 
+define('API_URL', 'https://api.sochidominvest.ru/paymentResult.php');
+define('API_LOGIN', '1662393169438DEMO');
+define('API_KEY', 'v5eokhwod2a3whvk');
+
 class Payment extends Model
 {
     public int $id;
@@ -23,9 +27,6 @@ class Payment extends Model
     public string $objectType;
 
     private TinkoffMerchantAPI $api;
-    private string $apiUrl = 'https://api.sochidominvest.ru/paymentResult.php';
-    private string $apiLogin = '1662393169438DEMO';
-    private string $apiKey = 'v5eokhwod2a3whvk';
 
     public function __construct(array $data = [], $settings = null)
     {
@@ -45,7 +46,37 @@ class Payment extends Model
         $this->objectId = $data['objectId'] ?? 0;
         $this->objectType = $data['objectType'] ?? '';
 
-        $this->api = new TinkoffMerchantAPI($this->getApiLogin(), $this->getApiKey());
+        $this->api = new TinkoffMerchantAPI(API_LOGIN, API_KEY);
+    }
+
+    /**
+     * Проверка и обработка ответа от платежной системы
+     *
+     * @param array $data Массив данных
+     */
+    public static function processResultResponse(array $data)
+    {
+        if (self::checkResultResponse($data)) {
+            $paymentId = (int)$data['OrderId'];
+            $order = self::fetchItem($paymentId);
+
+            if ($order) {
+                $status = $order['status'];
+
+                if ($data['Status'] === 'REJECTED') {
+                    $status = 'cancel';
+                } else if ($data['Status'] === 'CONFIRMED') {
+                    $status = 'paid';
+                }
+
+                $sql = "UPDATE `sdi_transaction` SET `status` = :status WHERE `id` = :paymentId";
+
+                parent::query($sql);
+                parent::bindParams('paymentId', $paymentId);
+                parent::bindParams('status', $status);
+                parent::execute();
+            }
+        }
     }
 
     /**
@@ -218,7 +249,7 @@ class Payment extends Model
                 'user' => $this->getUserId()
             ],
             'Receipt' => $this->getReceipt(),
-            'NotificationURL' => $this->getApiUrl()
+            'NotificationURL' => API_URL
         ];
 
         $this->api->init($params);
@@ -293,6 +324,42 @@ class Payment extends Model
         }
 
         return $items;
+    }
+
+    /**
+     * Валидация ответа от банковской системы
+     *
+     * @param array $params Массив параметров
+     * @return bool
+     */
+    private static function checkResultResponse($params = array()): bool
+    {
+        if (!is_array($params)) {
+            $params = (array)$params;
+        }
+
+        $prevToken = $params['Token'];
+
+        $params['Success'] = (int)$params['Success'];
+        if ($params['Success'] > 0) {
+            $params['Success'] = 'true';
+        } else {
+            $params['Success'] = 'false';
+        }
+
+        unset($params['Token']);
+
+        $params['Password'] = API_KEY;
+        $params['TerminalKey'] = API_LOGIN;
+
+        ksort($params);
+        $x = implode('', $params);
+
+        if (strcmp(strtolower($prevToken), strtolower(hash('sha256', $x))) == 0) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -523,29 +590,5 @@ class Payment extends Model
     public function setObjectType(string $objectType): void
     {
         $this->objectType = $objectType;
-    }
-
-    /**
-     * @return string
-     */
-    public function getApiUrl(): string
-    {
-        return $this->apiUrl;
-    }
-
-    /**
-     * @return string
-     */
-    public function getApiLogin(): string
-    {
-        return $this->apiLogin;
-    }
-
-    /**
-     * @return string
-     */
-    public function getApiKey(): string
-    {
-        return $this->apiKey;
     }
 }
