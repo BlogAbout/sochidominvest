@@ -35,6 +35,11 @@ interface Window {
     WS?: WS
 }
 
+interface Document {
+    msHidden?: any
+    webkitHidden?: any
+}
+
 declare module 'react-lightgallery'
 declare module 'react-helmet'
 declare module 'showdown'
