@@ -102,7 +102,22 @@ const PaymentPagePanel: React.FC = () => {
 
     // Отправка ссылки на платежную форму плательщику на почту
     const onSendLinkHandler = (payment: IPayment) => {
-        // Todo
+        setFetching(true)
+
+        PaymentService.savePayment(payment, true)
+            .then(() => {
+                openPopupAlert(document.body, {
+                    title: 'Ссылка отправлена!',
+                    text: 'Ссылка на форму оплаты успешно отправлена.'
+                })
+            })
+            .catch((error: any) => {
+                openPopupAlert(document.body, {
+                    title: 'Ошибка!',
+                    text: error.data
+                })
+            })
+            .finally(() => setFetching(false))
     }
 
     const onContextMenuItem = (e: React.MouseEvent, payment: IPayment) => {
@@ -113,7 +128,7 @@ const PaymentPagePanel: React.FC = () => {
 
             if (!payment.datePaid) {
                 menuItems.push({text: 'Перейти к оплате', onClick: () => onOpenLinkHandler(payment)})
-                menuItems.push({text: 'Отправить ссылку (в разработке)', onClick: () => onSendLinkHandler(payment)})
+                menuItems.push({text: 'Отправить ссылку', onClick: () => onSendLinkHandler(payment)})
             }
 
             menuItems.push({text: 'Редактировать', onClick: () => onEditHandler(payment)})

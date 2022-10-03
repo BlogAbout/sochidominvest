@@ -2,6 +2,7 @@
 
 namespace App\Payment;
 
+use App\MailModel;
 use App\Model;
 use App\UserModel;
 use App\UtilModel;
@@ -160,11 +161,28 @@ class Payment extends Model
         }
 
         if ($sendLink) {
-            $result = $this->createPay();
+            $this->sendLinkToMail();
+        }
+    }
 
-            if ($result['status']) {
-                // Todo: Доделать отправку ссылки на платежку плательщику $result['data']
-            }
+    /**
+     * Отправка ссылки на платежную форму на почтовый ящик плательщика
+     * @throws \HttpException
+     */
+    public function sendLinkToMail(): void
+    {
+        $result = $this->createPay();
+
+        if ($result['status']) {
+            $params = [
+                'link' => $result['data'],
+                'name' => $this->getName(),
+                'cost' => number_format($this->getCost(), 2, '.', ' '),
+                'dateCreated' => $this->getDateCreated()
+            ];
+
+            $mailModel = new MailModel($this->settings, $this->getUserEmail(), 'payment', $params);
+            $mailModel->send();
         }
     }
 

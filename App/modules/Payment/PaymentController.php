@@ -48,7 +48,7 @@ class PaymentController extends Controller
         $sendLink = $data->sendLink;
 
         try {
-            $payment = new Payment($payload);
+            $payment = new Payment($payload, $this->settings);
             $payment->save($sendLink);
 
             if ($payment->getId()) {
@@ -128,7 +128,7 @@ class PaymentController extends Controller
         $sendLink = $data->sendLink;
 
         try {
-            $payment = new Payment($payload);
+            $payment = new Payment($payload, $this->settings);
             $payment->save($sendLink);
 
             $response->code(200)->json($payment);

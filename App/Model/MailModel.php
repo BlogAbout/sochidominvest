@@ -79,12 +79,22 @@ class MailModel extends Model
                     <p>Дата выезда: <strong>' . $this->params['dateFinish'] . '</strong></p>
                     <p>Пожалуйста, проверьте заявки и свяжитесь с клиентом! (в будущем здесь будет ссылка)</p>
                 ' . $info;
+            case 'payment':
+                return '
+                    <p>В сервисе СОЧИДОМИНВЕСТ для Вас был выставлен счёт.</p>
+                    <p>Наименование услуги: <strong>' . $this->params['name'] . '</strong></p>
+                    <p>Сумма: <strong>' . $this->params['cost'] . ' руб.</strong></p>
+                    <p>Дата выставления счета: <strong>' . $this->params['dateCreated'] . '</strong></p>
+                    <p>Для проведения платежа перейдите на форму оплаты по ссылке ниже</p>
+                    <p><a href="' . $this->params['link'] . '" target="_blank">' . $this->params['link'] . '</a></p>
+                ' . $copyright . $info;
             default:
                 return '';
         }
     }
 
-    public function generateSubject() {
+    public function generateSubject()
+    {
         switch ($this->type) {
             case 'forgot':
                 return 'Восстановление пароля';
@@ -94,6 +104,8 @@ class MailModel extends Model
                 return 'Заявка в техническую поддержку';
             case 'booking':
                 return 'Новая бронь';
+            case 'payment':
+                return 'Оплата платежа';
             default:
                 return 'Без темы';
         }

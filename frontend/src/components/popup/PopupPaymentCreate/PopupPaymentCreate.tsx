@@ -103,6 +103,7 @@ const PopupPaymentCreate: React.FC<Props> = (props) => {
                                  showRequired
                                  errorText='Поле обязательно для заполнения'
                                  styleType='minimal'
+                                 readOnly={!!payment.datePaid}
                         />
                     </div>
 
@@ -114,6 +115,7 @@ const PopupPaymentCreate: React.FC<Props> = (props) => {
                                   onSelect={(value: string) => setPayment({...payment, status: value})}
                                   placeHolder='Выберите статус'
                                   styleType='minimal'
+                                  readOnly={!!payment.datePaid}
                         />
                     </div>
 
@@ -132,6 +134,7 @@ const PopupPaymentCreate: React.FC<Props> = (props) => {
                                  showRequired
                                  errorText='Поле обязательно для заполнения'
                                  styleType='minimal'
+                                 readOnly={!!payment.id}
                         />
                     </div>
 
@@ -151,18 +154,22 @@ const PopupPaymentCreate: React.FC<Props> = (props) => {
                                    showRequired
                                    errorText='Поле обязательно для заполнения'
                                    styleType='minimal'
+                                   readOnly={!!payment.datePaid}
                         />
                     </div>
 
-                    <div className={classes.field}>
-                        <CheckBox label='Отправить ссылку плательщику (в разработке)'
-                                  title='Отправить ссылку плательщику (в разработке)'
-                                  type='modern'
-                                  width={150}
-                                  checked={sendLink}
-                                  onChange={(e: React.MouseEvent, value: boolean) => setSendLink(value)}
-                        />
-                    </div>
+                    {!payment.datePaid ?
+                        <div className={classes.field}>
+                            <CheckBox label='Отправить ссылку плательщику'
+                                      title='Отправить ссылку плательщику'
+                                      type='modern'
+                                      width={150}
+                                      checked={sendLink}
+                                      onChange={(e: React.MouseEvent, value: boolean) => setSendLink(value)}
+                            />
+                        </div>
+                        : null
+                    }
                 </div>
             </BlockingElement>
 
