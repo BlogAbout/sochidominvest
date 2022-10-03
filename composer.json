@@ -4,7 +4,8 @@
         "firebase/php-jwt": "^5.2",
         "gumlet/php-image-resize": "2.0.*",
         "phpmailer/phpmailer": "^6.5",
-        "cboden/ratchet": "^0.4.4"
+        "cboden/ratchet": "^0.4.4",
+        "ratchet/pawl": "^0.4.1"
     },
     "autoload": {
         "psr-4": {
@@ -17,7 +18,8 @@
             "App/modules/Booking",
             "App/modules/BusinessProcess",
             "App/modules/Messenger",
-            "App/modules/Payment"
+            "App/modules/Payment",
+            "App/modules/WebSocket"
         ]
     }
 }

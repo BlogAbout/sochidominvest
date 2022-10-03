@@ -51,6 +51,13 @@ export class WS {
                 window.events.emit('messengerCountNotificationsIncrease')
             }
 
+            // Добавление нового уведомления
+            if (message.type === 'notification' && this.hasEvent('messengerNewNotification')) {
+                window.events.emit('messengerNewNotification', message)
+            } else if (message.type === 'notification' && this.hasEvent('messengerNewToastNotification')) {
+                window.events.emit('messengerNewToastNotification', this.userId, message)
+            }
+
             // Создание нового чата
             if (message.type === 'create' && this.hasEvent('messengerCreateMessenger')) {
                 window.events.emit('messengerCreateMessenger', message)
@@ -87,7 +94,6 @@ export class WS {
             window.events.on('messengerSendMessage', this.sendMessage)
             window.events.on('messengerNewToastMessage', newToastMessage)
             window.events.on('messengerCountMessagesIncrease', countMessagesIncrease)
-            window.events.on('messengerCountNotificationsIncrease', countNotificationsIncrease)
         }
     }
 
@@ -171,12 +177,5 @@ export const newToastMessage = (userId: number, message: IMessage): void => {
  * Увеличение счетчика новых сообщений
  */
 export const countMessagesIncrease = (): void => {
-    // Todo
-}
-
-/**
- * Увеличение счетчика новых уведомлений
- */
-export const countNotificationsIncrease = (): void => {
     // Todo
 }

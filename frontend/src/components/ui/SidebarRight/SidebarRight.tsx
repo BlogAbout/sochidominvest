@@ -20,24 +20,32 @@ const SidebarRight: React.FC = () => {
     const {userId, role} = useTypedSelector(state => state.userReducer)
     const {logout} = useActions()
 
-    let intervalTimer: any = null
-
     useEffect(() => {
-        updateCountNewNotification()
+        getCountNewNotification()
 
-        if (intervalTimer) {
-            clearInterval(intervalTimer)
+        window.events.addListener('messengerCountNotificationsIncrease', countNewNotificationIncrease)
+        window.events.addListener('messengerCountNewNotificationUpdate', countNewNotificationUpdate)
+
+        return () => {
+            window.events.removeListener('messengerCountNotificationsIncrease', countNewNotificationIncrease)
+            window.events.removeListener('messengerCountNewNotificationUpdate', countNewNotificationUpdate)
         }
+    }, [countNewNotification])
 
-        intervalTimer = setInterval(function () {
-            updateCountNewNotification()
-        }, 7200000)
-    })
-
-    const updateCountNewNotification = () => {
+    // Получение количества новых уведомлений
+    const getCountNewNotification = () => {
         NotificationService.fetchCountNewNotifications()
             .then((response: any) => setCountNewNotification(response.data))
             .catch((error: any) => console.error('Ошибка получения количества новых уведомлений', error))
+    }
+
+    // Увеличение счетчика количества новых уведомлений
+    const countNewNotificationIncrease = () => {
+        countNewNotificationUpdate(countNewNotification + 1)
+    }
+
+    const countNewNotificationUpdate = (count: number) => {
+        setCountNewNotification(count)
     }
 
     return (

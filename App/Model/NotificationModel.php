@@ -2,6 +2,10 @@
 
 namespace App;
 
+use App\Messenger\Message;
+use App\WebSocket\SocketClient;
+use Throwable;
+
 /**
  * NotificationModel - Модель управления уведомлениями.
  */
@@ -122,6 +126,7 @@ class NotificationModel extends Model
             $payload['id'] = parent::lastInsertedId();
 
             self::setNotificationForUsers($payload, $notifyUsers);
+            self::sendNotificationForUsersToWebSocket($payload);
 
             return array(
                 'status' => true,
@@ -250,6 +255,50 @@ class NotificationModel extends Model
 
             self::query($sql);
             self::execute();
+        }
+    }
+
+    /**
+     * Отправка уведомления для пользователей через сокет
+     *
+     * @param array $notification Массив данных уведомления
+     */
+    private static function sendNotificationForUsersToWebSocket(array $notification): void
+    {
+        $sql = "
+            SELECT *
+            FROM `sdi_user_notification`
+            WHERE `id_notification` = :notificationId
+        ";
+
+        parent::query($sql);
+        parent::bindParams('notificationId', $notification['id']);
+
+        $list = parent::fetchAll();
+        $attendees = [];
+
+        if (empty($list)) {
+            return;
+        }
+
+        foreach ($list as $item) {
+            array_push($attendees, $item['id_user']);
+        }
+
+        $message = new Message([
+            'id' => $notification['id'],
+            'type' => 'notification',
+            'text' => $notification['name'],
+            'author' => $notification['author'],
+            'dateCreated' => $notification['dateCreated'],
+            'attendees' => $attendees
+        ]);
+
+        try {
+            $socketClient = new SocketClient($message);
+            $socketClient->send();
+        } catch (Throwable $e) {
+            LogModel::error($e->getMessage());
         }
     }
 

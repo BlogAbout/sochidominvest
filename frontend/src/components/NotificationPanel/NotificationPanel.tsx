@@ -35,9 +35,11 @@ const NotificationPanel: React.FC<Props> = (props) => {
 
     useEffect(() => {
         document.addEventListener('click', handleClickOutside, true)
+        window.events.addListener('messengerNewNotification', updateNotificationHandler)
 
         return () => {
             document.removeEventListener('click', handleClickOutside, true)
+            window.events.removeListener('messengerNewNotification', updateNotificationHandler)
         }
     }, [])
 
@@ -46,17 +48,29 @@ const NotificationPanel: React.FC<Props> = (props) => {
             filter()
             fetchNotificationList()
         }
+
+        setIsUpdate(false)
     }, [isUpdate])
 
     useEffect(() => {
+        filter()
+        updateCountNewNotification()
+    }, [notifications, selectedType])
+
+    const updateNotificationHandler = () => {
+        setIsUpdate(true)
+    }
+
+    const updateCountNewNotification = () => {
+        let countNew = 0
+
         if (notifications.length) {
-            setCountNotification(notifications.filter((notification: INotification) => notification.status === 'new').length)
-        } else {
-            setCountNotification(0)
+            countNew = notifications.filter((notification: INotification) => notification.status === 'new').length
         }
 
-        filter()
-    }, [notifications, selectedType])
+        setCountNotification(countNew)
+        window.events.emit('messengerCountNewNotificationUpdate', countNew)
+    }
 
     const filter = () => {
         if (!notifications || !notifications.length) {
