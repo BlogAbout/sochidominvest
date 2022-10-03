@@ -32,6 +32,17 @@ const ToastMessage: React.FC<Props> = (props) => {
         text = text.substring(0, 50) + '...'
     }
 
+    const getMessageType = () => {
+        switch (props.message.type) {
+            case 'message':
+                return 'Сообщение'
+            case 'notification':
+                return 'Уведомление'
+            default:
+                return ''
+        }
+    }
+
     return (
         <div className={classes.ToastMessage}>
             <Avatar href={getUserAvatar(users, props.message.author)}
@@ -42,6 +53,7 @@ const ToastMessage: React.FC<Props> = (props) => {
             />
 
             <div className={classes.content}>
+                <div className={classes.meta}>{getMessageType()}</div>
                 <div className={classes.name}>{getUserName(users, props.message.author)}</div>
                 <div className={classes.text}>{text}</div>
             </div>

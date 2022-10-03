@@ -78,7 +78,7 @@ export class WS {
         this.webSocket.onclose = function (event: CloseEvent) {
             if (event.wasClean) {
                 // Соединение закрыто корректно
-                console.log('correct close')
+                console.info('Корректное закрытие сокета')
             } else {
                 // Сервер убил процесс или сеть недоступна, пробуем переподключиться
                 window.WS.restart()
@@ -94,6 +94,7 @@ export class WS {
             window.events.on('messengerSendMessage', this.sendMessage)
             window.events.on('messengerNewToastMessage', newToastMessage)
             window.events.on('messengerCountMessagesIncrease', countMessagesIncrease)
+            window.events.on('messengerNewToastNotification', newToastMessage)
         }
     }
 
@@ -163,13 +164,20 @@ export const isNewMessage = (userId: number, members?: IMessengerMember[], messa
  */
 export const newToastMessage = (userId: number, message: IMessage): void => {
     if (message.author !== userId) {
-        toast(<ToastMessage message={message}/>, {
-            onClick: () => {
-                openPopupMessenger(document.body, {
-                    currentMessengerId: message.messengerId || 0
+        switch (message.type) {
+            case 'message':
+                toast(<ToastMessage message={message}/>, {
+                    onClick: () => {
+                        openPopupMessenger(document.body, {
+                            currentMessengerId: message.messengerId || 0
+                        })
+                    }
                 })
-            }
-        })
+                break
+            case 'notification':
+                toast(<ToastMessage message={message}/>)
+                break
+        }
     }
 }
 

@@ -7,9 +7,24 @@
         width: 100%;
         padding-left: 10px;
 
+        .meta {
+            font-size: 11px;
+            margin-bottom: 2px;
+            text-align: right;
+            color: #999;
+            position: absolute;
+            right: 35px;
+            top: 10px;
+        }
+
         .name {
             font-weight: 700;
             margin-bottom: 5px;
+            font-size: 14px;
+        }
+
+        .text {
+            font-size: 13px;
         }
     }
 }
