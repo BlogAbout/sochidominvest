@@ -55,19 +55,42 @@ const PaymentPagePanel: React.FC = () => {
         setIsUpdate(true)
     }
 
+    // Создание платежа
     const onAddHandler = (type: 'createOrder') => {
         openPopupPaymentCreate(document.body, {
             onSave: onSaveHandler.bind(this)
         })
     }
 
+    // Клик на платеж
     const onClickHandler = (payment: IPayment) => {
         // Todo
     }
 
+    // Редактирование платежа
     const onEditHandler = (payment: IPayment) => {
         openPopupPaymentCreate(document.body, {
             payment: payment,
+            onSave: onSaveHandler.bind(this)
+        })
+    }
+
+    // Копирование платежа
+    const onCopyHandler = (payment: IPayment) => {
+        const newPayment: IPayment = {
+            id: null,
+            name: payment.name,
+            status: 'new',
+            userId: payment.userId,
+            userEmail: payment.userEmail,
+            userName: payment.userName,
+            cost: payment.cost,
+            objectId: payment.objectId,
+            objectType: payment.objectType
+        }
+
+        openPopupPaymentCreate(document.body, {
+            payment: newPayment,
             onSave: onSaveHandler.bind(this)
         })
     }
@@ -120,6 +143,7 @@ const PaymentPagePanel: React.FC = () => {
             .finally(() => setFetching(false))
     }
 
+    //
     const onContextMenuItem = (e: React.MouseEvent, payment: IPayment) => {
         e.preventDefault()
 
@@ -131,6 +155,7 @@ const PaymentPagePanel: React.FC = () => {
                 menuItems.push({text: 'Отправить ссылку', onClick: () => onSendLinkHandler(payment)})
             }
 
+            menuItems.push({text: 'Копировать', onClick: () => onCopyHandler(payment)})
             menuItems.push({text: 'Редактировать', onClick: () => onEditHandler(payment)})
 
             openContextMenu(e, menuItems)
