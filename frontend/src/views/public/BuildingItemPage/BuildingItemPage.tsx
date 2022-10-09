@@ -8,6 +8,7 @@ import {useTypedSelector} from '../../../hooks/useTypedSelector'
 import {useActions} from '../../../hooks/useActions'
 import {declension} from '../../../helpers/stringHelper'
 import {numberWithSpaces, round} from '../../../helpers/numberHelper'
+import {getFormatDate} from '../../../helpers/dateHelper'
 import CheckerService from '../../../api/CheckerService'
 import ArticleService from '../../../api/ArticleService'
 import UtilService from '../../../api/UtilService'
@@ -23,6 +24,7 @@ import Gallery from '../../../components/Gallery/Gallery'
 import Button from '../../../components/form/Button/Button'
 import openPopupFeedCreate from '../../../components/PopupFeedCreate/PopupFeedCreate'
 import openPopupCheckerInfo from '../../../components/PopupCheckerInfo/PopupCheckerInfo'
+import openPopupPriceChart from '../../../components/popup/PopupPriceChart/PopupPriceChart'
 import {
     amountContract,
     buildingAdvantages,
@@ -159,6 +161,22 @@ const BuildingItemPage: React.FC = () => {
         })
     }
 
+    // Вывод графика цен
+    const renderDynamicChangePrices = () => {
+        if (!building.id || !building.costOld || !building.cost) {
+            return null
+        }
+
+        return (
+            <div className={cx({'icon': true, 'link': true})}
+                 title='График цен'
+                 onClick={() => openPopupPriceChart(document.body, {buildingId: building.id || 0})}
+            >
+                <FontAwesomeIcon icon='chart-line'/>
+            </div>
+        )
+    }
+
     const renderOldPrice = () => {
         if (!building.costOld || !building.cost) {
             return null
@@ -222,7 +240,7 @@ const BuildingItemPage: React.FC = () => {
 
                             <div className={classes.icon} title={`Дата публикации: ${building.dateCreated}`}>
                                 <FontAwesomeIcon icon='calendar'/>
-                                <span>{building.dateCreated}</span>
+                                <span>{getFormatDate(building.dateCreated)}</span>
                             </div>
 
                             {building.authorName ?
@@ -231,6 +249,8 @@ const BuildingItemPage: React.FC = () => {
                                     <span>{building.authorName}</span>
                                 </div>
                                 : null}
+
+                            {renderDynamicChangePrices()}
                         </div>
                     </h1>
 

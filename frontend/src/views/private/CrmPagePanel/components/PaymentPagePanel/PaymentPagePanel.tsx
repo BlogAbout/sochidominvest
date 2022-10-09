@@ -143,7 +143,7 @@ const PaymentPagePanel: React.FC = () => {
             .finally(() => setFetching(false))
     }
 
-    //
+    // Контекстное меню на платеже
     const onContextMenuItem = (e: React.MouseEvent, payment: IPayment) => {
         e.preventDefault()
 

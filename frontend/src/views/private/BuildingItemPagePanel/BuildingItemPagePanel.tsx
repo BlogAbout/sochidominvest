@@ -36,6 +36,7 @@ import openPopupCompilationSelector from '../../../components/PopupCompilationSe
 import openPopupMessenger from '../../../components/popup/PopupMessenger/PopupMessenger'
 import PdfDocumentGenerator from '../../../components/PdfDocumentGenerator/PdfDocumentGenerator'
 import openPopupBookingCreate from '../../../components/popup/PopupBookingCreate/PopupBookingCreate'
+import openPopupPriceChart from '../../../components/popup/PopupPriceChart/PopupPriceChart'
 import {
     amountContract,
     buildingAdvantages,
@@ -240,6 +241,23 @@ const BuildingItemPagePanel: React.FC = (props) => {
         })
     }
 
+    // Вывод графика цен
+    const renderDynamicChangePrices = () => {
+        if (!building.id || !building.costOld || !building.cost) {
+            return null
+        }
+
+        return (
+            <div className={cx({'icon': true, 'link': true})}
+                 title='График цен'
+                 onClick={() => openPopupPriceChart(document.body, {buildingId: building.id || 0})}
+            >
+                <FontAwesomeIcon icon='chart-line'/>
+            </div>
+        )
+    }
+
+    // Вывод стрелки изменения цены
     const renderOldPrice = () => {
         if (!building.costOld || !building.cost) {
             return null
@@ -299,7 +317,7 @@ const BuildingItemPagePanel: React.FC = (props) => {
 
                     <div className={classes.icon} title={`Дата публикации: ${building.dateCreated}`}>
                         <FontAwesomeIcon icon='calendar'/>
-                        <span>{building.dateCreated}</span>
+                        <span>{getFormatDate(building.dateCreated)}</span>
                     </div>
 
                     {building.authorName ?
@@ -308,6 +326,8 @@ const BuildingItemPagePanel: React.FC = (props) => {
                             <span>{building.authorName}</span>
                         </div>
                         : null}
+
+                    {renderDynamicChangePrices()}
                 </div>
 
                 <h1>{building.name}</h1>

@@ -1,0 +1,53 @@
+.PopupPriceChart {
+    width: 400px;
+    height: 250px;
+
+    .popup {
+
+    }
+
+    .content {
+        height: 147px;
+        overflow: auto;
+
+        .info {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            padding: 15px 15px 20px;
+            height: 100%;
+        }
+
+        .chart {
+            width: 100%;
+            height: 112px;
+            overflow: hidden;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            border-bottom: 1px solid #075ea5;
+
+            .barContainer {
+                padding: 0 3px;
+                cursor: default;
+
+                .bar {
+                    background-color: #ffcc01;
+                    border: 1px solid #075ea5;
+                    border-bottom: none;
+                    width: 22px;
+                    height: 100%;
+
+                    span {
+                        width: 100%;
+                        height: 100%;
+                        color: #075ea5;
+                        writing-mode: vertical-rl;
+                        text-align: right;
+                        padding: 5px 0;
+                    }
+                }
+            }
+        }
+    }
+}

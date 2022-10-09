@@ -32,7 +32,8 @@ $Klein->respond('DELETE', '/api/v1/building/checker/[:id]', [new CheckerControll
 // Building Routes
 $Klein->respond('POST', '/api/v1/building', [new BuildingController(), 'createBuilding']);
 $Klein->respond('PUT', '/api/v1/building/[:id]', [new BuildingController(), 'updateBuilding']);
-$Klein->respond('GET', '/api/v1/building/[:id]', [new BuildingController(), 'getBuildingById']);
+$Klein->respond('GET', '/api/v1/building/[:id]/info', [new BuildingController(), 'getBuildingById']);
+$Klein->respond('GET', '/api/v1/building/[:id]/prices', [new BuildingController(), 'fetchBuildingPricesById']);
 $Klein->respond('GET', '/api/v1/building', [new BuildingController(), 'fetchBuildings']);
 $Klein->respond('DELETE', '/api/v1/building/[:id]', [new BuildingController(), 'deleteBuilding']);
 

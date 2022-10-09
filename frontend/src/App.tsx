@@ -27,6 +27,7 @@ import {
     faCalendarPlus,
     faCar,
     faCashRegister,
+    faChartLine,
     faCheck,
     faCheckDouble,
     faChevronDown,
@@ -194,7 +195,8 @@ library.add(
     faArrowLeftLong,
     faHouseLaptop,
     faArrowUp,
-    faArrowDown
+    faArrowDown,
+    faChartLine
 )
 
 function App() {

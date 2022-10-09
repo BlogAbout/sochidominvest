@@ -315,6 +315,48 @@ class BuildingController extends Controller
     }
 
     /**
+     * Получение графика цен объекта недвижимости по id
+     *
+     * @param mixed $request Содержит объект запроса
+     * @param mixed $response Содержит объект ответа от маршрутизатора
+     * @return void
+     */
+    public function fetchBuildingPricesById($request, $response)
+    {
+        $validationObject = array(
+            (object)[
+                'validator' => 'required',
+                'data' => $request->id ?? '',
+                'key' => 'Идентификатор'
+            ],
+            (object)[
+                'validator' => 'buildingExists',
+                'data' => $request->id ?? '',
+                'key' => 'Идентификатор'
+            ]
+        );
+
+        $validationBag = parent::validation($validationObject);
+        if ($validationBag->status) {
+            $response->code(400)->json($validationBag->errors);
+
+            return;
+        }
+
+        try {
+            $prices = $this->buildingModel->fetchBuildingPricesById($request->id);
+            $response->code(200)->json($prices);
+
+            return;
+        } catch (Exception $e) {
+            LogModel::error($e->getMessage());
+            $response->code(500)->json($e->getMessage());
+
+            return;
+        }
+    }
+
+    /**
      * Получение списка объектов недвижимости
      *
      * @param mixed $request Содержит объект запроса

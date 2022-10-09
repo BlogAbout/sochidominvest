@@ -100,6 +100,37 @@ class BuildingModel extends Model
     }
 
     /**
+     * Вернет график цен объекта недвижимости по id
+     *
+     * @param int $id Идентификатор недвижимости
+     * @return array
+     */
+    public static function fetchBuildingPricesById(int $id): array
+    {
+        $sql = "
+            SELECT sbp.`date_update`, sbp.`cost`
+            FROM `sdi_building_price` AS sbp
+            WHERE sbp.`id_object` = :buildingId AND sbp.`type_object` = 'building'
+            ORDER BY sbp.`date_update` DESC
+            LIMIT 10
+        ";
+
+        parent::query($sql);
+        parent::bindParams('buildingId', $id);
+
+        $list = parent::fetchAll();
+        $prices = [];
+
+        if (!empty($list)) {
+            foreach($list as $item) {
+                $prices[$item['date_update']] = $item['cost'];
+            }
+        }
+
+        return $prices;
+    }
+
+    /**
      * Вернет список объектов недвижимости
      *
      * @param array $params Массив параметров фильтрации
