@@ -63,6 +63,14 @@ const PopupPriceChart: React.FC<Props> = (props) => {
             return Math.round(result * 100) / 100 + '%'
         }
 
+        const getAverage = (): number => {
+            const sum = values.reduce((acc, number) => acc + number, 0)
+            const length = values.length
+            const average = sum / length
+
+            return Math.round(average * 100) / 100
+        }
+
         return (
             <div className={classes.chart}>
                 {Object.keys(prices).map((date: string) => {
@@ -77,6 +85,11 @@ const PopupPriceChart: React.FC<Props> = (props) => {
                         </div>
                     )
                 })}
+
+                <div className={classes.average}
+                     title={`Средняя цена: ${getAverage()} руб.`}
+                     style={{bottom: getHeightPercent(getAverage())}}
+                />
             </div>
         )
     }
