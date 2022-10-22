@@ -1,6 +1,6 @@
 import {AxiosResponse} from 'axios'
 import API from '../axios.init'
-import {IUser} from '../@types/IUser'
+import {IUser, IUserExternal} from '../@types/IUser'
 import {IAuth} from '../@types/IAuth'
 import {ISignUp} from '../@types/ISignUp'
 import {IFilter} from '../@types/IFilter'
@@ -40,5 +40,25 @@ export default class UserService {
 
     static async removeUser(userId: number): Promise<AxiosResponse> {
         return API.delete(`/user/${userId}`)
+    }
+
+    static async fetchUserExternalById(userId: number): Promise<AxiosResponse> {
+        return API.get(`/user-external/${userId}`)
+    }
+
+    static async fetchUsersExternal(filter: IFilter): Promise<AxiosResponse> {
+        return API.get('/user-external', {params: filter})
+    }
+
+    static async saveUserExternal(user: IUserExternal): Promise<AxiosResponse> {
+        if (user.id) {
+            return API.put(`/user-external/${user.id}`, user)
+        } else {
+            return API.post('/user-external', user)
+        }
+    }
+
+    static async removeUserExternal(userId: number): Promise<AxiosResponse> {
+        return API.delete(`/user-external/${userId}`)
     }
 }

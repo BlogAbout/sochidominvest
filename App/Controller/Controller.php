@@ -259,6 +259,15 @@ class Controller
                 } catch (Exception $e) {
                 }
             }
+
+            if ($payload->validator == 'userExternalExists') {
+                try {
+                    if (!Model::isExistsItem('sdi_user_external', (int)$payload->data)) {
+                        array_push($response, "Внешний пользователь с таким идентификатором не найден в базе данных.");
+                    }
+                } catch (Exception $e) {
+                }
+            }
         }
 
         $validationErrors = new \stdClass();

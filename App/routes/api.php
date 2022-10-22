@@ -5,6 +5,7 @@ namespace App;
 use App\Booking\BookingController;
 use App\BusinessProcess\BusinessProcessController;
 use App\BusinessProcess\PaymentController;
+use App\User\UserExternalController;
 use Klein\Klein;
 
 $Klein = new Klein();
@@ -21,6 +22,13 @@ $Klein->respond('PUT', '/api/v1/user/[:id]', [new UserController(), 'updateUser'
 $Klein->respond('GET', '/api/v1/user/[:id]', [new UserController(), 'getUserById']);
 $Klein->respond('GET', '/api/v1/user', [new UserController(), 'fetchUsers']);
 $Klein->respond('DELETE', '/api/v1/user/[:id]', [new UserController(), 'deleteUser']);
+
+// User External Routes
+$Klein->respond('POST', '/api/v1/user-external', [new UserExternalController(), 'createItem']);
+$Klein->respond('PUT', '/api/v1/user-external/[:id]', [new UserExternalController(), 'updateItem']);
+$Klein->respond('GET', '/api/v1/user-external/[:id]', [new UserExternalController(), 'fetchItemById']);
+$Klein->respond('GET', '/api/v1/user-external', [new UserExternalController(), 'fetchList']);
+$Klein->respond('DELETE', '/api/v1/user-external/[:id]', [new UserExternalController(), 'deleteItem']);
 
 // Checker Routes
 $Klein->respond('POST', '/api/v1/building/checker', [new CheckerController(), 'createChecker']);

@@ -14,7 +14,8 @@ const CrmPagePanel: React.FC = () => {
         {href: RouteNames.CRM_POST, title: 'Должности', disabled: false},
         {href: RouteNames.CRM_BP, title: 'Бизнес-процессы', disabled: false},
         {href: RouteNames.CRM_BOOKING, title: 'Бронирование', disabled: false},
-        {href: RouteNames.CRM_PAYMENT, title: 'Платежи и транзакции', disabled: false}
+        {href: RouteNames.CRM_PAYMENT, title: 'Платежи и транзакции', disabled: false},
+        {href: RouteNames.CRM_USER_EXTERNAL, title: 'Внешние пользователи', disabled: false}
     ]
 
     return (

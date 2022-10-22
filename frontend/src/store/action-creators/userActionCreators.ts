@@ -1,5 +1,5 @@
 import {UserAction, UserActionTypes} from '../../@types/userTypes'
-import {IUser, IUserSetting} from '../../@types/IUser'
+import {IUser, IUserExternal, IUserSetting} from '../../@types/IUser'
 import {IFilter} from '../../@types/IFilter'
 import {AppDispatch} from '../reducers'
 import UserService from '../../api/UserService'
@@ -27,6 +27,10 @@ export const UserActionCreators = {
     }),
     setUsers: (users: IUser[]): UserAction => ({
         type: UserActionTypes.USER_FETCH_LIST,
+        payload: users
+    }),
+    setUsersExternal: (users: IUserExternal[]): UserAction => ({
+        type: UserActionTypes.USER_EXTERNAL_FETCH_LIST,
         payload: users
     }),
     setFetching: (payload: boolean): UserAction => ({
@@ -71,5 +75,21 @@ export const UserActionCreators = {
             dispatch(UserActionCreators.setError('Непредвиденная ошибка загрузки данных'))
             console.error('Непредвиденная ошибка загрузки данных', e)
         }
-    }
+    },
+    fetchUserExternalList: (filter: IFilter) => async (dispatch: AppDispatch) => {
+        dispatch(UserActionCreators.setFetching(true))
+
+        try {
+            const response = await UserService.fetchUsersExternal(filter)
+
+            if (response.status === 200) {
+                dispatch(UserActionCreators.setUsersExternal(response.data))
+            } else {
+                dispatch(UserActionCreators.setError('Ошибка загрузки данных'))
+            }
+        } catch (e) {
+            dispatch(UserActionCreators.setError('Непредвиденная ошибка загрузки данных'))
+            console.error('Непредвиденная ошибка загрузки данных', e)
+        }
+    },
 }

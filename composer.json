@@ -19,6 +19,7 @@
             "App/modules/BusinessProcess",
             "App/modules/Messenger",
             "App/modules/Payment",
+            "App/modules/User",
             "App/modules/WebSocket"
         ]
     }

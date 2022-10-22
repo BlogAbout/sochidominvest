@@ -8,6 +8,7 @@ const initialState: UserState = {
     userSetting: {} as IUserSetting,
     usersOnline: [],
     users: [],
+    externals: [],
     fetching: false,
     error: ''
 }
@@ -26,6 +27,8 @@ export default function UserReducer(state: UserState = initialState, action: Use
             return {...state, usersOnline: action.payload}
         case UserActionTypes.USER_FETCH_LIST:
             return {...state, users: action.payload, fetching: false}
+        case UserActionTypes.USER_EXTERNAL_FETCH_LIST:
+            return {...state, externals: action.payload, fetching: false}
         case UserActionTypes.USER_IS_FETCHING:
             return {...state, fetching: false}
         case UserActionTypes.USER_ERROR:

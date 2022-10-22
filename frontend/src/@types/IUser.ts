@@ -25,3 +25,13 @@ export interface IUserSetting {
     pushMessenger?: number
     sendEmail?: number
 }
+
+export interface IUserExternal {
+    id: number | null
+    name: string
+    email: string
+    phone: string
+    active?: number
+    dateCreated?: string | null
+    dateUpdate?: string | null
+}

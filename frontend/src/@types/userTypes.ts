@@ -1,4 +1,4 @@
-import {IUser, IUserSetting} from './IUser'
+import {IUser, IUserExternal, IUserSetting} from './IUser'
 
 export interface UserState {
     isAuth: boolean
@@ -7,6 +7,7 @@ export interface UserState {
     userSetting: IUserSetting
     usersOnline: number[]
     users: IUser[]
+    externals: IUserExternal[]
     fetching: boolean
     error: string
 }
@@ -18,6 +19,7 @@ export enum UserActionTypes {
     USER_SETTING = 'USER_SETTING',
     USER_ONLINE = 'USER_ONLINE',
     USER_FETCH_LIST = 'USER_FETCH_LIST',
+    USER_EXTERNAL_FETCH_LIST = 'USER_EXTERNAL_FETCH_LIST',
     USER_IS_FETCHING = 'USER_IS_FETCHING',
     USER_ERROR = 'USER_ERROR'
 }
@@ -52,6 +54,11 @@ interface UserFetchListAction {
     payload: IUser[]
 }
 
+interface UserExternalFetchListAction {
+    type: UserActionTypes.USER_EXTERNAL_FETCH_LIST
+    payload: IUserExternal[]
+}
+
 export interface UserIsFetchingAction {
     type: UserActionTypes.USER_IS_FETCHING
     payload: boolean
@@ -69,5 +76,6 @@ export type UserAction =
     | UserSettingAction
     | UserOnlineAction
     | UserFetchListAction
+    | UserExternalFetchListAction
     | UserIsFetchingAction
     | UserErrorAction
