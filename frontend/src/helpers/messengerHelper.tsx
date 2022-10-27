@@ -4,6 +4,8 @@ import {configuration} from './utilHelper'
 import {IMessage, IMessengerMember} from '../@types/IMessenger'
 import openPopupMessenger from '../components/popup/PopupMessenger/PopupMessenger'
 import ToastMessage from '../components/popup/PopupMessenger/components/ToastMessage/ToastMessage'
+import {getUserSetting} from './userHelper'
+import {newNotification} from './notificationHelper'
 
 export class WS {
     private webSocket
@@ -72,6 +74,14 @@ export class WS {
                 window.events.emit('messengerNewMessage', message)
             } else if (message.type === 'message' && this.hasEvent('messengerNewToastMessage')) {
                 window.events.emit('messengerNewToastMessage', this.userId, message)
+            }
+
+            if (message.type === 'notification' && getUserSetting('pushNotify', 0) === 1) {
+                newNotification('Новое уведомление', message.text)
+            }
+
+            if (message.type === 'message' && getUserSetting('pushMessenger', 0) === 1) {
+                newNotification('Новое сообщение', message.text)
             }
         }
 

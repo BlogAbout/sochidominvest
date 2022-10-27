@@ -97,6 +97,10 @@ const PopupUserCreate: React.FC<Props> = (props) => {
                 setFetching(false)
                 setUser(response.data)
 
+                if (props.userId && props.userId === response.data.id) {
+                    localStorage.setItem('settings', response.data.settings ? JSON.stringify(response.data.settings) : '')
+                }
+
                 props.onSave()
 
                 if (isClose) {

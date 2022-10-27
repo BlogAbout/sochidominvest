@@ -58,3 +58,19 @@ export const getUserAvatar = (users: IUser[], userId?: number | null) => {
 
     return findUser.avatar
 }
+
+export const getUserSetting = (param: string, defaultValue: string | number = ''): string | number => {
+    let settingsString = localStorage.getItem('settings')
+
+    if (!settingsString) {
+        return defaultValue
+    }
+
+    const settings = JSON.parse(settingsString)
+
+    if (!(param in settings)) {
+        return defaultValue
+    }
+
+    return settings[param]
+}

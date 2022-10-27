@@ -4,9 +4,9 @@
  *
  * @param title string Название уведомления
  * @param text string Текст уведомления
- * @param userId number Иконка пользователя (по умолчанию - логотип)
+ * @param icon string Иконка (по умолчанию - логотип)
  */
-export function newNotification(title: string, text: string, userId: number | null = null) {
+export function newNotification(title: string, text: string, icon: string | null = null) {
     let result = false
 
     if (!('Notification' in window)) { // Проверка поддержки браузером уведомлений
@@ -24,24 +24,12 @@ export function newNotification(title: string, text: string, userId: number | nu
 
     function newMessage() {
         if (isPageHidden()) {
-            let icon = '/img/logo-full.jpg'
-
-            // Todo
-            // if (userId && userId > 0) {
-            //     const src = getPhoto(userId, 50)
-            //
-            //     if (src) {
-            //         icon = src
-            //     }
-            // }
-
-            const notification = new Notification(title, {body: text, icon, tag: title})
+            const iconMessage = icon || '/img/logo-short.png'
+            const notification = new Notification(title, {body: text, icon: iconMessage, tag: title})
             notification.onclick = () => notification.close() // Закрытие уведомления при нажатии на него
             setTimeout(() => notification.close(), 5000) // Автоматическое закрытие через 5 секунд
 
             result = true
-        } else {
-            // console.info('Страница открыта, системное уведомление не создается');
         }
     }
 
@@ -65,9 +53,7 @@ export function isPageHidden() {
         hidden = 'webkitHidden'
     }
 
-    if (hidden === undefined) {
-        // console.info('Браузер не поддерживает Page Visibility API. Определить состояние вкладки невозможно.');
-    } else {
+    if (hidden !== undefined) {
         result = document.hidden
     }
 
