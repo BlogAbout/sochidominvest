@@ -80,7 +80,7 @@ class UserController extends Controller
             'lastActive' => date('Y-m-d H:i:s'),
             'active' => 1,
             'role' => htmlspecialchars(stripcslashes(strip_tags($data->role))),
-            'settings' => ''
+            'settings' => '{"notifyNewAction":1,"soundAlert":1,"pushNotify":1,"notifyEdit":1,"notifyNewItem":1,"pushMessenger":1,"sendEmail":1}'
         );
 
         try {
@@ -388,7 +388,7 @@ class UserController extends Controller
             'active' => (int)htmlentities(stripcslashes(strip_tags($data->active))),
             'role' => htmlspecialchars(stripcslashes(strip_tags($data->role))),
             'avatarId' => $data->avatarId ? (int)htmlentities(stripcslashes(strip_tags($data->avatarId))) : null,
-            'settings' => $data->settings ? json_encode($data->settings) : '',
+            'settings' => '{"notifyNewAction":1,"soundAlert":1,"pushNotify":1,"notifyEdit":1,"notifyNewItem":1,"pushMessenger":1,"sendEmail":1}',
             'post' => $data->post ? (int)htmlentities(stripcslashes(strip_tags($data->post))) : null
         );
 

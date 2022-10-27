@@ -2,6 +2,8 @@
 
 namespace App;
 
+use App\User\UserExternal;
+
 /**
  * FeedbackModel - Эта модель используется в основном FeedbackController, а также другими контроллерами
  */
@@ -104,6 +106,11 @@ class FeedbackModel extends Model
         $feed = parent::execute();
 
         if ($feed) {
+            if (!$payload['author']) {
+                $userExternal = UserExternal::initFromData(['name' => $payload['name'], 'phone' => $payload['phone'], 'active' => 1]);
+                $userExternal->save();
+            }
+
             $payload['id'] = parent::lastInsertedId();
 
             if ($payload['messages']) {
