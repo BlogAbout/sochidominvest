@@ -32,6 +32,8 @@ export enum RouteNames {
     CRM_USER_EXTERNAL = '/panel/crm/user-external',
     PUBLIC_BUILDING = '/building',
     PUBLIC_BUILDING_ITEM = '/building/:id',
+    PUBLIC_RENT = '/rent',
+    PUBLIC_RENT_ITEM = '/rent/:id',
     PUBLIC_ARTICLE = '/article',
     PUBLIC_ARTICLE_ITEM = '/article/:id',
     PUBLIC_POLICY = '/policy',

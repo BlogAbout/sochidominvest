@@ -273,6 +273,10 @@ class Model
             array_push($where, 'sdi.`active` IN (' . implode(',', $filter['active']) . ')');
         }
 
+        if (!empty($filter['rent'])) {
+            array_push($where, 'sdi.`rent` IN (' . implode(',', $filter['rent']) . ')');
+        }
+
         if (!empty($filter['buildingId'])) {
             array_push($where, "sdi.`id_building` IN (" . implode(',', $filter['buildingId']) . ")");
         }

@@ -208,6 +208,10 @@ class BuildingModel extends Model
             array_push($where, 'bu.`publish` = ' . $params['publish']);
         }
 
+        if (!empty($params['rent'])) {
+            array_push($where, 'bu.`rent` IN (' . implode(',', $params['rent']) . ')');
+        }
+
         if (!empty($params['text'])) {
             array_push($where, '(bu.`name` LIKE "%' . $params['text'] . '%")');
         }

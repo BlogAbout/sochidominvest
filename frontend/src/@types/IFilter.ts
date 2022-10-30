@@ -16,6 +16,7 @@ export interface IFilter {
     dateStart?: string
     dateFinish?: string
     status?: string[]
+    rent?: number[]
 }
 
 export interface IFilterContent {

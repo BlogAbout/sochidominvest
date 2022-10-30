@@ -354,6 +354,10 @@ class Controller
             if (!empty($params['dateFinish'])) {
                 $filter['dateFinish'] = $params['dateFinish'];
             }
+
+            if (!empty($params['rent'])) {
+                $filter['rent'] = $params['rent'];
+            }
         }
 
         return $filter;

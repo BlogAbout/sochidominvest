@@ -15,6 +15,8 @@ import BuildingItemPagePanel from '../../../views/private/BuildingItemPagePanel/
 import BuildingPagePanel from '../../../views/private/BuildingPagePanel/BuildingPagePanel'
 import BuildingItemPage from '../../../views/public/BuildingItemPage/BuildingItemPage'
 import BuildingPage from '../../../views/public/BuildingPage/BuildingPage'
+import RentItemPage from '../../../views/public/RentItemPage/RentItemPage'
+import RentPage from '../../../views/public/RentPage/RentPage'
 import ArticleItemPagePanel from '../../../views/private/ArticleItemPagePanel/ArticleItemPagePanel'
 import ArticlePagePanel from '../../../views/private/ArticlePagePanel/ArticlePagePanel'
 import ArticlePage from '../../../views/public/ArticlePage/ArticlePage'
@@ -74,6 +76,8 @@ const AppRouter: React.FC = () => {
                         <Route path={RouteNames.PUBLIC_POLICY} element={<PolicyPage/>}/>
                         <Route path={RouteNames.PUBLIC_BUILDING_ITEM} element={<BuildingItemPage/>}/>
                         <Route path={RouteNames.PUBLIC_BUILDING} element={<BuildingPage/>}/>
+                        <Route path={RouteNames.PUBLIC_RENT_ITEM} element={<RentItemPage/>}/>
+                        <Route path={RouteNames.PUBLIC_RENT} element={<RentPage/>}/>
                         <Route path={RouteNames.PUBLIC_ARTICLE_ITEM} element={<ArticleItemPagePanel public/>}/>
                         <Route path={RouteNames.PUBLIC_ARTICLE} element={<ArticlePage/>}/>
                         <Route path={RouteNames.PUBLIC_ABOUT} element={<AboutPage/>}/>

@@ -49,6 +49,7 @@ const BuildingPagePanel: React.FC = () => {
         buildingCost: {min: 0, max: 0},
         buildingArea: {min: 0, max: 0},
         buildingDistrictZone: [],
+        rent: [],
         buildingType: [],
         houseClass: [],
         material: [],
@@ -296,7 +297,8 @@ const BuildingPagePanel: React.FC = () => {
                 ((!filters.gas || !filters.gas.length) || (filters.gas && item.gas && filters.gas.includes(item.gas))) &&
                 ((!filters.electricity || !filters.electricity.length) || (filters.electricity && item.electricity && filters.electricity.includes(item.electricity))) &&
                 ((!filters.sewerage || !filters.sewerage.length) || (filters.sewerage && item.sewerage && filters.sewerage.includes(item.sewerage))) &&
-                ((!filters.waterSupply || !filters.waterSupply.length) || (filters.waterSupply && item.waterSupply && filters.waterSupply.includes(item.waterSupply)))
+                ((!filters.waterSupply || !filters.waterSupply.length) || (filters.waterSupply && item.waterSupply && filters.waterSupply.includes(item.waterSupply))) &&
+                ((!filters.rent || !filters.rent.length) || (filters.rent && item.rent && filters.rent.map(Number).includes(item.rent)))
         })
     }
 
@@ -338,6 +340,16 @@ const BuildingPagePanel: React.FC = () => {
             selected: filters.buildingDistrictZone,
             onSelect: (values: string[]) => {
                 setFilters({...filters, buildingDistrictZone: values})
+            }
+        },
+        {
+            title: 'Аренда',
+            type: 'checker',
+            multi: false,
+            items: [{key: '1', text: 'Да'}],
+            selected: filters.rent,
+            onSelect: (values: string[]) => {
+                setFilters({...filters, rent: values})
             }
         },
         {
