@@ -5,9 +5,10 @@ namespace App\WebSocket;
 use App\LogModel;
 use App\Messenger\Message;
 use Ratchet\Client;
+use React\EventLoop\Loop;
+use React\Socket\Connector;
 
-define('WSS_URL', 'ws://127.0.0.1:8081');
-//define('WSS_URL', 'wss://api.sochidominvest.ru:8081');
+define('WSS_URL', 'wss://api.sochidominvest.ru:8081');
 
 class SocketClient
 {
@@ -23,7 +24,22 @@ class SocketClient
      */
     public function send(): void
     {
-        Client\connect(WSS_URL)->then(function ($conn) {
+        $secureContext = array(
+            'local_cert' => __DIR__ . '/../../../crt/cert.pem',
+            'local_pk' => __DIR__ . '/../../../crt/privkey.pem',
+            'allow_self_signed' => true,
+            'verify_peer' => false
+        );
+
+        $reactConnector = new Connector([
+            'dns' => '8.8.8.8',
+            'timeout' => 10,
+            'tls' => $secureContext
+        ]);
+        $loop = Loop::get();
+        $connector = new Client\Connector($loop, $reactConnector);
+
+        $connector(WSS_URL)->then(function ($conn) {
             $conn->on('message', function ($msg) use ($conn) {
                 $conn->close();
             });
