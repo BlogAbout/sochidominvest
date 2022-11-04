@@ -278,8 +278,8 @@ class PaymentController extends Controller
      */
     public static function processResultResponse($request, $response)
     {
-        $data = json_decode($request->body());
-        file_put_contents($_SERVER['DOCUMENT_ROOT'] . '/logs.txt', 'PaymentController $data: ' . json_encode($data) . PHP_EOL, FILE_APPEND);
+        $data = json_decode($request->body(), true);
+
         try {
             Payment::processResultResponse($data);
             $response->code(200)->json();

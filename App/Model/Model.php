@@ -40,6 +40,7 @@ class Model
         try {
             self::$dbConn = new PDO($Dsn, self::$dbUser, self::$dbPass, $options);
             self::$dbConn->exec('set names utf8');
+            self::$dbConn->setAttribute(PDO::ATTR_EMULATE_PREPARES, true);
 
             $this->settings = $settings;
         } catch (Exception $e) {

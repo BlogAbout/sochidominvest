@@ -62,7 +62,7 @@ class Payment extends Model
             $order = self::fetchItem($paymentId);
 
             if ($order) {
-                $status = $order['status'];
+                $status = $order->getStatus();
 
                 if ($data['Status'] === 'REJECTED') {
                     $status = 'cancel';
@@ -70,11 +70,12 @@ class Payment extends Model
                     $status = 'paid';
                 }
 
-                $sql = "UPDATE `sdi_transaction` SET `status` = :status WHERE `id` = :paymentId";
+                $sql = "UPDATE `sdi_transaction` SET `status` = :status, `date_paid` = :datePaid WHERE `id` = :paymentId";
 
                 parent::query($sql);
                 parent::bindParams('paymentId', $paymentId);
                 parent::bindParams('status', $status);
+                parent::bindParams('datePaid', UtilModel::getDateNow());
                 parent::execute();
             }
         }
@@ -237,6 +238,7 @@ class Payment extends Model
         $sql = "
             UPDATE `sdi_transaction`
             SET
+                `name` = :name,
                 `date_update` = :dateUpdate,
                 `date_paid` = :datePaid,
                 `status` = :status
@@ -245,6 +247,7 @@ class Payment extends Model
 
         parent::query($sql);
         parent::bindParams('id', $this->getId());
+        parent::bindParams('name', $this->getName());
         parent::bindParams('dateUpdate', $this->getDateUpdate());
         parent::bindParams('datePaid', $this->getDatePaid() ?: null);
         parent::bindParams('status', $this->getStatus());
@@ -393,6 +396,7 @@ class Payment extends Model
             'name' => $data['name'],
             'dateCreated' => $data['date_created'],
             'dateUpdate' => $data['date_update'],
+            'datePaid' => $data['date_paid'],
             'status' => $data['status'],
             'userId' => (int)$data['id_user'],
             'userEmail' => $data['email'],
