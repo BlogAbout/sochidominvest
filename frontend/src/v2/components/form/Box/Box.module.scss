@@ -1,0 +1,337 @@
+.box {
+    box-sizing: border-box;
+    height: 36px;
+    border: 1px solid #075ea5;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    position: relative;
+    margin-bottom: 15px;
+    padding: 0 5px 0 10px;
+    background: #fff;
+}
+
+.icon {
+    margin: 0 5px 0 0;
+    font-size: 14px;
+}
+
+.read_only {
+    cursor: default;
+}
+
+.place_holder .input_style,
+.read_only .input_style {
+    color: #a0a0a0;
+}
+
+.read_only .box_item {
+    opacity: 0.5;
+}
+
+.box:not(.read_only) .date:hover {
+    //background-image: url('img/calendar_active.png');
+}
+
+.show_clear .date {
+    border-left: 1px solid white;
+}
+
+.show_clear:hover .date {
+    background-position: center;
+}
+
+.show_clear:hover .cross {
+    display: flex;
+}
+
+.error {
+    border-color: #fe5a9d;
+}
+
+.error .input_style,
+.error .required,
+.error .validate,
+.error .eye {
+    background-color: transparent;
+}
+
+.error .required {
+    //background-image: url('img/required_error.png');
+}
+
+.error .validate {
+    //background-image: url('img/validate_error.png');
+}
+
+.error.place_holder .input_style {
+    color: #fe5a9d;
+}
+
+.error .input::-webkit-input-placeholder {
+    color: #fe5a9d;
+}
+
+.error .input::-moz-placeholder {
+    color: #fe5a9d;
+}
+
+.error .input:-ms-input-placeholder {
+    color: #fe5a9d;
+}
+
+.success .input_style,
+.success .required,
+.success .validate,
+.success .eye {
+    background-color: #f4f9ec;
+}
+
+.input_style {
+    max-width: 100%;
+    font-size: 13px;
+    height: 34px;
+    line-height: 34px;
+    padding: 0 10px;
+    flex-grow: 1;
+    border: none;
+    outline: none;
+    font-family: 'PT Serif', serif;
+}
+
+.input {
+    composes: input_style;
+    color: inherit;
+    background: transparent;
+}
+
+.input::-webkit-input-placeholder {
+    color: #b5bfc6;
+    font-size: 12px;
+    transition: all 0.3s ease-in;
+}
+
+.input::-moz-placeholder {
+    color: #b5bfc6;
+    font-size: 12px;
+    transition: all 0.3s ease-in;
+}
+
+.input:-moz-placeholder {
+    color: #b5bfc6;
+    font-size: 12px;
+    transition: all 0.3s ease-in;
+}
+
+.input:-ms-input-placeholder {
+    color: #b5bfc6;
+    font-size: 12px;
+    transition: all 0.3s ease-in;
+}
+
+.box_item {
+    width: 25px;
+    height: 33px;
+    border-left: 1px solid #075ea5;
+    flex-shrink: 0;
+    transition: width 0.3s;
+    text-align: center;
+    line-height: 33px;
+}
+
+.cross {
+    composes: box_item;
+    display: none;
+    //background: url('img/cross.png') no-repeat center;
+}
+
+.cross:hover {
+    //background-image: url('img/cross_active.png');
+}
+
+.arrow {
+    composes: box_item;
+}
+
+.arrow_left {
+    composes: box_item;
+    //background: url('img/arrow_left_grey.png') center no-repeat;
+    border-left-width: 0;
+    border-right: 1px solid #075ea5;
+}
+
+.arrow_right {
+    composes: box_item;
+    //background: url('img/arrow_right_grey.png') center no-repeat;
+}
+
+.box_arrow_up {
+    //background: url('img/arrow_up.png') no-repeat center;
+    height: 12px;
+}
+
+.box_arrow_down {
+    composes: box_arrow_up;
+    transform: scale(1, -1);
+}
+
+.required {
+    composes: box_item;
+    //background: url('img/required.png') no-repeat center;
+    border-color: transparent;
+    cursor: default;
+}
+
+.date {
+    composes: box_item;
+    //background: url('img/calendar.png') no-repeat left center;
+    border-color: transparent;
+    background-position-x: center;
+    border-left: 1px solid white;
+}
+
+.find {
+    font-size: 12px;
+    color: #a0a0a0;
+    padding-right: 6px;
+}
+
+.select {
+    composes: box_item;
+}
+
+.validate {
+    composes: box_item;
+    //background: url('img/validate_success.png') no-repeat center;
+    border-color: transparent;
+    cursor: default;
+}
+
+.eye {
+    composes: box_item;
+    //background: url('img/eye.png') no-repeat center;
+    border-color: transparent;
+}
+
+.eye_active {
+    composes: eye;
+    //background-image: url('img/eye_active.png');
+}
+
+.hidden {
+    composes: box_item;
+    opacity: 0;
+    width: 0;
+    border-left: 0;
+}
+
+.edit {
+    composes: box_item;
+    //background: url('img/edit.png') no-repeat center;
+}
+
+.edit:hover {
+    //background-image: url('img/edit_blue.png');
+}
+
+.minimal {
+    border-left: none;
+}
+
+.borderDisabled {
+    border: none;
+    text-align: left;
+}
+
+.placeholder_minimal {
+    color: #a0a0a0 !important;
+}
+
+.box.minimal {
+    height: 25px;
+    border: none;
+    background-color: inherit;
+    padding: 0;
+}
+
+.box .minimal {
+    border-bottom: 1px solid #bbc0c1;
+    box-sizing: content-box;
+    color: black;
+}
+
+.input.minimal {
+    border-bottom: 1px solid #bbc0c1;
+    color: black;
+    background-color: inherit;
+}
+
+.read_only .input.minimal {
+    opacity: 0.5;
+}
+
+.error .minimal {
+    border-color: #fe5a9d;
+}
+
+.error .arrow.minimal {
+    color: #fe5a9d;
+}
+
+.error .edit.minimal {
+    //background-image: url('img/edit_error.png');
+}
+
+.error .input.minimal::placeholder {
+    color: #fe5a9d;
+}
+
+.box:not(.error):not(.read_only) .input.minimal:focus,
+.box:not(.error):not(.read_only) .input.minimal:focus ~ .minimal,
+.box:not(.error):not(.read_only):hover .minimal {
+    border-bottom-color: #075ea5;
+}
+
+.show_clear:hover .cross.minimal {
+    background-size: auto;
+    display: block;
+}
+
+.box:not(.read_only) .edit.minimal:hover {
+    //background-image: url('img/edit_blue.png');
+}
+
+.box_arrow_up.minimal {
+    //background-image: url('img/arrow_minimal_grey.png');
+    transform: scale(1, -1);
+    border-bottom: none;
+}
+
+.box_arrow_down.minimal {
+    //background-image: url('img/arrow_minimal_grey.png');
+    transform: none;
+}
+
+.box:not(.read_only):hover .box_arrow_up.minimal {
+    border-bottom: none;
+}
+
+.box_arrow_down.minimal:hover,
+.box_arrow_up.minimal:hover {
+    //background-image: url('img/arrow_blue.png');
+}
+
+.text_hidden {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.error-text {
+    position: absolute;
+    right: 0;
+    bottom: -20px;
+    font-size: 11px;
+    z-index: 1;
+    color: #fe5a9d;
+}

@@ -1,0 +1,31 @@
+.inner {
+    .list {
+        width: 100%;
+        position: relative;
+        padding-bottom: 30px;
+
+        .item {
+            padding: 10px;
+            background-color: #033966;
+            color: #fff;
+            display: flex;
+            width: 100%;
+            position: relative;
+            box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.4);
+            transition: all 0.3s ease-in;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            cursor: pointer;
+
+            &:hover {
+                box-shadow: 6px 6px 8px rgba(0, 0, 0, 0.6);
+            }
+
+            + .item {
+                margin-top: 15px;
+            }
+        }
+    }
+}

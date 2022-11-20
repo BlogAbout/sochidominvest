@@ -47,6 +47,7 @@ import {
     faFolderTree,
     faGear,
     faGrip,
+    faHandshake,
     faHandshakeAngle,
     faHeading,
     faHeadset,
@@ -65,6 +66,7 @@ import {
     faMessage,
     faMoneyBill1Wave,
     faMoneyCheck,
+    faMoneyCheckDollar,
     faNewspaper,
     faPaintRoller,
     faPaperclip,
@@ -97,6 +99,7 @@ import {
     faVideo,
     faVolumeHigh,
     faVolumeXmark,
+    faWarehouse,
     faXmark
 } from '@fortawesome/free-solid-svg-icons'
 import {registerEventsEmitter, registerWebsocket} from './helpers/eventsHelper'
@@ -196,7 +199,10 @@ library.add(
     faHouseLaptop,
     faArrowUp,
     faArrowDown,
-    faChartLine
+    faChartLine,
+    faWarehouse,
+    faMoneyCheckDollar,
+    faHandshake
 )
 
 function App() {

@@ -1,0 +1,28 @@
+.SectionAdvantages {
+    padding: 40px 0;
+    background-color: #033966;
+
+    .inner {
+        .list {
+            padding-left: 40px;
+        }
+    }
+}
+
+@media (max-width: 768px) {
+    .SectionAdvantages {
+        .inner {
+            .cols {
+                flex-wrap: wrap;
+
+                > div {
+                    width: 100% !important;
+                }
+            }
+
+            .list {
+                padding-left: 20px;
+            }
+        }
+    }
+}

@@ -15,12 +15,11 @@ import PdfDocumentGenerator from '../PdfDocumentGenerator/PdfDocumentGenerator'
 import classes from './PopupFeedCreate.module.scss'
 
 interface Props extends PopupProps {
-    building: IBuilding
+    building?: IBuilding
     type: 'callback' | 'get-document' | 'get-presentation' | 'get-view'
 }
 
 const defaultProps: Props = {
-    building: {} as IBuilding,
     type: 'callback'
 }
 
@@ -32,8 +31,8 @@ const PopupFeedCreate: React.FC<Props> = (props) => {
         name: '',
         title: '',
         type: 'feed',
-        objectId: props.building.id,
-        objectType: props.building.id ? 'building' : null,
+        objectId: props.building ? props.building.id : null,
+        objectType: props.building ? 'building' : null,
         active: 1,
         status: 'new'
     })
@@ -61,19 +60,19 @@ const PopupFeedCreate: React.FC<Props> = (props) => {
 
         switch (props.type) {
             case 'callback':
-                title = `Запрос обратного звонка по ${props.building.name}`
+                title = `Запрос обратного звонка ${props.building ? ' по ' + props.building.name : ''}`
                 text = `Запрос обратного звонка`
                 break
             case 'get-document':
-                title = `Запрос документов по ${props.building.name}`
+                title = `Запрос документов ${props.building ? ' по ' + props.building.name : ''}`
                 text = `Запрос документов`
                 break
             case 'get-presentation':
-                title = `Запрос презентации по ${props.building.name}`
+                title = `Запрос презентации ${props.building ? ' по ' + props.building.name : ''}`
                 text = `Запрос презентации`
                 break
             case 'get-view':
-                title = `Заявка на просмотр объекта ${props.building.name}`
+                title = `Заявка на просмотр объекта ${props.building ? ' по ' + props.building.name : ''}`
                 text = `Заявка на просмотр объекта`
                 break
         }

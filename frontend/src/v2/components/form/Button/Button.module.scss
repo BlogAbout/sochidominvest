@@ -1,0 +1,123 @@
+.button {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    height: 36px;
+    padding: 0 8px;
+    min-width: 100px;
+    text-align: center;
+    line-height: 36px;
+    cursor: pointer;
+    font-size: 14px;
+    -webkit-transition: all 0.3s ease-in;
+    -moz-transition: all 0.3s ease-in;
+    -o-transition: all 0.3s ease-in;
+    transition: all 0.3s ease-in;
+    border: 1px solid #075ea5;
+    display: flex;
+    justify-content: center;
+    flex-shrink: 0;
+
+    &.marginLeft {
+        margin-left: 5px;
+    }
+
+    &.marginRight {
+        margin-right: 5px;
+    }
+
+    .icon {
+        width: 30px;
+        display: inline-block;
+        margin-right: 10px;
+        padding-right: 5px;
+        position: relative;
+        text-align: center;
+
+        &::after {
+            content: '';
+            display: block;
+            position: absolute;
+            width: 1px;
+            height: 60%;
+            right: 0;
+            top: 50%;
+            transform: translate(0, -50%);
+            z-index: 2;
+            background: #fff;
+            -webkit-transition: all 0.3s ease-in;
+            -moz-transition: all 0.3s ease-in;
+            -o-transition: all 0.3s ease-in;
+            transition: all 0.3s ease-in;
+        }
+    }
+
+    &:not(.disabled):hover {
+        box-shadow: inset 3px 3px 8px rgba(0, 0, 0, 0.4);
+    }
+
+    &.is-icon {
+        text-align: left;
+        justify-content: flex-start;
+    }
+
+    &.apply {
+        background: #075ea5;
+        background: linear-gradient(135deg, #075ea5 0%, #ffcc01 100%);
+        color: #fff;
+    }
+
+    &.save {
+        background: #075ea5;
+        color: #fff;
+
+        &:not(.disabled):hover {
+            background: #fff;
+            color: #075ea5;
+
+            .icon::after {
+                background: #075ea5;
+            }
+        }
+    }
+
+    &.cancel {
+        background: #ffcc01;
+
+        .icon::after {
+            background: #075ea5;
+        }
+    }
+
+    &.regular {
+        background: #fff;
+        color: #075ea5;
+
+        .icon::after {
+            background: #075ea5;
+        }
+    }
+
+    &.disabled {
+        cursor: default;
+        opacity: 0.5;
+    }
+
+    &.only-icon {
+        min-width: auto;
+
+        .icon {
+            margin-right: 0;
+            padding-right: 0;
+
+            &::after {
+                display: none;
+            }
+        }
+    }
+}
+
+.not-valid {
+    opacity: 0.5;
+}

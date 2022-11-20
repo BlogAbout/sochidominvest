@@ -1,0 +1,23 @@
+.Header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100px;
+    width: 100%;
+    background: #033966;
+    padding: 10px 0;
+    z-index: 5;
+
+    .inner {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+}
+
+@media (max-width: 768px) {
+    .Header {
+        height: 55px;
+        padding: 5px 0;
+    }
+}

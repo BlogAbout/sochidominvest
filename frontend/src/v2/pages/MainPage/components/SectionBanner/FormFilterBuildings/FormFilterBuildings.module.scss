@@ -1,0 +1,22 @@
+.FormFilterBuildings {
+    padding-left: 30%;
+
+    .inner {
+        background-color: #033966;
+        padding: 40px;
+
+        .field {
+            margin-bottom: 30px;
+        }
+
+        .buttons {
+            display: block;
+        }
+    }
+}
+
+@media (max-width: 1024px) {
+    .FormFilterBuildings {
+        padding-left: 0;
+    }
+}

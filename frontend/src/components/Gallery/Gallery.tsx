@@ -1,4 +1,5 @@
 import React from 'react'
+import classNames from 'classnames/bind'
 import {IAttachment} from '../../@types/IAttachment'
 import ImageCarousel from '../ImageCarousel/ImageCarousel'
 import Preloader from '../Preloader/Preloader'
@@ -11,6 +12,7 @@ interface Props {
     alt: string
     fetching: boolean
     type?: 'carousel'
+    className?: string
 }
 
 const defaultProps: Props = {
@@ -22,9 +24,11 @@ const defaultProps: Props = {
     type: 'carousel'
 }
 
+const cx = classNames.bind(classes)
+
 const Gallery: React.FC<Props> = (props) => {
     return (
-        <div className={classes.Gallery}>
+        <div className={cx(props.className, {'Gallery': true})}>
             {props.fetching && <Preloader/>}
 
             <div className={classes.carousel}>

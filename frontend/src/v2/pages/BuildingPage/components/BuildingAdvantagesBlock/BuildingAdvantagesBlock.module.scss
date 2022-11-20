@@ -1,0 +1,24 @@
+.BuildingAdvantagesBlock {
+    color: #000;
+    margin-bottom: 40px;
+    padding-bottom: 40px;
+    border-bottom: 1px solid #033966;
+
+    .info {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+
+        .advantage {
+            margin-right: 20px;
+            width: auto;
+            display: flex;
+
+            svg {
+                width: 32px;
+                height: 32px;
+                margin-right: 5px;
+            }
+        }
+    }
+}

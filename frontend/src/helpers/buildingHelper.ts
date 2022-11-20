@@ -358,28 +358,129 @@ export const getAboutBlockTitle = (type: 'building' | 'apartment' | 'house' | 'l
     return titleAbout
 }
 
-export const getBuildingStatusesText = (key: string) => {
+export const getBuildingStatusesText = (key: string | null | undefined) => {
+    if (!key) {
+        return ''
+    }
+
     const find = buildingStatuses.find((item: ISelector) => item.key === key)
     return find ? find.text : ''
 }
 
-export const getBuildingTypesText = (key: string) => {
+export const getBuildingTypesText = (key: string | null | undefined) => {
+    if (!key) {
+        return ''
+    }
+
     const find = buildingTypes.find((item: ISelector) => item.key === key)
     return find ? find.text : ''
 }
 
-export const getBuildingClassesText = (key: string) => {
+export const getBuildingClassesText = (key: string | null | undefined) => {
+    if (!key) {
+        return ''
+    }
+
     const find = buildingClasses.find((item: ISelector) => item.key === key)
     return find ? find.text : ''
 }
 
-export const getBuildingMaterialsText = (key: string) => {
+export const getBuildingMaterialsText = (key: string | null | undefined) => {
+    if (!key) {
+        return ''
+    }
+
     const find = buildingMaterials.find((item: ISelector) => item.key === key)
     return find ? find.text : ''
 }
 
-export const getBuildingFormatText = (key: string) => {
+export const getBuildingFormatText = (key: string | null | undefined) => {
+    if (!key) {
+        return ''
+    }
+
     const find = buildingFormat.find((item: ISelector) => item.key === key)
+    return find ? find.text : ''
+}
+
+export const getBuildingEntranceText = (key: string | null | undefined) => {
+    if (!key) {
+        return ''
+    }
+
+    const find = buildingEntrance.find((item: ISelector) => item.key === key)
+    return find ? find.text : ''
+}
+
+export const getBuildingParkingText = (key: string | null | undefined) => {
+    if (!key) {
+        return ''
+    }
+
+    const find = buildingParking.find((item: ISelector) => item.key === key)
+    return find ? find.text : ''
+}
+
+export const getBuildingTerritoryText = (key: string | null | undefined) => {
+    if (!key) {
+        return ''
+    }
+
+    const find = buildingTerritory.find((item: ISelector) => item.key === key)
+    return find ? find.text : ''
+}
+
+export const getBuildingGasText = (key: string | null | undefined) => {
+    if (!key) {
+        return ''
+    }
+
+    const find = buildingGas.find((item: ISelector) => item.key === key)
+    return find ? find.text : ''
+}
+
+export const getBuildingHeatingText = (key: string | null | undefined) => {
+    if (!key) {
+        return ''
+    }
+
+    const find = buildingHeating.find((item: ISelector) => item.key === key)
+    return find ? find.text : ''
+}
+
+export const getBuildingElectricityText = (key: string | null | undefined) => {
+    if (!key) {
+        return ''
+    }
+
+    const find = buildingElectricity.find((item: ISelector) => item.key === key)
+    return find ? find.text : ''
+}
+
+export const getBuildingSewerageText = (key: string | null | undefined) => {
+    if (!key) {
+        return ''
+    }
+
+    const find = buildingSewerage.find((item: ISelector) => item.key === key)
+    return find ? find.text : ''
+}
+
+export const getBuildingWaterSupplyText = (key: string | null | undefined) => {
+    if (!key) {
+        return ''
+    }
+
+    const find = buildingWaterSupply.find((item: ISelector) => item.key === key)
+    return find ? find.text : ''
+}
+
+export const getBuildingAmountContractText = (key: string | null | undefined) => {
+    if (!key) {
+        return ''
+    }
+
+    const find = amountContract.find((item: ISelector) => item.key === key)
     return find ? find.text : ''
 }
 

@@ -1,0 +1,53 @@
+.IconItem {
+    display: flex;
+    align-items: center;
+
+    + .IconItem {
+        margin-top: 40px;
+    }
+
+    &.light {
+        .text {
+
+        }
+    }
+
+    &.dark {
+        .text {
+
+        }
+    }
+
+    .icon {
+        width: 70px;
+        height: 70px;
+        display: block;
+        flex-shrink: 0;
+        margin-right: 40px;
+        padding: 10px;
+        background-color: #ffcc01;
+        font-size: 30px;
+        line-height: 50px;
+        text-align: center;
+        color: #033966;
+
+        &.round {
+            transform: rotate(45deg);
+
+            span {
+                display: block;
+                transform: rotate(-45deg);
+            }
+        }
+
+        &.circle {
+            border-radius: 50%;
+        }
+    }
+
+    .text {
+        font-size: 18px;
+        line-height: 22px;
+        color: #fff;
+    }
+}

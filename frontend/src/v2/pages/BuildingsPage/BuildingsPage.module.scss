@@ -1,0 +1,31 @@
+.inner {
+    .list {
+        width: 100%;
+        position: relative;
+        padding-bottom: 30px;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        height: auto;
+
+        .readMoreElementRef {
+            width: 100%;
+        }
+    }
+
+    .containerMap {
+        width: 100%;
+        height: calc(100vh - 278px);
+        position: relative;
+
+        .title {
+            margin: 0 auto 40px;
+            max-width: 1024px;
+            position: relative;
+        }
+
+        .map {
+            height: calc(100% - 76px);
+        }
+    }
+}

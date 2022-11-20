@@ -1,0 +1,31 @@
+.SectionArticles {
+    background-color: #fff;
+    padding: 40px 0;
+
+    .inner {
+        .title {
+
+        }
+
+        .list {
+            display: flex;
+            padding-bottom: 30px;
+            justify-content: space-between;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: center;
+        }
+    }
+}
+
+@media (max-width: 1024px) {
+    .SectionArticles {
+        .inner {
+            .list {
+                flex-wrap: wrap;
+            }
+        }
+    }
+}

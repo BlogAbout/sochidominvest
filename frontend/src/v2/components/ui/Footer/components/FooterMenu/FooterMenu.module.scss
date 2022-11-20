@@ -1,0 +1,41 @@
+.FooterMenu {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    width: 50%;
+
+    .item {
+        width: 50%;
+        flex-shrink: 0;
+        margin-bottom: 10px;
+
+        a {
+            display: inline-block;
+            color: #fff;
+            font-size: 16px;
+            line-height: 20px;
+            border-bottom: 1px solid transparent;
+
+            &:hover,
+            &.active {
+                border-bottom: 1px solid #ffcc01;
+            }
+        }
+    }
+}
+
+@media (max-width: 768px) {
+    .FooterMenu {
+        width: 100%;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .FooterMenu {
+        .item {
+            width: 100%;
+        }
+    }
+}

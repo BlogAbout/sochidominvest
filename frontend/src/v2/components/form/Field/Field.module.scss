@@ -1,0 +1,20 @@
+.Field {
+    display: flex;
+    width: 100%;
+
+    + .Field {
+        margin-top: 20px;
+    }
+
+    &.vert {
+        flex-direction: column;
+    }
+
+    &.hor {
+        flex-direction: row;
+    }
+
+    > div {
+        flex-grow: 1;
+    }
+}

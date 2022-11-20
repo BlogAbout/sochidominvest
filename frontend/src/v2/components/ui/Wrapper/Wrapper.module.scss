@@ -1,0 +1,18 @@
+.Wrapper {
+    max-width: 1420px;
+    margin: 0 auto;
+
+    &.withPadding {
+        padding: 40px 0;
+    }
+}
+
+@media (max-width: 1420px) {
+    .Wrapper {
+        padding: 0 10px;
+
+        &.withPadding {
+            padding: 20px 10px;
+        }
+    }
+}

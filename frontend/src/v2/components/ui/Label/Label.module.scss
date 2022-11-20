@@ -1,0 +1,24 @@
+.Label {
+    font-size: 14px;
+    color: #000;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+
+    &.light {
+        .text {
+            color: #fff;
+        }
+    }
+
+    &.dark {
+        .text {
+            color: #075DA5;
+        }
+    }
+
+    .text {
+
+    }
+}

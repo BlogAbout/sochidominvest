@@ -1,0 +1,51 @@
+.Radio {
+    display: flex;
+
+    &.horizontal {
+        justify-content: space-between;
+    }
+
+    &.vertical {
+        flex-direction: column;
+    }
+
+    .item {
+        flex-grow: 1;
+        text-align: center;
+        display: block;
+        transition: all 0.3s ease-in;
+        cursor: pointer;
+        padding: 5px 10px;
+
+        &:hover {
+            &.light {
+                background-color: #075DA5;
+            }
+
+            &.dark {
+
+            }
+        }
+
+        &.active {
+            &.light {
+                background-color: #ffcc01;
+            }
+
+            &.dark {
+
+            }
+        }
+
+        &.light {
+            border: 1px solid #033966;
+            color: #033966;
+            background-color: #fff;
+
+        }
+
+        &.dark {
+            color: #fff;
+        }
+    }
+}

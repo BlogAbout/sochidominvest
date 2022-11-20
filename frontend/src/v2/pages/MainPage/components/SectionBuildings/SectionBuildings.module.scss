@@ -1,0 +1,29 @@
+.SectionBuildings {
+    padding: 40px 0;
+    background-color: #fff;
+
+    .inner {
+        .title {
+
+        }
+
+        .list {
+            width: 100%;
+            position: relative;
+            padding-bottom: 30px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            height: auto;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: center;
+
+            > div:nth-child(2) {
+                margin-left: 40px;
+            }
+        }
+    }
+}

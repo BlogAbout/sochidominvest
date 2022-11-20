@@ -1,0 +1,15 @@
+.Grid {
+    display: flex;
+
+    &.wrap {
+        flex-wrap: wrap;
+    }
+
+    &.vTop {
+        align-items: center;
+    }
+
+    &.hTop {
+        justify-content: center;
+    }
+}

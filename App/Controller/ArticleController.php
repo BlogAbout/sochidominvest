@@ -204,12 +204,6 @@ class ArticleController extends Controller
      */
     public function fetchItemById($request, $response)
     {
-        if (!JwtMiddleware::getAndDecodeToken()) {
-            $response->code(401)->json('Вы не авторизованы.');
-
-            return;
-        }
-
         $validationObject = array(
             (object)[
                 'validator' => 'required',

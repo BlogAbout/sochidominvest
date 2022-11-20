@@ -27,12 +27,6 @@ class BookingController extends Controller
             return;
         }
 
-        if (!JwtMiddleware::getAndDecodeToken()) {
-            $response->code(401)->json('Вы не авторизованы.');
-
-            return;
-        }
-
         $data = json_decode($request->body());
 
         $payload = array(
@@ -141,12 +135,6 @@ class BookingController extends Controller
      */
     public function fetchItemById($request, $response)
     {
-        if (!JwtMiddleware::getAndDecodeToken()) {
-            $response->code(401)->json('Вы не авторизованы.');
-
-            return;
-        }
-
         $validationObject = array(
             (object)[
                 'validator' => 'required',
@@ -189,12 +177,6 @@ class BookingController extends Controller
      */
     public function fetchList($request, $response)
     {
-        if (!JwtMiddleware::getAndDecodeToken()) {
-            $response->code(401)->json('Вы не авторизованы.');
-
-            return;
-        }
-
         $filter = parent::getFilterParams($request->paramsGet()->all());
 
         try {

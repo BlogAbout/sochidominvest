@@ -11,6 +11,8 @@ export const configuration = {
     sitePhoneUrl: 'tel:+79186053427',
     siteEmail: 'info@sochidominvest.ru',
     siteEmailUrl: 'mailto:info@sochidominvest.ru',
+    apiYandexMapKey: '3ed788dc-edd5-4bce-8720-6cd8464b45bd',
+    apiYandexMapIcon: 'islands#blueIcon'
 }
 
 /**

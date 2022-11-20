@@ -1,0 +1,52 @@
+.Contacts {
+    width: 50%;
+
+    .item {
+        text-align: right;
+
+        + .item {
+            margin-top: 20px;
+        }
+
+        a {
+            display: inline-block;
+            color: #fff;
+            font-size: 20px;
+            line-height: 24px;
+
+            &:hover {
+                color: #ffcc01;
+            }
+        }
+    }
+
+    &.left {
+        .item {
+            text-align: left;
+        }
+    }
+
+    &.center {
+        .item {
+            text-align: center;
+        }
+    }
+
+    &.right {
+        .item {
+            text-align: right;
+        }
+    }
+}
+
+@media (max-width: 768px) {
+    .Contacts {
+        width: 100%;
+
+        &.right {
+            .item {
+                text-align: center;
+            }
+        }
+    }
+}

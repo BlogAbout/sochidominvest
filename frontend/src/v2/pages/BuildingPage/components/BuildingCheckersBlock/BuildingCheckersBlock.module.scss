@@ -1,0 +1,38 @@
+.BuildingCheckersBlock {
+    color: #000;
+    margin-bottom: 40px;
+    padding-bottom: 40px;
+    border-bottom: 1px solid #033966;
+
+    .housing {
+        position: relative;
+        padding: 3px 20px;
+        cursor: pointer;
+
+        &:hover {
+            color: #fff;
+            background: #075ea5;
+        }
+
+        &::before {
+            content: '';
+            display: block;
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 4px;
+            height: 100%;
+            background: #075ea5;
+        }
+
+        + .housing {
+            margin-top: 20px;
+        }
+
+        .title {
+            font-weight: 700;
+            font-size: 18px;
+            line-height: 24px;
+        }
+    }
+}

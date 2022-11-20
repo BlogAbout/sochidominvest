@@ -1,0 +1,15 @@
+.BuildingDescriptionBlock {
+    color: #000;
+    margin-bottom: 40px;
+    padding-bottom: 40px;
+    border-bottom: 1px solid #033966;
+
+    .text {
+        text-align: justify;
+
+        ol,
+        ul {
+            padding-left: 20px;
+        }
+    }
+}

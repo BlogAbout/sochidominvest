@@ -194,7 +194,7 @@ class TinkoffMerchantAPI
     }
 
     /**
-     * Main method. Call API with params
+     * MainPage method. Call API with params
      *
      * @param string $apiUrl
      * @param array $args

@@ -200,6 +200,10 @@ class BuildingModel extends Model
             LEFT JOIN `sdi_building_data` bd on bu.`id` = bd.`id`
         ";
 
+        if (!empty($params['id'])) {
+            array_push($where, 'bu.`id` IN (' . implode(',', $params['id']) . ')');
+        }
+
         if (!empty($params['active'])) {
             array_push($where, 'bu.`active` IN (' . implode(',', $params['active']) . ')');
         }

@@ -51,6 +51,7 @@ import BusinessProcessPanel
 import BookingPagePanel from '../../../views/private/CrmPagePanel/components/BookingPagePanel/BookingPagePanel'
 import PaymentPagePanel from '../../../views/private/CrmPagePanel/components/PaymentPagePanel/PaymentPagePanel'
 import ExternalPagePanel from '../../../views/private/CrmPagePanel/components/ExternalPagePanel/ExternalPagePanel'
+import {AppRouter as AppRouterV2} from '../../../v2/views/AppRouter/AppRouter'
 import classes from './AppRouter.module.scss'
 import 'react-toastify/dist/ReactToastify.css'
 
@@ -64,6 +65,23 @@ const AppRouter: React.FC = () => {
             fetchSettings()
         }
     }, [isAuth])
+
+    if (!isAuth) {
+        return (
+            <>
+                <AppRouterV2/>
+
+                <ToastContainer position={'bottom-right'}
+                                autoClose={5000}
+                                draggablePercent={60}
+                                pauseOnHover={true}
+                                closeOnClick={true}
+                                hideProgressBar={true}
+                                draggable={true}
+                />
+            </>
+        )
+    }
 
     return (
         <div className={classes.AppRouter}>

@@ -1,0 +1,75 @@
+.SectionBanner {
+    min-height: 100vh;
+    width: 100%;
+    background-image: url('./img/bg-sochi-001.jpg');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    padding: 40px 0;
+    position: relative;
+
+    &::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 1;
+        background-color: rgba(0, 0, 0, 0.25);
+    }
+
+    .inner {
+        height: calc(100vh - 80px);
+        position: relative;
+        z-index: 2;
+        display: flex;
+
+        .logo {
+            position: relative;
+            width: 330px;
+            height: 180px;
+
+            .image {
+                display: block;
+                width: 100%;
+                height: 100%;
+                background-size: contain;
+                background-position: center;
+                background-repeat: no-repeat;
+                background-image: url('./img/logo-full.png');
+            }
+        }
+
+        .title {
+            font-size: 40px;
+            line-height: 50px;
+            color: #fff;
+            margin-bottom: 50px;
+        }
+
+        .buttons {
+            margin-top: 50px;
+            display: flex;
+        }
+    }
+}
+
+@media (max-width: 768px) {
+    .SectionBanner {
+        .inner {
+            .cols {
+                flex-wrap: wrap;
+            }
+
+            .title {
+                margin-bottom: 10px;
+            }
+
+            .buttons {
+                margin-top: 20px;
+                margin-bottom: 20px;
+            }
+        }
+    }
+}

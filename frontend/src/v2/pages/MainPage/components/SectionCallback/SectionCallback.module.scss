@@ -1,0 +1,29 @@
+.SectionCallback {
+    background-color: #033966;
+    padding: 40px 0;
+
+    .inner {
+        display: flex;
+        flex-direction: column;
+        max-width: 1000px;
+        margin: 0 auto;
+
+        .title {
+            color: #fff;
+            margin-bottom: 40px;
+        }
+
+        p {
+            font-size: 16px;
+            line-height: 20px;
+            margin-bottom: 40px;
+            color: #fff;
+            text-align: center;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: center;
+        }
+    }
+}
