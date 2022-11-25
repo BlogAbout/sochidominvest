@@ -17,6 +17,7 @@
             "App/Model",
             "App/modules/Booking",
             "App/modules/BusinessProcess",
+            "App/modules/Mailing",
             "App/modules/Messenger",
             "App/modules/Payment",
             "App/modules/User",

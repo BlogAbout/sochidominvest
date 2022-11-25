@@ -5,6 +5,7 @@ namespace App;
 use App\Booking\BookingController;
 use App\BusinessProcess\BusinessProcessController;
 use App\BusinessProcess\PaymentController;
+use App\Mailing\MailingController;
 use App\User\UserExternalController;
 use Klein\Klein;
 
@@ -176,6 +177,14 @@ $Klein->respond('GET', '/api/v1/payment/[:id]/info', [new PaymentController(), '
 $Klein->respond('GET', '/api/v1/payment/[:id]/link', [new PaymentController(), 'fetchLinkById']);
 $Klein->respond('GET', '/api/v1/payment', [new PaymentController(), 'fetchList']);
 $Klein->respond('POST', '/api/v1/paymentResult', [new PaymentController(), 'processResultResponse']);
+
+// Mailing Routes
+$Klein->respond('POST', '/api/v1/mailing', [new MailingController(), 'createItem']);
+$Klein->respond('PUT', '/api/v1/mailing/[:id]', [new MailingController(), 'updateItem']);
+$Klein->respond('GET', '/api/v1/mailing/[:id]', [new MailingController(), 'fetchItemById']);
+$Klein->respond('GET', '/api/v1/mailing', [new MailingController(), 'fetchList']);
+$Klein->respond('DELETE', '/api/v1/mailing/[:id]', [new MailingController(), 'deleteItem']);
+$Klein->respond('DELETE', '/api/v1/mailing/[:mailingId]/[:userType]/[:userId]', [new MailingController(), 'deleteRecipient']);
 
 // Dispatch all routes
 $Klein->dispatch();

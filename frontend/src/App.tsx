@@ -87,6 +87,7 @@ import {
     faScrewdriverWrench,
     faSliders,
     faStar,
+    faStop,
     faTableList,
     faTrash,
     faTree,
@@ -202,7 +203,8 @@ library.add(
     faChartLine,
     faWarehouse,
     faMoneyCheckDollar,
-    faHandshake
+    faHandshake,
+    faStop
 )
 
 function App() {
