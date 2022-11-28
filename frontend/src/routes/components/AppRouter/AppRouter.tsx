@@ -140,6 +140,8 @@ const AppRouter: React.FC = () => {
                                 <Route path={RouteNames.DOCUMENT} element={<DocumentPagePanel/>}/>
                                 <Route path={RouteNames.REPORT} element={<ReportPanel/>}/>
                                 <Route path={RouteNames.FILE_MANAGER} element={<FileManagerPagePanel/>}/>
+                                <Route path={RouteNames.CRM_COMPILATION_ITEM} element={<CompilationItemPagePanel/>}/>
+                                <Route path={RouteNames.CRM_COMPILATION} element={<CompilationPagePanel/>}/>
                             </>
                             }
 
@@ -150,8 +152,6 @@ const AppRouter: React.FC = () => {
                             <Route path={RouteNames.ARTICLE} element={<ArticlePagePanel/>}/>
                             <Route path={RouteNames.SUPPORT} element={<SupportPagePanel/>}/>
                             <Route path={RouteNames.FAVORITE} element={<FavoritePagePanel/>}/>
-                            <Route path={RouteNames.COMPILATION_ITEM} element={<CompilationItemPagePanel/>}/>
-                            <Route path={RouteNames.COMPILATION} element={<CompilationPagePanel/>}/>
                             <Route path={RouteNames.TARIFF} element={<TariffPagePanel/>}/>
                         </Routes>
                     </div>

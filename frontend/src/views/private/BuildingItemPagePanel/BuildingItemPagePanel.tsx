@@ -270,7 +270,7 @@ const BuildingItemPagePanel: React.FC = (props) => {
         if (building.costOld > building.cost) {
             return (
                 <div className={classes.costDown}
-                      title={`Старая цена: ${numberWithSpaces(round(building.costOld || 0, 0))} руб.`}
+                     title={`Старая цена: ${numberWithSpaces(round(building.costOld || 0, 0))} руб.`}
                 >
                     <FontAwesomeIcon icon='arrow-down'/>
                 </div>
@@ -278,7 +278,7 @@ const BuildingItemPagePanel: React.FC = (props) => {
         } else {
             return (
                 <div className={classes.costUp}
-                      title={`Старая цена: ${numberWithSpaces(round(building.costOld || 0, 0))} руб.`}
+                     title={`Старая цена: ${numberWithSpaces(round(building.costOld || 0, 0))} руб.`}
                 >
                     <FontAwesomeIcon icon='arrow-up'/>
                 </div>
@@ -446,20 +446,23 @@ const BuildingItemPagePanel: React.FC = (props) => {
                             title='Задать вопрос'
                     />
 
-                    <Button type='regular'
-                            icon='plus'
-                            onClick={() => {
-                                if (building.id) {
-                                    openPopupCompilationSelector(document.body, {
-                                        buildingId: building.id,
-                                        onSave: () => {
-                                        }
-                                    })
-                                }
-                            }}
-                            className='marginRight'
-                            title='Добавить в подборку'
-                    />
+                    {building.id && ['director', 'administrator', 'manager'].includes(role) ?
+                        <Button type='regular'
+                                icon='plus'
+                                onClick={() => {
+                                    if (building.id) {
+                                        openPopupCompilationSelector(document.body, {
+                                            buildingId: building.id,
+                                            onSave: () => {
+                                            }
+                                        })
+                                    }
+                                }}
+                                className='marginRight'
+                                title='Добавить в подборку'
+                        />
+                        : null
+                    }
 
                     {building.id && favorites.length && favorites.includes(building.id) ?
                         <Button type='apply'

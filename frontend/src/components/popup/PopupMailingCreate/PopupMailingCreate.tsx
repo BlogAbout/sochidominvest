@@ -115,6 +115,9 @@ const PopupMailingCreate: React.FC<Props> = (props) => {
                              placeHolder='Введите содержимое рассылки'
                              isVisual={true}
                              width='100%'
+                             error={!mailing.content || mailing.content.trim() === ''}
+                             showRequired
+                             errorText='Поле обязательно для заполнения'
                 />
             </div>
         )
@@ -128,6 +131,9 @@ const PopupMailingCreate: React.FC<Props> = (props) => {
                 <CompilationBox compilations={mailing.content.trim() !== '' ? [+mailing.content] : []}
                                 onSelect={(value: number[]) => setMailing({...mailing, content: value[0].toString()})}
                                 placeHolder='Выберите подборку'
+                                error={!mailing.content || mailing.content.trim() === ''}
+                                showRequired
+                                errorText='Поле обязательно для заполнения'
                                 styleType='minimal'
                 />
             </div>
@@ -208,14 +214,14 @@ const PopupMailingCreate: React.FC<Props> = (props) => {
                 <Button type='save'
                         icon='check-double'
                         onClick={() => saveHandler(true)}
-                        disabled={fetching || mailing.name.trim() === ''}
+                        disabled={fetching || mailing.name.trim() === '' || mailing.content.trim() === ''}
                         title='Сохранить и закрыть'
                 />
 
                 <Button type='apply'
                         icon='check'
                         onClick={() => saveHandler()}
-                        disabled={fetching || mailing.name.trim() === ''}
+                        disabled={fetching || mailing.name.trim() === '' || mailing.content.trim() === ''}
                         className='marginLeft'
                         title='Сохранить'
                 >Сохранить</Button>

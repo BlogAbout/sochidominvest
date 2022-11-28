@@ -85,12 +85,6 @@ const SidebarRight: React.FC = () => {
                     </Link>
                 </div>
 
-                <div className={classes.icon}>
-                    <Link to={RouteNames.COMPILATION} title='Подборка'>
-                        <FontAwesomeIcon icon='table-list'/>
-                    </Link>
-                </div>
-
                 <div className={classes.icon}
                      title='Мессенджер'
                      onClick={() => openPopupMessenger(document.body, {})}

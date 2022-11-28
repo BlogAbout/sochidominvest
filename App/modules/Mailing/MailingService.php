@@ -268,18 +268,23 @@ class MailingService extends Model
         $recipient = parent::fetch();
 
         if ($recipient) {
-            // Todo: Проверка настроек пользователя и на случай, если пользователь отписался от рассылок
-            $mailModel = new MailModel($this->settings, $recipient['email'], 'mailing', [
-                'name' => $recipient['name'],
-                'content' => $recipient['content_html']
-            ]);
-            $mailModel->send();
+            // Todo: Проверка, если пользователь отписался от рассылок
+            $user = UserModel::fetchUserById($recipient['id_user']);
+
+            if ($user['settings'] && $user['settings']['sendEmail']) {
+                $mailModel = new MailModel($this->settings, $recipient['email'], 'mailing', [
+                    'name' => $recipient['name'],
+                    'content' => $recipient['content_html']
+                ]);
+                $mailModel->send();
+            }
 
             RecipientService::deleteItemFromDb($recipient['id_mailing'], $recipient['id_user'], $recipient['type_user']);
             $count = RecipientService::fetchCountRecipientsByMailingFromDb($recipient['id_mailing']);
 
             if ($count === 0 || trim($recipient['content_html']) === '') {
                 $sql = "UPDATE `sdi_mailing` SET `status` = :status WHERE `id` = :id";
+
                 parent::query($sql);
                 parent::bindParams('id', $recipient['id_mailing']);
                 parent::bindParams('status', trim($recipient['content_html']) === '' ? -1 : 2);
@@ -311,7 +316,7 @@ class MailingService extends Model
                 }
 
                 $content = '';
-                foreach($buildings as $building) {
+                foreach ($buildings as $building) {
                     $district = [];
                     if ($building['district']) {
                         array_push($district, $building['district']);
@@ -336,15 +341,15 @@ class MailingService extends Model
                                 </div>
                                 <div class="cost" style="font-size: 20px; font-weight: 700; margin-bottom: 5px; box-sizing: border-box;">
                                     ' . (
-                                            $building['type'] === 'building' ? 'от ' . number_format($building['costMin'], 0, '.', ' ')
-                                            : number_format($building['cost'], 0, '.', ' ')
-                                        ) . ' руб.
+                        $building['type'] === 'building' ? 'от ' . number_format($building['costMin'], 0, '.', ' ')
+                            : number_format($building['cost'], 0, '.', ' ')
+                        ) . ' руб.
                                 </div>
                                 <div class="area">Площадь: 
                                     ' . (
-                                        $building['type'] === 'building' ? 'от ' . $building['areaMin']
-                                            : $building['area']
-                                    ) . ' м<sup>2</sup>
+                        $building['type'] === 'building' ? 'от ' . $building['areaMin']
+                            : $building['area']
+                        ) . ' м<sup>2</sup>
                                 </div>
                             </div>
                             <div style="clear: both;"></div>
