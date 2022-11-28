@@ -3,17 +3,16 @@ import React, {useState} from 'react'
 import is from 'is_js'
 import {useActions} from '../../../../../../hooks/useActions'
 import {ISignUp} from '../../../../../../@types/ISignUp'
-import {rolesList} from '../../../../../../helpers/userHelper'
 import UserService from '../../../../../../api/UserService'
 import Title from '../../../../ui/Title/Title'
 import TextBox from '../../../../../../components/form/TextBox/TextBox'
-import ComboBox from '../../../../../../components/ComboBox/ComboBox'
 import Button from '../../../../../../components/form/Button/Button'
 import Field from '../../../../form/Field/Field'
 import classes from './RegistrationForm.module.scss'
 
 interface Props {
     onChangeType(type: string): void
+
     onClose(): void
 }
 
@@ -234,21 +233,6 @@ const RegistrationForm: React.FC<Props> = (props): React.ReactElement => {
                     }}
                     styleType='minimal'
                     width='100%'
-                />
-            </Field>
-
-            <Field label='Тип аккаунта'
-                   title='Тип аккаунта'
-                   type='hor'
-                   style='dark'
-                   labelWidth={150}
-            >
-                <ComboBox selected={signUp.role || 'subscriber'}
-                          items={Object.values(rolesList.filter(role => role.isRegistration))}
-                          onSelect={(value: string) => setSignUp({...signUp, role: value})}
-                          placeHolder='Выберите тип аккаунта'
-                          styleType='minimal'
-                          width='100%'
                 />
             </Field>
 

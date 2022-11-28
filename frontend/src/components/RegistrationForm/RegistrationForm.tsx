@@ -6,8 +6,6 @@ import UserService from '../../api/UserService'
 import TextBox from '../form/TextBox/TextBox'
 import Button from '../form/Button/Button'
 import Preloader from '../Preloader/Preloader'
-import ComboBox from '../ComboBox/ComboBox'
-import {rolesList} from '../../helpers/userHelper'
 import {ISignUp} from '../../@types/ISignUp'
 import classes from './RegistrationForm.module.scss'
 
@@ -205,15 +203,6 @@ const RegistrationForm: React.FC<Props> = (props) => {
                             setValidationError({...validationError, password: ''})
                         }
                     }}
-                />
-            </div>
-
-            <div className={classes['field-wrapper']}>
-                <ComboBox selected={signUp.role || 'subscriber'}
-                          items={Object.values(rolesList.filter(role => role.isRegistration))}
-                          onSelect={(value: string) => setSignUp({...signUp, role: value})}
-                          placeHolder='Выберите тип аккаунта'
-                          styleType='standard'
                 />
             </div>
 

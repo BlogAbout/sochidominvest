@@ -5,9 +5,11 @@ import {useTypedSelector} from '../../../hooks/useTypedSelector'
 import {useActions} from '../../../hooks/useActions'
 import {IBuilding} from '../../../@types/IBuilding'
 import {ICompilation} from '../../../@types/ICompilation'
+import {IMailing} from '../../../@types/IMailing'
 import BuildingTill from '../../../components/container/BuildingListContainer/components/BuildingTill/BuildingTill'
 import openPopupBuildingCreate from '../../../components/popup/PopupBuildingCreate/PopupBuildingCreate'
 import openPopupAlert from '../../../components/PopupAlert/PopupAlert'
+import openPopupMailingCreate from '../../../components/popup/PopupMailingCreate/PopupMailingCreate'
 import BuildingService from '../../../api/BuildingService'
 import FavoriteService from '../../../api/FavoriteService'
 import CompilationService from '../../../api/CompilationService'
@@ -30,7 +32,7 @@ const CompilationItemPagePanel: React.FC = () => {
     const [filterBuilding, setFilterBuilding] = useState<IBuilding[]>([])
     const [fetching, setFetching] = useState(false)
 
-    const {role} = useTypedSelector(state => state.userReducer)
+    const {userId, role} = useTypedSelector(state => state.userReducer)
     const {buildings, fetching: fetchingBuilding} = useTypedSelector(state => state.buildingReducer)
     const {compilations, fetching: fetchingCompilation} = useTypedSelector(state => state.compilationReducer)
     const {fetchBuildingList, fetchCompilationList} = useActions()
@@ -181,6 +183,31 @@ const CompilationItemPagePanel: React.FC = () => {
         }
     }
 
+    const onAddHandler = () => {
+        if (!compilation.id) {
+            return
+        }
+
+        const mailing: IMailing = {
+            id: null,
+            name: '',
+            content: compilation.id.toString(),
+            contentHtml: '',
+            type: 'compilation',
+            author: userId,
+            active: 1,
+            status: 0,
+            countRecipients: 0
+        }
+
+        openPopupMailingCreate(document.body, {
+            mailing: mailing,
+            onSave: () => {
+                navigate('/panel/crm/mailing')
+            }
+        })
+    }
+
     return (
         <main className={classes.CompilationItemPagePanel}>
             <Helmet>
@@ -193,7 +220,11 @@ const CompilationItemPagePanel: React.FC = () => {
             </Helmet>
 
             <div className={classes.Content}>
-                <Title type={1}>{compilation.name}</Title>
+                <Title type={1}
+                       onAdd={onAddHandler.bind(this)}
+                       showAdd={['director', 'administrator', 'manager'].includes(role)}
+                       addText='Создать рассылку'
+                >{compilation.name}</Title>
 
                 <Spacer/>
 

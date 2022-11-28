@@ -9,6 +9,7 @@ interface Props extends React.PropsWithChildren<any> {
     activeLayout?: 'list' | 'till' | 'map'
     layouts?: ('list' | 'till' | 'map')[]
     valueSearch?: string
+    addText?: string
     showAdd?: boolean
     showFilter?: boolean
     showSearch?: boolean
@@ -27,6 +28,7 @@ const defaultProps: Props = {
     activeLayout: 'list',
     layouts: [],
     valueSearch: '',
+    addText: 'Добавить',
     showAdd: false,
     showFilter: false,
     showSearch: false
@@ -105,7 +107,7 @@ const Title: React.FC<Props> = (props) => {
                                         icon='plus'
                                         onClick={(e: React.MouseEvent) => props.onAdd ? props.onAdd(e) : undefined}
                                         className='marginLeft'
-                                >Добавить</Button>
+                                >{props.addText}</Button>
                                 : null
                             }
                         </div>

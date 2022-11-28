@@ -18,9 +18,8 @@ import TextAreaBox from '../../form/TextAreaBox/TextAreaBox'
 import Title from '../../ui/Title/Title'
 import Label from '../../form/Label/Label'
 import ComboBox from '../../ComboBox/ComboBox'
+import CompilationBox from '../../form/CompilationBox/CompilationBox'
 import classes from './PopupMailingCreate.module.scss'
-import CompilationBox from "../../form/CompilationBox/CompilationBox";
-import PostBox from "../../form/PostBox/PostBox";
 
 interface Props extends PopupProps {
     mailing?: IMailing | null

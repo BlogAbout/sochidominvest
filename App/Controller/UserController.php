@@ -79,7 +79,7 @@ class UserController extends Controller
             'dateUpdate' => date('Y-m-d H:i:s'),
             'lastActive' => date('Y-m-d H:i:s'),
             'active' => 1,
-            'role' => htmlspecialchars(stripcslashes(strip_tags($data->role))),
+            'role' => 'subscriber',
             'settings' => '{"notifyNewAction":1,"soundAlert":1,"pushNotify":1,"notifyEdit":1,"notifyNewItem":1,"pushMessenger":1,"sendEmail":1}'
         );
 

@@ -6,11 +6,6 @@ import {IUser} from '../@types/IUser'
  */
 export const rolesList: ISelector[] = [
     {key: 'subscriber', text: 'Подписчик', isRegistration: true},
-    {key: 'buyer', text: 'Покупатель', isRegistration: true},
-    {key: 'owner', text: 'Собственник', isRegistration: true},
-    {key: 'agent', text: 'Агент', isRegistration: true},
-    {key: 'investor', text: 'Инвестор', isRegistration: true},
-    {key: 'developer', text: 'Застройщик', isRegistration: true},
     {key: 'manager', text: 'Менеджер', isRegistration: false},
     {key: 'administrator', text: 'Администратор', isRegistration: false},
     {key: 'director', text: 'Директор', isRegistration: false, readOnly: true, hidden: true}

@@ -28,12 +28,16 @@ const DesktopPagePanel: React.FC = () => {
     const [tariffs, setTariffs] = useState(null)
     const [tickets, setTickets] = useState<IFeed[]>([])
     const [deals, setDeals] = useState([])
+    const [agents, setAgents] = useState([])
+    const [developers, setDevelopers] = useState([])
     const [filterArticles, setFilterArticles] = useState<IArticle[]>([])
 
     const [fetchingUser, setFetchingUser] = useState(false)
     const [fetchingTariffs, setFetchingTariffs] = useState(false)
     const [fetchingTickets, setFetchingTickets] = useState(false)
     const [fetchingDeals, setFetchingDeals] = useState(false)
+    const [fetchingAgents, setFetchingAgents] = useState(false)
+    const [fetchingDevelopers, setFetchingDevelopers] = useState(false)
 
     const {userId} = useTypedSelector(state => state.userReducer)
     const {articles, fetching: fetchingArticles} = useTypedSelector(state => state.articleReducer)
@@ -236,6 +240,46 @@ const DesktopPagePanel: React.FC = () => {
         )
     }
 
+    const renderAgentsInfo = () => {
+        return (
+            <div className={cx({'col': true, 'col-2': true})}>
+                <Title type={2}>Мои агентства</Title>
+
+                <BlockingElement fetching={fetchingAgents} className={classes.list}>
+                    {agents && agents.length ? agents.map((agent: any, index: number) => {
+                            return (
+                                <div key={index}>
+
+                                </div>
+                            )
+                        })
+                        : <Empty message='У Вас еще нет созданных агентств.'/>
+                    }
+                </BlockingElement>
+            </div>
+        )
+    }
+
+    const renderDevelopersInfo = () => {
+        return (
+            <div className={cx({'col': true, 'col-2': true})}>
+                <Title type={2}>Мои застройщики</Title>
+
+                <BlockingElement fetching={fetchingDevelopers} className={classes.list}>
+                    {developers && developers.length ? developers.map((developer: any, index: number) => {
+                            return (
+                                <div key={index}>
+
+                                </div>
+                            )
+                        })
+                        : <Empty message='У Вас еще нет созданных застройщиков.'/>
+                    }
+                </BlockingElement>
+            </div>
+        )
+    }
+
     return (
         <div className={classes.DesktopPagePanel}>
             <PageInfo title='Авторизованный брокер недвижимости Сочи'/>
@@ -247,6 +291,8 @@ const DesktopPagePanel: React.FC = () => {
                     {renderUserInfo()}
                     {renderTariffsInfo()}
                     {renderArticlesInfo()}
+                    {renderAgentsInfo()}
+                    {renderDevelopersInfo()}
                     {renderDealsInfo()}
                     {renderTicketsInfo()}
                 </BlockingElement>

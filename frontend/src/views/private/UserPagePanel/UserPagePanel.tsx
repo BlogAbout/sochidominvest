@@ -67,14 +67,7 @@ const UserPagePanel: React.FC = () => {
                 types.push('administrator')
                 types.push('manager')
             }
-            if (selectedType.includes('partner')) {
-                types.push('developer')
-                types.push('investor')
-                types.push('agent')
-            }
             if (selectedType.includes('client')) {
-                types.push('owner')
-                types.push('buyer')
                 types.push('subscriber')
             }
 
@@ -246,15 +239,8 @@ const UserPagePanel: React.FC = () => {
             onClick: onClickFilterButtonHandler.bind(this)
         },
         {
-            key: 'partner',
-            title: 'Партнёры',
-            icon: 'user-tie',
-            active: selectedType.includes('partner'),
-            onClick: onClickFilterButtonHandler.bind(this)
-        },
-        {
             key: 'client',
-            title: 'Клиенты',
+            title: 'Пользователи',
             icon: 'user',
             active: selectedType.includes('client'),
             onClick: onClickFilterButtonHandler.bind(this)

@@ -372,26 +372,6 @@ class PopupMessenger extends React.Component<Props, State> {
                                     return null
                                 }
 
-                                if (this.state.userRole === 'buyer' && !['director', 'administrator', 'manager', 'agent'].includes(user.role)) {
-                                    return null
-                                }
-
-                                if (this.state.userRole === 'owner' && !['director', 'administrator', 'manager', 'agent'].includes(user.role)) {
-                                    return null
-                                }
-
-                                if (this.state.userRole === 'agent' && !['director', 'administrator', 'manager', 'developer', 'investor'].includes(user.role)) {
-                                    return null
-                                }
-
-                                if (this.state.userRole === 'investor' && !['director', 'administrator', 'manager', 'developer', 'agent'].includes(user.role)) {
-                                    return null
-                                }
-
-                                if (this.state.userRole === 'developer' && !['director', 'administrator', 'manager', 'investor', 'agent'].includes(user.role)) {
-                                    return null
-                                }
-
                                 return (
                                     <UserItem key={user.id}
                                               user={user}
