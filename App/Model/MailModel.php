@@ -88,6 +88,8 @@ class MailModel extends Model
                     <p>Для проведения платежа перейдите на форму оплаты по ссылке ниже</p>
                     <p><a href="' . $this->params['link'] . '" target="_blank">' . $this->params['link'] . '</a></p>
                 ' . $copyright . $info;
+            case 'mailing':
+                return $this->params['content'] . $copyright . $info;
             default:
                 return '';
         }
@@ -106,6 +108,8 @@ class MailModel extends Model
                 return 'Новая бронь';
             case 'payment':
                 return 'Оплата платежа';
+            case 'mailing':
+                return $this->params['name'] ?? 'Рассылка';
             default:
                 return 'Без темы';
         }

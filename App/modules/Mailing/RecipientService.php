@@ -29,8 +29,8 @@ class RecipientService extends Model
                        (SELECT ue.`email` FROM `sdi_user_external` ue WHERE ue.`id` = sdi.`id_user`)
                    ) AS email
             FROM `sdi_mailing_recipients` sdi
-            WHERE sdi.`id_mailing`
-            ORDER BY sdi.`id_user` ASC
+            WHERE sdi.`id_mailing` = :mailingId
+            ORDER BY sdi.`id_user`
         ";
 
         parent::query($sql);
@@ -89,5 +89,42 @@ class RecipientService extends Model
         parent::bindParams('userType', $userType);
 
         return parent::execute();
+    }
+
+    /**
+     * Удаляет всех получателей выбранных рассылок
+     *
+     * @param array $ids Массив идентификаторов рассылок
+     * @return bool
+     */
+    public static function deleteItemsByMailingFromDb(array $ids = []): bool
+    {
+        if (count($ids)) {
+            $sql = "DELETE FROM `sdi_mailing_recipients` WHERE `id_mailing` IN (" . implode(',', $ids) . ")";
+
+            parent::query($sql);
+
+            return parent::execute();
+        }
+
+        return false;
+    }
+
+    /**
+     * Получение количества получателей рассылки
+     *
+     * @param int $mailingId Идентификатор рассылки
+     * @return int
+     */
+    public static function fetchCountRecipientsByMailingFromDb(int $mailingId): int
+    {
+        $sql = "SELECT COUNT(`id_user`) FROM `sdi_mailing_recipients` WHERE `id_mailing` = :mailingId";
+
+        parent::query($sql);
+        parent::bindParams('mailingId', $mailingId);
+
+        $count = parent::fetch();
+
+        return (int)$count['count'];
     }
 }

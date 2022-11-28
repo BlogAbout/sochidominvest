@@ -5,7 +5,7 @@ import {IFilter} from '../@types/IFilter'
 
 export default class FeedService {
     static async fetchMailingById(mailingId: number): Promise<AxiosResponse> {
-        return API.get(`/mailing/${mailingId}`)
+        return API.get(`/mailing/${mailingId}/info`)
     }
 
     static async fetchMailings(filter: IFilter): Promise<AxiosResponse> {

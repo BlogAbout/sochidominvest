@@ -1,7 +1,7 @@
 import React from 'react'
 import classNames from 'classnames/bind'
 import {IMailing} from '../../../../../../../@types/IMailing'
-import {getMailingTypeText} from '../../../../../../../helpers/mailingHelper'
+import {getMailingStatusText, getMailingTypeText} from '../../../../../../../helpers/mailingHelper'
 import classes from './MailingItem.module.scss'
 
 interface Props {
@@ -42,7 +42,7 @@ const MailingItem: React.FC<Props> = (props) => {
         >
             <div className={classes.name}>{props.mailing.name}</div>
             <div className={classes.type}>{getMailingTypeText(props.mailing.type)}</div>
-            <div className={classes.status}>{props.mailing.status ? 'Запущен' : 'Остановлен'}</div>
+            <div className={classes.status}>{getMailingStatusText(props.mailing.status)}</div>
             <div className={classes.count}>{props.mailing.countRecipients}</div>
         </div>
     )

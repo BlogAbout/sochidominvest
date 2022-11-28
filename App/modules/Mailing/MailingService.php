@@ -2,6 +2,9 @@
 
 namespace App\Mailing;
 
+use App\BuildingModel;
+use App\CompilationModel;
+use App\MailModel;
 use App\Model;
 use App\User\UserExternalService;
 use App\UserModel;
@@ -23,7 +26,7 @@ class MailingService extends Model
     public static function fetchItemById(int $id): Mailing
     {
         $sql = "
-            SELECT sdi.`id`, sdi.`name`, sdi.`content`, sdi.`type`, sdi.`author`, sdi.`date_created`, sdi.`active`,
+            SELECT sdi.`id`, sdi.`name`, sdi.`content`, sdi.`content_html`, sdi.`type`, sdi.`author`, sdi.`date_created`, sdi.`active`,
                    (
                        SELECT u.`first_name`
                        FROM `sdi_user` AS u
@@ -60,7 +63,7 @@ class MailingService extends Model
         $sqlWhere = parent::generateFilterQuery($filter);
 
         $sql = "
-            SELECT sdi.`id`, sdi.`name`, sdi.`content`, sdi.`type`, sdi.`author`, sdi.`date_created`, sdi.`active`,
+            SELECT sdi.`id`, sdi.`name`, sdi.`content`, sdi.`content_html`, sdi.`type`, sdi.`author`, sdi.`date_created`, sdi.`active`,
                    (
                        SELECT u.`first_name`
                        FROM `sdi_user` AS u
@@ -95,17 +98,19 @@ class MailingService extends Model
     {
         $dateNow = UtilModel::getDateNow();
         $mailing->setDateCreated($dateNow);
+        $mailing->setContentHtml(self::createHtmlContent($mailing));
 
         $sql = "
             INSERT INTO `sdi_mailing`
-                (`name`, `content`, `type`, `author`, `date_created`, `active`, `status`)
+                (`name`, `content`, `content_html`, `type`, `author`, `date_created`, `active`, `status`)
             VALUES
-                (:name, :content, :type, :author, :dateCreated, :active, :status)
+                (:name, :content, :contentHtml, :type, :author, :dateCreated, :active, :status)
         ";
 
         parent::query($sql);
         parent::bindParams('name', $mailing->getName());
         parent::bindParams('content', $mailing->getContent());
+        parent::bindParams('contentHtml', $mailing->getContentHtml());
         parent::bindParams('type', $mailing->getType());
         parent::bindParams('author', $mailing->getAuthor());
         parent::bindParams('dateCreated', $mailing->getDateCreated());
@@ -135,31 +140,32 @@ class MailingService extends Model
                 }
             }
 
-            if ($usersExternal && count($usersExternal)) {
-                foreach ($usersExternal as $user) {
-                    if ($user->getEmail()) {
-                        $isExists = false;
-
-                        if (count($recipientsList)) {
-                            foreach ($recipientsList as $recipient) {
-                                if ($recipient->getEmail() === $user->getEmail()) {
-                                    $isExists = true;
-                                    break;
-                                }
-                            }
-                        }
-
-                        if (!$isExists) {
-                            array_push($recipientsList, Recipient::initFromData([
-                                'mailingId' => $mailing->getId(),
-                                'userId' => $user->getId(),
-                                'userType' => 'external',
-                                'email' => $user->getEmail()
-                            ]));
-                        }
-                    }
-                }
-            }
+            // Todo: ???
+//            if ($usersExternal && count($usersExternal)) {
+//                foreach ($usersExternal as $user) {
+//                    if ($user->getEmail()) {
+//                        $isExists = false;
+//
+//                        if (count($recipientsList)) {
+//                            foreach ($recipientsList as $recipient) {
+//                                if ($recipient->getEmail() === $user->getEmail()) {
+//                                    $isExists = true;
+//                                    break;
+//                                }
+//                            }
+//                        }
+//
+//                        if (!$isExists) {
+//                            array_push($recipientsList, Recipient::initFromData([
+//                                'mailingId' => $mailing->getId(),
+//                                'userId' => $user->getId(),
+//                                'userType' => 'external',
+//                                'email' => $user->getEmail()
+//                            ]));
+//                        }
+//                    }
+//                }
+//            }
 
             if (count($recipientsList)) {
                 RecipientService::insertListItemsToDb($recipientsList);
@@ -174,11 +180,14 @@ class MailingService extends Model
      */
     public static function updateItemToDb(Mailing $mailing): void
     {
+        $mailing->setContentHtml(self::createHtmlContent($mailing));
+
         $sql = "
             UPDATE `sdi_mailing`
             SET
                 `name` = :name,
                 `content` = :content,
+                `content_html` = :contentHtml,
                 `type` = :type,
                 `author` = :author,
                 `date_created` = :dateCreated,
@@ -191,6 +200,7 @@ class MailingService extends Model
         parent::bindParams('id', $mailing->getId());
         parent::bindParams('name', $mailing->getName());
         parent::bindParams('content', $mailing->getContent());
+        parent::bindParams('contentHtml', $mailing->getContentHtml());
         parent::bindParams('type', $mailing->getType());
         parent::bindParams('author', $mailing->getAuthor());
         parent::bindParams('dateCreated', $mailing->getDateCreated());
@@ -214,5 +224,140 @@ class MailingService extends Model
         parent::bindParams('id', $id);
 
         return parent::execute();
+    }
+
+    /**
+     * Получение идентификаторов рассылок
+     *
+     * @param array $filter Массив параметров фильтрации
+     * @return array
+     */
+    public static function fetchIdsMailing(array $filter): array
+    {
+        $sqlWhere = parent::generateFilterQuery($filter);
+
+        $sql = "SELECT sdi.`id` FROM `sdi_mailing` sdi $sqlWhere ORDER BY sdi.`id` ASC";
+
+        parent::query($sql);
+        return parent::fetchColumn();
+    }
+
+    /**
+     * Запуск рассылки
+     */
+    public function runSendMailing(): void
+    {
+        $idsRemove = MailingService::fetchIdsMailing(['active' => [-1]]);
+        RecipientService::deleteItemsByMailingFromDb($idsRemove);
+
+        $sql = "
+            SELECT sdi.`id_mailing`, sdi.`id_user`, sdi.`type_user`, m.`name`, m.`content`, m.`content_html`, m.`type`,
+                   IF(
+                       sdi.`type_user` = 'subscriber',
+                       (SELECT u.`email` FROM `sdi_user` u WHERE u.`id` = sdi.`id_user`),
+                       (SELECT ue.`email` FROM `sdi_user_external` ue WHERE ue.`id` = sdi.`id_user`)
+                   ) AS email
+            FROM `sdi_mailing_recipients` sdi
+            LEFT JOIN `sdi_mailing` m ON sdi.`id_mailing` = m.`id`
+            WHERE m.`active` = 1 AND m.`status` = 1
+            ORDER BY sdi.`id_user`
+            LIMIT 1
+        ";
+
+        parent::query($sql);
+        $recipient = parent::fetch();
+
+        if ($recipient) {
+            // Todo: Проверка настроек пользователя и на случай, если пользователь отписался от рассылок
+            $mailModel = new MailModel($this->settings, $recipient['email'], 'mailing', [
+                'name' => $recipient['name'],
+                'content' => $recipient['content_html']
+            ]);
+            $mailModel->send();
+
+            RecipientService::deleteItemFromDb($recipient['id_mailing'], $recipient['id_user'], $recipient['type_user']);
+            $count = RecipientService::fetchCountRecipientsByMailingFromDb($recipient['id_mailing']);
+
+            if ($count === 0 || trim($recipient['content_html']) === '') {
+                $sql = "UPDATE `sdi_mailing` SET `status` = :status WHERE `id` = :id";
+                parent::query($sql);
+                parent::bindParams('id', $recipient['id_mailing']);
+                parent::bindParams('status', trim($recipient['content_html']) === '' ? -1 : 2);
+                parent::execute();
+            }
+        }
+    }
+
+    /**
+     * Создание HTML контента рассылки на основе типа рассылки
+     *
+     * @param \App\Mailing\Mailing $mailing Объект рассылки
+     * @return string
+     */
+    private static function createHtmlContent(Mailing $mailing): string
+    {
+        switch ($mailing->getType()) {
+            case 'mail':
+                return $mailing->getContentHtml();
+            case 'compilation':
+                $compilation = CompilationModel::fetchItemById($mailing->getContent());
+                if (!$compilation['buildings'] || !count($compilation['buildings'])) {
+                    return '';
+                }
+
+                $buildings = BuildingModel::fetchBuildings(['id' => $compilation['buildings'], 'active' => [1]]);
+                if (!$buildings || !count($buildings)) {
+                    return '';
+                }
+
+                $content = '';
+                foreach($buildings as $building) {
+                    $district = [];
+                    if ($building['district']) {
+                        array_push($district, $building['district']);
+                    }
+                    if ($building['districtZone']) {
+                        array_push($district, $building['districtZone']);
+                    }
+                    $content .= '
+                        <div class="item" style="width: 100%; background-color: #fff; margin-bottom: 15px; padding: 8px 10px; position: relative; border: 1px solid #075ea5; box-sizing: border-box;">
+                            <div class="image" style="width: 200px; height: 200px; float: left; background-color: #ccc; overflow: hidden; position: relative; box-sizing: border-box;">
+                                <a href="https://sochidominvest.ru/building/' . $building['id'] . '" style="display: block;">
+                                    <img src="https://api.sochidominvest.ru/uploads/image/thumb/' . $building['avatar'] . '" alt="' . $building['name'] . '" style="height: 100%; object-fit: cover; width: 100%;"/>
+                                </a>
+                            </div>
+                            <div class="content" style="padding: 0 20px; float: left; width: calc(100% - 200px); box-sizing: border-box;">
+                                <h2 style="font-size: 22px; line-height: 24px; margin-bottom: 40px; position: relative;">
+                                    <a href="https://sochidominvest.ru/building/' . $building['id'] . '">' . $building['name'] . '</a>
+                                </h2>
+                                <div class="address" style="box-sizing: border-box;">
+                                    <span style="display: block; font-size: 15px;">' . implode(', ', $district) . '</span>
+                                    <span style="display: block; font-size: 15px;">' . $building['address'] . '</span>
+                                </div>
+                                <div class="cost" style="font-size: 20px; font-weight: 700; margin-bottom: 5px; box-sizing: border-box;">
+                                    ' . (
+                                            $building['type'] === 'building' ? 'от ' . number_format($building['costMin'], 0, '.', ' ')
+                                            : number_format($building['cost'], 0, '.', ' ')
+                                        ) . ' руб.
+                                </div>
+                                <div class="area">Площадь: 
+                                    ' . (
+                                        $building['type'] === 'building' ? 'от ' . $building['areaMin']
+                                            : $building['area']
+                                    ) . ' м<sup>2</sup>
+                                </div>
+                            </div>
+                            <div style="clear: both;"></div>
+                        </div>
+                    ';
+                }
+
+                return '<div class="list" style="display: block;">' . $content . '</div>';
+            case 'notification':
+                // Todo: Доделать рассылку для уведомлений
+                return '';
+        }
+
+        return '';
     }
 }

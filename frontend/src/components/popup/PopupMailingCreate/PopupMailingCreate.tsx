@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react'
+import * as Showdown from 'showdown'
 import withStore from '../../../hoc/withStore'
 import classNames from 'classnames/bind'
 import {mailingTypes} from '../../../helpers/mailingHelper'
@@ -18,6 +19,8 @@ import Title from '../../ui/Title/Title'
 import Label from '../../form/Label/Label'
 import ComboBox from '../../ComboBox/ComboBox'
 import classes from './PopupMailingCreate.module.scss'
+import CompilationBox from "../../form/CompilationBox/CompilationBox";
+import PostBox from "../../form/PostBox/PostBox";
 
 interface Props extends PopupProps {
     mailing?: IMailing | null
@@ -35,10 +38,18 @@ const defaultProps: Props = {
 const cx = classNames.bind(classes)
 
 const PopupMailingCreate: React.FC<Props> = (props) => {
+    const converter = new Showdown.Converter({
+        tables: true,
+        simplifiedAutoLink: true,
+        strikethrough: true,
+        tasklists: true
+    })
+
     const [mailing, setMailing] = useState<IMailing>(props.mailing || {
         id: null,
         name: '',
         content: '',
+        contentHtml: '',
         type: 'mail',
         author: null,
         active: 1,
@@ -63,7 +74,13 @@ const PopupMailingCreate: React.FC<Props> = (props) => {
     const saveHandler = (isClose?: boolean) => {
         setFetching(true)
 
-        MailingService.saveMailing(mailing)
+        const saveMailing: IMailing = JSON.parse(JSON.stringify(mailing))
+
+        if (saveMailing.type === 'mail') {
+            saveMailing.contentHtml = converter.makeHtml(saveMailing.content)
+        }
+
+        MailingService.saveMailing(saveMailing)
             .then((response: any) => {
                 setMailing(response.data)
 
@@ -104,11 +121,15 @@ const PopupMailingCreate: React.FC<Props> = (props) => {
     }
 
     const renderFieldsCompilation = () => {
-        // Todo
         return (
             <div className={classes.field}>
-                <Label text='В разработке'/>
+                <Label text='Подборка'/>
 
+                <CompilationBox compilations={mailing.content.trim() !== '' ? [+mailing.content] : []}
+                                onSelect={(value: number[]) => setMailing({...mailing, content: value[0].toString()})}
+                                placeHolder='Выберите подборку'
+                                styleType='minimal'
+                />
             </div>
         )
     }
@@ -161,7 +182,7 @@ const PopupMailingCreate: React.FC<Props> = (props) => {
 
                         <ComboBox selected={mailing.type}
                                   items={Object.values(mailingTypes)}
-                                  onSelect={(value: string) => setMailing({...mailing, type: value})}
+                                  onSelect={(value: string) => setMailing({...mailing, type: value, content: ''})}
                                   placeHolder='Выберите тип'
                                   styleType='minimal'
                         />

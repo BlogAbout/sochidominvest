@@ -7,6 +7,7 @@ class Mailing
     public int $id;
     public string $name;
     public string $content;
+    public string $contentHtml;
     public string $type;
     public int $author;
     public string $authorName;
@@ -21,6 +22,7 @@ class Mailing
      * @param int $id
      * @param string $name
      * @param string $content
+     * @param string $contentHtml
      * @param string $type
      * @param int $author
      * @param string $authorName
@@ -29,11 +31,12 @@ class Mailing
      * @param string $dateCreated
      * @param int $countRecipients
      */
-    public function __construct(int $id, string $name, string $content, string $type, int $author, string $authorName, int $active, int $status, string $dateCreated, int $countRecipients)
+    public function __construct(int $id, string $name, string $content, string $contentHtml, string $type, int $author, string $authorName, int $active, int $status, string $dateCreated, int $countRecipients)
     {
         $this->id = $id;
         $this->name = $name;
         $this->content = $content;
+        $this->contentHtml = $contentHtml;
         $this->type = $type;
         $this->author = $author;
         $this->authorName = $authorName;
@@ -55,6 +58,7 @@ class Mailing
             $data['id'] ?? 0,
             $data['name'] ?? '',
             $data['content'] ?? '',
+            $data['contentHtml'] ?? '',
             $data['type'] ?? 'mail',
             $data['author'] ?? 0,
             $data['authorName'] ?? '',
@@ -77,6 +81,7 @@ class Mailing
             $data['id'] ?? 0,
             $data['name'] ?? '',
             $data['content'] ?? '',
+            $data['content_html'] ?? '',
             $data['type'] ?? 'mail',
             $data['author'] ?? 0,
             $data['authorName'] ?? '',
@@ -142,6 +147,22 @@ class Mailing
     public function setContent(string $content): void
     {
         $this->content = $content;
+    }
+
+    /**
+     * @return string
+     */
+    public function getContentHtml(): string
+    {
+        return $this->contentHtml;
+    }
+
+    /**
+     * @param string $contentHtml
+     */
+    public function setContentHtml(string $contentHtml): void
+    {
+        $this->contentHtml = $contentHtml;
     }
 
     /**

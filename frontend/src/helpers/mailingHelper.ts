@@ -6,13 +6,14 @@ export const mailingTypes: ISelector[] = [
     {key: 'notification', text: 'Уведомление'}
 ]
 
-export const getMailingTypeText = (key: string) => {
+export const getMailingTypeText = (key: string): string => {
     const find = mailingTypes.find((item: ISelector) => item.key === key)
     return find ? find.text : ''
 }
 
-export const getMailingStatusText = (status: number) => {
+export const getMailingStatusText = (status: number): string => {
     switch (status) {
+        case -1: return 'Ошибка'
         case 1: return 'Запущен'
         case 2: return 'Завершен'
         default: return 'Остановлен'

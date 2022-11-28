@@ -181,8 +181,9 @@ $Klein->respond('POST', '/api/v1/paymentResult', [new PaymentController(), 'proc
 // Mailing Routes
 $Klein->respond('POST', '/api/v1/mailing', [new MailingController(), 'createItem']);
 $Klein->respond('PUT', '/api/v1/mailing/[:id]', [new MailingController(), 'updateItem']);
-$Klein->respond('GET', '/api/v1/mailing/[:id]', [new MailingController(), 'fetchItemById']);
+$Klein->respond('GET', '/api/v1/mailing/[:id]/info', [new MailingController(), 'fetchItemById']);
 $Klein->respond('GET', '/api/v1/mailing', [new MailingController(), 'fetchList']);
+$Klein->respond('GET', '/api/v1/mailing/send', [new MailingController(), 'sendMailing']);
 $Klein->respond('DELETE', '/api/v1/mailing/[:id]', [new MailingController(), 'deleteItem']);
 $Klein->respond('DELETE', '/api/v1/mailing/[:mailingId]/[:userType]/[:userId]', [new MailingController(), 'deleteRecipient']);
 

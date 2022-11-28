@@ -97,6 +97,7 @@ class MailingController extends Controller
         $payload = array(
             'name' => htmlentities(stripcslashes(strip_tags($data->name))),
             'content' => htmlentities(stripcslashes(strip_tags($data->content))),
+            'contentHtml' => htmlentities(stripcslashes(strip_tags($data->contentHtml))),
             'type' => htmlentities(stripcslashes(strip_tags($data->type))),
             'author' => (int)htmlentities(stripcslashes(strip_tags($data->author))),
             'active' => (int)htmlentities(stripcslashes(strip_tags($data->active))),
@@ -152,6 +153,7 @@ class MailingController extends Controller
             'id' => $request->id,
             'name' => htmlentities(stripcslashes(strip_tags($data->name))),
             'content' => htmlentities(stripcslashes(strip_tags($data->content))),
+            'contentHtml' => stripcslashes($data->contentHtml),
             'type' => htmlentities(stripcslashes(strip_tags($data->type))),
             'author' => (int)htmlentities(stripcslashes(strip_tags($data->author))),
             'authorName' => htmlentities(stripcslashes(strip_tags($data->authorName))),
@@ -238,6 +240,30 @@ class MailingController extends Controller
                 'userType' => $request->userType
             ]);
             $response->code(400)->json('Ошибка удаления получателя рассылки. Повторите попытку позже.');
+
+            return;
+        } catch (Exception $e) {
+            LogModel::error($e->getMessage());
+            $response->code(500)->json($e->getMessage());
+
+            return;
+        }
+    }
+
+    /**
+     * Запуск рассылки
+     *
+     * @param mixed $request Содержит объект запроса
+     * @param mixed $response Содержит объект ответа от маршрутизатора
+     * @return void
+     */
+    public function sendMailing($request, $response)
+    {
+        try {
+            $mailingService = new MailingService($this->settings);
+            $mailingService->runSendMailing();
+
+            $response->code(200)->json('');
 
             return;
         } catch (Exception $e) {
