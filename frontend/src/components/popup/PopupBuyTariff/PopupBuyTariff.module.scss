@@ -1,0 +1,58 @@
+.PopupBuyTariff {
+    width: 700px;
+    height: 100%;
+
+    .content {
+        width: 100%;
+        height: 100%;
+    }
+
+    .blockContent {
+        padding: 15px;
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        overflow-x: hidden;
+    }
+
+    .field {
+        width: 100%;
+        position: relative;
+        display: flex;
+
+        + .field {
+            margin-top: 30px;
+        }
+
+        > div:first-child {
+            width: 110px;
+            flex-shrink: 0;
+        }
+
+        > div:last-child {
+            flex-grow: 1;
+        }
+
+        &.fieldWrap {
+            flex-wrap: wrap;
+        }
+    }
+}
+
+@media (max-width: 768px) {
+    .PopupBuyTariff {
+        width: 500px;
+    }
+}
+
+@media (max-width: 480px) {
+    .PopupBuyTariff {
+        width: 350px;
+
+        .field {
+            + .field {
+                margin-top: 15px;
+            }
+        }
+    }
+}

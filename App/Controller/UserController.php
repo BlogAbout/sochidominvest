@@ -80,7 +80,9 @@ class UserController extends Controller
             'lastActive' => date('Y-m-d H:i:s'),
             'active' => 1,
             'role' => 'subscriber',
-            'settings' => '{"notifyNewAction":1,"soundAlert":1,"pushNotify":1,"notifyEdit":1,"notifyNewItem":1,"pushMessenger":1,"sendEmail":1}'
+            'settings' => '{"notifyNewAction":1,"soundAlert":1,"pushNotify":1,"notifyEdit":1,"notifyNewItem":1,"pushMessenger":1,"sendEmail":1}',
+            'tariff' => 'free',
+            'tariffExpired' => date('Y-m-d H:i:s')
         );
 
         try {
@@ -389,7 +391,9 @@ class UserController extends Controller
             'role' => htmlspecialchars(stripcslashes(strip_tags($data->role))),
             'avatarId' => $data->avatarId ? (int)htmlentities(stripcslashes(strip_tags($data->avatarId))) : null,
             'settings' => '{"notifyNewAction":1,"soundAlert":1,"pushNotify":1,"notifyEdit":1,"notifyNewItem":1,"pushMessenger":1,"sendEmail":1}',
-            'post' => $data->post ? (int)htmlentities(stripcslashes(strip_tags($data->post))) : null
+            'post' => $data->post ? (int)htmlentities(stripcslashes(strip_tags($data->post))) : null,
+            'tariff' => 'free',
+            'tariffExpired' => date('Y-m-d H:i:s')
         );
 
         try {
@@ -484,7 +488,9 @@ class UserController extends Controller
             'role' => htmlspecialchars(stripcslashes(strip_tags($data->role))),
             'avatarId' => $data->avatarId ? (int)htmlentities(stripcslashes(strip_tags($data->avatarId))) : null,
             'settings' => $data->settings ? json_encode($data->settings) : '',
-            'post' => $data->post ? (int)htmlentities(stripcslashes(strip_tags($data->post))) : null
+            'post' => $data->post ? (int)htmlentities(stripcslashes(strip_tags($data->post))) : null,
+            'tariff' => htmlspecialchars(stripcslashes(strip_tags($data->tariff))),
+            'tariffExpired' => htmlspecialchars(stripcslashes(strip_tags($data->tariffExpired)))
         );
 
         if ($data->password) {

@@ -19,7 +19,7 @@
         justify-content: space-between;
 
         .item {
-            width: 350px;
+            width: 450px;
             margin-bottom: 30px;
             background-color: #fff;
             border: 1px solid #075ea5;
@@ -52,11 +52,16 @@
                 margin-bottom: 20px;
 
                 ul {
-                    padding-left: 15px;
+                    list-style: none;
 
                     li {
-                        margin-bottom: 10px;
                         line-height: 16px;
+
+                        + li {
+                            margin-top: 15px;
+                            padding-top: 15px;
+                            border-top: 1px solid #075ea5;
+                        }
                     }
                 }
             }

@@ -14,6 +14,8 @@ export interface IUser {
     avatar?: string | null
     post?: number | null
     postName?: string | null
+    tariff?: string
+    tariffExpired?: string | null
 }
 
 export interface IUserSetting {

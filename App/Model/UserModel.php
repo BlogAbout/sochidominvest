@@ -206,10 +206,10 @@ class UserModel extends Model
         $sql = "
             INSERT INTO `sdi_user`
                 (first_name, email, phone, password, date_created, date_update, last_active, active, role, id_avatar,
-                    settings, post)
+                    settings, post, tariff, tariff_expired)
             VALUES
                 (:firstName, :email, :phone, :password, :dateCreated, :dateUpdate, :lastActive, :active, :role, :avatarId,
-                    :settings, :post)
+                    :settings, :post, :tariff, :tariffExpired)
         ";
 
         parent::query($sql);
@@ -226,6 +226,8 @@ class UserModel extends Model
         parent::bindParams('avatarId', $payload['avatarId']);
         parent::bindParams('settings', $payload['settings']);
         parent::bindParams('post', $payload['post']);
+        parent::bindParams('tariff', $payload['tariff']);
+        parent::bindParams('tariffExpired', $payload['tariffExpired']);
 
         $user = parent::execute();
 
@@ -273,7 +275,9 @@ class UserModel extends Model
                     role = :role,
                     id_avatar = :avatarId,
                     settings = :settings,
-                    post = :post
+                    post = :post,
+                    tariff = :tariff,
+                    tariff_expired = :tariffExpired
                 WHERE id = :id
             ";
         } else {
@@ -289,7 +293,9 @@ class UserModel extends Model
                     role = :role,
                     id_avatar = :avatarId,
                     settings = :settings,
-                    post = :post
+                    post = :post,
+                    tariff = :tariff,
+                    tariff_expired = :tariffExpired
                 WHERE id = :id
             ";
         }
@@ -307,6 +313,8 @@ class UserModel extends Model
         parent::bindParams('avatarId', $payload['avatarId']);
         parent::bindParams('settings', $payload['settings']);
         parent::bindParams('post', $payload['post']);
+        parent::bindParams('tariff', $payload['tariff']);
+        parent::bindParams('tariffExpired', $payload['tariffExpired']);
 
         if ($payload['password'] && $payload['password'] !== '') {
             parent::bindParams('password', $payload['password']);
@@ -385,7 +393,9 @@ class UserModel extends Model
             'avatar' => $data['avatar'],
             'settings' => $data['settings'] ? json_decode($data['settings']) : null,
             'post' => (int)$data['post'],
-            'postName' => $data['postName']
+            'postName' => $data['postName'],
+            'tariff' => $data['tariff'],
+            'tariffExpired' => $data['tariff_expired']
         ];
     }
 }

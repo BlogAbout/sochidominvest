@@ -25,7 +25,6 @@ const DesktopPagePanel: React.FC = () => {
 
     const [isUpdate, setIsUpdate] = useState(true)
     const [userInfo, setUserInfo] = useState<IUser>({} as IUser)
-    const [tariffs, setTariffs] = useState(null)
     const [tickets, setTickets] = useState<IFeed[]>([])
     const [deals, setDeals] = useState([])
     const [agents, setAgents] = useState([])
@@ -139,7 +138,7 @@ const DesktopPagePanel: React.FC = () => {
                     <div className={classes.row}>
                         <div className={classes.label}>Текущий тариф:</div>
                         <div className={classes.param}>
-                            Базовый&nbsp;
+                            Бесплатно&nbsp;
                             (<span className={classes.link}
                                    onClick={() => navigate('/panel/tariff/')}>изменить</span>)
                         </div>

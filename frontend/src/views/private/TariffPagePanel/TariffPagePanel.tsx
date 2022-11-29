@@ -1,11 +1,51 @@
-import React from 'react'
+import React, {useEffect, useState} from 'react'
+import {tariffs} from '../../../helpers/tariffHelper'
+import {useTypedSelector} from '../../../hooks/useTypedSelector'
+import {numberWithSpaces} from '../../../helpers/numberHelper'
+import UserService from '../../../api/UserService'
+import {ITariff} from '../../../@types/ITariff'
+import {IUser} from '../../../@types/IUser'
+import PageInfo from '../../../components/ui/PageInfo/PageInfo'
+import Title from '../../../components/ui/Title/Title'
+import BlockingElement from '../../../components/ui/BlockingElement/BlockingElement'
+import Button from '../../../components/form/Button/Button'
+import openPopupBuyTariff from '../../../components/popup/PopupBuyTariff/PopupBuyTariff'
 import classes from './TariffPagePanel.module.scss'
-import PageInfo from "../../../components/ui/PageInfo/PageInfo";
-import Title from "../../../components/ui/Title/Title";
-import BlockingElement from "../../../components/ui/BlockingElement/BlockingElement";
-import Button from "../../../components/form/Button/Button";
 
 const TariffPagePanel: React.FC = () => {
+    const [userInfo, setUserInfo] = useState<IUser>({} as IUser)
+    const [fetchingUser, setFetchingUser] = useState(false)
+
+    const {userId} = useTypedSelector(state => state.userReducer)
+
+    useEffect(() => {
+        if (userId) {
+            setFetchingUser(true)
+
+            UserService.fetchUserById(userId)
+                .then((response: any) => {
+                    setUserInfo(response.data)
+                })
+                .catch((error: any) => {
+                    console.error('Ошибка загрузки данных пользователя', error)
+                })
+                .finally(() => {
+                    setFetchingUser(false)
+                })
+        }
+    })
+
+    const onBuyTariffHandler = (tariff: ITariff) => {
+        if (userInfo.tariff === tariff.key) {
+            return
+        }
+
+        openPopupBuyTariff(document.body, {
+            user: userInfo,
+            tariff: tariff
+        })
+    }
+
     return (
         <div className={classes.TariffPagePanel}>
             <PageInfo title='Тарифы'/>
@@ -14,70 +54,30 @@ const TariffPagePanel: React.FC = () => {
                 <Title type={1}>Тарифы</Title>
 
                 <BlockingElement fetching={false} className={classes.list}>
-                    <div className={classes.item}>
-                        <div className={classes.head}>
-                            <h3>Базовый</h3>
-                            <div className={classes.cost}>3 000 руб.</div>
-                        </div>
-                        <div className={classes.advanced}>
-                            <ul>
-                                <li>3 активных объекта недвижимости</li>
-                                <li>5 активных квартир в шахматке к каждому объекту недвижимости</li>
-                                <li>300 уникальных просмотров на участие в публичных просмотрах</li>
-                            </ul>
-                        </div>
-                        <div className={classes.buttons}>
-                            <Button type='save'
-                                    onClick={() => console.log('base')}
-                                    disabled={true}
-                                    title='Выбран'
-                            >Выбран</Button>
-                        </div>
-                    </div>
+                    {tariffs.map((tariff: ITariff) => {
+                        return (
+                            <div key={tariff.key} className={classes.item}>
+                                <div className={classes.head}>
+                                    <h3>{tariff.name}</h3>
+                                    <div className={classes.cost}>{numberWithSpaces(tariff.cost)} руб.</div>
+                                </div>
 
-                    <div className={classes.item}>
-                        <div className={classes.head}>
-                            <h3>Бизнес</h3>
-                            <div className={classes.cost}>5 000 руб.</div>
-                        </div>
-                        <div className={classes.advanced}>
-                            <ul>
-                                <li>5 активных объекта недвижимости</li>
-                                <li>8 активных квартир в шахматке к каждому объекту недвижимости</li>
-                                <li>500 уникальных просмотров на участие в публичных просмотрах</li>
-                                <li>Доступ к конструктору документов</li>
-                            </ul>
-                        </div>
-                        <div className={classes.buttons}>
-                            <Button type='save'
-                                    onClick={() => console.log('business')}
-                                    title='Выбрать'
-                            >Выбрать</Button>
-                        </div>
-                    </div>
+                                <div className={classes.advanced}>
+                                    <ul>{tariff.advantages.map((advantage: string, index: number) => {
+                                        return <li key={index}>{advantage}</li>
+                                    })}</ul>
+                                </div>
 
-                    <div className={classes.item}>
-                        <div className={classes.head}>
-                            <h3>Эффективность Плюс</h3>
-                            <div className={classes.cost}>10 000 руб.</div>
-                        </div>
-                        <div className={classes.advanced}>
-                            <ul>
-                                <li>20 активных объекта недвижимости</li>
-                                <li>Нелимитированное количество активных квартир в шахматке к каждому объекту недвижимости</li>
-                                <li>Нелимитированное количество уникальных просмотров на участие в публичных просмотрах</li>
-                                <li>Доступ к конструктору документов</li>
-                                <li>Прямая связь с агентствами и застройщиками</li>
-                                <li>Помощь наших менеджеров в подборе и организации сделок</li>
-                            </ul>
-                        </div>
-                        <div className={classes.buttons}>
-                            <Button type='save'
-                                    onClick={() => console.log('effective')}
-                                    title='Выбрать'
-                            >Выбрать</Button>
-                        </div>
-                    </div>
+                                <div className={classes.buttons}>
+                                    <Button type='save'
+                                            onClick={() => onBuyTariffHandler(tariff)}
+                                            disabled={userInfo.tariff === tariff.key}
+                                            title={userInfo.tariff === tariff.key ? 'Выбран' : 'Выбрать'}
+                                    >{userInfo.tariff === tariff.key ? 'Выбран' : 'Выбрать'}</Button>
+                                </div>
+                            </div>
+                        )
+                    })}
                 </BlockingElement>
             </div>
         </div>
