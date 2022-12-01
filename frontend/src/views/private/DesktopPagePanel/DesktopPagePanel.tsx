@@ -10,6 +10,7 @@ import FeedService from '../../../api/FeedService'
 import {IUser} from '../../../@types/IUser'
 import {IFeed} from '../../../@types/IFeed'
 import {IArticle} from '../../../@types/IArticle'
+import {IDeveloper} from '../../../@types/IDeveloper'
 import PageInfo from '../../../components/ui/PageInfo/PageInfo'
 import Title from '../../../components/ui/Title/Title'
 import BlockingElement from '../../../components/ui/BlockingElement/BlockingElement'
@@ -17,6 +18,9 @@ import Empty from '../../../components/Empty/Empty'
 import Avatar from '../../../components/ui/Avatar/Avatar'
 import openPopupSupportInfo from '../../../components/popup/PopupSupportInfo/PopupSupportInfo'
 import classes from './DesktopPagePanel.module.scss'
+import DeveloperService from "../../../api/DeveloperService";
+import Button from "../../../components/form/Button/Button";
+import openPopupDeveloperCreate from "../../../components/popup/PopupDeveloperCreate/PopupDeveloperCreate";
 
 const cx = classNames.bind(classes)
 
@@ -28,7 +32,7 @@ const DesktopPagePanel: React.FC = () => {
     const [tickets, setTickets] = useState<IFeed[]>([])
     const [deals, setDeals] = useState([])
     const [agents, setAgents] = useState([])
-    const [developers, setDevelopers] = useState([])
+    const [developers, setDevelopers] = useState<IDeveloper[]>([])
     const [filterArticles, setFilterArticles] = useState<IArticle[]>([])
 
     const [fetchingUser, setFetchingUser] = useState(false)
@@ -49,7 +53,6 @@ const DesktopPagePanel: React.FC = () => {
 
         if (userId && isUpdate) {
             setFetchingUser(true)
-
             UserService.fetchUserById(userId)
                 .then((response: any) => {
                     setUserInfo(response.data)
@@ -62,7 +65,6 @@ const DesktopPagePanel: React.FC = () => {
                 })
 
             setFetchingTickets(true)
-
             FeedService.fetchFeeds({active: [1], author: [userId]})
                 .then((response: any) => {
                     setTickets(response.data)
@@ -73,6 +75,8 @@ const DesktopPagePanel: React.FC = () => {
                 .finally(() => {
                     setFetchingTickets(false)
                 })
+
+            loadDevelopersHandler()
         }
 
         if (isUpdate) {
@@ -89,6 +93,22 @@ const DesktopPagePanel: React.FC = () => {
             setFilterArticles(articles.filter((article: IArticle) => article.active === 1))
         }
     }, [articles])
+
+    // Загрузка данных о застройщиках
+    const loadDevelopersHandler = () => {
+        setFetchingDevelopers(true)
+
+        DeveloperService.fetchDevelopers({active: [0, 1], author: [userId]})
+            .then((response: any) => {
+                setDevelopers(response.data)
+            })
+            .catch((error: any) => {
+                console.error('Ошибка загрузки застройщиков пользователя', error)
+            })
+            .finally(() => {
+                setFetchingDevelopers(false)
+            })
+    }
 
     const renderUserInfo = () => {
         return (
@@ -158,7 +178,8 @@ const DesktopPagePanel: React.FC = () => {
                 <Title type={2}>Последние события</Title>
 
                 <BlockingElement fetching={fetchingArticles} className={classes.list}>
-                    {filterArticles && filterArticles.length ? filterArticles.map((article: IArticle) => {
+                    {filterArticles && filterArticles.length ?
+                        filterArticles.map((article: IArticle) => {
                             return (
                                 <div key={article.id}
                                      className={classes.block}
@@ -193,7 +214,8 @@ const DesktopPagePanel: React.FC = () => {
                 <Title type={2}>Активные тикеты</Title>
 
                 <BlockingElement fetching={fetchingTickets} className={classes.list}>
-                    {tickets && tickets.length ? tickets.map((ticket: IFeed) => {
+                    {tickets && tickets.length ?
+                        tickets.map((ticket: IFeed) => {
                             return (
                                 <div key={ticket.id}
                                      className={classes.block}
@@ -225,7 +247,8 @@ const DesktopPagePanel: React.FC = () => {
                 <Title type={2}>Сделки</Title>
 
                 <BlockingElement fetching={fetchingDeals} className={classes.list}>
-                    {deals && deals.length ? deals.map((deal: any, index: number) => {
+                    {deals && deals.length ?
+                        deals.map((deal: any, index: number) => {
                             return (
                                 <div key={index}>
 
@@ -245,7 +268,8 @@ const DesktopPagePanel: React.FC = () => {
                 <Title type={2}>Мои агентства</Title>
 
                 <BlockingElement fetching={fetchingAgents} className={classes.list}>
-                    {agents && agents.length ? agents.map((agent: any, index: number) => {
+                    {agents && agents.length ?
+                        agents.map((agent: any, index: number) => {
                             return (
                                 <div key={index}>
 
@@ -262,13 +286,34 @@ const DesktopPagePanel: React.FC = () => {
     const renderDevelopersInfo = () => {
         return (
             <div className={cx({'col': true, 'col-2': true})}>
-                <Title type={2}>Мои застройщики</Title>
+                <Title type={2}>
+                    <span>Мои застройщики</span>
+
+                    <Button type='apply'
+                            icon='plus'
+                            onClick={(e: React.MouseEvent) => {
+                                openPopupDeveloperCreate(document.body, {
+                                    onSave: () => loadDevelopersHandler()
+                                })
+                            }}
+                    >Добавить</Button>
+                </Title>
 
                 <BlockingElement fetching={fetchingDevelopers} className={classes.list}>
-                    {developers && developers.length ? developers.map((developer: any, index: number) => {
+                    {developers && developers.length ?
+                        developers.map((developer: IDeveloper, index: number) => {
                             return (
-                                <div key={index}>
+                                <div key={developer.id}
+                                     className={classes.block}
+                                     onClick={() => {
 
+                                     }}
+                                >
+                                    <div className={classes.name}>{developer.name}</div>
+                                    <div className={classes.date} title='Дата публикации'>
+                                        <FontAwesomeIcon icon='calendar'/>
+                                        <span>{getFormatDate(developer.dateCreated)}</span>
+                                    </div>
                                 </div>
                             )
                         })

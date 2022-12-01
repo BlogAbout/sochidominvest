@@ -42,7 +42,10 @@ const TariffPagePanel: React.FC = () => {
 
         openPopupBuyTariff(document.body, {
             user: userInfo,
-            tariff: tariff
+            tariff: tariff,
+            onSave: (user: IUser) => {
+                setUserInfo(user)
+            }
         })
     }
 
@@ -53,7 +56,7 @@ const TariffPagePanel: React.FC = () => {
             <div className={classes.Content}>
                 <Title type={1}>Тарифы</Title>
 
-                <BlockingElement fetching={false} className={classes.list}>
+                <BlockingElement fetching={fetchingUser} className={classes.list}>
                     {tariffs.map((tariff: ITariff) => {
                         return (
                             <div key={tariff.key} className={classes.item}>
@@ -71,9 +74,8 @@ const TariffPagePanel: React.FC = () => {
                                 <div className={classes.buttons}>
                                     <Button type='save'
                                             onClick={() => onBuyTariffHandler(tariff)}
-                                            disabled={userInfo.tariff === tariff.key}
-                                            title={userInfo.tariff === tariff.key ? 'Выбран' : 'Выбрать'}
-                                    >{userInfo.tariff === tariff.key ? 'Выбран' : 'Выбрать'}</Button>
+                                            title={userInfo.tariff === tariff.key ? 'Продлить' : 'Выбрать'}
+                                    >{userInfo.tariff === tariff.key ? 'Продлить' : 'Выбрать'}</Button>
                                 </div>
                             </div>
                         )

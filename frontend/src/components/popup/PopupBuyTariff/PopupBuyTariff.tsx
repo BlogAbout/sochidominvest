@@ -1,10 +1,12 @@
 import React, {useEffect, useState} from 'react'
+import moment from 'moment'
 import withStore from '../../../hoc/withStore'
 import {PopupDisplayOptions, PopupProps} from '../../../@types/IPopup'
 import {IUser} from '../../../@types/IUser'
 import {ISelector} from '../../../@types/ISelector'
 import {tariffs} from '../../../helpers/tariffHelper'
 import {ITariff} from '../../../@types/ITariff'
+import UserService from '../../../api/UserService'
 import {getPopupContainer, openPopup, removePopup} from '../../../helpers/popupHelper'
 import showBackgroundBlock from '../../ui/BackgroundBlock/BackgroundBlock'
 import {numberWithSpaces} from '../../../helpers/numberHelper'
@@ -15,20 +17,26 @@ import Title from '../../ui/Title/Title'
 import Label from '../../form/Label/Label'
 import ComboBox from '../../ComboBox/ComboBox'
 import NumberBox from '../../NumberBox/NumberBox'
+import openPopupAlert from '../../PopupAlert/PopupAlert'
 import classes from './PopupBuyTariff.module.scss'
 
 interface Props extends PopupProps {
     user: IUser
     tariff: ITariff
+
+    onSave(user: IUser): void
 }
 
 const defaultProps: Props = {
     user: {} as IUser,
-    tariff: {} as ITariff
+    tariff: {} as ITariff,
+    onSave: (user: IUser) => {
+        console.info('PopupBuyTariff onSave', user)
+    }
 }
 
 const PopupBuyTariff: React.FC<Props> = (props) => {
-    const [user, setMailing] = useState<IUser>(props.user || {
+    const [user, setUser] = useState<IUser>(props.user || {
         id: null,
         email: '',
         phone: '',
@@ -41,6 +49,7 @@ const PopupBuyTariff: React.FC<Props> = (props) => {
     })
     const [currentTariff, setCurrentTariff] = useState(props.tariff.key || 'base')
     const [months, setMonths] = useState(1)
+    const [total, setTotal] = useState(0)
 
     const [fetching, setFetching] = useState(false)
 
@@ -50,6 +59,14 @@ const PopupBuyTariff: React.FC<Props> = (props) => {
         }
     }, [props.blockId])
 
+    useEffect(() => {
+        const findTariff = tariffs.find((tariff: ITariff) => tariff.key === currentTariff)
+
+        if (findTariff) {
+            setTotal(findTariff.cost * months)
+        }
+    }, [currentTariff])
+
     // Закрытие popup
     const close = () => {
         removePopup(props.id ? props.id : '')
@@ -57,7 +74,30 @@ const PopupBuyTariff: React.FC<Props> = (props) => {
 
     // Сохранение изменений
     const saveHandler = () => {
+        if (!user.id) {
+            return
+        }
+
         // Todo: Реализовать псевдооплату
+        setFetching(true)
+
+        const dateExpiration = moment().add(months, 'months')
+
+        const updateUser: IUser = JSON.parse(JSON.stringify(user))
+        updateUser.tariff = currentTariff
+        updateUser.tariffExpired = dateExpiration.format('YYYY-MM-DD HH:mm:ss')
+
+        UserService.saveUser(updateUser)
+            .then((response: any) => {
+                setUser(response.data)
+            })
+            .catch((error: any) => {
+                console.error('Произошла ошибка оплаты тарифа.', error)
+                openPopupAlert(document.body, {
+                    text: 'Произошла ошибка оплаты тарифа. Попробуйте позже.'
+                })
+            })
+            .finally(() => setFetching(false))
     }
 
     const getTariffsList = () => {
@@ -98,6 +138,20 @@ const PopupBuyTariff: React.FC<Props> = (props) => {
                                    onChange={(e: React.ChangeEvent<HTMLInputElement>, value: number) => setMonths(value)}
                                    placeHolder='Укажите количество месяцев'
                                    styleType='minimal'
+                        />
+                    </div>
+
+                    <div className={classes.field}>
+                        <Label text='Итого'/>
+
+                        <NumberBox value={total || ''}
+                                   min={0}
+                                   step={1}
+                                   max={99999999999}
+                                   onChange={(e: React.ChangeEvent<HTMLInputElement>, value: number) => setTotal(value)}
+                                   placeHolder='Итоговая сумма к оплате'
+                                   styleType='minimal'
+                                   readOnly
                         />
                     </div>
                 </div>
