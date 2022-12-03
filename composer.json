@@ -15,6 +15,7 @@
             "App/Controller",
             "App/Middleware",
             "App/Model",
+            "App/modules/Agent",
             "App/modules/Booking",
             "App/modules/BusinessProcess",
             "App/modules/Mailing",

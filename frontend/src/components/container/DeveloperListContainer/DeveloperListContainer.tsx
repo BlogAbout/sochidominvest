@@ -24,16 +24,16 @@ const defaultProps: Props = {
     fetching: false,
     layout: 'list',
     onClick: (developer: IDeveloper) => {
-        console.info('DeveloperListContainer onClick', developer)
+        console.info('AgentListContainer onClick', developer)
     },
     onEdit: (developer: IDeveloper) => {
-        console.info('DeveloperListContainer onEdit', developer)
+        console.info('AgentListContainer onEdit', developer)
     },
     onRemove: (developer: IDeveloper) => {
-        console.info('DeveloperListContainer onRemove', developer)
+        console.info('AgentListContainer onRemove', developer)
     },
     onContextMenu: (e: React.MouseEvent, developer: IDeveloper) => {
-        console.info('DeveloperListContainer onContextMenu', e, developer)
+        console.info('AgentListContainer onContextMenu', e, developer)
     }
 }
 

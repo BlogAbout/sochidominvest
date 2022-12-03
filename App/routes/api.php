@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Agent\AgentController;
 use App\Booking\BookingController;
 use App\BusinessProcess\BusinessProcessController;
 use App\BusinessProcess\PaymentController;
@@ -186,6 +187,13 @@ $Klein->respond('GET', '/api/v1/mailing', [new MailingController(), 'fetchList']
 $Klein->respond('GET', '/api/v1/mailing/send', [new MailingController(), 'sendMailing']);
 $Klein->respond('DELETE', '/api/v1/mailing/[:id]', [new MailingController(), 'deleteItem']);
 $Klein->respond('DELETE', '/api/v1/mailing/[:mailingId]/[:userType]/[:userId]', [new MailingController(), 'deleteRecipient']);
+
+// Agent Routes
+$Klein->respond('POST', '/api/v1/agent', [new AgentController(), 'createItem']);
+$Klein->respond('PUT', '/api/v1/agent/[:id]', [new AgentController(), 'updateItem']);
+$Klein->respond('GET', '/api/v1/agent/[:id]', [new AgentController(), 'fetchItemById']);
+$Klein->respond('GET', '/api/v1/agent', [new AgentController(), 'fetchList']);
+$Klein->respond('DELETE', '/api/v1/agent/[:id]', [new AgentController(), 'deleteItem']);
 
 // Dispatch all routes
 $Klein->dispatch();

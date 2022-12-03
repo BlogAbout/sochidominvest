@@ -22,16 +22,16 @@ interface Props {
 const defaultProps: Props = {
     developer: {} as IDeveloper,
     onClick: (developer: IDeveloper) => {
-        console.info('DeveloperItem onClick', developer)
+        console.info('AgentItem onClick', developer)
     },
     onEdit: (developer: IDeveloper) => {
-        console.info('DeveloperItem onEdit', developer)
+        console.info('AgentItem onEdit', developer)
     },
     onRemove: (developer: IDeveloper) => {
-        console.info('DeveloperItem onRemove', developer)
+        console.info('AgentItem onRemove', developer)
     },
     onContextMenu: (e: React.MouseEvent, developer: IDeveloper) => {
-        console.info('DeveloperItem onContextMenu', e, developer)
+        console.info('AgentItem onContextMenu', e, developer)
     }
 }
 

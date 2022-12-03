@@ -24,6 +24,9 @@ import CrmPagePanel from '../../../views/private/CrmPagePanel/CrmPagePanel'
 import DeveloperItemPagePanel
     from '../../../views/private/CrmPagePanel/components/DeveloperItemPagePanel/DeveloperItemPagePanel'
 import DeveloperPagePanel from '../../../views/private/CrmPagePanel/components/DeveloperPagePanel/DeveloperPagePanel'
+import AgentItemPagePanel
+    from '../../../views/private/CrmPagePanel/components/AgentItemPagePanel/AgentItemPagePanel'
+import AgentPagePanel from '../../../views/private/CrmPagePanel/components/AgentPagePanel/AgentPagePanel'
 import DocumentPagePanel from '../../../views/private/DocumentPagePanel/DocumentPagePanel'
 import ReportPanel from '../../../views/private/ReportPanel/ReportPanel'
 import ToolPanel from '../../../views/private/ToolPanel/ToolPanel'
@@ -131,6 +134,8 @@ const AppRouter: React.FC = () => {
                                 <Route path={RouteNames.CRM} element={<CrmPagePanel/>}/>
                                 <Route path={RouteNames.CRM_DEVELOPER_ITEM} element={<DeveloperItemPagePanel/>}/>
                                 <Route path={RouteNames.CRM_DEVELOPER} element={<DeveloperPagePanel/>}/>
+                                <Route path={RouteNames.CRM_AGENT_ITEM} element={<AgentItemPagePanel/>}/>
+                                <Route path={RouteNames.CRM_AGENT} element={<AgentPagePanel/>}/>
                                 <Route path={RouteNames.CRM_POST} element={<PostPagePanel/>}/>
                                 <Route path={RouteNames.CRM_BP} element={<BusinessProcessPanel/>}/>
                                 <Route path={RouteNames.CRM_BOOKING} element={<BookingPagePanel/>}/>

@@ -23,6 +23,8 @@ export enum RouteNames {
     CRM = '/panel/crm',
     CRM_DEVELOPER = '/panel/crm/developer',
     CRM_DEVELOPER_ITEM = '/panel/crm/developer/:id',
+    CRM_AGENT = '/panel/crm/agent',
+    CRM_AGENT_ITEM = '/panel/crm/agent/:id',
     CRM_POST = '/panel/crm/post',
     CRM_BP = '/panel/crm/bp',
     CRM_BOOKING = '/panel/crm/booking',

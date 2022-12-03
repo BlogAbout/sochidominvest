@@ -69,7 +69,7 @@ class Agent
             $data['type'] ?? 'agent',
             $data['dateCreated'] ?? '',
             $data['dateUpdate'] ?? '',
-            $data['authorName'] ?? '',
+            $data['active'] ?? 1,
             $data['avatarId'] ?? 0,
             $data['avatar'] ?? '',
             $data['buildings'] ?? []
@@ -94,7 +94,7 @@ class Agent
             $data['type'] ?? 'agent',
             $data['date_created'] ?? '',
             $data['date_update'] ?? '',
-            $data['authorName'] ?? '',
+            $data['active'] ?? 1,
             $data['id_avatar'] ?? 0,
             $data['avatar'] ?? '',
             $data['buildings'] ?? []

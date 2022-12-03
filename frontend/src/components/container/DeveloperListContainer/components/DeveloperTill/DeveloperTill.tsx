@@ -21,16 +21,16 @@ const defaultProps: Props = {
     developers: [],
     fetching: false,
     onClick: (developer: IDeveloper) => {
-        console.info('DeveloperTill onClick', developer)
+        console.info('AgentTill onClick', developer)
     },
     onEdit: (developer: IDeveloper) => {
-        console.info('DeveloperTill onEdit', developer)
+        console.info('AgentTill onEdit', developer)
     },
     onRemove: (developer: IDeveloper) => {
-        console.info('DeveloperTill onRemove', developer)
+        console.info('AgentTill onRemove', developer)
     },
     onContextMenu: (e: React.MouseEvent, developer: IDeveloper) => {
-        console.info('DeveloperTill onContextMenu', e, developer)
+        console.info('AgentTill onContextMenu', e, developer)
     }
 }
 

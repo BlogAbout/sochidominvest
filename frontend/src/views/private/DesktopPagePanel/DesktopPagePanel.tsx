@@ -7,20 +7,23 @@ import {useActions} from '../../../hooks/useActions'
 import {getFormatDate} from '../../../helpers/dateHelper'
 import UserService from '../../../api/UserService'
 import FeedService from '../../../api/FeedService'
+import DeveloperService from '../../../api/DeveloperService'
+import AgentService from '../../../api/AgentService'
 import {IUser} from '../../../@types/IUser'
 import {IFeed} from '../../../@types/IFeed'
 import {IArticle} from '../../../@types/IArticle'
 import {IDeveloper} from '../../../@types/IDeveloper'
+import {IAgent} from '../../../@types/IAgent'
 import PageInfo from '../../../components/ui/PageInfo/PageInfo'
 import Title from '../../../components/ui/Title/Title'
 import BlockingElement from '../../../components/ui/BlockingElement/BlockingElement'
 import Empty from '../../../components/Empty/Empty'
 import Avatar from '../../../components/ui/Avatar/Avatar'
+import Button from '../../../components/form/Button/Button'
 import openPopupSupportInfo from '../../../components/popup/PopupSupportInfo/PopupSupportInfo'
+import openPopupDeveloperCreate from '../../../components/popup/PopupDeveloperCreate/PopupDeveloperCreate'
+import openPopupAgentCreate from '../../../components/popup/PopupAgentCreate/PopupAgentCreate'
 import classes from './DesktopPagePanel.module.scss'
-import DeveloperService from "../../../api/DeveloperService";
-import Button from "../../../components/form/Button/Button";
-import openPopupDeveloperCreate from "../../../components/popup/PopupDeveloperCreate/PopupDeveloperCreate";
 
 const cx = classNames.bind(classes)
 
@@ -31,7 +34,7 @@ const DesktopPagePanel: React.FC = () => {
     const [userInfo, setUserInfo] = useState<IUser>({} as IUser)
     const [tickets, setTickets] = useState<IFeed[]>([])
     const [deals, setDeals] = useState([])
-    const [agents, setAgents] = useState([])
+    const [agents, setAgents] = useState<IAgent[]>([])
     const [developers, setDevelopers] = useState<IDeveloper[]>([])
     const [filterArticles, setFilterArticles] = useState<IArticle[]>([])
 
@@ -77,6 +80,7 @@ const DesktopPagePanel: React.FC = () => {
                 })
 
             loadDevelopersHandler()
+            loadAgentsHandler()
         }
 
         if (isUpdate) {
@@ -107,6 +111,21 @@ const DesktopPagePanel: React.FC = () => {
             })
             .finally(() => {
                 setFetchingDevelopers(false)
+            })
+    }
+
+    const loadAgentsHandler = () => {
+        setFetchingAgents(true)
+
+        AgentService.fetchAgents({active: [0, 1], author: [userId]})
+            .then((response: any) => {
+                setAgents(response.data)
+            })
+            .catch((error: any) => {
+                console.error('Ошибка загрузки агентств пользователя', error)
+            })
+            .finally(() => {
+                setFetchingAgents(false)
             })
     }
 
@@ -265,14 +284,34 @@ const DesktopPagePanel: React.FC = () => {
     const renderAgentsInfo = () => {
         return (
             <div className={cx({'col': true, 'col-2': true})}>
-                <Title type={2}>Мои агентства</Title>
+                <Title type={2}>
+                    <span>Мои агентства</span>
+
+                    <Button type='apply'
+                            icon='plus'
+                            onClick={(e: React.MouseEvent) => {
+                                openPopupAgentCreate(document.body, {
+                                    onSave: () => loadAgentsHandler()
+                                })
+                            }}
+                    >Добавить</Button>
+                </Title>
 
                 <BlockingElement fetching={fetchingAgents} className={classes.list}>
                     {agents && agents.length ?
                         agents.map((agent: any, index: number) => {
                             return (
-                                <div key={index}>
+                                <div key={agent.id}
+                                     className={classes.block}
+                                     onClick={() => {
 
+                                     }}
+                                >
+                                    <div className={classes.name}>{agent.name}</div>
+                                    <div className={classes.date} title='Дата публикации'>
+                                        <FontAwesomeIcon icon='calendar'/>
+                                        <span>{getFormatDate(agent.dateCreated)}</span>
+                                    </div>
                                 </div>
                             )
                         })
