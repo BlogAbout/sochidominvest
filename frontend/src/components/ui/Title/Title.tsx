@@ -114,7 +114,22 @@ const Title: React.FC<Props> = (props) => {
                     </h1>
                 )
             case 2:
-                return <h2>{props.children}</h2>
+                return (
+                    <h2>
+                        <span>{props.children}</span>
+
+                        {props.showAdd ?
+                            <div className={classes.interface}>
+                                <Button type='apply'
+                                        icon='plus'
+                                        onClick={(e: React.MouseEvent) => props.onAdd ? props.onAdd(e) : undefined}
+                                        className='marginLeft'
+                                >{props.addText}</Button>
+                            </div>
+                            : null
+                        }
+                    </h2>
+                )
             case 3:
                 return <h3>{props.children}</h3>
             case 4:

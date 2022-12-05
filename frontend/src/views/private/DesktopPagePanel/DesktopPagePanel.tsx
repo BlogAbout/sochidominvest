@@ -19,7 +19,6 @@ import Title from '../../../components/ui/Title/Title'
 import BlockingElement from '../../../components/ui/BlockingElement/BlockingElement'
 import Empty from '../../../components/Empty/Empty'
 import Avatar from '../../../components/ui/Avatar/Avatar'
-import Button from '../../../components/form/Button/Button'
 import openPopupSupportInfo from '../../../components/popup/PopupSupportInfo/PopupSupportInfo'
 import openPopupDeveloperCreate from '../../../components/popup/PopupDeveloperCreate/PopupDeveloperCreate'
 import openPopupAgentCreate from '../../../components/popup/PopupAgentCreate/PopupAgentCreate'
@@ -284,18 +283,14 @@ const DesktopPagePanel: React.FC = () => {
     const renderAgentsInfo = () => {
         return (
             <div className={cx({'col': true, 'col-2': true})}>
-                <Title type={2}>
-                    <span>Мои агентства</span>
-
-                    <Button type='apply'
-                            icon='plus'
-                            onClick={(e: React.MouseEvent) => {
-                                openPopupAgentCreate(document.body, {
-                                    onSave: () => loadAgentsHandler()
-                                })
-                            }}
-                    >Добавить</Button>
-                </Title>
+                <Title type={2}
+                       showAdd
+                       onAdd={() => {
+                           openPopupAgentCreate(document.body, {
+                               onSave: () => loadAgentsHandler()
+                           })
+                       }}
+                >Мои агентства</Title>
 
                 <BlockingElement fetching={fetchingAgents} className={classes.list}>
                     {agents && agents.length ?
@@ -325,18 +320,14 @@ const DesktopPagePanel: React.FC = () => {
     const renderDevelopersInfo = () => {
         return (
             <div className={cx({'col': true, 'col-2': true})}>
-                <Title type={2}>
-                    <span>Мои застройщики</span>
-
-                    <Button type='apply'
-                            icon='plus'
-                            onClick={(e: React.MouseEvent) => {
-                                openPopupDeveloperCreate(document.body, {
-                                    onSave: () => loadDevelopersHandler()
-                                })
-                            }}
-                    >Добавить</Button>
-                </Title>
+                <Title type={2}
+                       showAdd
+                       onAdd={() => {
+                           openPopupDeveloperCreate(document.body, {
+                               onSave: () => loadDevelopersHandler()
+                           })
+                       }}
+                >Мои застройщики</Title>
 
                 <BlockingElement fetching={fetchingDevelopers} className={classes.list}>
                     {developers && developers.length ?
