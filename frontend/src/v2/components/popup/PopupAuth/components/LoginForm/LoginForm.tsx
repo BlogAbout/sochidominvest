@@ -8,7 +8,7 @@ import Button from '../../../../form/Button/Button'
 import UserService from '../../../../../../api/UserService'
 import Field from '../../../../form/Field/Field'
 import Title from '../../../../ui/Title/Title'
-import classes from './LoginForm.module.scss'
+import classes from '../../PopupAuth.module.scss'
 
 interface Props {
     onChangeType(type: string): void
@@ -91,7 +91,7 @@ const LoginForm: React.FC<Props> = (props): React.ReactElement => {
     }
 
     return (
-        <div className={classes.LoginForm}>
+        <div className={classes.form}>
             <Title type='h2'>Вход в систему</Title>
 
             <Field label='E-mail'

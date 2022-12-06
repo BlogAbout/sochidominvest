@@ -8,7 +8,7 @@ import Title from '../../../../ui/Title/Title'
 import TextBox from '../../../../../../components/form/TextBox/TextBox'
 import Button from '../../../../../../components/form/Button/Button'
 import Field from '../../../../form/Field/Field'
-import classes from './RegistrationForm.module.scss'
+import classes from '../../PopupAuth.module.scss'
 
 interface Props {
     onChangeType(type: string): void
@@ -112,7 +112,7 @@ const RegistrationForm: React.FC<Props> = (props): React.ReactElement => {
     }
 
     return (
-        <div className={classes.RegistrationForm}>
+        <div className={classes.form}>
             <Title type='h2'>Регистрация</Title>
 
             <Field label='Имя'

@@ -5,7 +5,7 @@ import TextBox from '../../../../../../components/form/TextBox/TextBox'
 import Button from '../../../../../../components/form/Button/Button'
 import Field from '../../../../form/Field/Field'
 import Title from '../../../../ui/Title/Title'
-import classes from './ForgotForm.module.scss'
+import classes from '../../PopupAuth.module.scss'
 
 interface Props {
     onChangeType(type: string): void
@@ -95,7 +95,7 @@ const ForgotForm: React.FC<Props> = (props): React.ReactElement => {
 
     const renderForgotForm = () => {
         return (
-            <div className={classes.ForgotForm}>
+            <div className={classes.form}>
                 <Title type='h2'>Восстановление пароля</Title>
 
                 <Field label='E-mail'
