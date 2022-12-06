@@ -191,4 +191,23 @@ class AgentService extends Model
 
         return parent::execute();
     }
+
+    /**
+     * Отключение всех агентств для указанного пользователя
+     *
+     * @param int $userId Идентификатор пользователя
+     */
+    public static function disableAllAgentsForUser(int $userId): void
+    {
+        $sql = "
+            UPDATE `sdi_agent`
+            SET `active` = 0
+            WHERE `author` = :author AND `active` = 1
+        ";
+
+        parent::query($sql);
+        parent::bindParams('author', $userId);
+
+        parent::execute();
+    }
 }

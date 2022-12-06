@@ -200,6 +200,25 @@ class DeveloperModel extends Model
     }
 
     /**
+     * Отключение всех застройщиков для указанного пользователя
+     *
+     * @param int $userId Идентификатор пользователя
+     */
+    public static function disableAllDevelopersForUser(int $userId): void
+    {
+        $sql = "
+            UPDATE `sdi_developer`
+            SET `active` = 0
+            WHERE `author` = :author AND `active` = 1
+        ";
+
+        parent::query($sql);
+        parent::bindParams('author', $userId);
+
+        parent::execute();
+    }
+
+    /**
      * Преобразование выходящих данных в формат для frontend
      * @param array $data Массив из базы данных
      * @return array

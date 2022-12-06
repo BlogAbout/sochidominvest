@@ -742,6 +742,25 @@ class BuildingModel extends Model
     }
 
     /**
+     * Отключение всех объектов недвижимости для указанного пользователя
+     *
+     * @param int $userId Идентификатор пользователя
+     */
+    public static function disableAllBuildingsForUser(int $userId): void
+    {
+        $sql = "
+            UPDATE `sdi_building`
+            SET `active` = 0
+            WHERE `author` = :author AND `active` = 1
+        ";
+
+        parent::query($sql);
+        parent::bindParams('author', $userId);
+
+        parent::execute();
+    }
+
+    /**
      * Преобразование выходящих данных в формат для frontend
      *
      * @param array $data Массив из базы данных

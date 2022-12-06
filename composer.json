@@ -18,6 +18,7 @@
             "App/modules/Agent",
             "App/modules/Booking",
             "App/modules/BusinessProcess",
+            "App/modules/Core",
             "App/modules/Mailing",
             "App/modules/Messenger",
             "App/modules/Payment",

@@ -371,6 +371,31 @@ class UserModel extends Model
     }
 
     /**
+     * Смена тарифа для пользователя
+     *
+     * @param int $userId Идентификатор пользователя
+     * @param string $tariff Выбранный тариф
+     * @param string $dateExpired Дата окончания выбранного тарифа
+     */
+    public static function changeTariffForUser(int $userId, string $tariff, string $dateExpired): void
+    {
+        $sql = "
+            UPDATE `sdi_user`
+            SET
+                `tariff` = :tariff,
+                `tariff_expired` = :tariffExpired
+            WHERE `id` = :userId
+        ";
+
+        parent::query($sql);
+        parent::bindParams('tariff', $tariff);
+        parent::bindParams('tariffExpired', $dateExpired);
+        parent::bindParams('userId', $userId);
+
+        parent::execute();
+    }
+
+    /**
      * Преобразование выходящих данных в формат для frontend
      * @param array $data Массив из базы данных
      * @return array
