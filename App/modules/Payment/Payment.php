@@ -11,6 +11,7 @@ define('API_URL', 'https://api.sochidominvest.ru/paymentResult.php');
 define('API_LOGIN', '1662393169438DEMO');
 define('API_KEY', 'v5eokhwod2a3whvk');
 
+// Fixme: отделить сервис от модели
 class Payment extends Model
 {
     public int $id;

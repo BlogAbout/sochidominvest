@@ -5,6 +5,7 @@ namespace App\BusinessProcess;
 use App\Model;
 use App\UtilModel;
 
+// Fixme: отделить сервис от модели
 class BusinessProcess extends Model
 {
     public int $id;

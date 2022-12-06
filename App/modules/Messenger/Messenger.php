@@ -5,6 +5,7 @@ namespace App\Messenger;
 use App\Model;
 use App\UtilModel;
 
+// Fixme: отделить сервис от модели
 class Messenger extends Model
 {
     public int $id;

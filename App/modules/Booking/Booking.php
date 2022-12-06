@@ -7,6 +7,7 @@ use App\MailModel;
 use App\Model;
 use App\NotificationModel;
 
+// Fixme: отделить сервис от модели
 class Booking extends Model
 {
     public int $id;
