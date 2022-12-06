@@ -23,6 +23,7 @@ import openPopupSupportInfo from '../../../components/popup/PopupSupportInfo/Pop
 import openPopupDeveloperCreate from '../../../components/popup/PopupDeveloperCreate/PopupDeveloperCreate'
 import openPopupAgentCreate from '../../../components/popup/PopupAgentCreate/PopupAgentCreate'
 import classes from './DesktopPagePanel.module.scss'
+import {getTariffText} from "../../../helpers/tariffHelper";
 
 const cx = classNames.bind(classes)
 
@@ -77,9 +78,6 @@ const DesktopPagePanel: React.FC = () => {
                 .finally(() => {
                     setFetchingTickets(false)
                 })
-
-            loadDevelopersHandler()
-            loadAgentsHandler()
         }
 
         if (isUpdate) {
@@ -96,6 +94,13 @@ const DesktopPagePanel: React.FC = () => {
             setFilterArticles(articles.filter((article: IArticle) => article.active === 1))
         }
     }, [articles])
+
+    useEffect(() => {
+        if (userInfo && (userInfo.role !== 'subscriber' || (['free', 'base'].includes(userInfo.tariff || 'free')))) {
+            loadDevelopersHandler()
+            loadAgentsHandler()
+        }
+    }, [userInfo])
 
     // Загрузка данных о застройщиках
     const loadDevelopersHandler = () => {
@@ -168,6 +173,10 @@ const DesktopPagePanel: React.FC = () => {
     }
 
     const renderTariffsInfo = () => {
+        if (!userInfo || userInfo.role !== 'subscriber') {
+            return null
+        }
+
         return (
             <div className={cx({'col': true, 'col-3': true})}>
                 <Title type={2}>Тарифный план</Title>
@@ -176,14 +185,17 @@ const DesktopPagePanel: React.FC = () => {
                     <div className={classes.row}>
                         <div className={classes.label}>Текущий тариф:</div>
                         <div className={classes.param}>
-                            Бесплатно&nbsp;
+                            {userInfo.tariff === 'free' ? 'Нет активного тарифа' : getTariffText(userInfo.tariff || 'free')}&nbsp;
                             (<span className={classes.link}
                                    onClick={() => navigate('/panel/tariff/')}>изменить</span>)
                         </div>
                     </div>
+
                     <div className={classes.row}>
                         <div className={classes.label}>Дата окончания:</div>
-                        <div className={classes.param}>Бессрочно</div>
+                        <div className={classes.param}>
+                            {userInfo.tariff !== 'free' ? getFormatDate(userInfo.tariffExpired) : 'Бессрочно'}
+                        </div>
                     </div>
                 </BlockingElement>
             </div>
@@ -228,7 +240,7 @@ const DesktopPagePanel: React.FC = () => {
 
     const renderTicketsInfo = () => {
         return (
-            <div className={cx({'col': true, 'col-2': true})}>
+            <div className={cx({'col': true, 'col-3': true})}>
                 <Title type={2}>Активные тикеты</Title>
 
                 <BlockingElement fetching={fetchingTickets} className={classes.list}>
@@ -261,7 +273,7 @@ const DesktopPagePanel: React.FC = () => {
 
     const renderDealsInfo = () => {
         return (
-            <div className={cx({'col': true, 'col-2': true})}>
+            <div className={cx({'col': true, 'col-3': true})}>
                 <Title type={2}>Сделки</Title>
 
                 <BlockingElement fetching={fetchingDeals} className={classes.list}>
@@ -282,7 +294,7 @@ const DesktopPagePanel: React.FC = () => {
 
     const renderAgentsInfo = () => {
         return (
-            <div className={cx({'col': true, 'col-2': true})}>
+            <div className={cx({'col': true, 'col-3': true})}>
                 <Title type={2}
                        showAdd
                        onAdd={() => {
@@ -310,7 +322,8 @@ const DesktopPagePanel: React.FC = () => {
                                 </div>
                             )
                         })
-                        : <Empty message='У Вас еще нет созданных агентств.'/>
+                        : <Empty
+                            message={userInfo && (userInfo.role !== 'subscriber' || (['free', 'base'].includes(userInfo.tariff || 'free'))) ? 'У Вас еще нет созданных агентств.' : 'На текущем тарифе не доступно.'}/>
                     }
                 </BlockingElement>
             </div>
@@ -319,7 +332,7 @@ const DesktopPagePanel: React.FC = () => {
 
     const renderDevelopersInfo = () => {
         return (
-            <div className={cx({'col': true, 'col-2': true})}>
+            <div className={cx({'col': true, 'col-3': true})}>
                 <Title type={2}
                        showAdd
                        onAdd={() => {
@@ -347,7 +360,8 @@ const DesktopPagePanel: React.FC = () => {
                                 </div>
                             )
                         })
-                        : <Empty message='У Вас еще нет созданных застройщиков.'/>
+                        : <Empty
+                            message={userInfo && (userInfo.role !== 'subscriber' || (['free', 'base'].includes(userInfo.tariff || 'free'))) ? 'У Вас еще нет созданных застройщиков.' : 'На текущем тарифе не доступно.'}/>
                     }
                 </BlockingElement>
             </div>
@@ -365,9 +379,9 @@ const DesktopPagePanel: React.FC = () => {
                     {renderUserInfo()}
                     {renderTariffsInfo()}
                     {renderArticlesInfo()}
+                    {renderDealsInfo()}
                     {renderAgentsInfo()}
                     {renderDevelopersInfo()}
-                    {renderDealsInfo()}
                     {renderTicketsInfo()}
                 </BlockingElement>
             </div>

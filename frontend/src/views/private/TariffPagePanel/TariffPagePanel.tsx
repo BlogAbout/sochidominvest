@@ -33,7 +33,7 @@ const TariffPagePanel: React.FC = () => {
                     setFetchingUser(false)
                 })
         }
-    })
+    }, [userId])
 
     const onBuyTariffHandler = (tariff: ITariff) => {
         if (userInfo.tariff === tariff.key) {

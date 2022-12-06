@@ -99,7 +99,7 @@ class MailingController extends Controller
             'content' => htmlentities(stripcslashes(strip_tags($data->content))),
             'contentHtml' => htmlentities(stripcslashes(strip_tags($data->contentHtml))),
             'type' => htmlentities(stripcslashes(strip_tags($data->type))),
-            'author' => (int)htmlentities(stripcslashes(strip_tags($data->author))),
+            'author' => JwtMiddleware::getUserId(),
             'active' => (int)htmlentities(stripcslashes(strip_tags($data->active))),
             'status' => (int)htmlentities(stripcslashes(strip_tags($data->status)))
         );

@@ -271,7 +271,7 @@ class MailingService extends Model
             // Todo: Проверка, если пользователь отписался от рассылок
             $user = UserModel::fetchUserById($recipient['id_user']);
 
-            if ($user['settings'] && $user['settings']['sendEmail']) {
+            if ($user['settings'] && $user['settings']->sendEmail) {
                 $mailModel = new MailModel($this->settings, $recipient['email'], 'mailing', [
                     'name' => $recipient['name'],
                     'content' => $recipient['content_html']

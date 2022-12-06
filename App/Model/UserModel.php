@@ -314,7 +314,7 @@ class UserModel extends Model
         parent::bindParams('settings', $payload['settings']);
         parent::bindParams('post', $payload['post']);
         parent::bindParams('tariff', $payload['tariff']);
-        parent::bindParams('tariffExpired', $payload['tariffExpired']);
+        parent::bindParams('tariffExpired', $payload['tariff'] === 'free' ? UtilModel::getDateNow() : $payload['tariffExpired']);
 
         if ($payload['password'] && $payload['password'] !== '') {
             parent::bindParams('password', $payload['password']);

@@ -47,7 +47,7 @@ const RecipientList: React.FC<Props> = (props) => {
                                  className={classes.row}
                                  onContextMenu={(e: React.MouseEvent) => onContextMenu(e, recipient)}
                             >
-                                <div className={classes.name}>{recipient.email}</div>
+                                <div className={classes.email}>{recipient.email}</div>
                                 <div
                                     className={classes.type}>{recipient.userType === 'subscriber' ? 'Подписчик' : 'Внешний'}</div>
                             </div>

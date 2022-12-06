@@ -99,7 +99,7 @@ class AgentController extends Controller
             'description' => htmlentities(stripcslashes(strip_tags($data->description))),
             'address' => htmlentities(stripcslashes(strip_tags($data->address))),
             'phone' => htmlentities(stripcslashes(strip_tags($data->phone))),
-            'author' => (int)htmlentities(stripcslashes(strip_tags($data->author))),
+            'author' => JwtMiddleware::getUserId(),
             'authorName' => htmlentities(stripcslashes(strip_tags($data->authorName))),
             'type' => htmlentities(stripcslashes(strip_tags($data->type))),
             'active' => (int)htmlentities(stripcslashes(strip_tags($data->active))),
