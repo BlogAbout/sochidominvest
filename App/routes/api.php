@@ -6,6 +6,7 @@ use App\Agent\AgentController;
 use App\Booking\BookingController;
 use App\BusinessProcess\BusinessProcessController;
 use App\BusinessProcess\PaymentController;
+use App\Core\CoreController;
 use App\Mailing\MailingController;
 use App\User\UserExternalController;
 use Klein\Klein;
@@ -195,6 +196,9 @@ $Klein->respond('PUT', '/api/v1/agent/[:id]', [new AgentController(), 'updateIte
 $Klein->respond('GET', '/api/v1/agent/[:id]', [new AgentController(), 'fetchItemById']);
 $Klein->respond('GET', '/api/v1/agent', [new AgentController(), 'fetchList']);
 $Klein->respond('DELETE', '/api/v1/agent/[:id]', [new AgentController(), 'deleteItem']);
+
+// Core Routes
+$Klein->respond('GET', '/api/v1/core/init', [new CoreController(), 'initAllChecking']);
 
 // Dispatch all routes
 $Klein->dispatch();
