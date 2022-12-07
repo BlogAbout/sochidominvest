@@ -87,7 +87,7 @@ const PopupBuyTariff: React.FC<Props> = (props) => {
         updateUser.tariff = currentTariff
         updateUser.tariffExpired = dateExpiration.format('YYYY-MM-DD HH:mm:ss')
 
-        UserService.saveUser(updateUser)
+        UserService.changeTariffUser(user.id, currentTariff, dateExpiration.format('YYYY-MM-DD HH:mm:ss'))
             .then((response: any) => {
                 setUser(response.data)
             })

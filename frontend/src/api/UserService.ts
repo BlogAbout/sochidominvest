@@ -32,7 +32,7 @@ export default class UserService {
 
     static async saveUser(user: IUser): Promise<AxiosResponse> {
         if (user.id) {
-            return API.put(`/user/${user.id}`, user)
+            return API.put(`/user/${user.id}/edit`, user)
         } else {
             return API.post('/user', user)
         }
@@ -40,6 +40,10 @@ export default class UserService {
 
     static async removeUser(userId: number): Promise<AxiosResponse> {
         return API.delete(`/user/${userId}`)
+    }
+
+    static async changeTariffUser(userId: number, tariff: string, tariffExpired: string): Promise<AxiosResponse> {
+        return API.put(`/user/${userId}/tariff`, {tariff: tariff, tariffExpired: tariffExpired})
     }
 
     static async fetchUserExternalById(userId: number): Promise<AxiosResponse> {

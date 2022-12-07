@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react'
-import {tariffs} from '../../../helpers/tariffHelper'
+import {compareTariffLevels, tariffs} from '../../../helpers/tariffHelper'
 import {useTypedSelector} from '../../../hooks/useTypedSelector'
 import {numberWithSpaces} from '../../../helpers/numberHelper'
 import UserService from '../../../api/UserService'
@@ -11,6 +11,8 @@ import BlockingElement from '../../../components/ui/BlockingElement/BlockingElem
 import Button from '../../../components/form/Button/Button'
 import openPopupBuyTariff from '../../../components/popup/PopupBuyTariff/PopupBuyTariff'
 import classes from './TariffPagePanel.module.scss'
+import openPopupAlert from "../../../components/PopupAlert/PopupAlert";
+import ArticleService from "../../../api/ArticleService";
 
 const TariffPagePanel: React.FC = () => {
     const [userInfo, setUserInfo] = useState<IUser>({} as IUser)
@@ -38,6 +40,31 @@ const TariffPagePanel: React.FC = () => {
     const onBuyTariffHandler = (tariff: ITariff) => {
         if (userInfo.tariff === tariff.key) {
             return
+        }
+
+        if (compareTariffLevels(userInfo.tariff || 'free', tariff.key) === -1) {
+            openPopupAlert(document.body, {
+                text: `
+                    Вы собираетесь понизить тариф. Все данные, не соответствующие тарифу будут отключены.
+                    Вы можете самостоятельно, отключить ненужные, оставив только те, которые будут соответствовать новому тарифу.
+                    Либо это произойдет автоматически, оставив только последние.
+                `,
+                buttons: [
+                    {
+                        text: 'Продолжить',
+                        onClick: () => {
+                            openPopupBuyTariff(document.body, {
+                                user: userInfo,
+                                tariff: tariff,
+                                onSave: (user: IUser) => {
+                                    setUserInfo(user)
+                                }
+                            })
+                        }
+                    },
+                    {text: 'Отмена'}
+                ]
+            })
         }
 
         openPopupBuyTariff(document.body, {

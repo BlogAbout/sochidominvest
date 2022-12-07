@@ -20,10 +20,11 @@ $Klein->respond('POST', '/api/v1/reset', [new UserController(), 'resetPassword']
 
 // User Routes
 $Klein->respond('POST', '/api/v1/user', [new UserController(), 'createUser']);
-$Klein->respond('PUT', '/api/v1/user/[:id]', [new UserController(), 'updateUser']);
+$Klein->respond('PUT', '/api/v1/user/[:id]/edit', [new UserController(), 'updateUser']);
 $Klein->respond('GET', '/api/v1/user/[:id]', [new UserController(), 'getUserById']);
 $Klein->respond('GET', '/api/v1/user', [new UserController(), 'fetchUsers']);
 $Klein->respond('DELETE', '/api/v1/user/[:id]', [new UserController(), 'deleteUser']);
+$Klein->respond('PUT', '/api/v1/user/[:id]/tariff', [new UserController(), 'changeUserTariff']);
 
 // User External Routes
 $Klein->respond('POST', '/api/v1/user-external', [new UserExternalController(), 'createItem']);

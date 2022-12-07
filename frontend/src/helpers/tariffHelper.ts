@@ -42,3 +42,18 @@ export const getTariffText = (key: string) => {
     const find = tariffs.find((item: ITariff) => item.key === key)
     return find ? find.name : ''
 }
+
+export const compareTariffLevels = (oldTariff: string, newTariff: string): number => {
+    const findOldTariffIndex = tariffs.findIndex((item: ITariff) => item.key === oldTariff)
+    const findNewTariffIndex = tariffs.findIndex((item: ITariff) => item.key === newTariff)
+
+    if (findOldTariffIndex === findNewTariffIndex) {
+        return 0
+    } else if (findOldTariffIndex === -1 || findNewTariffIndex > findOldTariffIndex) {
+        return 1
+    } else if (findNewTariffIndex === -1 || findNewTariffIndex < findOldTariffIndex) {
+        return -1
+    }
+
+    return 0
+}

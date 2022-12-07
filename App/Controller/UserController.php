@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Core\CoreService;
 use Exception;
 use Firebase\JWT\JWT;
 
@@ -651,6 +652,78 @@ class UserController extends Controller
             return;
         } catch (Exception $e) {
             LogModel::error($e->getMessage());
+            $response->code(500)->json($e->getMessage());
+
+            return;
+        }
+    }
+
+    /**
+     * Изменение тарифа пользователя по id
+     *
+     * @param mixed $request Содержит объект запроса
+     * @param mixed $response Содержит объект ответа от маршрутизатора
+     * @return void
+     */
+    public function changeUserTariff($request, $response)
+    {
+        if (!$this->requestMiddleware->acceptsJson()) {
+            $response->code(400)->json('Доступ к конечной точке разрешен только содержимому JSON.');
+
+            return;
+        }
+
+        if (!JwtMiddleware::getAndDecodeToken()) {
+            $response->code(401)->json('Вы не авторизованы.');
+
+            return;
+        }
+
+        $data = json_decode($request->body());
+
+        $validationObject = array(
+            (object)[
+                'validator' => 'required',
+                'data' => $request->id ?? '',
+                'key' => 'Идентификатор'
+            ],
+            (object)[
+                'validator' => 'userExists',
+                'data' => $request->id ?? ''
+            ],
+            (object)[
+                'validator' => 'required',
+                'data' => $data->tariff ?? '',
+                'key' => 'Имя'
+            ]
+        );
+
+        $validationBag = parent::validation($validationObject);
+        if ($validationBag->status) {
+            $response->code(400)->json($validationBag->errors);
+
+            return;
+        }
+
+        $userId = $request->id;
+        $tariff = htmlspecialchars(stripcslashes(strip_tags($data->tariff)));
+        $tariffExpired = htmlspecialchars(stripcslashes(strip_tags($data->tariffExpired)));
+
+        try {
+            $currentUser = UserModel::fetchUserById($userId);
+            UserModel::changeTariffForUser($userId, $tariff, $tariffExpired);
+
+            $coreService = new CoreService($this->settings);
+            $coreService->updateAllDataForUser($userId, $tariff, $currentUser['tariff']);
+
+            $user = $this->userModel->fetchUserById($request->id);
+            unset($user['password']);
+
+            $response->code(200)->json($user);
+
+            return;
+        } catch (Exception $e) {
+            LogModel::error($e->getMessage(), ['userId' => $userId, 'tariff' => $tariff, 'tariffExpired' => $tariffExpired]);
             $response->code(500)->json($e->getMessage());
 
             return;
