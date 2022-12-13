@@ -296,9 +296,10 @@ const DesktopPagePanel: React.FC = () => {
         return (
             <div className={cx({'col': true, 'col-3': true})}>
                 <Title type={2}
-                       showAdd
+                       showAdd={userInfo && (userInfo.role !== 'subscriber' || (['free', 'base'].includes(userInfo.tariff || 'free')))}
                        onAdd={() => {
                            openPopupAgentCreate(document.body, {
+                               isDisable: userInfo.role === 'subscriber' && userInfo.tariff === 'business' && agents.filter((agent: IAgent) => agent.active === 1).length > 0,
                                onSave: () => loadAgentsHandler()
                            })
                        }}
@@ -306,7 +307,7 @@ const DesktopPagePanel: React.FC = () => {
 
                 <BlockingElement fetching={fetchingAgents} className={classes.list}>
                     {agents && agents.length ?
-                        agents.map((agent: any, index: number) => {
+                        agents.map((agent: IAgent) => {
                             return (
                                 <div key={agent.id}
                                      className={classes.block}
@@ -334,9 +335,10 @@ const DesktopPagePanel: React.FC = () => {
         return (
             <div className={cx({'col': true, 'col-3': true})}>
                 <Title type={2}
-                       showAdd
+                       showAdd={userInfo && (userInfo.role !== 'subscriber' || (['free', 'base'].includes(userInfo.tariff || 'free')))}
                        onAdd={() => {
                            openPopupDeveloperCreate(document.body, {
+                               isDisable: userInfo.role === 'subscriber' && userInfo.tariff === 'business' && developers.filter((developer: IDeveloper) => developer.active === 1).length > 0,
                                onSave: () => loadDevelopersHandler()
                            })
                        }}
@@ -344,7 +346,7 @@ const DesktopPagePanel: React.FC = () => {
 
                 <BlockingElement fetching={fetchingDevelopers} className={classes.list}>
                     {developers && developers.length ?
-                        developers.map((developer: IDeveloper, index: number) => {
+                        developers.map((developer: IDeveloper) => {
                             return (
                                 <div key={developer.id}
                                      className={classes.block}

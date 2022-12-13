@@ -21,12 +21,14 @@ import classes from './PopupDeveloperCreate.module.scss'
 
 interface Props extends PopupProps {
     developer?: IDeveloper | null
+    isDisable?: boolean
 
     onSave(): void
 }
 
 const defaultProps: Props = {
     developer: null,
+    isDisable: false,
     onSave: () => {
         console.info('PopupDeveloperCreate onSave')
     }
@@ -42,7 +44,7 @@ const PopupDeveloperCreate: React.FC<Props> = (props) => {
         address: '',
         phone: '',
         type: 'constructionCompany',
-        active: 1,
+        active: !props.isDisable ? 1 : 0,
         author: null
     })
 
@@ -186,6 +188,7 @@ const PopupDeveloperCreate: React.FC<Props> = (props) => {
                                       ...developer,
                                       active: value ? 1 : 0
                                   })}
+                                  readOnly={props.isDisable}
                         />
                     </div>
                 </div>

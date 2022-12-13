@@ -21,12 +21,14 @@ import classes from './PopupAgentCreate.module.scss'
 
 interface Props extends PopupProps {
     agent?: IAgent | null
+    isDisable: boolean
 
     onSave(): void
 }
 
 const defaultProps: Props = {
     agent: null,
+    isDisable: false,
     onSave: () => {
         console.info('PopupAgentCreate onSave')
     }
@@ -43,7 +45,7 @@ const PopupAgentCreate: React.FC<Props> = (props) => {
         phone: '',
         author: null,
         type: 'agent',
-        active: 1
+        active: !props.isDisable ? 1 : 0
     })
 
     const [fetching, setFetching] = useState(false)
@@ -186,6 +188,7 @@ const PopupAgentCreate: React.FC<Props> = (props) => {
                                       ...agent,
                                       active: value ? 1 : 0
                                   })}
+                                  readOnly={props.isDisable}
                         />
                     </div>
                 </div>
