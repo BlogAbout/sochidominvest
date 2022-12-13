@@ -96,7 +96,7 @@ const DesktopPagePanel: React.FC = () => {
     }, [articles])
 
     useEffect(() => {
-        if (userInfo && (userInfo.role !== 'subscriber' || (['free', 'base'].includes(userInfo.tariff || 'free')))) {
+        if (userInfo && userInfo.role && userInfo.tariff && (userInfo.role !== 'subscriber' || (!['free', 'base'].includes(userInfo.tariff)))) {
             loadDevelopersHandler()
             loadAgentsHandler()
         }
@@ -296,7 +296,7 @@ const DesktopPagePanel: React.FC = () => {
         return (
             <div className={cx({'col': true, 'col-3': true})}>
                 <Title type={2}
-                       showAdd={userInfo && (userInfo.role !== 'subscriber' || (['free', 'base'].includes(userInfo.tariff || 'free')))}
+                       showAdd={!!(userInfo && userInfo.role && userInfo.tariff && (userInfo.role !== 'subscriber' || (!['free', 'base'].includes(userInfo.tariff))))}
                        onAdd={() => {
                            openPopupAgentCreate(document.body, {
                                isDisable: userInfo.role === 'subscriber' && userInfo.tariff === 'business' && agents.filter((agent: IAgent) => agent.active === 1).length > 0,
@@ -324,7 +324,7 @@ const DesktopPagePanel: React.FC = () => {
                             )
                         })
                         : <Empty
-                            message={userInfo && (userInfo.role !== 'subscriber' || (['free', 'base'].includes(userInfo.tariff || 'free'))) ? 'У Вас еще нет созданных агентств.' : 'На текущем тарифе не доступно.'}/>
+                            message={!!(userInfo && userInfo.role && userInfo.tariff && (userInfo.role !== 'subscriber' || (!['free', 'base'].includes(userInfo.tariff)))) ? 'У Вас еще нет созданных агентств.' : 'На текущем тарифе не доступно.'}/>
                     }
                 </BlockingElement>
             </div>
@@ -335,7 +335,7 @@ const DesktopPagePanel: React.FC = () => {
         return (
             <div className={cx({'col': true, 'col-3': true})}>
                 <Title type={2}
-                       showAdd={userInfo && (userInfo.role !== 'subscriber' || (['free', 'base'].includes(userInfo.tariff || 'free')))}
+                       showAdd={!!(userInfo && userInfo.role && userInfo.tariff && (userInfo.role !== 'subscriber' || (!['free', 'base'].includes(userInfo.tariff))))}
                        onAdd={() => {
                            openPopupDeveloperCreate(document.body, {
                                isDisable: userInfo.role === 'subscriber' && userInfo.tariff === 'business' && developers.filter((developer: IDeveloper) => developer.active === 1).length > 0,
@@ -363,7 +363,7 @@ const DesktopPagePanel: React.FC = () => {
                             )
                         })
                         : <Empty
-                            message={userInfo && (userInfo.role !== 'subscriber' || (['free', 'base'].includes(userInfo.tariff || 'free'))) ? 'У Вас еще нет созданных застройщиков.' : 'На текущем тарифе не доступно.'}/>
+                            message={!!(userInfo && userInfo.role && userInfo.tariff && (userInfo.role !== 'subscriber' || (!['free', 'base'].includes(userInfo.tariff || 'free')))) ? 'У Вас еще нет созданных застройщиков.' : 'На текущем тарифе не доступно.'}/>
                     }
                 </BlockingElement>
             </div>

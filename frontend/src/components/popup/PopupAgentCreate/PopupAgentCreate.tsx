@@ -21,7 +21,7 @@ import classes from './PopupAgentCreate.module.scss'
 
 interface Props extends PopupProps {
     agent?: IAgent | null
-    isDisable: boolean
+    isDisable?: boolean
 
     onSave(): void
 }
