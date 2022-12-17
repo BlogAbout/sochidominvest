@@ -85,6 +85,7 @@ const PaymentPagePanel: React.FC = () => {
             userEmail: payment.userEmail,
             userName: payment.userName,
             cost: payment.cost,
+            duration: payment.duration,
             objectId: payment.objectId,
             objectType: payment.objectType
         }

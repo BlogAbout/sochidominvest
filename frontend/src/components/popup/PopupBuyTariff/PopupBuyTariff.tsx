@@ -4,7 +4,7 @@ import withStore from '../../../hoc/withStore'
 import {PopupDisplayOptions, PopupProps} from '../../../@types/IPopup'
 import {IUser} from '../../../@types/IUser'
 import {ISelector} from '../../../@types/ISelector'
-import {tariffs} from '../../../helpers/tariffHelper'
+import {getTariffText, tariffs} from '../../../helpers/tariffHelper'
 import {ITariff} from '../../../@types/ITariff'
 import UserService from '../../../api/UserService'
 import {getPopupContainer, openPopup, removePopup} from '../../../helpers/popupHelper'
@@ -19,6 +19,8 @@ import ComboBox from '../../ComboBox/ComboBox'
 import NumberBox from '../../NumberBox/NumberBox'
 import openPopupAlert from '../../PopupAlert/PopupAlert'
 import classes from './PopupBuyTariff.module.scss'
+import {IPayment} from "../../../@types/IPayment";
+import PaymentService from "../../../api/PaymentService";
 
 interface Props extends PopupProps {
     user: IUser
@@ -65,7 +67,7 @@ const PopupBuyTariff: React.FC<Props> = (props) => {
         if (findTariff) {
             setTotal(findTariff.cost * months)
         }
-    }, [currentTariff])
+    }, [currentTariff, months])
 
     // Закрытие popup
     const close = () => {
@@ -78,26 +80,57 @@ const PopupBuyTariff: React.FC<Props> = (props) => {
             return
         }
 
-        // Todo: Реализовать псевдооплату
         setFetching(true)
 
-        const dateExpiration = moment().add(months, 'months')
+        const findTariff = tariffs.find((tariff: ITariff) => tariff.key === currentTariff)
 
-        const updateUser: IUser = JSON.parse(JSON.stringify(user))
-        updateUser.tariff = currentTariff
-        updateUser.tariffExpired = dateExpiration.format('YYYY-MM-DD HH:mm:ss')
+        if (!findTariff) {
+            return
+        }
 
-        UserService.changeTariffUser(user.id, currentTariff, dateExpiration.format('YYYY-MM-DD HH:mm:ss'))
+        const payment: IPayment = {
+            id: null,
+            name: `Оплата тарифа ${findTariff.name}. Месяцев: ${months}`,
+            status: 'new',
+            userId: user.id,
+            cost: total,
+            duration: `P${months}M`,
+            objectId: findTariff.objectId,
+            objectType: 'tariff'
+        }
+
+        PaymentService.savePayment(payment, false)
             .then((response: any) => {
-                setUser(response.data)
+                PaymentService.fetchLinkPayment(response.data.id)
+                    .then((response: any) => {
+                        if (response.data.status) {
+                            window.location.href = response.data.data
+                        } else {
+                            openPopupAlert(document.body, {
+                                title: 'Ошибка!',
+                                text: response.data.data
+                            })
+                        }
+
+                        setFetching(false)
+                    })
+                    .catch((error: any) => {
+                        openPopupAlert(document.body, {
+                            title: 'Ошибка!',
+                            text: error.data.data
+                        })
+
+                        setFetching(false)
+                    })
             })
             .catch((error: any) => {
-                console.error('Произошла ошибка оплаты тарифа.', error)
                 openPopupAlert(document.body, {
-                    text: 'Произошла ошибка оплаты тарифа. Попробуйте позже.'
+                    title: 'Ошибка!',
+                    text: error.data
                 })
+
+                setFetching(false)
             })
-            .finally(() => setFetching(false))
     }
 
     const getTariffsList = () => {

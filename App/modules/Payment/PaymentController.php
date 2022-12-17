@@ -41,6 +41,7 @@ class PaymentController extends Controller
             'status' => htmlentities(stripcslashes(strip_tags($data->payment->status))),
             'userId' => $data->payment->userId ? (int)htmlentities(stripcslashes(strip_tags($data->payment->userId))) : JwtMiddleware::getUserId(),
             'cost' => (float)htmlentities(stripcslashes(strip_tags($data->payment->cost))),
+            'duration' => htmlentities(stripcslashes(strip_tags($data->payment->duration))),
             'objectId' => (int)htmlentities(stripcslashes(strip_tags($data->payment->objectId))),
             'objectType' => htmlentities(stripcslashes(strip_tags($data->payment->objectType)))
         );
@@ -121,6 +122,7 @@ class PaymentController extends Controller
             'userId' => (int)htmlentities(stripcslashes(strip_tags($data->payment->userId))),
             'email' => htmlentities(stripcslashes(strip_tags($data->payment->email))),
             'cost' => (float)htmlentities(stripcslashes(strip_tags($data->payment->cost))),
+            'duration' => htmlentities(stripcslashes(strip_tags($data->payment->duration))),
             'objectId' => (int)htmlentities(stripcslashes(strip_tags($data->payment->objectId))),
             'objectType' => htmlentities(stripcslashes(strip_tags($data->payment->objectType)))
         );
@@ -276,12 +278,13 @@ class PaymentController extends Controller
      * @param mixed $response Содержит объект ответа от маршрутизатора
      * @return void
      */
-    public static function processResultResponse($request, $response)
+    public function processResultResponse($request, $response)
     {
         $data = json_decode($request->body(), true);
 
         try {
-            Payment::processResultResponse($data);
+            $payment = new Payment([], $this->settings);
+            $payment->processResultResponse($data);
             $response->code(200)->json();
 
             return;

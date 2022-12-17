@@ -2,6 +2,7 @@ import {ITariff} from '../@types/ITariff'
 
 export const tariffs: ITariff[] = [
     {
+        objectId: 1,
         key: 'base',
         name: 'Базовый',
         cost: 2100,
@@ -11,6 +12,7 @@ export const tariffs: ITariff[] = [
         ]
     },
     {
+        objectId: 2,
         key: 'business',
         name: 'Бизнес',
         cost: 9500,
@@ -23,6 +25,7 @@ export const tariffs: ITariff[] = [
         ]
     },
     {
+        objectId: 3,
         key: 'effectivePlus',
         name: 'Эффективность Плюс',
         cost: 25000,

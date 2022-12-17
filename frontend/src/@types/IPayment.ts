@@ -10,6 +10,7 @@ export interface IPayment {
     userName?: string
     companyEmail?: string
     cost: number
+    duration: string | null
     objectId: number
     objectType: string
 }

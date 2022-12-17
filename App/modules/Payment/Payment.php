@@ -2,10 +2,13 @@
 
 namespace App\Payment;
 
+use App\Core\CoreService;
 use App\MailModel;
 use App\Model;
 use App\UserModel;
 use App\UtilModel;
+use DateInterval;
+use DateTime;
 
 define('API_URL', 'https://api.sochidominvest.ru/paymentResult.php');
 define('API_LOGIN', '1662393169438DEMO');
@@ -25,6 +28,7 @@ class Payment extends Model
     public string $userName;
     public string $companyEmail;
     public float $cost;
+    public string $duration;
     public int $objectId;
     public string $objectType;
 
@@ -45,6 +49,7 @@ class Payment extends Model
         $this->userName = $data['userName'] ?? '';
         $this->companyEmail = $data['companyEmail'] ?? '';
         $this->cost = $data['cost'] ?? 0;
+        $this->duration = $data['duration'] ?? '';
         $this->objectId = $data['objectId'] ?? 0;
         $this->objectType = $data['objectType'] ?? '';
 
@@ -55,8 +60,9 @@ class Payment extends Model
      * Проверка и обработка ответа от платежной системы
      *
      * @param array $data Массив данных
+     * @throws \Exception
      */
-    public static function processResultResponse(array $data)
+    public function processResultResponse(array $data)
     {
         if (self::checkResultResponse($data)) {
             $paymentId = (int)$data['OrderId'];
@@ -78,6 +84,37 @@ class Payment extends Model
                 parent::bindParams('status', $status);
                 parent::bindParams('datePaid', UtilModel::getDateNow());
                 parent::execute();
+
+                switch ($order->getObjectType()) {
+                    case 'tariff':
+                    {
+                        $currentUser = UserModel::fetchUserById($order->getUserId());
+
+                        $tariffs = [
+                            1 => 'base',
+                            2 => 'business',
+                            3 => 'effectivePlus'
+                        ];
+
+                        $currentTariff = 'free';
+                        if ($order->getObjectId()) {
+                            $currentTariff = $tariffs[$order->getObjectId()];
+                        }
+
+                        $date = new DateTime();
+                        if ($currentUser['tariffExpired'] && $currentUser['tariff'] !== 'free') {
+                            $date = new DateTime($currentUser['tariffExpired']);
+                        }
+                        $tariffExpired = $date->add(new DateInterval($order->getDuration()));
+
+                        $coreService = new CoreService($this->settings);
+                        $coreService->updateAllDataForUser($order->getUserId(), $currentTariff, $currentUser['tariff']);
+
+                        UserModel::changeTariffForUser($order->getUserId(), $currentTariff, $tariffExpired->format('Y-m-d H:i:s'));
+
+                        break;
+                    }
+                }
             }
         }
     }
@@ -205,9 +242,9 @@ class Payment extends Model
 
         $sql = "
             INSERT INTO `sdi_transaction`
-                (`name`, `date_created`, `date_update`, `status`, `id_user`, `email`, `cost`, `id_object`, `type_object`)
+                (`name`, `date_created`, `date_update`, `status`, `id_user`, `email`, `cost`, `duration`, `id_object`, `type_object`)
             VALUES
-                (:name, :dateCreated, :dateUpdate, :status, :userId, :userEmail, :cost, :objectId, :objectType)
+                (:name, :dateCreated, :dateUpdate, :status, :userId, :userEmail, :cost, :duration, :objectId, :objectType)
         ";
 
         parent::query($sql);
@@ -218,6 +255,7 @@ class Payment extends Model
         parent::bindParams('userId', $this->getUserId());
         parent::bindParams('userEmail', $this->getUserEmail());
         parent::bindParams('cost', $this->getCost());
+        parent::bindParams('duration', $this->getDuration());
         parent::bindParams('objectId', $this->getObjectId());
         parent::bindParams('objectType', $this->getObjectType());
 
@@ -402,6 +440,7 @@ class Payment extends Model
             'userId' => (int)$data['id_user'],
             'userEmail' => $data['email'],
             'cost' => (float)$data['cost'],
+            'duration' => (float)$data['duration'],
             'objectId' => (int)$data['id_object'],
             'objectType' => $data['type_object']
         ];
@@ -581,6 +620,22 @@ class Payment extends Model
     public function setCost(float $cost): void
     {
         $this->cost = $cost;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDuration(): string
+    {
+        return $this->duration;
+    }
+
+    /**
+     * @param string $duration
+     */
+    public function setDuration(string $duration): void
+    {
+        $this->duration = $duration;
     }
 
     /**

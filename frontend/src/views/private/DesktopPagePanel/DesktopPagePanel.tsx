@@ -5,6 +5,7 @@ import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {useTypedSelector} from '../../../hooks/useTypedSelector'
 import {useActions} from '../../../hooks/useActions'
 import {getFormatDate} from '../../../helpers/dateHelper'
+import {getTariffText} from '../../../helpers/tariffHelper'
 import UserService from '../../../api/UserService'
 import FeedService from '../../../api/FeedService'
 import DeveloperService from '../../../api/DeveloperService'
@@ -23,7 +24,6 @@ import openPopupSupportInfo from '../../../components/popup/PopupSupportInfo/Pop
 import openPopupDeveloperCreate from '../../../components/popup/PopupDeveloperCreate/PopupDeveloperCreate'
 import openPopupAgentCreate from '../../../components/popup/PopupAgentCreate/PopupAgentCreate'
 import classes from './DesktopPagePanel.module.scss'
-import {getTariffText} from "../../../helpers/tariffHelper";
 
 const cx = classNames.bind(classes)
 
@@ -39,7 +39,6 @@ const DesktopPagePanel: React.FC = () => {
     const [filterArticles, setFilterArticles] = useState<IArticle[]>([])
 
     const [fetchingUser, setFetchingUser] = useState(false)
-    const [fetchingTariffs, setFetchingTariffs] = useState(false)
     const [fetchingTickets, setFetchingTickets] = useState(false)
     const [fetchingDeals, setFetchingDeals] = useState(false)
     const [fetchingAgents, setFetchingAgents] = useState(false)
@@ -54,9 +53,17 @@ const DesktopPagePanel: React.FC = () => {
             fetchArticleList({active: [0, 1]})
         }
 
-        if (userId && isUpdate) {
+        let findUserId = userId
+        if (!userId) {
+            const localStorageUserId = localStorage.getItem('id') || ''
+            if (localStorageUserId) {
+                findUserId = parseInt(localStorageUserId)
+            }
+        }
+
+        if (findUserId && isUpdate) {
             setFetchingUser(true)
-            UserService.fetchUserById(userId)
+            UserService.fetchUserById(findUserId)
                 .then((response: any) => {
                     setUserInfo(response.data)
                 })
@@ -66,22 +73,6 @@ const DesktopPagePanel: React.FC = () => {
                 .finally(() => {
                     setFetchingUser(false)
                 })
-
-            setFetchingTickets(true)
-            FeedService.fetchFeeds({active: [1], author: [userId]})
-                .then((response: any) => {
-                    setTickets(response.data)
-                })
-                .catch((error: any) => {
-                    console.error('Ошибка загрузки тикетов пользователя', error)
-                })
-                .finally(() => {
-                    setFetchingTickets(false)
-                })
-        }
-
-        if (isUpdate) {
-
         }
 
         setIsUpdate(false)
@@ -96,6 +87,20 @@ const DesktopPagePanel: React.FC = () => {
     }, [articles])
 
     useEffect(() => {
+        if (userInfo && userInfo.id) {
+            setFetchingTickets(true)
+            FeedService.fetchFeeds({active: [1], author: [userInfo.id]})
+                .then((response: any) => {
+                    setTickets(response.data)
+                })
+                .catch((error: any) => {
+                    console.error('Ошибка загрузки тикетов пользователя', error)
+                })
+                .finally(() => {
+                    setFetchingTickets(false)
+                })
+        }
+
         if (userInfo && userInfo.role && userInfo.tariff && (userInfo.role !== 'subscriber' || (!['free', 'base'].includes(userInfo.tariff)))) {
             loadDevelopersHandler()
             loadAgentsHandler()
@@ -181,7 +186,7 @@ const DesktopPagePanel: React.FC = () => {
             <div className={cx({'col': true, 'col-3': true})}>
                 <Title type={2}>Тарифный план</Title>
 
-                <BlockingElement fetching={fetchingTariffs} className={classes.list}>
+                <BlockingElement fetching={fetchingUser} className={classes.list}>
                     <div className={classes.row}>
                         <div className={classes.label}>Текущий тариф:</div>
                         <div className={classes.param}>

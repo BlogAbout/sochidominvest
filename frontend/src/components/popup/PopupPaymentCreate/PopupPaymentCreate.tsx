@@ -44,6 +44,7 @@ const PopupPaymentCreate: React.FC<Props> = (props) => {
         status: 'new',
         userId: userId,
         cost: 0,
+        duration: null,
         objectId: 0,
         objectType: ''
     })
