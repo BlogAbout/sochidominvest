@@ -85,34 +85,37 @@ class Payment extends Model
                 parent::bindParams('datePaid', UtilModel::getDateNow());
                 parent::execute();
 
-                switch ($order->getObjectType()) {
-                    case 'tariff':
-                    {
-                        $currentUser = UserModel::fetchUserById($order->getUserId());
+                if ($data['Status'] === 'CONFIRMED') {
+                    switch ($order->getObjectType()) {
+                        case 'tariff':
+                        {
+                            $currentUser = UserModel::fetchUserById($order->getUserId());
 
-                        $tariffs = [
-                            1 => 'base',
-                            2 => 'business',
-                            3 => 'effectivePlus'
-                        ];
+                            $tariffs = [
+                                1 => 'base',
+                                2 => 'business',
+                                3 => 'effectivePlus'
+                            ];
 
-                        $currentTariff = 'free';
-                        if ($order->getObjectId()) {
-                            $currentTariff = $tariffs[$order->getObjectId()];
+                            $currentTariff = 'free';
+                            if ($order->getObjectId()) {
+                                $currentTariff = $tariffs[$order->getObjectId()];
+                            }
+
+                            $date = new DateTime();
+                            if ($currentUser['tariffExpired'] && $currentUser['tariff'] !== 'free') {
+                                file_put_contents($_SERVER['DOCUMENT_ROOT'] . '/logs.txt', '1: ' . json_encode($currentUser['tariffExpired']) . PHP_EOL, FILE_APPEND);
+                                $date = new DateTime($currentUser['tariffExpired']);
+                            }
+                            $tariffExpired = $date->add(new DateInterval($order->getDuration()));
+
+                            $coreService = new CoreService($this->settings);
+                            $coreService->updateAllDataForUser($order->getUserId(), $currentTariff, $currentUser['tariff']);
+
+                            UserModel::changeTariffForUser($order->getUserId(), $currentTariff, $tariffExpired->format('Y-m-d H:i:s'));
+
+                            break;
                         }
-
-                        $date = new DateTime();
-                        if ($currentUser['tariffExpired'] && $currentUser['tariff'] !== 'free') {
-                            $date = new DateTime($currentUser['tariffExpired']);
-                        }
-                        $tariffExpired = $date->add(new DateInterval($order->getDuration()));
-
-                        $coreService = new CoreService($this->settings);
-                        $coreService->updateAllDataForUser($order->getUserId(), $currentTariff, $currentUser['tariff']);
-
-                        UserModel::changeTariffForUser($order->getUserId(), $currentTariff, $tariffExpired->format('Y-m-d H:i:s'));
-
-                        break;
                     }
                 }
             }
@@ -440,7 +443,7 @@ class Payment extends Model
             'userId' => (int)$data['id_user'],
             'userEmail' => $data['email'],
             'cost' => (float)$data['cost'],
-            'duration' => (float)$data['duration'],
+            'duration' => $data['duration'],
             'objectId' => (int)$data['id_object'],
             'objectType' => $data['type_object']
         ];
