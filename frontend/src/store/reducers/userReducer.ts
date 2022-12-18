@@ -1,8 +1,9 @@
 import {UserAction, UserActionTypes, UserState} from '../../@types/userTypes'
-import {IUserSetting} from '../../@types/IUser'
+import {IUser, IUserSetting} from '../../@types/IUser'
 
 const initialState: UserState = {
     isAuth: false,
+    user: {} as IUser,
     role: '',
     userId: 0,
     userSetting: {} as IUserSetting,
@@ -15,6 +16,8 @@ const initialState: UserState = {
 
 export default function UserReducer(state: UserState = initialState, action: UserAction): UserState {
     switch (action.type) {
+        case UserActionTypes.USER:
+            return {...state, user: action.payload, fetching: false}
         case UserActionTypes.USER_AUTH:
             return {...state, isAuth: action.payload, fetching: false}
         case UserActionTypes.USER_ROLE:

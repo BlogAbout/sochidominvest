@@ -70,7 +70,7 @@ const BuildingPagePanel: React.FC = () => {
     const [apiKey, setApiKey] = useState('3ed788dc-edd5-4bce-8720-6cd8464b45bd')
     const [presetIcon, setPresetIcon] = useState('islands#blueIcon')
 
-    const {role} = useTypedSelector(state => state.userReducer)
+    const {role, user} = useTypedSelector(state => state.userReducer)
     const {buildings, fetching: fetchingBuilding} = useTypedSelector(state => state.buildingReducer)
     const {settings} = useTypedSelector(state => state.administrationReducer)
     const {fetchBuildingList} = useActions()
@@ -248,10 +248,10 @@ const BuildingPagePanel: React.FC = () => {
         //     menuItems.push({text: 'Удалить из подборки', onClick: () => removeBuildingFromCompilation()})
         // }
 
-        if (['director', 'administrator', 'manager'].includes(role)) {
+        if (['director', 'administrator', 'manager'].includes(role) || (role === 'subscriber' && building.author === user.id)) {
             menuItems.push({text: 'Редактировать', onClick: () => onEditHandler(building)})
 
-            if (['director', 'administrator'].includes(role)) {
+            if (['director', 'administrator'].includes(role) || (role === 'subscriber' && building.author === user.id)) {
                 menuItems.push({text: 'Удалить', onClick: () => onRemoveHandler(building)})
             }
         }
@@ -266,13 +266,16 @@ const BuildingPagePanel: React.FC = () => {
         e.preventDefault()
 
         const menuItems = [
-            {text: 'Жилой комплекс', onClick: () => onAddHandler('building')},
             {text: 'Квартиру', onClick: () => onAddHandler('apartment')},
             {text: 'Дом', onClick: () => onAddHandler('house')},
             {text: 'Земельный участок', onClick: () => onAddHandler('land')},
             {text: 'Коммерцию', onClick: () => onAddHandler('commerce')},
             {text: 'Гараж, машиноместо', onClick: () => onAddHandler('garage')}
         ]
+
+        if (['director', 'administrator', 'manager'].includes(role) || (role === 'subscriber' && user.tariff !== undefined && ['business', 'effectivePlus'].includes(user.tariff))) {
+            menuItems.unshift({text: 'Жилой комплекс', onClick: () => onAddHandler('building')})
+        }
 
         openContextMenu(e.currentTarget, menuItems)
     }
@@ -489,7 +492,7 @@ const BuildingPagePanel: React.FC = () => {
                 <Title type={1}
                        activeLayout={layout}
                        layouts={['list', 'till', 'map']}
-                       showAdd={['director', 'administrator', 'manager'].includes(role)}
+                       showAdd={['director', 'administrator', 'manager'].includes(role) || (role === 'subscriber' && user.tariff !== undefined && user.tariff !== 'free')}
                        onAdd={onContextMenu.bind(this)}
                        onChangeLayout={onChangeLayoutHandler.bind(this)}
                        showFilter

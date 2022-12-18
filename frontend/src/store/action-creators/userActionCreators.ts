@@ -9,6 +9,10 @@ export const UserActionCreators = {
         type: UserActionTypes.USER_AUTH,
         payload: auth
     }),
+    setUser: (user: IUser): UserAction => ({
+        type: UserActionTypes.USER,
+        payload: user
+    }),
     setUserRole: (role: string): UserAction => ({
         type: UserActionTypes.USER_ROLE,
         payload: role
@@ -43,12 +47,14 @@ export const UserActionCreators = {
     }),
     setUserAuth: (user: IUser) => async (dispatch: AppDispatch) => {
         localStorage.setItem('auth', 'true')
+        localStorage.setItem('user', user ? JSON.stringify(user) : '')
         localStorage.setItem('id', user.id ? user.id.toString() : '')
         localStorage.setItem('token', user.token || '')
         localStorage.setItem('role', user.role || '')
         localStorage.setItem('settings', user.settings ? JSON.stringify(user.settings) : '')
 
         dispatch(UserActionCreators.setIsAuth(true))
+        dispatch(UserActionCreators.setUser(user || {} as IUser))
         dispatch(UserActionCreators.setUserRole(user.role || ''))
         dispatch(UserActionCreators.setUserId(user.id || 0))
         dispatch(UserActionCreators.setUserSetting(user.settings || {} as IUserSetting))

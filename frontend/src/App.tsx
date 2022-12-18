@@ -104,6 +104,7 @@ import {
     faXmark
 } from '@fortawesome/free-solid-svg-icons'
 import {registerEventsEmitter, registerWebsocket} from './helpers/eventsHelper'
+import UserService from "./api/UserService";
 
 library.add(
     faUser,
@@ -208,7 +209,7 @@ library.add(
 )
 
 function App() {
-    const {setIsAuth, setUserRole, setUserId, setUsersOnline} = useActions()
+    const {setIsAuth, setUserRole, setUserId, setUsersOnline, setUser} = useActions()
 
     useEffect(() => {
         registerEventsEmitter()
@@ -218,6 +219,7 @@ function App() {
 
             const userRole = localStorage.getItem('role') || ''
             const userId = localStorage.getItem('id') || ''
+            const user = localStorage.getItem('user') || ''
 
             if (userRole) {
                 setUserRole(userRole)
@@ -226,6 +228,14 @@ function App() {
             if (userId) {
                 setUserId(parseInt(userId))
                 registerWebsocket(parseInt(userId))
+
+                UserService.fetchUserById(parseInt(userId))
+                    .then((response: any) => {
+                        setUser(response.data)
+                    })
+                    .catch((error: any) => {
+                        console.error('Ошибка загрузки данных пользователя', error)
+                    })
             }
         }
 

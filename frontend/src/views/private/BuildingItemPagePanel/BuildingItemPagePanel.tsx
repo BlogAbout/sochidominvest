@@ -87,7 +87,7 @@ const BuildingItemPagePanel: React.FC = (props) => {
 
     const {buildings, fetching} = useTypedSelector(state => state.buildingReducer)
     const {developers, fetching: fetchingDeveloperList} = useTypedSelector(state => state.developerReducer)
-    const {users, fetching: fetchingUserList, role, usersOnline} = useTypedSelector(state => state.userReducer)
+    const {users, fetching: fetchingUserList, role, usersOnline, user} = useTypedSelector(state => state.userReducer)
     const {tags} = useTypedSelector(state => state.tagReducer)
     const {articles} = useTypedSelector(state => state.articleReducer)
     const {fetchBuildingList, fetchTagList, fetchDeveloperList, fetchUserList, fetchArticleList} = useActions()
@@ -393,7 +393,7 @@ const BuildingItemPagePanel: React.FC = (props) => {
                 </div>
 
                 <div className={classes.container}>
-                    {['director', 'administrator', 'manager'].includes(role) ?
+                    {['director', 'administrator', 'manager'].includes(role) || (role === 'subscriber' && building.author === user.id) ?
                         <Button type='apply'
                                 icon='pen-to-square'
                                 onClick={onClickEditHandler.bind(this)}
