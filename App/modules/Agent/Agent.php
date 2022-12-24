@@ -10,6 +10,7 @@ class Agent
     public string $address;
     public string $phone;
     public int $author;
+    public string $authorName;
     public string $type;
     public string $dateCreated;
     public string $dateUpdate;
@@ -26,6 +27,7 @@ class Agent
      * @param string $address
      * @param string $phone
      * @param int $author
+     * @param string $authorName
      * @param string $type
      * @param string $dateCreated
      * @param string $dateUpdate
@@ -34,7 +36,7 @@ class Agent
      * @param string $avatar
      * @param array $buildings
      */
-    public function __construct(int $id, string $name, string $description, string $address, string $phone, int $author, string $type, string $dateCreated, string $dateUpdate, int $active, int $avatarId, string $avatar, array $buildings)
+    public function __construct(int $id, string $name, string $description, string $address, string $phone, int $author, string $authorName, string $type, string $dateCreated, string $dateUpdate, int $active, int $avatarId, string $avatar, array $buildings)
     {
         $this->id = $id;
         $this->name = $name;
@@ -42,6 +44,7 @@ class Agent
         $this->address = $address;
         $this->phone = $phone;
         $this->author = $author;
+        $this->authorName = $authorName;
         $this->type = $type;
         $this->dateCreated = $dateCreated;
         $this->dateUpdate = $dateUpdate;
@@ -66,6 +69,7 @@ class Agent
             $data['address'] ?? '',
             $data['phone'] ?? '',
             $data['author'] ?? 0,
+            $data['authorName'] ?? '',
             $data['type'] ?? 'agent',
             $data['dateCreated'] ?? '',
             $data['dateUpdate'] ?? '',
@@ -91,6 +95,7 @@ class Agent
             $data['address'] ?? '',
             $data['phone'] ?? '',
             $data['author'] ?? 0,
+            $data['authorName'] ?? '',
             $data['type'] ?? 'agent',
             $data['date_created'] ?? '',
             $data['date_update'] ?? '',
@@ -204,6 +209,22 @@ class Agent
     public function setAuthor(int $author): void
     {
         $this->author = $author;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAuthorName(): string
+    {
+        return $this->authorName;
+    }
+
+    /**
+     * @param string $authorName
+     */
+    public function setAuthorName(string $authorName): void
+    {
+        $this->authorName = $authorName;
     }
 
     /**

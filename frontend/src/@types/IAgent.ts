@@ -5,6 +5,7 @@ export interface IAgent {
     address: string
     phone: string
     author: number | null
+    authorName?: string | null
     type: string
     dateCreated?: string | null
     dateUpdate?: string | null
@@ -12,4 +13,17 @@ export interface IAgent {
     avatarId?: number | null
     avatar?: string | null
     buildings?: number[]
+}
+
+export interface IContact {
+    id: number | null
+    agentId: number
+    name: string
+    post: string
+    phone: string
+    author: number | null
+    authorName?: string | null
+    dateCreated?: string | null
+    dateUpdate?: string | null
+    active: number
 }

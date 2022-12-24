@@ -10,6 +10,7 @@ class Contact
     public string $post;
     public string $phone;
     public int $author;
+    public string $authorName;
     public string $dateCreated;
     public string $dateUpdate;
     public int $active;
@@ -22,11 +23,12 @@ class Contact
      * @param string $post
      * @param string $phone
      * @param int $author
+     * @param string $authorName
      * @param string $dateCreated
      * @param string $dateUpdate
      * @param int $active
      */
-    public function __construct(int $id, int $agentId, string $name, string $post, string $phone, int $author, string $dateCreated, string $dateUpdate, int $active)
+    public function __construct(int $id, int $agentId, string $name, string $post, string $phone, int $author, string $authorName, string $dateCreated, string $dateUpdate, int $active)
     {
         $this->id = $id;
         $this->agentId = $agentId;
@@ -34,6 +36,7 @@ class Contact
         $this->post = $post;
         $this->phone = $phone;
         $this->author = $author;
+        $this->authorName = $authorName;
         $this->dateCreated = $dateCreated;
         $this->dateUpdate = $dateUpdate;
         $this->active = $active;
@@ -54,6 +57,7 @@ class Contact
             $data['post'] ?? '',
             $data['phone'] ?? '',
             $data['author'] ?? 0,
+            $data['authorName'] ?? '',
             $data['dateCreated'] ?? '',
             $data['dateUpdate'] ?? '',
             $data['active'] ?? 1
@@ -75,6 +79,7 @@ class Contact
             $data['post'] ?? '',
             $data['phone'] ?? '',
             $data['author'] ?? 0,
+            $data['authorName'] ?? '',
             $data['date_created'] ?? '',
             $data['date_update'] ?? '',
             $data['active'] ?? 1
@@ -184,6 +189,22 @@ class Contact
     public function setAuthor(int $author): void
     {
         $this->author = $author;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAuthorName(): string
+    {
+        return $this->authorName;
+    }
+
+    /**
+     * @param string $authorName
+     */
+    public function setAuthorName(string $authorName): void
+    {
+        $this->authorName = $authorName;
     }
 
     /**

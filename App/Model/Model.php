@@ -307,6 +307,10 @@ class Model
             array_push($where, "(sdi.`name` LIKE '%" . $filter['text'] . "%')");
         }
 
+        if (!empty($filter['agentId'])) {
+            array_push($where, "sdi.`id_agent` IN (" . implode(',', $filter['agentId']) . ")");
+        }
+
 //        if (!empty($filter['dateStart'])) {
 //            array_push($where, "sdi.`date_start` >= '" . $filter['dateStart'] . "'");
 //        }

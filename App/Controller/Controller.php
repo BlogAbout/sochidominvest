@@ -358,6 +358,10 @@ class Controller
             if (!empty($params['rent'])) {
                 $filter['rent'] = $params['rent'];
             }
+
+            if (!empty($params['agentId'])) {
+                $filter['agentId'] = $params['agentId'];
+            }
         }
 
         return $filter;

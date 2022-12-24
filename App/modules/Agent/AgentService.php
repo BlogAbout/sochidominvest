@@ -27,7 +27,8 @@ class AgentService extends Model
                        SELECT u.`first_name`
                        FROM `sdi_user` AS u
                        WHERE u.`id` = `author` AND u.`active` IN (0, 1)
-                   ) AS authorName,(
+                   ) AS authorName,
+                   (
                        SELECT a.`content`
                        FROM `sdi_attachment` AS a
                        WHERE a.`id` = sdi.`id_avatar` AND a.`active` IN (0, 1)
@@ -71,7 +72,8 @@ class AgentService extends Model
                        SELECT u.`first_name`
                        FROM `sdi_user` AS u
                        WHERE u.`id` = `author` AND u.`active` IN (0, 1)
-                   ) AS authorName,(
+                   ) AS authorName,
+                   (
                        SELECT a.`content`
                        FROM `sdi_attachment` AS a
                        WHERE a.`id` = sdi.`id_avatar` AND a.`active` IN (0, 1)
