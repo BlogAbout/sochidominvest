@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Agent\AgentController;
+use App\Agent\ContactController;
 use App\Booking\BookingController;
 use App\BusinessProcess\BusinessProcessController;
 use App\BusinessProcess\PaymentController;
@@ -196,6 +197,13 @@ $Klein->respond('PUT', '/api/v1/agent/[:id]', [new AgentController(), 'updateIte
 $Klein->respond('GET', '/api/v1/agent/[:id]', [new AgentController(), 'fetchItemById']);
 $Klein->respond('GET', '/api/v1/agent', [new AgentController(), 'fetchList']);
 $Klein->respond('DELETE', '/api/v1/agent/[:id]', [new AgentController(), 'deleteItem']);
+
+// Contact Routes
+$Klein->respond('POST', '/api/v1/agent/contact', [new ContactController(), 'createItem']);
+$Klein->respond('PUT', '/api/v1/agent/contact/[:id]', [new ContactController(), 'updateItem']);
+$Klein->respond('GET', '/api/v1/agent/contact/[:id]', [new ContactController(), 'fetchItemById']);
+$Klein->respond('GET', '/api/v1/agent/contact', [new ContactController(), 'fetchList']);
+$Klein->respond('DELETE', '/api/v1/agent/contact/[:id]', [new ContactController(), 'deleteItem']);
 
 // Core Routes
 $Klein->respond('GET', '/api/v1/core/init', [new CoreController(), 'initAllChecking']);
