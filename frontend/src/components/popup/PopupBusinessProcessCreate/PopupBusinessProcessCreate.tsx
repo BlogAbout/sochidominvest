@@ -20,7 +20,7 @@ import SelectorBox from '../../SelectorBox/SelectorBox'
 import UserBox from '../../form/UserBox/UserBox'
 import TextBox from '../../form/TextBox/TextBox'
 import Tabs from '../../Tabs/Tabs'
-import UserList from '../PopupBuildingCreate/components/UserList/UserList'
+import UserList from './components/UserList/UserList'
 import RelationList from './components/RelationList/RelationList'
 import classes from './PopupBusinessProcessCreate.module.scss'
 

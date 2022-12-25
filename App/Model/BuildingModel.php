@@ -35,8 +35,13 @@ class BuildingModel extends Model
                    (
                        SELECT GROUP_CONCAT(DISTINCT(bc.`id_user`))
                        FROM `sdi_building_contact` AS bc
-                       WHERE bc.`id_building` = bu.`id`
-                   ) AS contacts,
+                       WHERE bc.`id_building` = bu.`id` AND bc.`type_contact` = 'user'
+                   ) AS contactUsers,
+                   (
+                       SELECT GROUP_CONCAT(DISTINCT(bc.`id_user`))
+                       FROM `sdi_building_contact` AS bc
+                       WHERE bc.`id_building` = bu.`id` AND bc.`type_contact` = 'contact'
+                   ) AS contactContacts,
                    (
                        SELECT GROUP_CONCAT(DISTINCT(bd.`id_developer`))
                        FROM `sdi_building_developer` AS bd
@@ -151,8 +156,13 @@ class BuildingModel extends Model
                    (
                        SELECT GROUP_CONCAT(DISTINCT(bc.`id_user`))
                        FROM `sdi_building_contact` AS bc
-                       WHERE bc.`id_building` = bu.`id`
-                   ) AS contacts,
+                       WHERE bc.`id_building` = bu.`id` AND bc.`type_contact` = 'user'
+                   ) AS contactUsers,
+                   (
+                       SELECT GROUP_CONCAT(DISTINCT(bc.`id_user`))
+                       FROM `sdi_building_contact` AS bc
+                       WHERE bc.`id_building` = bu.`id` AND bc.`type_contact` = 'contact'
+                   ) AS contactContacts,
                    (
                        SELECT GROUP_CONCAT(DISTINCT(bd.`id_developer`))
                        FROM `sdi_building_developer` AS bd
@@ -522,7 +532,8 @@ class BuildingModel extends Model
         BuildingModel::updateRent($payload);
         BuildingModel::updateRelationsTags($payload['id'], $payload['tags']);
         BuildingModel::updateRelationsDevelopers($payload['id'], $payload['developers']);
-        BuildingModel::updateRelationsContacts($payload['id'], $payload['contacts']);
+        BuildingModel::updateRelationsContacts($payload['id'], $payload['contactUsers'], 'user');
+        BuildingModel::updateRelationsContacts($payload['id'], $payload['contactContacts'], 'contact');
         BuildingModel::updateRelationsArticles($payload['id'], $payload['articles']);
         parent::updateRelationsImages($payload['images'], $payload['id'], 'building');
         parent::updateRelationsVideos($payload['videos'], $payload['id'], 'building');
@@ -650,25 +661,27 @@ class BuildingModel extends Model
      *
      * @param int $buildingId Идентификатор объекта недвижимости
      * @param array $users Массив идентификаторов пользователей
+     * @param string $type Тип контакта
      */
-    private static function updateRelationsContacts(int $buildingId, array $users = array())
+    private static function updateRelationsContacts(int $buildingId, array $users = array(), string $type)
     {
-        $sql = "DELETE FROM `sdi_building_contact` WHERE `id_building` = :id";
+        $sql = "DELETE FROM `sdi_building_contact` WHERE `id_building` = :id AND `type_contact` = :type";
 
         parent::query($sql);
         parent::bindParams('id', $buildingId);
+        parent::bindParams('type', $type);
         parent::execute();
 
         if (count($users)) {
             $usersSql = [];
 
             foreach ($users as $user) {
-                array_push($usersSql, "($buildingId, $user)");
+                array_push($usersSql, "($buildingId, $user, '$type')");
             }
 
             $sql = "
                 INSERT INTO `sdi_building_contact`
-                    (`id_building`, `id_user`)
+                    (`id_building`, `id_user`, `type_contact`)
                 VALUES
             " . implode(',', $usersSql);
 
@@ -812,7 +825,8 @@ class BuildingModel extends Model
             'surchargeGas' => (float)$data['surcharge_gas'],
             'saleNoResident' => (int)$data['sale_no_resident'],
             'tags' => array_map('intval', $data['tags'] ? explode(',', $data['tags']) : []),
-            'contacts' => array_map('intval', $data['contacts'] ? explode(',', $data['contacts']) : []),
+            'contactUsers' => array_map('intval', $data['contactUsers'] ? explode(',', $data['contactUsers']) : []),
+            'contactContacts' => array_map('intval', $data['contactContacts'] ? explode(',', $data['contactContacts']) : []),
             'developers' => array_map('intval', $data['developers'] ? explode(',', $data['developers']) : []),
             'articles' => array_map('intval', $data['articles'] ? explode(',', $data['articles']) : []),
             'images' => array_map('intval', $data['images'] ? explode(',', $data['images']) : []),

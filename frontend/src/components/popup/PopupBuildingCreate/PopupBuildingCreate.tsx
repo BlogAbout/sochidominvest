@@ -788,8 +788,10 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
     const renderContactTab = () => {
         return (
             <div key='developer' className={classes.tabContent}>
-                <UserList selected={building.contacts}
-                          onSelect={(value: number[]) => setBuilding({...building, contacts: value})}
+                <UserList selectedUsers={building.contactUsers}
+                          selectedContacts={building.contactContacts}
+                          onSelectUsers={(value: number[]) => setBuilding({...building, contactUsers: value})}
+                          onSelectContacts={(value: number[]) => setBuilding({...building, contactContacts: value})}
                 />
             </div>
         )

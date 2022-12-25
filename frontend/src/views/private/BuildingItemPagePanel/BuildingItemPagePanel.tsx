@@ -61,6 +61,8 @@ import {
 import {sortAttachments} from '../../../helpers/attachmentHelper'
 import {getFormatDate} from '../../../helpers/dateHelper'
 import classes from './BuildingItemPagePanel.module.scss'
+import {IContact} from "../../../@types/IAgent";
+import AgentService from "../../../api/AgentService";
 
 type BuildingItemPageParams = {
     id: string
@@ -78,10 +80,12 @@ const BuildingItemPagePanel: React.FC = (props) => {
     const [documents, setDocuments] = useState<IDocument[]>([])
     const [images, setImages] = useState<IAttachment[]>([])
     const [videos, setVideos] = useState<IAttachment[]>([])
+    const [contacts, setContacts] = useState<IContact[]>([])
     const [fetchingCheckers, setFetchingCheckers] = useState(false)
     const [fetchingDocuments, setFetchingDocuments] = useState(false)
     const [fetchingImages, setFetchingImages] = useState(false)
     const [fetchingVideos, setFetchingVideos] = useState(false)
+    const [fetchingContactList, setFetchingContactList] = useState(false)
     const [favorites, setFavorites] = useState<number[]>([])
     const [showCopyText, setShowCopyText] = useState(false)
 
@@ -179,7 +183,7 @@ const BuildingItemPagePanel: React.FC = (props) => {
             fetchDeveloperList({active: [0, 1]})
         }
 
-        if ((!users || !users.length) && (building.contacts && building.contacts.length)) {
+        if ((!users || !users.length) && (building.contactUsers && building.contactUsers.length)) {
             fetchUserList({active: [0, 1]})
         }
 
@@ -188,12 +192,36 @@ const BuildingItemPagePanel: React.FC = (props) => {
         }
     }, [building])
 
+    useEffect(() => {
+        fetchContactListHandler()
+    }, [building.contactContacts])
+
     const converter = new Showdown.Converter({
         tables: true,
         simplifiedAutoLink: true,
         strikethrough: true,
         tasklists: true
     })
+
+    const fetchContactListHandler = () => {
+        if (!building || !building.contactContacts || !building.contactContacts.length) {
+            return
+        }
+
+        setFetchingContactList(true)
+
+        AgentService.fetchContacts({id: building.contactContacts, active: [1]})
+            .then((response: any) => {
+                setContacts(response.data)
+            })
+            .catch((error: any) => {
+                openPopupAlert(document.body, {
+                    title: 'Ошибка!',
+                    text: error.data
+                })
+            })
+            .finally(() => setFetchingContactList(false))
+    }
 
     // Добавление объекта в избранное
     const addBuildingToFavorite = () => {
@@ -823,49 +851,78 @@ const BuildingItemPagePanel: React.FC = (props) => {
         )
     }
 
-    // Вывод информации о контактах
-    const renderContactsInfo = () => {
-        if (!['director', 'administrator', 'manager'].includes(role)) {
-            return null
+    const renderContactUsersList = () => {
+        if (!building.contactUsers || !building.contactUsers.length || !users || !users.length) {
+            return
         }
 
+        return (
+            building.contactUsers.map((id: number) => {
+                const userInfo = users.find((user: IUser) => user.id === id)
+
+                return userInfo ?
+                    <div key={id}>
+                        <span>
+                            <Indicator
+                                color={userInfo.id && usersOnline.includes(userInfo.id) ? 'green' : 'red'}
+                                text={userInfo.id && usersOnline.includes(userInfo.id) ? 'Online' : `Был в сети: ${getFormatDate(userInfo.lastActive)}`}
+                            />
+
+                            <span>{userInfo.firstName}</span>
+
+                            <span className={classes.icon}
+                                  title='Написать в чат'
+                                  onClick={() => {
+                                      openPopupMessenger(document.body, {
+                                          currentMemberId: userInfo.id
+                                      })
+                                  }}
+                            >
+                                <FontAwesomeIcon icon='message'/>
+                            </span>
+                        </span>
+
+                        {userInfo.postName && <span className={classes.post}>{userInfo.postName}</span>}
+
+                        <span><a href={`tel:${userInfo.phone}`}>{userInfo.phone}</a></span>
+                    </div>
+                    : null
+            })
+        )
+    }
+
+    const renderContactContactsList = () => {
+        if (!building.contactContacts || !building.contactContacts.length || !contacts || !contacts.length) {
+            return
+        }
+
+        return (
+            contacts.map((contact: IContact) => {
+                return (
+                    <div key={contact.id}>
+                        <span>
+                            <span>{contact.name}</span>
+                        </span>
+
+                        {contact.post.trim() !== '' && <span className={classes.post}>{contact.post}</span>}
+
+                        <span><a href={`tel:${contact.phone}`}>{contact.phone}</a></span>
+                    </div>
+                )
+            })
+        )
+    }
+
+    // Вывод информации о контактах
+    const renderContactsInfo = () => {
         return (
             <BlockingElement fetching={fetchingUserList} className={classes.block}>
                 <h2>Контакты</h2>
 
-                {building.contacts && building.contacts.length && users && users.length ?
+                {(building.contactUsers && building.contactUsers.length && users && users.length) || (building.contactContacts && building.contactContacts.length && contacts && contacts.length) ?
                     <div className={classes.list}>
-                        {building.contacts.map((id: number) => {
-                            const userInfo = users.find((user: IUser) => user.id === id)
-
-                            return userInfo ? (
-                                <div key={id}>
-                                    <span>
-                                        <Indicator
-                                            color={userInfo.id && usersOnline.includes(userInfo.id) ? 'green' : 'red'}
-                                            text={userInfo.id && usersOnline.includes(userInfo.id) ? 'Online' : `Был в сети: ${getFormatDate(userInfo.lastActive)}`}
-                                        />
-
-                                        <span>{userInfo.firstName}</span>
-
-                                        <span className={classes.icon}
-                                              title='Написать в чат'
-                                              onClick={() => {
-                                                  openPopupMessenger(document.body, {
-                                                      currentMemberId: userInfo.id
-                                                  })
-                                              }}
-                                        >
-                                            <FontAwesomeIcon icon='message'/>
-                                        </span>
-                                    </span>
-
-                                    {userInfo.postName && <span className={classes.post}>{userInfo.postName}</span>}
-
-                                    <span><a href={`tel:${userInfo.phone}`}>{userInfo.phone}</a></span>
-                                </div>
-                            ) : null
-                        })}
+                        {renderContactUsersList()}
+                        {renderContactContactsList()}
                     </div>
                     : <Empty message='Отсутствует информация о контактах'/>
                 }

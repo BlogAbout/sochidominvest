@@ -16,14 +16,13 @@ import classes from './PopupContactCreate.module.scss'
 
 interface Props extends PopupProps {
     contact?: IContact | null
-    agentId: number
+    agentId?: number
 
     onSave(): void
 }
 
 const defaultProps: Props = {
     contact: null,
-    agentId: 0,
     onSave: () => {
         console.info('PopupContactCreate onSave')
     }
@@ -32,7 +31,7 @@ const defaultProps: Props = {
 const PopupContactCreate: React.FC<Props> = (props) => {
     const [contact, setContact] = useState<IContact>(props.contact || {
         id: null,
-        agentId: props.agentId,
+        agentId: props.agentId || 0,
         name: '',
         post: '',
         phone: '',

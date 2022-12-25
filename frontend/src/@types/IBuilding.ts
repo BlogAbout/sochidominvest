@@ -22,7 +22,8 @@ export interface IBuilding {
     costOld?: number | null
     countCheckers?: number | null
     tags: number[]
-    contacts: number[]
+    contactUsers: number[]
+    contactContacts: number[]
     developers: number[]
     articles: number[]
     district?: string | null
