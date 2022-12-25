@@ -199,11 +199,11 @@ $Klein->respond('GET', '/api/v1/agent', [new AgentController(), 'fetchList']);
 $Klein->respond('DELETE', '/api/v1/agent/[:id]', [new AgentController(), 'deleteItem']);
 
 // Contact Routes
-$Klein->respond('POST', '/api/v1/agent/contact', [new ContactController(), 'createItem']);
-$Klein->respond('PUT', '/api/v1/agent/contact/[:id]', [new ContactController(), 'updateItem']);
-$Klein->respond('GET', '/api/v1/agent/contact/[:id]', [new ContactController(), 'fetchItemById']);
-$Klein->respond('GET', '/api/v1/agent/contact', [new ContactController(), 'fetchList']);
-$Klein->respond('DELETE', '/api/v1/agent/contact/[:id]', [new ContactController(), 'deleteItem']);
+$Klein->respond('POST', '/api/v1/contact', [new ContactController(), 'createItem']);
+$Klein->respond('PUT', '/api/v1/contact/[:id]', [new ContactController(), 'updateItem']);
+$Klein->respond('GET', '/api/v1/contact/[:id]', [new ContactController(), 'fetchItemById']);
+$Klein->respond('GET', '/api/v1/contact', [new ContactController(), 'fetchList']);
+$Klein->respond('DELETE', '/api/v1/contact/[:id]', [new ContactController(), 'deleteItem']);
 
 // Core Routes
 $Klein->respond('GET', '/api/v1/core/init', [new CoreController(), 'initAllChecking']);

@@ -101,7 +101,7 @@ class ContactService extends Model
         parent::query($sql);
         parent::bindParams('agentId', $contact->getAgentId());
         parent::bindParams('name', $contact->getName());
-        parent::bindParams('description', $contact->getPost());
+        parent::bindParams('post', $contact->getPost());
         parent::bindParams('phone', $contact->getPhone());
         parent::bindParams('author', $contact->getAuthor());
         parent::bindParams('dateCreated', $contact->getDateCreated());
@@ -142,7 +142,7 @@ class ContactService extends Model
         parent::bindParams('id', $contact->getId());
         parent::bindParams('agentId', $contact->getAgentId());
         parent::bindParams('name', $contact->getName());
-        parent::bindParams('description', $contact->getPost());
+        parent::bindParams('post', $contact->getPost());
         parent::bindParams('phone', $contact->getPhone());
         parent::bindParams('author', $contact->getAuthor());
         parent::bindParams('dateCreated', $contact->getDateCreated());

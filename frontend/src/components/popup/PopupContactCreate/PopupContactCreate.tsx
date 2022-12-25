@@ -103,7 +103,7 @@ const PopupContactCreate: React.FC<Props> = (props) => {
                     <div className={classes.field}>
                         <Label text='Должность/Отдел'/>
 
-                        <TextBox value={contact.name}
+                        <TextBox value={contact.post}
                                  onChange={(e: React.MouseEvent, value: string) => setContact({
                                      ...contact,
                                      post: value

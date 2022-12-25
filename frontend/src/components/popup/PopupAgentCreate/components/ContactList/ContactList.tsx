@@ -6,7 +6,7 @@ import BlockingElement from '../../../../ui/BlockingElement/BlockingElement'
 import Empty from '../../../../Empty/Empty'
 import openPopupAlert from '../../../../PopupAlert/PopupAlert'
 import openContextMenu from '../../../../ContextMenu/ContextMenu'
-import openPopupContactCreate from '../../PopupContactCreate'
+import openPopupContactCreate from '../../../PopupContactCreate/PopupContactCreate'
 import classes from './ContactList.module.scss'
 
 interface Props {
@@ -108,9 +108,12 @@ const ContactList: React.FC<Props> = (props) => {
                 <div className={classes.post}>Должность/Отдел</div>
             </div>
 
-            <div className={classes.addContact} onClick={onAddHandler.bind(this)}>
-                <FontAwesomeIcon icon='plus'/> Добавить
-            </div>
+            {props.agentId ?
+                <div className={classes.addContact} onClick={onAddHandler.bind(this)}>
+                    <FontAwesomeIcon icon='plus'/> Добавить
+                </div>
+                : null
+            }
 
             <BlockingElement fetching={fetching} className={classes.list}>
                 {props.contacts && props.contacts.length ?

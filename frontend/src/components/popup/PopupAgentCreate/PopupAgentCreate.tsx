@@ -19,7 +19,7 @@ import Title from '../../ui/Title/Title'
 import Label from '../../form/Label/Label'
 import AvatarBox from '../../form/AvatarBox/AvatarBox'
 import Tabs from '../../Tabs/Tabs'
-import ContactList from '../PopupContactCreate/components/ContactList/ContactList'
+import ContactList from './components/ContactList/ContactList'
 import classes from './PopupAgentCreate.module.scss'
 import Empty from "../../Empty/Empty";
 
@@ -227,7 +227,7 @@ const PopupAgentCreate: React.FC<Props> = (props) => {
         return (
             <div key='contacts' className={classes.tabContent}>
                 {agent.id ?
-                    <ContactList contacts={contacts} onSave={() => fetchContactsForAgentHandler()}/>
+                    <ContactList agentId={agent.id} contacts={contacts} onSave={() => fetchContactsForAgentHandler()}/>
                     : <Empty message='Для получения доступа к контактам сохраните изменения'/>
                 }
             </div>

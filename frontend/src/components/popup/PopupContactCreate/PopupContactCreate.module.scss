@@ -9,7 +9,6 @@
 
     .blockContent {
         padding: 15px;
-        height: 100%;
         display: flex;
         justify-content: space-between;
         flex-wrap: wrap;
@@ -33,10 +32,6 @@
         > div:last-child {
             flex-grow: 1;
         }
-    }
-
-    .tabContent {
-        padding: 20px 0;
     }
 }
 

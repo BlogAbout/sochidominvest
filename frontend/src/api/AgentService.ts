@@ -25,22 +25,22 @@ export default class AgentService {
     }
 
     static async fetchContactById(contactId: number): Promise<AxiosResponse> {
-        return API.get(`/agent/contact/${contactId}`)
+        return API.get(`/contact/${contactId}`)
     }
 
     static async fetchContacts(filter: IFilter): Promise<AxiosResponse> {
-        return API.get('/agent/contact', {params: filter})
+        return API.get('/contact', {params: filter})
     }
 
     static async saveContact(contact: IContact): Promise<AxiosResponse> {
         if (contact.id) {
-            return API.put(`/agent/contact/${contact.id}`, contact)
+            return API.put(`/contact/${contact.id}`, contact)
         } else {
-            return API.post('/agent/contact', contact)
+            return API.post('/contact', contact)
         }
     }
 
     static async removeContact(contactId: number): Promise<AxiosResponse> {
-        return API.delete(`/agent/contact/${contactId}`)
+        return API.delete(`/contact/${contactId}`)
     }
 }

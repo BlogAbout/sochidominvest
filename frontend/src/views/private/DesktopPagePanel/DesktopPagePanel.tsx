@@ -23,7 +23,9 @@ import Avatar from '../../../components/ui/Avatar/Avatar'
 import openPopupSupportInfo from '../../../components/popup/PopupSupportInfo/PopupSupportInfo'
 import openPopupDeveloperCreate from '../../../components/popup/PopupDeveloperCreate/PopupDeveloperCreate'
 import openPopupAgentCreate from '../../../components/popup/PopupAgentCreate/PopupAgentCreate'
+import openPopupAlert from '../../../components/PopupAlert/PopupAlert'
 import classes from './DesktopPagePanel.module.scss'
+import openContextMenu from "../../../components/ContextMenu/ContextMenu";
 
 const cx = classNames.bind(classes)
 
@@ -136,6 +138,112 @@ const DesktopPagePanel: React.FC = () => {
             .finally(() => {
                 setFetchingAgents(false)
             })
+    }
+
+    const onContextMenuAgent = (e: React.MouseEvent, agent: IAgent) => {
+        e.preventDefault()
+
+        const menuItems = [
+            {
+                text: 'Редактировать',
+                onClick: () => {
+                    openPopupAgentCreate(document.body, {
+                        agent: agent,
+                        onSave: () => {
+                            loadAgentsHandler()
+                        }
+                    })
+                }
+            },
+            {
+                text: 'Удалить',
+                onClick: () => {
+                    openPopupAlert(document.body, {
+                        text: `Вы действительно хотите удалить ${agent.name}?`,
+                        buttons: [
+                            {
+                                text: 'Удалить',
+                                onClick: () => {
+                                    if (agent.id) {
+                                        setFetchingAgents(true)
+
+                                        AgentService.removeAgent(agent.id)
+                                            .then(() => {
+                                                loadAgentsHandler()
+                                            })
+                                            .catch((error: any) => {
+                                                openPopupAlert(document.body, {
+                                                    title: 'Ошибка!',
+                                                    text: error.data
+                                                })
+                                            })
+                                            .finally(() => {
+                                                setFetchingAgents(false)
+                                            })
+                                    }
+                                }
+                            },
+                            {text: 'Отмена'}
+                        ]
+                    })
+                }
+            }
+        ]
+
+        openContextMenu(e, menuItems)
+    }
+
+    const onContextMenuDeveloper = (e: React.MouseEvent, developer: IDeveloper) => {
+        e.preventDefault()
+
+        const menuItems = [
+            {
+                text: 'Редактировать',
+                onClick: () => {
+                    openPopupDeveloperCreate(document.body, {
+                        developer: developer,
+                        onSave: () => {
+                            loadDevelopersHandler()
+                        }
+                    })
+                }
+            },
+            {
+                text: 'Удалить',
+                onClick: () => {
+                    openPopupAlert(document.body, {
+                        text: `Вы действительно хотите удалить ${developer.name}?`,
+                        buttons: [
+                            {
+                                text: 'Удалить',
+                                onClick: () => {
+                                    if (developer.id) {
+                                        setFetchingDevelopers(true)
+
+                                        AgentService.removeAgent(developer.id)
+                                            .then(() => {
+                                                loadDevelopersHandler()
+                                            })
+                                            .catch((error: any) => {
+                                                openPopupAlert(document.body, {
+                                                    title: 'Ошибка!',
+                                                    text: error.data
+                                                })
+                                            })
+                                            .finally(() => {
+                                                setFetchingDevelopers(false)
+                                            })
+                                    }
+                                }
+                            },
+                            {text: 'Отмена'}
+                        ]
+                    })
+                }
+            }
+        ]
+
+        openContextMenu(e, menuItems)
     }
 
     const renderUserInfo = () => {
@@ -319,6 +427,7 @@ const DesktopPagePanel: React.FC = () => {
                                      onClick={() => {
 
                                      }}
+                                     onContextMenu={(e: React.MouseEvent) => onContextMenuAgent(e, agent)}
                                 >
                                     <div className={classes.name}>{agent.name}</div>
                                     <div className={classes.date} title='Дата публикации'>
@@ -358,6 +467,7 @@ const DesktopPagePanel: React.FC = () => {
                                      onClick={() => {
 
                                      }}
+                                     onContextMenu={(e: React.MouseEvent) => onContextMenuDeveloper(e, developer)}
                                 >
                                     <div className={classes.name}>{developer.name}</div>
                                     <div className={classes.date} title='Дата публикации'>
