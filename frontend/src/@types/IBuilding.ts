@@ -25,6 +25,7 @@ export interface IBuilding {
     contactUsers: number[]
     contactContacts: number[]
     developers: number[]
+    agents: number[]
     articles: number[]
     district?: string | null
     districtZone?: string | null

@@ -22,6 +22,7 @@ import TagBox from '../../TagBox/TagBox'
 import Empty from '../../Empty/Empty'
 import CheckerList from './components/CheckerList/CheckerList'
 import DeveloperList from './components/DeveloperList/DeveloperList'
+import AgentList from './components/AgentList/AgentList'
 import DocumentList from './components/DocumentList/DocumentList'
 import UserList from './components/UserList/UserList'
 import SelectorBox from '../../SelectorBox/SelectorBox'
@@ -87,6 +88,7 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
         tags: [],
         contacts: [],
         developers: [],
+        agents: [],
         advantages: [],
         articles: [],
         images: [],
@@ -784,11 +786,23 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
         )
     }
 
+    // Вкладка агентства объекта
+    const renderAgentTab = () => {
+        return (
+            <div key='agent' className={classes.tabContent}>
+                <AgentList selected={building.agents}
+                           onSelect={(value: number[]) => setBuilding({...building, agents: value})}
+                />
+            </div>
+        )
+    }
+
     // Вкладка контактов объекта
     const renderContactTab = () => {
         return (
-            <div key='developer' className={classes.tabContent}>
-                <UserList selectedUsers={building.contactUsers}
+            <div key='contact' className={classes.tabContent}>
+                <UserList selectedAgents={building.agents}
+                          selectedUsers={building.contactUsers}
                           selectedContacts={building.contactContacts}
                           onSelectUsers={(value: number[]) => setBuilding({...building, contactUsers: value})}
                           onSelectContacts={(value: number[]) => setBuilding({...building, contactContacts: value})}
@@ -860,6 +874,7 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
         checker: {title: 'Шахматка', render: renderCheckerBoardTab()},
         media: {title: 'Медиа', render: renderMediaTab()},
         developer: {title: 'Застройщик', render: renderDeveloperTab()},
+        agent: {title: 'Агентство', render: renderAgentTab()},
         contact: {title: 'Контакты', render: renderContactTab()},
         documents: {title: 'Документы', render: renderDocumentTab()},
         articles: {title: 'Статьи', render: renderArticleTab()},

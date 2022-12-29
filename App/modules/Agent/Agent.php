@@ -102,7 +102,7 @@ class Agent
             $data['active'] ?? 1,
             $data['id_avatar'] ?? 0,
             $data['avatar'] ?? '',
-            $data['buildings'] ?? []
+            array_map('intval', $data['buildings'] ? explode(',', $data['buildings']) : [])
         );
     }
 

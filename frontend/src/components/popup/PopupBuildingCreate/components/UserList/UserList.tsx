@@ -14,6 +14,7 @@ import openPopupContactSelector from '../../../PopupContactSelector/PopupContact
 import classes from './UserList.module.scss'
 
 interface Props {
+    selectedAgents: number[]
     selectedUsers: number[]
     selectedContacts: number[]
 
@@ -23,6 +24,7 @@ interface Props {
 }
 
 const defaultProps: Props = {
+    selectedAgents: [],
     selectedUsers: [],
     selectedContacts: [],
     onSelectUsers: (value: number[]) => {
@@ -59,13 +61,13 @@ const UserList: React.FC<Props> = (props) => {
     }, [props.selectedContacts])
 
     const fetchContactListHandler = () => {
-        if (!props.selectedContacts.length) {
+        if (!props.selectedAgents.length || !props.selectedContacts.length) {
             return
         }
 
         setFetchingContactList(true)
 
-        AgentService.fetchContacts({id: props.selectedContacts, active: [0, 1]})
+        AgentService.fetchContacts({id: props.selectedContacts, agentId: props.selectedAgents, active: [0, 1]})
             .then((response: any) => {
                 setSelectedContacts(response.data)
             })
@@ -135,6 +137,7 @@ const UserList: React.FC<Props> = (props) => {
                 text: 'Из контактов',
                 onClick: () => {
                     openPopupContactSelector(document.body, {
+                        includeAgents: props.selectedAgents,
                         selected: props.selectedContacts,
                         multi: true,
                         onSelect: (value: number[]) => props.onSelectContacts(value),

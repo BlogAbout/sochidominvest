@@ -48,6 +48,11 @@ class BuildingModel extends Model
                        WHERE bd.`id_building` = bu.`id`
                    ) AS developers,
                    (
+                       SELECT GROUP_CONCAT(DISTINCT(ba.`id_agent`))
+                       FROM `sdi_building_agent` AS ba
+                       WHERE ba.`id_building` = bu.`id`
+                   ) AS agents,
+                   (
                        SELECT GROUP_CONCAT(DISTINCT(ba.`id_article`))
                        FROM `sdi_building_article` AS ba
                        WHERE ba.`id_building` = bu.`id`
@@ -168,6 +173,11 @@ class BuildingModel extends Model
                        FROM `sdi_building_developer` AS bd
                        WHERE bd.`id_building` = bu.`id`
                    ) AS developers,
+                   (
+                       SELECT GROUP_CONCAT(DISTINCT(ba.`id_agent`))
+                       FROM `sdi_building_agent` AS ba
+                       WHERE ba.`id_building` = bu.`id`
+                   ) AS agents,
                    (
                        SELECT GROUP_CONCAT(DISTINCT(ba.`id_article`))
                        FROM `sdi_building_article` AS ba
@@ -532,6 +542,7 @@ class BuildingModel extends Model
         BuildingModel::updateRent($payload);
         BuildingModel::updateRelationsTags($payload['id'], $payload['tags']);
         BuildingModel::updateRelationsDevelopers($payload['id'], $payload['developers']);
+        BuildingModel::updateRelationsAgents($payload['id'], $payload['agents']);
         BuildingModel::updateRelationsContacts($payload['id'], $payload['contactUsers'], 'user');
         BuildingModel::updateRelationsContacts($payload['id'], $payload['contactContacts'], 'contact');
         BuildingModel::updateRelationsArticles($payload['id'], $payload['articles']);
@@ -723,6 +734,38 @@ class BuildingModel extends Model
     }
 
     /**
+     * Обновление связей между объектами недвижимости и агентствами
+     *
+     * @param int $buildingId Идентификатор объекта недвижимости
+     * @param array $agents Массив идентификаторов агентств
+     */
+    private static function updateRelationsAgents(int $buildingId, array $agents = array())
+    {
+        $sql = "DELETE FROM `sdi_building_agent` WHERE `id_building` = :id";
+
+        parent::query($sql);
+        parent::bindParams('id', $buildingId);
+        parent::execute();
+
+        if (count($agents)) {
+            $agentsSql = [];
+
+            foreach ($agents as $agent) {
+                array_push($agentsSql, "($buildingId, $agent)");
+            }
+
+            $sql = "
+                INSERT INTO `sdi_building_agent`
+                    (`id_building`, `id_agent`)
+                VALUES
+            " . implode(',', $agentsSql);
+
+            parent::query($sql);
+            parent::execute();
+        }
+    }
+
+    /**
      * Обновление связей между недвижимостью и статьями
      *
      * @param int $buildingId Идентификатор объекта недвижимости
@@ -828,6 +871,7 @@ class BuildingModel extends Model
             'contactUsers' => array_map('intval', $data['contactUsers'] ? explode(',', $data['contactUsers']) : []),
             'contactContacts' => array_map('intval', $data['contactContacts'] ? explode(',', $data['contactContacts']) : []),
             'developers' => array_map('intval', $data['developers'] ? explode(',', $data['developers']) : []),
+            'agents' => array_map('intval', $data['agents'] ? explode(',', $data['agents']) : []),
             'articles' => array_map('intval', $data['articles'] ? explode(',', $data['articles']) : []),
             'images' => array_map('intval', $data['images'] ? explode(',', $data['images']) : []),
             'videos' => array_map('intval', $data['videos'] ? explode(',', $data['videos']) : []),

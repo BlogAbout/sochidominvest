@@ -2,27 +2,27 @@ import React, {useEffect, useState} from 'react'
 import withStore from '../../../hoc/withStore'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {PopupDisplayOptions, PopupProps} from '../../../@types/IPopup'
-import {IContact} from '../../../@types/IAgent'
-import {IFilter} from '../../../@types/IFilter'
+import {IAgent} from '../../../@types/IAgent'
 import AgentService from '../../../api/AgentService'
 import {getPopupContainer, openPopup, removePopup} from '../../../helpers/popupHelper'
 import {Footer, Popup} from '../Popup/Popup'
 import BlockingElement from '../../ui/BlockingElement/BlockingElement'
 import Empty from '../../Empty/Empty'
 import openContextMenu from '../../ContextMenu/ContextMenu'
-import openPopupContactCreate from '../PopupContactCreate/PopupContactCreate'
+import openPopupAgentCreate from '../PopupAgentCreate/PopupAgentCreate'
 import showBackgroundBlock from '../../ui/BackgroundBlock/BackgroundBlock'
+import ButtonAdd from '../../ButtonAdd/ButtonAdd'
 import SearchBox from '../../SearchBox/SearchBox'
 import CheckBox from '../../form/CheckBox/CheckBox'
 import Button from '../../form/Button/Button'
 import Title from '../../ui/Title/Title'
 import openPopupAlert from '../../PopupAlert/PopupAlert'
 import {useTypedSelector} from '../../../hooks/useTypedSelector'
-import classes from './PopupContactSelector.module.scss'
+import classes from './PopupAgentSelector.module.scss'
 
 interface Props extends PopupProps {
-    includeAgents?: number[]
     selected?: number[]
+    buttonAdd?: boolean
     multi?: boolean
 
     onSelect(value: number[]): void
@@ -32,28 +32,29 @@ interface Props extends PopupProps {
 
 const defaultProps: Props = {
     selected: [],
+    buttonAdd: true,
     multi: false,
     onAdd: () => {
-        console.info('PopupContactSelector onAdd')
+        console.info('PopupAgentSelector onAdd')
     },
     onSelect: (value: number[]) => {
-        console.info('PopupContactSelector onSelect', value)
+        console.info('PopupAgentSelector onSelect', value)
     }
 }
 
-const PopupContactSelector: React.FC<Props> = (props) => {
-    const [isUpdate, setIsUpdate] = useState(false)
+const PopupAgentSelector: React.FC<Props> = (props) => {
+    const [isUpdate, setIsUpdate] = useState(true)
     const [searchText, setSearchText] = useState('')
-    const [contacts, setContacts] = useState<IContact[]>([])
-    const [filterContacts, setFilterContacts] = useState<IContact[]>([])
-    const [selectedContacts, setSelectedContacts] = useState<number[]>(props.selected || [])
+    const [agents, setAgents] = useState<IAgent[]>([])
+    const [filterAgents, setFilterAgents] = useState<IAgent[]>([])
+    const [selectedAgents, setSelectedAgents] = useState<number[]>(props.selected || [])
     const [fetching, setFetching] = useState(false)
 
-    const {userId} = useTypedSelector(state => state.userReducer)
+    const {role, userId} = useTypedSelector(state => state.userReducer)
 
     useEffect(() => {
-        if (!contacts.length || isUpdate) {
-            fetchContactsForAgentHandler()
+        if (isUpdate) {
+            loadAgentsHandler()
 
             setIsUpdate(false)
         }
@@ -61,35 +62,25 @@ const PopupContactSelector: React.FC<Props> = (props) => {
         return () => {
             removePopup(props.blockId ? props.blockId : '')
         }
-    }, [isUpdate, userId])
+    }, [isUpdate])
 
     useEffect(() => {
         search(searchText)
-    }, [contacts])
+    }, [agents])
 
-    // Загрузка контактов всех агентств пользователя
-    const fetchContactsForAgentHandler = () => {
-        const filter: IFilter = {author: [userId], active: [0, 1]}
-        if (props.includeAgents && props.includeAgents.length) {
-            filter.agentId = props.includeAgents
-        } else if (props.includeAgents !== undefined && !props.includeAgents.length) {
-            setContacts([])
-            return
-        }
-
+    const loadAgentsHandler = () => {
         setFetching(true)
 
-        AgentService.fetchContacts(filter)
+        AgentService.fetchAgents({active: [0, 1], author: [userId]})
             .then((response: any) => {
-                setContacts(response.data)
+                setAgents(response.data)
             })
             .catch((error: any) => {
-                openPopupAlert(document.body, {
-                    title: 'Ошибка!',
-                    text: error.data
-                })
+                console.error('Ошибка загрузки агентств пользователя', error)
             })
-            .finally(() => setFetching(false))
+            .finally(() => {
+                setFetching(false)
+            })
     }
 
     // Закрытие Popup
@@ -98,29 +89,29 @@ const PopupContactSelector: React.FC<Props> = (props) => {
     }
 
     // Клик на строку
-    const selectRow = (contact: IContact) => {
+    const selectRow = (agent: IAgent) => {
         if (props.multi) {
-            selectRowMulti(contact)
+            selectRowMulti(agent)
         } else if (props.onSelect !== null) {
-            props.onSelect(contact.id ? [contact.id] : [0])
+            props.onSelect(agent.id ? [agent.id] : [0])
             close()
         }
     }
 
     // Клик на строку в мульти режиме
-    const selectRowMulti = (contact: IContact) => {
-        if (contact.id) {
-            if (checkSelected(contact.id)) {
-                setSelectedContacts(selectedContacts.filter((key: number) => key !== contact.id))
+    const selectRowMulti = (agent: IAgent) => {
+        if (agent.id) {
+            if (checkSelected(agent.id)) {
+                setSelectedAgents(selectedAgents.filter((key: number) => key !== agent.id))
             } else {
-                setSelectedContacts([...selectedContacts, contact.id])
+                setSelectedAgents([...selectedAgents, agent.id])
             }
         }
     }
 
     // Проверка наличия элемента среди выбранных
     const checkSelected = (id: number | null) => {
-        return id !== null && selectedContacts.includes(id)
+        return id !== null && selectedAgents.includes(id)
     }
 
     // Поиск
@@ -128,18 +119,27 @@ const PopupContactSelector: React.FC<Props> = (props) => {
         setSearchText(value)
 
         if (value.trim() !== '') {
-            setFilterContacts(contacts.filter((contact: IContact) => {
-                return contact.name.toLocaleLowerCase().indexOf(value.toLocaleLowerCase()) !== -1
+            setFilterAgents(agents.filter((agent: IAgent) => {
+                return agent.name.toLocaleLowerCase().indexOf(value.toLocaleLowerCase()) !== -1
             }))
         } else {
-            setFilterContacts(contacts)
+            setFilterAgents(agents)
         }
     }
 
+    // Добавление нового элемента
+    const onClickAdd = () => {
+        openPopupAgentCreate(document.body, {
+            onSave: () => {
+                setIsUpdate(true)
+            }
+        })
+    }
+
     // Редактирование элемента
-    const onClickEdit = (e: React.MouseEvent, contact: IContact) => {
-        openPopupContactCreate(document.body, {
-            contact: contact,
+    const onClickEdit = (e: React.MouseEvent, agent: IAgent) => {
+        openPopupAgentCreate(document.body, {
+            agent: agent,
             onSave: () => {
                 setIsUpdate(true)
             }
@@ -148,22 +148,22 @@ const PopupContactSelector: React.FC<Props> = (props) => {
 
     // Сохранение выбора
     const onClickSave = () => {
-        props.onSelect(selectedContacts)
+        props.onSelect(selectedAgents)
         close()
     }
 
     // Удаление элемента справочника
-    const onClickDelete = (e: React.MouseEvent, contact: IContact) => {
+    const onClickDelete = (e: React.MouseEvent, agent: IAgent) => {
         openPopupAlert(e, {
-            text: `Вы действительно хотите удалить ${contact.name}?`,
+            text: `Вы действительно хотите удалить ${agent.name}?`,
             buttons: [
                 {
                     text: 'Удалить',
                     onClick: () => {
                         setFetching(true)
 
-                        if (contact.id) {
-                            AgentService.removeContact(contact.id)
+                        if (agent.id) {
+                            AgentService.removeAgent(agent.id)
                                 .then(() => {
                                     setFetching(false)
                                     setIsUpdate(true)
@@ -186,15 +186,18 @@ const PopupContactSelector: React.FC<Props> = (props) => {
     }
 
     // Открытие контекстного меню на элементе справочника
-    const onContextMenu = (e: React.MouseEvent, contact: IContact) => {
+    const onContextMenu = (e: React.MouseEvent, agent: IAgent) => {
         e.preventDefault()
 
-        const menuItems = [
-            {text: 'Редактировать', onClick: (e: React.MouseEvent) => onClickEdit(e, contact)},
-            {text: 'Удалить', onClick: (e: React.MouseEvent) => onClickDelete(e, contact)}
-        ]
+        if (['director', 'administrator', 'manager'].includes(role)) {
+            const menuItems = [{text: 'Редактировать', onClick: (e: React.MouseEvent) => onClickEdit(e, agent)}]
 
-        openContextMenu(e, menuItems)
+            if (['director', 'administrator'].includes(role)) {
+                menuItems.push({text: 'Удалить', onClick: (e: React.MouseEvent) => onClickDelete(e, agent)})
+            }
+
+            openContextMenu(e, menuItems)
+        }
     }
 
     const renderSearch = () => {
@@ -202,11 +205,16 @@ const PopupContactSelector: React.FC<Props> = (props) => {
             <div className={classes.search}>
                 <SearchBox value={searchText}
                            onChange={(value: string) => search(value)}
-                           countFind={filterContacts ? filterContacts.length : 0}
+                           countFind={filterAgents ? filterAgents.length : 0}
                            showClear
                            flexGrow
                            autoFocus
                 />
+
+                {props.buttonAdd && ['director', 'administrator', 'manager'].includes(role) ?
+                    <ButtonAdd onClick={onClickAdd.bind(this)}/>
+                    : null
+                }
             </div>
         )
     }
@@ -215,15 +223,9 @@ const PopupContactSelector: React.FC<Props> = (props) => {
         return (
             <BlockingElement fetching={false} className={classes.list}>
                 <div className={classes.listContent}>
-                    {filterContacts.length
-                        ? filterContacts.map((contact: IContact) => renderRow(contact, 'left', checkSelected(contact.id)))
-                        : <Empty message={
-                            props.includeAgents !== undefined && !props.includeAgents.length
-                                ? 'Перед добавлением контактов, добавьте агентство в объект недвижимости'
-                                : !contacts.length
-                                ? 'Нет контактов. Создать новые контакты Вы можете отдельно для каждого агентства'
-                                : 'Контакты не найдены'
-                        }/>
+                    {filterAgents.length ?
+                        filterAgents.map((agent: IAgent) => renderRow(agent, 'left', checkSelected(agent.id)))
+                        : <Empty message={!agents.length ? 'Нет агентств' : 'Агентства не найдены'}/>
                     }
                 </div>
             </BlockingElement>
@@ -231,26 +233,26 @@ const PopupContactSelector: React.FC<Props> = (props) => {
     }
 
     const renderSelectedListBox = () => {
-        const rows = filterContacts.filter((contact: IContact) => checkSelected(contact.id))
+        const rows = filterAgents.filter((agent: IAgent) => checkSelected(agent.id))
 
         return (
             <BlockingElement fetching={false} className={classes.list}>
                 <div className={classes.listContent}>
                     {rows.length ?
-                        rows.map((contact: IContact) => renderRow(contact, 'right', checkSelected(contact.id)))
-                        : <Empty message='Контакты не выбраны'/>
+                        rows.map((agent: IAgent) => renderRow(agent, 'right', checkSelected(agent.id)))
+                        : <Empty message='Агентства не выбраны'/>
                     }
                 </div>
             </BlockingElement>
         )
     }
 
-    const renderRow = (contact: IContact, side: string, checked: boolean) => {
+    const renderRow = (agent: IAgent, side: string, checked: boolean) => {
         return (
             <div className={classes.row}
-                 key={contact.id}
-                 onClick={() => selectRow(contact)}
-                 onContextMenu={(e: React.MouseEvent) => onContextMenu(e, contact)}
+                 key={agent.id}
+                 onClick={() => selectRow(agent)}
+                 onContextMenu={(e: React.MouseEvent) => onContextMenu(e, agent)}
             >
                 {props.multi && side === 'left' ?
                     <CheckBox type='classic'
@@ -268,7 +270,7 @@ const PopupContactSelector: React.FC<Props> = (props) => {
                     </div>
                 }
 
-                <div className={classes.name}>{contact.name}</div>
+                <div className={classes.name}>{agent.name}</div>
 
                 {props.multi && side === 'right' ?
                     <div className={classes.delete} title='Удалить'>
@@ -281,10 +283,10 @@ const PopupContactSelector: React.FC<Props> = (props) => {
     }
 
     return (
-        <Popup className={classes.PopupContactSelector}>
+        <Popup className={classes.PopupAgentSelector}>
             <BlockingElement fetching={fetching} className={classes.content}>
                 <div className={classes.blockContent}>
-                    <Title type={2}>Выбрать контакты</Title>
+                    <Title type={2}>Выбрать агентства</Title>
 
                     {renderSearch()}
 
@@ -317,10 +319,10 @@ const PopupContactSelector: React.FC<Props> = (props) => {
     )
 }
 
-PopupContactSelector.defaultProps = defaultProps
-PopupContactSelector.displayName = 'PopupContactSelector'
+PopupAgentSelector.defaultProps = defaultProps
+PopupAgentSelector.displayName = 'PopupAgentSelector'
 
-export default function openPopupContactSelector(target: any, popupProps = {} as Props) {
+export default function openPopupAgentSelector(target: any, popupProps = {} as Props) {
     const displayOptions: PopupDisplayOptions = {
         autoClose: false,
         rightPanel: true,
@@ -332,5 +334,5 @@ export default function openPopupContactSelector(target: any, popupProps = {} as
 
     popupProps = {...popupProps, blockId: blockId}
 
-    return openPopup(withStore(PopupContactSelector), popupProps, undefined, block, displayOptions)
+    return openPopup(withStore(PopupAgentSelector), popupProps, undefined, block, displayOptions)
 }
