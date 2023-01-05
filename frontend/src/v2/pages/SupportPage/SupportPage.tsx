@@ -12,6 +12,7 @@ import SidebarLeft from '../../../components/ui/SidebarLeft/SidebarLeft'
 import openPopupSupportCreate from '../../components/popup/PopupSupportCreate/PopupSupportCreate'
 import FeedList from './components/FeedList/FeedList'
 import classes from './SupportPage.module.scss'
+import {allowForRole} from "../../helpers/accessHelper";
 
 const SupportPage: React.FC = (): React.ReactElement => {
     const [fetching, setFetching] = useState(false)
@@ -60,7 +61,7 @@ const SupportPage: React.FC = (): React.ReactElement => {
             setFilterFeeds([])
         }
 
-        if (['director', 'administrator', 'manager'].includes(user.role)) {
+        if (allowForRole(['director', 'administrator', 'manager'], user.role)) {
             if (value !== '') {
                 setFilterFeeds(filterItemsHandler(feeds.filter((feed: IFeed) => {
                     return compareText(feed.title, value) || (feed.name && compareText(feed.name, value)) || (feed.phone && compareText(feed.phone, value))

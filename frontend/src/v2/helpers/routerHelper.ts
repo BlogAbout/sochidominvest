@@ -16,6 +16,7 @@ export enum RouteNames {
     P_SUPPORT = '/support',
     P_ADMINISTRATION = '/administration',
     P_TOOL = '/tool',
+    P_QUESTION = '/question',
 
 
 
@@ -36,7 +37,6 @@ export enum RouteNames {
     ADVERTISING_PARTNER_ITEM = '/panel/advertising/partner/:id',
     ADVERTISING_BANNER = '/panel/advertising/banner',
     ADVERTISING_WIDGET = '/panel/advertising/widget',
-    ADVERTISING_FAQ = '/panel/advertising/faq',
     CRM_DEVELOPER = '/panel/crm/developer',
     CRM_DEVELOPER_ITEM = '/panel/crm/developer/:id',
     CRM_POST = '/panel/crm/post',
