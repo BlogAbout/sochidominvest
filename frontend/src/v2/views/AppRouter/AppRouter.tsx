@@ -12,6 +12,7 @@ import ArticlesPage from '../../pages/ArticlesPage/ArticlesPage'
 import ArticlePage from '../../pages/ArticlePage/ArticlePage'
 import BuildingsPage from '../../pages/BuildingsPage/BuildingsPage'
 import BuildingPage from '../../pages/BuildingPage/BuildingPage'
+import CatalogPage from '../../pages/CatalogPage/CatalogPage'
 import ReportPage from '../../pages/ReportPage/ReportPage'
 import ToolPage from '../../pages/ToolPage/ToolPage'
 import AdministrationPage from '../../pages/AdministrationPage/AdministrationPage'
@@ -46,6 +47,8 @@ const AppRouter: React.FC = () => {
 
                 {isAuth ?
                     <>
+                        <Route path={RouteNames.P_CATALOG} element={<CatalogPage name='Каталоги' type='catalog'/>}/>
+                        <Route path={RouteNames.P_CRM} element={<CatalogPage name='CRM' type='crm'/>}/>
                         <Route path={RouteNames.P_REPORT} element={<ReportPage/>}/>
                         <Route path={RouteNames.P_TOOL} element={<ToolPage/>}/>
                         <Route path={RouteNames.P_ADMINISTRATION} element={<AdministrationPage/>}/>

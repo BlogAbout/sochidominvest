@@ -10,3 +10,14 @@ export interface IMenuLink {
     isSeparator?: boolean
     hasTariff?: ('free' | 'base' | 'business' | 'effectivePlus')[]
 }
+
+export interface ISubMenu {
+    href: string
+    title: string
+    disabled: boolean
+    icon: string
+    description: string
+    type: 'crm' | 'catalog'
+    hasRole?: ('director' | 'administrator' | 'manager' | 'subscriber')[]
+    hasTariff?: ('free' | 'base' | 'business' | 'effectivePlus')[]
+}

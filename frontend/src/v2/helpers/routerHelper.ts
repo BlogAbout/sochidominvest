@@ -10,6 +10,8 @@ export enum RouteNames {
     RENT = '/rent',
     RENT_ITEM = '/rent/:id',
 
+    P_CATALOG = '/catalog',
+    P_CRM = '/crm',
     P_REPORT = '/report',
     P_SUPPORT = '/support',
     P_ADMINISTRATION = '/administration',
@@ -35,7 +37,6 @@ export enum RouteNames {
     ADVERTISING_BANNER = '/panel/advertising/banner',
     ADVERTISING_WIDGET = '/panel/advertising/widget',
     ADVERTISING_FAQ = '/panel/advertising/faq',
-    CRM = '/panel/crm',
     CRM_DEVELOPER = '/panel/crm/developer',
     CRM_DEVELOPER_ITEM = '/panel/crm/developer/:id',
     CRM_POST = '/panel/crm/post',

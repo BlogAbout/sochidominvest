@@ -19,7 +19,7 @@ import Wrapper from '../../components/ui/Wrapper/Wrapper'
 import PanelView from '../../views/PanelView/PanelView'
 import classes from './AdministrationPage.module.scss'
 
-const AdministrationPagePanel: React.FC = () => {
+const AdministrationPagePanel: React.FC = (): React.ReactElement => {
     const [settings, setSettings] = useState<ISetting>({} as ISetting)
     const [settingsUpdate, setSettingsUpdate] = useState<ISetting>({} as ISetting)
     const [fetching, setFetching] = useState(false)
@@ -484,4 +484,4 @@ const AdministrationPagePanel: React.FC = () => {
 
 AdministrationPagePanel.displayName = 'AdministrationPagePanel'
 
-export default AdministrationPagePanel
+export default React.memo(AdministrationPagePanel)

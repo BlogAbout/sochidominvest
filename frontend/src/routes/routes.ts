@@ -11,6 +11,11 @@ export enum RouteNames {
     PUBLIC_ABOUT = '/about',
     PUBLIC_FAQ = '/faq',
 
+    CATALOG = '/panel/catalog',
+    CRM = '/panel/crm',
+    REPORT = '/panel/report',
+    TOOL = '/panel/tool',
+    ADMINISTRATION = '/panel/administration',
     SUPPORT = '/panel/support',
 
 
@@ -22,11 +27,8 @@ export enum RouteNames {
     ARTICLE = '/panel/article',
     ARTICLE_ITEM = '/panel/article/:id',
     DOCUMENT = '/panel/document',
-    REPORT = '/panel/report',
-    TOOL = '/panel/tool',
     FAVORITE = '/panel/favorite',
     FILE_MANAGER = '/panel/file-manager',
-    ADMINISTRATION = '/panel/administration',
     TARIFF = '/panel/tariff',
     ADVERTISING = '/panel/advertising',
     ADVERTISING_PARTNER = '/panel/advertising/partner',
@@ -34,7 +36,6 @@ export enum RouteNames {
     ADVERTISING_BANNER = '/panel/advertising/banner',
     ADVERTISING_WIDGET = '/panel/advertising/widget',
     ADVERTISING_FAQ = '/panel/advertising/faq',
-    CRM = '/panel/crm',
     CRM_DEVELOPER = '/panel/crm/developer',
     CRM_DEVELOPER_ITEM = '/panel/crm/developer/:id',
     CRM_AGENT = '/panel/crm/agent',

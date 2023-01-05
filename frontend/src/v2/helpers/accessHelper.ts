@@ -23,6 +23,10 @@ export const allowForTariff = (tariffs: ('free' | 'base' | 'business' | 'effecti
         return true
     }
 
+    if (allowForRole(['director', 'administrator', 'manager'])) {
+        return true
+    }
+
     if (currentTariff) {
         return tariffs.includes(currentTariff)
     }

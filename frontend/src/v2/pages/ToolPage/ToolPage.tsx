@@ -4,7 +4,7 @@ import Wrapper from '../../components/ui/Wrapper/Wrapper'
 import PanelView from '../../views/PanelView/PanelView'
 import classes from './ToolPage.module.scss'
 
-const ToolPage: React.FC = () => {
+const ToolPage: React.FC = (): React.ReactElement => {
     return (
         <PanelView pageTitle='Инструменты'>
             <Wrapper isFull>
@@ -20,4 +20,4 @@ const ToolPage: React.FC = () => {
 
 ToolPage.displayName = 'ToolPage'
 
-export default ToolPage
+export default React.memo(ToolPage)

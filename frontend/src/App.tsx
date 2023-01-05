@@ -28,6 +28,7 @@ import {
     faCar,
     faCashRegister,
     faChartLine,
+    faChartPie,
     faCheck,
     faCheckDouble,
     faChevronDown,
@@ -205,7 +206,8 @@ library.add(
     faWarehouse,
     faMoneyCheckDollar,
     faHandshake,
-    faStop
+    faStop,
+    faChartPie
 )
 
 function App() {
