@@ -13,6 +13,7 @@ import ArticlePage from '../../pages/ArticlePage/ArticlePage'
 import BuildingsPage from '../../pages/BuildingsPage/BuildingsPage'
 import BuildingPage from '../../pages/BuildingPage/BuildingPage'
 import SupportPage from '../../pages/SupportPage/SupportPage'
+import AdministrationPage from '../../pages/AdministrationPage/AdministrationPage'
 import classes from './AppRouter.module.scss'
 import 'react-toastify/dist/ReactToastify.css'
 
@@ -44,6 +45,7 @@ const AppRouter: React.FC = () => {
                 {isAuth ?
                     <>
                         <Route path={RouteNames.P_SUPPORT} element={<SupportPage/>}/>
+                        <Route path={RouteNames.P_ADMINISTRATION} element={<AdministrationPage/>}/>
                     </>
                     : null
                 }

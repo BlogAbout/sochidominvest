@@ -12,7 +12,7 @@ const defaultProps: Props = {
 const GridColumn: React.FC<Props> = (props): React.ReactElement => {
     return (
         <div className={classes.GridColumn}
-             style={{width: props.width}}
+             style={{width: props.width, flexGrow: props.width !== undefined && props.width !== '100%' ? 0 : 1}}
         >
             {props.children}
         </div>

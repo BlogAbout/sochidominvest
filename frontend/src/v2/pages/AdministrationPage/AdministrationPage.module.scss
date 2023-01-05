@@ -1,0 +1,32 @@
+.title {
+    color: #fff;
+}
+
+.tabs {
+    flex-grow: 1;
+    margin-top: 20px;
+
+    .tabContent {
+        padding: 15px;
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        background: #fff;
+
+        .columns {
+            justify-content: space-between;
+
+            > div {
+                margin-bottom: 20px;
+            }
+        }
+    }
+}
+
+.footer {
+    display: flex;
+    justify-content: flex-end;
+    background-color: #fff;
+    padding: 15px;
+    border-top: 1px solid #075ea5;
+}
