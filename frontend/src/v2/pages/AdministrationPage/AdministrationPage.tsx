@@ -29,6 +29,8 @@ const AdministrationPagePanel: React.FC = () => {
     }, [])
 
     const fetchSettingsHandler = () => {
+        setFetching(true)
+
         AdministrationService.fetchSettings()
             .then((response: any) => {
                 setSettings(response.data)
@@ -43,6 +45,8 @@ const AdministrationPagePanel: React.FC = () => {
 
     // Обработчик изменений
     const onSaveHandler = () => {
+        setFetching(true)
+
         AdministrationService.saveSetting(settingsUpdate)
             .then((response: any) => {
                 setSettings(response.data)
@@ -79,6 +83,7 @@ const AdministrationPagePanel: React.FC = () => {
         setSettingsUpdate({...settingsUpdate, [`${key}`]: value})
     }
 
+    // Вкладка "Общие настройки"
     const renderCommonTab = () => {
         return (
             <div key='common' className={classes.tabContent}>
@@ -154,6 +159,7 @@ const AdministrationPagePanel: React.FC = () => {
         )
     }
 
+    // Вкладка "Уведомления"
     const renderNotificationTab = () => {
         return (
             <div key='notification' className={classes.tabContent}>
