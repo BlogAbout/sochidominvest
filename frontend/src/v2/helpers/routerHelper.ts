@@ -9,9 +9,10 @@ export enum RouteNames {
     BUILDING_ITEM = '/building/:id',
     RENT = '/rent',
     RENT_ITEM = '/rent/:id',
-    
+
     P_SUPPORT = '/support',
     P_ADMINISTRATION = '/administration',
+    P_TOOL = '/tool',
 
 
 
@@ -23,7 +24,6 @@ export enum RouteNames {
     // ARTICLE_ITEM = '/panel/article/:id',
     DOCUMENT = '/panel/document',
     REPORT = '/panel/report',
-    TOOL = '/panel/tool',
     FAVORITE = '/panel/favorite',
     COMPILATION = '/panel/compilation',
     COMPILATION_ITEM = '/panel/compilation/:id',
