@@ -48,7 +48,7 @@ const SupportPage: React.FC = (): React.ReactElement => {
     }
 
     // Обработчик изменений
-    const onSave = () => {
+    const onSaveHandler = () => {
         fetchFeedsHandler()
     }
 
@@ -84,7 +84,7 @@ const SupportPage: React.FC = (): React.ReactElement => {
 
     const onAddHandler = () => {
         openPopupSupportCreate(document.body, {
-            onSave: () => onSave()
+            onSave: () => onSaveHandler()
         })
     }
 

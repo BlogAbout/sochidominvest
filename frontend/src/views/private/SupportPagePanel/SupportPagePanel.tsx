@@ -14,7 +14,6 @@ import openPopupSupportCreate from '../../../components/popup/PopupSupportCreate
 import classes from './SupportPagePanel.module.scss'
 
 const SupportPagePanel: React.FC = () => {
-    const [isUpdate, setIsUpdate] = useState(true)
     const [fetching, setFetching] = useState(false)
     const [feeds, setFeeds] = useState<IFeed[]>([])
     const [searchText, setSearchText] = useState('')
@@ -26,30 +25,30 @@ const SupportPagePanel: React.FC = () => {
 
     const {role, userId} = useTypedSelector(state => state.userReducer)
 
-
     useEffect(() => {
-        if (isUpdate) {
-            FeedService.fetchFeeds({active: [0, 1]})
-                .then((response: any) => {
-                    setFeeds(response.data)
-                })
-                .catch((error: any) => {
-                    console.error('Произошла ошибка загрузки данных', error)
-                })
-                .finally(() => {
-                    setFetching(false)
-                    setIsUpdate(false)
-                })
-        }
-    }, [isUpdate])
+        fetchFeedsHandler()
+    }, [])
 
     useEffect(() => {
         search(searchText)
     }, [feeds, selectedType, filters])
 
+    const fetchFeedsHandler = () => {
+        FeedService.fetchFeeds({active: [0, 1]})
+            .then((response: any) => {
+                setFeeds(response.data)
+            })
+            .catch((error: any) => {
+                console.error('Произошла ошибка загрузки данных', error)
+            })
+            .finally(() => {
+                setFetching(false)
+            })
+    }
+
     // Обработчик изменений
     const onSave = () => {
-        setIsUpdate(true)
+        fetchFeedsHandler()
     }
 
     // Поиск
