@@ -1,0 +1,16 @@
+.ListHead {
+    padding: 8px 16px 8px 10px;
+    background-color: #033966;
+    color: #fff;
+    margin-bottom: 15px;
+    display: flex;
+    width: 100%;
+    font-weight: 700;
+    box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.4);
+}
+
+@media (max-width: 768px) {
+    .ListHead {
+        display: none;
+    }
+}

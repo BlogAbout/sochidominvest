@@ -1,0 +1,29 @@
+.PopupSupportCreate {
+    width: 700px;
+    height: 100%;
+
+    .content {
+        width: 100%;
+        height: 100%;
+    }
+
+    .blockContent {
+        padding: 15px;
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        overflow-x: hidden;
+    }
+}
+
+@media (max-width: 768px) {
+    .PopupSupportCreate {
+        width: 500px;
+    }
+}
+
+@media (max-width: 480px) {
+    .PopupSupportCreate {
+        width: 350px;
+    }
+}

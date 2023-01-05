@@ -1,6 +1,6 @@
 import React from 'react'
 import classNames from 'classnames/bind'
-import PageInfo from '../../../components/ui/PageInfo/PageInfo'
+import PageMetaInfo from '../../components/ui/PageMetaInfo/PageMetaInfo'
 import Header from '../../components/ui/Header/Header'
 import Footer from '../../components/ui/Footer/Footer'
 import classes from './DefaultView.module.scss'
@@ -20,7 +20,7 @@ const cx = classNames.bind(classes)
 const DefaultView: React.FC<Props> = (props): React.ReactElement => {
     return (
         <div className={cx({'DefaultView': true, isMain: props.isMain})}>
-            <PageInfo title={props.pageTitle || ''} description={props.pageDescription || ''}/>
+            <PageMetaInfo title={props.pageTitle || ''} description={props.pageDescription || ''}/>
 
             <Header/>
 

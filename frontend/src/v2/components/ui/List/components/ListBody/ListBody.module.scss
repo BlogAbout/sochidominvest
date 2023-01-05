@@ -1,0 +1,9 @@
+.ListBody {
+    max-height: calc(100% - 51px);
+}
+
+@media (max-width: 768px) {
+    .ListBody {
+        max-height: 100%;
+    }
+}

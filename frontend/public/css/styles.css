@@ -16,7 +16,7 @@ body {
 body {
     position: relative;
     font-size: 15px;
-    color: #075ea5;
+    color: #033966;
     scroll-behavior: smooth;
     font-family: 'PT Serif', serif;
     overflow-x: hidden;
@@ -34,7 +34,7 @@ body {
 
 ::-webkit-scrollbar-thumb {
     border-radius: 25px;
-    background-color: #075ea5;
+    background-color: #033966;
     cursor: pointer;
 }
 

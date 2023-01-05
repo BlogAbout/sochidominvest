@@ -13,7 +13,7 @@ export const UserActionCreators = {
         type: UserActionTypes.USER,
         payload: user
     }),
-    setUserRole: (role: string): UserAction => ({
+    setUserRole: (role: 'director' | 'administrator' | 'manager' | 'subscriber'): UserAction => ({
         type: UserActionTypes.USER_ROLE,
         payload: role
     }),

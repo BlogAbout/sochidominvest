@@ -121,26 +121,24 @@ const RegistrationForm: React.FC<Props> = (props): React.ReactElement => {
                    style='dark'
                    labelWidth={150}
             >
-                <TextBox
-                    type='text'
-                    value={signUp.firstName}
-                    placeHolder='Имя'
-                    error={validationError.firstName !== ''}
-                    errorText={validationError.firstName}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                        setSignUp({
-                            ...signUp,
-                            firstName: e.target.value
-                        })
+                <TextBox value={signUp.firstName}
+                         placeHolder='Имя'
+                         error={validationError.firstName !== ''}
+                         errorText={validationError.firstName}
+                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                             setSignUp({
+                                 ...signUp,
+                                 firstName: e.target.value
+                             })
 
-                        if (e.target.value.trim().length === 0) {
-                            setValidationError({...validationError, firstName: 'Введите имя'})
-                        } else {
-                            setValidationError({...validationError, firstName: ''})
-                        }
-                    }}
-                    styleType='minimal'
-                    width='100%'
+                             if (e.target.value.trim().length === 0) {
+                                 setValidationError({...validationError, firstName: 'Введите имя'})
+                             } else {
+                                 setValidationError({...validationError, firstName: ''})
+                             }
+                         }}
+                         styleType='minimal'
+                         width='100%'
                 />
             </Field>
 
@@ -150,28 +148,26 @@ const RegistrationForm: React.FC<Props> = (props): React.ReactElement => {
                    style='dark'
                    labelWidth={150}
             >
-                <TextBox
-                    type='text'
-                    value={signUp.email}
-                    placeHolder='Email'
-                    error={validationError.email !== ''}
-                    errorText={validationError.email}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                        setSignUp({
-                            ...signUp,
-                            email: e.target.value
-                        })
+                <TextBox value={signUp.email}
+                         placeHolder='Email'
+                         error={validationError.email !== ''}
+                         errorText={validationError.email}
+                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                             setSignUp({
+                                 ...signUp,
+                                 email: e.target.value
+                             })
 
-                        if (e.target.value.trim().length === 0) {
-                            setValidationError({...validationError, email: 'Введите имя'})
-                        } else if (!is.email(e.target.value)) {
-                            setValidationError({...validationError, email: 'E-mail имеет неверный формат'})
-                        } else {
-                            setValidationError({...validationError, email: ''})
-                        }
-                    }}
-                    styleType='minimal'
-                    width='100%'
+                             if (e.target.value.trim().length === 0) {
+                                 setValidationError({...validationError, email: 'Введите имя'})
+                             } else if (!is.email(e.target.value)) {
+                                 setValidationError({...validationError, email: 'E-mail имеет неверный формат'})
+                             } else {
+                                 setValidationError({...validationError, email: ''})
+                             }
+                         }}
+                         styleType='minimal'
+                         width='100%'
                 />
             </Field>
 
@@ -181,26 +177,24 @@ const RegistrationForm: React.FC<Props> = (props): React.ReactElement => {
                    style='dark'
                    labelWidth={150}
             >
-                <TextBox
-                    type='tel'
-                    value={signUp.phone}
-                    placeHolder='Телефон'
-                    error={validationError.phone !== ''}
-                    errorText={validationError.phone}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                        setSignUp({
-                            ...signUp,
-                            phone: e.target.value
-                        })
+                <TextBox value={signUp.phone}
+                         placeHolder='Телефон'
+                         error={validationError.phone !== ''}
+                         errorText={validationError.phone}
+                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                             setSignUp({
+                                 ...signUp,
+                                 phone: e.target.value
+                             })
 
-                        if (e.target.value.trim().length === 0) {
-                            setValidationError({...validationError, phone: 'Введите номер телефона'})
-                        } else {
-                            setValidationError({...validationError, phone: ''})
-                        }
-                    }}
-                    styleType='minimal'
-                    width='100%'
+                             if (e.target.value.trim().length === 0) {
+                                 setValidationError({...validationError, phone: 'Введите номер телефона'})
+                             } else {
+                                 setValidationError({...validationError, phone: ''})
+                             }
+                         }}
+                         styleType='minimal'
+                         width='100%'
                 />
             </Field>
 
@@ -210,29 +204,30 @@ const RegistrationForm: React.FC<Props> = (props): React.ReactElement => {
                    style='dark'
                    labelWidth={150}
             >
-                <TextBox
-                    type='password'
-                    password={true}
-                    value={signUp.password}
-                    placeHolder='Пароль'
-                    error={validationError.password !== ''}
-                    errorText={validationError.password}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                        setSignUp({
-                            ...signUp,
-                            password: e.target.value
-                        })
+                <TextBox password={true}
+                         value={signUp.password}
+                         placeHolder='Пароль'
+                         error={validationError.password !== ''}
+                         errorText={validationError.password}
+                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                             setSignUp({
+                                 ...signUp,
+                                 password: e.target.value
+                             })
 
-                        if (e.target.value.length > 0 && e.target.value.length < 6) {
-                            setValidationError({...validationError, password: 'Минимальная длина пароля 6 символов'})
-                        } else if (e.target.value.length === 0) {
-                            setValidationError({...validationError, password: 'Введите пароль'})
-                        } else {
-                            setValidationError({...validationError, password: ''})
-                        }
-                    }}
-                    styleType='minimal'
-                    width='100%'
+                             if (e.target.value.length > 0 && e.target.value.length < 6) {
+                                 setValidationError({
+                                     ...validationError,
+                                     password: 'Минимальная длина пароля 6 символов'
+                                 })
+                             } else if (e.target.value.length === 0) {
+                                 setValidationError({...validationError, password: 'Введите пароль'})
+                             } else {
+                                 setValidationError({...validationError, password: ''})
+                             }
+                         }}
+                         styleType='minimal'
+                         width='100%'
                 />
             </Field>
 

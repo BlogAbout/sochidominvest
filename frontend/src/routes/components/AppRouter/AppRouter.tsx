@@ -70,7 +70,7 @@ const AppRouter: React.FC = () => {
         }
     }, [isAuth])
 
-    if (!isAuth) {
+    // if (!isAuth) {
         return (
             <>
                 <AppRouterV2/>
@@ -85,7 +85,7 @@ const AppRouter: React.FC = () => {
                 />
             </>
         )
-    }
+    // }
 
     return (
         <div className={classes.AppRouter}>

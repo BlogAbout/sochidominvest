@@ -6,5 +6,7 @@ export interface IMenuLink {
     title: string
     text?: string
     icon?: IconProp
-    role?: string[]
+    hasRole?: ('director' | 'administrator' | 'manager' | 'subscriber')[]
+    isSeparator?: boolean
+    hasTariff?: ('free' | 'base' | 'business' | 'effectivePlus')[]
 }

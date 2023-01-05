@@ -1,14 +1,30 @@
 import React from 'react'
+import PageMetaInfo from '../../components/ui/PageMetaInfo/PageMetaInfo'
+import Navigation from '../../components/ui/Navigation/Navigation'
 import classes from './PanelView.module.scss'
 
-const PanelView = (props: React.PropsWithChildren<any>): React.ReactElement => {
+interface Props extends React.PropsWithChildren<any> {
+    pageTitle?: string
+    pageDescription?: string
+}
+
+const defaultProps: Props = {}
+
+const PanelView: React.FC<Props> = (props): React.ReactElement => {
     return (
         <div className={classes.PanelView}>
-            {props.children}
+            <PageMetaInfo title={props.pageTitle || ''} description={props.pageDescription || ''}/>
+
+            <Navigation/>
+
+            <main className={classes.main}>
+                {props.children}
+            </main>
         </div>
     )
 }
 
+PanelView.defaultProps = defaultProps
 PanelView.displayName = 'PanelView'
 
 export default React.memo(PanelView)

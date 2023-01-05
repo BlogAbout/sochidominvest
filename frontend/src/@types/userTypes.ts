@@ -2,7 +2,7 @@ import {IUser, IUserExternal, IUserSetting} from './IUser'
 
 export interface UserState {
     isAuth: boolean
-    role: string
+    role: 'director' | 'administrator' | 'manager' | 'subscriber'
     user: IUser
     userId: number
     userSetting: IUserSetting
@@ -38,7 +38,7 @@ interface UserAuthAction {
 
 interface UserRoleAction {
     type: UserActionTypes.USER_ROLE
-    payload: string
+    payload: 'director' | 'administrator' | 'manager' | 'subscriber'
 }
 
 interface UserIdAction {

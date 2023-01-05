@@ -1,4 +1,19 @@
 export enum RouteNames {
+    SEPARATOR = '/',
+
+    PUBLIC_BUILDING = '/building',
+    PUBLIC_BUILDING_ITEM = '/building/:id',
+    PUBLIC_RENT = '/rent',
+    PUBLIC_RENT_ITEM = '/rent/:id',
+    PUBLIC_ARTICLE = '/article',
+    PUBLIC_ARTICLE_ITEM = '/article/:id',
+    PUBLIC_POLICY = '/policy',
+    PUBLIC_ABOUT = '/about',
+    PUBLIC_FAQ = '/faq',
+
+    SUPPORT = '/panel/support',
+
+
     MAIN = '/',
     USER = '/panel/user',
     USER_ITEM = '/panel/user/:id',
@@ -9,7 +24,6 @@ export enum RouteNames {
     DOCUMENT = '/panel/document',
     REPORT = '/panel/report',
     TOOL = '/panel/tool',
-    SUPPORT = '/panel/support',
     FAVORITE = '/panel/favorite',
     FILE_MANAGER = '/panel/file-manager',
     ADMINISTRATION = '/panel/administration',
@@ -33,14 +47,5 @@ export enum RouteNames {
     CRM_COMPILATION = '/panel/compilation',
     CRM_COMPILATION_ITEM = '/panel/compilation/:id',
     CRM_MAILING = '/panel/crm/mailing',
-    PUBLIC_BUILDING = '/building',
-    PUBLIC_BUILDING_ITEM = '/building/:id',
-    PUBLIC_RENT = '/rent',
-    PUBLIC_RENT_ITEM = '/rent/:id',
-    PUBLIC_ARTICLE = '/article',
-    PUBLIC_ARTICLE_ITEM = '/article/:id',
-    PUBLIC_POLICY = '/policy',
-    PUBLIC_ABOUT = '/about',
-    PUBLIC_FAQ = '/faq',
     PUBLIC_PARTNER_ITEM = '/partner/:id'
 }

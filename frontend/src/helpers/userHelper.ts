@@ -69,3 +69,11 @@ export const getUserSetting = (param: string, defaultValue: string | number = ''
 
     return settings[param]
 }
+
+export const getUserFromStorage = (): IUser | null => {
+    if (localStorage.getItem('user')) {
+        return JSON.parse(localStorage.getItem('user') || '')
+    }
+
+    return null
+}

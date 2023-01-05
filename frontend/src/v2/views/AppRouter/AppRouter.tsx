@@ -12,11 +12,12 @@ import ArticlesPage from '../../pages/ArticlesPage/ArticlesPage'
 import ArticlePage from '../../pages/ArticlePage/ArticlePage'
 import BuildingsPage from '../../pages/BuildingsPage/BuildingsPage'
 import BuildingPage from '../../pages/BuildingPage/BuildingPage'
+import SupportPage from '../../pages/SupportPage/SupportPage'
 import classes from './AppRouter.module.scss'
 import 'react-toastify/dist/ReactToastify.css'
 
 const AppRouter: React.FC = () => {
-    const {isAuth, role} = useTypedSelector(state => state.userReducer)
+    const {isAuth, user} = useTypedSelector(state => state.userReducer)
 
     const {fetchSettings} = useActions()
 
@@ -36,9 +37,16 @@ const AppRouter: React.FC = () => {
                 <Route path={RouteNames.ARTICLE} element={<ArticlesPage/>}/>
                 <Route path={RouteNames.ARTICLE_ITEM} element={<ArticlePage isPublic/>}/>
                 <Route path={RouteNames.BUILDING} element={<BuildingsPage/>}/>
-                <Route path={RouteNames.BUILDING_ITEM} element={<BuildingPage role={role} isPublic/>}/>
+                <Route path={RouteNames.BUILDING_ITEM} element={<BuildingPage role={user.role} isPublic/>}/>
                 <Route path={RouteNames.RENT} element={<BuildingsPage isRent/>}/>
-                <Route path={RouteNames.RENT_ITEM} element={<BuildingPage role={role} isPublic isRent/>}/>
+                <Route path={RouteNames.RENT_ITEM} element={<BuildingPage role={user.role} isPublic isRent/>}/>
+
+                {isAuth ?
+                    <>
+                        <Route path={RouteNames.P_SUPPORT} element={<SupportPage/>}/>
+                    </>
+                    : null
+                }
             </Routes>
 
             <ToastContainer position={'bottom-right'}

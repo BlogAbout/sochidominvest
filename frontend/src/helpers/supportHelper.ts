@@ -17,3 +17,30 @@ export const feedStatuses: ISelector[] = [
     {key: 'cancel', text: 'Отменено'},
     {key: 'close', text: 'Закрыт'}
 ]
+
+export const getFeedStatusesText = (key: string | null | undefined) => {
+    if (!key) {
+        return ''
+    }
+
+    const find = feedStatuses.find((item: ISelector) => item.key === key)
+    return find ? find.text : ''
+}
+
+export const getFeedObjectText = (key: string | null | undefined) => {
+    if (!key) {
+        return ''
+    }
+
+    const find = objectTypes.find((item: ISelector) => item.key === key)
+    return find ? find.text : ''
+}
+
+export const getFeedTypesText = (key: string | null | undefined) => {
+    if (!key) {
+        return ''
+    }
+
+    const find = feedTypes.find((item: ISelector) => item.key === key)
+    return find ? find.text : ''
+}

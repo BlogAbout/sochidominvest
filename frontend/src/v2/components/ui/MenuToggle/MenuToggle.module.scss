@@ -4,10 +4,31 @@
     cursor: pointer;
     font-size: 25px;
     line-height: 25px;
+    z-index: 8;
 }
 
 @media (max-width: 768px) {
     .MenuToggle {
         display: block;
+
+        &.inPanel {
+            display: none;
+        }
+    }
+}
+
+@media (max-width: 480px) {
+    .MenuToggle {
+        &.inPanel {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 46px;
+            height: 46px;
+
+        }
     }
 }

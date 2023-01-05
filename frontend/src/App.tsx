@@ -217,7 +217,7 @@ function App() {
         if (localStorage.getItem('auth')) {
             setIsAuth(true)
 
-            const userRole = localStorage.getItem('role') || ''
+            const userRole: any = localStorage.getItem('role') || ''
             const userId = localStorage.getItem('id') || ''
             const user = localStorage.getItem('user') || ''
 

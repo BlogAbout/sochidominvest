@@ -5,7 +5,7 @@ import classes from './Avatar.module.scss'
 
 interface Props extends React.PropsWithChildren<any> {
     href: string | null | undefined
-    alt: string
+    alt: string | null | undefined
     width?: number | string
     height?: number | string
     isRound?: boolean
@@ -13,7 +13,7 @@ interface Props extends React.PropsWithChildren<any> {
 
 const defaultProps: Props = {
     href: null,
-    alt: '',
+    alt: 'Пользователь не найден',
     width: 200,
     height: 'auto',
     isRound: false
@@ -27,7 +27,9 @@ const Avatar: React.FC<Props> = (props) => {
              style={{width: props.width, height: props.height}}
         >
             {props.href ?
-                <img src={`${configuration.siteUrl}uploads/image/thumb/${props.href}`} alt={props.alt}/>
+                <img src={`${configuration.siteUrl}uploads/image/thumb/${props.href}`}
+                     alt={props.alt || 'Пользователь не найден'}
+                />
                 : null
             }
 

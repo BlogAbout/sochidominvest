@@ -9,6 +9,7 @@ import classes from '../../PopupAuth.module.scss'
 
 interface Props {
     onChangeType(type: string): void
+
     onClose(): void
 }
 
@@ -104,17 +105,15 @@ const ForgotForm: React.FC<Props> = (props): React.ReactElement => {
                        style='dark'
                        labelWidth={150}
                 >
-                    <TextBox
-                        type='text'
-                        value={email}
-                        placeHolder='E-mail'
-                        error={email === ''}
-                        errorText={'Укажите Ваш E-mail для восстановления пароля'}
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                            setEmail(e.target.value)
-                        }}
-                        styleType='minimal'
-                        width='100%'
+                    <TextBox value={email}
+                             placeHolder='E-mail'
+                             error={email === ''}
+                             errorText={'Укажите Ваш E-mail для восстановления пароля'}
+                             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                 setEmail(e.target.value)
+                             }}
+                             styleType='minimal'
+                             width='100%'
                     />
                 </Field>
 
@@ -143,17 +142,15 @@ const ForgotForm: React.FC<Props> = (props): React.ReactElement => {
                        style='dark'
                        labelWidth={150}
                 >
-                    <TextBox
-                        type='text'
-                        value={validationCode}
-                        placeHolder='Проверочный код'
-                        error={validationCode === ''}
-                        errorText={'Укажите код из письма для проверки'}
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                            setValidationCode(e.target.value)
-                        }}
-                        styleType='minimal'
-                        width='100%'
+                    <TextBox value={validationCode}
+                             placeHolder='Проверочный код'
+                             error={validationCode === ''}
+                             errorText={'Укажите код из письма для проверки'}
+                             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                 setValidationCode(e.target.value)
+                             }}
+                             styleType='minimal'
+                             width='100%'
                     />
                 </Field>
 
@@ -182,18 +179,16 @@ const ForgotForm: React.FC<Props> = (props): React.ReactElement => {
                        style='dark'
                        labelWidth={150}
                 >
-                    <TextBox
-                        type='password'
-                        password={true}
-                        value={password}
-                        placeHolder='Новый пароль'
-                        error={password === ''}
-                        errorText='Укажите новый пароль'
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                            setPassword(e.target.value)
-                        }}
-                        styleType='minimal'
-                        width='100%'
+                    <TextBox password={true}
+                             value={password}
+                             placeHolder='Новый пароль'
+                             error={password === ''}
+                             errorText='Укажите новый пароль'
+                             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                 setPassword(e.target.value)
+                             }}
+                             styleType='minimal'
+                             width='100%'
                     />
                 </Field>
 

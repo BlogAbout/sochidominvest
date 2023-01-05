@@ -4,7 +4,7 @@ export interface IUser {
     password: string | null
     phone: string
     firstName: string
-    role: string
+    role: 'director' | 'administrator' | 'manager' | 'subscriber'
     active?: number
     block?: number
     lastActive?: string | null
@@ -14,7 +14,7 @@ export interface IUser {
     avatar?: string | null
     post?: number | null
     postName?: string | null
-    tariff?: string
+    tariff: 'free' | 'base' | 'business' | 'effectivePlus'
     tariffExpired?: string | null
 }
 

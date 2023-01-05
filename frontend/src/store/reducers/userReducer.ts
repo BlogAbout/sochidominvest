@@ -4,7 +4,7 @@ import {IUser, IUserSetting} from '../../@types/IUser'
 const initialState: UserState = {
     isAuth: false,
     user: {} as IUser,
-    role: '',
+    role: 'subscriber',
     userId: 0,
     userSetting: {} as IUserSetting,
     usersOnline: [],

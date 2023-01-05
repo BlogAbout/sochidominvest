@@ -1,0 +1,31 @@
+.ListRow {
+    padding: 8px 10px;
+    background-color: #fff;
+    display: flex;
+    width: 100%;
+    position: relative;
+    box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.4);
+    transition: all 0.3s ease-in;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    cursor: pointer;
+
+    + .ListRow {
+        margin-top: 15px;
+    }
+}
+
+@media (max-width: 768px) {
+    .ListRow {
+        display: block;
+        padding: 0;
+    }
+}
+
+@media (max-width: 480px) {
+    .ListRow {
+        overflow-y: auto;
+    }
+}

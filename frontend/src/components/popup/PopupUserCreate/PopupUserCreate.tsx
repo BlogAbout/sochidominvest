@@ -48,7 +48,8 @@ const PopupUserCreate: React.FC<Props> = (props) => {
         role: 'subscriber',
         active: 1,
         lastActive: null,
-        settings: null
+        settings: null,
+        tariff: 'free'
     })
 
     const [fetching, setFetching] = useState(false)
@@ -221,7 +222,7 @@ const PopupUserCreate: React.FC<Props> = (props) => {
 
                             <ComboBox selected={user.role}
                                       items={Object.values(rolesList)}
-                                      onSelect={(value: string) => setUser({...user, role: value})}
+                                      onSelect={(value: 'director' | 'administrator' | 'manager' | 'subscriber') => setUser({...user, role: value})}
                                       placeHolder='Выберите роль'
                                       styleType='minimal'
                             />

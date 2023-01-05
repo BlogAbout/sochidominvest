@@ -1,0 +1,98 @@
+.FeedList {
+    height: calc(100% - 118px);
+
+    .id {
+        width: 50px;
+        flex-shrink: 0;
+    }
+
+    .title {
+        flex-grow: 1;
+    }
+
+    .status {
+        width: 100px;
+        flex-shrink: 0;
+    }
+
+    .name,
+    .phone,
+    .type {
+        width: 150px;
+        flex-shrink: 0;
+    }
+}
+
+@media (max-width: 768px) {
+    .FeedList {
+        display: block;
+        padding: 0;
+        margin-bottom: 0;
+
+        .id,
+        .title,
+        .status,
+        .name,
+        .phone,
+        .type {
+            position: relative;
+            display: block;
+            width: 100%;
+            padding-right: 8px;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+
+            &::before {
+                display: inline-block;
+                width: 100px;
+                padding: 8px 10px;
+                background-color: #075ea5;
+                color: #fff;
+                margin-right: 10px;
+                border-bottom: 1px solid #fff;
+            }
+        }
+
+        .id::before {
+            content: 'Номер';
+        }
+
+        .title::before {
+            content: 'Заголовок';
+        }
+
+        .status::before {
+            content: 'Статус';
+        }
+
+        .name::before {
+            content: 'Имя';
+        }
+
+        .phone::before {
+            content: 'Телефон';
+        }
+
+        .type::before {
+            content: 'Тип';
+            border-bottom: none;
+        }
+    }
+}
+
+@media (max-width: 480px) {
+    .FeedList {
+        font-size: 13px;
+
+        .id,
+        .title,
+        .status,
+        .name,
+        .phone,
+        .type {
+            &::before {
+                width: 80px;
+            }
+        }
+    }
+}
