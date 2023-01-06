@@ -13,11 +13,15 @@ import ArticlePage from '../../pages/ArticlePage/ArticlePage'
 import BuildingsPage from '../../pages/BuildingsPage/BuildingsPage'
 import BuildingPage from '../../pages/BuildingPage/BuildingPage'
 import CatalogPage from '../../pages/CatalogPage/CatalogPage'
-import ReportPage from '../../pages/ReportPage/ReportPage'
+import ReportPage from '../../pages/ReportsPage/ReportsPage'
 import ToolPage from '../../pages/ToolPage/ToolPage'
 import AdministrationPage from '../../pages/AdministrationPage/AdministrationPage'
 import SupportPage from '../../pages/SupportPage/SupportPage'
-import QuestionPage from '../../pages/QuestionPage/QuestionPage'
+import QuestionPage from '../../pages/QuestionsPage/QuestionsPage'
+import DevelopersPage from '../../pages/DevelopersPage/DevelopersPage'
+import AgentsPage from '../../pages/AgentsPage/AgentsPage'
+import PostsPage from '../../pages/PostsPage/PostsPage'
+import CompilationsPage from '../../pages/CompilationsPage/CompilationsPage'
 import classes from './AppRouter.module.scss'
 import 'react-toastify/dist/ReactToastify.css'
 
@@ -55,6 +59,10 @@ const AppRouter: React.FC = () => {
                         <Route path={RouteNames.P_ADMINISTRATION} element={<AdministrationPage/>}/>
                         <Route path={RouteNames.P_SUPPORT} element={<SupportPage/>}/>
                         <Route path={RouteNames.P_QUESTION} element={<QuestionPage/>}/>
+                        <Route path={RouteNames.P_DEVELOPER} element={<DevelopersPage/>}/>
+                        <Route path={RouteNames.P_AGENT} element={<AgentsPage/>}/>
+                        <Route path={RouteNames.P_POST} element={<PostsPage/>}/>
+                        <Route path={RouteNames.P_COMPILATION} element={<CompilationsPage/>}/>
                     </>
                     : null
                 }

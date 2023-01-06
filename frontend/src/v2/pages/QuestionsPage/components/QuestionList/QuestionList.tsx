@@ -30,7 +30,7 @@ const defaultProps: Props = {
     }
 }
 
-const QuestionList: React.FC<Props> = (props) => {
+const QuestionList: React.FC<Props> = (props): React.ReactElement => {
     const [fetching, setFetching] = useState(props.fetching)
 
     // Редактирование

@@ -3,6 +3,7 @@ import {useNavigate} from 'react-router-dom'
 import {Map, MapState, YMaps, ZoomControl} from 'react-yandex-maps'
 import {IBuilding} from '../../../@types/IBuilding'
 import {IFilter} from '../../../@types/IFilter'
+import {ISelector} from '../../../@types/ISelector'
 import {changeLayout, configuration, getLayout} from '../../../helpers/utilHelper'
 import useInfiniteScroll from '../../../hooks/useInfiniteScroll'
 import {compareText} from '../../../helpers/filterHelper'
@@ -21,7 +22,6 @@ import BuildingPlacemark from './components/BuildingPlacemark/BuildingPlacemark'
 import BuildingItem from './components/BuildingItem/BuildingItem'
 import openPopupBuildingFilter from '../../../components/popup/PopupBuildingFilter/PopupBuildingFilter'
 import classes from './BuildingsPage.module.scss'
-import {ISelector} from "../../../@types/ISelector";
 
 interface Props {
     isRent?: boolean
@@ -196,7 +196,7 @@ const BuildingsPage: React.FC<Props> = (props): React.ReactElement => {
     }
 
     // Отображение объектов недвижимости в режиме списка
-    const renderTillContainer = () => {
+    const renderTillContainer = (): React.ReactElement => {
         return (
             <BlockingElement fetching={fetching} className={classes.list}>
                 {filterBuilding && filterBuilding.length ?
@@ -223,7 +223,7 @@ const BuildingsPage: React.FC<Props> = (props): React.ReactElement => {
     }
 
     // Отображение объектов недвижимости в режиме карты
-    const renderMapContainer = () => {
+    const renderMapContainer = (): React.ReactElement => {
         return (
             <div className={classes.containerMap}>
                 <div className={classes.map}>

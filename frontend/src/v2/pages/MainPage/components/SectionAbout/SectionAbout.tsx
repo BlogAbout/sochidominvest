@@ -1,6 +1,6 @@
 import React from 'react'
 import Wrapper from '../../../../components/ui/Wrapper/Wrapper'
-import GridColumn from '../../../../components/ui/GridColumn/GridColumn'
+import GridColumn from '../../../../components/ui/Grid/components/GridColumn/GridColumn'
 import Grid from '../../../../components/ui/Grid/Grid'
 import Title from '../../../../components/ui/Title/Title'
 import classes from './SectionAbout.module.scss'

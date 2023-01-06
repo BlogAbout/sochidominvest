@@ -1,11 +1,11 @@
 import React from 'react'
 import Wrapper from '../../../../components/ui/Wrapper/Wrapper'
 import Grid from '../../../../components/ui/Grid/Grid'
-import GridColumn from '../../../../components/ui/GridColumn/GridColumn'
+import GridColumn from '../../../../components/ui/Grid/components/GridColumn/GridColumn'
 import Title from '../../../../components/ui/Title/Title'
 import Contacts from '../../../../components/ui/Contacts/Contacts'
 import Button from '../../../../components/form/Button/Button'
-import FormFilterBuildings from './FormFilterBuildings/FormFilterBuildings'
+import FormFilterBuildings from './components/FormFilterBuildings/FormFilterBuildings'
 import openPopupAuth from '../../../../components/popup/PopupAuth/PopupAuth'
 import classes from './SectionBanner.module.scss'
 

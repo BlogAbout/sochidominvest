@@ -49,6 +49,11 @@ export const getLayout = (type: string) => {
                 return listLayoutsItems.developers
             }
             return 'list'
+        case 'agents':
+            if (listLayoutsItems && 'agents' in listLayoutsItems) {
+                return listLayoutsItems.developers
+            }
+            return 'list'
         case 'partners':
             if (listLayoutsItems && 'partners' in listLayoutsItems) {
                 return listLayoutsItems.partners

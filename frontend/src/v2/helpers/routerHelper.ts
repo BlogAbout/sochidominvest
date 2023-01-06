@@ -17,6 +17,10 @@ export enum RouteNames {
     P_ADMINISTRATION = '/administration',
     P_TOOL = '/tool',
     P_QUESTION = '/question',
+    P_DEVELOPER = '/developer',
+    P_AGENT = '/agent',
+    P_COMPILATION = '/compilation',
+    P_POST = '/post',
 
 
 
@@ -28,7 +32,6 @@ export enum RouteNames {
     // ARTICLE_ITEM = '/panel/article/:id',
     DOCUMENT = '/panel/document',
     FAVORITE = '/panel/favorite',
-    COMPILATION = '/panel/compilation',
     COMPILATION_ITEM = '/panel/compilation/:id',
     FILE_MANAGER = '/panel/file-manager',
     TARIFF = '/panel/tariff',
@@ -37,9 +40,7 @@ export enum RouteNames {
     ADVERTISING_PARTNER_ITEM = '/panel/advertising/partner/:id',
     ADVERTISING_BANNER = '/panel/advertising/banner',
     ADVERTISING_WIDGET = '/panel/advertising/widget',
-    CRM_DEVELOPER = '/panel/crm/developer',
     CRM_DEVELOPER_ITEM = '/panel/crm/developer/:id',
-    CRM_POST = '/panel/crm/post',
     CRM_BP = '/panel/crm/bp',
     CRM_BOOKING = '/panel/crm/booking',
     CRM_PAYMENT = '/panel/crm/payment',

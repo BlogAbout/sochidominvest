@@ -1,0 +1,11 @@
+.AgentTill {
+    overflow: auto;
+    height: calc(100% - 103px);
+
+    .list {
+        max-height: 100%;
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+    }
+}

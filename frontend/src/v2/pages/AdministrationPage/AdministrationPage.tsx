@@ -12,7 +12,7 @@ import CheckBox from '../../../components/form/CheckBox/CheckBox'
 import ComboBox from '../../components/form/ComboBox/ComboBox'
 import NumberBox from '../../../components/NumberBox/NumberBox'
 import Grid from '../../components/ui/Grid/Grid'
-import GridColumn from '../../components/ui/GridColumn/GridColumn'
+import GridColumn from '../../components/ui/Grid/components/GridColumn/GridColumn'
 import Title from '../../components/ui/Title/Title'
 import Field from '../../components/form/Field/Field'
 import Wrapper from '../../components/ui/Wrapper/Wrapper'
@@ -84,7 +84,7 @@ const AdministrationPagePanel: React.FC = (): React.ReactElement => {
     }
 
     // Вкладка "Общие настройки"
-    const renderCommonTab = () => {
+    const renderCommonTab = (): React.ReactElement => {
         return (
             <div key='common' className={classes.tabContent}>
                 <BlockingElement fetching={fetching} className={classes.container}>
@@ -160,7 +160,7 @@ const AdministrationPagePanel: React.FC = (): React.ReactElement => {
     }
 
     // Вкладка "Уведомления"
-    const renderNotificationTab = () => {
+    const renderNotificationTab = (): React.ReactElement => {
         return (
             <div key='notification' className={classes.tabContent}>
                 <BlockingElement fetching={fetching} className={classes.container}>
@@ -326,7 +326,7 @@ const AdministrationPagePanel: React.FC = (): React.ReactElement => {
     }
 
     // Вкладка "Функционал"
-    const renderFunctionalTab = () => {
+    const renderFunctionalTab = (): React.ReactElement => {
         return (
             <div key='functional' className={classes.tabContent}>
                 <BlockingElement fetching={fetching} className={classes.container}>
@@ -371,7 +371,7 @@ const AdministrationPagePanel: React.FC = (): React.ReactElement => {
     }
 
     // Вкладка "Медиа"
-    const renderMediaTab = () => {
+    const renderMediaTab = (): React.ReactElement => {
         return (
             <div key='media' className={classes.tabContent}>
                 <BlockingElement fetching={fetching} className={classes.container}>

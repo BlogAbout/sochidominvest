@@ -181,7 +181,7 @@ export const subMenuCatalog: ISubMenu[] = [
     {
         href: RouteNames.ADVERTISING_WIDGET,
         title: 'Виджеты',
-        disabled: false,
+        disabled: true,
         icon: '',
         type: 'catalog',
         description: 'Создание дополнительных виджетов для главной страницы сайта',
@@ -190,7 +190,7 @@ export const subMenuCatalog: ISubMenu[] = [
     {
         href: RouteNames.ADVERTISING_BANNER,
         title: 'Баннеры',
-        disabled: false,
+        disabled: true,
         icon: '',
         type: 'catalog',
         description: 'Функционал управления и публикации собственных рекламных баннеров для привлечения клиентов и заработка',
@@ -253,7 +253,7 @@ export const subMenuCatalog: ISubMenu[] = [
     {
         href: RouteNames.ADVERTISING_PARTNER,
         title: 'Спонсоры и партнеры',
-        disabled: false,
+        disabled: true,
         icon: '',
         type: 'crm',
         description: 'Средства работы с партнерами и спонсорами, заработок на партнерстве',

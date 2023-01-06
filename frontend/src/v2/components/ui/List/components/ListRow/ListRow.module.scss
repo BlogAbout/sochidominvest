@@ -15,6 +15,10 @@
     + .ListRow {
         margin-top: 15px;
     }
+
+    &.disabled {
+        filter: grayscale(1);
+    }
 }
 
 @media (max-width: 768px) {

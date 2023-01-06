@@ -1,7 +1,7 @@
 import React, {useMemo} from 'react'
 import Wrapper from '../../../../components/ui/Wrapper/Wrapper'
 import Grid from '../../../../components/ui/Grid/Grid'
-import GridColumn from '../../../../components/ui/GridColumn/GridColumn'
+import GridColumn from '../../../../components/ui/Grid/components/GridColumn/GridColumn'
 import IconItem from '../../../../components/ui/IconItem/IconItem'
 import FormBuildRequest from './components/FormBuildRequest/FormBuildRequest'
 import classes from './SectionAdvantages.module.scss'

@@ -22,7 +22,7 @@ import BuildingDescriptionBlock from './components/BuildingDescriptionBlock/Buil
 import BuildingCheckersBlock from './components/BuildingCheckersBlock/BuildingCheckersBlock'
 import ArticleItem from '../ArticlesPage/components/ArticleItem/ArticleItem'
 import Grid from '../../components/ui/Grid/Grid'
-import GridColumn from '../../components/ui/GridColumn/GridColumn'
+import GridColumn from '../../components/ui/Grid/components/GridColumn/GridColumn'
 import classes from './BuildingPage.module.scss'
 
 type BuildingPageProps = {

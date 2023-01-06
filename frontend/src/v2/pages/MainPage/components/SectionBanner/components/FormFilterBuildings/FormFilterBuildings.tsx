@@ -1,9 +1,9 @@
 import React, {useState} from 'react'
 import {useNavigate} from 'react-router-dom'
-import {buildingClasses, buildingTypes, districtList} from '../../../../../../helpers/buildingHelper'
-import ComboBox from '../../../../../components/form/ComboBox/ComboBox'
-import Button from '../../../../../components/form/Button/Button'
-import NumberBox from '../../../../../../components/NumberBox/NumberBox'
+import {buildingClasses, buildingTypes, districtList} from '../../../../../../../helpers/buildingHelper'
+import ComboBox from '../../../../../../components/form/ComboBox/ComboBox'
+import Button from '../../../../../../components/form/Button/Button'
+import NumberBox from '../../../../../../../components/NumberBox/NumberBox'
 import classes from './FormFilterBuildings.module.scss'
 
 interface IFilterBuildings {

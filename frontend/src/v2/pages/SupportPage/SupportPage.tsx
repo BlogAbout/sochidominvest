@@ -3,6 +3,7 @@ import {IFeed} from '../../../@types/IFeed'
 import {IFilterContent} from '../../../@types/IFilter'
 import {useTypedSelector} from '../../../hooks/useTypedSelector'
 import {feedStatuses, feedTypes} from '../../../helpers/supportHelper'
+import {allowForRole} from '../../helpers/accessHelper'
 import {compareText} from '../../../helpers/filterHelper'
 import PanelView from '../../views/PanelView/PanelView'
 import Title from '../../components/ui/Title/Title'
@@ -12,7 +13,6 @@ import SidebarLeft from '../../../components/ui/SidebarLeft/SidebarLeft'
 import openPopupSupportCreate from '../../components/popup/PopupSupportCreate/PopupSupportCreate'
 import FeedList from './components/FeedList/FeedList'
 import classes from './SupportPage.module.scss'
-import {allowForRole} from "../../helpers/accessHelper";
 
 const SupportPage: React.FC = (): React.ReactElement => {
     const [fetching, setFetching] = useState(false)

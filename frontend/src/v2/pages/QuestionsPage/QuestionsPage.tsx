@@ -10,16 +10,16 @@ import PanelView from '../../views/PanelView/PanelView'
 import SidebarLeft from '../../../components/ui/SidebarLeft/SidebarLeft'
 import QuestionList from './components/QuestionList/QuestionList'
 import openPopupQuestionCreate from '../../../components/popup/PopupQuestionCreate/PopupQuestionCreate'
-import classes from './QuestionPage.module.scss'
+import classes from './QuestionsPage.module.scss'
 
-const QuestionPage: React.FC = (): React.ReactElement => {
+const QuestionsPage: React.FC = (): React.ReactElement => {
     const [fetching, setFetching] = useState(false)
     const [questions, setQuestions] = useState<IQuestion[]>([])
     const [searchText, setSearchText] = useState('')
     const [filterQuestion, setFilterQuestion] = useState<IQuestion[]>([])
     const [isShowFilter, setIsShowFilter] = useState(false)
     const [filters, setFilters] = useState({
-        types: ['common', 'payment', 'tariffs', 'other'],
+        types: ['common', 'payment', 'tariffs', 'other']
     })
 
     useEffect(() => {
@@ -121,6 +121,6 @@ const QuestionPage: React.FC = (): React.ReactElement => {
     )
 }
 
-QuestionPage.displayName = 'QuestionPage'
+QuestionsPage.displayName = 'QuestionsPage'
 
-export default React.memo(QuestionPage)
+export default React.memo(QuestionsPage)

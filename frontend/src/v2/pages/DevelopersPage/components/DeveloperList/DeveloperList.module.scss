@@ -1,0 +1,73 @@
+.DeveloperList {
+    height: calc(100% - 118px);
+
+    .name {
+        flex-grow: 1;
+    }
+
+    .type {
+        width: 200px;
+        flex-shrink: 0;
+    }
+
+    .phone {
+        width: 150px;
+        flex-shrink: 0;
+    }
+}
+
+@media (max-width: 768px) {
+    .DeveloperList {
+        display: block;
+        padding: 0;
+        margin-bottom: 0;
+
+        .name,
+        .type,
+        .phone {
+            position: relative;
+            display: block;
+            width: 100%;
+            padding-right: 8px;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+
+            &::before {
+                display: inline-block;
+                width: 100px;
+                padding: 8px 10px;
+                background-color: #075ea5;
+                color: #fff;
+                margin-right: 10px;
+                border-bottom: 1px solid #fff;
+            }
+        }
+
+        .name::before {
+            content: 'Название';
+        }
+
+        .type::before {
+            content: 'Тип';
+        }
+
+        .phone::before {
+            content: 'Телефон';
+            border-bottom: none;
+        }
+    }
+}
+
+@media (max-width: 480px) {
+    .DeveloperList {
+        font-size: 13px;
+
+        .name,
+        .type,
+        .phone {
+            &::before {
+                width: 80px;
+            }
+        }
+    }
+}

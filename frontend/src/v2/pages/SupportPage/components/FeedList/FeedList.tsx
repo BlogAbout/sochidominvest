@@ -30,11 +30,11 @@ const defaultProps: Props = {
     list: [],
     fetching: false,
     onSave: () => {
-        console.info('FeedList onSave')
+        console.info('AgentList onSave')
     }
 }
 
-const FeedList: React.FC<Props> = (props) => {
+const FeedList: React.FC<Props> = (props): React.ReactElement => {
     const navigate = useNavigate()
 
     const [fetching, setFetching] = useState(props.fetching)
@@ -196,6 +196,6 @@ const FeedList: React.FC<Props> = (props) => {
 }
 
 FeedList.defaultProps = defaultProps
-FeedList.displayName = 'FeedList'
+FeedList.displayName = 'AgentList'
 
 export default React.memo(FeedList)
