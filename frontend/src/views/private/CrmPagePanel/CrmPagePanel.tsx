@@ -10,15 +10,15 @@ const cx = classNames.bind(classes)
 
 const CrmPagePanel: React.FC = () => {
     const menu = [
-        {href: RouteNames.CRM_DEVELOPER, title: 'Застройщики', disabled: false},
-        {href: RouteNames.CRM_AGENT, title: 'Агентства', disabled: false},
-        {href: RouteNames.CRM_POST, title: 'Должности', disabled: false},
-        {href: RouteNames.CRM_BP, title: 'Бизнес-процессы', disabled: false},
-        {href: RouteNames.CRM_BOOKING, title: 'Бронирование', disabled: false},
-        {href: RouteNames.CRM_PAYMENT, title: 'Платежи и транзакции', disabled: false},
-        {href: RouteNames.CRM_USER_EXTERNAL, title: 'Внешние пользователи', disabled: false},
-        {href: RouteNames.CRM_COMPILATION, title: 'Подборки', disabled: false},
-        {href: RouteNames.CRM_MAILING, title: 'Рассылки', disabled: false}
+        // {href: RouteNames.CRM_DEVELOPER, title: 'Застройщики', disabled: false},
+        // {href: RouteNames.CRM_AGENT, title: 'Агентства', disabled: false},
+        // {href: RouteNames.CRM_POST, title: 'Должности', disabled: false},
+        // {href: RouteNames.CRM_BP, title: 'Бизнес-процессы', disabled: false},
+        // {href: RouteNames.CRM_BOOKING, title: 'Бронирование', disabled: false},
+        // {href: RouteNames.CRM_PAYMENT, title: 'Платежи и транзакции', disabled: false},
+        // {href: RouteNames.CRM_USER_EXTERNAL, title: 'Внешние пользователи', disabled: false},
+        // {href: RouteNames.CRM_COMPILATION, title: 'Подборки', disabled: false},
+        // {href: RouteNames.CRM_MAILING, title: 'Рассылки', disabled: false}
     ]
 
     return (
@@ -29,14 +29,14 @@ const CrmPagePanel: React.FC = () => {
                 <Title type={1}>CRM</Title>
 
                 <div className={classes.list}>
-                    {menu.map(item => {
-                        return (
-                            <div key={item.href} className={cx({'item': true, 'disabled': item.disabled})}>
-                                {item.disabled ? <span>{item.title}</span>
-                                    : <Link to={item.href} title={item.title}>{item.title}</Link>}
-                            </div>
-                        )
-                    })}
+                    {/*{menu.map(item => {*/}
+                    {/*    return (*/}
+                    {/*        <div key={item.href} className={cx({'item': true, 'disabled': item.disabled})}>*/}
+                    {/*            {item.disabled ? <span>{item.title}</span>*/}
+                    {/*                : <Link to={item.href} title={item.title}>{item.title}</Link>}*/}
+                    {/*        </div>*/}
+                    {/*    )*/}
+                    {/*})}*/}
                 </div>
             </div>
         </main>

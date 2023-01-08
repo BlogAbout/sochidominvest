@@ -52,15 +52,11 @@ const DevelopersPage: React.FC = (): React.ReactElement => {
         }
 
         DeveloperService.fetchDevelopers(filter)
-            .then((response: any) => {
-                setDevelopers(response.data)
-            })
+            .then((response: any) => setDevelopers(response.data))
             .catch((error: any) => {
                 console.error('Произошла ошибка загрузки данных', error)
             })
-            .finally(() => {
-                setFetching(false)
-            })
+            .finally(() => setFetching(false))
     }
 
     // Обработчик изменений

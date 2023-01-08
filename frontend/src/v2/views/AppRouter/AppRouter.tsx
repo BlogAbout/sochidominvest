@@ -22,6 +22,13 @@ import DevelopersPage from '../../pages/DevelopersPage/DevelopersPage'
 import AgentsPage from '../../pages/AgentsPage/AgentsPage'
 import PostsPage from '../../pages/PostsPage/PostsPage'
 import CompilationsPage from '../../pages/CompilationsPage/CompilationsPage'
+import BookingPage from '../../pages/BookingPage/BookingPage'
+import ExternalUsersPage from '../../pages/ExternalUsersPage/ExternalUsersPage'
+import MailingsPage from '../../pages/MailingsPage/MailingsPage'
+import PaymentPage from '../../pages/PaymentPage/PaymentPage'
+import DocumentsPage from '../../pages/DocumentsPage/DocumentsPage'
+import UsersPage from '../../pages/UsersPage/UsersPage'
+import BusinessProcessPage from '../../pages/BusinessProcessPage/BusinessProcessPage'
 import classes from './AppRouter.module.scss'
 import 'react-toastify/dist/ReactToastify.css'
 
@@ -63,6 +70,13 @@ const AppRouter: React.FC = () => {
                         <Route path={RouteNames.P_AGENT} element={<AgentsPage/>}/>
                         <Route path={RouteNames.P_POST} element={<PostsPage/>}/>
                         <Route path={RouteNames.P_COMPILATION} element={<CompilationsPage/>}/>
+                        <Route path={RouteNames.P_BOOKING} element={<BookingPage/>}/>
+                        <Route path={RouteNames.P_USER_EXTERNAL} element={<ExternalUsersPage/>}/>
+                        <Route path={RouteNames.P_MAILING} element={<MailingsPage/>}/>
+                        <Route path={RouteNames.P_PAYMENT} element={<PaymentPage/>}/>
+                        <Route path={RouteNames.P_DOCUMENT} element={<DocumentsPage/>}/>
+                        <Route path={RouteNames.P_USER} element={<UsersPage/>}/>
+                        <Route path={RouteNames.P_BP} element={<BusinessProcessPage/>}/>
                     </>
                     : null
                 }

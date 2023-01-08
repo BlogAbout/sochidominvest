@@ -21,11 +21,22 @@
         filter: grayscale(1);
     }
 
+    &.block {
+        color: #999;
+    }
+
     .itemContent {
         flex-grow: 1;
         padding: 0 20px;
         display: flex;
         flex-direction: column;
+
+        .title {
+            span {
+                vertical-align: middle;
+                margin-left: 5px;
+            }
+        }
 
         .row {
             color: #075ea5;

@@ -63,7 +63,7 @@ const Title: React.FC<Props> = (props): React.ReactElement | null => {
 
     const renderH1 = () => {
         return (
-            <h1 className={cx(props.className, {'Title': true, [props.style || 'left']: true})}>
+            <h1 className={cx(props.className, {'Title': true, 'hasSearch': !!props.onSearch, [props.style || 'left']: true})}>
                 <span>{props.children}</span>
 
                 <div className={classes.interface}>

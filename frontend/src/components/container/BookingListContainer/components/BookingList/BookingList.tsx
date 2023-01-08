@@ -21,16 +21,16 @@ const defaultProps: Props = {
     bookings: [],
     fetching: false,
     onClick: (booking: IBooking) => {
-        console.info('BookingList onClick', booking)
+        console.info('BusinessProcessList onClick', booking)
     },
     onEdit: (booking: IBooking) => {
-        console.info('BookingList onEdit', booking)
+        console.info('BusinessProcessList onEdit', booking)
     },
     onRemove: (booking: IBooking) => {
-        console.info('BookingList onRemove', booking)
+        console.info('BusinessProcessList onRemove', booking)
     },
     onContextMenu: (e: React.MouseEvent, booking: IBooking) => {
-        console.info('BookingList onContextMenu', e, booking)
+        console.info('BusinessProcessList onContextMenu', e, booking)
     }
 }
 

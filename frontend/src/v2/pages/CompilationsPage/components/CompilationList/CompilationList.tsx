@@ -101,6 +101,7 @@ const CompilationList: React.FC<Props> = (props): React.ReactElement => {
                             <ListRow key={compilation.id}
                                      onContextMenu={(e: React.MouseEvent) => onContextMenu(compilation, e)}
                                      onClick={() => navigate('/compilation/' + compilation.id)}
+                                     isDisabled={!compilation.active}
                             >
                                 <ListCell className={classes.name}>{compilation.name}</ListCell>
                                 <ListCell className={classes.date}>{getFormatDate(compilation.dateCreated)}</ListCell>

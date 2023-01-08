@@ -21,16 +21,16 @@ const defaultProps: Props = {
     questions: [],
     fetching: false,
     onClick: (question: IQuestion) => {
-        console.info('QuestionList onClick', question)
+        console.info('MailingList onClick', question)
     },
     onEdit: (question: IQuestion) => {
-        console.info('QuestionList onEdit', question)
+        console.info('MailingList onEdit', question)
     },
     onRemove: (question: IQuestion) => {
-        console.info('QuestionList onRemove', question)
+        console.info('MailingList onRemove', question)
     },
     onContextMenu: (e: React.MouseEvent, question: IQuestion) => {
-        console.info('QuestionList onContextMenu', e, question)
+        console.info('MailingList onContextMenu', e, question)
     }
 }
 

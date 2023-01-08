@@ -1,4 +1,4 @@
-import {RouteNames} from '../routes/routes'
+import {RouteNames} from '../v2/helpers/routerHelper'
 import {IconProp} from '@fortawesome/fontawesome-svg-core'
 
 export interface IMenuLink {

@@ -117,47 +117,47 @@ const AppRouter: React.FC = () => {
                         <Routes>
                             {['director', 'administrator'].includes(role) &&
                             <>
-                                <Route path={RouteNames.USER_ITEM} element={<UserItemPagePanel/>}/>
-                                <Route path={RouteNames.USER} element={<UserPagePanel/>}/>
-                                <Route path={RouteNames.TOOL} element={<ToolPanel/>}/>
-                                <Route path={RouteNames.ADMINISTRATION} element={<AdministrationPagePanel/>}/>
-                                <Route path={RouteNames.ADVERTISING} element={<AdvertisingMaterialsPagePanel/>}/>
-                                <Route path={RouteNames.ADVERTISING_PARTNER} element={<PartnerPanel/>}/>
-                                <Route path={RouteNames.ADVERTISING_BANNER} element={<BannerPanel/>}/>
-                                <Route path={RouteNames.ADVERTISING_WIDGET} element={<WidgetPanel/>}/>
-                                <Route path={RouteNames.ADVERTISING_FAQ} element={<FaqPanel/>}/>
+                                {/*<Route path={RouteNames.USER_ITEM} element={<UserItemPagePanel/>}/>*/}
+                                {/*<Route path={RouteNames.USER} element={<UserPagePanel/>}/>*/}
+                                {/*<Route path={RouteNames.TOOL} element={<ToolPanel/>}/>*/}
+                                {/*<Route path={RouteNames.ADMINISTRATION} element={<AdministrationPagePanel/>}/>*/}
+                                {/*<Route path={RouteNames.ADVERTISING} element={<AdvertisingMaterialsPagePanel/>}/>*/}
+                                {/*<Route path={RouteNames.ADVERTISING_PARTNER} element={<PartnerPanel/>}/>*/}
+                                {/*<Route path={RouteNames.ADVERTISING_BANNER} element={<BannerPanel/>}/>*/}
+                                {/*<Route path={RouteNames.ADVERTISING_WIDGET} element={<WidgetPanel/>}/>*/}
+                                {/*<Route path={RouteNames.ADVERTISING_FAQ} element={<FaqPanel/>}/>*/}
                             </>
                             }
 
                             {['director', 'administrator', 'manager'].includes(role) &&
                             <>
-                                <Route path={RouteNames.CRM} element={<CrmPagePanel/>}/>
-                                <Route path={RouteNames.CRM_DEVELOPER_ITEM} element={<DeveloperItemPagePanel/>}/>
-                                <Route path={RouteNames.CRM_DEVELOPER} element={<DeveloperPagePanel/>}/>
-                                <Route path={RouteNames.CRM_AGENT_ITEM} element={<AgentItemPagePanel/>}/>
-                                <Route path={RouteNames.CRM_AGENT} element={<AgentPagePanel/>}/>
-                                <Route path={RouteNames.CRM_POST} element={<PostPagePanel/>}/>
-                                <Route path={RouteNames.CRM_BP} element={<BusinessProcessPanel/>}/>
-                                <Route path={RouteNames.CRM_BOOKING} element={<BookingPagePanel/>}/>
-                                <Route path={RouteNames.CRM_PAYMENT} element={<PaymentPagePanel/>}/>
-                                <Route path={RouteNames.CRM_USER_EXTERNAL} element={<ExternalPagePanel/>}/>
-                                <Route path={RouteNames.CRM_MAILING} element={<MailingPagePanel/>}/>
-                                <Route path={RouteNames.DOCUMENT} element={<DocumentPagePanel/>}/>
-                                <Route path={RouteNames.REPORT} element={<ReportPanel/>}/>
-                                <Route path={RouteNames.FILE_MANAGER} element={<FileManagerPagePanel/>}/>
-                                <Route path={RouteNames.CRM_COMPILATION_ITEM} element={<CompilationItemPagePanel/>}/>
-                                <Route path={RouteNames.CRM_COMPILATION} element={<CompilationPagePanel/>}/>
+                                {/*<Route path={RouteNames.CRM} element={<CrmPagePanel/>}/>*/}
+                                {/*<Route path={RouteNames.CRM_DEVELOPER_ITEM} element={<DeveloperItemPagePanel/>}/>*/}
+                                {/*<Route path={RouteNames.CRM_DEVELOPER} element={<DeveloperPagePanel/>}/>*/}
+                                {/*<Route path={RouteNames.CRM_AGENT_ITEM} element={<AgentItemPagePanel/>}/>*/}
+                                {/*<Route path={RouteNames.CRM_AGENT} element={<AgentPagePanel/>}/>*/}
+                                {/*<Route path={RouteNames.CRM_POST} element={<PostPagePanel/>}/>*/}
+                                {/*<Route path={RouteNames.CRM_BP} element={<BusinessProcessPanel/>}/>*/}
+                                {/*<Route path={RouteNames.CRM_BOOKING} element={<BookingPagePanel/>}/>*/}
+                                {/*<Route path={RouteNames.CRM_PAYMENT} element={<PaymentPagePanel/>}/>*/}
+                                {/*<Route path={RouteNames.CRM_USER_EXTERNAL} element={<ExternalPagePanel/>}/>*/}
+                                {/*<Route path={RouteNames.CRM_MAILING} element={<MailingPagePanel/>}/>*/}
+                                {/*<Route path={RouteNames.DOCUMENT} element={<DocumentPagePanel/>}/>*/}
+                                {/*<Route path={RouteNames.REPORT} element={<ReportPanel/>}/>*/}
+                                {/*<Route path={RouteNames.FILE_MANAGER} element={<FileManagerPagePanel/>}/>*/}
+                                {/*<Route path={RouteNames.CRM_COMPILATION_ITEM} element={<CompilationItemPagePanel/>}/>*/}
+                                {/*<Route path={RouteNames.CRM_COMPILATION} element={<CompilationPagePanel/>}/>*/}
                             </>
                             }
 
-                            <Route path={RouteNames.MAIN} element={<DesktopPagePanel/>}/>
-                            <Route path={RouteNames.BUILDING_ITEM} element={<BuildingItemPagePanel/>}/>
-                            <Route path={RouteNames.BUILDING} element={<BuildingPagePanel/>}/>
-                            <Route path={RouteNames.ARTICLE_ITEM} element={<ArticleItemPagePanel/>}/>
-                            <Route path={RouteNames.ARTICLE} element={<ArticlePagePanel/>}/>
-                            <Route path={RouteNames.SUPPORT} element={<SupportPagePanel/>}/>
-                            <Route path={RouteNames.FAVORITE} element={<FavoritePagePanel/>}/>
-                            <Route path={RouteNames.TARIFF} element={<TariffPagePanel/>}/>
+                            {/*<Route path={RouteNames.MAIN} element={<DesktopPagePanel/>}/>*/}
+                            {/*<Route path={RouteNames.BUILDING_ITEM} element={<BuildingItemPagePanel/>}/>*/}
+                            {/*<Route path={RouteNames.BUILDING} element={<BuildingPagePanel/>}/>*/}
+                            {/*<Route path={RouteNames.ARTICLE_ITEM} element={<ArticleItemPagePanel/>}/>*/}
+                            {/*<Route path={RouteNames.ARTICLE} element={<ArticlePagePanel/>}/>*/}
+                            {/*<Route path={RouteNames.SUPPORT} element={<SupportPagePanel/>}/>*/}
+                            {/*<Route path={RouteNames.FAVORITE} element={<FavoritePagePanel/>}/>*/}
+                            {/*<Route path={RouteNames.TARIFF} element={<TariffPagePanel/>}/>*/}
                         </Routes>
                     </div>
 

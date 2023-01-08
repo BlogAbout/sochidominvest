@@ -19,10 +19,10 @@ const defaultProps: Props = {
     list: [],
     fetching: false,
     onClick: (developer: IDeveloper) => {
-        console.info('AgentList onClick', developer)
+        console.info('DeveloperTill onClick', developer)
     },
     onContextMenu: (developer: IDeveloper, e: React.MouseEvent) => {
-        console.info('AgentList onClick', developer, e)
+        console.info('DeveloperTill onClick', developer, e)
     }
 }
 

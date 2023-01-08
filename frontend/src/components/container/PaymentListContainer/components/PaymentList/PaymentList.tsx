@@ -19,13 +19,13 @@ const defaultProps: Props = {
     payments: [],
     fetching: false,
     onClick: (payment: IPayment) => {
-        console.info('PaymentList onClick', payment)
+        console.info('DocumentList onClick', payment)
     },
     onEdit: (payment: IPayment) => {
-        console.info('PaymentList onEdit', payment)
+        console.info('DocumentList onEdit', payment)
     },
     onContextMenu: (e: React.MouseEvent, payment: IPayment) => {
-        console.info('PaymentList onContextMenu', e, payment)
+        console.info('DocumentList onContextMenu', e, payment)
     }
 }
 

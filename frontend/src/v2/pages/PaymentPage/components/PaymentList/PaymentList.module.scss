@@ -1,0 +1,106 @@
+.PaymentList {
+    height: calc(100% - 118px);
+
+    .id {
+        width: 50px;
+        flex-shrink: 0;
+    }
+
+    .name {
+        flex-grow: 1;
+    }
+
+    .userName {
+        width: 250px;
+        flex-shrink: 0;
+    }
+
+    .cost {
+        width: 150px;
+        flex-shrink: 0;
+    }
+
+    .status {
+        width: 200px;
+        flex-shrink: 0;
+    }
+
+    .dateCreated {
+        width: 150px;
+        flex-shrink: 0;
+    }
+}
+
+@media (max-width: 768px) {
+    .PaymentList {
+        display: block;
+        padding: 0;
+        margin-bottom: 0;
+
+        .id,
+        .name,
+        .userName,
+        .cost,
+        .status,
+        .dateCreated {
+            position: relative;
+            display: block;
+            width: 100%;
+            padding-right: 8px;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+
+            &::before {
+                display: inline-block;
+                width: 100px;
+                padding: 8px 10px;
+                background-color: #075ea5;
+                color: #fff;
+                margin-right: 10px;
+                border-bottom: 1px solid #fff;
+            }
+        }
+
+        .id::before {
+            content: 'Номер #'
+        }
+
+        .name::before {
+            content: 'Название';
+        }
+
+        .userName::before {
+            content: 'Имя пользователя';
+        }
+
+        .cost::before {
+            content: 'Сумма, руб.';
+        }
+
+        .status::before {
+            content: 'Статус';
+        }
+
+        .dateCreated::before {
+            content: 'дата создания';
+            border-bottom: none;
+        }
+    }
+}
+
+@media (max-width: 480px) {
+    .PaymentList {
+        font-size: 13px;
+
+        .id,
+        .name,
+        .userName,
+        .cost,
+        .status,
+        .dateCreated {
+            &::before {
+                width: 80px;
+            }
+        }
+    }
+}

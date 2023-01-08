@@ -1,4 +1,4 @@
-import {RouteNames} from '../../routes/routes'
+import {RouteNames} from './routerHelper'
 import {IMenuLink, ISubMenu} from '../../@types/IMenu'
 
 export const menuMain: IMenuLink[] = [
@@ -7,19 +7,19 @@ export const menuMain: IMenuLink[] = [
         title: 'Главная'
     },
     {
-        route: RouteNames.PUBLIC_ABOUT,
+        route: RouteNames.ABOUT,
         title: 'О компании'
     },
     {
-        route: RouteNames.PUBLIC_BUILDING,
+        route: RouteNames.BUILDING,
         title: 'Недвижимость'
     },
     {
-        route: RouteNames.PUBLIC_RENT,
+        route: RouteNames.RENT,
         title: 'Аренда'
     },
     {
-        route: RouteNames.PUBLIC_ARTICLE,
+        route: RouteNames.ARTICLE,
         title: 'Статьи'
     }
 ]
@@ -30,26 +30,26 @@ export const menuFooter: IMenuLink[] = [
         title: 'Главная'
     },
     {
-        route: RouteNames.PUBLIC_ABOUT,
+        route: RouteNames.ABOUT,
         title: 'О компании'
     },
     {
-        route: RouteNames.PUBLIC_FAQ,
+        route: RouteNames.FAQ,
         title: 'Вопрос/Ответ'
     },
     {
-        route: RouteNames.PUBLIC_POLICY,
+        route: RouteNames.POLICY,
         title: 'Политика'
     },
     {
-        route: RouteNames.PUBLIC_ARTICLE,
+        route: RouteNames.ARTICLE,
         title: 'Статьи'
     },
 ]
 
 export const menuPanel: IMenuLink[] = [
     {
-        route: RouteNames.MAIN,
+        route: RouteNames.P_DESKTOP,
         title: 'Рабочий стол',
         icon: 'house',
         hasRole: []
@@ -61,19 +61,19 @@ export const menuPanel: IMenuLink[] = [
         isSeparator: true
     },
     {
-        route: RouteNames.USER,
+        route: RouteNames.P_USER,
         title: 'Пользователи',
         icon: 'user',
         hasRole: ['director', 'administrator']
     },
     {
-        route: RouteNames.BUILDING,
+        route: RouteNames.P_BUILDING,
         title: 'Недвижимость',
         icon: 'building',
         hasRole: []
     },
     {
-        route: RouteNames.ARTICLE,
+        route: RouteNames.P_ARTICLE,
         title: 'Статьи',
         icon: 'newspaper',
         hasRole: []
@@ -85,32 +85,32 @@ export const menuPanel: IMenuLink[] = [
         isSeparator: true
     },
     {
-        route: RouteNames.FILE_MANAGER,
+        route: RouteNames.P_FILE_MANAGER,
         title: 'Файловый менеджер',
         icon: 'photo-film',
         hasRole: []
     },
     {
-        route: RouteNames.CATALOG,
+        route: RouteNames.P_CATALOG,
         title: 'Каталоги',
         icon: 'folder-tree',
         hasTariff: ['base', 'business', 'effectivePlus']
     },
     {
-        route: RouteNames.CRM,
+        route: RouteNames.P_CRM,
         title: 'CRM',
         icon: 'chart-pie',
         hasTariff: ['base', 'business', 'effectivePlus']
     },
     {
-        route: RouteNames.DOCUMENT,
+        route: RouteNames.P_DOCUMENT,
         title: 'Документы',
         icon: 'book',
         hasRole: [],
         hasTariff: ['business', 'effectivePlus']
     },
     {
-        route: RouteNames.REPORT,
+        route: RouteNames.P_REPORT,
         title: 'Отчеты',
         icon: 'file-excel',
         hasRole: ['director', 'administrator', 'manager']
@@ -122,19 +122,19 @@ export const menuPanel: IMenuLink[] = [
         isSeparator: true
     },
     {
-        route: RouteNames.TOOL,
+        route: RouteNames.P_TOOL,
         title: 'Инструменты',
         icon: 'screwdriver-wrench',
         hasRole: ['director', 'administrator']
     },
     {
-        route: RouteNames.ADMINISTRATION,
+        route: RouteNames.P_ADMINISTRATION,
         title: 'Администрирование',
         icon: 'gear',
         hasRole: ['director', 'administrator']
     },
     {
-        route: RouteNames.SUPPORT,
+        route: RouteNames.P_SUPPORT,
         title: 'Поддержка',
         icon: 'question',
         hasRole: []
@@ -143,7 +143,7 @@ export const menuPanel: IMenuLink[] = [
 
 export const subMenuCatalog: ISubMenu[] = [
     {
-        href: RouteNames.CRM_DEVELOPER,
+        href: RouteNames.P_DEVELOPER,
         title: 'Застройщики',
         disabled: false,
         icon: '',
@@ -152,7 +152,7 @@ export const subMenuCatalog: ISubMenu[] = [
         hasTariff: ['base', 'business', 'effectivePlus']
     },
     {
-        href: RouteNames.CRM_AGENT,
+        href: RouteNames.P_AGENT,
         title: 'Агентства',
         disabled: false,
         icon: '',
@@ -161,7 +161,7 @@ export const subMenuCatalog: ISubMenu[] = [
         hasTariff: ['base', 'business', 'effectivePlus']
     },
     {
-        href: RouteNames.CRM_POST,
+        href: RouteNames.P_POST,
         title: 'Должности',
         disabled: false,
         icon: '',
@@ -170,7 +170,7 @@ export const subMenuCatalog: ISubMenu[] = [
         hasRole: ['director', 'administrator']
     },
     {
-        href: RouteNames.CRM_COMPILATION,
+        href: RouteNames.P_COMPILATION,
         title: 'Подборки',
         disabled: false,
         icon: '',
@@ -179,7 +179,7 @@ export const subMenuCatalog: ISubMenu[] = [
         hasRole: ['director', 'administrator', 'manager']
     },
     {
-        href: RouteNames.ADVERTISING_WIDGET,
+        href: RouteNames.P_WIDGET,
         title: 'Виджеты',
         disabled: true,
         icon: '',
@@ -188,7 +188,7 @@ export const subMenuCatalog: ISubMenu[] = [
         hasRole: ['director', 'administrator', 'manager']
     },
     {
-        href: RouteNames.ADVERTISING_BANNER,
+        href: RouteNames.P_BANNER,
         title: 'Баннеры',
         disabled: true,
         icon: '',
@@ -197,7 +197,7 @@ export const subMenuCatalog: ISubMenu[] = [
         hasTariff: ['effectivePlus']
     },
     {
-        href: RouteNames.ADVERTISING_FAQ,
+        href: RouteNames.P_QUESTION,
         title: 'F.A.Q.',
         disabled: false,
         icon: '',
@@ -206,7 +206,7 @@ export const subMenuCatalog: ISubMenu[] = [
         hasRole: ['director', 'administrator', 'manager']
     },
     {
-        href: RouteNames.CRM_BP,
+        href: RouteNames.P_BP,
         title: 'Бизнес-процессы',
         disabled: false,
         icon: '',
@@ -215,7 +215,7 @@ export const subMenuCatalog: ISubMenu[] = [
         hasTariff: ['base', 'business', 'effectivePlus']
     },
     {
-        href: RouteNames.CRM_BOOKING,
+        href: RouteNames.P_BOOKING,
         title: 'Бронирование',
         disabled: false,
         icon: '',
@@ -224,7 +224,7 @@ export const subMenuCatalog: ISubMenu[] = [
         hasRole: ['director', 'administrator', 'manager']
     },
     {
-        href: RouteNames.CRM_PAYMENT,
+        href: RouteNames.P_PAYMENT,
         title: 'Платежи и транзакции',
         disabled: false,
         icon: '',
@@ -233,7 +233,7 @@ export const subMenuCatalog: ISubMenu[] = [
         hasTariff: ['base', 'business', 'effectivePlus']
     },
     {
-        href: RouteNames.CRM_USER_EXTERNAL,
+        href: RouteNames.P_USER_EXTERNAL,
         title: 'Внешние пользователи',
         disabled: false,
         icon: '',
@@ -242,7 +242,7 @@ export const subMenuCatalog: ISubMenu[] = [
         hasRole: ['director', 'administrator', 'manager']
     },
     {
-        href: RouteNames.CRM_MAILING,
+        href: RouteNames.P_MAILING,
         title: 'Рассылки',
         disabled: false,
         icon: '',
@@ -251,7 +251,7 @@ export const subMenuCatalog: ISubMenu[] = [
         hasRole: ['director', 'administrator']
     },
     {
-        href: RouteNames.ADVERTISING_PARTNER,
+        href: RouteNames.P_PARTNER,
         title: 'Спонсоры и партнеры',
         disabled: true,
         icon: '',

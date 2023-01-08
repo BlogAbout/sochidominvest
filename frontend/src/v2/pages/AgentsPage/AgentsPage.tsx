@@ -52,15 +52,11 @@ const AgentsPage: React.FC = (): React.ReactElement => {
         }
 
         AgentService.fetchAgents(filter)
-            .then((response: any) => {
-                setAgents(response.data)
-            })
+            .then((response: any) => setAgents(response.data))
             .catch((error: any) => {
                 console.error('Произошла ошибка загрузки данных', error)
             })
-            .finally(() => {
-                setFetching(false)
-            })
+            .finally(() => setFetching(false))
     }
 
     // Обработчик изменений

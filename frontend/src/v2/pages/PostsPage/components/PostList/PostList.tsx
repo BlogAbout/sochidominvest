@@ -127,6 +127,7 @@ const PostList: React.FC<Props> = (props): React.ReactElement => {
                                          marginLeft: post.spaces ? 30 * post.spaces : 0,
                                          width: post.spaces ? (`calc(100% - ${30 * post.spaces}px`) : '100%'
                                      }}
+                                     isDisabled={!post.active}
                             >
                                 <ListCell className={classes.name}>
                                     {renderArrowTree(post)}
