@@ -1,6 +1,7 @@
 import React, {useState} from 'react'
 import {useNavigate} from 'react-router-dom'
 import {useTypedSelector} from '../../../../../hooks/useTypedSelector'
+import {RouteNames} from '../../../../helpers/routerHelper'
 import {IBusinessProcess} from '../../../../../@types/IBusinessProcess'
 import {IFeed} from '../../../../../@types/IFeed'
 import {getFeedStatusesText, getFeedTypesText} from '../../../../../helpers/supportHelper'
@@ -97,7 +98,7 @@ const FeedList: React.FC<Props> = (props): React.ReactElement => {
         openPopupBusinessProcessCreate(document.body, {
             businessProcess: businessProcess,
             onSave: () => {
-                navigate('/panel/crm/bp/')
+                navigate(RouteNames.P_BP)
             }
         })
     }

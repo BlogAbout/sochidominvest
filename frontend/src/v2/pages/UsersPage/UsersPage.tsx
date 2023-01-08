@@ -6,6 +6,7 @@ import {useActions} from '../../../hooks/useActions'
 import {compareText} from '../../../helpers/filterHelper'
 import {changeLayout, getLayout} from '../../../helpers/utilHelper'
 import {allowForRole} from '../../helpers/accessHelper'
+import {RouteNames} from '../../helpers/routerHelper'
 import {IUser} from '../../../@types/IUser'
 import {IFilterContent} from '../../../@types/IFilter'
 import Title from '../../components/ui/Title/Title'
@@ -71,7 +72,7 @@ const UsersPage: React.FC = (): React.ReactElement => {
     }
 
     const onClickHandler = (user: IUser) => {
-        navigate('/panel/user/' + user.id)
+        navigate(`${RouteNames.P_USER}/${user.id}`)
     }
 
     const onAddHandler = () => {

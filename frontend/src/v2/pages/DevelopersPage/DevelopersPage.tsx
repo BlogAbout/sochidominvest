@@ -5,6 +5,7 @@ import {developerTypes} from '../../../helpers/developerHelper'
 import {compareText} from '../../../helpers/filterHelper'
 import {changeLayout, getLayout} from '../../../helpers/utilHelper'
 import {allowForRole, allowForTariff} from '../../helpers/accessHelper'
+import {RouteNames} from '../../helpers/routerHelper'
 import {IDeveloper} from '../../../@types/IDeveloper'
 import {IFilter, IFilterContent} from '../../../@types/IFilter'
 import Title from '../../components/ui/Title/Title'
@@ -82,7 +83,7 @@ const DevelopersPage: React.FC = (): React.ReactElement => {
     }
 
     const onClickHandler = (developer: IDeveloper) => {
-        navigate('/panel/crm/developer/' + developer.id)
+        navigate(`${RouteNames.P_DEVELOPER}/${developer.id}`)
     }
 
     const onAddHandler = () => {

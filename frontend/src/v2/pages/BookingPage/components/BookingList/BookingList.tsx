@@ -1,5 +1,6 @@
 import React, {useState} from 'react'
 import {useNavigate} from 'react-router-dom'
+import {RouteNames} from '../../../../helpers/routerHelper'
 import {IBooking} from '../../../../../@types/IBooking'
 import {IBusinessProcess} from '../../../../../@types/IBusinessProcess'
 import {useTypedSelector} from '../../../../../hooks/useTypedSelector'
@@ -67,7 +68,7 @@ const BookingList: React.FC<Props> = (props): React.ReactElement => {
         openPopupBusinessProcessCreate(document.body, {
             businessProcess: businessProcess,
             onSave: () => {
-                navigate('/panel/crm/bp/')
+                navigate(RouteNames.P_BP)
             }
         })
     }
