@@ -1,17 +1,16 @@
 import React, {useEffect, useState} from 'react'
 import {Link, useNavigate} from 'react-router-dom'
-import NotificationService from '../../../api/NotificationService'
+import NotificationService from '../../../../api/NotificationService'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {useActions} from '../../../hooks/useActions'
-import {useTypedSelector} from '../../../hooks/useTypedSelector'
-import {RouteNames} from '../../../routes/routes'
-import NotificationPanel from '../../NotificationPanel/NotificationPanel'
-import openPopupUserCreate from '../../popup/PopupUserCreate/PopupUserCreate'
-import openPopupSearchPanel from '../../popup/PopupSearchPanel/PopupSearchPanel'
-import openPopupMessenger from '../../popup/PopupMessenger/PopupMessenger'
-import classes from './SidebarRight.module.scss'
+import {useActions} from '../../../../hooks/useActions'
+import {useTypedSelector} from '../../../../hooks/useTypedSelector'
+import {RouteNames} from '../../../helpers/routerHelper'
+import NotificationPanel from '../../../../components/NotificationPanel/NotificationPanel'
+import openPopupSearchPanel from '../../../../components/popup/PopupSearchPanel/PopupSearchPanel'
+import openPopupMessenger from '../../../../components/popup/PopupMessenger/PopupMessenger'
+import classes from './ToolsPanel.module.scss'
 
-const SidebarRight: React.FC = () => {
+const ToolsPanel: React.FC = () => {
     const navigate = useNavigate()
 
     const [isShowNotification, setIsShowNotification] = useState(false)
@@ -50,7 +49,7 @@ const SidebarRight: React.FC = () => {
 
     return (
         <>
-            <aside className={classes.SidebarRight}>
+            <aside className={classes.ToolsPanel}>
                 <div className={classes.icon}
                      title='Глобальный поиск'
                      onClick={() => {
@@ -63,24 +62,8 @@ const SidebarRight: React.FC = () => {
                     <FontAwesomeIcon icon='magnifying-glass'/>
                 </div>
 
-                <div className={classes.icon}
-                     title='Профиль'
-                     onClick={() => {
-                         if (userId) {
-                             openPopupUserCreate(document.body, {
-                                 user: null,
-                                 userId: userId,
-                                 onSave: () => {
-                                 }
-                             })
-                         }
-                     }}
-                >
-                    <FontAwesomeIcon icon='user'/>
-                </div>
-
                 <div className={classes.icon}>
-                    <Link to={RouteNames.FAVORITE} title='Избранное'>
+                    <Link to={RouteNames.P_FAVORITE} title='Избранное'>
                         <FontAwesomeIcon icon='heart'/>
                     </Link>
                 </div>
@@ -115,6 +98,6 @@ const SidebarRight: React.FC = () => {
     )
 }
 
-SidebarRight.displayName = 'SidebarRight'
+ToolsPanel.displayName = 'ToolsPanel'
 
-export default SidebarRight
+export default ToolsPanel

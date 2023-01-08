@@ -1,5 +1,5 @@
 import axios, {AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse} from 'axios'
-import {RouteNames} from './routes/routes'
+import {RouteNames} from './v2/helpers/routerHelper'
 import {configuration} from './helpers/utilHelper'
 
 /**

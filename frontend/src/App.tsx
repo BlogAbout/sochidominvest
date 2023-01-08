@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react'
-import AppRouter from './routes/components/AppRouter/AppRouter'
+import AppRouter from './v2/views/AppRouter/AppRouter'
 import {useActions} from './hooks/useActions'
 import {library} from '@fortawesome/fontawesome-svg-core'
 import {
@@ -105,7 +105,7 @@ import {
     faXmark
 } from '@fortawesome/free-solid-svg-icons'
 import {registerEventsEmitter, registerWebsocket} from './helpers/eventsHelper'
-import UserService from "./api/UserService";
+import UserService from './api/UserService'
 
 library.add(
     faUser,

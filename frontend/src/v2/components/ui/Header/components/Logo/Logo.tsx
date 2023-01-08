@@ -1,7 +1,7 @@
 import React from 'react'
 import {Link} from 'react-router-dom'
 import classNames from 'classnames/bind'
-import {RouteNames} from '../../../../../../routes/routes'
+import {RouteNames} from '../../../../../helpers/routerHelper'
 import classes from './Logo.module.scss'
 
 interface Props {

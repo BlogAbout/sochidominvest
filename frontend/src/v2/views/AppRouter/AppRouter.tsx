@@ -94,4 +94,4 @@ const AppRouter: React.FC = () => {
     )
 }
 
-export {AppRouter}
+export default AppRouter

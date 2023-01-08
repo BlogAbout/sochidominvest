@@ -1,6 +1,7 @@
 import React from 'react'
 import PageMetaInfo from '../../components/ui/PageMetaInfo/PageMetaInfo'
 import Navigation from '../../components/ui/Navigation/Navigation'
+import ToolsPanel from '../../components/ui/ToolsPanel/ToolsPanel'
 import classes from './PanelView.module.scss'
 
 interface Props extends React.PropsWithChildren<any> {
@@ -20,6 +21,8 @@ const PanelView: React.FC<Props> = (props): React.ReactElement => {
             <main className={classes.main}>
                 {props.children}
             </main>
+
+            <ToolsPanel/>
         </div>
     )
 }
