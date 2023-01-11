@@ -132,7 +132,7 @@ const DevelopersPage: React.FC = (): React.ReactElement => {
     const onContextMenuHandler = (developer: IDeveloper, e: React.MouseEvent) => {
         e.preventDefault()
 
-        const menuItems = [{text: 'Открыть', onClick: () => navigate('/developer/' + developer.id)}]
+        const menuItems = [{text: 'Открыть', onClick: () => navigate(`${RouteNames.P_DEVELOPER}/${developer.id}`)}]
 
         if (allowForRole(['director', 'administrator', 'manager'])) {
             menuItems.push({text: 'Редактировать', onClick: () => onEditHandler(developer)})

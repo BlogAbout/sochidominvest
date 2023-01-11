@@ -30,7 +30,6 @@
 
             .head {
                 color: #fff;
-                text-align: right;
                 margin-bottom: 5px;
             }
 
@@ -41,16 +40,6 @@
 
         .itemInfo {
             position: relative;
-
-            .type {
-                background: #075ea5;
-                color: #fff;
-                display: inline-block;
-                font-size: 14px;
-                line-height: 14px;
-                padding: 5px;
-                z-index: 3;
-            }
 
             .passed {
                 background: #3E88C6;
@@ -87,6 +76,20 @@
                     line-height: 16px;
                 }
             }
+        }
+
+        .type {
+            position: absolute;
+            left: -15px;
+            bottom: 35px;
+            width: auto;
+            height: 20px;
+            background-color: #075ea5;
+            color: #fff;
+            padding: 0 5px;
+            z-index: 3;
+            font-size: 14px;
+            line-height: 20px;
         }
 
         .information {

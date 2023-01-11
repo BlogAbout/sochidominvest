@@ -1,6 +1,7 @@
 import React, {useState} from 'react'
 import {useNavigate} from 'react-router-dom'
 import {buildingClasses, buildingTypes, districtList} from '../../../../../../../helpers/buildingHelper'
+import {RouteNames} from '../../../../../../helpers/routerHelper'
 import ComboBox from '../../../../../../components/form/ComboBox/ComboBox'
 import Button from '../../../../../../components/form/Button/Button'
 import NumberBox from '../../../../../../../components/NumberBox/NumberBox'
@@ -28,7 +29,7 @@ const FormFilterBuildings: React.FC = (): React.ReactElement => {
     const findBuildingsHandler = () => {
         localStorage.setItem('mainPageFilter', JSON.stringify(selectedFilter))
 
-        navigate('/building/')
+        navigate(RouteNames.BUILDING)
     }
 
     return (

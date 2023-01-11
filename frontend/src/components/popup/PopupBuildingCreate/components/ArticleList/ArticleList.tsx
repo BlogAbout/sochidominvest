@@ -21,7 +21,7 @@ interface Props {
 const defaultProps: Props = {
     selected: [],
     onSelect: (value: number[]) => {
-        console.info('ArticleList onSelect', value)
+        console.info('BuildingList onSelect', value)
     }
 }
 

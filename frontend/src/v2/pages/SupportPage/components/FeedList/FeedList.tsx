@@ -31,7 +31,7 @@ const defaultProps: Props = {
     list: [],
     fetching: false,
     onSave: () => {
-        console.info('AgentList onSave')
+        console.info('BuildingList onSave')
     }
 }
 

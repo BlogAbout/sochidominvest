@@ -19,6 +19,7 @@ interface Props extends React.PropsWithChildren<any> {
     activeLayout?: 'list' | 'till' | 'map'
     layouts?: ('list' | 'till' | 'map')[]
     searchText?: string
+    addText?: string
 
     onAdd?(e: React.MouseEvent): void
 
@@ -34,7 +35,8 @@ const defaultProps: Props = {
     style: 'left',
     activeLayout: 'list',
     layouts: [],
-    searchText: ''
+    searchText: '',
+    addText: 'Добавить',
 }
 
 const cx = classNames.bind(classes)
@@ -115,7 +117,7 @@ const Title: React.FC<Props> = (props): React.ReactElement | null => {
                                 icon='plus'
                                 onClick={(e: React.MouseEvent) => props.onAdd ? props.onAdd(e) : undefined}
                                 className='marginLeft'
-                        >Добавить</Button>
+                        >{props.addText}</Button>
                         : null
                     }
                 </div>

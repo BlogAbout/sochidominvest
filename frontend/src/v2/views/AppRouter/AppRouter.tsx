@@ -22,13 +22,21 @@ import DevelopersPage from '../../pages/DevelopersPage/DevelopersPage'
 import AgentsPage from '../../pages/AgentsPage/AgentsPage'
 import PostsPage from '../../pages/PostsPage/PostsPage'
 import CompilationsPage from '../../pages/CompilationsPage/CompilationsPage'
+import CompilationPage from '../../pages/CompilationPage/CompilationPage'
 import BookingPage from '../../pages/BookingPage/BookingPage'
 import ExternalUsersPage from '../../pages/ExternalUsersPage/ExternalUsersPage'
 import MailingsPage from '../../pages/MailingsPage/MailingsPage'
 import PaymentPage from '../../pages/PaymentPage/PaymentPage'
 import DocumentsPage from '../../pages/DocumentsPage/DocumentsPage'
 import UsersPage from '../../pages/UsersPage/UsersPage'
+import UserPage from '../../pages/UserPage/UserPage'
 import BusinessProcessPage from '../../pages/BusinessProcessPage/BusinessProcessPage'
+import ArticlePanelPage from '../../pages/ArticlesPanelPage/ArticlesPanelPage'
+import BuildingsPanelPage from '../../pages/BuildingsPanelPage/BuildingsPanelPage'
+import FavoritePage from '../../pages/FavoritePage/FavoritePage'
+import TariffPage from '../../pages/TariffPage/TariffPage'
+import FilesPage from '../../pages/FilesPage/FilesPage'
+import DesktopPage from '../../pages/DesktopPage/DesktopPage'
 import classes from './AppRouter.module.scss'
 import 'react-toastify/dist/ReactToastify.css'
 
@@ -59,6 +67,7 @@ const AppRouter: React.FC = () => {
 
                 {isAuth ?
                     <>
+                        <Route path={RouteNames.P_DESKTOP} element={<DesktopPage/>}/>
                         <Route path={RouteNames.P_CATALOG} element={<CatalogPage name='Каталоги' type='catalog'/>}/>
                         <Route path={RouteNames.P_CRM} element={<CatalogPage name='CRM' type='crm'/>}/>
                         <Route path={RouteNames.P_REPORT} element={<ReportPage/>}/>
@@ -70,13 +79,20 @@ const AppRouter: React.FC = () => {
                         <Route path={RouteNames.P_AGENT} element={<AgentsPage/>}/>
                         <Route path={RouteNames.P_POST} element={<PostsPage/>}/>
                         <Route path={RouteNames.P_COMPILATION} element={<CompilationsPage/>}/>
+                        <Route path={RouteNames.P_COMPILATION_ITEM} element={<CompilationPage/>}/>
                         <Route path={RouteNames.P_BOOKING} element={<BookingPage/>}/>
                         <Route path={RouteNames.P_USER_EXTERNAL} element={<ExternalUsersPage/>}/>
                         <Route path={RouteNames.P_MAILING} element={<MailingsPage/>}/>
                         <Route path={RouteNames.P_PAYMENT} element={<PaymentPage/>}/>
                         <Route path={RouteNames.P_DOCUMENT} element={<DocumentsPage/>}/>
                         <Route path={RouteNames.P_USER} element={<UsersPage/>}/>
+                        <Route path={RouteNames.P_USER_ITEM} element={<UserPage/>}/>
                         <Route path={RouteNames.P_BP} element={<BusinessProcessPage/>}/>
+                        <Route path={RouteNames.P_ARTICLE} element={<ArticlePanelPage/>}/>
+                        <Route path={RouteNames.P_BUILDING} element={<BuildingsPanelPage/>}/>
+                        <Route path={RouteNames.P_FAVORITE} element={<FavoritePage/>}/>
+                        <Route path={RouteNames.P_TARIFF} element={<TariffPage/>}/>
+                        <Route path={RouteNames.P_FILE_MANAGER} element={<FilesPage/>}/>
                     </>
                     : null
                 }

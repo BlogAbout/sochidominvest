@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react'
 import {useNavigate} from 'react-router-dom'
 import Wrapper from '../../../../components/ui/Wrapper/Wrapper'
+import {RouteNames} from '../../../../helpers/routerHelper'
 import {IBuilding} from '../../../../../@types/IBuilding'
 import BuildingService from '../../../../../api/BuildingService'
 import Title from '../../../../components/ui/Title/Title'
@@ -64,7 +65,7 @@ const SectionBuildings: React.FC = (): React.ReactElement => {
                                 return (
                                     <BuildingItem key={building.id}
                                                   building={building}
-                                                  onClick={() => navigate('/building/' + building.id)}
+                                                  onClick={() => navigate(`${RouteNames.BUILDING}/${building.id}`)}
                                     />
                                 )
                             })
@@ -72,8 +73,8 @@ const SectionBuildings: React.FC = (): React.ReactElement => {
                     </BlockingElement>
 
                     <div className={classes.buttons}>
-                        <Button type='apply' onClick={() => navigate('/building/')}>Покупка</Button>
-                        <Button type='apply' onClick={() => navigate('/rent/')}>Аренда</Button>
+                        <Button type='apply' onClick={() => navigate(RouteNames.BUILDING)}>Покупка</Button>
+                        <Button type='apply' onClick={() => navigate(RouteNames.RENT)}>Аренда</Button>
                     </div>
                 </div>
             </Wrapper>

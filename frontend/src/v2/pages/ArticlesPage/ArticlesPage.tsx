@@ -1,6 +1,7 @@
 import React, {useEffect, useMemo, useState} from 'react'
 import {useNavigate} from 'react-router-dom'
 import ArticleService from '../../../api/ArticleService'
+import {RouteNames} from '../../helpers/routerHelper'
 import {IArticle} from '../../../@types/IArticle'
 import {IFilterBase} from '../../../@types/IFilter'
 import BlockingElement from '../../../components/ui/BlockingElement/BlockingElement'
@@ -106,7 +107,7 @@ const ArticlesPage: React.FC = (): React.ReactElement => {
                             filterArticle.map((article: IArticle) => {
                                 return (
                                     <ArticleItem article={article}
-                                                 onClick={() => navigate('/article/' + article.id)}
+                                                 onClick={() => navigate(`${RouteNames.ARTICLE}/${article.id}`)}
                                     />
                                 )
                             })

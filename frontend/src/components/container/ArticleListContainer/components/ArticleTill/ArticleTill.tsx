@@ -21,16 +21,16 @@ const defaultProps: Props = {
     articles: [],
     fetching: false,
     onClick: (article: IArticle) => {
-        console.info('ArticleTill onClick', article)
+        console.info('BuildingTill onClick', article)
     },
     onEdit: (article: IArticle) => {
-        console.info('ArticleTill onEdit', article)
+        console.info('BuildingTill onEdit', article)
     },
     onRemove: (article: IArticle) => {
-        console.info('ArticleTill onRemove', article)
+        console.info('BuildingTill onRemove', article)
     },
     onContextMenu: (e: React.MouseEvent, article: IArticle) => {
-        console.info('ArticleTill onContextMenu', e, article)
+        console.info('BuildingTill onContextMenu', e, article)
     }
 }
 

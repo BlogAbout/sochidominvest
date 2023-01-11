@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react'
 import {useNavigate} from 'react-router-dom'
+import {RouteNames} from '../../../../helpers/routerHelper'
 import {IArticle} from '../../../../../@types/IArticle'
 import Wrapper from '../../../../components/ui/Wrapper/Wrapper'
 import ArticleService from '../../../../../api/ArticleService'
@@ -46,7 +47,7 @@ const SectionArticles: React.FC = (): React.ReactElement => {
             return (
                 <ArticleItem key={article.id}
                              article={article}
-                             onClick={() => navigate('/article/' + article.id)}
+                             onClick={() => navigate(`${RouteNames.ARTICLE}/${article.id}`)}
                 />
             )
         })
@@ -63,7 +64,7 @@ const SectionArticles: React.FC = (): React.ReactElement => {
                     </BlockingElement>
 
                     <div className={classes.buttons}>
-                        <Button type='apply' onClick={() => navigate('/article/')}>Смотреть все</Button>
+                        <Button type='apply' onClick={() => navigate(RouteNames.ARTICLE)}>Смотреть все</Button>
                     </div>
                 </div>
             </Wrapper>

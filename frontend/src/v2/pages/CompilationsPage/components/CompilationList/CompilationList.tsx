@@ -1,6 +1,7 @@
 import React, {useState} from 'react'
 import {useNavigate} from 'react-router-dom'
 import {getFormatDate} from '../../../../../helpers/dateHelper'
+import {RouteNames} from '../../../../helpers/routerHelper'
 import {ICompilation} from '../../../../../@types/ICompilation'
 import CompilationService from '../../../../../api/CompilationService'
 import ListHead from '../../../../components/ui/List/components/ListHead/ListHead'
@@ -25,7 +26,7 @@ const defaultProps: Props = {
     list: [],
     fetching: false,
     onSave: () => {
-        console.info('AgentList onSave')
+        console.info('BuildingList onSave')
     }
 }
 
@@ -100,7 +101,7 @@ const CompilationList: React.FC<Props> = (props): React.ReactElement => {
                         return (
                             <ListRow key={compilation.id}
                                      onContextMenu={(e: React.MouseEvent) => onContextMenu(compilation, e)}
-                                     onClick={() => navigate('/compilation/' + compilation.id)}
+                                     onClick={() => navigate(`${RouteNames.P_COMPILATION}/${compilation.id}`)}
                                      isDisabled={!compilation.active}
                             >
                                 <ListCell className={classes.name}>{compilation.name}</ListCell>

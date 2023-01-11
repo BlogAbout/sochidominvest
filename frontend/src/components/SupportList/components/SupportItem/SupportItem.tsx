@@ -2,6 +2,7 @@ import React, {useState} from 'react'
 import {useNavigate} from 'react-router-dom'
 import classNames from 'classnames/bind'
 import {useTypedSelector} from '../../../../hooks/useTypedSelector'
+import {RouteNames} from '../../../../v2/helpers/routerHelper'
 import {IBusinessProcess} from '../../../../@types/IBusinessProcess'
 import {IFeed} from '../../../../@types/IFeed'
 import {ISelector} from '../../../../@types/ISelector'
@@ -92,7 +93,7 @@ const SupportItem: React.FC<Props> = (props) => {
         openPopupBusinessProcessCreate(document.body, {
             businessProcess: businessProcess,
             onSave: () => {
-                navigate('/panel/crm/bp/')
+                navigate(RouteNames.P_BP)
             }
         })
     }

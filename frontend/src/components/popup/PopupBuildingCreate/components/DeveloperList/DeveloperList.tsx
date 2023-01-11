@@ -20,7 +20,7 @@ interface Props {
 const defaultProps: Props = {
     selected: [],
     onSelect: (value: number[]) => {
-        console.info('AgentList onSelect', value)
+        console.info('BuildingList onSelect', value)
     }
 }
 

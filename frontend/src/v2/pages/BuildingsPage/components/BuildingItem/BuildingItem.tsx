@@ -45,6 +45,7 @@ const BuildingItem: React.FC<Props> = (props): React.ReactElement => {
                 <div className={classes.itemContent}>
                     <Title type='h3'
                            className={classes.head}
+                           style='right'
                     >{props.building.name}</Title>
 
                     <div className={classes.address}>
@@ -54,8 +55,6 @@ const BuildingItem: React.FC<Props> = (props): React.ReactElement => {
                 </div>
 
                 <div className={classes.itemInfo}>
-                    {buildingType !== '' && <div className={classes.type}>{buildingType}</div>}
-
                     {passedInfo !== '' &&
                     <div className={cx({
                         'passed': true,
@@ -97,6 +96,8 @@ const BuildingItem: React.FC<Props> = (props): React.ReactElement => {
                         </div>
                     }
                 </div>
+
+                {buildingType !== '' && <div className={classes.type}>{buildingType}</div>}
 
                 <div className={classes.information}>
                     <div className={classes.icon}

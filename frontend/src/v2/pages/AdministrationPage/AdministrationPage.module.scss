@@ -30,3 +30,23 @@
     padding: 15px;
     border-top: 1px solid #075ea5;
 }
+
+@media (max-width: 768px) {
+    .tabs {
+        .columns {
+            > div {
+                width: 49% !important;
+            }
+        }
+    }
+}
+
+@media (max-width: 480px) {
+    .tabs {
+        .columns {
+            > div {
+                width: 100% !important;
+            }
+        }
+    }
+}

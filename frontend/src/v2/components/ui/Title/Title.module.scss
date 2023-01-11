@@ -1,41 +1,32 @@
 .Title {
     display: flex;
+    flex-wrap: wrap;
 
     &.left {
-        text-align: left;
+        justify-content: right;
     }
 
     &.center {
-        text-align: center;
+        justify-content: right;
     }
 
     &.right {
-        text-align: right;
+        justify-content: right;
     }
-
-    &.hasSearch {
-        flex-wrap: wrap;
 
         > span {
             flex-grow: 1;
             width: 100%;
+            display: block;
+            margin-right: auto;
         }
-
-        .interface {
-            flex-grow: 1;
-            width: 100%;
-            margin-top: 15px;
-        }
-    }
-
-    > span {
-        display: block;
-        margin-right: auto;
-    }
 
     .interface {
         display: flex;
-        justify-content: center;
+        justify-content: right;
+        flex-grow: 1;
+        width: 100%;
+        margin-top: 15px;
 
         .search {
             width: 100%;

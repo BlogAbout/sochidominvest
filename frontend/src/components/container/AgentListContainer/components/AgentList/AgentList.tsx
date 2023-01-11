@@ -21,16 +21,16 @@ const defaultProps: Props = {
     agents: [],
     fetching: false,
     onClick: (agent: IAgent) => {
-        console.info('AgentList onClick', agent)
+        console.info('BuildingList onClick', agent)
     },
     onEdit: (agent: IAgent) => {
-        console.info('AgentList onEdit', agent)
+        console.info('BuildingList onEdit', agent)
     },
     onRemove: (agent: IAgent) => {
-        console.info('AgentList onRemove', agent)
+        console.info('BuildingList onRemove', agent)
     },
     onContextMenu: (e: React.MouseEvent, agent: IAgent) => {
-        console.info('AgentList onContextMenu', e, agent)
+        console.info('BuildingList onContextMenu', e, agent)
     }
 }
 

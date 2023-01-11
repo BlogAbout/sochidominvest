@@ -4,6 +4,7 @@ import classes from './ListBody.module.scss'
 
 interface Props extends React.PropsWithChildren<any> {
     fetching: boolean
+    ref?: React.MutableRefObject<any>
 }
 
 const defaultProps: Props = {
@@ -12,7 +13,7 @@ const defaultProps: Props = {
 
 const ListBody: React.FC<Props> = (props): React.ReactElement => {
     return (
-        <BlockingElement fetching={props.fetching} className={classes.ListBody}>
+        <BlockingElement fetching={props.fetching} className={classes.ListBody} innerRef={props.ref}>
             {props.children}
         </BlockingElement>
     )

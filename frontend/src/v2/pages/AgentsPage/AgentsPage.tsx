@@ -5,6 +5,7 @@ import {agentTypes} from '../../../helpers/agentHelper'
 import {compareText} from '../../../helpers/filterHelper'
 import {changeLayout, getLayout} from '../../../helpers/utilHelper'
 import {allowForRole, allowForTariff} from '../../helpers/accessHelper'
+import {RouteNames} from '../../helpers/routerHelper'
 import {IAgent} from '../../../@types/IAgent'
 import {IFilter, IFilterContent} from '../../../@types/IFilter'
 import Title from '../../components/ui/Title/Title'
@@ -82,7 +83,7 @@ const AgentsPage: React.FC = (): React.ReactElement => {
     }
 
     const onClickHandler = (agent: IAgent) => {
-        navigate('/agent/' + agent.id)
+        navigate(`${RouteNames.P_AGENT}/${agent.id}`)
     }
 
     const onAddHandler = () => {
@@ -131,7 +132,7 @@ const AgentsPage: React.FC = (): React.ReactElement => {
     const onContextMenuHandler = (agent: IAgent, e: React.MouseEvent) => {
         e.preventDefault()
 
-        const menuItems = [{text: 'Открыть', onClick: () => navigate('/agent/' + agent.id)}]
+        const menuItems = [{text: 'Открыть', onClick: () => navigate(`${RouteNames.P_AGENT}/${agent.id}`)}]
 
         if (allowForRole(['director', 'administrator', 'manager'])) {
             menuItems.push({text: 'Редактировать', onClick: () => onEditHandler(agent)})

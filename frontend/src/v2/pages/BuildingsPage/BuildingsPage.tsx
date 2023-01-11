@@ -1,6 +1,7 @@
 import React, {useEffect, useMemo, useRef, useState} from 'react'
 import {useNavigate} from 'react-router-dom'
 import {Map, MapState, YMaps, ZoomControl} from 'react-yandex-maps'
+import {RouteNames} from '../../helpers/routerHelper'
 import {IBuilding} from '../../../@types/IBuilding'
 import {IFilter} from '../../../@types/IFilter'
 import {ISelector} from '../../../@types/ISelector'
@@ -10,7 +11,8 @@ import {compareText} from '../../../helpers/filterHelper'
 import {
     checkBuildingByDistrict,
     checkBuildingByRangeArea,
-    checkBuildingByRangeCost, districtList
+    checkBuildingByRangeCost,
+    districtList
 } from '../../../helpers/buildingHelper'
 import Wrapper from '../../components/ui/Wrapper/Wrapper'
 import Title from '../../components/ui/Title/Title'
@@ -64,7 +66,7 @@ const BuildingsPage: React.FC<Props> = (props): React.ReactElement => {
 
     const countPerPage: number = useMemo(() => 18, [])
     const directoryUrl = useMemo(() => {
-        return props.isRent ? '/rent/' : '/building/'
+        return props.isRent ? RouteNames.RENT : RouteNames.BUILDING
     }, [props.isRent])
 
     const [readMoreElementRef] = useInfiniteScroll(

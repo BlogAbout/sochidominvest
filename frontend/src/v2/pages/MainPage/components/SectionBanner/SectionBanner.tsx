@@ -1,4 +1,7 @@
 import React from 'react'
+import {useNavigate} from 'react-router-dom'
+import {useTypedSelector} from '../../../../../hooks/useTypedSelector'
+import {RouteNames} from '../../../../helpers/routerHelper'
 import Wrapper from '../../../../components/ui/Wrapper/Wrapper'
 import Grid from '../../../../components/ui/Grid/Grid'
 import GridColumn from '../../../../components/ui/Grid/components/GridColumn/GridColumn'
@@ -10,8 +13,16 @@ import openPopupAuth from '../../../../components/popup/PopupAuth/PopupAuth'
 import classes from './SectionBanner.module.scss'
 
 const SectionBanner: React.FC = (): React.ReactElement => {
+    const navigate = useNavigate()
+
+    const {isAuth} = useTypedSelector(state => state.userReducer)
+
     const signInHandler = () => {
-        openPopupAuth(document.body, {})
+        if (isAuth) {
+            navigate(RouteNames.P_DESKTOP)
+        } else {
+            openPopupAuth(document.body, {})
+        }
     }
 
     return (

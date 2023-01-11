@@ -12,7 +12,7 @@ export enum RouteNames {
     RENT_ITEM = '/rent/:id',
     P_DESKTOP = '/desktop',
     P_USER = '/users',
-    P_USER_ITEM = '/panel/users/:id',
+    P_USER_ITEM = '/users/:id',
     P_BUILDING = '/buildings',
     // P_BUILDING_ITEM = '/buildings/:id',
     P_ARTICLE = '/articles',

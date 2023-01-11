@@ -1,0 +1,58 @@
+.title {
+    color: #fff;
+}
+
+.information {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    justify-content: space-between;
+
+    .data {
+        width: 49%;
+        height: 300px;
+        margin-bottom: 30px;
+        background-color: #fff;
+        border: 1px solid #075ea5;
+        box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.4);
+        padding: 15px;
+
+        h3 {
+            display: block;
+            padding-bottom: 5px;
+            margin-bottom: 10px;
+            position: relative;
+
+            &::after {
+                content: '';
+                display: block;
+                width: 100px;
+                height: 1px;
+                background: #ffcc01;
+                position: absolute;
+                bottom: 0;
+                left: 0;
+            }
+        }
+
+        .container {
+            .row {
+                display: flex;
+
+                + .row {
+                    margin-top: 10px;
+                }
+
+                .label {
+                    width: 30%;
+                    font-weight: 700;
+                }
+
+                .param {
+                    width: 70%;
+                    text-align: right;
+                }
+            }
+        }
+    }
+}
