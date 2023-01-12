@@ -1,25 +1,38 @@
-import React, {useEffect, useMemo} from 'react'
+import React, {useEffect, useMemo, useState} from 'react'
+import {PDFDownloadLink} from '@react-pdf/renderer'
+import {useNavigate} from 'react-router-dom'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import classNames from 'classnames/bind'
 import {useTypedSelector} from '../../../../../hooks/useTypedSelector'
 import {useActions} from '../../../../../hooks/useActions'
+import {RouteNames} from '../../../../helpers/routerHelper'
 import {IBuilding} from '../../../../../@types/IBuilding'
 import {ITag} from '../../../../../@types/ITag'
+import {configuration} from '../../../../../helpers/utilHelper'
+import {allowForRole} from '../../../../helpers/accessHelper'
 import {getFormatDate} from '../../../../../helpers/dateHelper'
 import {declension} from '../../../../../helpers/stringHelper'
 import {getDistrictText, getPassedText} from '../../../../../helpers/buildingHelper'
 import {numberWithSpaces, round} from '../../../../../helpers/numberHelper'
+import FavoriteService from '../../../../../api/FavoriteService'
 import Title from '../../../../components/ui/Title/Title'
 import Button from '../../../../../components/form/Button/Button'
+import PdfDocumentGenerator from '../../../../../components/PdfDocumentGenerator/PdfDocumentGenerator'
 import openPopupPriceChart from '../../../../../components/popup/PopupPriceChart/PopupPriceChart'
 import openPopupFeedCreate from '../../../../../components/PopupFeedCreate/PopupFeedCreate'
 import openPopupBookingCreate from '../../../../../components/popup/PopupBookingCreate/PopupBookingCreate'
+import openPopupBuildingCreate from '../../../../../components/popup/PopupBuildingCreate/PopupBuildingCreate'
+import openPopupSupportCreate from '../../../../../components/popup/PopupSupportCreate/PopupSupportCreate'
+import openPopupAlert from '../../../../../components/PopupAlert/PopupAlert'
+import openPopupCompilationSelector from '../../../../../components/PopupCompilationSelector/PopupCompilationSelector'
 import classes from './BuildingInfoBlock.module.scss'
 
 interface Props {
     building: IBuilding
     views: number
     isRent?: boolean
+
+    onSave?(): void
 }
 
 const defaultProps: Props = {
@@ -31,6 +44,12 @@ const defaultProps: Props = {
 const cx = classNames.bind(classes)
 
 const BuildingInfoBlock: React.FC<Props> = (props): React.ReactElement => {
+    const navigate = useNavigate()
+
+    const [favorites, setFavorites] = useState<number[]>([])
+    const [showCopyText, setShowCopyText] = useState(false)
+
+    const {user} = useTypedSelector(state => state.userReducer)
     const {tags} = useTypedSelector(state => state.tagReducer)
 
     const {fetchTagList} = useActions()
@@ -39,12 +58,72 @@ const BuildingInfoBlock: React.FC<Props> = (props): React.ReactElement => {
         fetchTagList()
     }, [props.building])
 
+    useEffect(() => {
+        if (props.building && user) {
+            onFetchFavorites()
+        } else {
+            setFavorites([])
+        }
+    }, [props.building, user])
+
+    const onFetchFavorites = (): void => {
+        if (!props.building || !props.building.id) {
+            return
+        }
+
+        FavoriteService.fetchFavorites()
+            .then((response: any) => setFavorites(response.data))
+            .catch((error: any) => {
+                console.error('Ошибка загрузки избранного', error)
+            })
+    }
+
     // Вызов окна обратной связи
     const onFeedButtonHandler = (type: 'callback' | 'get-document' | 'get-presentation' | 'get-view'): void => {
         openPopupFeedCreate(document.body, {
             building: props.building,
             type: type
         })
+    }
+
+    // Редактирование объекта
+    const onClickEditHandler = (): void => {
+        openPopupBuildingCreate(document.body, {
+            building: props.building,
+            onSave: () => props.onSave ? props.onSave() : undefined
+        })
+    }
+
+    // Добавление объекта в избранное
+    const addBuildingToFavorite = () => {
+        if (props.building.id) {
+            FavoriteService.addFavorite(props.building.id)
+                .then((response: any) => setFavorites(response.data))
+                .catch((error: any) => {
+                    console.error('Ошибка добавления в избранное', error)
+
+                    openPopupAlert(document.body, {
+                        title: 'Ошибка!',
+                        text: error.data
+                    })
+                })
+        }
+    }
+
+    // Удаление объекта из избранного
+    const removeBuildingFromFavorite = () => {
+        if (props.building.id) {
+            FavoriteService.removeFavorite(props.building.id)
+                .then((response: any) => setFavorites(response.data))
+                .catch((error: any) => {
+                    console.error('Ошибка удаления из избранного', error)
+
+                    openPopupAlert(document.body, {
+                        title: 'Ошибка!',
+                        text: error.data
+                    })
+                })
+        }
     }
 
     const passedInfo = useMemo(() => {
@@ -77,15 +156,7 @@ const BuildingInfoBlock: React.FC<Props> = (props): React.ReactElement => {
 
     // Вывод старой цены
     const renderOldPrice = (): React.ReactElement | null => {
-        if (props.isRent) {
-            return null
-        }
-
-        if (!props.building.costOld || !props.building.cost) {
-            return null
-        }
-
-        if (props.building.costOld === props.building.cost) {
+        if (!props.isRent || !props.building.costOld || !props.building.cost || props.building.costOld === props.building.cost) {
             return null
         }
 
@@ -247,40 +318,153 @@ const BuildingInfoBlock: React.FC<Props> = (props): React.ReactElement => {
         )
     }
 
-return (
-    <div className={classes.BuildingInfoBlock}>
-        {renderMetaInformation()}
-
-        {passedInfo !== '' &&
-        <div className={cx({'passed': true, 'is': props.building.passed && props.building.passed.is})}>
-            <span>{passedInfo}</span>
-        </div>}
-
-        {tags && tags.length && props.building.tags && props.building.tags.length ?
-            <div className={classes.tags}>
-                {props.building.tags.map((id: number) => {
-                    const findTag = tags.find((tag: ITag) => tag.id === id)
-
-                    return findTag ? <div key={findTag.id}>{findTag.name}</div> : null
-                })}
-            </div>
-            : null
+    const renderButtonsAdmin = (): React.ReactElement | null => {
+        if (!user) {
+            return null
         }
 
-        <Title type='h1'
-               className={classes.title}
-        >{props.building.name}</Title>
+        return (
+            <div className={classes.buttonsAdmin}>
+                {allowForRole(['director', 'administrator', 'manager'], user.role) || (props.building.author === user.id) ?
+                    <Button type='apply'
+                            icon='pen-to-square'
+                            onClick={onClickEditHandler.bind(this)}
+                            className='marginRight'
+                            title='Редактировать'
+                    />
+                    : null
+                }
 
-        <div className={classes.address}>
-            {districtText !== '' && <span>{districtText}</span>}
-            <span>{props.building.address}</span>
+                <Button type='regular'
+                        icon='question'
+                        onClick={() => {
+                            openPopupSupportCreate(document.body, {
+                                objectId: props.building.id,
+                                objectType: 'building',
+                                onSave: () => {
+                                    openPopupAlert(document.body, {
+                                        title: 'Сообщение отправлено',
+                                        text: 'Ваша заявка успешно принята, мы ответим Вам в ближайшее время.',
+                                        buttons: [
+                                            {
+                                                text: 'Перейти к заявкам',
+                                                onClick: () => navigate(RouteNames.P_SUPPORT)
+                                            },
+                                            {text: 'Закрыть'}
+                                        ]
+                                    })
+                                }
+                            })
+                        }}
+                        className='marginRight'
+                        title='Задать вопрос'
+                />
+
+                {props.building.id && allowForRole(['director', 'administrator', 'manager'], user.role) ?
+                    <Button type='regular'
+                            icon='plus'
+                            onClick={() => {
+                                if (props.building.id) {
+                                    openPopupCompilationSelector(document.body, {
+                                        buildingId: props.building.id,
+                                        onSave: () => {
+                                        }
+                                    })
+                                }
+                            }}
+                            className='marginRight'
+                            title='Добавить в подборку'
+                    />
+                    : null
+                }
+
+                {props.building.id && favorites.length && favorites.includes(props.building.id) ?
+                    <Button type='apply'
+                            icon='heart'
+                            onClick={removeBuildingFromFavorite.bind(this)}
+                            className='marginRight'
+                            title='Удалить из избранного'
+                    />
+                    :
+                    <Button type='regular'
+                            icon='heart'
+                            onClick={addBuildingToFavorite.bind(this)}
+                            className='marginRight'
+                            title='Добавить в избранное'
+                    />
+                }
+
+                <div className={classes.btn}>
+                    <Button type='regular'
+                            icon='arrow-up-from-bracket'
+                            onClick={() => {
+                                navigator.clipboard.writeText(configuration.siteUrl + props.building.id)
+                                    .then(() => {
+                                        setShowCopyText(true)
+                                        setTimeout(() => {
+                                            setShowCopyText(false)
+                                        }, 2000)
+                                    })
+                            }}
+                            title='Поделиться ссылкой'
+                    />
+
+                    <div className={cx({'copyText': true, 'show': showCopyText})}>Ссылка скопирована</div>
+                </div>
+
+                <PDFDownloadLink document={<PdfDocumentGenerator type='building' building={props.building}/>}>
+                    {({loading}) => {
+                        return (
+                            <Button type='regular'
+                                    icon='print'
+                                    onClick={() => {
+                                    }}
+                                    title='Печать информации'
+                                    disabled={loading}
+                            />
+                        )
+                    }}
+                </PDFDownloadLink>
+            </div>
+        )
+    }
+
+    return (
+        <div className={classes.BuildingInfoBlock}>
+            {renderMetaInformation()}
+
+            {passedInfo !== '' &&
+            <div className={cx({'passed': true, 'is': props.building.passed && props.building.passed.is})}>
+                <span>{passedInfo}</span>
+            </div>}
+
+            {tags && tags.length && props.building.tags && props.building.tags.length ?
+                <div className={classes.tags}>
+                    {props.building.tags.map((id: number) => {
+                        const findTag = tags.find((tag: ITag) => tag.id === id)
+
+                        return findTag ? <div key={findTag.id}>{findTag.name}</div> : null
+                    })}
+                </div>
+                : null
+            }
+
+            <Title type='h1'
+                   className={classes.title}
+            >{props.building.name}</Title>
+
+            <div className={classes.address}>
+                {districtText !== '' && <span>{districtText}</span>}
+                <span>{props.building.address}</span>
+            </div>
+
+            {renderBuildingInfo()}
+
+            {renderButtons()}
+
+            {renderButtonsAdmin()}
         </div>
-
-        {renderBuildingInfo()}
-
-        {renderButtons()}
-    </div>
-)
+    )
 }
 
 BuildingInfoBlock.defaultProps = defaultProps

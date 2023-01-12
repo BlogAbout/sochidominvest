@@ -1,6 +1,7 @@
 import React, {useEffect, useMemo, useState} from 'react'
 import {useNavigate, useParams} from 'react-router-dom'
 import {sortAttachments} from '../../../helpers/attachmentHelper'
+import {allowForRole, allowForTariff} from '../../helpers/accessHelper'
 import {IFilter} from '../../../@types/IFilter'
 import {IArticle} from '../../../@types/IArticle'
 import {IAttachment} from '../../../@types/IAttachment'
@@ -20,6 +21,9 @@ import BuildingAdvantagesBlock from './components/BuildingAdvantagesBlock/Buildi
 import BuildingAdvancedBlock from './components/BuildingAdvancedBlock/BuildingAdvancedBlock'
 import BuildingDescriptionBlock from './components/BuildingDescriptionBlock/BuildingDescriptionBlock'
 import BuildingCheckersBlock from './components/BuildingCheckersBlock/BuildingCheckersBlock'
+import BuildingDocumentsBlock from './components/BuildingDocumentsBlock/BuildingDocumentsBlock'
+import BuildingDevelopersBlock from './components/BuildingDevelopersBlock/BuildingDevelopersBlock'
+import BuildingContactsBlock from './components/BuildingContactsBlock/BuildingContactsBlock'
 import ArticleItem from '../ArticlesPage/components/ArticleItem/ArticleItem'
 import Grid from '../../components/ui/Grid/Grid'
 import GridColumn from '../../components/ui/Grid/components/GridColumn/GridColumn'
@@ -182,7 +186,7 @@ const BuildingPage: React.FC<Props> = (props): React.ReactElement => {
     }, [building])
 
     const showPanels = useMemo((): boolean => {
-        return !!(props.role && ['director', 'administrator', 'manager', 'business'].includes(props.role))
+        return allowForRole(['director', 'administrator', 'manager'] || allowForTariff(['business', 'effectivePlus']))
     }, [props.role])
 
     // Отображение списка связанных статей
@@ -228,12 +232,16 @@ const BuildingPage: React.FC<Props> = (props): React.ReactElement => {
                     </GridColumn>
 
                     <GridColumn width='40%'>
-                        <BuildingInfoBlock building={building} views={views} isRent={props.isRent}/>
+                        <BuildingInfoBlock building={building}
+                                           views={views}
+                                           isRent={props.isRent}
+                                           onSave={() => onFetchBuilding()}
+                        />
                     </GridColumn>
                 </Grid>
 
                 <Grid className={classes.info}>
-                    <GridColumn width={showPanels ? '70%' : '100%'}>
+                    <GridColumn width={showPanels ? '68%' : '100%'}>
                         <BuildingDescriptionBlock building={building}/>
 
                         <BuildingAdvantagesBlock building={building}/>
@@ -245,7 +253,9 @@ const BuildingPage: React.FC<Props> = (props): React.ReactElement => {
 
                     {showPanels ?
                         <GridColumn width='30%'>
-
+                            <BuildingDocumentsBlock building={building}/>
+                            <BuildingDevelopersBlock building={building}/>
+                            <BuildingContactsBlock building={building}/>
                         </GridColumn>
                         : null
                     }

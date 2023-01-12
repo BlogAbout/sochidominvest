@@ -929,7 +929,8 @@ export default function openPopupBuildingCreate(target: any, popupProps = {} as 
     const displayOptions: PopupDisplayOptions = {
         autoClose: false,
         rightPanel: true,
-        fullScreen: true
+        fullScreen: true,
+        isFixed: true
     }
     const blockId = showBackgroundBlock(target, {animate: true}, displayOptions)
     let block = getPopupContainer(blockId)

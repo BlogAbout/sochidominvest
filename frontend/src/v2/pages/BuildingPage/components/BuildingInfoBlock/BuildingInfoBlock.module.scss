@@ -133,6 +133,38 @@
             }
         }
     }
+
+    .buttonsAdmin {
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+
+        > a,
+        > div {
+            margin-top: 10px;
+            width: 48px;
+            position: relative;
+        }
+
+        .copyText {
+            z-index: 2;
+            position: absolute;
+            left: 50%;
+            bottom: -25px;
+            transform: translate(-50%, 0);
+            transition: all 0.3s ease-in;
+            opacity: 0;
+            background: #ffcc01;
+            font-size: 12px;
+            white-space: nowrap;
+            padding: 2px 5px;
+            border-radius: 5px;
+
+            &.show {
+                opacity: 1;
+            }
+        }
+    }
 }
 
 @media (max-width: 480px) {

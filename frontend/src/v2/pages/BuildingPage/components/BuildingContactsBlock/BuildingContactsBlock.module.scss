@@ -1,0 +1,65 @@
+.BuildingContactsBlock {
+    background: #033966;
+    padding: 30px;
+    box-shadow: -3px 3px 8px rgba(0, 0, 0, 0.4);
+    height: auto;
+    color: #fff;
+
+    .list {
+        div {
+            margin-bottom: 20px;
+
+            + div {
+                margin-top: 5px;
+                padding-top: 5px;
+                border-top: 1px solid #dfdfdf;
+            }
+        }
+
+        + .list {
+            margin-top: 10px;
+        }
+
+        span:first-child {
+            font-weight: 700;
+            font-size: 18px;
+            display: block;
+
+            > :first-child {
+                margin-bottom: 0;
+                margin-right: 5px;
+            }
+
+            span {
+                vertical-align: middle;
+            }
+
+            .icon {
+                display: inline-block;
+                margin-left: 5px;
+                cursor: pointer;
+                color: #fff;
+
+                svg {
+                    width: 16px;
+                    height: 16px;
+                }
+            }
+        }
+
+        span:last-child {
+            display: block;
+            margin-top: 5px;
+            font-size: 16px;
+        }
+
+        .post {
+            font-size: 12px;
+            color: #999;
+        }
+
+        a {
+            color: #ffcc01;
+        }
+    }
+}

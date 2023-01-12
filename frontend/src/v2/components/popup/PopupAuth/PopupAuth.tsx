@@ -73,7 +73,8 @@ export default function openPopupAuth(target: any, popupProps = {} as Props) {
     const displayOptions: PopupDisplayOptions = {
         autoClose: false,
         rightPanel: true,
-        fullScreen: true
+        fullScreen: true,
+        isFixed: true
     }
     const blockId = showBackgroundBlock(target, {animate: true}, displayOptions)
     let block = getPopupContainer(blockId)
