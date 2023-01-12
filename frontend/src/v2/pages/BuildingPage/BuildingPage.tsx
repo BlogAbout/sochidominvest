@@ -186,7 +186,7 @@ const BuildingPage: React.FC<Props> = (props): React.ReactElement => {
     }, [building])
 
     const showPanels = useMemo((): boolean => {
-        return allowForRole(['director', 'administrator', 'manager'] || allowForTariff(['business', 'effectivePlus']))
+        return allowForRole(['director', 'administrator', 'manager']) || allowForTariff(['business', 'effectivePlus'])
     }, [props.role])
 
     // Отображение списка связанных статей

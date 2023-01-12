@@ -211,7 +211,7 @@ const BuildingsPage: React.FC<Props> = (props): React.ReactElement => {
                             <BuildingItem key={building.id}
                                           building={building}
                                           isRent={props.isRent}
-                                          onClick={() => navigate(directoryUrl + building.id)}
+                                          onClick={() => navigate(`${directoryUrl}/${building.id}`)}
                             />
                         )
                     })
@@ -247,7 +247,7 @@ const BuildingsPage: React.FC<Props> = (props): React.ReactElement => {
                                         return (
                                             <BuildingPlacemark key={building.id}
                                                                building={building}
-                                                               onClick={() => navigate(directoryUrl + building.id)}
+                                                               onClick={() => navigate(`${directoryUrl}/${building.id}`)}
                                             />
                                         )
                                     })

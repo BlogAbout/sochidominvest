@@ -59,7 +59,7 @@ const BuildingInfoBlock: React.FC<Props> = (props): React.ReactElement => {
     }, [props.building])
 
     useEffect(() => {
-        if (props.building && user) {
+        if (props.building && user.id) {
             onFetchFavorites()
         } else {
             setFavorites([])
@@ -67,7 +67,7 @@ const BuildingInfoBlock: React.FC<Props> = (props): React.ReactElement => {
     }, [props.building, user])
 
     const onFetchFavorites = (): void => {
-        if (!props.building || !props.building.id) {
+        if (!props.building.id) {
             return
         }
 
@@ -319,13 +319,13 @@ const BuildingInfoBlock: React.FC<Props> = (props): React.ReactElement => {
     }
 
     const renderButtonsAdmin = (): React.ReactElement | null => {
-        if (!user) {
+        if (!user.id) {
             return null
         }
 
         return (
             <div className={classes.buttonsAdmin}>
-                {allowForRole(['director', 'administrator', 'manager'], user.role) || (props.building.author === user.id) ?
+                {allowForRole(['director', 'administrator', 'manager'], user.role) || props.building.author === user.id ?
                     <Button type='apply'
                             icon='pen-to-square'
                             onClick={onClickEditHandler.bind(this)}
