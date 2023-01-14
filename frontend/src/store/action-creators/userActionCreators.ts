@@ -1,4 +1,5 @@
 import {UserAction, UserActionTypes} from '../../@types/userTypes'
+import {RouteNames} from '../../v2/helpers/routerHelper'
 import {IUser, IUserExternal, IUserSetting} from '../../@types/IUser'
 import {IFilter} from '../../@types/IFilter'
 import {AppDispatch} from '../reducers'
@@ -58,13 +59,15 @@ export const UserActionCreators = {
         dispatch(UserActionCreators.setUserRole(user.role || ''))
         dispatch(UserActionCreators.setUserId(user.id || 0))
         dispatch(UserActionCreators.setUserSetting(user.settings || {} as IUserSetting))
+
+        window.location.replace(RouteNames.P_DESKTOP)
     },
     logout: () => async (dispatch: AppDispatch) => {
         localStorage.clear()
 
         dispatch(UserActionCreators.setIsAuth(false))
 
-        window.location.replace('/')
+        window.location.replace(RouteNames.MAIN)
     },
     fetchUserList: (filter: IFilter) => async (dispatch: AppDispatch) => {
         dispatch(UserActionCreators.setFetching(true))

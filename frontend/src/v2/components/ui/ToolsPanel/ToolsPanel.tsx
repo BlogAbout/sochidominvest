@@ -16,7 +16,7 @@ const ToolsPanel: React.FC = () => {
     const [isShowNotification, setIsShowNotification] = useState(false)
     const [countNewNotification, setCountNewNotification] = useState(0)
 
-    const {userId, role} = useTypedSelector(state => state.userReducer)
+    const {role} = useTypedSelector(state => state.userReducer)
     const {logout} = useActions()
 
     useEffect(() => {
@@ -62,12 +62,6 @@ const ToolsPanel: React.FC = () => {
                     <FontAwesomeIcon icon='magnifying-glass'/>
                 </div>
 
-                <div className={classes.icon}>
-                    <Link to={RouteNames.P_FAVORITE} title='Избранное'>
-                        <FontAwesomeIcon icon='heart'/>
-                    </Link>
-                </div>
-
                 <div className={classes.icon}
                      title='Мессенджер'
                      onClick={() => openPopupMessenger(document.body, {})}
@@ -82,13 +76,6 @@ const ToolsPanel: React.FC = () => {
                     <FontAwesomeIcon icon='bell'/>
 
                     {countNewNotification > 0 ? <div className={classes.counter}>{countNewNotification}</div> : null}
-                </div>
-
-                <div className={classes.icon}
-                     title='Выход'
-                     onClick={logout.bind(this)}
-                >
-                    <FontAwesomeIcon icon='right-from-bracket'/>
                 </div>
             </aside>
 

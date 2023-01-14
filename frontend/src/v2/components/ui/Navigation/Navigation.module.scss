@@ -9,11 +9,90 @@
     left: 0;
     top: 0;
     box-shadow: 3px 0 8px rgba(0, 0, 0, 0.4);
-    overflow: hidden;
     z-index: 7;
 
     .profile {
         cursor: pointer;
+    }
+
+    .userPanel {
+        background-color: #033966;
+        position: absolute;
+        top: 0;
+        left: 46px;
+        width: 0;
+        height: 46px;
+        overflow: hidden;
+        transition: all 0.3s ease-in;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        z-index: 7;
+        display: flex;
+
+        &.show {
+            width: 350px;
+        }
+
+        .userName {
+            color: #fff;
+            padding: 3px 8px;
+            width: 200px;
+            flex-shrink: 0;
+
+            span:first-child {
+                display: block;
+                font-size: 18px;
+                line-height: 18px;
+                margin-bottom: 5px;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            span:last-child {
+                display: block;
+                font-size: 14px;
+                line-height: 14px;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+        }
+
+        .icon {
+            flex-shrink: 0;
+            width: 50px;
+            height: 46px;
+            color: #fff;
+            transition: all 0.3s ease-in;
+            cursor: pointer;
+            text-align: center;
+            position: relative;
+            border-left: 1px solid #fff;
+
+            &:hover {
+                opacity: 0.7;
+            }
+
+            a {
+                color: #fff;
+            }
+
+            svg {
+                font-size: 18px;
+                margin: 8px 0 5px;
+            }
+
+            span {
+                font-size: 9px;
+                line-height: 9px;
+                display: block;
+                text-align: center;
+                color: #999;
+            }
+        }
     }
 
     .menu {
