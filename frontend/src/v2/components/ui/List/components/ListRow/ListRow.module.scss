@@ -23,12 +23,28 @@
     &.block {
         color: #999;
     }
+
+    &.compact {
+        box-shadow: none;
+
+        + .ListRow {
+            border-top: 1px solid #033966;
+            margin-top: 0;
+        }
+    }
 }
 
 @media (max-width: 768px) {
     .ListRow {
         display: block;
         padding: 0;
+
+        &.compact {
+            + .ListRow {
+                border-top: none;
+                margin-top: 15px;
+            }
+        }
     }
 }
 

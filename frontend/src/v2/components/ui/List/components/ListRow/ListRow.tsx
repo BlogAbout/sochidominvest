@@ -7,6 +7,7 @@ interface Props extends React.PropsWithChildren<any> {
     isBlock?: boolean
     className?: string
     style?: React.CSSProperties
+    isCompact?: boolean
 
     onClick?(): void
 
@@ -22,7 +23,7 @@ const cx = classNames.bind(classes)
 
 const ListRow: React.FC<Props> = (props): React.ReactElement => {
     return (
-        <div className={cx({'ListRow': true, 'disabled': props.isDisabled, 'block': props.isBlock}, props.className)}
+        <div className={cx({'ListRow': true, 'disabled': props.isDisabled, 'block': props.isBlock, 'compact': props.isCompact}, props.className)}
              onClick={props.onClick}
              onContextMenu={props.onContextMenu}
              style={props.style}

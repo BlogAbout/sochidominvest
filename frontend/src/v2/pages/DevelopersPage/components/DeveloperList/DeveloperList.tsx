@@ -12,6 +12,8 @@ import classes from './DeveloperList.module.scss'
 interface Props {
     list: IDeveloper[]
     fetching: boolean
+    emptyText?: string
+    isCompact?: boolean
 
     onClick(developer: IDeveloper): void
 
@@ -46,6 +48,7 @@ const DeveloperList: React.FC<Props> = (props): React.ReactElement => {
                                      onContextMenu={(e: React.MouseEvent) => props.onContextMenu(developer, e)}
                                      onClick={() => props.onClick(developer)}
                                      isDisabled={!developer.active}
+                                     isCompact={props.isCompact}
                             >
                                 <ListCell className={classes.name}>{developer.name}</ListCell>
                                 <ListCell className={classes.type}>{getDeveloperTypeText(developer.type)}</ListCell>
@@ -53,7 +56,7 @@ const DeveloperList: React.FC<Props> = (props): React.ReactElement => {
                             </ListRow>
                         )
                     })
-                    : <Empty message='Нет застройщиков'/>
+                    : <Empty message={props.emptyText || 'Нет застройщиков'}/>
                 }
             </ListBody>
         </List>

@@ -1,7 +1,8 @@
 import React, {useEffect, useRef, useState} from 'react'
-import {Link, NavLink} from 'react-router-dom'
+import {Link, NavLink, useNavigate} from 'react-router-dom'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import classNames from 'classnames/bind'
+import {useTypedSelector} from '../../../../hooks/useTypedSelector'
 import {useActions} from '../../../../hooks/useActions'
 import {RouteNames} from '../../../helpers/routerHelper'
 import {IMenuLink} from '../../../../@types/IMenu'
@@ -12,11 +13,14 @@ import {menuPanel} from '../../../helpers/menuHelper'
 import MenuToggle from '../MenuToggle/MenuToggle'
 import Avatar from '../../../../components/ui/Avatar/Avatar'
 import openPopupUserCreate from '../../../../components/popup/PopupUserCreate/PopupUserCreate'
+import openPopupSearchPanel from '../../../../components/popup/PopupSearchPanel/PopupSearchPanel'
 import classes from './Navigation.module.scss'
 
 const cx = classNames.bind(classes)
 
 const Navigation: React.FC = (): React.ReactElement => {
+    const navigate = useNavigate()
+
     const refProfile = useRef<HTMLDivElement>(null)
     const refUserPanel = useRef<HTMLDivElement>(null)
 
@@ -35,6 +39,7 @@ const Navigation: React.FC = (): React.ReactElement => {
         tariff: 'free'
     })
 
+    const {role} = useTypedSelector(state => state.userReducer)
     const {logout} = useActions()
 
     useEffect(() => {
@@ -96,8 +101,8 @@ const Navigation: React.FC = (): React.ReactElement => {
             <nav className={cx({'Navigation': true, 'show': showMobileMenu})}>
                 <div className={cx({'userPanel': true, 'show': showUserPanel})} ref={refUserPanel}>
                     <div className={classes.userName}>
-                        <span>{user.firstName}</span>
-                        <span>{user.postName}</span>
+                        <span className={classes.name}>{user.firstName}</span>
+                        {user.postName ? <span className={classes.post}>{user.postName}</span> : null}
                     </div>
 
                     <div className={classes.icon}
@@ -106,6 +111,20 @@ const Navigation: React.FC = (): React.ReactElement => {
                     >
                         <FontAwesomeIcon icon='pen-to-square'/>
                         <span>Профиль</span>
+                    </div>
+
+                    <div className={classes.icon}
+                         title='Глобальный поиск'
+                         onClick={() => {
+                             openPopupSearchPanel(document.body, {
+                                 role: role,
+                                 navigate: navigate
+                             })
+                         }}
+                    >
+                        <FontAwesomeIcon icon='magnifying-glass'/>
+
+                        <span>Поиск</span>
                     </div>
 
                     <div className={classes.icon}>

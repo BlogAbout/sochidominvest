@@ -23,7 +23,9 @@ import Wrapper from '../../components/ui/Wrapper/Wrapper'
 import PanelView from '../../views/PanelView/PanelView'
 import Avatar from '../../../components/ui/Avatar/Avatar'
 import Empty from '../../../components/Empty/Empty'
-import openPopupSupportInfo from '../../../components/popup/PopupSupportInfo/PopupSupportInfo'
+import AgentList from '../AgentsPage/components/AgentList/AgentList'
+import DeveloperList from '../DevelopersPage/components/DeveloperList/DeveloperList'
+import FeedList from '../SupportPage/components/FeedList/FeedList'
 import openPopupAgentCreate from '../../../components/popup/PopupAgentCreate/PopupAgentCreate'
 import openPopupAlert from '../../../components/PopupAlert/PopupAlert'
 import openPopupDeveloperCreate from '../../../components/popup/PopupDeveloperCreate/PopupDeveloperCreate'
@@ -63,7 +65,7 @@ const DesktopPage: React.FC = (): React.ReactElement => {
     useEffect(() => {
         fetchFeedsHandler()
 
-        if (allowForRole(['subscriber']) && allowForTariff(['business', 'effectivePlus'])) {
+        if (allowForRole(['director', 'administrator', 'manager'], userInfo.role) || (allowForRole(['subscriber']) && allowForTariff(['business', 'effectivePlus']))) {
             fetchDevelopersHandler()
             fetchAgentsHandler()
         }
@@ -145,7 +147,7 @@ const DesktopPage: React.FC = (): React.ReactElement => {
             .finally(() => setFetchingAgents(false))
     }
 
-    const onContextMenuAgent = (e: React.MouseEvent, agent: IAgent) => {
+    const onContextMenuAgent = (agent: IAgent, e: React.MouseEvent) => {
         e.preventDefault()
 
         const menuItems = [
@@ -192,7 +194,7 @@ const DesktopPage: React.FC = (): React.ReactElement => {
         openContextMenu(e, menuItems)
     }
 
-    const onContextMenuDeveloper = (e: React.MouseEvent, developer: IDeveloper) => {
+    const onContextMenuDeveloper = (developer: IDeveloper, e: React.MouseEvent) => {
         e.preventDefault()
 
         const menuItems = [
@@ -346,40 +348,17 @@ const DesktopPage: React.FC = (): React.ReactElement => {
 
     const renderTicketsInfo = (): React.ReactElement => {
         return (
-            <div className={cx({'col': true, 'col-3': true})}>
+            <div className={cx({'col': true, 'col-2': true})}>
                 <Title type='h2'>Активные тикеты</Title>
 
-                <BlockingElement fetching={fetchingTickets} className={classes.list}>
-                    {tickets && tickets.length ?
-                        tickets.map((ticket: IFeed) => {
-                            return (
-                                <div key={ticket.id}
-                                     className={classes.block}
-                                     onClick={() => {
-                                         openPopupSupportInfo(document.body, {
-                                             feedId: ticket.id,
-                                             onSave: () => fetchFeedsHandler()
-                                         })
-                                     }}
-                                >
-                                    <div className={classes.name}>{ticket.title}</div>
-                                    <div className={classes.date} title='Дата публикации'>
-                                        <FontAwesomeIcon icon='calendar'/>
-                                        <span>{getFormatDate(ticket.dateCreated)}</span>
-                                    </div>
-                                </div>
-                            )
-                        })
-                        : <Empty message='Вы еще не связывались с технической поддержкой.'/>
-                    }
-                </BlockingElement>
+                <FeedList list={tickets} fetching={fetchingTickets} onSave={() => {}} isCompact/>
             </div>
         )
     }
 
     const renderDealsInfo = (): React.ReactElement => {
         return (
-            <div className={cx({'col': true, 'col-3': true})}>
+            <div className={cx({'col': true, 'col-2': true})}>
                 <Title type='h2'>Сделки</Title>
 
                 <BlockingElement fetching={fetchingDeals} className={classes.list}>
@@ -398,45 +377,33 @@ const DesktopPage: React.FC = (): React.ReactElement => {
         )
     }
 
-    const renderAgentsInfo = (): React.ReactElement => {
+    const renderAgentsInfo = (): React.ReactElement | null => {
+        if (!allowForRole(['subscriber']) && !allowForTariff(['business', 'effectivePlus'])) {
+            return null
+        }
+
         const showAdd = allowForRole(['director', 'administrator', 'manager'], userInfo.role) || (allowForRole(['subscriber'], userInfo.role) && allowForTariff(['business', 'effectivePlus'], userInfo.tariff))
         const isDisable = allowForRole(['subscriber'], userInfo.role) && allowForTariff(['business'], userInfo.tariff) && agents.filter((agent: IAgent) => agent.active === 1).length > 0
         const emptyText = showAdd ? 'У Вас еще нет созданных агентств.' : 'На текущем тарифе не доступно.'
 
         return (
-            <div className={cx({'col': true, 'col-3': true})}>
+            <div className={cx({'col': true, 'col-2': true})}>
                 <Title type='h2'
-                       showAdd={showAdd}
-                       onAdd={() => {
+                       onAdd={() => showAdd ?
                            openPopupAgentCreate(document.body, {
                                isDisable: isDisable,
                                onSave: () => fetchAgentsHandler()
                            })
-                       }}
+                       : undefined}
                 >Мои агентства</Title>
 
-                <BlockingElement fetching={fetchingAgents} className={classes.list}>
-                    {agents && agents.length ?
-                        agents.map((agent: IAgent) => {
-                            return (
-                                <div key={agent.id}
-                                     className={classes.block}
-                                     onClick={() => {
-
-                                     }}
-                                     onContextMenu={(e: React.MouseEvent) => onContextMenuAgent(e, agent)}
-                                >
-                                    <div className={classes.name}>{agent.name}</div>
-                                    <div className={classes.date} title='Дата публикации'>
-                                        <FontAwesomeIcon icon='calendar'/>
-                                        <span>{getFormatDate(agent.dateCreated)}</span>
-                                    </div>
-                                </div>
-                            )
-                        })
-                        : <Empty message={emptyText}/>
-                    }
-                </BlockingElement>
+                <AgentList list={agents}
+                           fetching={fetchingAgents}
+                           onClick={() => {}}
+                           onContextMenu={(agent: IAgent, e: React.MouseEvent) => onContextMenuAgent(agent, e)}
+                           emptyText={emptyText}
+                           isCompact
+                />
             </div>
         )
     }
@@ -447,39 +414,23 @@ const DesktopPage: React.FC = (): React.ReactElement => {
         const emptyText = showAdd ? 'У Вас еще нет созданных застройщиков.' : 'На текущем тарифе не доступно.'
 
         return (
-            <div className={cx({'col': true, 'col-3': true})}>
+            <div className={cx({'col': true, 'col-2': true})}>
                 <Title type='h2'
-                       showAdd={showAdd}
-                       onAdd={() => {
+                       onAdd={() => showAdd ?
                            openPopupDeveloperCreate(document.body, {
                                isDisable: isDisable,
                                onSave: () => fetchDevelopersHandler()
                            })
-                       }}
+                       : undefined}
                 >Мои застройщики</Title>
 
-                <BlockingElement fetching={fetchingDevelopers} className={classes.list}>
-                    {developers && developers.length ?
-                        developers.map((developer: IDeveloper) => {
-                            return (
-                                <div key={developer.id}
-                                     className={classes.block}
-                                     onClick={() => {
-
-                                     }}
-                                     onContextMenu={(e: React.MouseEvent) => onContextMenuDeveloper(e, developer)}
-                                >
-                                    <div className={classes.name}>{developer.name}</div>
-                                    <div className={classes.date} title='Дата публикации'>
-                                        <FontAwesomeIcon icon='calendar'/>
-                                        <span>{getFormatDate(developer.dateCreated)}</span>
-                                    </div>
-                                </div>
-                            )
-                        })
-                        : <Empty message={emptyText}/>
-                    }
-                </BlockingElement>
+                <DeveloperList list={developers}
+                               fetching={fetchingDevelopers}
+                               onClick={() => {}}
+                               onContextMenu={(developer: IDeveloper, e: React.MouseEvent) => onContextMenuDeveloper(developer, e)}
+                               emptyText={emptyText}
+                               isCompact
+                />
             </div>
         )
     }

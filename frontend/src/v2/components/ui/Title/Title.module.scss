@@ -14,19 +14,29 @@
         justify-content: right;
     }
 
+    > span {
+        display: block;
+        margin-right: auto;
+    }
+
+    &.hasSearch {
+        flex-wrap: wrap;
+
         > span {
             flex-grow: 1;
             width: 100%;
-            display: block;
-            margin-right: auto;
         }
+
+        .interface {
+            flex-grow: 1;
+            width: 100%;
+            margin-top: 15px;
+        }
+    }
 
     .interface {
         display: flex;
         justify-content: right;
-        flex-grow: 1;
-        width: 100%;
-        margin-top: 15px;
 
         .search {
             width: 100%;

@@ -63,77 +63,89 @@ const Title: React.FC<Props> = (props): React.ReactElement | null => {
         }
     ]
 
-    const renderH1 = () => {
+    const renderInterface = (): React.ReactElement | null => {
+        if (!props.onSearch && !props.onFilter && !props.layouts && !props.onAdd) {
+            return null
+        }
+
+        return (
+            <div className={classes.interface}>
+                {props.onSearch ?
+                    <div className={classes.search}>
+                        <SearchBox value={props.searchText}
+                                   onChange={(value: string) => props.onSearch ? props.onSearch(value) : undefined}
+                        />
+                    </div>
+                    : null
+                }
+
+                {props.onFilter ?
+                    <Button type='regular'
+                            icon='sliders'
+                            title='Фильтр'
+                            className='marginLeft'
+                            onClick={() => {
+                                if (props.onFilter) {
+                                    props.onFilter()
+                                }
+                            }}
+                    />
+                    : null
+                }
+
+                {props.layouts && props.layouts.length ?
+                    <>
+                        {layoutButtons.map((layout: ILayout) => {
+                            if (!props.layouts || !props.layouts.includes(layout.key)) {
+                                return null
+                            }
+
+                            return (
+                                <Button type={props.activeLayout === layout.key ? 'regular' : 'save'}
+                                        icon={layout.icon}
+                                        onClick={() => props.onChangeLayout ? props.onChangeLayout(layout.key) : null}
+                                        title={layout.title}
+                                        className={layout.marginLeft ? 'marginLeft' : undefined}
+                                />
+                            )
+                        })}
+                    </>
+                    : null
+                }
+
+                {props.onAdd ?
+                    <Button type='apply'
+                            icon='plus'
+                            onClick={(e: React.MouseEvent) => props.onAdd ? props.onAdd(e) : undefined}
+                            className='marginLeft'
+                    >{props.addText}</Button>
+                    : null
+                }
+            </div>
+        )
+    }
+
+    const renderH1 = (): React.ReactElement => {
         return (
             <h1 className={cx(props.className, {'Title': true, 'hasSearch': !!props.onSearch, [props.style || 'left']: true})}>
                 <span>{props.children}</span>
 
-                <div className={classes.interface}>
-                    {props.onSearch ?
-                        <div className={classes.search}>
-                            <SearchBox value={props.searchText}
-                                       onChange={(value: string) => props.onSearch ? props.onSearch(value) : undefined}
-                            />
-                        </div>
-                        : null
-                    }
-
-                    {props.onFilter ?
-                        <Button type='regular'
-                                icon='sliders'
-                                title='Фильтр'
-                                className='marginLeft'
-                                onClick={() => {
-                                    if (props.onFilter) {
-                                        props.onFilter()
-                                    }
-                                }}
-                        />
-                        : null
-                    }
-
-                    {props.layouts && props.layouts.length ?
-                        <>
-                            {layoutButtons.map((layout: ILayout) => {
-                                if (!props.layouts || !props.layouts.includes(layout.key)) {
-                                    return null
-                                }
-
-                                return (
-                                    <Button type={props.activeLayout === layout.key ? 'regular' : 'save'}
-                                            icon={layout.icon}
-                                            onClick={() => props.onChangeLayout ? props.onChangeLayout(layout.key) : null}
-                                            title={layout.title}
-                                            className={layout.marginLeft ? 'marginLeft' : undefined}
-                                    />
-                                )
-                            })}
-                        </>
-                        : null
-                    }
-
-                    {props.onAdd ?
-                        <Button type='apply'
-                                icon='plus'
-                                onClick={(e: React.MouseEvent) => props.onAdd ? props.onAdd(e) : undefined}
-                                className='marginLeft'
-                        >{props.addText}</Button>
-                        : null
-                    }
-                </div>
+                {renderInterface()}
             </h1>
         )
     }
 
-    const renderH2 = () => {
+    const renderH2 = (): React.ReactElement => {
         return (
-            <h2 className={cx(props.className, {'Title': true, [props.style || 'left']: true})}>
+            <h2 className={cx(props.className, {'Title': true, 'hasSearch': !!props.onSearch, [props.style || 'left']: true})}>
                 <span>{props.children}</span>
+
+                {renderInterface()}
             </h2>
         )
     }
 
-    const renderH3 = () => {
+    const renderH3 = (): React.ReactElement => {
         return (
             <h3 className={cx(props.className, {'Title': true, [props.style || 'left']: true})}>
                 {props.children}
@@ -141,7 +153,7 @@ const Title: React.FC<Props> = (props): React.ReactElement | null => {
         )
     }
 
-    const renderH4 = () => {
+    const renderH4 = (): React.ReactElement => {
         return (
             <h4 className={cx(props.className, {'Title': true, [props.style || 'left']: true})}>
                 {props.children}
@@ -149,7 +161,7 @@ const Title: React.FC<Props> = (props): React.ReactElement | null => {
         )
     }
 
-    const renderH5 = () => {
+    const renderH5 = (): React.ReactElement => {
         return (
             <h5 className={cx(props.className, {'Title': true, [props.style || 'left']: true})}>
                 {props.children}
@@ -157,7 +169,7 @@ const Title: React.FC<Props> = (props): React.ReactElement | null => {
         )
     }
 
-    const renderH6 = () => {
+    const renderH6 = (): React.ReactElement => {
         return (
             <h6 className={cx(props.className, {'Title': true, [props.style || 'left']: true})}>
                 {props.children}

@@ -38,23 +38,26 @@
         .userName {
             color: #fff;
             padding: 3px 8px;
-            width: 200px;
+            width: 150px;
             flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
 
-            span:first-child {
+            .name {
                 display: block;
-                font-size: 18px;
-                line-height: 18px;
+                font-size: 16px;
+                line-height: 16px;
                 margin-bottom: 5px;
                 white-space: nowrap;
                 overflow: hidden;
                 text-overflow: ellipsis;
             }
 
-            span:last-child {
+            .post {
                 display: block;
-                font-size: 14px;
-                line-height: 14px;
+                font-size: 13px;
+                line-height: 13px;
                 white-space: nowrap;
                 overflow: hidden;
                 text-overflow: ellipsis;
@@ -97,7 +100,7 @@
 
     .menu {
         list-style: none;
-        padding: 10px 0;
+        padding: 5px 0;
         margin: 0;
         flex-grow: 1;
         display: flex;
@@ -109,12 +112,8 @@
             position: relative;
             padding: 5px;
 
-            + li {
-                margin-top: 5px;
-            }
-
             &.spacer {
-                height: 5px;
+                height: 1px;
 
                 &::after {
                     content: '';
@@ -169,6 +168,16 @@
 
         &.show {
             display: flex;
+        }
+
+        .userPanel {
+            &.show {
+                width: 325px;
+            }
+
+            .userName {
+                width: 125px;
+            }
         }
     }
 }

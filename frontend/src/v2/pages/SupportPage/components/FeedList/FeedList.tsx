@@ -23,6 +23,7 @@ import classes from './FeedList.module.scss'
 interface Props {
     list: IFeed[]
     fetching: boolean
+    isCompact?: boolean
 
     onSave(): void
 }
@@ -173,6 +174,7 @@ const FeedList: React.FC<Props> = (props): React.ReactElement => {
                                          feedId: feed.id,
                                          onSave: props.onSave
                                      })}
+                                     isCompact={props.isCompact}
                             >
                                 <ListCell className={classes.id}>#{feed.id}</ListCell>
                                 <ListCell className={classes.title}>{feed.title}</ListCell>

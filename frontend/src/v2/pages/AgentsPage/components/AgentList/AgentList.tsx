@@ -12,6 +12,8 @@ import classes from './AgentList.module.scss'
 interface Props {
     list: IAgent[]
     fetching: boolean
+    emptyText?: string
+    isCompact?: boolean
 
     onClick(agent: IAgent): void
 
@@ -46,6 +48,7 @@ const AgentList: React.FC<Props> = (props): React.ReactElement => {
                                      onContextMenu={(e: React.MouseEvent) => props.onContextMenu(agent, e)}
                                      onClick={() => props.onClick(agent)}
                                      isDisabled={!agent.active}
+                                     isCompact={props.isCompact}
                             >
                                 <ListCell className={classes.name}>{agent.name}</ListCell>
                                 <ListCell className={classes.type}>{getAgentTypeText(agent.type)}</ListCell>
@@ -53,7 +56,7 @@ const AgentList: React.FC<Props> = (props): React.ReactElement => {
                             </ListRow>
                         )
                     })
-                    : <Empty message='Нет агентств'/>
+                    : <Empty message={props.emptyText || 'Нет агентств'}/>
                 }
             </ListBody>
         </List>

@@ -1,23 +1,13 @@
 import React, {useEffect, useState} from 'react'
-import {Link, useNavigate} from 'react-router-dom'
 import NotificationService from '../../../../api/NotificationService'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {useActions} from '../../../../hooks/useActions'
-import {useTypedSelector} from '../../../../hooks/useTypedSelector'
-import {RouteNames} from '../../../helpers/routerHelper'
 import NotificationPanel from '../../../../components/NotificationPanel/NotificationPanel'
-import openPopupSearchPanel from '../../../../components/popup/PopupSearchPanel/PopupSearchPanel'
 import openPopupMessenger from '../../../../components/popup/PopupMessenger/PopupMessenger'
 import classes from './ToolsPanel.module.scss'
 
 const ToolsPanel: React.FC = () => {
-    const navigate = useNavigate()
-
     const [isShowNotification, setIsShowNotification] = useState(false)
     const [countNewNotification, setCountNewNotification] = useState(0)
-
-    const {role} = useTypedSelector(state => state.userReducer)
-    const {logout} = useActions()
 
     useEffect(() => {
         getCountNewNotification()
@@ -50,18 +40,6 @@ const ToolsPanel: React.FC = () => {
     return (
         <>
             <aside className={classes.ToolsPanel}>
-                <div className={classes.icon}
-                     title='Глобальный поиск'
-                     onClick={() => {
-                         openPopupSearchPanel(document.body, {
-                             role: role,
-                             navigate: navigate
-                         })
-                     }}
-                >
-                    <FontAwesomeIcon icon='magnifying-glass'/>
-                </div>
-
                 <div className={classes.icon}
                      title='Мессенджер'
                      onClick={() => openPopupMessenger(document.body, {})}
