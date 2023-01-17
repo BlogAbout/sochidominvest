@@ -482,7 +482,7 @@ const BuildingsPanelPage: React.FC = (): React.ReactElement => {
 
             <Wrapper isFull>
                 <Title type='h1'
-                       onAdd={() => allowForRole(['director', 'administrator', 'manager'], user.role) || (role === 'subscriber' && user.tariff !== undefined && user.tariff !== 'free') ? onContextMenuHandler.bind(this) : undefined}
+                       onAdd={allowForRole(['director', 'administrator', 'manager'], user.role) || (allowForRole(['subscriber']) && allowForTariff(['base', 'business', 'effectivePlus'], user.tariff)) ? (e: React.MouseEvent) => onContextMenuHandler(e) : undefined}
                        onFilter={() => setIsShowFilter(!isShowFilter)}
                        searchText={searchText}
                        onSearch={search.bind(this)}
