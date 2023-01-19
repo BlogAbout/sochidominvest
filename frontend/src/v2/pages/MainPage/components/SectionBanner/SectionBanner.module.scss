@@ -20,7 +20,7 @@
     }
 
     .inner {
-        height: calc(100vh - 80px);
+        min-height: calc(100vh - 80px);
         position: relative;
         z-index: 2;
         display: flex;

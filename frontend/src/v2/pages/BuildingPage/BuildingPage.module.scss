@@ -2,7 +2,7 @@
     .content {
         .block {
             .gallery {
-
+                height: 100%;
             }
 
             .info {
@@ -43,12 +43,17 @@
     .inner {
         .content {
             .block {
+                .info,
                 .headInfo {
                     flex-wrap: wrap;
 
                     > div {
                         width: 100% !important;
                     }
+                }
+
+                .relations {
+                    margin-top: 20px;
                 }
             }
         }
