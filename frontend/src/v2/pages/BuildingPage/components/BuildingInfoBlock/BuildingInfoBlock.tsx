@@ -405,7 +405,7 @@ const BuildingInfoBlock: React.FC<Props> = (props): React.ReactElement => {
                     <Button type='regular'
                             icon='arrow-up-from-bracket'
                             onClick={() => {
-                                navigator.clipboard.writeText(configuration.siteUrl + props.building.id)
+                                navigator.clipboard.writeText(`${configuration.siteUrl}building/${props.building.id}`)
                                     .then(() => {
                                         setShowCopyText(true)
                                         setTimeout(() => {

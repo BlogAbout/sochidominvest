@@ -118,6 +118,7 @@ export const buildingSewerage: ISelector[] = [
  */
 export const buildingWaterSupply: ISelector[] = [
     {key: 'borehole', text: 'Скважина'},
+    {key: 'spring', text: 'Родник'},
     {key: 'central', text: 'Центральное'}
 ]
 
