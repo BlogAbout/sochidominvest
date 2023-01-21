@@ -35,6 +35,7 @@ export const buildingClasses: ISelector[] = [
  * Список типов материалов
  */
 export const buildingMaterials: ISelector[] = [
+    {key: 'wood', text: 'Деревянный'},
     {key: 'monolith', text: 'Монолитный'},
     {key: 'monolith-frame', text: 'Монолит-каркас'},
     {key: 'monolith-brick', text: 'Монолитно-кирпичный'},
@@ -82,7 +83,8 @@ export const buildingEntrance: ISelector[] = [
  */
 export const buildingGas: ISelector[] = [
     {key: 'no', text: 'Нет'},
-    {key: 'yes', text: 'Да'}
+    {key: 'yes', text: 'Да'},
+    {key: 'balloon', text: 'Баллоны'}
 ]
 
 /**
@@ -115,6 +117,7 @@ export const buildingSewerage: ISelector[] = [
  *  Список типов водоснабжения
  */
 export const buildingWaterSupply: ISelector[] = [
+    {key: 'borehole', text: 'Скважина'},
     {key: 'central', text: 'Центральное'}
 ]
 
@@ -219,6 +222,7 @@ export const districtList: ISelector[] = [
             {key: 'Бытха', text: 'Бытха'},
             {key: 'Кудепста пос.', text: 'Кудепста пос.'},
             {key: 'Мацеста', text: 'Мацеста'},
+            {key: 'Пластунка', text: 'Пластунка'},
             {key: 'Приморье', text: 'Приморье'},
             {key: 'Раздольное', text: 'Раздольное'},
             {key: 'Светлана низ', text: 'Светлана низ'},

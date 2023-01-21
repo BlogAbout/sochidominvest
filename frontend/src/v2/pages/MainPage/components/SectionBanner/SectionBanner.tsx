@@ -30,27 +30,27 @@ const SectionBanner: React.FC = (): React.ReactElement => {
             <Wrapper>
                 <div className={classes.inner}>
                     <Grid className={classes.cols} isVerticalCenter>
-                        <GridColumn>
-                            <div className={classes.logo}>
-                                <div className={classes.image}/>
-                            </div>
+                        <GridColumn width='100%'>
+                            {/*<div className={classes.logo}>*/}
+                            {/*    <div className={classes.image}/>*/}
+                            {/*</div>*/}
 
                             <div className={classes.title}>
                                 <Title type='h1'
                                        className={classes.title}
-                                >Авторизованный брокер недвижимости Сочи</Title>
+                                >Инвестиционные проекты Сочи</Title>
                             </div>
 
-                            <Contacts/>
+                            <Contacts align='center'/>
 
                             <div className={classes.buttons}>
                                 <Button type='apply' onClick={() => signInHandler()}>Войти в систему</Button>
                             </div>
                         </GridColumn>
 
-                        <GridColumn>
-                            <FormFilterBuildings/>
-                        </GridColumn>
+                        {/*<GridColumn>*/}
+                        {/*    <FormFilterBuildings/>*/}
+                        {/*</GridColumn>*/}
                     </Grid>
                 </div>
             </Wrapper>

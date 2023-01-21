@@ -1,11 +1,11 @@
 .SectionBanner {
-    min-height: 100vh;
+    min-height: 420px;
     width: 100%;
     background-image: url('./img/bg-sochi-001.jpg');
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
-    padding: 40px 0;
+    padding: 120px 0 40px;
     position: relative;
 
     &::before {
@@ -20,10 +20,20 @@
     }
 
     .inner {
-        min-height: calc(100vh - 80px);
+        min-height: 300px;
         position: relative;
         z-index: 2;
         display: flex;
+        justify-content: center;
+
+        .cols {
+            > div {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+            }
+        }
 
         .logo {
             position: relative;
@@ -45,7 +55,7 @@
             font-size: 40px;
             line-height: 50px;
             color: #fff;
-            margin-bottom: 50px;
+            margin-bottom: 15px;
         }
 
         .buttons {
@@ -57,7 +67,13 @@
 
 @media (max-width: 768px) {
     .SectionBanner {
+        min-height: 320px;
+        padding: 80px 0 40px;
+        text-align: center;
+
         .inner {
+            min-height: 200px;
+
             .cols {
                 flex-wrap: wrap;
             }

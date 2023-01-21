@@ -222,14 +222,21 @@ const BuildingInfoBlock: React.FC<Props> = (props): React.ReactElement => {
                                 <span>{numberWithSpaces(round(props.building.costMinUnit || 0, 0))} руб.</span>
                                 <span>Мин. цена за м<sup>2</sup></span>
                             </>
-                            :
-                            <>
-                                <span>
-                                    {numberWithSpaces(round(props.building.area && props.building.cost ? props.building.cost / props.building.area : 0, 0))} руб.
-                                    {renderOldPrice()}
-                                </span>
-                                <span>Цена за м<sup>2</sup></span>
-                            </>
+                            : props.building.type === 'land' ?
+                                <>
+                                    <span>
+                                        {numberWithSpaces(round(props.building.area && props.building.cost ? (props.building.cost / props.building.area) * 100 : 0, 0))} руб.
+                                        {renderOldPrice()}
+                                    </span>
+                                    <span>Цена сотку</span>
+                                </>
+                                : <>
+                                    <span>
+                                        {numberWithSpaces(round(props.building.area && props.building.cost ? props.building.cost / props.building.area : 0, 0))} руб.
+                                        {renderOldPrice()}
+                                    </span>
+                                    <span>Цена за м<sup>2</sup></span>
+                                </>
                         }
                     </div>
                     : null
