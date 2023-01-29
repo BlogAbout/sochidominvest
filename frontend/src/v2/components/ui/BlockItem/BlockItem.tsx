@@ -5,7 +5,7 @@ import {converter} from '../../../helpers/utilHelper'
 import {getFormatDate} from '../../../../helpers/dateHelper'
 import {numberWithSpaces, round} from '../../../../helpers/numberHelper'
 import {declension} from '../../../../helpers/stringHelper'
-import Avatar from '../../../../components/ui/Avatar/Avatar'
+import Avatar from '../../../components/ui/Avatar/Avatar'
 import Title from '../../../components/ui/Title/Title'
 import classes from './BlockItem.module.scss'
 
@@ -30,6 +30,7 @@ interface Props {
     areaMax?: number
     isDisabled?: boolean
     className?: string
+    isRent?: boolean
 
     onClick?(): void
 
@@ -39,7 +40,8 @@ interface Props {
 const defaultProps: Props = {
     title: '',
     avatar: '',
-    isDisabled: false
+    isDisabled: false,
+    isRent: false
 }
 
 const cx = classNames.bind(classes)
@@ -88,7 +90,7 @@ const BlockItem: React.FC<Props> = (props): React.ReactElement => {
 
                 {props.passed || props.rentType || props.rentCost || props.countCheckers || props.buildingType ?
                     <div className={classes.itemInfo}>
-                        {props.passed !== '' ?
+                        {props.buildingType !== 'land' && props.passed !== '' ?
                             <div className={cx({
                                 'passed': true,
                                 'is': props.isPassed
@@ -98,7 +100,7 @@ const BlockItem: React.FC<Props> = (props): React.ReactElement => {
                             : null
                         }
 
-                        {props.rentType && props.rentCost ?
+                        {props.isRent && props.rentType && props.rentCost ?
                             <div className={classes.counter}>
                                 {numberWithSpaces(round(props.rentCost || 0, 0))} руб.
                                 {props.rentType}
@@ -106,7 +108,7 @@ const BlockItem: React.FC<Props> = (props): React.ReactElement => {
                             : null
                         }
 
-                        {props.countCheckers !== undefined ?
+                        {!props.isRent && props.countCheckers !== undefined ?
                             props.buildingType && props.buildingType === 'building' ?
                                 <div className={classes.counter}>
                                     {declension(props.countCheckers || 0, ['квартира', 'квартиры', 'квартир'], false)} от {numberWithSpaces(round(props.cost || 0, 0))} руб.

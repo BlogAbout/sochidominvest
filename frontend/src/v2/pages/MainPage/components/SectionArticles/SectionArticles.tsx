@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react'
 import {useNavigate} from 'react-router-dom'
 import {RouteNames} from '../../../../helpers/routerHelper'
+import {getArticleTypeText} from '../../../../../helpers/articleHelper'
 import {IArticle} from '../../../../../@types/IArticle'
 import Wrapper from '../../../../components/ui/Wrapper/Wrapper'
 import ArticleService from '../../../../../api/ArticleService'
@@ -8,7 +9,7 @@ import Title from '../../../../components/ui/Title/Title'
 import Button from '../../../../components/form/Button/Button'
 import BlockingElement from '../../../../../components/ui/BlockingElement/BlockingElement'
 import Empty from '../../../../components/ui/Empty/Empty'
-import ArticleItem from '../../../ArticlesPage/components/ArticleItem/ArticleItem'
+import BlockItem from '../../../../components/ui/BlockItem/BlockItem'
 import classes from './SectionArticles.module.scss'
 
 const SectionArticles: React.FC = (): React.ReactElement => {
@@ -45,9 +46,15 @@ const SectionArticles: React.FC = (): React.ReactElement => {
 
         return showArticles.map((article: IArticle) => {
             return (
-                <ArticleItem key={article.id}
-                             article={article}
-                             onClick={() => navigate(`${RouteNames.ARTICLE}/${article.id}`)}
+                <BlockItem key={article.id}
+                           title={article.name}
+                           avatar={article.avatar || ''}
+                           description={article.description}
+                           date={article.dateCreated || undefined}
+                           type={getArticleTypeText(article.type)}
+                           isDisabled={!article.active}
+                           onContextMenu={() => {}}
+                           onClick={() => navigate(`${RouteNames.ARTICLE}/${article.id}`)}
                 />
             )
         })

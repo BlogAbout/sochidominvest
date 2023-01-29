@@ -440,7 +440,7 @@ const BuildingInfoBlock: React.FC<Props> = (props): React.ReactElement => {
         <div className={classes.BuildingInfoBlock}>
             {renderMetaInformation()}
 
-            {passedInfo !== '' &&
+            {props.building.type !== 'land' && passedInfo !== '' &&
             <div className={cx({'passed': true, 'is': props.building.passed && props.building.passed.is})}>
                 <span>{passedInfo}</span>
             </div>}

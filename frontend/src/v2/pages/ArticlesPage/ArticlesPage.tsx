@@ -1,6 +1,7 @@
 import React, {useEffect, useMemo, useState} from 'react'
 import {useNavigate} from 'react-router-dom'
 import ArticleService from '../../../api/ArticleService'
+import {getArticleTypeText} from '../../../helpers/articleHelper'
 import {RouteNames} from '../../helpers/routerHelper'
 import {IArticle} from '../../../@types/IArticle'
 import {IFilterBase} from '../../../@types/IFilter'
@@ -10,7 +11,7 @@ import FilterBase from '../../../components/ui/FilterBase/FilterBase'
 import Title from '../../components/ui/Title/Title'
 import Wrapper from '../../components/ui/Wrapper/Wrapper'
 import DefaultView from '../../views/DefaultView/DefaultView'
-import ArticleItem from './components/ArticleItem/ArticleItem'
+import BlockItem from '../../components/ui/BlockItem/BlockItem'
 import classes from './ArticlesPage.module.scss'
 
 const ArticlesPage: React.FC = (): React.ReactElement => {
@@ -106,8 +107,16 @@ const ArticlesPage: React.FC = (): React.ReactElement => {
                         {filterArticle && filterArticle.length ?
                             filterArticle.map((article: IArticle) => {
                                 return (
-                                    <ArticleItem article={article}
-                                                 onClick={() => navigate(`${RouteNames.ARTICLE}/${article.id}`)}
+                                    <BlockItem key={article.id}
+                                               title={article.name}
+                                               avatar={article.avatar || ''}
+                                               description={article.description}
+                                               date={article.dateCreated || undefined}
+                                               type={getArticleTypeText(article.type)}
+                                               isDisabled={!article.active}
+                                               onContextMenu={() => {
+                                               }}
+                                               onClick={() => navigate(`${RouteNames.ARTICLE}/${article.id}`)}
                                     />
                                 )
                             })

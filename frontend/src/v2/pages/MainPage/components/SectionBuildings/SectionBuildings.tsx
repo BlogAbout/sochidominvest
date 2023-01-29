@@ -1,14 +1,15 @@
 import React, {useEffect, useState} from 'react'
 import {useNavigate} from 'react-router-dom'
-import Wrapper from '../../../../components/ui/Wrapper/Wrapper'
+import {getBuildingTypesText, getDistrictText, getPassedText} from '../../../../../helpers/buildingHelper'
 import {RouteNames} from '../../../../helpers/routerHelper'
 import {IBuilding} from '../../../../../@types/IBuilding'
 import BuildingService from '../../../../../api/BuildingService'
+import Wrapper from '../../../../components/ui/Wrapper/Wrapper'
 import Title from '../../../../components/ui/Title/Title'
 import Button from '../../../../components/form/Button/Button'
 import Empty from '../../../../components/ui/Empty/Empty'
 import BlockingElement from '../../../../../components/ui/BlockingElement/BlockingElement'
-import BuildingItem from '../../../BuildingsPage/components/BuildingItem/BuildingItem'
+import BlockItem from '../../../../components/ui/BlockItem/BlockItem'
 import classes from './SectionBuildings.module.scss'
 
 const SectionBuildings: React.FC = (): React.ReactElement => {
@@ -63,9 +64,26 @@ const SectionBuildings: React.FC = (): React.ReactElement => {
                         {filteredBuildings.length ?
                             filteredBuildings.map((building: IBuilding) => {
                                 return (
-                                    <BuildingItem key={building.id}
-                                                  building={building}
-                                                  onClick={() => navigate(`${RouteNames.BUILDING}/${building.id}`)}
+                                    <BlockItem key={building.id}
+                                               title={building.name}
+                                               avatar={building.avatar || ''}
+                                               address={building.address || ''}
+                                               districtText={getDistrictText(building.district, building.districtZone)}
+                                               date={building.dateCreated || undefined}
+                                               type={getBuildingTypesText(building.type)}
+                                               passed={getPassedText(building.passed)}
+                                               isPassed={!!(building.passed && building.passed.is)}
+                                               rentType={building.rentData ? building.rentData.type === 'short' ? '/в сутки' : '/в месяц' : undefined}
+                                               rentCost={building.rentData && building.rentData.cost ? building.rentData.cost : undefined}
+                                               countCheckers={building.countCheckers || undefined}
+                                               buildingType={building.type}
+                                               cost={building.type === 'building' ? (building.costMin || 0) : (building.cost || 0)}
+                                               areaMin={building.type === 'building' ? (building.areaMin || 0) : (building.area || 0)}
+                                               areaMax={building.type === 'building' ? (building.areaMax || 0) : undefined}
+                                               isDisabled={!building.active}
+                                               onContextMenu={() => {
+                                               }}
+                                               onClick={() => navigate(`${RouteNames.BUILDING}/${building.id}`)}
                                     />
                                 )
                             })

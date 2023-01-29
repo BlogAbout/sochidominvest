@@ -47,7 +47,8 @@ export const buildingMaterials: ISelector[] = [
  */
 export const buildingFormat: ISelector[] = [
     {key: 'multi-family', text: 'Многоквартирный'},
-    {key: 'club', text: 'Клубный'}
+    {key: 'club', text: 'Клубный'},
+    {key: 'private', text: 'Частный'}
 ]
 
 /**
@@ -94,7 +95,8 @@ export const buildingHeating: ISelector[] = [
     {key: 'central', text: 'Центральное'},
     {key: 'electrical', text: 'Электрическое'},
     {key: 'boiler', text: 'Котельная'},
-    {key: 'individual-gas-boiler', text: 'Индивидуальный газовый котел'}
+    {key: 'individual-gas-boiler', text: 'Индивидуальный газовый котел'},
+    {key: 'oven', text: 'Печка'}
 ]
 
 /**
@@ -102,7 +104,8 @@ export const buildingHeating: ISelector[] = [
  */
 export const buildingElectricity: ISelector[] = [
     {key: 'no-connect', text: 'Не подключено'},
-    {key: 'connect', text: 'Подключено'}
+    {key: 'connect', text: 'Подключено'},
+    {key: 'gasoline-generator', text: 'Бензогенератор'}
 ]
 
 /**

@@ -1,5 +1,5 @@
 .SectionBanner {
-    min-height: 420px;
+    min-height: 550px;
     width: 100%;
     background-image: url('./img/bg-sochi-001.jpg');
     background-repeat: no-repeat;
@@ -20,7 +20,7 @@
     }
 
     .inner {
-        min-height: 300px;
+        min-height: 430px;
         position: relative;
         z-index: 2;
         display: flex;
@@ -67,12 +67,12 @@
 
 @media (max-width: 768px) {
     .SectionBanner {
-        min-height: 320px;
+        min-height: 350px;
         padding: 80px 0 40px;
         text-align: center;
 
         .inner {
-            min-height: 200px;
+            min-height: 230px;
 
             .cols {
                 flex-wrap: wrap;

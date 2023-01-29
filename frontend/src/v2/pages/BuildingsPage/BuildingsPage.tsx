@@ -12,7 +12,10 @@ import {
     checkBuildingByDistrict,
     checkBuildingByRangeArea,
     checkBuildingByRangeCost,
-    districtList
+    districtList,
+    getBuildingTypesText,
+    getDistrictText,
+    getPassedText
 } from '../../../helpers/buildingHelper'
 import Wrapper from '../../components/ui/Wrapper/Wrapper'
 import Title from '../../components/ui/Title/Title'
@@ -21,7 +24,7 @@ import Empty from '../../components/ui/Empty/Empty'
 import DefaultView from '../../views/DefaultView/DefaultView'
 import BuildingService from '../../../api/BuildingService'
 import BuildingPlacemark from './components/BuildingPlacemark/BuildingPlacemark'
-import BuildingItem from './components/BuildingItem/BuildingItem'
+import BlockItem from '../../components/ui/BlockItem/BlockItem'
 import openPopupBuildingFilter from '../../../components/popup/PopupBuildingFilter/PopupBuildingFilter'
 import classes from './BuildingsPage.module.scss'
 
@@ -208,10 +211,27 @@ const BuildingsPage: React.FC<Props> = (props): React.ReactElement => {
                         }
 
                         return (
-                            <BuildingItem key={building.id}
-                                          building={building}
-                                          isRent={props.isRent}
-                                          onClick={() => navigate(`${directoryUrl}/${building.id}`)}
+                            <BlockItem key={building.id}
+                                       title={building.name}
+                                       avatar={building.avatar || ''}
+                                       address={building.address || ''}
+                                       districtText={getDistrictText(building.district, building.districtZone)}
+                                       date={building.dateCreated || undefined}
+                                       type={getBuildingTypesText(building.type)}
+                                       passed={getPassedText(building.passed)}
+                                       isPassed={!!(building.passed && building.passed.is)}
+                                       rentType={building.rentData ? building.rentData.type === 'short' ? '/в сутки' : '/в месяц' : undefined}
+                                       rentCost={building.rentData && building.rentData.cost ? building.rentData.cost : undefined}
+                                       countCheckers={building.countCheckers || undefined}
+                                       buildingType={building.type}
+                                       cost={building.type === 'building' ? (building.costMin || 0) : (building.cost || 0)}
+                                       areaMin={building.type === 'building' ? (building.areaMin || 0) : (building.area || 0)}
+                                       areaMax={building.type === 'building' ? (building.areaMax || 0) : undefined}
+                                       isDisabled={!building.active}
+                                       isRent={props.isRent}
+                                       onContextMenu={() => {
+                                       }}
+                                       onClick={() => navigate(`${directoryUrl}/${building.id}`)}
                             />
                         )
                     })

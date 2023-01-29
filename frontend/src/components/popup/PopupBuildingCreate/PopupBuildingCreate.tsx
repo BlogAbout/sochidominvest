@@ -301,15 +301,18 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
                     />
                 </div>
 
-                <div className={classes.field}>
-                    <Label text='Дата сдачи'/>
+                {building.type !== 'land' ?
+                    <div className={classes.field}>
+                        <Label text='Дата сдачи'/>
 
-                    <PassedBox selected={building.passed || null}
-                               onChange={(value: IBuildingPassed) => setBuilding({...building, passed: value})}
-                               placeHolder='Укажите дату сдачи'
-                               styleType='minimal'
-                    />
-                </div>
+                        <PassedBox selected={building.passed || null}
+                                   onChange={(value: IBuildingPassed) => setBuilding({...building, passed: value})}
+                                   placeHolder='Укажите дату сдачи'
+                                   styleType='minimal'
+                        />
+                    </div>
+                    : null
+                }
 
                 <div className={classes.field}>
                     <Label text='Теги'/>
