@@ -488,7 +488,9 @@ class BuildingModel extends Model
                     `sale_no_resident` = :saleNoResident,
                     `passed` = :passed,
                     `id_avatar` = :avatarId,
-                    `avatar` = :avatar
+                    `avatar` = :avatar,
+                    `cadastr_number` = :cadastrNumber,
+                    `cadastr_cost` = :cadastrCost
                 WHERE `id` = :id
             ";
         } else {
@@ -498,13 +500,13 @@ class BuildingModel extends Model
                      `parking`, `territory`, `ceiling_height`, `maintenance_cost`, `distance_sea`, `gas`, `heating`,
                      `electricity`, `sewerage`, `water_supply`, `advantages`, `payments`, `formalization`,
                      `amount_contract`, `surcharge_doc`, `surcharge_gas`, `sale_no_resident`, `passed`, `id_avatar`,
-                     `avatar`)
+                     `avatar`, `cadastr_number`, `cadastr_cost`)
                 VALUES
                     (:id, :district, :districtZone, :houseClass, :material, :houseType, :entranceHouse,
                      :parking, :territory, :ceilingHeight, :maintenanceCost, :distanceSea, :gas, :heating,
                      :electricity, :sewerage, :waterSupply, :advantages, :payments, :formalization,
                      :amountContract, :surchargeDoc, :surchargeGas, :saleNoResident, :passed, :avatarId,
-                     :avatar)
+                     :avatar, :cadastrNumber, :cadastrCost)
             ";
         }
 
@@ -536,6 +538,8 @@ class BuildingModel extends Model
         parent::bindParams('passed', $payload['passed'] ? json_encode($payload['passed']) : '');
         parent::bindParams('avatarId', $payload['avatarId']);
         parent::bindParams('avatar', $payload['avatar']);
+        parent::bindParams('cadastrNumber', $payload['cadastrNumber']);
+        parent::bindParams('cadastrCost', $payload['cadastrCost']);
         parent::execute();
 
         BuildingModel::updatePrices($payload['id'], 'building', $payload['cost']);
@@ -885,7 +889,9 @@ class BuildingModel extends Model
             'avatarId' => (int)$data['id_avatar'],
             'avatar' => $data['avatar'],
             'authorName' => $data['authorName'],
-            'rentData' => $data['rentData'] ?: null
+            'rentData' => $data['rentData'] ?: null,
+            'cadastrNumber' => $data['cadastr_number'] ?: null,
+            'cadastrCost' => $data['cadastr_cost'] ?: null
         ];
     }
 

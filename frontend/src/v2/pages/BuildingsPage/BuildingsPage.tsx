@@ -229,6 +229,7 @@ const BuildingsPage: React.FC<Props> = (props): React.ReactElement => {
                                        areaMax={building.type === 'building' ? (building.areaMax || 0) : undefined}
                                        isDisabled={!building.active}
                                        isRent={props.isRent}
+                                       cadastrNumber={building.type === 'land' ? building.cadastrNumber : null}
                                        onContextMenu={() => {
                                        }}
                                        onClick={() => navigate(`${directoryUrl}/${building.id}`)}

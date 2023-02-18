@@ -280,6 +280,14 @@ const BuildingInfoBlock: React.FC<Props> = (props): React.ReactElement => {
                         </>
                     }
                 </div>
+
+                {props.building.type === 'land' && props.building.cadastrCost ?
+                    <div className={classes.row}>
+                        <span>{numberWithSpaces(round(props.building.cadastrCost || 0, 0))} руб.</span>
+                        <span>Кадастровая стоимость</span>
+                    </div>
+                    : null
+                }
             </div>
         )
     }
@@ -440,10 +448,19 @@ const BuildingInfoBlock: React.FC<Props> = (props): React.ReactElement => {
         <div className={classes.BuildingInfoBlock}>
             {renderMetaInformation()}
 
-            {props.building.type !== 'land' && passedInfo !== '' &&
-            <div className={cx({'passed': true, 'is': props.building.passed && props.building.passed.is})}>
-                <span>{passedInfo}</span>
-            </div>}
+            {props.building.type !== 'land' && passedInfo !== '' ?
+                <div className={cx({'passed': true, 'is': props.building.passed && props.building.passed.is})}>
+                    <span>{passedInfo}</span>
+                </div>
+                : null
+            }
+
+            {props.building.type === 'land' && props.building.cadastrNumber ?
+                <div className={classes.passed} title='Кадастровый номер'>
+                    <span>{props.building.cadastrNumber}</span>
+                </div>
+                : null
+            }
 
             {tags && tags.length && props.building.tags && props.building.tags.length ?
                 <div className={classes.tags}>

@@ -1,5 +1,6 @@
 import {ISelector} from '../@types/ISelector'
 import {IBuilding, IBuildingPassed} from '../@types/IBuilding'
+import {allowForRole} from '../v2/helpers/accessHelper'
 
 /**
  * Список статусов объектов недвижимости
@@ -558,6 +559,14 @@ export const checkBuildingByDistrict = (building: IBuilding, filters: any) => {
     }
 
     return !!(building.districtZone && filters.buildingDistrictZone.includes(building.districtZone))
+}
+
+export const checkVisibleBuildingByAuthor = (building: IBuilding, authorId: number | null): boolean => {
+    if (allowForRole(['director', 'administrator', 'manager'])) {
+        return true
+    }
+
+    return building.author === authorId || building.active === 1
 }
 
 export const getRentTypesText = (key: string) => {

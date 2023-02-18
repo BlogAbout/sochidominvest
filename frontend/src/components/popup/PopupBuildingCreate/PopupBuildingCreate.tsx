@@ -237,6 +237,37 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
         setVideos([...videos.filter((attachment: IAttachment) => attachment.id !== file.id)])
     }
 
+    const getPopupTitle = (): string => {
+        let title = 'Добавить '
+
+        if (building.id) {
+            title = 'Редактировать '
+        }
+
+        switch (building.type) {
+            case 'building':
+                title += 'жилой комплекс'
+                break
+            case 'apartment':
+                title += 'квартиру'
+                break
+            case 'house':
+                title += 'дом'
+                break
+            case 'land':
+                title += 'земельный участок'
+                break
+            case 'commerce':
+                title += 'коммерцию'
+                break
+            case 'garage':
+                title += 'гараж/машиноместо'
+                break
+        }
+
+        return title
+    }
+
     // Вкладка состояния объекта
     const renderStateTab = () => {
         return (
@@ -367,6 +398,42 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
                                styleType='minimal'
                     />
                 </div>
+
+                {building.type === 'land' ?
+                    <div className={classes.field}>
+                        <Label text='Кадастровый номер'/>
+
+                        <TextBox value={building.cadastrNumber}
+                                 onChange={(e: React.MouseEvent, value: string) => setBuilding({
+                                     ...building,
+                                     cadastrNumber: value
+                                 })}
+                                 placeHolder='Введите кадастровый номер'
+                                 styleType='minimal'
+                        />
+                    </div>
+                    : null
+                }
+
+                {building.type === 'land' ?
+                    <div className={classes.field}>
+                        <Label text='Кадастровая стоимость, руб.'/>
+
+                        <NumberBox value={building.cadastrCost || ''}
+                                   min={0}
+                                   step={0.01}
+                                   max={999999999}
+                                   countAfterComma={2}
+                                   onChange={(e: React.ChangeEvent<HTMLInputElement>, value: number) => setBuilding({
+                                       ...building,
+                                       cadastrCost: value
+                                   })}
+                                   placeHolder='Введите кадастровую стоимость'
+                                   styleType='minimal'
+                        />
+                    </div>
+                    : null
+                }
 
                 {building.type !== 'building' ?
                     <div className={classes.field}>
@@ -892,7 +959,7 @@ const PopupBuildingCreate: React.FC<Props> = (props) => {
         <Popup className={classes.PopupBuildingCreate}>
             <BlockingElement fetching={fetchingBuilding} className={classes.content}>
                 <div className={classes.blockContent}>
-                    <Title type={2}>{building.id ? 'Редактировать недвижимость' : 'Добавить недвижимость'}</Title>
+                    <Title type={2}>{getPopupTitle()}</Title>
 
                     <Tabs tabs={tabs} paddingFirstTab='popup'/>
                 </div>

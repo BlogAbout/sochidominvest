@@ -18,7 +18,7 @@ import {
     buildingWaterSupply,
     checkBuildingByDistrict,
     checkBuildingByRangeArea,
-    checkBuildingByRangeCost
+    checkBuildingByRangeCost, checkVisibleBuildingByAuthor
 } from '../../../helpers/buildingHelper'
 import {compareText} from '../../../helpers/filterHelper'
 import {changeLayout, getLayout, getSetting} from '../../../helpers/utilHelper'
@@ -281,7 +281,8 @@ const BuildingsPanelPage: React.FC = (): React.ReactElement => {
         }
 
         return list.filter((item: IBuilding) => {
-            return checkBuildingByRangeCost(item, filters) &&
+            return checkVisibleBuildingByAuthor(item, user.id) &&
+                checkBuildingByRangeCost(item, filters) &&
                 checkBuildingByRangeArea(item, filters) &&
                 checkBuildingByDistrict(item, filters) &&
                 ((!filters.buildingType || !filters.buildingType.length) || (filters.buildingType && item.type && filters.buildingType.includes(item.type))) &&

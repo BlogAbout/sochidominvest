@@ -13,7 +13,11 @@ const defaultProps: Props = {
     building: {} as IBuilding
 }
 
-const BuildingDescriptionBlock: React.FC<Props> = (props): React.ReactElement => {
+const BuildingDescriptionBlock: React.FC<Props> = (props): React.ReactElement | null => {
+    if (!props.building.description || props.building.description.trim() === '') {
+        return null
+    }
+
     return (
         <div className={classes.BuildingDescriptionBlock}>
             <Title type='h2'>{getAboutBlockTitle(props.building.type)}</Title>

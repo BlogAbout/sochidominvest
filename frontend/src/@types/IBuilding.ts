@@ -59,7 +59,9 @@ export interface IBuilding {
     avatarId?: number | null
     avatar?: string | null,
     authorName?: string | null
-    rentData?: IBuildingRent
+    rentData?: IBuildingRent,
+    cadastrNumber?: string | null,
+    cadastrCost?: number | null
 }
 
 export interface IBuildingPassed {

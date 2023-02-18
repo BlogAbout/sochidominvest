@@ -63,6 +63,7 @@ const BuildingTill: React.FC<Props> = (props): React.ReactElement => {
                                        cost={building.type === 'building' ? (building.costMin || 0) : (building.cost || 0)}
                                        areaMin={building.type === 'building' ? (building.areaMin || 0) : (building.area || 0)}
                                        areaMax={building.type === 'building' ? (building.areaMax || 0) : undefined}
+                                       cadastrNumber={building.type === 'land' ? building.cadastrNumber : null}
                                        isDisabled={!building.active}
                                        onContextMenu={(e: React.MouseEvent) => props.onContextMenu(building, e)}
                                        onClick={() => props.onClick(building)}

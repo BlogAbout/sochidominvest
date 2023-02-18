@@ -115,7 +115,9 @@ class BuildingController extends Controller
             'rentData' => $data->rentData,
             'dateCreated' => date('Y-m-d H:i:s'),
             'dateUpdate' => date('Y-m-d H:i:s'),
-            'author' => JwtMiddleware::getUserId()
+            'author' => JwtMiddleware::getUserId(),
+            'cadastrNumber' => htmlentities(stripcslashes(strip_tags($data->cadastrNumber))),
+            'cadastrCost' => (float)htmlentities(stripcslashes(strip_tags($data->cadastrCost)))
         );
 
         try {
@@ -244,7 +246,9 @@ class BuildingController extends Controller
             'metaDescription' => htmlentities(stripcslashes(strip_tags($data->metaDescription))),
             'passed' => $data->passed ?? null,
             'rentData' => $data->rentData,
-            'video' => htmlentities(stripcslashes(strip_tags($data->video)))
+            'video' => htmlentities(stripcslashes(strip_tags($data->video))),
+            'cadastrNumber' => htmlentities(stripcslashes(strip_tags($data->cadastrNumber))),
+            'cadastrCost' => (float)htmlentities(stripcslashes(strip_tags($data->cadastrCost)))
         );
 
         try {
