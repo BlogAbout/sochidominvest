@@ -1,5 +1,7 @@
 import React, {useEffect, useState} from 'react'
+import {Link, useNavigate} from 'react-router-dom'
 import {getDeveloperTypeText} from '../../../../../helpers/developerHelper'
+import {RouteNames} from '../../../../helpers/routerHelper'
 import {IDeveloper} from '../../../../../@types/IDeveloper'
 import {IBuilding} from '../../../../../@types/IBuilding'
 import {IFilter} from '../../../../../@types/IFilter'
@@ -19,6 +21,8 @@ const defaultProps: Props = {
 }
 
 const BuildingDevelopersBlock: React.FC<Props> = (props): React.ReactElement => {
+    const navigate = useNavigate()
+
     const [fetching, setFetching] = useState(false)
     const [developers, setDevelopers] = useState<IDeveloper[]>([])
 
@@ -58,7 +62,11 @@ const BuildingDevelopersBlock: React.FC<Props> = (props): React.ReactElement => 
                     {developers.map((developer: IDeveloper) => {
                         return (
                             <div key={developer.id}>
-                                <span>{developer.name}</span>
+                                <span>
+                                    <Link to={`${RouteNames.P_DEVELOPER}/${developer.id}`}>
+                                        {developer.name}
+                                    </Link>
+                                </span>
                                 <span>{getDeveloperTypeText(developer.type)}</span>
                             </div>
                         )

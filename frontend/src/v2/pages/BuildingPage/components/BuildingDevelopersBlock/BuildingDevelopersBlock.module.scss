@@ -21,6 +21,14 @@
             margin-top: 10px;
         }
 
+        a {
+            color: #fff;
+
+            &:hover {
+                color: #999;
+            }
+        }
+
         span:first-child {
             font-weight: 700;
             font-size: 18px;
