@@ -72,7 +72,7 @@ const BlockItem: React.FC<Props> = (props): React.ReactElement => {
                 <Title type='h3'
                        style='right'
                        className={classes.head}
-                >{props.title}</Title>
+                >{props.title.length <= 100 ? props.title : props.title.substring(0, 50) + '...'}</Title>
 
                 {props.address ?
                     <div className={classes.address}>

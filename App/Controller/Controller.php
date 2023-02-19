@@ -362,6 +362,10 @@ class Controller
             if (!empty($params['agentId'])) {
                 $filter['agentId'] = $params['agentId'];
             }
+
+            if (!empty($params['developerId'])) {
+                $filter['developerId'] = $params['developerId'];
+            }
         }
 
         return $filter;

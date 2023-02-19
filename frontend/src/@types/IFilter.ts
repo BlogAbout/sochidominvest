@@ -18,6 +18,7 @@ export interface IFilter {
     status?: string[]
     rent?: number[]
     agentId?: number[]
+    developerId?: number[]
 }
 
 export interface IFilterContent {

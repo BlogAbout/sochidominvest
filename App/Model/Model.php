@@ -311,6 +311,10 @@ class Model
             array_push($where, "sdi.`id_agent` IN (" . implode(',', $filter['agentId']) . ")");
         }
 
+        if (!empty($filter['developerId'])) {
+            array_push($where, "sdi.`id_developer` IN (" . implode(',', $filter['developerId']) . ")");
+        }
+
 //        if (!empty($filter['dateStart'])) {
 //            array_push($where, "sdi.`date_start` >= '" . $filter['dateStart'] . "'");
 //        }

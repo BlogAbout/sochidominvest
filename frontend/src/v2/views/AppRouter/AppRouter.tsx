@@ -19,7 +19,9 @@ import AdministrationPage from '../../pages/AdministrationPage/AdministrationPag
 import SupportPage from '../../pages/SupportPage/SupportPage'
 import QuestionPage from '../../pages/QuestionsPage/QuestionsPage'
 import DevelopersPage from '../../pages/DevelopersPage/DevelopersPage'
+import DeveloperPage from '../../pages/DeveloperPage/DeveloperPage'
 import AgentsPage from '../../pages/AgentsPage/AgentsPage'
+import AgentPage from '../../pages/AgentPage/AgentPage'
 import PostsPage from '../../pages/PostsPage/PostsPage'
 import CompilationsPage from '../../pages/CompilationsPage/CompilationsPage'
 import CompilationPage from '../../pages/CompilationPage/CompilationPage'
@@ -76,7 +78,9 @@ const AppRouter: React.FC = () => {
                         <Route path={RouteNames.P_SUPPORT} element={<SupportPage/>}/>
                         <Route path={RouteNames.P_QUESTION} element={<QuestionPage/>}/>
                         <Route path={RouteNames.P_DEVELOPER} element={<DevelopersPage/>}/>
+                        <Route path={RouteNames.P_DEVELOPER_ITEM} element={<DeveloperPage/>}/>
                         <Route path={RouteNames.P_AGENT} element={<AgentsPage/>}/>
+                        <Route path={RouteNames.P_AGENT_ITEM} element={<AgentPage/>}/>
                         <Route path={RouteNames.P_POST} element={<PostsPage/>}/>
                         <Route path={RouteNames.P_COMPILATION} element={<CompilationsPage/>}/>
                         <Route path={RouteNames.P_COMPILATION_ITEM} element={<CompilationPage/>}/>
