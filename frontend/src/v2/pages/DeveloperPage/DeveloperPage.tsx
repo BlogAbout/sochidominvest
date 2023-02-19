@@ -268,7 +268,9 @@ const DeveloperPage: React.FC = (): React.ReactElement => {
     }
 
     return (
-        <PanelView pageTitle={developer ? `Застройщик "${developer.name}"` : 'Застройщик'}>
+        <PanelView pageTitle={developer ? `Застройщик "${developer.name}"` : 'Застройщик'}
+                   pageDescription={developer ? developer.description : ''}
+        >
             <Wrapper isFull>
                 <Title type='h1'
                        onAdd={allowForRole(['director', 'administrator', 'manager'], user.role) || (allowForRole(['subscriber']) && allowForTariff(['base', 'business', 'effectivePlus'], user.tariff)) ? (e: React.MouseEvent) => onContextMenuHandler(e) : undefined}
