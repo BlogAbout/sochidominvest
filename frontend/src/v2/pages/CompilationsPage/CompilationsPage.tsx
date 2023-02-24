@@ -6,7 +6,7 @@ import Title from '../../components/ui/Title/Title'
 import Wrapper from '../../components/ui/Wrapper/Wrapper'
 import PanelView from '../../views/PanelView/PanelView'
 import CompilationList from './components/CompilationList/CompilationList'
-import openPopupCompilationCreate from '../../../components/PopupCompilationCreate/PopupCompilationCreate'
+import openPopupCompilationCreate from '../../../components/popup/PopupCompilationCreate/PopupCompilationCreate'
 import classes from './CompilationsPage.module.scss'
 
 const CompilationsPage: React.FC = (): React.ReactElement => {

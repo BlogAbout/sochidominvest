@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react'
 import {ITag} from '../../@types/ITag'
-import openPopupTagSelector from '../PopupTagSelector/PopupTagSelector'
+import openPopupTagSelector from '../popup/PopupTagSelector/PopupTagSelector'
 import {useTypedSelector} from '../../hooks/useTypedSelector'
 import {useActions} from '../../hooks/useActions'
 import Box from '../form/Box/Box'

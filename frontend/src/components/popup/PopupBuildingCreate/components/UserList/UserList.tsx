@@ -9,7 +9,7 @@ import BlockingElement from '../../../../ui/BlockingElement/BlockingElement'
 import Empty from '../../../../ui/Empty/Empty'
 import openPopupAlert from '../../../../PopupAlert/PopupAlert'
 import openContextMenu from '../../../../ContextMenu/ContextMenu'
-import openPopupUserSelector from '../../../../PopupUserSelector/PopupUserSelector'
+import openPopupUserSelector from '../../../PopupUserSelector/PopupUserSelector'
 import openPopupContactSelector from '../../../PopupContactSelector/PopupContactSelector'
 import classes from './UserList.module.scss'
 

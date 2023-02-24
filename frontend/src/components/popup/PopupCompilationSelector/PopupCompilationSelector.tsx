@@ -18,7 +18,7 @@ import CheckBox from '../../form/CheckBox/CheckBox'
 import Button from '../../form/Button/Button'
 import Title from '../../ui/Title/Title'
 import openPopupAlert from '../../PopupAlert/PopupAlert'
-import openPopupCompilationCreate from '../../PopupCompilationCreate/PopupCompilationCreate'
+import openPopupCompilationCreate from '../PopupCompilationCreate/PopupCompilationCreate'
 import classes from './PopupCompilationSelector.module.scss'
 
 interface Props extends PopupProps {

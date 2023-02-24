@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react'
 import {IUser} from '../../../@types/IUser'
-import openPopupUserSelector from '../../PopupUserSelector/PopupUserSelector'
+import openPopupUserSelector from '../../popup/PopupUserSelector/PopupUserSelector'
 import {useTypedSelector} from '../../../hooks/useTypedSelector'
 import {useActions} from '../../../hooks/useActions'
 import Box from '../Box/Box'

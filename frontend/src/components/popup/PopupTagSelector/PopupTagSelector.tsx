@@ -1,21 +1,24 @@
 import React, {useEffect, useState} from 'react'
-import withStore from '../../hoc/withStore'
-import TagService from '../../api/TagService'
-import {ITag} from '../../@types/ITag'
-import {PopupDisplayOptions, PopupProps} from '../../@types/IPopup'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {useTypedSelector} from '../../../hooks/useTypedSelector'
+import {useActions} from '../../../hooks/useActions'
+import withStore from '../../../hoc/withStore'
+import TagService from '../../../api/TagService'
+import {ITag} from '../../../@types/ITag'
+import {PopupDisplayOptions, PopupProps} from '../../../@types/IPopup'
 import openPopupTagCreate from '../PopupTagCreate/PopupTagCreate'
-import {openPopup, removePopup} from '../../helpers/popupHelper'
-import {Content, Footer, Header, Popup} from '../popup/Popup/Popup'
-import BlockingElement from '../ui/BlockingElement/BlockingElement'
-import Empty from '../ui/Empty/Empty'
-import openContextMenu from '../ContextMenu/ContextMenu'
-import ButtonAdd from '../form/ButtonAdd/ButtonAdd'
-import SearchBox from '../SearchBox/SearchBox'
-import CheckBox from '../form/CheckBox/CheckBox'
-import Button from '../form/Button/Button'
-import openPopupAlert from '../PopupAlert/PopupAlert'
-import {useTypedSelector} from '../../hooks/useTypedSelector'
-import {useActions} from '../../hooks/useActions'
+import showBackgroundBlock from '../../ui/BackgroundBlock/BackgroundBlock'
+import {getPopupContainer, openPopup, removePopup} from '../../../helpers/popupHelper'
+import {Footer, Popup} from '../Popup/Popup'
+import BlockingElement from '../../ui/BlockingElement/BlockingElement'
+import Empty from '../../ui/Empty/Empty'
+import openContextMenu from '../../ContextMenu/ContextMenu'
+import ButtonAdd from '../../form/ButtonAdd/ButtonAdd'
+import SearchBox from '../../SearchBox/SearchBox'
+import CheckBox from '../../form/CheckBox/CheckBox'
+import Button from '../../form/Button/Button'
+import Title from '../../ui/Title/Title'
+import openPopupAlert from '../../PopupAlert/PopupAlert'
 import classes from './PopupTagSelector.module.scss'
 
 interface Props extends PopupProps {
@@ -56,6 +59,10 @@ const PopupTagSelector: React.FC<Props> = (props) => {
             fetchTagList()
 
             setIsUpdate(false)
+        }
+
+        return () => {
+            removePopup(props.blockId ? props.blockId : '')
         }
     }, [isUpdate])
 
@@ -148,19 +155,15 @@ const PopupTagSelector: React.FC<Props> = (props) => {
 
                         if (tag.id) {
                             TagService.removeTag(tag.id)
-                                .then(() => {
-                                    setFetching(false)
-                                    setIsUpdate(true)
-                                })
+                                .then(() => setIsUpdate(true))
                                 .catch((error: any) => {
                                     openPopupAlert(document.body, {
                                         title: 'Ошибка!',
                                         text: error.data,
                                         onOk: close.bind(this)
                                     })
-
-                                    setFetching(false)
                                 })
+                                .finally(() => setFetching(false))
                         }
                     }
                 },
@@ -184,26 +187,9 @@ const PopupTagSelector: React.FC<Props> = (props) => {
         }
     }
 
-    const renderLeftBox = () => {
-        return (
-            <div className={classes['box']}>
-                <div style={{height: 38}}>
-                    {renderSearch()}
-                </div>
-                <div className={classes['box_border']} style={{height: 300}}>
-                    {!props.multi ? renderLeftTab() :
-                        <div className={classes['box_content_wrapper']}>
-                            {renderLeftTab()}
-                        </div>
-                    }
-                </div>
-            </div>
-        )
-    }
-
     const renderSearch = () => {
         return (
-            <div className={classes['search_and_button']}>
+            <div className={classes.search}>
                 <SearchBox value={searchText}
                            onChange={(value: string) => search(value)}
                            countFind={tagFilter ? tagFilter.length : 0}
@@ -219,48 +205,44 @@ const PopupTagSelector: React.FC<Props> = (props) => {
         )
     }
 
-    const renderLeftTab = () => {
+    const renderListBox = () => {
         return (
-            <div className={classes['box_content']}>
-                {tagFilter.length ?
-                    tagFilter.map((tag: ITag) => renderRow(tag, 'left', checkSelected(tag.id)))
-                    :
-                    <Empty message={!tags.length ? 'Нет меток' : 'Метки не найдены'}/>
-                }
-            </div>
-        )
-    }
-
-    const renderRightBox = () => {
-        return (
-            <div className={classes['box']}>
-                <div style={{height: 38, flex: 'none'}}/>
-                <div className={classes['box_border']} style={{height: 400}}>
-                    {renderRightTab()}
+            <BlockingElement fetching={fetching} className={classes.list}>
+                <div className={classes.listContent}>
+                    {tagFilter.length
+                        ? tagFilter.map((tag: ITag) => renderRow(tag, 'left', checkSelected(tag.id)))
+                        : <Empty message={!tags.length ? 'Нет меток' : 'Метки не найдены'}/>
+                    }
                 </div>
-            </div>
+            </BlockingElement>
         )
     }
 
-    const renderRightTab = () => {
+    const renderSelectedListBox = () => {
         const rows = tagFilter.filter((tag: ITag) => checkSelected(tag.id))
 
         return (
-            <div className={classes['box_content']}>
-                {rows.length ? rows.map((tag: ITag) => renderRow(tag, 'right', checkSelected(tag.id))) : ''}
-            </div>
+            <BlockingElement fetching={fetching} className={classes.list}>
+                <div className={classes.listContent}>
+                    {rows.length ?
+                        rows.map((tag: ITag) => renderRow(tag, 'right', checkSelected(tag.id)))
+                        : <Empty message='Метки не выбраны'/>
+                    }
+                </div>
+            </BlockingElement>
         )
     }
 
     const renderRow = (tag: ITag, side: string, checked: boolean) => {
         return (
-            <div className={classes['row']}
+            <div className={classes.row}
                  key={tag.id}
                  onClick={() => selectRow(tag)}
                  onContextMenu={(e: React.MouseEvent) => onContextMenu(e, tag)}
             >
                 {props.multi && side === 'left' ?
-                    <CheckBox type='classic' onChange={e => e}
+                    <CheckBox type='classic'
+                              onChange={e => e}
                               checked={checked}
                               margin='0px 0px 0px 10px'
                               label=''
@@ -268,44 +250,57 @@ const PopupTagSelector: React.FC<Props> = (props) => {
                     : null
                 }
 
-                <div className={classes['item_name']}>{tag.name}</div>
+                {!checked || props.multi ? null :
+                    <div className={classes.selected}>
+                        <FontAwesomeIcon icon='check'/>
+                    </div>
+                }
 
-                {!checked || props.multi ? null : <div className={classes['selected_icon']}/>}
+                <div className={classes.name}>{tag.name}</div>
 
-                {props.multi && side === 'right' ? <div className={classes['delete_icon']} title='Удалить'/> : null}
+                {props.multi && side === 'right' ?
+                    <div className={classes.delete} title='Удалить'>
+                        <FontAwesomeIcon icon='xmark'/>
+                    </div>
+                    : null
+                }
             </div>
         )
     }
 
     return (
-        <Popup className={classes.popup}>
-            <Header title='Выбрать метку' popupId={props.id ? props.id : ''} onClose={() => close()}/>
+        <Popup className={classes.PopupTagSelector}>
+            <BlockingElement fetching={fetching} className={classes.content}>
+                <div className={classes.blockContent}>
+                    <Title type={2}>Выбрать метки</Title>
 
-            <BlockingElement fetching={fetching}>
-                <Content className={props.multi ? classes['content_multi'] : classes['content']}>
-                    {renderLeftBox()}
+                    {renderSearch()}
 
-                    {!props.multi ? null : renderRightBox()}
-                </Content>
+                    {renderListBox()}
 
-                {props.multi ?
-                    <Footer>
-                        <Button type='apply'
-                                icon='check'
-                                onClick={() => onClickSave()}
-                                className='marginLeft'
-                        >Сохранить</Button>
-
-                        <Button type='regular'
-                                icon='arrow-rotate-left'
-                                onClick={close.bind(this)}
-                                className='marginLeft'
-                        >Отменить</Button>
-                    </Footer>
-                    :
-                    <div className={classes['footer_spacer']}/>
-                }
+                    {props.multi ? renderSelectedListBox() : null}
+                </div>
             </BlockingElement>
+
+            {props.multi ?
+                <Footer>
+                    <Button type='apply'
+                            icon='check'
+                            onClick={() => onClickSave()}
+                            className='marginLeft'
+                            title='Сохранить'
+                    >Сохранить</Button>
+
+                    <Button type='regular'
+                            icon='arrow-rotate-left'
+                            onClick={close.bind(this)}
+                            className='marginLeft'
+                            title='Отменить'
+                    >Отменить</Button>
+                </Footer>
+                :
+                null
+            }
         </Popup>
     )
 }
@@ -313,6 +308,17 @@ const PopupTagSelector: React.FC<Props> = (props) => {
 PopupTagSelector.defaultProps = defaultProps
 PopupTagSelector.displayName = 'PopupTagSelector'
 
-export default function openPopupTagSelector(target: any, popupProps = {} as Props, displayOptions: PopupDisplayOptions = {} as PopupDisplayOptions) {
-    return openPopup(withStore(PopupTagSelector), popupProps, undefined, target, displayOptions)
+export default function openPopupTagSelector(target: any, popupProps = {} as Props) {
+    const displayOptions: PopupDisplayOptions = {
+        autoClose: false,
+        rightPanel: true,
+        fullScreen: true,
+        isFixed: true
+    }
+    const blockId = showBackgroundBlock(target, {animate: true}, displayOptions)
+    let block = getPopupContainer(blockId)
+
+    popupProps = {...popupProps, blockId: blockId}
+
+    return openPopup(withStore(PopupTagSelector), popupProps, undefined, block, displayOptions)
 }

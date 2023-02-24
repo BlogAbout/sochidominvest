@@ -5,7 +5,7 @@ import {INotification} from '../../../@types/INotification'
 import {Content, Footer, Header} from '../../popup/Popup/Popup'
 import Button from '../../form/Button/Button'
 import NotificationList from './components/NotificationList/NotificationList'
-import openPopupNotificationCreate from '../../PopupNotificationCreate/PopupNotificationCreate'
+import openPopupNotificationCreate from '../../popup/PopupNotificationCreate/PopupNotificationCreate'
 import classes from './NotificationPanel.module.scss'
 
 interface Props {

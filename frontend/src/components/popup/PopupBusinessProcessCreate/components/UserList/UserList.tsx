@@ -6,7 +6,7 @@ import {useActions} from '../../../../../hooks/useActions'
 import BlockingElement from '../../../../ui/BlockingElement/BlockingElement'
 import Empty from '../../../../ui/Empty/Empty'
 import openContextMenu from '../../../../ContextMenu/ContextMenu'
-import openPopupUserSelector from '../../../../PopupUserSelector/PopupUserSelector'
+import openPopupUserSelector from '../../../PopupUserSelector/PopupUserSelector'
 import classes from './UserList.module.scss'
 
 interface Props {

@@ -1,16 +1,18 @@
 import React, {useEffect, useState} from 'react'
-import withStore from '../../hoc/withStore'
-import TagService from '../../api/TagService'
-import {PopupProps} from '../../@types/IPopup'
-import {ITag} from '../../@types/ITag'
-import {getPopupContainer, openPopup, removePopup} from '../../helpers/popupHelper'
-import showBackgroundBlock from '../ui/BackgroundBlock/BackgroundBlock'
-import openPopupAlert from '../PopupAlert/PopupAlert'
-import {Content, Footer, Header, Popup} from '../popup/Popup/Popup'
-import BlockingElement from '../ui/BlockingElement/BlockingElement'
-import TextBox from '../form/TextBox/TextBox'
-import Button from '../form/Button/Button'
-import CheckBox from '../form/CheckBox/CheckBox'
+import withStore from '../../../hoc/withStore'
+import TagService from '../../../api/TagService'
+import {PopupDisplayOptions, PopupProps} from '../../../@types/IPopup'
+import {ITag} from '../../../@types/ITag'
+import {getPopupContainer, openPopup, removePopup} from '../../../helpers/popupHelper'
+import showBackgroundBlock from '../../ui/BackgroundBlock/BackgroundBlock'
+import openPopupAlert from '../../PopupAlert/PopupAlert'
+import {Footer, Popup} from '../Popup/Popup'
+import BlockingElement from '../../ui/BlockingElement/BlockingElement'
+import TextBox from '../../form/TextBox/TextBox'
+import Button from '../../form/Button/Button'
+import CheckBox from '../../form/CheckBox/CheckBox'
+import Title from '../../ui/Title/Title'
+import Label from '../../form/Label/Label'
 import classes from './PopupTagCreate.module.scss'
 
 interface Props extends PopupProps {
@@ -56,7 +58,6 @@ const PopupTagCreate: React.FC<Props> = (props) => {
 
         TagService.saveTag(tag)
             .then((response: any) => {
-                setFetching(false)
                 setTag(response.data)
 
                 props.onSave()
@@ -70,21 +71,18 @@ const PopupTagCreate: React.FC<Props> = (props) => {
                     title: 'Ошибка!',
                     text: error.data
                 })
-
-                setFetching(false)
             })
+            .finally(() => setFetching(false))
     }
 
     return (
         <Popup className={classes.PopupTagCreate}>
-            <Header title={tag.id ? 'Редактировать метку' : 'Добавить метку'}
-                    popupId={props.id ? props.id : ''}
-            />
+            <BlockingElement fetching={fetching} className={classes.content}>
+                <div className={classes.blockContent}>
+                    <Title type={2}>Информация о метке</Title>
 
-            <Content className={classes['popup-content']}>
-                <BlockingElement fetching={fetching} className={classes.content}>
                     <div className={classes.field}>
-                        <div className={classes.field_label}>Название</div>
+                        <Label text='Название'/>
 
                         <TextBox value={tag.name}
                                  onChange={(e: React.MouseEvent, value: string) => setTag({
@@ -95,13 +93,14 @@ const PopupTagCreate: React.FC<Props> = (props) => {
                                  error={tag.name.trim() === ''}
                                  showRequired
                                  errorText='Поле обязательно для заполнения'
-                                 icon='heading'
+                                 styleType='minimal'
                         />
                     </div>
 
                     <div className={classes.field}>
                         <CheckBox label='Активен'
                                   type='modern'
+                                  width={110}
                                   checked={!!tag.active}
                                   onChange={(e: React.MouseEvent, value: boolean) => setTag({
                                       ...tag,
@@ -109,25 +108,28 @@ const PopupTagCreate: React.FC<Props> = (props) => {
                                   })}
                         />
                     </div>
-                </BlockingElement>
-            </Content>
+                </div>
+            </BlockingElement>
 
             <Footer>
                 <Button type='save'
                         icon='check-double'
                         onClick={() => saveHandler(true)}
                         disabled={fetching || tag.name.trim() === ''}
+                        title='Сохранить и закрыть'
                 >Сохранить и закрыть</Button>
 
                 <Button type='apply'
                         icon='check'
                         onClick={() => saveHandler()}
                         disabled={fetching || tag.name.trim() === ''}
+                        title='Сохранить'
                 >Сохранить</Button>
 
                 <Button type='regular'
                         icon='arrow-rotate-left'
                         onClick={close.bind(this)}
+                        title='Отменить'
                 >Отменить</Button>
             </Footer>
         </Popup>
@@ -138,9 +140,10 @@ PopupTagCreate.defaultProps = defaultProps
 PopupTagCreate.displayName = 'PopupTagCreate'
 
 export default function openPopupTagCreate(target: any, popupProps = {} as Props) {
-    const displayOptions = {
+    const displayOptions: PopupDisplayOptions = {
         autoClose: false,
-        center: true
+        rightPanel: true,
+        fullScreen: true
     }
     const blockId = showBackgroundBlock(target, {animate: true}, displayOptions)
     let block = getPopupContainer(blockId)

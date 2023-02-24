@@ -2,7 +2,7 @@ import React from 'react'
 import Wrapper from '../../../../components/ui/Wrapper/Wrapper'
 import Title from '../../../../components/ui/Title/Title'
 import Button from '../../../../components/form/Button/Button'
-import openPopupFeedCreate from '../../../../../components/PopupFeedCreate/PopupFeedCreate'
+import openPopupFeedCreate from '../../../../../components/popup/PopupFeedCreate/PopupFeedCreate'
 import classes from './SectionCallback.module.scss'
 
 const SectionCallback: React.FC = (): React.ReactElement => {

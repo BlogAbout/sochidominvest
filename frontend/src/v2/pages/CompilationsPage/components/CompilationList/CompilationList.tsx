@@ -12,7 +12,7 @@ import List from '../../../../components/ui/List/List'
 import Empty from '../../../../components/ui/Empty/Empty'
 import openPopupAlert from '../../../../../components/PopupAlert/PopupAlert'
 import openContextMenu from '../../../../../components/ContextMenu/ContextMenu'
-import openPopupCompilationCreate from '../../../../../components/PopupCompilationCreate/PopupCompilationCreate'
+import openPopupCompilationCreate from '../../../../../components/popup/PopupCompilationCreate/PopupCompilationCreate'
 import classes from './CompilationList.module.scss'
 
 interface Props {

@@ -1,17 +1,19 @@
 import React, {useEffect, useState} from 'react'
 import {PDFDownloadLink} from '@react-pdf/renderer'
-import FeedService from '../../api/FeedService'
-import {PopupProps} from '../../@types/IPopup'
-import {IFeed} from '../../@types/IFeed'
-import {IBuilding} from '../../@types/IBuilding'
-import {getPopupContainer, openPopup, removePopup} from '../../helpers/popupHelper'
-import showBackgroundBlock from '../ui/BackgroundBlock/BackgroundBlock'
-import {Content, Footer, Header, Popup} from '../popup/Popup/Popup'
-import BlockingElement from '../ui/BlockingElement/BlockingElement'
-import TextBox from '../form/TextBox/TextBox'
-import Button from '../form/Button/Button'
-import CheckBox from '../form/CheckBox/CheckBox'
-import PdfDocumentGenerator from '../PdfDocumentGenerator/PdfDocumentGenerator'
+import FeedService from '../../../api/FeedService'
+import {PopupProps} from '../../../@types/IPopup'
+import {IFeed} from '../../../@types/IFeed'
+import {IBuilding} from '../../../@types/IBuilding'
+import {getPopupContainer, openPopup, removePopup} from '../../../helpers/popupHelper'
+import showBackgroundBlock from '../../ui/BackgroundBlock/BackgroundBlock'
+import {Footer, Popup} from '../Popup/Popup'
+import BlockingElement from '../../ui/BlockingElement/BlockingElement'
+import TextBox from '../../form/TextBox/TextBox'
+import Button from '../../form/Button/Button'
+import CheckBox from '../../form/CheckBox/CheckBox'
+import Title from '../../ui/Title/Title'
+import Label from '../../form/Label/Label'
+import PdfDocumentGenerator from '../../PdfDocumentGenerator/PdfDocumentGenerator'
 import classes from './PopupFeedCreate.module.scss'
 
 interface Props extends PopupProps {
@@ -120,100 +122,97 @@ const PopupFeedCreate: React.FC<Props> = (props) => {
                         error: error.data
                     })
                 })
-                .finally(() => {
-                    setFetching(false)
-                })
+                .finally(() => setFetching(false))
         }
     }
 
     return (
-        <Popup className={classes.PopupDeveloperCreate}>
-            <Header title={titlePopup} popupId={props.id || ''}/>
+        <Popup className={classes.PopupFeedCreate}>
+            <BlockingElement fetching={fetching} className={classes.content}>
+                <div className={classes.blockContent}>
+                    <Title type={2}>{titlePopup}</Title>
 
-            <Content className={classes['popup-content']}>
-                <BlockingElement fetching={fetching} className={classes.content}>
-                    <div className={classes.info}>
-                        <div className={classes.field}>
-                            <div className={classes.field_label}>Номер телефона</div>
+                    <div className={classes.field}>
+                        <Label text='Номер телефона'/>
 
-                            <TextBox
-                                type='tel'
-                                value={info.phone}
-                                placeHolder='Телефон'
-                                error={validationPhone !== ''}
-                                errorText={validationPhone}
-                                icon='phone'
-                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                                    setInfo({
-                                        ...info,
-                                        phone: e.target.value
-                                    })
+                        <TextBox type='tel'
+                                 value={info.phone}
+                                 placeHolder='Телефон'
+                                 error={validationPhone !== ''}
+                                 errorText={validationPhone}
+                                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                     setInfo({
+                                         ...info,
+                                         phone: e.target.value
+                                     })
 
-                                    if (e.target.value.trim().length === 0) {
-                                        setValidationPhone('Введите номер телефона')
-                                    } else {
-                                        setValidationPhone('')
-                                    }
-                                }}
-                            />
-                        </div>
-
-                        <div className={classes.field}>
-                            <div className={classes.field_label}>Имя</div>
-
-                            <TextBox
-                                type='text'
-                                value={info.name}
-                                placeHolder='Имя'
-                                icon='user'
-                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                                    setInfo({
-                                        ...info,
-                                        name: e.target.value
-                                    })
-                                }}
-                            />
-                        </div>
-
-                        <div className={classes.field}>
-                            <CheckBox label='Соглашаюсь с условиями политики конфиденциальности'
-                                      type='classic'
-                                      checked={policy}
-                                      onChange={() => setPolicy(!policy)}
-                            />
-                        </div>
-
-                        {resultResponse.error !== '' &&
-                        <div className={classes.errorMessage}>{resultResponse.error}</div>}
-                        {resultResponse.success !== '' &&
-                        <div className={classes.successMessage}>
-                            {resultResponse.success}
-
-                            {props.type === 'get-presentation' ?
-                                <PDFDownloadLink className={classes.btn}
-                                                 document={
-                                                     <PdfDocumentGenerator type='building' building={props.building}/>
-                                                 }
-                                >
-                                    Скачать презентацию
-                                </PDFDownloadLink>
-                            : null}
-                        </div>}
+                                     if (e.target.value.trim().length === 0) {
+                                         setValidationPhone('Введите номер телефона')
+                                     } else {
+                                         setValidationPhone('')
+                                     }
+                                 }}
+                                 styleType='minimal'
+                        />
                     </div>
-                </BlockingElement>
-            </Content>
+
+                    <div className={classes.field}>
+                        <Label text='Имя'/>
+
+                        <TextBox type='text'
+                                 value={info.name}
+                                 placeHolder='Имя'
+                                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                     setInfo({
+                                         ...info,
+                                         name: e.target.value
+                                     })
+                                 }}
+                                 styleType='minimal'
+                        />
+                    </div>
+
+                    <div className={classes.field}>
+                        <CheckBox label='Соглашаюсь с условиями политики конфиденциальности'
+                                  type='classic'
+                                  width={110}
+                                  checked={policy}
+                                  onChange={() => setPolicy(!policy)}
+                        />
+                    </div>
+
+                    {resultResponse.error !== '' &&
+                    <div className={classes.errorMessage}>{resultResponse.error}</div>}
+                    {resultResponse.success !== '' &&
+                    <div className={classes.successMessage}>
+                        {resultResponse.success}
+
+                        {props.type === 'get-presentation' ?
+                            <PDFDownloadLink className={classes.btn}
+                                             document={
+                                                 <PdfDocumentGenerator type='building' building={props.building}/>
+                                             }
+                            >
+                                Скачать презентацию
+                            </PDFDownloadLink>
+                            : null}
+                    </div>}
+                </div>
+            </BlockingElement>
 
             <Footer>
                 <Button type='apply'
                         icon='check'
                         onClick={() => sendCallbackHandler()}
                         disabled={fetching || validationPhone !== '' || !policy}
+                        title='Отправить заявку'
                 >Отправить заявку</Button>
 
                 <Button type='regular'
                         icon='arrow-rotate-left'
                         onClick={close.bind(this)}
                         className='marginLeft'
+                        title='Отменить'
                 >Отменить</Button>
             </Footer>
         </Popup>
@@ -226,7 +225,8 @@ PopupFeedCreate.displayName = 'PopupFeedCreate'
 export default function openPopupFeedCreate(target: any, popupProps = {} as Props) {
     const displayOptions = {
         autoClose: false,
-        center: true
+        rightPanel: true,
+        fullScreen: true
     }
     const blockId = showBackgroundBlock(target, {animate: true}, displayOptions)
     let block = getPopupContainer(blockId)
