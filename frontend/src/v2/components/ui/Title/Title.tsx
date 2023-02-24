@@ -101,7 +101,8 @@ const Title: React.FC<Props> = (props): React.ReactElement | null => {
                             }
 
                             return (
-                                <Button type={props.activeLayout === layout.key ? 'regular' : 'save'}
+                                <Button key={layout.key}
+                                        type={props.activeLayout === layout.key ? 'regular' : 'save'}
                                         icon={layout.icon}
                                         onClick={() => props.onChangeLayout ? props.onChangeLayout(layout.key) : null}
                                         title={layout.title}

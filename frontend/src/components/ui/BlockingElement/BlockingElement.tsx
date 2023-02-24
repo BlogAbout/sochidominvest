@@ -1,6 +1,6 @@
 import React from 'react'
 import classNames from 'classnames'
-import Preloader from '../../Preloader/Preloader'
+import Preloader from '../Preloader/Preloader'
 import classes from './BlockingElement.module.scss'
 
 interface Props {

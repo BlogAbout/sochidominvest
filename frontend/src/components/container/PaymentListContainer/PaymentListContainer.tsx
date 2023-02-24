@@ -1,6 +1,6 @@
 import React from 'react'
 import {IPayment} from '../../../@types/IPayment'
-import Empty from '../../Empty/Empty'
+import Empty from '../../ui/Empty/Empty'
 import PaymentList from './components/PaymentList/PaymentList'
 import classes from './PaymentListContainer.module.scss'
 

@@ -1,6 +1,6 @@
 import React from 'react'
 import {IUserExternal} from '../../../@types/IUser'
-import Empty from '../../Empty/Empty'
+import Empty from '../../ui/Empty/Empty'
 import ExternalList from './components/ExternalList/ExternalList'
 import classes from './ExternalListContainer.module.scss'
 

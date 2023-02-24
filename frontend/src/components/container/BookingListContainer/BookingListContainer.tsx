@@ -1,6 +1,6 @@
 import React from 'react'
 import {IBooking} from '../../../@types/IBooking'
-import Empty from '../../Empty/Empty'
+import Empty from '../../ui/Empty/Empty'
 import BookingList from './components/BookingList/BookingList'
 import classes from './BookingListContainer.module.scss'
 

@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react'
 import {IBuilding} from '../../../@types/IBuilding'
-import openPopupBuildingSelector from '../../PopupBuildingSelector/PopupBuildingSelector'
+import openPopupBuildingSelector from '../../popup/PopupBuildingSelector/PopupBuildingSelector'
 import {useTypedSelector} from '../../../hooks/useTypedSelector'
 import {useActions} from '../../../hooks/useActions'
 import Box from '../Box/Box'
@@ -72,8 +72,6 @@ const BuildingBox: React.FC<Props> = (props) => {
             onSelect: (value: number[]) => {
                 props.onSelect(value, e)
             }
-        }, {
-            center: true
         })
     }
 

@@ -1,6 +1,6 @@
 import React from 'react'
 import {IQuestion} from '../../../@types/IQuestion'
-import Empty from '../../Empty/Empty'
+import Empty from '../../ui/Empty/Empty'
 import QuestionList from './components/QuestionList/QuestionList'
 import classes from './QuestionListContainer.module.scss'
 

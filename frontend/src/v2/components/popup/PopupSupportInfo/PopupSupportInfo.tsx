@@ -20,7 +20,7 @@ import StatusBox from '../../../../components/StatusBox/StatusBox'
 import Title from '../../ui/Title/Title'
 import TextBox from '../../form/TextBox/TextBox'
 import Field from '../../form/Field/Field'
-import Tabs from '../../../../components/Tabs/Tabs'
+import Tabs from '../../../../components/ui/Tabs/Tabs'
 import classes from './PopupSupportInfo.module.scss'
 
 interface Props extends PopupProps {

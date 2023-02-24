@@ -1,7 +1,7 @@
 import React from 'react'
 import {IMailingRecipient} from '../../../../../@types/IMailing'
 import BlockingElement from '../../../../ui/BlockingElement/BlockingElement'
-import Empty from '../../../../Empty/Empty'
+import Empty from '../../../../ui/Empty/Empty'
 import openContextMenu from '../../../../ContextMenu/ContextMenu'
 import classes from './RecipientList.module.scss'
 

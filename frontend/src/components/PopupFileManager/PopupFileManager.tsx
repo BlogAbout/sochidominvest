@@ -9,7 +9,7 @@ import openPopupAlert from '../PopupAlert/PopupAlert'
 import {Content, Footer, Header, Popup} from '../popup/Popup/Popup'
 import FileList from '../FileList/FileList'
 import Button from '../form/Button/Button'
-import FileUploader from '../FileUploader/FileUploader'
+import FileUploader from '../ui/FileUploader/FileUploader'
 import SearchBox from '../SearchBox/SearchBox'
 import classes from './PopupFileManager.module.scss'
 

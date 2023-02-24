@@ -1,6 +1,6 @@
 import React from 'react'
 import {IPartner} from '../../../@types/IPartner'
-import Empty from '../../Empty/Empty'
+import Empty from '../../ui/Empty/Empty'
 import PartnerList from './components/PartnerList/PartnerList'
 import PartnerTill from './components/PartnerTill/PartnerTill'
 import classes from './PartnerListContainer.module.scss'

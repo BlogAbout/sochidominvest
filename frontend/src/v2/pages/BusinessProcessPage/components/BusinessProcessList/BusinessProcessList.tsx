@@ -10,7 +10,7 @@ import {allowForRole} from '../../../../helpers/accessHelper'
 import {getFormatDate} from '../../../../../helpers/dateHelper'
 import BusinessProcessService from '../../../../../api/BusinessProcessService'
 import Title from '../../../../../components/ui/Title/Title'
-import Preloader from '../../../../../components/Preloader/Preloader'
+import Preloader from '../../../../../components/ui/Preloader/Preloader'
 import openPopupAlert from '../../../../../components/PopupAlert/PopupAlert'
 import openContextMenu from '../../../../../components/ContextMenu/ContextMenu'
 import openPopupBusinessProcessCreate

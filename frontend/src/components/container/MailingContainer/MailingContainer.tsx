@@ -1,6 +1,6 @@
 import React from 'react'
 import {IMailing} from '../../../@types/IMailing'
-import Empty from '../../Empty/Empty'
+import Empty from '../../ui/Empty/Empty'
 import MailingList from './components/MailingList/MailingList'
 import classes from './MailingContainer.module.scss'
 

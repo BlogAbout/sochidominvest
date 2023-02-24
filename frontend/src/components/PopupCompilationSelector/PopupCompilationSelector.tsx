@@ -6,9 +6,9 @@ import CompilationService from '../../api/CompilationService'
 import {getPopupContainer, openPopup, removePopup} from '../../helpers/popupHelper'
 import {Content, Header, Popup} from '../popup/Popup/Popup'
 import BlockingElement from '../ui/BlockingElement/BlockingElement'
-import Empty from '../Empty/Empty'
+import Empty from '../ui/Empty/Empty'
 import openContextMenu from '../ContextMenu/ContextMenu'
-import ButtonAdd from '../ButtonAdd/ButtonAdd'
+import ButtonAdd from '../form/ButtonAdd/ButtonAdd'
 import SearchBox from '../SearchBox/SearchBox'
 import openPopupAlert from '../PopupAlert/PopupAlert'
 import openPopupCompilationCreate from '../PopupCompilationCreate/PopupCompilationCreate'
@@ -30,6 +30,7 @@ const defaultProps: Props = {
     }
 }
 
+// Todo: Удалить, не используется, перенести методы
 const PopupCompilationSelector: React.FC<Props> = (props) => {
     const [isUpdate, setIsUpdate] = useState(true)
     const [searchText, setSearchText] = useState('')

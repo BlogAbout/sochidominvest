@@ -1,6 +1,6 @@
 import React from 'react'
 import {IAgent} from '../../../@types/IAgent'
-import Empty from '../../Empty/Empty'
+import Empty from '../../ui/Empty/Empty'
 import AgentList from './components/AgentList/AgentList'
 import AgentTill from './components/AgentTill/AgentTill'
 import classes from './AgentListContainer.module.scss'

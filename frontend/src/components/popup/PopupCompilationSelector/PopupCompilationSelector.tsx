@@ -1,20 +1,24 @@
 import React, {useEffect, useState} from 'react'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {useTypedSelector} from '../../../hooks/useTypedSelector'
+import {useActions} from '../../../hooks/useActions'
 import withStore from '../../../hoc/withStore'
 import CompilationService from '../../../api/CompilationService'
 import {ICompilation} from '../../../@types/ICompilation'
 import {PopupDisplayOptions, PopupProps} from '../../../@types/IPopup'
-import {openPopup, removePopup} from '../../../helpers/popupHelper'
-import {Content, Footer, Header, Popup} from '../Popup/Popup'
+import showBackgroundBlock from '../../ui/BackgroundBlock/BackgroundBlock'
+import {getPopupContainer, openPopup, removePopup} from '../../../helpers/popupHelper'
+import {Footer, Popup} from '../Popup/Popup'
 import BlockingElement from '../../ui/BlockingElement/BlockingElement'
-import Empty from '../../Empty/Empty'
+import Empty from '../../ui/Empty/Empty'
 import openContextMenu from '../../ContextMenu/ContextMenu'
-import ButtonAdd from '../../ButtonAdd/ButtonAdd'
+import ButtonAdd from '../../form/ButtonAdd/ButtonAdd'
 import SearchBox from '../../SearchBox/SearchBox'
 import CheckBox from '../../form/CheckBox/CheckBox'
 import Button from '../../form/Button/Button'
+import Title from '../../ui/Title/Title'
 import openPopupAlert from '../../PopupAlert/PopupAlert'
-import {useTypedSelector} from '../../../hooks/useTypedSelector'
-import {useActions} from '../../../hooks/useActions'
+import openPopupCompilationCreate from '../../PopupCompilationCreate/PopupCompilationCreate'
 import classes from './PopupCompilationSelector.module.scss'
 
 interface Props extends PopupProps {
@@ -57,6 +61,10 @@ const PopupCompilationSelector: React.FC<Props> = (props) => {
             fetchCompilationList()
 
             setIsUpdate(false)
+        }
+
+        return () => {
+            removePopup(props.blockId ? props.blockId : '')
         }
     }, [isUpdate])
 
@@ -113,13 +121,22 @@ const PopupCompilationSelector: React.FC<Props> = (props) => {
     }
 
     // Добавление нового элемента
-    const onClickAdd = (e: React.MouseEvent) => {
-
+    const onClickAdd = () => {
+        openPopupCompilationCreate(document.body, {
+            onSave: () => {
+                setIsUpdate(true)
+            }
+        })
     }
 
     // Редактирование элемента
-    const onClickEdit = (e: React.MouseEvent, compilation: ICompilation) => {
-
+    const onClickEdit = (compilation: ICompilation) => {
+        openPopupCompilationCreate(document.body, {
+            compilation: compilation,
+            onSave: () => {
+                setIsUpdate(true)
+            }
+        })
     }
 
     // Сохранение выбора
@@ -129,8 +146,8 @@ const PopupCompilationSelector: React.FC<Props> = (props) => {
     }
 
     // Удаление элемента справочника
-    const onClickDelete = (e: React.MouseEvent, compilation: ICompilation) => {
-        openPopupAlert(e, {
+    const onClickDelete = (compilation: ICompilation) => {
+        openPopupAlert(document.body, {
             text: `Вы действительно хотите удалить ${compilation.name}?`,
             buttons: [
                 {
@@ -140,9 +157,7 @@ const PopupCompilationSelector: React.FC<Props> = (props) => {
 
                         if (compilation.id) {
                             CompilationService.removeCompilation(compilation.id)
-                                .then(() => {
-                                    setIsUpdate(true)
-                                })
+                                .then(() => setIsUpdate(true))
                                 .catch((error: any) => {
                                     openPopupAlert(document.body, {
                                         title: 'Ошибка!',
@@ -150,9 +165,7 @@ const PopupCompilationSelector: React.FC<Props> = (props) => {
                                         onOk: close.bind(this)
                                     })
                                 })
-                                .finally(() => {
-                                    setFetching(false)
-                                })
+                                .finally(() => setFetching(false))
                         }
                     }
                 },
@@ -165,37 +178,20 @@ const PopupCompilationSelector: React.FC<Props> = (props) => {
     const onContextMenu = (e: React.MouseEvent, compilation: ICompilation) => {
         e.preventDefault()
 
-        // if (['director', 'administrator', 'manager'].includes(role)) {
-        //     const menuItems = [{text: 'Редактировать', onClick: (e: React.MouseEvent) => onClickEdit(e, compilation)}]
-        //
-        //     if (['director', 'administrator'].includes(role)) {
-        //         menuItems.push({text: 'Удалить', onClick: (e: React.MouseEvent) => onClickDelete(e, compilation)})
-        //     }
-        //
-        //     openContextMenu(e, menuItems)
-        // }
-    }
+        if (['director', 'administrator', 'manager'].includes(role)) {
+            const menuItems = [{text: 'Редактировать', onClick: () => onClickEdit(compilation)}]
 
-    const renderLeftBox = () => {
-        return (
-            <div className={classes['box']}>
-                <div style={{height: 36}}>
-                    {renderSearch()}
-                </div>
-                <div className={classes['box_border']} style={{height: 300}}>
-                    {!props.multi ? renderLeftTab() :
-                        <div className={classes['box_content_wrapper']}>
-                            {renderLeftTab()}
-                        </div>
-                    }
-                </div>
-            </div>
-        )
+            if (['director', 'administrator'].includes(role)) {
+                menuItems.push({text: 'Редактировать', onClick: () => onClickDelete(compilation)})
+            }
+
+            openContextMenu(e, menuItems)
+        }
     }
 
     const renderSearch = () => {
         return (
-            <div className={classes['search_and_button']}>
+            <div className={classes.search}>
                 <SearchBox value={searchText}
                            onChange={(value: string) => search(value)}
                            countFind={filterCompilation ? filterCompilation.length : 0}
@@ -211,48 +207,44 @@ const PopupCompilationSelector: React.FC<Props> = (props) => {
         )
     }
 
-    const renderLeftTab = () => {
+    const renderListBox = () => {
         return (
-            <div className={classes['box_content']}>
-                {filterCompilation.length ?
-                    filterCompilation.map((compilation: ICompilation) => renderRow(compilation, 'left', checkSelected(compilation.id)))
-                    :
-                    <Empty message={!compilations.length ? 'Нет подборок' : 'Подборки не найдены'}/>
-                }
-            </div>
-        )
-    }
-
-    const renderRightBox = () => {
-        return (
-            <div className={classes['box']}>
-                <div style={{height: 36, flex: 'none'}}/>
-                <div className={classes['box_border']} style={{height: 400}}>
-                    {renderRightTab()}
+            <BlockingElement fetching={fetching} className={classes.list}>
+                <div className={classes.listContent}>
+                    {filterCompilation.length
+                        ? filterCompilation.map((compilation: ICompilation) => renderRow(compilation, 'left', checkSelected(compilation.id)))
+                        : <Empty message={!compilations.length ? 'Нет подборок' : 'Подборки не найдены'}/>
+                    }
                 </div>
-            </div>
+            </BlockingElement>
         )
     }
 
-    const renderRightTab = () => {
+    const renderSelectedListBox = () => {
         const rows = filterCompilation.filter((compilation: ICompilation) => checkSelected(compilation.id))
 
         return (
-            <div className={classes['box_content']}>
-                {rows.length ? rows.map((compilation: ICompilation) => renderRow(compilation, 'right', checkSelected(compilation.id))) : ''}
-            </div>
+            <BlockingElement fetching={fetching} className={classes.list}>
+                <div className={classes.listContent}>
+                    {rows.length ?
+                        rows.map((compilation: ICompilation) => renderRow(compilation, 'right', checkSelected(compilation.id)))
+                        : <Empty message='Подборки не выбраны'/>
+                    }
+                </div>
+            </BlockingElement>
         )
     }
 
     const renderRow = (compilation: ICompilation, side: string, checked: boolean) => {
         return (
-            <div className={classes['row']}
+            <div className={classes.row}
                  key={compilation.id}
                  onClick={() => selectRow(compilation)}
                  onContextMenu={(e: React.MouseEvent) => onContextMenu(e, compilation)}
             >
                 {props.multi && side === 'left' ?
-                    <CheckBox type='classic' onChange={e => e}
+                    <CheckBox type='classic'
+                              onChange={e => e}
                               checked={checked}
                               margin='0px 0px 0px 10px'
                               label=''
@@ -260,44 +252,57 @@ const PopupCompilationSelector: React.FC<Props> = (props) => {
                     : null
                 }
 
-                <div className={classes['item_name']}>{compilation.name}</div>
+                {!checked || props.multi ? null :
+                    <div className={classes.selected}>
+                        <FontAwesomeIcon icon='check'/>
+                    </div>
+                }
 
-                {!checked || props.multi ? null : <div className={classes['selected_icon']}/>}
+                <div className={classes.name}>{compilation.name}</div>
 
-                {props.multi && side === 'right' ? <div className={classes['delete_icon']} title='Удалить'/> : null}
+                {props.multi && side === 'right' ?
+                    <div className={classes.delete} title='Удалить'>
+                        <FontAwesomeIcon icon='xmark'/>
+                    </div>
+                    : null
+                }
             </div>
         )
     }
 
     return (
-        <Popup className={classes.popup}>
-            <Header title='Выбрать подборку' popupId={props.id || ''} onClose={() => close()}/>
+        <Popup className={classes.PopupCompilationSelector}>
+            <BlockingElement fetching={fetching} className={classes.content}>
+                <div className={classes.blockContent}>
+                    <Title type={2}>Выбрать подборки</Title>
 
-            <BlockingElement fetching={fetching}>
-                <Content className={props.multi ? classes['content_multi'] : classes['content']}>
-                    {renderLeftBox()}
+                    {renderSearch()}
 
-                    {!props.multi ? null : renderRightBox()}
-                </Content>
+                    {renderListBox()}
 
-                {props.multi ?
-                    <Footer>
-                        <Button type='apply'
-                                icon='check'
-                                onClick={() => onClickSave()}
-                                className='marginLeft'
-                        >Сохранить</Button>
-
-                        <Button type='regular'
-                                icon='arrow-rotate-left'
-                                onClick={close.bind(this)}
-                                className='marginLeft'
-                        >Отменить</Button>
-                    </Footer>
-                    :
-                    <div className={classes['footer_spacer']}/>
-                }
+                    {props.multi ? renderSelectedListBox() : null}
+                </div>
             </BlockingElement>
+
+            {props.multi ?
+                <Footer>
+                    <Button type='apply'
+                            icon='check'
+                            onClick={() => onClickSave()}
+                            className='marginLeft'
+                            title='Сохранить'
+                    >Сохранить</Button>
+
+                    <Button type='regular'
+                            icon='arrow-rotate-left'
+                            onClick={close.bind(this)}
+                            className='marginLeft'
+                            title='Отменить'
+                    >Отменить</Button>
+                </Footer>
+                :
+                null
+            }
         </Popup>
     )
 }
@@ -305,6 +310,17 @@ const PopupCompilationSelector: React.FC<Props> = (props) => {
 PopupCompilationSelector.defaultProps = defaultProps
 PopupCompilationSelector.displayName = 'PopupCompilationSelector'
 
-export default function openPopupCompilationSelector(target: any, popupProps = {} as Props, displayOptions: PopupDisplayOptions = {} as PopupDisplayOptions) {
-    return openPopup(withStore(PopupCompilationSelector), popupProps, undefined, target, displayOptions)
+export default function openPopupCompilationSelector(target: any, popupProps = {} as Props) {
+    const displayOptions: PopupDisplayOptions = {
+        autoClose: false,
+        rightPanel: true,
+        fullScreen: true,
+        isFixed: true
+    }
+    const blockId = showBackgroundBlock(target, {animate: true}, displayOptions)
+    let block = getPopupContainer(blockId)
+
+    popupProps = {...popupProps, blockId: blockId}
+
+    return openPopup(withStore(PopupCompilationSelector), popupProps, undefined, block, displayOptions)
 }

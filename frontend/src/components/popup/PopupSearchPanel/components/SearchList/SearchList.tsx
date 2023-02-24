@@ -7,7 +7,7 @@ import {IDeveloper} from '../../../../../@types/IDeveloper'
 import {IAttachment} from '../../../../../@types/IAttachment'
 import {IPartner} from '../../../../../@types/IPartner'
 import BlockingElement from '../../../../ui/BlockingElement/BlockingElement'
-import Empty from '../../../../Empty/Empty'
+import Empty from '../../../../ui/Empty/Empty'
 import SearchItem from '../SearchItem/SearchItem'
 import classes from './SearchList.module.scss'
 

@@ -2,7 +2,7 @@ import React, {useEffect} from 'react'
 import {Map, MapState, Placemark, YMaps, ZoomControl} from 'react-yandex-maps'
 import {IBuilding} from '../../../../../@types/IBuilding'
 import {useActions} from '../../../../../hooks/useActions'
-import Empty from '../../../../Empty/Empty'
+import Empty from '../../../../ui/Empty/Empty'
 import openPopupBuildingInfo from '../../../../popup/PopupBuildingInfo/PopupBuildingInfo'
 import classes from './BuildingMap.module.scss'
 

@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react'
 import NotificationService from '../../../../api/NotificationService'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import NotificationPanel from '../../../../components/NotificationPanel/NotificationPanel'
+import NotificationPanel from '../../../../components/ui/NotificationPanel/NotificationPanel'
 import openPopupMessenger from '../../../../components/popup/PopupMessenger/PopupMessenger'
 import classes from './ToolsPanel.module.scss'
 

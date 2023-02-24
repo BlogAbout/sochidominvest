@@ -1,6 +1,6 @@
 import React from 'react'
 import {IArticle} from '../../../@types/IArticle'
-import Empty from '../../Empty/Empty'
+import Empty from '../../ui/Empty/Empty'
 import ArticleList from './components/ArticleList/ArticleList'
 import ArticleTill from './components/ArticleTill/ArticleTill'
 import classes from './ArticleListContainer.module.scss'

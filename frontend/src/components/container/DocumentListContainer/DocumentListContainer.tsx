@@ -1,6 +1,6 @@
 import React from 'react'
 import {IDocument} from '../../../@types/IDocument'
-import Empty from '../../Empty/Empty'
+import Empty from '../../ui/Empty/Empty'
 import DocumentList from './components/DocumentList/DocumentList'
 import DocumentTill from './components/DocumentTill/DocumentTill'
 import classes from './DocumentListContainer.module.scss'

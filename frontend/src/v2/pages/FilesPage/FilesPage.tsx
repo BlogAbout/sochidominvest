@@ -11,7 +11,7 @@ import Wrapper from '../../components/ui/Wrapper/Wrapper'
 import PanelView from '../../views/PanelView/PanelView'
 import SidebarLeft from '../../../components/ui/SidebarLeft/SidebarLeft'
 import FileList from '../../../components/FileList/FileList'
-import FileUploader from '../../../components/FileUploader/FileUploader'
+import FileUploader from '../../../components/ui/FileUploader/FileUploader'
 import openContextMenu from '../../../components/ContextMenu/ContextMenu'
 import classes from './FilesPage.module.scss'
 

@@ -2,12 +2,12 @@ import React, {useEffect, useState} from 'react'
 import classNames from 'classnames/bind'
 import {useTypedSelector} from '../../hooks/useTypedSelector'
 import WidgetService from '../../api/WidgetService'
-import Empty from '../Empty/Empty'
+import Empty from '../ui/Empty/Empty'
 import BlockingElement from '../ui/BlockingElement/BlockingElement'
 import openContextMenu from '../ContextMenu/ContextMenu'
-import openPopupArticleSelector from '../PopupArticleSelector/PopupArticleSelector'
-import openPopupBuildingSelector from '../PopupBuildingSelector/PopupBuildingSelector'
-import openPopupPartnerSelector from '../PopupPartnerSelector/PopupPartnerSelector'
+import openPopupArticleSelector from '../popup/PopupArticleSelector/PopupArticleSelector'
+import openPopupBuildingSelector from '../popup/PopupBuildingSelector/PopupBuildingSelector'
+import openPopupPartnerSelector from '../popup/PopupPartnerSelector/PopupPartnerSelector'
 import openPopupAlert from '../PopupAlert/PopupAlert'
 import Button from '../form/Button/Button'
 import {getWidgetPageText, getWidgetStyleText, getWidgetTypeText} from '../../helpers/widgetHelper'
@@ -59,8 +59,6 @@ const WidgetList: React.FC<Props> = (props) => {
                     buttonAdd: true,
                     multi: false,
                     onSelect: (selected: number[]) => addElementToWidget(widget, selected[0])
-                }, {
-                    center: true
                 })
                 break
             case 'article':
@@ -77,8 +75,6 @@ const WidgetList: React.FC<Props> = (props) => {
                     buttonAdd: true,
                     multi: false,
                     onSelect: (selected: number[]) => addElementToWidget(widget, selected[0])
-                }, {
-                    center: true
                 })
                 break
         }

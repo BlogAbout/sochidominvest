@@ -166,12 +166,11 @@ const Navigation: React.FC = (): React.ReactElement => {
                         }
 
                         return (
-                            <li>
+                            <li key={link.route}>
                                 <NavLink to={link.route}
                                          className={({isActive}) => isActive ? classes.active : ''}
                                          title={link.text || link.title}
                                          onClick={onHideMobileMenuHandler.bind(this)}
-                                         key={link.route}
                                 >
                                     {link.icon ?
                                         <span className={classes.icon}>

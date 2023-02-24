@@ -1,6 +1,6 @@
 import React from 'react'
 import {IDeveloper} from '../../../@types/IDeveloper'
-import Empty from '../../Empty/Empty'
+import Empty from '../../ui/Empty/Empty'
 import DeveloperList from './components/DeveloperList/DeveloperList'
 import DeveloperTill from './components/DeveloperTill/DeveloperTill'
 import classes from './DeveloperListContainer.module.scss'

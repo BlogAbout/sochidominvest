@@ -1,6 +1,6 @@
 import React from 'react'
 import {IPost} from '../../../@types/IPost'
-import Empty from '../../Empty/Empty'
+import Empty from '../../ui/Empty/Empty'
 import PostList from './components/PostList/PostList'
 import classes from './PostListContainer.module.scss'
 

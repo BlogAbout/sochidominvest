@@ -18,10 +18,10 @@ import ComboBox from '../../ComboBox/ComboBox'
 import Title from '../../ui/Title/Title'
 import Label from '../../form/Label/Label'
 import AvatarBox from '../../form/AvatarBox/AvatarBox'
-import Tabs from '../../Tabs/Tabs'
+import Tabs from '../../ui/Tabs/Tabs'
 import ContactList from './components/ContactList/ContactList'
 import classes from './PopupAgentCreate.module.scss'
-import Empty from "../../Empty/Empty";
+import Empty from "../../ui/Empty/Empty";
 
 interface Props extends PopupProps {
     agent?: IAgent | null

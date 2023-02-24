@@ -24,7 +24,7 @@ import openPopupBookingCreate from '../../../../../components/popup/PopupBooking
 import openPopupBuildingCreate from '../../../../../components/popup/PopupBuildingCreate/PopupBuildingCreate'
 import openPopupSupportCreate from '../../../../../components/popup/PopupSupportCreate/PopupSupportCreate'
 import openPopupAlert from '../../../../../components/PopupAlert/PopupAlert'
-import openPopupCompilationSelector from '../../../../../components/PopupCompilationSelector/PopupCompilationSelector'
+import openPopupCompilationSelector from '../../../../../components/popup/PopupCompilationSelector/PopupCompilationSelector'
 import classes from './BuildingInfoBlock.module.scss'
 
 interface Props {
@@ -380,9 +380,9 @@ const BuildingInfoBlock: React.FC<Props> = (props): React.ReactElement => {
                             icon='plus'
                             onClick={() => {
                                 if (props.building.id) {
+                                    // Todo
                                     openPopupCompilationSelector(document.body, {
-                                        buildingId: props.building.id,
-                                        onSave: () => {
+                                        onSelect: (value: number[]) => {
                                         }
                                     })
                                 }

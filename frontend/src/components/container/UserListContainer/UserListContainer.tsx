@@ -1,6 +1,6 @@
 import React from 'react'
 import {IUser} from '../../../@types/IUser'
-import Empty from '../../Empty/Empty'
+import Empty from '../../ui/Empty/Empty'
 import UserList from './components/UserList/UserList'
 import UserTill from './components/UserTill/UserTill'
 import classes from './UserListContainer.module.scss'

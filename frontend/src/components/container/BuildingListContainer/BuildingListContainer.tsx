@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react'
 import {useActions} from '../../../hooks/useActions'
 import {IBuilding} from '../../../@types/IBuilding'
-import Empty from '../../Empty/Empty'
+import Empty from '../../ui/Empty/Empty'
 import BuildingList from './components/BuildingList/BuildingList'
 import BuildingTill from './components/BuildingTill/BuildingTill'
 import BuildingMap from './components/BuildingMap/BuildingMap'

@@ -4,11 +4,11 @@ import {IDeveloper} from '../../../../../@types/IDeveloper'
 import {useTypedSelector} from '../../../../../hooks/useTypedSelector'
 import {useActions} from '../../../../../hooks/useActions'
 import BlockingElement from '../../../../ui/BlockingElement/BlockingElement'
-import Empty from '../../../../Empty/Empty'
+import Empty from '../../../../ui/Empty/Empty'
 import openPopupAlert from '../../../../PopupAlert/PopupAlert'
 import openContextMenu from '../../../../ContextMenu/ContextMenu'
 import openPopupDeveloperSelector from '../../../PopupDeveloperSelector/PopupDeveloperSelector'
-import Preloader from '../../../../Preloader/Preloader'
+import Preloader from '../../../../ui/Preloader/Preloader'
 import classes from './DeveloperList.module.scss'
 
 interface Props {

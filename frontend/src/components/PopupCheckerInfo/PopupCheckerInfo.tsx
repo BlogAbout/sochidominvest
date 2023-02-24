@@ -8,7 +8,7 @@ import {getPopupContainer, openPopup, removePopup} from '../../helpers/popupHelp
 import {Content, Header, Popup} from '../popup/Popup/Popup'
 import showBackgroundBlock from '../ui/BackgroundBlock/BackgroundBlock'
 import BlockingElement from '../ui/BlockingElement/BlockingElement'
-import Empty from '../Empty/Empty'
+import Empty from '../ui/Empty/Empty'
 import ComboBox from '../ComboBox/ComboBox'
 import classes from './PopupCheckerInfo.module.scss'
 

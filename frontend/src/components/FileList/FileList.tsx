@@ -8,7 +8,7 @@ import {useTypedSelector} from '../../hooks/useTypedSelector'
 import openContextMenu from '../ContextMenu/ContextMenu'
 import openPopupAttachmentCreate from '../popup/PopupAttachmentCreate/PopupAttachmentCreate'
 import openPopupAlert from '../PopupAlert/PopupAlert'
-import Empty from '../Empty/Empty'
+import Empty from '../ui/Empty/Empty'
 import BlockingElement from '../ui/BlockingElement/BlockingElement'
 import classes from './FileList.module.scss'
 
