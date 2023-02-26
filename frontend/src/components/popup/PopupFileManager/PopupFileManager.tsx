@@ -1,16 +1,18 @@
 import React, {useEffect, useState} from 'react'
-import withStore from '../../hoc/withStore'
-import AttachmentService from '../../api/AttachmentService'
-import {PopupProps} from '../../@types/IPopup'
-import {IAttachment} from '../../@types/IAttachment'
-import {getPopupContainer, openPopup, removePopup} from '../../helpers/popupHelper'
-import showBackgroundBlock from '../ui/BackgroundBlock/BackgroundBlock'
-import openPopupAlert from '../PopupAlert/PopupAlert'
-import {Content, Footer, Header, Popup} from '../popup/Popup/Popup'
-import FileList from '../FileList/FileList'
-import Button from '../form/Button/Button'
-import FileUploader from '../ui/FileUploader/FileUploader'
-import SearchBox from '../SearchBox/SearchBox'
+import withStore from '../../../hoc/withStore'
+import AttachmentService from '../../../api/AttachmentService'
+import {PopupDisplayOptions, PopupProps} from '../../../@types/IPopup'
+import {IAttachment} from '../../../@types/IAttachment'
+import {getPopupContainer, openPopup, removePopup} from '../../../helpers/popupHelper'
+import showBackgroundBlock from '../../ui/BackgroundBlock/BackgroundBlock'
+import openPopupAlert from '../../PopupAlert/PopupAlert'
+import {Footer, Popup} from '../Popup/Popup'
+import FileList from '../../FileList/FileList'
+import Button from '../../form/Button/Button'
+import FileUploader from '../../ui/FileUploader/FileUploader'
+import SearchBox from '../../SearchBox/SearchBox'
+import Title from '../../ui/Title/Title'
+import BlockingElement from '../../ui/BlockingElement/BlockingElement'
 import classes from './PopupFileManager.module.scss'
 
 interface Props extends PopupProps {
@@ -41,9 +43,7 @@ const PopupFileManager: React.FC<Props> = (props) => {
         setFetching(true)
 
         AttachmentService.fetchAttachments({active: [0, 1], type: props.type})
-            .then((response: any) => {
-                setAttachments(response.data)
-            })
+            .then((response: any) => setAttachments(response.data))
             .catch((error: any) => {
                 console.error('error', error)
 
@@ -52,9 +52,7 @@ const PopupFileManager: React.FC<Props> = (props) => {
                     text: error.data
                 })
             })
-            .finally(() => {
-                setFetching(false)
-            })
+            .finally(() => setFetching(false))
 
         return () => {
             removePopup(props.blockId ? props.blockId : '')
@@ -130,28 +128,31 @@ const PopupFileManager: React.FC<Props> = (props) => {
 
     return (
         <Popup className={classes.PopupFileManager}>
-            <Header title='Файловый менеджер' popupId={props.id || ''}/>
+            <BlockingElement fetching={fetching} className={classes.content}>
+                <div className={classes.blockContent}>
+                    <Title type={2}>Файловый менеджер</Title>
 
-            <Content className={classes['popup-content']}>
-                <div className={classes.uploader}>
-                    <FileUploader text='Загрузить'
-                                  type={props.type}
-                                  onChange={onUploadFileHandler.bind(this)}
-                                  multi={props.multi}
+                    <div className={classes.uploader}>
+                        <FileUploader text='Загрузить'
+                                      type={props.type}
+                                      onChange={onUploadFileHandler.bind(this)}
+                                      multi={props.multi}
+                        />
+
+                        <SearchBox value={searchText} onChange={search.bind(this)}/>
+                    </div>
+
+                    <FileList files={filterAttachments}
+                              selected={selected}
+                              fetching={fetching}
+                              onSave={() => {
+                              }}
+                              onSelect={onSelectHandler.bind(this)}
+                              onFullRemove={onFullRemove.bind(this)}
+                              className={classes.list}
                     />
-
-                    <SearchBox value={searchText} onChange={search.bind(this)}/>
                 </div>
-
-                <FileList files={filterAttachments}
-                          selected={selected}
-                          fetching={fetching}
-                          onSave={() => {
-                          }}
-                          onSelect={onSelectHandler.bind(this)}
-                          onFullRemove={onFullRemove.bind(this)}
-                />
-            </Content>
+            </BlockingElement>
 
             <Footer>
                 {props.multi ?
@@ -159,6 +160,7 @@ const PopupFileManager: React.FC<Props> = (props) => {
                             icon='check'
                             onClick={onSaveHandler.bind(this)}
                             disabled={fetching}
+                            title='Сохранить'
                     >Сохранить</Button>
                     : null
                 }
@@ -167,6 +169,7 @@ const PopupFileManager: React.FC<Props> = (props) => {
                         icon='arrow-rotate-left'
                         onClick={close.bind(this)}
                         className='marginLeft'
+                        title='Отменить'
                 >Отменить</Button>
             </Footer>
         </Popup>
@@ -177,9 +180,11 @@ PopupFileManager.defaultProps = defaultProps
 PopupFileManager.displayName = 'PopupFileManager'
 
 export default function openPopupFileManager(target: any, popupProps = {} as Props) {
-    const displayOptions = {
+    const displayOptions: PopupDisplayOptions = {
         autoClose: false,
-        center: true
+        rightPanel: true,
+        fullScreen: true,
+        isFixed: true
     }
     const blockId = showBackgroundBlock(target, {animate: true}, displayOptions)
     let block = getPopupContainer(blockId)

@@ -1,5 +1,5 @@
 import React from 'react'
-import openPopupFileManager from '../../PopupFileManager/PopupFileManager'
+import openPopupFileManager from '../../popup/PopupFileManager/PopupFileManager'
 import Button from '../Button/Button'
 import classes from './AvatarBox.module.scss'
 

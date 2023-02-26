@@ -53,8 +53,6 @@ const SelectorBox: React.FC<Props> = (props) => {
             onSelect: (value: string[]) => {
                 props.onSelect(value)
             }
-        }, {
-            center: true
         })
     }
 

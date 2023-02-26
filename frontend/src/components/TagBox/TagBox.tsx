@@ -70,8 +70,6 @@ const TagBox: React.FC<Props> = (props) => {
             onSelect: (value: number[]) => {
                 props.onSelect(value, e)
             }
-        }, {
-            center: true
         })
     }
 

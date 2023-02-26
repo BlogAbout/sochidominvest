@@ -21,7 +21,7 @@ import BuildingBox from '../../form/BuildingBox/BuildingBox'
 import FileList from '../../FileList/FileList'
 import Title from '../../ui/Title/Title'
 import Label from '../../form/Label/Label'
-import openPopupFileManager from '../../PopupFileManager/PopupFileManager'
+import openPopupFileManager from '../PopupFileManager/PopupFileManager'
 import {sortAttachments} from '../../../helpers/attachmentHelper'
 import classes from './PopupArticleCreate.module.scss'
 

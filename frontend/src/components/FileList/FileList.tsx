@@ -17,6 +17,7 @@ interface Props {
     selected?: number[]
     fetching: boolean
     isOnlyList?: boolean
+    className?: string
 
     onSave(file: IAttachment): void
 
@@ -230,7 +231,7 @@ const FileList: React.FC<Props> = (props) => {
     }
 
     return (
-        <div className={classes.FileList}>
+        <div className={cx(classes.FileList, props.className)}>
             <BlockingElement fetching={props.fetching || fetching} className={classes.content}>
                 {props.files && props.files.length ?
                     props.isOnlyList ?
