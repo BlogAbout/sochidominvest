@@ -9,6 +9,8 @@ use App\BusinessProcess\BusinessProcessController;
 use App\BusinessProcess\PaymentController;
 use App\Core\CoreController;
 use App\Mailing\MailingController;
+use App\Store\CategoryController;
+use App\Store\ProductController;
 use App\User\UserExternalController;
 use Klein\Klein;
 
@@ -204,6 +206,20 @@ $Klein->respond('PUT', '/api/v1/contact/[:id]', [new ContactController(), 'updat
 $Klein->respond('GET', '/api/v1/contact/[:id]', [new ContactController(), 'fetchItemById']);
 $Klein->respond('GET', '/api/v1/contact', [new ContactController(), 'fetchList']);
 $Klein->respond('DELETE', '/api/v1/contact/[:id]', [new ContactController(), 'deleteItem']);
+
+// Store Category Routes
+$Klein->respond('POST', '/api/v1/store/category', [new CategoryController(), 'createItem']);
+$Klein->respond('PUT', '/api/v1/store/category/[:id]', [new CategoryController(), 'updateItem']);
+$Klein->respond('GET', '/api/v1/store/category/[:id]', [new CategoryController(), 'fetchItemById']);
+$Klein->respond('GET', '/api/v1/store/category', [new CategoryController(), 'fetchList']);
+$Klein->respond('DELETE', '/api/v1/store/category/[:id]', [new CategoryController(), 'deleteItem']);
+
+// Store Product Routes
+$Klein->respond('POST', '/api/v1/store/product', [new ProductController(), 'createItem']);
+$Klein->respond('PUT', '/api/v1/store/product/[:id]', [new ProductController(), 'updateItem']);
+$Klein->respond('GET', '/api/v1/store/product/[:id]', [new ProductController(), 'fetchItemById']);
+$Klein->respond('GET', '/api/v1/store/product', [new ProductController(), 'fetchList']);
+$Klein->respond('DELETE', '/api/v1/store/product/[:id]', [new ProductController(), 'deleteItem']);
 
 // Core Routes
 $Klein->respond('GET', '/api/v1/core/init', [new CoreController(), 'initAllChecking']);
