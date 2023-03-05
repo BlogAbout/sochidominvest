@@ -895,6 +895,7 @@ ALTER TABLE `sdi_store_categories`
 
 CREATE TABLE `sdi_store_product` (
     `id` int(11) NOT NULL,
+    `id_category` int(11) NOT NULL,
     `name` varchar(255) NOT NULL,
     `description` text DEFAULT NULL,
     `cost` float(11, 2) DEFAULT NULL,

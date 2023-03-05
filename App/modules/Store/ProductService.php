@@ -106,12 +106,13 @@ class ProductService extends Model
 
         $sql = "
             INSERT INTO `sdi_store_product`
-                (`name`, `description`, `cost`, `cost_old`, `id_avatar`, `avatar`, `date_created`, `date_update`, `active`, `author`, `fields`, `meta_title`, `meta_description`)
+                (`name`, `id_category`, `description`, `cost`, `cost_old`, `id_avatar`, `avatar`, `date_created`, `date_update`, `active`, `author`, `fields`, `meta_title`, `meta_description`)
             VALUES
-                (:name, :description, :cost, :costOld, :avatarId, :avatar, :dateCreated, :dateUpdate, :active, :author, :fields, :metaTitle, :metaDescription)
+                (:name, :categoryId, :description, :cost, :costOld, :avatarId, :avatar, :dateCreated, :dateUpdate, :active, :author, :fields, :metaTitle, :metaDescription)
         ";
 
         parent::query($sql);
+        parent::bindParams('categoryId', $product->getCategoryId());
         parent::bindParams('name', $product->getName());
         parent::bindParams('description', $product->getDescription());
         parent::bindParams('cost', $product->getCost());
@@ -147,6 +148,7 @@ class ProductService extends Model
         $sql = "
             UPDATE `sdi_store_product`
             SET
+                `id_category` = :categoryId,
                 `name` = :name,
                 `description` = :description,
                 `cost` = :cost,
@@ -163,6 +165,7 @@ class ProductService extends Model
 
         parent::query($sql);
         parent::bindParams('id', $product->getId());
+        parent::bindParams('categoryId', $product->getCategoryId());
         parent::bindParams('name', $product->getName());
         parent::bindParams('description', $product->getDescription());
         parent::bindParams('cost', $product->getCost());

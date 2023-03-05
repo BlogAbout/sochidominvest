@@ -95,6 +95,7 @@ class ProductController extends Controller
         $data = json_decode($request->body());
 
         $payload = array(
+            'categoryId' => (int)htmlentities(stripcslashes(strip_tags($data->categoryId))),
             'name' => htmlentities(stripcslashes(strip_tags($data->name))),
             'description' => htmlentities(stripcslashes(strip_tags($data->description))),
             'cost' => (float)htmlentities(stripcslashes(strip_tags($data->cost))),
@@ -155,6 +156,7 @@ class ProductController extends Controller
 
         $payload = array(
             'id' => $request->id,
+            'categoryId' => (int)htmlentities(stripcslashes(strip_tags($data->categoryId))),
             'name' => htmlentities(stripcslashes(strip_tags($data->name))),
             'description' => htmlentities(stripcslashes(strip_tags($data->description))),
             'cost' => (float)htmlentities(stripcslashes(strip_tags($data->cost))),

@@ -5,6 +5,7 @@ namespace App\Store;
 class Product
 {
     public int $id;
+    public int $categoryId;
     public string $name;
     public string $description;
     public float $cost;
@@ -23,6 +24,7 @@ class Product
      * Product constructor.
      *
      * @param int $id
+     * @param int $categoryId
      * @param string $name
      * @param string $description
      * @param float $cost
@@ -37,9 +39,10 @@ class Product
      * @param string $metaDescription
      * @param object $fields
      */
-    public function __construct(int $id, string $name, string $description, float $cost, float $costOld, int $avatarId, string $avatar, string $dateCreated, string $dateUpdate, int $active, int $author, string $metaTitle, string $metaDescription, object $fields)
+    public function __construct(int $id, int $categoryId, string $name, string $description, float $cost, float $costOld, int $avatarId, string $avatar, string $dateCreated, string $dateUpdate, int $active, int $author, string $metaTitle, string $metaDescription, object $fields)
     {
         $this->id = $id;
+        $this->categoryId = $categoryId;
         $this->name = $name;
         $this->description = $description;
         $this->cost = $cost;
@@ -65,6 +68,7 @@ class Product
     {
         return new Product(
             $data['id'] ?? 0,
+            $data['categoryId'] ?? 0,
             $data['name'] ?? '',
             $data['description'] ? html_entity_decode($data['description']) : '',
             $data['cost'] ?? 0,
@@ -91,6 +95,7 @@ class Product
     {
         return new Product(
             $data['id'] ?? 0,
+            $data['id_category'] ?? 0,
             $data['name'] ?? '',
             $data['description'] ? html_entity_decode($data['description']) : '',
             $data['cost'] ?? 0,
@@ -130,6 +135,22 @@ class Product
     public function setId(int $id): void
     {
         $this->id = $id;
+    }
+
+    /**
+     * @return int
+     */
+    public function getCategoryId(): int
+    {
+        return $this->categoryId;
+    }
+
+    /**
+     * @param int $categoryId
+     */
+    public function setCategoryId(int $categoryId): void
+    {
+        $this->categoryId = $categoryId;
     }
 
     /**
