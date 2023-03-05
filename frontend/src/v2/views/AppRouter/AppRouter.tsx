@@ -40,6 +40,7 @@ import TariffPage from '../../pages/TariffPage/TariffPage'
 import FilesPage from '../../pages/FilesPage/FilesPage'
 import DesktopPage from '../../pages/DesktopPage/DesktopPage'
 import StoreCategoriesPage from '../../pages/StoreCategoriesPage/StoreCategoriesPage'
+import StoreCategoryPage from '../../pages/StoreCategoryPage/StoreCategoryPage'
 import StoreProductsPage from '../../pages/StoreProductsPage/StoreProductsPage'
 import StoreProductPage from '../../pages/StoreProductPage/StoreProductPage'
 import classes from './AppRouter.module.scss'
@@ -101,6 +102,7 @@ const AppRouter: React.FC = () => {
                         <Route path={RouteNames.P_TARIFF} element={<TariffPage/>}/>
                         <Route path={RouteNames.P_FILE_MANAGER} element={<FilesPage/>}/>
                         <Route path={RouteNames.P_STORE_CATEGORIES} element={<StoreCategoriesPage/>}/>
+                        <Route path={RouteNames.P_STORE_CATEGORY} element={<StoreCategoryPage/>}/>
                         <Route path={RouteNames.P_STORE_PRODUCTS} element={<StoreProductsPage/>}/>
                         <Route path={RouteNames.P_STORE_PRODUCT} element={<StoreProductPage/>}/>
                     </>

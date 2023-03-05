@@ -19,12 +19,12 @@ import GridColumn from '../../components/ui/Grid/components/GridColumn/GridColum
 import Title from '../../components/ui/Title/Title'
 import classes from './StoreProductPage.module.scss'
 
-type ProductPageProps = {
+type StoreProductPageProps = {
     id: string
 }
 
 const ProductPage: React.FC = (): React.ReactElement => {
-    const params = useParams<ProductPageProps>()
+    const params = useParams<StoreProductPageProps>()
 
     const [fetchingProduct, setFetchingProduct] = useState(false)
     const [fetchingImages, setFetchingImages] = useState(false)
