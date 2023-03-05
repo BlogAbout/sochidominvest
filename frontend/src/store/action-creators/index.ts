@@ -13,6 +13,7 @@ import {QuestionActionCreators} from './questionActionCreators'
 import {PostActionCreators} from './postActionCreators'
 import {BusinessProcessActionCreators} from './businessProcessCreators'
 import {AgentActionCreators} from './agentActionCreators'
+import {StoreActionCreators} from './storeActionCreators'
 
 export default {
     ...UserActionCreators,
@@ -29,5 +30,6 @@ export default {
     ...QuestionActionCreators,
     ...PostActionCreators,
     ...BusinessProcessActionCreators,
-    ...AgentActionCreators
+    ...AgentActionCreators,
+    ...StoreActionCreators
 }

@@ -1,0 +1,77 @@
+.ProductList {
+    height: calc(100% - 118px);
+
+    .name {
+        flex-grow: 1;
+    }
+
+    .cost {
+        width: 200px;
+        flex-shrink: 0;
+
+        .old {
+
+        }
+    }
+
+    .category {
+        width: 100px;
+        flex-shrink: 0;
+    }
+}
+
+@media (max-width: 768px) {
+    .ProductList {
+        display: block;
+        padding: 0;
+        margin-bottom: 0;
+
+        .name,
+        .cost,
+        .category {
+            position: relative;
+            display: block;
+            width: 100%;
+            padding-right: 8px;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+
+            &::before {
+                display: inline-block;
+                width: 100px;
+                padding: 8px 10px;
+                background-color: #075ea5;
+                color: #fff;
+                margin-right: 10px;
+                border-bottom: 1px solid #fff;
+            }
+        }
+
+        .name::before {
+            content: 'Название';
+        }
+
+        .cost::before {
+            content: 'Цена';
+        }
+
+        .category::before {
+            content: 'Категория';
+            border-bottom: none;
+        }
+    }
+}
+
+@media (max-width: 480px) {
+    .ProductList {
+        font-size: 13px;
+
+        .name,
+        .cost,
+        .category {
+            &::before {
+                width: 80px;
+            }
+        }
+    }
+}

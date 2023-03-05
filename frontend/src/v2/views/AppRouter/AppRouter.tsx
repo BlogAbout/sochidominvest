@@ -39,6 +39,8 @@ import FavoritePage from '../../pages/FavoritePage/FavoritePage'
 import TariffPage from '../../pages/TariffPage/TariffPage'
 import FilesPage from '../../pages/FilesPage/FilesPage'
 import DesktopPage from '../../pages/DesktopPage/DesktopPage'
+import StoreCategoriesPage from '../../pages/StoreCategoriesPage/StoreCategoriesPage'
+import StoreProductsPage from '../../pages/StoreProductsPage/StoreProductsPage'
 import classes from './AppRouter.module.scss'
 import 'react-toastify/dist/ReactToastify.css'
 
@@ -97,6 +99,8 @@ const AppRouter: React.FC = () => {
                         <Route path={RouteNames.P_FAVORITE} element={<FavoritePage/>}/>
                         <Route path={RouteNames.P_TARIFF} element={<TariffPage/>}/>
                         <Route path={RouteNames.P_FILE_MANAGER} element={<FilesPage/>}/>
+                        <Route path={RouteNames.P_STORE_CATEGORIES} element={<StoreCategoriesPage/>}/>
+                        <Route path={RouteNames.P_STORE_PRODUCTS} element={<StoreProductsPage/>}/>
                     </>
                     : null
                 }

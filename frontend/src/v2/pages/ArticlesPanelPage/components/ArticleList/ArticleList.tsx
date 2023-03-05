@@ -22,10 +22,10 @@ const defaultProps: Props = {
     list: [],
     fetching: false,
     onClick: (article: IArticle) => {
-        console.info('BuildingList onClick', article)
+        console.info('ArticleList onClick', article)
     },
     onContextMenu: (article: IArticle, e: React.MouseEvent) => {
-        console.info('BuildingList onContextMenu', article, e)
+        console.info('ArticleList onContextMenu', article, e)
     }
 }
 

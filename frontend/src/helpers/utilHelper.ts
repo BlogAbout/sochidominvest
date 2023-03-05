@@ -75,6 +75,11 @@ export const getLayout = (type: string) => {
                 return listLayoutsItems.rents
             }
             return 'list'
+        case 'products':
+            if (listLayoutsItems && 'products' in listLayoutsItems) {
+                return listLayoutsItems.rents
+            }
+            return 'products'
         default:
             return 'list'
     }
