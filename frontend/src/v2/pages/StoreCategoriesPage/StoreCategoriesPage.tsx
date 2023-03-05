@@ -13,6 +13,7 @@ import StoreService from '../../../api/StoreService'
 import CategoryList from './components/CategoryList/CategoryList'
 import openContextMenu from '../../../components/ContextMenu/ContextMenu'
 import openPopupAlert from '../../../components/PopupAlert/PopupAlert'
+import openPopupCategoryCreate from '../../../components/popup/PopupCategoryCreate/PopupCategoryCreate'
 import classes from './StoreCategoriesPage.module.scss'
 
 const StoreCategoriesPage: React.FC = (): React.ReactElement => {
@@ -65,19 +66,17 @@ const StoreCategoriesPage: React.FC = (): React.ReactElement => {
     }
 
     const onAddHandler = () => {
-        // TOdo
-        // openPopupArticleCreate(document.body, {
-        //     onSave: () => onSaveHandler()
-        // })
+        openPopupCategoryCreate(document.body, {
+            onSave: () => onSaveHandler()
+        })
     }
 
     // Редактирование
     const onEditHandler = (category: ICategory) => {
-        // TOdo
-        // openPopupArticleCreate(document.body, {
-        //     article: article,
-        //     onSave: () => onSaveHandler()
-        // })
+        openPopupCategoryCreate(document.body, {
+            category: category,
+            onSave: () => onSaveHandler()
+        })
     }
 
     // Удаление
