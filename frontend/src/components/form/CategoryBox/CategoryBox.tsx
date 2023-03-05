@@ -15,6 +15,7 @@ interface Props {
     title?: string
     readOnly?: boolean
     error?: boolean
+    errorText?: string
     showValidate?: boolean
     showRequired?: boolean
     showClear?: boolean

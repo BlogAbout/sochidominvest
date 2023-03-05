@@ -17,6 +17,7 @@ import ProductList from './components/ProductList/ProductList'
 import ProductTill from './components/ProductTill/ProductTill'
 import openPopupAlert from '../../../components/PopupAlert/PopupAlert'
 import openContextMenu from '../../../components/ContextMenu/ContextMenu'
+import openPopupProductCreate from '../../../components/popup/PopupProductCreate/PopupProductCreate'
 import classes from './StoreProductsPage.module.scss'
 
 const StoreProductsPage: React.FC = (): React.ReactElement => {
@@ -72,19 +73,17 @@ const StoreProductsPage: React.FC = (): React.ReactElement => {
     }
 
     const onAddHandler = () => {
-        // Todo
-        // openPopupArticleCreate(document.body, {
-        //     onSave: () => onSaveHandler()
-        // })
+        openPopupProductCreate(document.body, {
+            onSave: () => onSaveHandler()
+        })
     }
 
     // Редактирование
     const onEditHandler = (product: IProduct) => {
-        // Todo
-        // openPopupArticleCreate(document.body, {
-        //     article: article,
-        //     onSave: () => onSaveHandler()
-        // })
+        openPopupProductCreate(document.body, {
+            product: product,
+            onSave: () => onSaveHandler()
+        })
     }
 
     // Удаление

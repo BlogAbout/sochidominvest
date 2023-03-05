@@ -17,8 +17,8 @@ export interface IProduct {
     description?: string
     cost: number
     costOld?: number
-    avatarId?: number
-    avatar?: string
+    avatarId?: number | null
+    avatar?: string | null
     dateCreated?: string
     dateUpdate?: string
     active: number
@@ -26,4 +26,6 @@ export interface IProduct {
     metaTitle?: string
     metaDescription?: string
     fields: { [key: string]: string }
+    images: number[]
+    videos: number[]
 }
