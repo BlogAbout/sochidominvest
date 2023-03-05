@@ -19,6 +19,8 @@ class Product
     public string $metaTitle;
     public string $metaDescription;
     public object $fields;
+    public array $images;
+    public array $videos;
 
     /**
      * Product constructor.
@@ -38,8 +40,10 @@ class Product
      * @param string $metaTitle
      * @param string $metaDescription
      * @param object $fields
+     * @param array $images
+     * @param array $videos
      */
-    public function __construct(int $id, int $categoryId, string $name, string $description, float $cost, float $costOld, int $avatarId, string $avatar, string $dateCreated, string $dateUpdate, int $active, int $author, string $metaTitle, string $metaDescription, object $fields)
+    public function __construct(int $id, int $categoryId, string $name, string $description, float $cost, float $costOld, int $avatarId, string $avatar, string $dateCreated, string $dateUpdate, int $active, int $author, string $metaTitle, string $metaDescription, object $fields, array $images, array $videos)
     {
         $this->id = $id;
         $this->categoryId = $categoryId;
@@ -56,6 +60,8 @@ class Product
         $this->metaTitle = $metaTitle;
         $this->metaDescription = $metaDescription;
         $this->fields = $fields;
+        $this->images = $images;
+        $this->videos = $videos;
     }
 
     /**
@@ -81,7 +87,9 @@ class Product
             $data['author'] ?? 0,
             $data['metaTitle'] ?? '',
             $data['metaDescription'] ?? '',
-            $data['fields'] ?? null
+            $data['fields'] ?? null,
+            $data['images'] ?? [],
+            $data['videos'] ?? []
         );
     }
 
@@ -108,7 +116,9 @@ class Product
             $data['author'] ?? 0,
             $data['meta_title'] ?? '',
             $data['meta_description'] ?? '',
-            $data['fields'] ? json_decode($data['fields']) : null
+            $data['fields'] ? json_decode($data['fields']) : null,
+            array_map('intval', $data['images'] ? explode(',', $data['images']) : []),
+            array_map('intval', $data['videos'] ? explode(',', $data['videos']) : [])
         );
     }
 
@@ -359,5 +369,37 @@ class Product
     public function setFields(object $fields): void
     {
         $this->fields = $fields;
+    }
+
+    /**
+     * @return array
+     */
+    public function getImages(): array
+    {
+        return $this->images;
+    }
+
+    /**
+     * @param array $images
+     */
+    public function setImages(array $images): void
+    {
+        $this->images = $images;
+    }
+
+    /**
+     * @return array
+     */
+    public function getVideos(): array
+    {
+        return $this->videos;
+    }
+
+    /**
+     * @param array $videos
+     */
+    public function setVideos(array $videos): void
+    {
+        $this->videos = $videos;
     }
 }

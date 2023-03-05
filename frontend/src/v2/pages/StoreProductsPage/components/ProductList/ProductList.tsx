@@ -49,7 +49,7 @@ const ProductList: React.FC<Props> = (props): React.ReactElement => {
                             >
                                 <ListCell className={classes.name}>{product.name}</ListCell>
                                 <ListCell className={classes.cost}>
-                                    {product.costOld ?
+                                    {product.cost && product.costOld ?
                                         <span className={classes.old}>
                                             {numberWithSpaces(round(product.costOld || 0, 2))}
                                         </span>

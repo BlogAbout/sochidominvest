@@ -34,7 +34,17 @@ class ProductService extends Model
                        SELECT a.`content`
                        FROM `sdi_attachment` AS a
                        WHERE a.`id` = sdi.`id_avatar` AND a.`active` IN (0, 1)
-                   ) AS avatar
+                   ) AS avatar,
+                   (
+                       SELECT GROUP_CONCAT(DISTINCT(i.`id_attachment`) ORDER BY i.`ordering` ASC, i.`id_attachment` ASC)
+                       FROM `sdi_images` AS i
+                       WHERE i.`id_object` = sdi.`id` AND `type_object` = 'product'
+                   ) AS images,
+                   (
+                       SELECT GROUP_CONCAT(DISTINCT(v.`id_attachment`) ORDER BY v.`ordering` ASC, v.`id_attachment` ASC)
+                       FROM `sdi_videos` AS v
+                       WHERE v.`id_object` = sdi.`id` AND `type_object` = 'product'
+                   ) AS videos
             FROM `sdi_store_product` sdi
             WHERE sdi.`id` = :id
         ";
@@ -75,7 +85,17 @@ class ProductService extends Model
                        SELECT a.`content`
                        FROM `sdi_attachment` AS a
                        WHERE a.`id` = sdi.`id_avatar` AND a.`active` IN (0, 1)
-                   ) AS avatar
+                   ) AS avatar,
+                   (
+                       SELECT GROUP_CONCAT(DISTINCT(i.`id_attachment`) ORDER BY i.`ordering` ASC, i.`id_attachment` ASC)
+                       FROM `sdi_images` AS i
+                       WHERE i.`id_object` = sdi.`id` AND `type_object` = 'product'
+                   ) AS images,
+                   (
+                       SELECT GROUP_CONCAT(DISTINCT(v.`id_attachment`) ORDER BY v.`ordering` ASC, v.`id_attachment` ASC)
+                       FROM `sdi_videos` AS v
+                       WHERE v.`id_object` = sdi.`id` AND `type_object` = 'product'
+                   ) AS videos
             FROM `sdi_store_product` sdi
             $sqlWhere
             ORDER BY sdi.`id` ASC
@@ -133,6 +153,8 @@ class ProductService extends Model
             $product->setId(parent::lastInsertedId());
 
             ProductService::updatePrices($product);
+            parent::updateRelationsImages($product->getImages(), $product->getId(), 'product');
+            parent::updateRelationsVideos($product->getVideos(), $product->getId(), 'product');
         }
     }
 
@@ -181,6 +203,8 @@ class ProductService extends Model
         parent::execute();
         
         ProductService::updatePrices($product);
+        parent::updateRelationsImages($product->getImages(), $product->getId(), 'product');
+        parent::updateRelationsVideos($product->getVideos(), $product->getId(), 'product');
     }
 
     /**

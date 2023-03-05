@@ -100,13 +100,15 @@ class ProductController extends Controller
             'description' => htmlentities(stripcslashes(strip_tags($data->description))),
             'cost' => (float)htmlentities(stripcslashes(strip_tags($data->cost))),
             'costOld' => (float)htmlentities(stripcslashes(strip_tags($data->costOld))),
-            'avatarId' => (int)htmlentities(stripcslashes(strip_tags($data->avatarId))),
-            'avatar' => htmlentities(stripcslashes(strip_tags($data->avatar))),
+            'avatarId' => $data->avatarId && $data->images ? (int)htmlentities(stripcslashes(strip_tags($data->avatarId))) : null,
+            'avatar' => $data->avatar && $data->images ? htmlentities(stripcslashes(strip_tags($data->avatar))) : null,
             'active' => (int)htmlentities(stripcslashes(strip_tags($data->active))),
             'author' => JwtMiddleware::getUserId(),
             'metaTitle' => htmlentities(stripcslashes(strip_tags($data->metaTitle))),
             'metaDescription' => htmlentities(stripcslashes(strip_tags($data->metaDescription))),
-            'fields' => htmlentities(stripcslashes(strip_tags($data->fields)))
+            'fields' => htmlentities(stripcslashes(strip_tags($data->fields))),
+            'images' => $data->images,
+            'videos' => $data->videos
         );
 
         try {
@@ -161,14 +163,16 @@ class ProductController extends Controller
             'description' => htmlentities(stripcslashes(strip_tags($data->description))),
             'cost' => (float)htmlentities(stripcslashes(strip_tags($data->cost))),
             'costOld' => (float)htmlentities(stripcslashes(strip_tags($data->costOld))),
-            'avatarId' => (int)htmlentities(stripcslashes(strip_tags($data->avatarId))),
-            'avatar' => htmlentities(stripcslashes(strip_tags($data->avatar))),
+            'avatarId' => $data->avatarId && $data->images ? (int)htmlentities(stripcslashes(strip_tags($data->avatarId))) : null,
+            'avatar' => $data->avatar && $data->images ? htmlentities(stripcslashes(strip_tags($data->avatar))) : null,
             'dateCreated' => htmlentities(stripcslashes(strip_tags($data->dateCreated))),
             'active' => (int)htmlentities(stripcslashes(strip_tags($data->active))),
             'author' => JwtMiddleware::getUserId(),
             'metaTitle' => htmlentities(stripcslashes(strip_tags($data->metaTitle))),
             'metaDescription' => htmlentities(stripcslashes(strip_tags($data->metaDescription))),
-            'fields' => htmlentities(stripcslashes(strip_tags($data->fields)))
+            'fields' => htmlentities(stripcslashes(strip_tags($data->fields))),
+            'images' => $data->images,
+            'videos' => $data->videos
         );
 
         try {
