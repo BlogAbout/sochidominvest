@@ -1,0 +1,45 @@
+.inner {
+    .content {
+        .block {
+            .gallery {
+                height: 100%;
+            }
+
+            .info {
+                margin-top: 40px;
+                justify-content: space-between;
+            }
+        }
+    }
+}
+
+@media (max-width: 1024px) {
+    .inner {
+        .content {
+            .block {
+                .headInfo {
+                    > div {
+                        width: 50% !important;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 768px) {
+    .inner {
+        .content {
+            .block {
+                .info,
+                .headInfo {
+                    flex-wrap: wrap;
+
+                    > div {
+                        width: 100% !important;
+                    }
+                }
+            }
+        }
+    }
+}

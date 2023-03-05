@@ -1,0 +1,47 @@
+.ProductAdvancedBlock {
+    color: #000;
+    margin-bottom: 40px;
+    padding-bottom: 40px;
+    border-bottom: 1px solid #033966;
+
+    .info {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        width: 100%;
+
+        .col {
+            width: 48%;
+            margin-bottom: 15px;
+
+            .row {
+                display: flex;
+                width: 100%;
+
+                + .row {
+                    margin-top: 10px;
+                }
+
+                .label {
+                    width: 40%;
+                    font-weight: 700;
+                }
+
+                .param {
+                    width: 60%;
+                    text-align: right;
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 768px) {
+    .ProductAdvancedBlock {
+        .info {
+            .col {
+                width: 100%;
+            }
+        }
+    }
+}
