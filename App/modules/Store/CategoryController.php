@@ -99,7 +99,7 @@ class CategoryController extends Controller
             'description' => htmlentities(stripcslashes(strip_tags($data->description))),
             'active' => (int)htmlentities(stripcslashes(strip_tags($data->active))),
             'author' => (int)htmlentities(stripcslashes(strip_tags($data->author))),
-            'fields' => htmlentities(stripcslashes(strip_tags($data->fields))),
+            'fields' => $data->fields,
             'metaTitle' => htmlentities(stripcslashes(strip_tags($data->metaTitle))),
             'metaDescription' => htmlentities(stripcslashes(strip_tags($data->metaDescription)))
         );
@@ -156,7 +156,7 @@ class CategoryController extends Controller
             'dateCreated' => htmlentities(stripcslashes(strip_tags($data->dateCreated))),
             'active' => (int)htmlentities(stripcslashes(strip_tags($data->active))),
             'author' => (int)htmlentities(stripcslashes(strip_tags($data->author))),
-            'fields' => htmlentities(stripcslashes(strip_tags($data->fields))),
+            'fields' => $data->fields,
             'metaTitle' => htmlentities(stripcslashes(strip_tags($data->metaTitle))),
             'metaDescription' => htmlentities(stripcslashes(strip_tags($data->metaDescription)))
         );

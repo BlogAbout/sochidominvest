@@ -22,8 +22,8 @@ class ProductService extends Model
     public static function fetchItemById(int $id): Product
     {
         $sql = "
-            SELECT sdi.`id`, sdi.`name`, sdi.`description`, sdi.`cost`, sdi.`cost_old`, sdi.`id_avatar`,
-                   sdi.`date_created`, sdi.`date_update`, sdi.`active`, sdi.`author`, sdi.`fields`,
+            SELECT sdi.`id`, sdi.`id_category`, sdi.`name`, sdi.`description`, sdi.`cost`, sdi.`cost_old`,
+                   sdi.`id_avatar`, sdi.`date_created`, sdi.`date_update`, sdi.`active`, sdi.`author`, sdi.`fields`,
                    sdi.`meta_title`, sdi.`meta_description`,
                    (
                        SELECT u.`first_name`
@@ -73,8 +73,8 @@ class ProductService extends Model
         $sqlWhere = parent::generateFilterQuery($filter);
 
         $sql = "
-            SELECT sdi.`id`, sdi.`name`, sdi.`description`, sdi.`cost`, sdi.`cost_old`, sdi.`id_avatar`,
-                   sdi.`date_created`, sdi.`date_update`, sdi.`active`, sdi.`author`, sdi.`fields`,
+            SELECT sdi.`id`, sdi.`id_category`, sdi.`name`, sdi.`description`, sdi.`cost`, sdi.`cost_old`,
+                   sdi.`id_avatar`, sdi.`date_created`, sdi.`date_update`, sdi.`active`, sdi.`author`, sdi.`fields`,
                    sdi.`meta_title`, sdi.`meta_description`,
                    (
                        SELECT u.`first_name`
@@ -143,7 +143,7 @@ class ProductService extends Model
         parent::bindParams('dateUpdate', $product->getDateUpdate());
         parent::bindParams('active', $product->getActive());
         parent::bindParams('author', $product->getAuthor());
-        parent::bindParams('fields', $product->getFields());
+        parent::bindParams('fields', json_encode($product->getFields()));
         parent::bindParams('metaTitle', $product->getMetaTitle());
         parent::bindParams('metaDescription', $product->getMetaDescription());
 
@@ -196,7 +196,7 @@ class ProductService extends Model
         parent::bindParams('avatar', $product->getAvatar());
         parent::bindParams('dateUpdate', $product->getDateUpdate());
         parent::bindParams('active', $product->getActive());
-        parent::bindParams('fields', $product->getFields());
+        parent::bindParams('fields', json_encode($product->getFields()));
         parent::bindParams('metaTitle', $product->getMetaTitle());
         parent::bindParams('metaDescription', $product->getMetaDescription());
 

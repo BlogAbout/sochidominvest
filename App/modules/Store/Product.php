@@ -87,7 +87,7 @@ class Product
             $data['author'] ?? 0,
             $data['metaTitle'] ?? '',
             $data['metaDescription'] ?? '',
-            $data['fields'] ?? null,
+            $data['fields'] ?? new \stdClass(),
             $data['images'] ?? [],
             $data['videos'] ?? []
         );
@@ -116,7 +116,7 @@ class Product
             $data['author'] ?? 0,
             $data['meta_title'] ?? '',
             $data['meta_description'] ?? '',
-            $data['fields'] ? json_decode($data['fields']) : null,
+            $data['fields'] ? json_decode($data['fields']) : new \stdClass(),
             array_map('intval', $data['images'] ? explode(',', $data['images']) : []),
             array_map('intval', $data['videos'] ? explode(',', $data['videos']) : [])
         );

@@ -58,7 +58,7 @@ const ProductList: React.FC<Props> = (props): React.ReactElement => {
 
                                     {numberWithSpaces(round(product.cost || 0, 0))}
                                 </ListCell>
-                                <ListCell className={classes.views}>{product.categoryId}</ListCell>
+                                <ListCell className={classes.category}>{product.categoryId}</ListCell>
                             </ListRow>
                         )
                     })

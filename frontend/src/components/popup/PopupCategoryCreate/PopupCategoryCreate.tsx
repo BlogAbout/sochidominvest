@@ -40,7 +40,7 @@ const PopupCategoryCreate: React.FC<Props> = (props) => {
         active: 1,
         metaTitle: '',
         metaDescription: '',
-        fields: []
+        fields: ['test1', 'test2']
     })
 
     const [fetching, setFetching] = useState(false)
@@ -174,14 +174,14 @@ const PopupCategoryCreate: React.FC<Props> = (props) => {
                 <Button type='save'
                         icon='check-double'
                         onClick={() => saveHandler(true)}
-                        disabled={fetching || category.name.trim() === ''}
+                        disabled={fetching || !category.name || category.name.trim() === ''}
                         title='Сохранить и закрыть'
                 />
 
                 <Button type='apply'
                         icon='check'
                         onClick={() => saveHandler()}
-                        disabled={fetching || category.name.trim() === ''}
+                        disabled={fetching || !category.name || category.name.trim() === ''}
                         className='marginLeft'
                         title='Сохранить'
                 >Сохранить</Button>

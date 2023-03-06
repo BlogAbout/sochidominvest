@@ -106,7 +106,7 @@ class ProductController extends Controller
             'author' => JwtMiddleware::getUserId(),
             'metaTitle' => htmlentities(stripcslashes(strip_tags($data->metaTitle))),
             'metaDescription' => htmlentities(stripcslashes(strip_tags($data->metaDescription))),
-            'fields' => htmlentities(stripcslashes(strip_tags($data->fields))),
+            'fields' => $data->fields,
             'images' => $data->images,
             'videos' => $data->videos
         );
@@ -170,7 +170,7 @@ class ProductController extends Controller
             'author' => JwtMiddleware::getUserId(),
             'metaTitle' => htmlentities(stripcslashes(strip_tags($data->metaTitle))),
             'metaDescription' => htmlentities(stripcslashes(strip_tags($data->metaDescription))),
-            'fields' => htmlentities(stripcslashes(strip_tags($data->fields))),
+            'fields' => $data->fields,
             'images' => $data->images,
             'videos' => $data->videos
         );

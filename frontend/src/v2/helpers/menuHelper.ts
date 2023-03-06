@@ -79,6 +79,12 @@ export const menuPanel: IMenuLink[] = [
         hasRole: []
     },
     {
+        route: RouteNames.P_STORE_PRODUCTS,
+        title: 'Магазин',
+        icon: 'store',
+        hasRole: []
+    },
+    {
         route: RouteNames.SEPARATOR,
         title: '',
         hasRole: [],
@@ -203,6 +209,15 @@ export const subMenuCatalog: ISubMenu[] = [
         icon: '',
         type: 'catalog',
         description: 'Управление списками вопросов и ответов для помощи пользователям',
+        hasRole: ['director', 'administrator', 'manager']
+    },
+    {
+        href: RouteNames.P_STORE_CATEGORIES,
+        title: 'Категории товаров',
+        disabled: false,
+        icon: '',
+        type: 'catalog',
+        description: 'Настройка категорий товаров для магазина с возможностью задания необходимых полей',
         hasRole: ['director', 'administrator', 'manager']
     },
     {

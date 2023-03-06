@@ -89,6 +89,7 @@ import {
     faSliders,
     faStar,
     faStop,
+    faStore,
     faTableList,
     faTrash,
     faTree,
@@ -207,7 +208,8 @@ library.add(
     faMoneyCheckDollar,
     faHandshake,
     faStop,
-    faChartPie
+    faChartPie,
+    faStore
 )
 
 function App() {

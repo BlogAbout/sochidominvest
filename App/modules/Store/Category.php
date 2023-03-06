@@ -13,7 +13,7 @@ class Category
     public int $author;
     public string $metaTitle;
     public string $metaDescription;
-    public object $fields;
+    public array $fields;
 
     /**
      * Category constructor.
@@ -27,9 +27,9 @@ class Category
      * @param int $author
      * @param string $metaTitle
      * @param string $metaDescription
-     * @param object $fields
+     * @param array $fields
      */
-    public function __construct(int $id, string $name, string $description, string $dateCreated, string $dateUpdate, int $active, int $author, string $metaTitle, string $metaDescription, object $fields)
+    public function __construct(int $id, string $name, string $description, string $dateCreated, string $dateUpdate, int $active, int $author, string $metaTitle, string $metaDescription, array $fields)
     {
         $this->id = $id;
         $this->name = $name;
@@ -61,7 +61,7 @@ class Category
             $data['author'] ?? 0,
             $data['metaTitle'] ?? '',
             $data['metaDescription'] ?? '',
-            $data['fields'] ?? null
+            $data['fields'] ?? []
         );
     }
 
@@ -83,7 +83,7 @@ class Category
             $data['author'] ?? 0,
             $data['meta_title'] ?? '',
             $data['meta_description'] ?? '',
-            $data['fields'] ? json_decode($data['fields']) : null
+            $data['fields'] ? json_decode($data['fields']) : []
         );
     }
 
@@ -241,17 +241,17 @@ class Category
     }
 
     /**
-     * @return object
+     * @return array
      */
-    public function getFields(): string
+    public function getFields(): array
     {
         return $this->fields;
     }
 
     /**
-     * @param object $fields
+     * @param array $fields
      */
-    public function setFields(object $fields): void
+    public function setFields(array $fields): void
     {
         $this->fields = $fields;
     }

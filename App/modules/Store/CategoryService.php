@@ -95,7 +95,7 @@ class CategoryService extends Model
         parent::bindParams('dateUpdate', $category->getDateUpdate());
         parent::bindParams('active', $category->getActive());
         parent::bindParams('author', $category->getAuthor());
-        parent::bindParams('fields', $category->getFields());
+        parent::bindParams('fields', json_encode($category->getFields()));
         parent::bindParams('metaTitle', $category->getMetaTitle());
         parent::bindParams('metaDescription', $category->getMetaDescription());
 
@@ -134,7 +134,7 @@ class CategoryService extends Model
         parent::bindParams('description', $category->getDescription());
         parent::bindParams('dateUpdate', $category->getDateUpdate());
         parent::bindParams('active', $category->getActive());
-        parent::bindParams('fields', $category->getFields());
+        parent::bindParams('fields', json_encode($category->getFields()));
         parent::bindParams('metaTitle', $category->getMetaTitle());
         parent::bindParams('metaDescription', $category->getMetaDescription());
 

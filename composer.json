@@ -22,6 +22,7 @@
             "App/modules/Mailing",
             "App/modules/Messenger",
             "App/modules/Payment",
+            "App/modules/Store",
             "App/modules/User",
             "App/modules/WebSocket"
         ]
