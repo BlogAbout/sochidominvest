@@ -4,6 +4,7 @@ import classNames from 'classnames/bind'
 import StoreService from '../../../api/StoreService'
 import {PopupDisplayOptions, PopupProps} from '../../../@types/IPopup'
 import {ICategory} from '../../../@types/IStore'
+import {ITab} from '../../../@types/ITab'
 import {getPopupContainer, openPopup, removePopup} from '../../../helpers/popupHelper'
 import showBackgroundBlock from '../../ui/BackgroundBlock/BackgroundBlock'
 import openPopupAlert from '../../PopupAlert/PopupAlert'
@@ -15,6 +16,7 @@ import CheckBox from '../../form/CheckBox/CheckBox'
 import TextAreaBox from '../../form/TextAreaBox/TextAreaBox'
 import Title from '../../ui/Title/Title'
 import Label from '../../form/Label/Label'
+import Tabs from '../../ui/Tabs/Tabs'
 import classes from './PopupCategoryCreate.module.scss'
 
 interface Props extends PopupProps {
@@ -79,11 +81,9 @@ const PopupCategoryCreate: React.FC<Props> = (props) => {
             .finally(() => setFetching(false))
     }
 
-    const renderContentBlock = () => {
+    const renderContentTab = () => {
         return (
-            <div key='content' className={classes.blockContent}>
-                <Title type={2}>Информация о категории</Title>
-
+            <div key='content' className={classes.tabContent}>
                 <div className={classes.field}>
                     <Label text='Название'/>
 
@@ -129,11 +129,13 @@ const PopupCategoryCreate: React.FC<Props> = (props) => {
         )
     }
 
-    const renderSeoBlock = () => {
-        return (
-            <div key='seo' className={classes.blockContent}>
-                <Title type={2}>СЕО</Title>
+    const renderFieldsTab = () => {
+        return (<div/>)
+    }
 
+    const renderSeoTab = () => {
+        return (
+            <div key='seo' className={classes.tabContent}>
                 <div className={classes.field}>
                     <Label text='Meta Title'/>
 
@@ -163,11 +165,20 @@ const PopupCategoryCreate: React.FC<Props> = (props) => {
         )
     }
 
+    const tabs: ITab = {
+        state: {title: 'Информация', render: renderContentTab()},
+        info: {title: 'Поля', render: renderFieldsTab()},
+        seo: {title: 'СЕО', render: renderSeoTab()}
+    }
+
     return (
         <Popup className={classes.PopupCategoryCreate}>
             <BlockingElement fetching={fetching} className={classes.content}>
-                {renderContentBlock()}
-                {renderSeoBlock()}
+                <div className={classes.blockContent}>
+                    <Title type={2}>{category.id ? 'Редактировать категорию' : 'Новая категория'}</Title>
+
+                    <Tabs tabs={tabs} paddingFirstTab='popup'/>
+                </div>
             </BlockingElement>
 
             <Footer>

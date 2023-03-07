@@ -30,12 +30,13 @@ const StoreProductsPage: React.FC = (): React.ReactElement => {
     const [filters, setFilters] = useState({})
     const [layout, setLayout] = useState<'list' | 'till'>(getLayout('products'))
 
-    const {products, fetching: fetchingProducts} = useTypedSelector(state => state.storeReducer)
+    const {products, categories, fetching: fetchingProducts} = useTypedSelector(state => state.storeReducer)
 
-    const {fetchProductList} = useActions()
+    const {fetchProductList, fetchCategoryList} = useActions()
 
     useEffect(() => {
         fetchProductsHandler()
+        fetchCategoryList({active: [0, 1]})
     }, [])
 
     useEffect(() => {
@@ -183,11 +184,13 @@ const StoreProductsPage: React.FC = (): React.ReactElement => {
 
                 {layout === 'till'
                     ? <ProductTill list={filterProducts}
+                                   categories={categories}
                                    fetching={fetching || fetchingProducts}
                                    onClick={(product: IProduct) => onClickHandler(product)}
                                    onContextMenu={(product: IProduct, e: React.MouseEvent) => onContextMenuHandler(product, e)}
                     />
                     : <ProductList list={filterProducts}
+                                   categories={categories}
                                    fetching={fetching || fetchingProducts}
                                    onClick={(product: IProduct) => onClickHandler(product)}
                                    onContextMenu={(product: IProduct, e: React.MouseEvent) => onContextMenuHandler(product, e)}

@@ -1,6 +1,6 @@
 import React from 'react'
 import {numberWithSpaces, round} from '../../../../../helpers/numberHelper'
-import {IProduct} from '../../../../../@types/IStore'
+import {ICategory, IProduct} from '../../../../../@types/IStore'
 import ListHead from '../../../../components/ui/List/components/ListHead/ListHead'
 import ListCell from '../../../../components/ui/List/components/ListCell/ListCell'
 import ListBody from '../../../../components/ui/List/components/ListBody/ListBody'
@@ -11,6 +11,7 @@ import classes from './ProductList.module.scss'
 
 interface Props {
     list: IProduct[]
+    categories: ICategory[]
     fetching: boolean
 
     onClick(product: IProduct): void
@@ -20,6 +21,7 @@ interface Props {
 
 const defaultProps: Props = {
     list: [],
+    categories: [],
     fetching: false,
     onClick: (product: IProduct) => {
         console.info('ProductList onClick', product)
@@ -30,6 +32,20 @@ const defaultProps: Props = {
 }
 
 const ProductList: React.FC<Props> = (props): React.ReactElement => {
+    const getCategoryName = (categoryId: number): string => {
+        if (!props.categories.length) {
+            return ''
+        }
+
+        const findCategory = props.categories.find((category: ICategory) => category.id === categoryId)
+
+        if (!findCategory) {
+            return ''
+        }
+
+        return findCategory.name
+    }
+
     return (
         <List className={classes.ProductList}>
             <ListHead>
@@ -58,7 +74,7 @@ const ProductList: React.FC<Props> = (props): React.ReactElement => {
 
                                     {numberWithSpaces(round(product.cost || 0, 0))}
                                 </ListCell>
-                                <ListCell className={classes.category}>{product.categoryId}</ListCell>
+                                <ListCell className={classes.category}>{getCategoryName(product.categoryId)}</ListCell>
                             </ListRow>
                         )
                     })

@@ -160,6 +160,7 @@ const CategoryPage: React.FC = (): React.ReactElement => {
                 >{category.name}</Title>
 
                 <ProductTill list={filterProduct}
+                             categories={categories}
                              fetching={fetching || fetchingStore}
                              onClick={(product: IProduct) => onClickHandler(product)}
                              onContextMenu={(product: IProduct, e: React.MouseEvent) => onContextMenuItem(product, e)}

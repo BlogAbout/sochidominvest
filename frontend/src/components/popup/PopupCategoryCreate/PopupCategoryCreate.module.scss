@@ -9,6 +9,7 @@
 
     .blockContent {
         padding: 15px;
+        height: 100%;
         display: flex;
         justify-content: space-between;
         flex-wrap: wrap;
@@ -36,6 +37,10 @@
         &.fieldWrap {
             flex-wrap: wrap;
         }
+    }
+
+    .tabContent {
+        padding: 20px 0;
     }
 }
 

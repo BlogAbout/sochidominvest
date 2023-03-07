@@ -89,9 +89,9 @@ const BlockItem: React.FC<Props> = (props): React.ReactElement => {
                     : null
                 }
 
-                {props.passed || props.rentType || props.rentCost || props.countCheckers || props.buildingType ?
+                {props.cost || props.passed || props.rentType || props.rentCost || props.countCheckers || props.buildingType ?
                     <div className={classes.itemInfo}>
-                        {props.buildingType !== 'land' && props.passed !== '' ?
+                        {props.passed && props.passed !== '' && props.buildingType !== 'land' ?
                             <div className={cx({
                                 'passed': true,
                                 'is': props.isPassed
@@ -102,7 +102,8 @@ const BlockItem: React.FC<Props> = (props): React.ReactElement => {
                         }
 
                         {props.buildingType === 'land' && props.cadastrNumber ?
-                            <div className={classes.passed} title='Кадастровый номер'><span>{props.cadastrNumber}</span></div>
+                            <div className={classes.passed} title='Кадастровый номер'><span>{props.cadastrNumber}</span>
+                            </div>
                             : null
                         }
 
@@ -114,8 +115,8 @@ const BlockItem: React.FC<Props> = (props): React.ReactElement => {
                             : null
                         }
 
-                        {!props.isRent && props.countCheckers !== undefined ?
-                            props.buildingType && props.buildingType === 'building' ?
+                        {!props.isRent ?
+                            props.buildingType && props.buildingType === 'building' && props.countCheckers !== undefined ?
                                 <div className={classes.counter}>
                                     {declension(props.countCheckers || 0, ['квартира', 'квартиры', 'квартир'], false)} от {numberWithSpaces(round(props.cost || 0, 0))} руб.
                                 </div>
@@ -126,7 +127,7 @@ const BlockItem: React.FC<Props> = (props): React.ReactElement => {
                             : null
                         }
 
-                        {props.buildingType && props.buildingType === 'building' ?
+                        {props.buildingType ? props.buildingType === 'building' ?
                             <div className={classes.area}>
                                 <h3>Площади</h3>
                                 <div>{props.areaMin || 0} м<sup>2</sup> - {props.areaMax || 0} м<sup>2</sup>
@@ -137,6 +138,7 @@ const BlockItem: React.FC<Props> = (props): React.ReactElement => {
                                 <h3>Площадь</h3>
                                 <div>{props.areaMin || 0} м<sup>2</sup></div>
                             </div>
+                            : null
                         }
                     </div>
                     : null

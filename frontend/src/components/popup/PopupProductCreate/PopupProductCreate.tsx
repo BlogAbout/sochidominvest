@@ -299,7 +299,7 @@ const PopupProductCreate: React.FC<Props> = (props) => {
         )
     }
 
-    // Вкладка галереии объекта
+    // Вкладка галереи объекта
     const renderMediaTab = () => {
         return (
             <div key='media' className={classes.tabContent}>
