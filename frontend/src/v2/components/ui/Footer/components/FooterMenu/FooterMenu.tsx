@@ -9,11 +9,10 @@ const FooterMenu: React.FC = (): React.ReactElement => {
         <div className={classes.FooterMenu}>
             {menuFooter.map((link: IMenuLink) => {
                 return (
-                    <div className={classes.item}>
+                    <div className={classes.item} key={link.route}>
                         <NavLink to={link.route}
                                  className={({isActive}) => isActive ? classes.active : ''}
                                  title={link.text || link.title}
-                                 key={link.route}
                         >
                             <span>{link.title}</span>
                         </NavLink>
