@@ -24,7 +24,9 @@ import openPopupBookingCreate from '../../../../../components/popup/PopupBooking
 import openPopupBuildingCreate from '../../../../../components/popup/PopupBuildingCreate/PopupBuildingCreate'
 import openPopupSupportCreate from '../../../../../components/popup/PopupSupportCreate/PopupSupportCreate'
 import openPopupAlert from '../../../../../components/PopupAlert/PopupAlert'
-import openPopupCompilationSelector from '../../../../../components/popup/PopupCompilationSelector/PopupCompilationSelector'
+import openPopupCompilationSelector
+    from '../../../../../components/popup/PopupCompilationSelector/PopupCompilationSelector'
+import openPopupMap from '../../../../components/popup/PopupMap/PopupMap'
 import classes from './BuildingInfoBlock.module.scss'
 
 interface Props {
@@ -479,7 +481,17 @@ const BuildingInfoBlock: React.FC<Props> = (props): React.ReactElement => {
 
             <div className={classes.address}>
                 {districtText !== '' && <span>{districtText}</span>}
-                <span>{props.building.address}</span>
+
+                {props.building.coordinates ?
+                    <span className={classes.addressLink}
+                          onClick={() => {
+                              openPopupMap(document.body, {
+                                  building: props.building
+                              })
+                          }}
+                    >{props.building.address}</span>
+                    : <span>{props.building.address}</span>
+                }
             </div>
 
             {renderBuildingInfo()}

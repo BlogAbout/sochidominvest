@@ -72,6 +72,16 @@
 
         span {
             display: block;
+
+            &.addressLink {
+                color: #ffcc01;
+                transition: all 0.3s ease-in;
+                cursor: pointer;
+
+                &:hover {
+                    color: #dfdfdf;
+                }
+            }
         }
     }
 
