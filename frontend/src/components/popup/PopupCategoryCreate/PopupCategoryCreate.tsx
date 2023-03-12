@@ -2,6 +2,8 @@ import React, {useEffect, useState} from 'react'
 import withStore from '../../../hoc/withStore'
 import classNames from 'classnames/bind'
 import StoreService from '../../../api/StoreService'
+import {fieldTypes} from '../../../v2/helpers/storeHelper'
+import {ISelector} from '../../../@types/ISelector'
 import {PopupDisplayOptions, PopupProps} from '../../../@types/IPopup'
 import {ICategory} from '../../../@types/IStore'
 import {ITab} from '../../../@types/ITab'
@@ -81,6 +83,14 @@ const PopupCategoryCreate: React.FC<Props> = (props) => {
             .finally(() => setFetching(false))
     }
 
+    const onChangeFieldsHandler = (name: string): void => {
+        if (category.fields.includes(name)) {
+            setCategory({...category, fields: category.fields.filter((field: string) => field !== name)})
+        } else {
+            setCategory({...category, fields: [...category.fields, name]})
+        }
+    }
+
     const renderContentTab = () => {
         return (
             <div key='content' className={classes.tabContent}>
@@ -130,7 +140,22 @@ const PopupCategoryCreate: React.FC<Props> = (props) => {
     }
 
     const renderFieldsTab = () => {
-        return (<div/>)
+        return (
+            <div key='fields' className={classes.tabContent}>
+                {fieldTypes.map((field: ISelector) => {
+                    return (
+                        <div className={classes.field}>
+                            <CheckBox label={field.text}
+                                      type='classic'
+                                      width={110}
+                                      checked={category.fields.includes(field.key)}
+                                      onChange={() => onChangeFieldsHandler(field.key)}
+                            />
+                        </div>
+                    )
+                })}
+            </div>
+        )
     }
 
     const renderSeoTab = () => {

@@ -2,6 +2,8 @@ import React, {useEffect, useMemo, useState} from 'react'
 import {useParams} from 'react-router-dom'
 import {converter} from '../../helpers/utilHelper'
 import {sortAttachments} from '../../../helpers/attachmentHelper'
+import {useTypedSelector} from '../../../hooks/useTypedSelector'
+import {useActions} from '../../../hooks/useActions'
 import {IFilter} from '../../../@types/IFilter'
 import {IAttachment} from '../../../@types/IAttachment'
 import {IProduct} from '../../../@types/IStore'
@@ -33,6 +35,10 @@ const ProductPage: React.FC = (): React.ReactElement => {
     const [images, setImages] = useState<IAttachment[]>([])
     const [videos, setVideos] = useState<IAttachment[]>([])
 
+    const {categories} = useTypedSelector(state => state.storeReducer)
+
+    const {fetchCategoryList} = useActions()
+
     useEffect(() => {
         onFetchProduct()
     }, [params.id])
@@ -41,6 +47,8 @@ const ProductPage: React.FC = (): React.ReactElement => {
         onFetchImages()
 
         onFetchVideos()
+
+        fetchCategoryList({active: [0, 1]})
     }, [product])
 
     // Загрузка данных объекта недвижимости
@@ -123,6 +131,7 @@ const ProductPage: React.FC = (): React.ReactElement => {
 
                     <GridColumn width='40%'>
                         <ProductInfoBlock product={product}
+                                          categories={categories}
                                           onSave={() => onFetchProduct()}
                         />
                     </GridColumn>
@@ -141,7 +150,7 @@ const ProductPage: React.FC = (): React.ReactElement => {
                             : null
                         }
 
-                        <ProductAdvancedBlock product={product}/>
+                        <ProductAdvancedBlock product={product} categories={categories}/>
                     </GridColumn>
                 </Grid>
             </BlockingElement>

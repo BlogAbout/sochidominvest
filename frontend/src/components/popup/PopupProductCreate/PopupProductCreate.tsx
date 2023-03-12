@@ -1,13 +1,15 @@
 import React, {useEffect, useState} from 'react'
 import withStore from '../../../hoc/withStore'
 import classNames from 'classnames/bind'
+import {useTypedSelector} from '../../../hooks/useTypedSelector'
 import StoreService from '../../../api/StoreService'
 import AttachmentService from '../../../api/AttachmentService'
 import {sortAttachments} from '../../../helpers/attachmentHelper'
 import {getPopupContainer, openPopup, removePopup} from '../../../helpers/popupHelper'
+import {getFieldTypeText} from '../../../v2/helpers/storeHelper'
 import showBackgroundBlock from '../../ui/BackgroundBlock/BackgroundBlock'
 import {PopupDisplayOptions, PopupProps} from '../../../@types/IPopup'
-import {IProduct} from '../../../@types/IStore'
+import {ICategory, IProduct} from '../../../@types/IStore'
 import {ITab} from '../../../@types/ITab'
 import {IAttachment} from '../../../@types/IAttachment'
 import {Footer, Popup} from '../Popup/Popup'
@@ -59,6 +61,8 @@ const PopupProductCreate: React.FC<Props> = (props) => {
     const [fetchingVideos, setFetchingVideos] = useState(false)
     const [images, setImages] = useState<IAttachment[]>([])
     const [videos, setVideos] = useState<IAttachment[]>([])
+
+    const {categories} = useTypedSelector(state => state.storeReducer)
 
     useEffect(() => {
         return () => {
@@ -191,6 +195,37 @@ const PopupProductCreate: React.FC<Props> = (props) => {
         setVideos([...videos.filter((attachment: IAttachment) => attachment.id !== file.id)])
     }
 
+    const renderField = (fieldName: string): React.ReactElement | null => {
+        const fieldValue = product.fields[fieldName] ? product.fields[fieldName] : ''
+
+        switch (fieldName) {
+            case 'length':
+            case 'width':
+            case 'height':
+            case 'depth':
+            case 'diameter':
+                return (
+                    <div key={fieldName} className={classes.field}>
+                        <Label text={getFieldTypeText(fieldName)}/>
+
+                        <NumberBox value={fieldValue || ''}
+                                   min={0}
+                                   step={0.01}
+                                   max={999999999}
+                                   countAfterComma={2}
+                                   onChange={(e: React.ChangeEvent<HTMLInputElement>, value: number) => setProduct({
+                                       ...product,
+                                       fields: {...product.fields, [fieldName]: value}
+                                   })}
+                                   styleType='minimal'
+                        />
+                    </div>
+                )
+        }
+
+        return null
+    }
+
     // Вкладка состояния
     const renderStateTab = () => {
         return (
@@ -291,10 +326,19 @@ const PopupProductCreate: React.FC<Props> = (props) => {
     }
 
     // Вкладка информации объекта
-    const renderInformationTab = () => {
+    const renderInformationTab = (): React.ReactElement | null => {
+        if (!categories || !categories.length || !product.categoryId) {
+            return null
+        }
+
+        const category = categories.find((category: ICategory) => category.id === product.categoryId)
+        if (!category || !category.fields || !category.fields.length) {
+            return null
+        }
+
         return (
             <div key='info' className={classes.tabContent}>
-
+                {category.fields.map((fieldName: string) => renderField(fieldName))}
             </div>
         )
     }
@@ -396,10 +440,22 @@ const PopupProductCreate: React.FC<Props> = (props) => {
     }
 
     const tabs: ITab = {
-        state: {title: 'Состояние', render: renderStateTab()},
-        info: {title: 'Информация', render: renderInformationTab()},
-        media: {title: 'Медиа', render: renderMediaTab()},
-        seo: {title: 'СЕО', render: renderSeoTab()}
+        state: {
+            title: 'Состояние',
+            render: renderStateTab()
+        },
+        info: {
+            title: 'Информация',
+            render: renderInformationTab()
+        },
+        media: {
+            title: 'Медиа',
+            render: renderMediaTab()
+        },
+        seo: {
+            title: 'СЕО',
+            render: renderSeoTab()
+        }
     }
 
     return (

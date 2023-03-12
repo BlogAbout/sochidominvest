@@ -1,7 +1,5 @@
-import React, {useEffect, useMemo} from 'react'
+import React, {useMemo} from 'react'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {useTypedSelector} from '../../../../../hooks/useTypedSelector'
-import {useActions} from '../../../../../hooks/useActions'
 import {ICategory, IProduct} from '../../../../../@types/IStore'
 import {getFormatDate} from '../../../../../helpers/dateHelper'
 import {numberWithSpaces, round} from '../../../../../helpers/numberHelper'
@@ -10,26 +8,20 @@ import classes from './ProductInfoBlock.module.scss'
 
 interface Props {
     product: IProduct
+    categories: ICategory[]
 
     onSave?(): void
 }
 
 const defaultProps: Props = {
-    product: {} as IProduct
+    product: {} as IProduct,
+    categories: []
 }
 
 const ProductInfoBlock: React.FC<Props> = (props): React.ReactElement => {
-    const {categories} = useTypedSelector(state => state.storeReducer)
-
-    const {fetchCategoryList} = useActions()
-
-    useEffect(() => {
-        fetchCategoryList({active: [0, 1]})
-    }, [props.product])
-
     const category = useMemo(() => {
-        if (categories && categories.length) {
-            const findCategory = categories.find((item: ICategory) => item.id === props.product.categoryId)
+        if (props.categories && props.categories.length) {
+            const findCategory = props.categories.find((item: ICategory) => item.id === props.product.categoryId)
 
             if (findCategory) {
                 return findCategory
@@ -37,7 +29,7 @@ const ProductInfoBlock: React.FC<Props> = (props): React.ReactElement => {
         }
 
         return null
-    }, [categories, props.product.categoryId])
+    }, [props.categories, props.product.categoryId])
 
     // Вывод графика цен
     const renderDynamicChangePrices = (): React.ReactElement | null => {

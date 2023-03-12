@@ -25,7 +25,7 @@ export interface IProduct {
     author: number
     metaTitle?: string
     metaDescription?: string
-    fields: { [key: string]: string }
+    fields: { [key: string]: string | number }
     images: number[]
     videos: number[]
 }
