@@ -8,7 +8,7 @@ import Title from '../../components/ui/Title/Title'
 import Wrapper from '../../components/ui/Wrapper/Wrapper'
 import PanelView from '../../views/PanelView/PanelView'
 import StoreService from '../../../api/StoreService'
-import ProductTill from '../StoreProductsPage/components/ProductTill/ProductTill'
+import ProductTill from '../StoreProductsPanelPage/components/ProductTill/ProductTill'
 import openContextMenu from '../../../components/ContextMenu/ContextMenu'
 import openPopupProductCreate from '../../../components/popup/PopupProductCreate/PopupProductCreate'
 import openPopupAlert from '../../../components/PopupAlert/PopupAlert'
@@ -69,7 +69,7 @@ const CategoryPage: React.FC = (): React.ReactElement => {
     }
 
     const onClickHandler = (product: IProduct) => {
-        navigate(`${RouteNames.P_STORE_PRODUCTS}/${product.id}`)
+        navigate(`${RouteNames.STORE_PRODUCTS}/${product.id}`)
     }
 
     const onAddHandler = () => {

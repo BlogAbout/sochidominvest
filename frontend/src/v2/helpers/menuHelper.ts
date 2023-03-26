@@ -19,6 +19,10 @@ export const menuMain: IMenuLink[] = [
         title: 'Аренда'
     },
     {
+        route: RouteNames.STORE_PRODUCTS,
+        title: 'Товары'
+    },
+    {
         route: RouteNames.ARTICLE,
         title: 'Статьи'
     }

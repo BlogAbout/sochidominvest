@@ -44,6 +44,7 @@ export enum RouteNames {
     P_TARIFF = '/tariffs',
     P_STORE_CATEGORIES = '/categories',
     P_STORE_CATEGORY = '/categories/:id',
+    STORE_PRODUCTS = '/product',
     P_STORE_PRODUCTS = '/products',
-    P_STORE_PRODUCT = '/products/:id'
+    STORE_PRODUCT = '/product/:id'
 }

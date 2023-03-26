@@ -21,12 +21,6 @@ class ProductController extends Controller
      */
     public function fetchItemById($request, $response)
     {
-        if (!JwtMiddleware::getAndDecodeToken()) {
-            $response->code(401)->json('Вы не авторизованы.');
-
-            return;
-        }
-
         try {
             $product = ProductService::fetchItemById($request->id);
             $response->code(200)->json($product);
@@ -49,12 +43,6 @@ class ProductController extends Controller
      */
     public function fetchList($request, $response)
     {
-        if (!JwtMiddleware::getAndDecodeToken()) {
-            $response->code(401)->json('Вы не авторизованы.');
-
-            return;
-        }
-
         $filter = parent::getFilterParams($request->paramsGet()->all());
 
         try {

@@ -6,7 +6,7 @@ import StoreService from '../../../api/StoreService'
 import AttachmentService from '../../../api/AttachmentService'
 import {sortAttachments} from '../../../helpers/attachmentHelper'
 import {getPopupContainer, openPopup, removePopup} from '../../../helpers/popupHelper'
-import {getFieldTypeText} from '../../../v2/helpers/storeHelper'
+import {getFieldTypeChildren, getFieldTypeText} from '../../../v2/helpers/storeHelper'
 import showBackgroundBlock from '../../ui/BackgroundBlock/BackgroundBlock'
 import {PopupDisplayOptions, PopupProps} from '../../../@types/IPopup'
 import {ICategory, IProduct} from '../../../@types/IStore'
@@ -24,6 +24,7 @@ import FileList from '../../FileList/FileList'
 import CategoryBox from '../../form/CategoryBox/CategoryBox'
 import Title from '../../ui/Title/Title'
 import Label from '../../form/Label/Label'
+import ComboBox from '../../ComboBox/ComboBox'
 import openPopupAlert from '../../PopupAlert/PopupAlert'
 import openPopupFileManager from '../PopupFileManager/PopupFileManager'
 import classes from './PopupProductCreate.module.scss'
@@ -218,6 +219,22 @@ const PopupProductCreate: React.FC<Props> = (props) => {
                                        fields: {...product.fields, [fieldName]: value}
                                    })}
                                    styleType='minimal'
+                        />
+                    </div>
+                )
+            case 'material':
+                return (
+                    <div key={fieldName} className={classes.field}>
+                        <Label text={getFieldTypeText(fieldName)}/>
+
+                        <ComboBox selected={fieldValue ? fieldValue.toString() : ''}
+                                  items={getFieldTypeChildren(fieldName)}
+                                  onSelect={(value: string) => setProduct({
+                                      ...product,
+                                      fields: {...product.fields, [fieldName.toString()]: value}
+                                  })}
+                                  placeHolder={`Выберите ${getFieldTypeText(fieldName)}`}
+                                  styleType='minimal'
                         />
                     </div>
                 )

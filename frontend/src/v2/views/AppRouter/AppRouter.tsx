@@ -42,6 +42,7 @@ import DesktopPage from '../../pages/DesktopPage/DesktopPage'
 import StoreCategoriesPage from '../../pages/StoreCategoriesPage/StoreCategoriesPage'
 import StoreCategoryPage from '../../pages/StoreCategoryPage/StoreCategoryPage'
 import StoreProductsPage from '../../pages/StoreProductsPage/StoreProductsPage'
+import StoreProductsPanelPage from '../../pages/StoreProductsPanelPage/StoreProductsPanelPage'
 import StoreProductPage from '../../pages/StoreProductPage/StoreProductPage'
 import classes from './AppRouter.module.scss'
 import 'react-toastify/dist/ReactToastify.css'
@@ -70,6 +71,8 @@ const AppRouter: React.FC = () => {
                 <Route path={RouteNames.BUILDING_ITEM} element={<BuildingPage role={user.role} isPublic/>}/>
                 <Route path={RouteNames.RENT} element={<BuildingsPage isRent/>}/>
                 <Route path={RouteNames.RENT_ITEM} element={<BuildingPage role={user.role} isPublic isRent/>}/>
+                <Route path={RouteNames.STORE_PRODUCTS} element={<StoreProductsPage/>}/>
+                <Route path={RouteNames.STORE_PRODUCT} element={<StoreProductPage/>}/>
 
                 {isAuth ?
                     <>
@@ -103,8 +106,7 @@ const AppRouter: React.FC = () => {
                         <Route path={RouteNames.P_FILE_MANAGER} element={<FilesPage/>}/>
                         <Route path={RouteNames.P_STORE_CATEGORIES} element={<StoreCategoriesPage/>}/>
                         <Route path={RouteNames.P_STORE_CATEGORY} element={<StoreCategoryPage/>}/>
-                        <Route path={RouteNames.P_STORE_PRODUCTS} element={<StoreProductsPage/>}/>
-                        <Route path={RouteNames.P_STORE_PRODUCT} element={<StoreProductPage/>}/>
+                        <Route path={RouteNames.P_STORE_PRODUCTS} element={<StoreProductsPanelPage/>}/>
                     </>
                     : null
                 }
