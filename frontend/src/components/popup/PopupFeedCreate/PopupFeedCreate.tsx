@@ -18,7 +18,8 @@ import classes from './PopupFeedCreate.module.scss'
 
 interface Props extends PopupProps {
     building?: IBuilding
-    type: 'callback' | 'get-document' | 'get-presentation' | 'get-view'
+    feed?: IFeed
+    type: 'callback' | 'get-document' | 'get-presentation' | 'get-view' | 'buy-product'
 }
 
 const defaultProps: Props = {
@@ -26,7 +27,7 @@ const defaultProps: Props = {
 }
 
 const PopupFeedCreate: React.FC<Props> = (props) => {
-    const [info, setInfo] = useState<IFeed>({
+    const [info, setInfo] = useState<IFeed>(props.feed || {
         id: null,
         author: null,
         phone: '',
@@ -57,6 +58,10 @@ const PopupFeedCreate: React.FC<Props> = (props) => {
     }, [])
 
     const getTitleFeed = () => {
+        if (props.feed) {
+            return
+        }
+
         let title = ''
         let text = ''
 
@@ -175,7 +180,7 @@ const PopupFeedCreate: React.FC<Props> = (props) => {
                     <div className={classes.field}>
                         <CheckBox label='Соглашаюсь с условиями политики конфиденциальности'
                                   type='classic'
-                                  width={110}
+                                  width={500}
                                   checked={policy}
                                   onChange={() => setPolicy(!policy)}
                         />
@@ -226,7 +231,8 @@ export default function openPopupFeedCreate(target: any, popupProps = {} as Prop
     const displayOptions = {
         autoClose: false,
         rightPanel: true,
-        fullScreen: true
+        fullScreen: true,
+        isFixed: true
     }
     const blockId = showBackgroundBlock(target, {animate: true}, displayOptions)
     let block = getPopupContainer(blockId)

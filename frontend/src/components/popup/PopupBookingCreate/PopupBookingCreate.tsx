@@ -436,7 +436,8 @@ export default function openPopupBookingCreate(target: any, popupProps = {} as P
     const displayOptions: PopupDisplayOptions = {
         autoClose: false,
         rightPanel: true,
-        fullScreen: true
+        fullScreen: true,
+        isFixed: true
     }
     const blockId = showBackgroundBlock(target, {animate: true}, displayOptions)
     let block = getPopupContainer(blockId)

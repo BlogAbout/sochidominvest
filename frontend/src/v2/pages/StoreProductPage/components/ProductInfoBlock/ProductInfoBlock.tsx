@@ -1,9 +1,12 @@
 import React, {useMemo} from 'react'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {ICategory, IProduct} from '../../../../../@types/IStore'
+import {IFeed} from '../../../../../@types/IFeed'
 import {getFormatDate} from '../../../../../helpers/dateHelper'
 import {numberWithSpaces, round} from '../../../../../helpers/numberHelper'
 import Title from '../../../../components/ui/Title/Title'
+import Button from '../../../../../components/form/Button/Button'
+import openPopupFeedCreate from '../../../../../components/popup/PopupFeedCreate/PopupFeedCreate'
 import classes from './ProductInfoBlock.module.scss'
 
 interface Props {
@@ -30,6 +33,26 @@ const ProductInfoBlock: React.FC<Props> = (props): React.ReactElement => {
 
         return null
     }, [props.categories, props.product.categoryId])
+
+    // Вызов окна обратной связи
+    const onFeedButtonHandler = (): void => {
+        const feed: IFeed = {
+            id: null,
+            author: null,
+            phone: '',
+            name: '',
+            title: `Заявка на покупку ${props.product.name}`,
+            type: 'callback',
+            objectId: props.product.id,
+            objectType: 'store',
+            active: 1,
+            status: 'new'
+        }
+        openPopupFeedCreate(document.body, {
+            feed: feed,
+            type: 'callback'
+        })
+    }
 
     // Вывод графика цен
     const renderDynamicChangePrices = (): React.ReactElement | null => {
@@ -112,6 +135,16 @@ const ProductInfoBlock: React.FC<Props> = (props): React.ReactElement => {
         )
     }
 
+    const renderButtons = (): React.ReactElement => {
+        return (
+            <div className={classes.buttons}>
+                <Button type='save'
+                        onClick={() => onFeedButtonHandler()}
+                >Заказать</Button>
+            </div>
+        )
+    }
+
     return (
         <div className={classes.ProductInfoBlock}>
             {renderMetaInformation()}
@@ -128,6 +161,8 @@ const ProductInfoBlock: React.FC<Props> = (props): React.ReactElement => {
             >{props.product.name}</Title>
 
             {renderProductInfo()}
+
+            {renderButtons()}
         </div>
     )
 }
