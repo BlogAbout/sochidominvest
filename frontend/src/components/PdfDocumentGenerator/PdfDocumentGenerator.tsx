@@ -108,10 +108,10 @@ const PdfDocumentGenerator: React.FC<Props> = (props) => {
 
                 <View style={styles.footer}>
                     <Text style={{...styles.textSmall, ...styles.footerBlock}}>
-                        ИНН 123456789
+                        ИНН 7704384596
                     </Text>
                     <Text style={{...styles.textSmall, ...styles.footerBlock, textAlign: 'center'}}>
-                        ОГРН 123456789
+                        ОГРН 5167746453530
                     </Text>
                     <Text style={{...styles.textSmall, ...styles.footerBlock, textAlign: 'right'}}>
                         2022. Все права защищены

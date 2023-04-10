@@ -50,14 +50,12 @@ const CategoryBox: React.FC<Props> = (props) => {
                 .catch((error) => {
                     console.error('Ошибка загрузки категорий товаров в store', error)
                 })
-        } else {
-            updateSelectedInfo()
         }
-    }, [props.categories])
+    }, [])
 
     useEffect(() => {
         updateSelectedInfo()
-    }, [categories])
+    }, [categories, props.categories])
 
     // Обновление списка категорий товаров в store
     const updateCategoryListStore = async () => {
